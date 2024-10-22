@@ -39,18 +39,28 @@ const pages: Page[] = [
     description: '',
   },
   {
-    title: 'Anmeldung',
+    title: 'Login',
     pathname: '/auth/login',
     description: '',
   },
   {
-    title: 'Benutzerverwaltung',
+    title: 'Profile',
     pathname: '/auth/user',
     description: '',
   },
   {
-    title: 'Passwort zurücksetzen',
+    title: 'Reset password',
     pathname: '/auth/reset-password',
+    description: '',
+  },
+  {
+    title: 'Sell patterns',
+    pathname: '/sell',
+    description: '',
+  },
+  {
+    title: 'Test patterns',
+    pathname: '/test',
     description: '',
   },
 

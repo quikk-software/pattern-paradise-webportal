@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { Store, Tag, TestTube2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 const menuItems = [
-  { id: 'shop', label: 'Shop', icon: Store },
-  { id: 'sell', label: 'Sell', icon: Tag },
-  { id: 'test', label: 'Test', icon: TestTube2 },
+  { id: 'shop', label: 'Shop', icon: Store, href: '/' },
+  { id: 'sell', label: 'Sell', icon: Tag, href: '/sell' },
+  { id: 'test', label: 'Test', icon: TestTube2, href: '/test' },
 ];
 
 export function BottomNavigation() {
@@ -26,13 +27,15 @@ export function BottomNavigation() {
             )}
             onClick={() => setActiveItem(item.id)}
           >
-            <item.icon
-              className={cn(
-                'w-6 h-6 mb-1 transition-transform group-hover:scale-110',
-                activeItem === item.id && 'animate-bounce',
-              )}
-            />
-            <span className="text-xs">{item.label}</span>
+            <Link href={item.href}>
+              <item.icon
+                className={cn(
+                  'w-6 h-6 mb-1 transition-transform group-hover:scale-110',
+                  activeItem === item.id && 'animate-bounce',
+                )}
+              />
+              <span className="text-xs">{item.label}</span>
+            </Link>
           </button>
         ))}
       </div>

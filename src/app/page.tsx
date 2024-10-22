@@ -1,5 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import { APP_NAME } from '@/lib/constants';
+import Image from 'next/image';
 
 const patterns = [
   {
@@ -44,11 +47,11 @@ export default function Home() {
   return (
     <div>
       <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-muted">
-        <div className="container px-4 md:px-6">
+        <div className="container px-4 md:px-6 mx-auto">
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                Welcome to Crochet Patterns Paradise
+                Welcome to {APP_NAME}
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
                 Discover beautiful crochet and knitting patterns for your next project. From cozy
@@ -56,14 +59,18 @@ export default function Home() {
               </p>
             </div>
             <div className="space-x-4">
-              <Button>Shop Patterns</Button>
-              <Button variant="outline">Learn More</Button>
+              <Link href="/sell">
+                <Button>Start selling</Button>
+              </Link>
+              <Link href="/test">
+                <Button variant="outline">Become a tester</Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className="container px-4 md:px-6 mx-auto">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">
             Our Popular Patterns
           </h2>
@@ -71,7 +78,7 @@ export default function Home() {
             {patterns.map((pattern) => (
               <Card key={pattern.id} className="flex flex-col">
                 <CardHeader>
-                  <img
+                  <Image
                     src={pattern.image}
                     alt={pattern.name}
                     className="w-full h-48 object-cover rounded-t-lg"

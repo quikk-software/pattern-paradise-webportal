@@ -3,6 +3,8 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME } from '@/lib/constants';
+import AuthGuard from '@/lib/auth/AuthGuard';
+import StoreProvider from '@/app/providers/StoreProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -66,7 +68,9 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen pb-16">
-          {children}
+          <StoreProvider>
+            <AuthGuard>{children}</AuthGuard>
+          </StoreProvider>
           <BottomNavigation />
         </div>
       </body>

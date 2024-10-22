@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -54,13 +55,19 @@ export function LoginForm() {
                 required
               />
             </div>
+            <Button className="w-full" onClick={handleSubmit}>
+              Log in
+            </Button>
           </div>
         </form>
       </CardContent>
       <CardFooter>
-        <Button className="w-full" onClick={handleSubmit}>
-          Log in
-        </Button>
+        <p className="text-sm text-muted-foreground">
+          Don&apos;t have an account?{' '}
+          <Link href="/auth/registration" className="text-primary hover:underline">
+            Register here
+          </Link>
+        </p>
       </CardFooter>
     </Card>
   );
