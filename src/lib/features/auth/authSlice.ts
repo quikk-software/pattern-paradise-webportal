@@ -44,11 +44,11 @@ export const authSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload;
     },
-    setAccessToken: (state, action: PayloadAction<string>) => {
+    setAccessToken: (state, action: PayloadAction<string | null>) => {
       setLocalStorageItem(LocalStorageKey.accessToken, action.payload);
       state.accessToken = action.payload;
     },
-    setRefreshToken: (state, action: PayloadAction<string>) => {
+    setRefreshToken: (state, action: PayloadAction<string | null>) => {
       state.refreshToken = action.payload;
       setLocalStorageItem(LocalStorageKey.refreshToken, action.payload);
     },

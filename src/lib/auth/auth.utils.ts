@@ -28,9 +28,10 @@ const isTokenExpired = (token: string) => {
 
 /**
  * Function returns an access token based on a given refresh token.
- * @param refreshToken
- */
-const getAccessTokenUsingRefreshToken = async (refreshToken: string) => {
+ @param refreshToken
+ @param callback
+ **/
+const getAccessTokenUsingRefreshToken = async (refreshToken: string, callback?: () => void) => {
   if (refreshToken !== '') {
     try {
       return await axios.post(
@@ -43,6 +44,7 @@ const getAccessTokenUsingRefreshToken = async (refreshToken: string) => {
       );
     } catch (err) {
       logger.error({ err });
+      !!callback && callback();
       return undefined;
     }
   }

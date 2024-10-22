@@ -1,8 +1,8 @@
 import React from 'react';
-import { RegistrationForm } from '@/components/registration-form';
+import { RegistrationFormComponent } from '@/components/registration-form';
 
 const RegistrationScreen: React.FunctionComponent = () => {
-  return <RegistrationForm />;
+  return <RegistrationFormComponent />;
 };
 
 export default RegistrationScreen;

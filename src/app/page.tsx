@@ -82,6 +82,8 @@ export default function Home() {
                     src={pattern.image}
                     alt={pattern.name}
                     className="w-full h-48 object-cover rounded-t-lg"
+                    width={200}
+                    height={200}
                   />
                 </CardHeader>
                 <CardContent className="flex-grow">

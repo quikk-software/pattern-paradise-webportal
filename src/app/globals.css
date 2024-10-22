@@ -76,3 +76,14 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+#bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media all and (display-mode: standalone) {
+  #bottom-nav {
+    /* Apply specific styles for standalone PWA mode */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
