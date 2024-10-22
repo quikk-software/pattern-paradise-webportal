@@ -5,46 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="742cc063-a408-4a9c-b05c-262eb1818598" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components.json" beforeDir="false" afterPath="$PROJECT_DIR$/components.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.mjs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/registration/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/registration/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/bottom-navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/bottom-navigation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/login-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/login-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/registration-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/registration-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/button.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/label.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/label.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/Login.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/Login.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/Registration.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/Registration.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/auth.constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/auth.constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/auth.utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/auth.utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/useAuth.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/useAuth.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/constants/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/constants/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/core/localStorage.utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/core/localStorage.utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/core/logger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/core/logger.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/core/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/core/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/core/useRedirect.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/core/useRedirect.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/core/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/core/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/features/auth/authSlice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/features/auth/authSlice.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/features/common/commonSlice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/features/common/commonSlice.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/errorPages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/errorPages.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/routes.styles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/routes.styles.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/routes.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/routes.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/useCurrentPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/useCurrentPage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/redux/hooks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/redux/hooks.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/redux/rootReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/redux/rootReducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/redux/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/redux/store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -122,7 +85,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729517416345</updated>
-      <workItem from="1729517417421" duration="2924000" />
+      <workItem from="1729517417421" duration="4022000" />
     </task>
     <servers />
   </component>
