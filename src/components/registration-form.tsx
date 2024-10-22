@@ -15,6 +15,7 @@ import {
 import { User, ShoppingCart, TestTube } from 'lucide-react';
 import { useCreateUser } from '@/lib/api';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 
 const roleOptions = [
   { id: 'buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
@@ -78,7 +79,7 @@ export function RegistrationFormComponent() {
           <CardTitle>Register</CardTitle>
           <CardDescription>Create your account to get started.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="email">
               Email <span className="text-red-500">*</span>
@@ -169,14 +170,20 @@ export function RegistrationFormComponent() {
             <Label htmlFor="tiktok">TikTok</Label>
             <Input id="tiktok" placeholder="Your TikTok handle" />
           </div>
-        </CardContent>
-        <CardFooter className="flex flex-col items-start">
           <Button className="w-full" type="submit">
             Register
           </Button>
           {!!hasErrors ? (
             <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
           ) : null}
+        </CardContent>
+        <CardFooter className="flex flex-col items-start">
+          <p className="text-sm text-muted-foreground">
+            Already have an account?{' '}
+            <Link href="/auth/login" className="text-primary hover:underline">
+              Login here
+            </Link>
+          </p>
         </CardFooter>
       </Card>
     </form>

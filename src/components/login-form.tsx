@@ -30,10 +30,10 @@ export function LoginForm() {
         <CardTitle>Login</CardTitle>
         <CardDescription>Enter your credentials to access your account.</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-5">
         <form onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
+            <div className="flex flex-col space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -44,7 +44,7 @@ export function LoginForm() {
                 required
               />
             </div>
-            <div className="flex flex-col space-y-1.5">
+            <div className="flex flex-col space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
