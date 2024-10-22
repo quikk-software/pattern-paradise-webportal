@@ -11,6 +11,7 @@ import useRedirect from '@/lib/core/useRedirect';
 import { hasPageBeenMounted } from '@/lib/core/utils';
 import useAuth from '@/lib/auth/useAuth';
 import pages from '@/lib/hooks/routes';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 const publicUrls = ['/', '/auth/login', '/auth/reset-password', '/auth/registration'];
 const isPublicUrl = (url: string) => {
@@ -99,7 +100,11 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     return <>{children}</>;
   }
 
-  return <>LOADING...</>;
+  return (
+    <div className="min-h-screen flex justify-center items-center">
+      <LoadingSpinnerComponent />
+    </div>
+  );
 };
 
 export default AuthGuard;
