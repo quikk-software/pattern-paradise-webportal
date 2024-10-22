@@ -1,49 +1,42 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 const patterns = [
   {
     id: 1,
-    name: "Cozy Blanket",
+    name: 'Cozy Blanket',
     price: 5.99,
-    image: "/placeholder.svg?height=200&width=200",
+    image: '/placeholder.svg?height=200&width=200',
   },
   {
     id: 2,
-    name: "Summer Top",
+    name: 'Summer Top',
     price: 4.99,
-    image: "/placeholder.svg?height=200&width=200",
+    image: '/placeholder.svg?height=200&width=200',
   },
   {
     id: 3,
-    name: "Cute Amigurumi",
+    name: 'Cute Amigurumi',
     price: 3.99,
-    image: "/placeholder.svg?height=200&width=200",
+    image: '/placeholder.svg?height=200&width=200',
   },
   {
     id: 4,
-    name: "Warm Scarf",
+    name: 'Warm Scarf',
     price: 2.99,
-    image: "/placeholder.svg?height=200&width=200",
+    image: '/placeholder.svg?height=200&width=200',
   },
   {
     id: 5,
-    name: "Baby Booties",
+    name: 'Baby Booties',
     price: 1.99,
-    image: "/placeholder.svg?height=200&width=200",
+    image: '/placeholder.svg?height=200&width=200',
   },
   {
     id: 6,
-    name: "Flower Granny Square",
+    name: 'Flower Granny Square',
     price: 0.99,
-    image: "/placeholder.svg?height=200&width=200",
+    image: '/placeholder.svg?height=200&width=200',
   },
 ];
 
@@ -58,9 +51,8 @@ export default function Home() {
                 Welcome to Crochet Patterns Paradise
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Discover beautiful crochet and knitting patterns for your next
-                project. From cozy blankets to cute amigurumi, we've got you
-                covered!
+                Discover beautiful crochet and knitting patterns for your next project. From cozy
+                blankets to cute amigurumi, we&apos;ve got you covered!
               </p>
             </div>
             <div className="space-x-4">
@@ -89,9 +81,7 @@ export default function Home() {
                   <CardTitle>{pattern.name}</CardTitle>
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
-                  <span className="text-lg font-bold">
-                    ${pattern.price.toFixed(2)}
-                  </span>
+                  <span className="text-lg font-bold">${pattern.price.toFixed(2)}</span>
                   <Button>Add to Cart</Button>
                 </CardFooter>
               </Card>

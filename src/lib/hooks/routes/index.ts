@@ -1,6 +1,6 @@
-import type { Page } from "./routes.types";
-import { BreadcrumbConfig } from "./routes.types";
-import errorPages from "@/lib/hooks/routes/errorPages";
+import type { Page } from './routes.types';
+import { BreadcrumbConfig } from './routes.types';
+import errorPages from '@/lib/hooks/routes/errorPages';
 
 const flattenPages = (pages: Page[]) => {
   const flattenedPages: Page[] = [];
@@ -15,7 +15,7 @@ const flattenPages = (pages: Page[]) => {
 
 const createBreadcrumbConfig = (
   pages: Page[],
-  parent: BreadcrumbConfig[] = []
+  parent: BreadcrumbConfig[] = [],
 ): BreadcrumbConfig[][] => {
   const bcConfig: BreadcrumbConfig[][] = [];
   flattenPages(pages).forEach((p) => {
@@ -24,7 +24,7 @@ const createBreadcrumbConfig = (
         ...createBreadcrumbConfig(p.children, [
           { pathname: p.pathname, title: p.title },
           ...parent,
-        ])
+        ]),
       );
     }
     bcConfig.push([{ pathname: p.pathname, title: p.title }, ...parent]);
@@ -34,24 +34,24 @@ const createBreadcrumbConfig = (
 
 const pages: Page[] = [
   {
-    title: "Start",
-    pathname: "/",
-    description: "",
+    title: 'Start',
+    pathname: '/',
+    description: '',
   },
   {
-    title: "Anmeldung",
-    pathname: "/auth/login",
-    description: "",
+    title: 'Anmeldung',
+    pathname: '/auth/login',
+    description: '',
   },
   {
-    title: "Benutzerverwaltung",
-    pathname: "/auth/user",
-    description: "",
+    title: 'Benutzerverwaltung',
+    pathname: '/auth/user',
+    description: '',
   },
   {
-    title: "Passwort zurücksetzen",
-    pathname: "/auth/reset-password",
-    description: "",
+    title: 'Passwort zurücksetzen',
+    pathname: '/auth/reset-password',
+    description: '',
   },
 
   ...errorPages,

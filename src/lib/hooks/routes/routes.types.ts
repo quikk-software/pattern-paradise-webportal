@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React, { CSSProperties } from 'react';
 
 type PageBase = {
   // The title of the page, that is also displayed in the meta tag.
@@ -22,4 +22,4 @@ export type PageProps = PageBase & {
   children: React.ReactNode;
 };
 
-export type BreadcrumbConfig = Pick<Page, "title" | "pathname">;
+export type BreadcrumbConfig = Pick<Page, 'title' | 'pathname'>;

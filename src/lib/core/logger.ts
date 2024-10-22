@@ -1,8 +1,8 @@
-import log from "loglevel";
-import prefix from "loglevel-plugin-prefix";
+import log from 'loglevel';
+import prefix from 'loglevel-plugin-prefix';
 
-if (process.env.NODE_ENV == "development") {
-  log.setLevel("debug");
+if (process.env.NODE_ENV == 'development') {
+  log.setLevel('debug');
 }
 
 prefix.reg(log);

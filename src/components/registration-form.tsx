@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Card,
   CardHeader,
@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
 export function RegistrationForm() {
   return (
@@ -24,23 +24,13 @@ export function RegistrationForm() {
           <Label htmlFor="email">
             Email <span className="text-red-500">*</span>
           </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            required
-          />
+          <Input id="email" type="email" placeholder="Enter your email" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">
             Password <span className="text-red-500">*</span>
           </Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Create a password"
-            required
-          />
+          <Input id="password" type="password" placeholder="Create a password" required />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
