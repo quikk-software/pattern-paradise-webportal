@@ -1,128 +1,259 @@
-'use client'
+'use client';
 
-import { useState, ChangeEvent } from 'react'
-import { X } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import React, { useState, ChangeEvent } from 'react';
+import { ArrowLeft, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
+import Link from 'next/link';
+import { useCreateProduct } from '@/lib/api';
+import axios from 'axios';
+import logger from '@/lib/core/logger';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+
+const CATEGORIES = ['Crocheting', 'Knitting'];
 
 export function ProductFormComponent() {
-  const [images, setImages] = useState<string[]>([])
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState('')
-  const [category, setCategory] = useState('')
+  const [images, setImages] = useState<string[]>([]);
+  const [category, setCategory] = useState<string>('Crocheting');
+  const [imageError, setImageError] = useState<string | undefined>(undefined);
+  const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
 
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
+  const { mutate, isLoading } = useCreateProduct();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
+
+  const hasErrors = errors.title || errors.description || errors.price || imageError;
+
+  const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
     if (files && files.length > 0) {
-      const newImages = Array.from(files).map(file => URL.createObjectURL(file))
-      setImages(prev => [...prev, ...newImages].slice(0, 6))
+      const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
+      setImages((prev) => [...prev, ...newImages].slice(0, 6));
     }
-  }
+  };
+
+  const handleImageUpload = async (files: string[]) => {
+    if (hasErrors) {
+      setImageError('Please fill out the form before uploading');
+      return;
+    }
+    setImageUploadIsLoading(true);
+    const urls: string[] = [];
+    const blobs: Blob[] = [];
+    for await (const file of files) {
+      const blob = await fetch(file).then((r) => r.blob());
+      blobs.push(blob);
+    }
+    for await (const file of Array.from(blobs)) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'product_form');
+      try {
+        const response = await axios.post(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        urls.push(response.data.url);
+      } catch (error) {
+        setImageError('Error uploading images. Please try again.');
+        logger.error('Error uploading image:', error);
+      }
+    }
+    setImageUploadIsLoading(false);
+
+    return urls;
+  };
 
   const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index))
-  }
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log({ images, title, description, price, category })
-  }
+  const onSubmit = async (data: any) => {
+    if (images.length === 0 || images.length > 6) {
+      setImageError('Please add 1 to 6 images.');
+      return;
+    }
+
+    const urls = await handleImageUpload(images);
+
+    if (!urls) {
+      setImageError("Images couldn't be uploaded. Please try again later.");
+      return;
+    }
+
+    await mutate({
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      imageUrls: urls,
+      category,
+    });
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-lg">
-      <div>
-        <Label htmlFor="images" className="block text-lg font-semibold mb-2">Product Images (Max 6)</Label>
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          {images.map((img, index) => (
-            <div key={index} className="relative">
-              <img src={img} alt={`Product ${index + 1}`} className="w-full h-32 object-cover rounded-md" />
-              <Button
-                type="button"
-                variant="destructive"
-                size="icon"
-                className="absolute top-1 right-1 h-6 w-6"
-                onClick={() => removeImage(index)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
+    <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="p-6 space-y-8 bg-white rounded-lg shadow-lg"
+      >
+        <div>
+          <Label htmlFor="title" className="block text-lg font-semibold mb-2">
+            Title <span className="text-red-500">*</span>
+          </Label>
+          <Input
+            id="title"
+            placeholder="Enter a title"
+            className="w-full"
+            {...register('title', {
+              required: 'Title is required',
+              maxLength: {
+                value: 30,
+                message: 'Please choose a title with no more than 30 characters',
+              },
+            })}
+          />
+          <p className="text-sm text-gray-500 mt-1">
+            {(getValues('title') ?? '')?.length}/80 characters
+          </p>
+          {errors.title ? (
+            <p className="text-sm text-red-500 mb-2">{errors.title.message as string}</p>
+          ) : null}
         </div>
-        <Input
-          id="images"
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageUpload}
-          disabled={images.length >= 6}
-          className="cursor-pointer"
-        />
-        {images.length >= 6 && (
-          <p className="text-yellow-600 text-sm mt-2">Maximum number of images reached.</p>
-        )}
-      </div>
 
-      <div>
-        <Label htmlFor="title" className="block text-lg font-semibold mb-2">Title</Label>
-        <Input
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          maxLength={80}
-          placeholder="Enter product title"
-          className="w-full"
-        />
-        <p className="text-sm text-gray-500 mt-1">{title.length}/80 characters</p>
-      </div>
+        <div>
+          <Label htmlFor="description" className="block text-lg font-semibold mb-2">
+            Description <span className="text-red-500">*</span>
+          </Label>
+          <Textarea
+            id="description"
+            placeholder="Enter a description"
+            className="w-full"
+            rows={4}
+            {...register('description', {
+              required: 'Description is required',
+            })}
+          />
+          {errors.description ? (
+            <p className="text-sm text-red-500 mb-2">{errors.description.message as string}</p>
+          ) : null}
+        </div>
 
-      <div>
-        <Label htmlFor="description" className="block text-lg font-semibold mb-2">Description</Label>
-        <Textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Enter product description"
-          className="w-full"
-          rows={4}
-        />
-      </div>
+        <div>
+          <Label htmlFor="price" className="block text-lg font-semibold mb-2">
+            Price <span className="text-red-500">*</span>
+          </Label>
+          <Input
+            id="price"
+            type="number"
+            placeholder="Enter price"
+            {...register('price', {
+              required: 'Price is required',
+              min: {
+                value: 0,
+                message: 'Price has to be greater than 0',
+              },
+            })}
+            step="0.01"
+            className="w-full"
+          />
+          {errors.price ? (
+            <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
+          ) : null}
+        </div>
 
-      <div>
-        <Label htmlFor="price" className="block text-lg font-semibold mb-2">Price</Label>
-        <Input
-          id="price"
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Enter price"
-          min="0"
-          step="0.01"
-          className="w-full"
-        />
-      </div>
+        <div>
+          <Label htmlFor="category" className="block text-lg font-semibold mb-2">
+            Category <span className="text-red-500">*</span>
+          </Label>
+          <Select value={category} onValueChange={setCategory}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              {CATEGORIES.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      <div>
-        <Label htmlFor="category" className="block text-lg font-semibold mb-2">Category</Label>
-        <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="electronics">Electronics</SelectItem>
-            <SelectItem value="clothing">Clothing</SelectItem>
-            <SelectItem value="books">Books</SelectItem>
-            <SelectItem value="home">Home & Garden</SelectItem>
-            <SelectItem value="toys">Toys & Games</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="images" className="block text-lg font-semibold mb-2">
+            Images (max. 6) <span className="text-red-500">*</span>
+          </Label>
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            {images.map((img, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={img}
+                  alt={`Product ${index + 1}`}
+                  className="w-full h-32 object-cover rounded-md"
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  className="absolute top-1 right-1 h-6 w-6"
+                  onClick={() => removeImage(index)}
+                >
+                  <X />
+                </Button>
+              </div>
+            ))}
+          </div>
+          <Input
+            id="images"
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageSelect}
+            disabled={images.length >= 6}
+            className="cursor-pointer"
+          />
+          {images.length >= 6 && (
+            <p className="text-yellow-600 text-sm mt-2">Maximum number of images reached.</p>
+          )}
+          {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
+        </div>
 
-      <Button type="submit" className="w-full">Submit Product</Button>
-    </form>
-  )
+        <Button type="submit" className="w-full">
+          {imageUploadIsLoading || isLoading ? (
+            <LoadingSpinnerComponent size="sm" className="text-white" />
+          ) : null}
+          Submit pattern
+        </Button>
+        {!!hasErrors ? (
+          <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
+        ) : null}
+      </form>
+      <Button asChild className="flex items-center space-x-2" variant="outline">
+        <Link href="/sell">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Go back
+        </Link>
+      </Button>
+    </div>
+  );
 }

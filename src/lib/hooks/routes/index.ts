@@ -59,6 +59,21 @@ const pages: Page[] = [
     description: '',
   },
   {
+    title: 'Submit a pattern',
+    pathname: '/sell/submit',
+    description: '',
+  },
+  {
+    title: 'Your orders',
+    pathname: '/sell/orders',
+    description: '',
+  },
+  {
+    title: 'Your testings',
+    pathname: '/sell/testings',
+    description: '',
+  },
+  {
     title: 'Test patterns',
     pathname: '/test',
     description: '',

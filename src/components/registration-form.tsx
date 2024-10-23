@@ -52,8 +52,6 @@ export function RegistrationFormComponent() {
       return;
     }
 
-    console.log({ roles });
-
     await mutate({
       email: data.email,
       password: data.password,

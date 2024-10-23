@@ -78,7 +78,7 @@ const useAuth = () => {
           client_id: 'cbj',
           username: username,
           password: password,
-          scope: 'openid',
+          scope: 'openid profile',
         }),
       );
       if (response.status === 200) {
