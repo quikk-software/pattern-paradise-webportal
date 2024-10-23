@@ -13,9 +13,23 @@ import useAuth from '@/lib/auth/useAuth';
 import pages from '@/lib/hooks/routes';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
-const publicUrls = ['/', '/auth/login', '/auth/reset-password', '/auth/registration'];
+const PUBLIC_URLS = [
+  '/',
+  '/auth/login',
+  '/auth/reset-password',
+  '/auth/registration',
+  '/products',
+  '/products/*',
+];
+
+function patternToRegex(pattern: string): RegExp {
+  // Escape special characters and replace '*' with a regex that matches any characters after the base path
+  const regexString = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*');
+  return new RegExp(`^${regexString}$`);
+}
+
 const isPublicUrl = (url: string) => {
-  const isPublic = publicUrls.includes(url);
+  const isPublic = PUBLIC_URLS.some((pattern) => patternToRegex(pattern).test(url));
   logger.debug(`${isPublic}: ${url}`);
   return isPublic;
 };
