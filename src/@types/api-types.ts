@@ -35,6 +35,7 @@ export interface PutUserRequest {
 }
 
 export interface GetUserResponse {
+  id: string;
   email: string;
   username: string;
   isActive: boolean;
@@ -47,6 +48,16 @@ export interface GetUserResponse {
   mollieCustomerId?: string;
   mollieCreatedAt?: string;
   mollieDashboardLink?: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
 }
 
 export interface ListUsersResponse {
@@ -86,11 +97,23 @@ export interface PutProductRequest {
 }
 
 export interface GetProductResponse {
+  id: string;
   imageUrls: string[];
   title: string;
   description: string;
   category: string;
   price: number;
+  status: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
 }
 
 export interface ListProductsResponse {
@@ -106,7 +129,7 @@ export interface ListProductsResponse {
   pageSize: number;
   /** @example 3 */
   totalPages: number;
-  users: GetProductResponse[];
+  products: GetProductResponse[];
 }
 
 export interface ListApplicationErrorsResponse {

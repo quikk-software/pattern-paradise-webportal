@@ -5,12 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env.sample" beforeDir="false" afterPath="$PROJECT_DIR$/.env.sample" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/prettier.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.prettierrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.prettierrc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/not-found.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/not-found.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/offline.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/offline.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/products/[productId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/products/[productId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/providers/StoreProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/providers/StoreProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/sell/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/test/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/test/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/wrappers/PwaWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/wrappers/PwaWrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/loading-spinner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/loading-spinner.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/not-found.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/not-found.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/offline-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/offline-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/product-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/usePagination.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/usePagination.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/user/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/user/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/user/useCreateUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/user/useCreateUser.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/auth/useAuth.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/useAuth.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +42,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/components/bottom-navigation.tsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/login-form.tsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/product-page.tsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/registration-form.tsx" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
@@ -28,6 +56,7 @@
     "git-widget-placeholder": "main",
     "node.js.selected.package.tslint": "(autodetect)",
     "npm.format.executor": "Run",
+    "npm.generate-types.executor": "Run",
     "prettierjs.PrettierConfiguration.Package": "/Users/mac/Desktop/Repos/cbj/node_modules/prettier",
     "ts.external.directory.path": "/Users/mac/Desktop/Repos/cbj/node_modules/typescript/lib"
   }
@@ -37,7 +66,7 @@
       <recent name="$PROJECT_DIR$/src/app/products/[productId]" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="npm.generate-types">
     <configuration name="format" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -48,14 +77,36 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="generate-types" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="generate-types" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.generate-types" />
         <item itemvalue="npm.format" />
       </list>
     </recent_temporary>
   </component>
   <component name="TaskManager">
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="LAST_COMMIT_MESSAGE" value="" />

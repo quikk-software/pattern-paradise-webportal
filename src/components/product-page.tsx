@@ -1,50 +1,67 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Image from 'next/image'
-import { ChevronLeft, ChevronRight, User } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import React, { useEffect, useState } from 'react';
+import { ArrowLeft, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { useGetProduct } from '@/lib/api';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import NotFoundPage from '@/app/not-found';
+import { CldImage } from 'next-cloudinary';
+import Link from 'next/link';
 
-export function ProductPageComponent() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+interface ProductPageComponentProps {
+  productId: string;
+}
 
-  const product = {
-    title: "Eco-Friendly Water Bottle",
-    description: "Stay hydrated in style with our sleek, sustainable water bottle. Made from recycled materials, this 20oz bottle keeps your drinks cold for 24 hours or hot for 12 hours. Perfect for your daily commute, gym sessions, or outdoor adventures.",
-    creator: "EcoDesigns",
-    price: 29.99,
-    images: [
-      "/placeholder.svg?height=400&width=400",
-      "/placeholder.svg?height=400&width=400",
-      "/placeholder.svg?height=400&width=400",
-    ]
+export function ProductPageComponent({ productId }: ProductPageComponentProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const { fetch, data: product, isLoading, isError } = useGetProduct();
+
+  useEffect(() => {
+    fetch(productId);
+  }, [productId]);
+
+  if (isError) {
+    return <NotFoundPage />;
+  }
+
+  if (isLoading || !product) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <LoadingSpinnerComponent />
+      </div>
+    );
   }
 
   const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
-    )
-  }
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === product.imageUrls.length - 1 ? 0 : prevIndex + 1,
+    );
+  };
 
   const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
-    )
-  }
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? product.imageUrls.length - 1 : prevIndex - 1,
+    );
+  };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
       <Card className="overflow-hidden">
         <CardContent className="p-6">
           <div className="grid gap-8 md:grid-cols-2">
             <div className="relative aspect-square">
-              <Image
-                src={product.images[currentImageIndex]}
+              <CldImage
                 alt={`${product.title} - Image ${currentImageIndex + 1}`}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
+                src={product.imageUrls[currentImageIndex]}
+                width="1000"
+                height="1000"
+                crop={{
+                  type: 'auto',
+                  source: true,
+                }}
               />
               <div className="absolute inset-0 flex items-center justify-between p-4">
                 <Button
@@ -67,7 +84,7 @@ export function ProductPageComponent() {
                 </Button>
               </div>
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                {product.images.map((_, index) => (
+                {product.imageUrls.map((_, index) => (
                   <div
                     key={index}
                     className={`h-2 w-2 rounded-full ${
@@ -83,19 +100,25 @@ export function ProductPageComponent() {
                 <p className="text-gray-600 mb-6">{product.description}</p>
                 <div className="flex items-center mb-6">
                   <User className="h-5 w-5 mr-2" />
-                  <span className="text-sm text-gray-500">Created by {product.creator}</span>
+                  <span className="text-sm text-gray-500">Created by PLACEHOLDER</span>
                 </div>
               </div>
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
-                  <Button className="px-8">Buy Now</Button>
+                  <span className="text-3xl font-bold">€{product.price.toFixed(2)}</span>
+                  <Button className="px-8">Buy now</Button>
                 </div>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
+      <Button asChild className="flex items-center space-x-2" variant="outline">
+        <Link href="/">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Go back
+        </Link>
+      </Button>
     </div>
-  )
+  );
 }

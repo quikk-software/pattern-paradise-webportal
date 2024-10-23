@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { client } from '@/@types';
 import type { PostUserRequest, PostUserResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
@@ -8,16 +8,13 @@ export const useCreateUser = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const mutate = useCallback(
-    async (data: PostUserRequest) => {
-      const response = await handleFn(async () => await client.api.postUser(data));
+  const mutate = async (data: PostUserRequest) => {
+    const response = await handleFn(async () => await client.api.postUser(data));
 
-      setData(response?.data);
+    setData(response?.data);
 
-      return response?.data;
-    },
-    [handleFn],
-  );
+    return response?.data;
+  };
 
   return {
     ...apiStates,

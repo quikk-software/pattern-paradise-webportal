@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 interface ProductCardProps {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -38,7 +38,7 @@ export default function ProductCard({ id, name, price, image }: ProductCardProps
           justifyContent: 'space-between',
         }}
       >
-        <span className="text-lg font-bold">${price.toFixed(2)}</span>
+        <span className="text-lg font-bold">€{price.toFixed(2)}</span>
         <Link href={`/products/${id}`}>
           <Button>Show details</Button>
         </Link>

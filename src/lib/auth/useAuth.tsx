@@ -61,7 +61,7 @@ const useAuth = () => {
     const decodedToken = jwtDecode(accessToken);
     const userId = getUserIdFromAccessToken(accessToken);
     dispatch(setUserId(userId));
-    dispatch(setRoles((decodedToken as any)?.resource_access?.ava?.roles ?? []));
+    dispatch(setRoles((decodedToken as any)?.resource_access?.cbj?.roles ?? []));
   };
 
   const handleLogin = async (username: string, password: string) => {

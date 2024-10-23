@@ -23,7 +23,6 @@ const PUBLIC_URLS = [
 ];
 
 function patternToRegex(pattern: string): RegExp {
-  // Escape special characters and replace '*' with a regex that matches any characters after the base path
   const regexString = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*');
   return new RegExp(`^${regexString}$`);
 }
