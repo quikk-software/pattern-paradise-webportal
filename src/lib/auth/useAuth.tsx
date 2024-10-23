@@ -72,10 +72,10 @@ const useAuth = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/analytics/protocol/openid-connect/token`,
+        `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/cbj/protocol/openid-connect/token`,
         qs.stringify({
           grant_type: 'password',
-          client_id: 'analytics',
+          client_id: 'cbj',
           username: username,
           password: password,
           scope: 'openid',

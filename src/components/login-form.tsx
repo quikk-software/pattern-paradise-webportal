@@ -13,16 +13,21 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
+import useAuth from '@/lib/auth/useAuth';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { handleLogin } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle the login logic
-    console.log('Login attempted with:', { email, password });
+
+    await handleLogin(email, password);
   };
+
+  const disabled = !email || !password;
 
   return (
     <Card className="w-full max-w-md mx-auto border-none">
@@ -55,7 +60,7 @@ export function LoginForm() {
                 required
               />
             </div>
-            <Button className="w-full" onClick={handleSubmit}>
+            <Button className="w-full" onClick={handleSubmit} disabled={disabled}>
               Log in
             </Button>
           </div>

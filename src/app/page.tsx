@@ -1,45 +1,44 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
-import Image from 'next/image';
+import ProductCard from '@/lib/components/ProductCard';
 
 const patterns = [
   {
     id: 1,
     name: 'Cozy Blanket',
     price: 5.99,
-    image: '/placeholder.svg?height=200&width=200',
+    image: 'patrick-1',
   },
   {
     id: 2,
     name: 'Summer Top',
     price: 4.99,
-    image: '/placeholder.svg?height=200&width=200',
+    image: 'patrick-2',
   },
   {
     id: 3,
     name: 'Cute Amigurumi',
     price: 3.99,
-    image: '/placeholder.svg?height=200&width=200',
+    image: 'patrick-3',
   },
   {
     id: 4,
     name: 'Warm Scarf',
     price: 2.99,
-    image: '/placeholder.svg?height=200&width=200',
+    image: 'patrick-1',
   },
   {
     id: 5,
     name: 'Baby Booties',
     price: 1.99,
-    image: '/placeholder.svg?height=200&width=200',
+    image: 'patrick-2',
   },
   {
     id: 6,
     name: 'Flower Granny Square',
     price: 0.99,
-    image: '/placeholder.svg?height=200&width=200',
+    image: 'patrick-3',
   },
 ];
 
@@ -76,24 +75,13 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {patterns.map((pattern) => (
-              <Card key={pattern.id} className="flex flex-col">
-                <CardHeader>
-                  <Image
-                    src={pattern.image}
-                    alt={pattern.name}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                    width={200}
-                    height={200}
-                  />
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <CardTitle>{pattern.name}</CardTitle>
-                </CardContent>
-                <CardFooter className="flex justify-between items-center">
-                  <span className="text-lg font-bold">${pattern.price.toFixed(2)}</span>
-                  <Button>Add to Cart</Button>
-                </CardFooter>
-              </Card>
+              <ProductCard
+                key={pattern.id}
+                id={pattern.id}
+                name={pattern.name}
+                price={pattern.price}
+                image={pattern.image}
+              />
             ))}
           </div>
         </div>

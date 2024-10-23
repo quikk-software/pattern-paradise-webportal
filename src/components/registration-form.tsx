@@ -18,10 +18,10 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 
 const roleOptions = [
-  { id: 'buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
-  { id: 'seller', label: 'Seller', icon: User, description: 'List and sell your patterns' },
+  { id: 'Buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
+  { id: 'Seller', label: 'Seller', icon: User, description: 'List and sell your patterns' },
   {
-    id: 'tester',
+    id: 'Tester',
     label: 'Tester',
     icon: TestTube,
     description: 'Try out new patterns and provide feedback',
@@ -51,6 +51,8 @@ export function RegistrationFormComponent() {
       setRolesError('Select one or more roles');
       return;
     }
+
+    console.log({ roles });
 
     await mutate({
       email: data.email,
