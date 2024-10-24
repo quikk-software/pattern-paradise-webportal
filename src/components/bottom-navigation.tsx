@@ -1,18 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import { Store, Tag, TestTube2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Store, Tag, TestTube2, Settings2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const menuItems = [
   { id: 'shop', label: 'Shop', icon: Store, href: '/' },
   { id: 'sell', label: 'Sell', icon: Tag, href: '/sell' },
   { id: 'test', label: 'Test', icon: TestTube2, href: '/test' },
+  { id: 'me', label: 'Me', icon: Settings2, href: '/auth/me' },
 ];
 
 export function BottomNavigation() {
   const [activeItem, setActiveItem] = useState('shop');
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    console.log({ pathname });
+    if (pathname === '/') {
+      setActiveItem('shop');
+      return;
+    }
+    const element = menuItems
+      .filter((menuItem) => menuItem.id !== 'shop')
+      .find((menuItem) => menuItem.href.startsWith(pathname) || pathname.startsWith(menuItem.href));
+    setActiveItem(element?.id ?? 'shop');
+  }, [pathname]);
 
   const { push } = useRouter();
 
@@ -21,7 +36,7 @@ export function BottomNavigation() {
       className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border"
       id="bottom-nav"
     >
-      <div className="grid h-full max-w-lg grid-cols-3 mx-auto">
+      <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
         {menuItems.map((item) => (
           <button
             key={item.id}

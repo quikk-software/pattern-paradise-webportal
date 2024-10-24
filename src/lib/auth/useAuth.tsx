@@ -1,61 +1,32 @@
-import { useCallback } from 'react';
+'use client';
+
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { getUserIdFromAccessToken, isTokenValid } from '@/lib/auth/auth.utils';
 import {
-  initialState,
   reset,
   setAccessToken,
   setRefreshToken,
   setRoles,
   setUserId,
-  setUsername,
 } from '@/lib/features/auth/authSlice';
 import logger from '@/lib/core/logger';
 import useRedirect from '@/lib/core/useRedirect';
 import { useRouter } from 'next/navigation';
 import { Store } from '@/lib/redux/store';
+import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
+import { useEffect, useState } from 'react';
 
 const useAuth = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
+
   const dispatch = useDispatch();
   const { redirectUrl } = useRedirect();
   const { push } = useRouter();
 
-  const { accessToken, username, userId } = useSelector((store: Store) => store.auth);
-
-  const getUserData = useCallback(
-    async () => {
-      if (userId === initialState.userId) {
-        return undefined;
-      }
-
-      // TODO: Sobald die API Route steht: Tatsächlichen Namen fetchen
-
-      // const res = await axios.get(getUserDataURL(userId), {
-      //   headers: {
-      //     Authorization: `Bearer ${accessToken}`,
-      //   },
-      // });
-      //
-      // // TODO: Add profile picture, etc...
-      //
-      // const {
-      //   data,
-      // }: {
-      //   data: {
-      //     username: string;
-      //   };
-      // } = res;
-
-      const username = '';
-
-      dispatch(setUsername(username));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [accessToken],
-  );
+  const { accessToken: accessTokenFromStore, username } = useSelector((store: Store) => store.auth);
 
   const setUserDataInReduxStore = (accessToken: string) => {
     const decodedToken = jwtDecode(accessToken);
@@ -90,7 +61,6 @@ const useAuth = () => {
         dispatch(setRefreshToken(refreshToken));
         setUserDataInReduxStore(accessToken);
 
-        console.log({ redirectUrl });
         push(redirectUrl);
       }
     } catch (err) {
@@ -105,15 +75,16 @@ const useAuth = () => {
     push('/auth/login');
   };
 
-  const isLoggedIn = () => {
-    return isTokenValid(accessToken);
-  };
+  useEffect(() => {
+    const accessToken =
+      accessTokenFromStore ?? getLocalStorageItem(LocalStorageKey.accessToken, null);
+    setIsLoggedIn(isTokenValid(accessToken));
+  }, [accessTokenFromStore]);
 
   return {
-    getUserData,
     handleLogin,
     handleLogout,
-    isLoggedIn: isLoggedIn(),
+    isLoggedIn,
     username,
     setUserDataInReduxStore,
   };

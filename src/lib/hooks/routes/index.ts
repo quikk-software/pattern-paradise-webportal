@@ -44,8 +44,8 @@ const pages: Page[] = [
     description: '',
   },
   {
-    title: 'Profile',
-    pathname: '/auth/user',
+    title: 'My profile',
+    pathname: '/auth/me',
     description: '',
   },
   {

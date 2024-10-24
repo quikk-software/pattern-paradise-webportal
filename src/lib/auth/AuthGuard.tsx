@@ -12,6 +12,7 @@ import { hasPageBeenMounted } from '@/lib/core/utils';
 import useAuth from '@/lib/auth/useAuth';
 import pages from '@/lib/hooks/routes';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
 
 const PUBLIC_URLS = [
   '/',
@@ -42,13 +43,14 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const { redirectUrl } = useRedirect();
   const { setUserDataInReduxStore, isLoggedIn } = useAuth();
 
-  const [showLoadingScreen, setShowLoadingScreen] = useState(!isLoggedIn);
-
   const isAccessibleWithoutAccount = isPublicUrl(pathname);
+  const pageMounted = hasPageBeenMounted();
 
-  const { accessToken, refreshToken } = useSelector((store: Store) => store.auth);
+  const { accessToken: accessTokenFromStore, refreshToken: refreshTokenFromStore } = useSelector(
+    (store: Store) => store.auth,
+  );
 
-  const onTokenValid = () => {
+  const onTokenValid = (accessToken: string | null) => {
     if (accessToken !== null) {
       setUserDataInReduxStore(accessToken);
       // redirect to redirect URL if not already on a valid page
@@ -58,21 +60,23 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     }
   };
 
-  const checkAuth = () => {
+  const checkAuth = (accessToken: string | null, refreshToken: string | null) => {
     if (isLoggedIn || isAccessibleWithoutAccount) {
       return;
     }
 
     logger.debug(`Checking Access for <${pathname}>.`);
-    if (isTokenValid(accessToken)) {
-      onTokenValid();
+    const at = accessToken ?? getLocalStorageItem(LocalStorageKey.accessToken, null);
+    if (isTokenValid(at)) {
+      onTokenValid(at);
       return;
     }
     (async () => {
-      if (refreshToken === null) {
+      const rt = refreshToken ?? getLocalStorageItem(LocalStorageKey.refreshToken, null);
+      if (rt === null) {
         return;
       }
-      const res = await getAccessTokenUsingRefreshToken(refreshToken);
+      const res = await getAccessTokenUsingRefreshToken(rt);
       if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
         const newAccessToken: string = (res.data.access_token as string) ?? '';
         const newRefreshToken: string = (res.data.refresh_token as string) ?? '';
@@ -87,29 +91,18 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
    * Taken from https://jasonwatmore.com/post/2021/08/30/next-js-redirect-to-login-page-if-unauthenticated
    */
   useEffect(() => {
-    checkAuth();
+    checkAuth(accessTokenFromStore, refreshTokenFromStore);
 
-    if (!isLoggedIn && hasPageBeenMounted() && !isPublicUrl(pathname)) {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessTokenFromStore, refreshTokenFromStore]);
+
+  useEffect(() => {
+    if (isLoggedIn === false && pageMounted && !isPublicUrl(pathname)) {
       router.push(`/auth/login?redirect=${pathname}`);
     }
+  }, [isLoggedIn, pageMounted, pathname]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, isLoggedIn]);
-
-  useEffect(() => {
-    setShowLoadingScreen(true);
-    if (isTokenValid(accessToken)) {
-      onTokenValid();
-    }
-    setShowLoadingScreen(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, accessToken]);
-
-  useEffect(() => {
-    setTimeout(() => setShowLoadingScreen(false), 1000);
-  });
-
-  if (!showLoadingScreen || isAccessibleWithoutAccount) {
+  if (isLoggedIn || isAccessibleWithoutAccount) {
     return <>{children}</>;
   }
 
