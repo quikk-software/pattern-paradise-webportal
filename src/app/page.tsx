@@ -22,10 +22,10 @@ export default async function Home() {
               </p>
             </div>
             <div className="space-x-4">
-              <Link href="/sell">
+              <Link href="/auth/registration?redirect=/sell">
                 <Button>Start selling</Button>
               </Link>
-              <Link href="/test">
+              <Link href="/auth/registration?redirect=/test">
                 <Button variant="outline">Become a tester</Button>
               </Link>
             </div>

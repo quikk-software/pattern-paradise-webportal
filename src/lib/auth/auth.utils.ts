@@ -9,7 +9,7 @@ import logger from '@/lib/core/logger';
  */
 const getUserIdFromAccessToken = (accessToken: string) => {
   const decoded: any = jwtDecode(accessToken);
-  return decoded.sub ?? '';
+  return decoded.refId ?? '';
 };
 
 /**

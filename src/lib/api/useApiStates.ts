@@ -26,14 +26,14 @@ export const useApiStates = () => {
         setIsError(false);
         return result;
       } catch (err: any) {
+        setIsSuccess(false);
+        setIsError(true);
         if (
           err?.error?.status !== undefined &&
           err?.error?.status !== '' &&
           err?.error?.detail !== '' &&
           err?.error?.detail !== undefined
         ) {
-          setIsSuccess(false);
-          setIsError(true);
           setValidationErrors(err?.error?.errors ?? []);
           setErrorDetail(err?.error?.detail);
           if (!BLACKLISTED_ROUTES.some((route) => err?.url.includes(route))) {

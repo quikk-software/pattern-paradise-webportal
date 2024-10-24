@@ -18,6 +18,7 @@ export interface PostUserRequest {
   roles: string[];
   instagramRef?: string;
   tiktokRef?: string;
+  imageUrl?: string;
 }
 
 export interface PostUserResponse {
@@ -31,6 +32,7 @@ export interface PutUserRequest {
   lastName?: string;
   instagramRef?: string;
   tiktokRef?: string;
+  imageUrl?: string;
   roles?: string[];
 }
 
@@ -43,6 +45,7 @@ export interface GetUserResponse {
   lastName?: string;
   instagramRef?: string;
   tiktokRef?: string;
+  imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
   mollieCustomerId?: string;
@@ -74,6 +77,34 @@ export interface ListUsersResponse {
   /** @example 3 */
   totalPages: number;
   users: GetUserResponse[];
+}
+
+export interface GetUserAccountResponse {
+  id: string;
+  username: string;
+  isActive: boolean;
+  firstName?: string;
+  lastName?: string;
+  instagramRef?: string;
+  tiktokRef?: string;
+  imageUrl?: string;
+  roles?: string[];
+}
+
+export interface ListUserAccountsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  users: GetUserAccountResponse[];
 }
 
 export interface PostProductRequest {
@@ -583,8 +614,26 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     getUserById: (userId: string, params: RequestParams = {}) =>
-      this.request<GetUserResponse, NotFoundResponse>({
+      this.request<GetUserAccountResponse, NotFoundResponse>({
         path: `/api/v1/users/${userId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The user will be queried by a given ID. If the user cannot be found or the user ID is not related to the authenticated user, an exception will be thrown.
+     *
+     * @tags User
+     * @name GetUser
+     * @summary Gets the authenticated user.
+     * @request GET:/api/v1/users/{userId}/me
+     * @secure
+     */
+    getUser: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUserResponse, NotFoundResponse>({
+        path: `/api/v1/users/${userId}/me`,
         method: 'GET',
         secure: true,
         format: 'json',
