@@ -22,7 +22,7 @@ export default function ProductImageSlider({ imageUrls, title }: ProductImageSli
   };
 
   return (
-    <>
+    <div className="relative aspect-square">
       <CldImage
         alt={`${title} - Image ${currentImageIndex + 1}`}
         src={imageUrls[currentImageIndex]}
@@ -33,7 +33,7 @@ export default function ProductImageSlider({ imageUrls, title }: ProductImageSli
           source: true,
         }}
       />
-      <div className="absolute inset-0 flex items-center justify-between p-4">
+      <div className="absolute inset-0 flex items-center justify-between p-4 w-full bottom-0">
         <Button
           variant="outline"
           size="icon"
@@ -63,6 +63,6 @@ export default function ProductImageSlider({ imageUrls, title }: ProductImageSli
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }
