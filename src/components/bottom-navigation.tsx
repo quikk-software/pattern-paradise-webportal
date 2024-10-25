@@ -18,7 +18,6 @@ export function BottomNavigation() {
   const pathname = usePathname();
 
   useEffect(() => {
-    console.log({ pathname });
     if (pathname === '/') {
       setActiveItem('shop');
       return;

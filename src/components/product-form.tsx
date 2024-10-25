@@ -19,6 +19,7 @@ import { useCreateProduct } from '@/lib/api';
 import axios from 'axios';
 import logger from '@/lib/core/logger';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { handleImageUpload } from '@/lib/features/common/utils';
 
 const CATEGORIES = ['Crocheting', 'Knitting'];
 
@@ -47,43 +48,6 @@ export function ProductFormComponent() {
     }
   };
 
-  const handleImageUpload = async (files: string[]) => {
-    if (hasErrors) {
-      setImageError('Please fill out the form before uploading');
-      return;
-    }
-    setImageUploadIsLoading(true);
-    const urls: string[] = [];
-    const blobs: Blob[] = [];
-    for await (const file of files) {
-      const blob = await fetch(file).then((r) => r.blob());
-      blobs.push(blob);
-    }
-    for await (const file of Array.from(blobs)) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'product_form');
-      try {
-        const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        );
-        urls.push(response.data.url);
-      } catch (error) {
-        setImageError('Error uploading images. Please try again.');
-        logger.error('Error uploading image:', error);
-      }
-    }
-    setImageUploadIsLoading(false);
-
-    return urls;
-  };
-
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
@@ -94,7 +58,22 @@ export function ProductFormComponent() {
       return;
     }
 
-    const urls = await handleImageUpload(images);
+    const urls = await handleImageUpload(
+      images,
+      () => {
+        if (hasErrors) {
+          setImageError('Please fill out the form before uploading');
+          return;
+        }
+        setImageUploadIsLoading(true);
+      },
+      () => {
+        setImageUploadIsLoading(false);
+      },
+      () => {
+        setImageError('Error uploading images. Please try again.');
+      },
+    );
 
     if (!urls) {
       setImageError("Images couldn't be uploaded. Please try again later.");

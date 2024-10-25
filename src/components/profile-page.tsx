@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,13 +9,20 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
+import { useUpdateUser } from '@/lib/api';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { handleImageUpload } from '@/lib/features/common/utils';
 
 interface ProfilePageProps {
   user: GetUserResponse;
 }
 
 export function ProfilePage({ user }: ProfilePageProps) {
-  const [profileImage, setProfileImage] = useState('/placeholder.svg?height=100&width=100');
+  const [profileImage, setProfileImage] = useState(user.imageUrl);
+  const [imageIsLoading, setImageIsLoading] = useState(false);
+  const [imageError, setImageError] = useState<string | undefined>(undefined);
+
+  const { mutate, isLoading } = useUpdateUser();
 
   const {
     register,
@@ -24,12 +31,39 @@ export function ProfilePage({ user }: ProfilePageProps) {
     formState: { errors },
   } = useForm({ defaultValues: user });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    // Here you would typically send the data to your API
+  const onSubmit = async (data: any) => {
+    setImageError(undefined);
+    let urls: string[] = [];
+    if (!!profileImage) {
+      [urls] = await Promise.all([
+        handleImageUpload(
+          [profileImage],
+          () => {
+            setImageIsLoading(true);
+          },
+          () => {
+            setImageIsLoading(false);
+          },
+          () => {
+            setImageError('Image upload failed. Please use another image or try again later.');
+            setImageIsLoading(false);
+          },
+        ),
+      ]);
+    }
+    await mutate({
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      imageUrl: urls.length > 0 ? urls[0] : undefined,
+      instagramRef: data.instagramRef,
+      tiktokRef: data.tiktokRef,
+      username: data.username,
+      roles: data.roles,
+    });
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -38,6 +72,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
       reader.readAsDataURL(file);
     }
   };
+
+  const initials =
+    user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
 
   return (
     <Card className="w-full max-w-2xl mx-auto border-none">
@@ -49,7 +86,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
           <div className="space-y-2 flex flex-col items-center">
             <Avatar className="w-32 h-32">
               <AvatarImage src={profileImage} alt="Profile" />
-              <AvatarFallback>JD</AvatarFallback>
+              {initials ? <AvatarFallback>{initials}</AvatarFallback> : null}
             </Avatar>
             <Label
               htmlFor="picture"
@@ -62,7 +99,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={handleImageUpload}
+              onChange={selectImage}
             />
           </div>
 
@@ -198,9 +235,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
             </div>
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={isLoading || imageIsLoading}>
+            {isLoading || imageIsLoading ? (
+              <LoadingSpinnerComponent size="sm" className="text-white" />
+            ) : null}
             Save Changes
           </Button>
+          {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
         </form>
       </CardContent>
     </Card>
