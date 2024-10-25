@@ -67,12 +67,14 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
 
     logger.debug(`Checking Access for <${pathname}>.`);
     const at = accessToken ?? getLocalStorageItem(LocalStorageKey.accessToken, null);
+    const rt = refreshToken ?? getLocalStorageItem(LocalStorageKey.refreshToken, null);
     if (isTokenValid(at)) {
       onTokenValid(at);
+      dispatch(setAccessToken(at));
+      dispatch(setRefreshToken(rt));
       return;
     }
     (async () => {
-      const rt = refreshToken ?? getLocalStorageItem(LocalStorageKey.refreshToken, null);
       if (rt === null) {
         return;
       }
