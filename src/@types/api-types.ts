@@ -163,6 +163,99 @@ export interface ListProductsResponse {
   products: GetProductResponse[];
 }
 
+export interface PostTestingRequest {
+  testerIds: string[];
+  productId: string;
+}
+
+export interface PostTestingResponse {
+  testingId: string;
+}
+
+export interface PutTestingRequest {
+  testerIds: any[];
+}
+
+export interface GetTestingResponse {
+  id: string;
+  testers: string[];
+  creatorId: string;
+  productId: string;
+  status: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListTestingsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  testings: GetTestingResponse[];
+}
+
+export interface PostTestingCommentRequest {
+  testingId: string;
+  comment: string;
+  type: string;
+  fileUrls: string[];
+}
+
+export interface PostTestingCommentResponse {
+  testingCommentId: string;
+}
+
+export interface GetTestingCommentResponse {
+  id: string;
+  fileUrls: string[];
+  creatorId: string;
+  testingId: string;
+  message: string;
+  type: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListTestingCommentsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  testingComments: GetTestingCommentResponse[];
+}
+
 export interface ListApplicationErrorsResponse {
   /** @example "3" */
   count: number;
@@ -591,6 +684,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @example "any" */
         tiktokRef?: any;
         /** @example "any" */
+        imageUrl?: any;
+        /** @example "any" */
         roles?: any;
       },
       params: RequestParams = {},
@@ -791,6 +886,210 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListProductsResponse, any>({
         path: `/api/v1/products/users/${userId}`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Creates a testing by the given request body data.
+     *
+     * @tags Testing
+     * @name PostTesting
+     * @summary Creates a testing.
+     * @request POST:/api/v1/testings
+     * @secure
+     */
+    postTesting: (
+      data: {
+        /** @example "any" */
+        productId?: any;
+        /** @example "any" */
+        testerIds?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostTestingResponse, any>({
+        path: `/api/v1/testings`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of testings.
+     *
+     * @tags Testing
+     * @name ListTestings
+     * @summary Gets the testings.
+     * @request GET:/api/v1/testings
+     * @secure
+     */
+    listTestings: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListTestingsResponse, any>({
+        path: `/api/v1/testings`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Updates the testing by the given request body data and testing ID.
+     *
+     * @tags Testing
+     * @name PutTesting
+     * @summary Updates the testing.
+     * @request PUT:/api/v1/testings/{testingId}
+     * @secure
+     */
+    putTesting: (
+      testingId: string,
+      data: {
+        /** @example "any" */
+        testerIds?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/${testingId}`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The testing will be queried by a given ID. If the testing cannot be found, an exception will be thrown.
+     *
+     * @tags Testing
+     * @name GetTestingById
+     * @summary Gets a testing by ID.
+     * @request GET:/api/v1/testings/{testingId}
+     * @secure
+     */
+    getTestingById: (testingId: string, params: RequestParams = {}) =>
+      this.request<GetTestingResponse, NotFoundResponse>({
+        path: `/api/v1/testings/${testingId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query deletes a testing by a given ID.
+     *
+     * @tags Testing
+     * @name DeleteTesting
+     * @summary Deletes the testings.
+     * @request DELETE:/api/v1/testings/{testingId}
+     * @secure
+     */
+    deleteTesting: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/${testingId}`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of testings of a given user ID.
+     *
+     * @tags Testing
+     * @name ListTestingsByUserId
+     * @summary Gets the testings by user ID.
+     * @request GET:/api/v1/testings/users/{userId}
+     * @secure
+     */
+    listTestingsByUserId: (
+      userId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListTestingsResponse, any>({
+        path: `/api/v1/testings/users/${userId}`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Creates a testing comment by the given request body data.
+     *
+     * @tags Testing comment
+     * @name PostTestingComment
+     * @summary Creates a testing comment.
+     * @request POST:/api/v1/testing-comments
+     * @secure
+     */
+    postTestingComment: (
+      data: {
+        /** @example "any" */
+        testingId?: any;
+        /** @example "any" */
+        message?: any;
+        /** @example "any" */
+        fileUrls?: any;
+        /** @example "any" */
+        type?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostTestingCommentResponse, any>({
+        path: `/api/v1/testing-comments`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of testing comment of a given testing ID.
+     *
+     * @tags Testing comment
+     * @name ListTestingCommentsByTestingId
+     * @summary Gets the testing comments by testing ID.
+     * @request GET:/api/v1/testing-comments/testings/{testingId}
+     * @secure
+     */
+    listTestingCommentsByTestingId: (
+      testingId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListTestingCommentsResponse, any>({
+        path: `/api/v1/testing-comments/testings/${testingId}`,
         method: 'GET',
         query: query,
         secure: true,

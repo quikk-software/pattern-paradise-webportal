@@ -1,0 +1,25 @@
+import { client, getApi } from '@/@types';
+import { useApiStates } from '../useApiStates';
+import { useDispatch, useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+
+export const useDeleteProduct = () => {
+  const dispatch = useDispatch();
+  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+
+  const { handleFn, ...apiStates } = useApiStates();
+
+  const fetch = async (productId: string) => {
+    await handleFn(
+      async () =>
+        await client.api.deleteProduct(productId, {
+          ...(await getApi(accessToken, refreshToken, dispatch)),
+        }),
+    );
+  };
+
+  return {
+    ...apiStates,
+    fetch,
+  };
+};
