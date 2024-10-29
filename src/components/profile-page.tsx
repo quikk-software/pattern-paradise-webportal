@@ -53,8 +53,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
     await mutate({
       email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
+      firstName: data.firstName ?? undefined,
+      lastName: data.lastName ?? undefined,
       imageUrl: urls.length > 0 ? urls[0] : undefined,
       instagramRef: data.instagramRef,
       tiktokRef: data.tiktokRef,
@@ -106,20 +106,14 @@ export function ProfilePage({ user }: ProfilePageProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                {...register('firstName', { required: 'First name is required' })}
-              />
+              <Input id="firstName" {...register('firstName')} />
               {errors.firstName && (
                 <p className="text-red-500 text-sm">{errors.firstName.message}</p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                {...register('lastName', { required: 'Last name is required' })}
-              />
+              <Input id="lastName" {...register('lastName')} />
               {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
             </div>
           </div>

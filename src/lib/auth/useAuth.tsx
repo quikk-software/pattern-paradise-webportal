@@ -21,6 +21,9 @@ import { useEffect, useState } from 'react';
 
 const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const dispatch = useDispatch();
   const { redirectUrl } = useRedirect();
@@ -40,6 +43,10 @@ const useAuth = () => {
       logger.warn('Username or password are empty.', { username, password });
       return;
     }
+
+    setIsLoading(true);
+    setIsSuccess(false);
+    setIsError(false);
 
     try {
       const response = await axios.post(
@@ -61,12 +68,17 @@ const useAuth = () => {
         dispatch(setRefreshToken(refreshToken));
         setUserDataInReduxStore(accessToken);
 
+        setIsSuccess(true);
+
         push(redirectUrl);
       }
     } catch (err) {
       logger.error(err);
+      setIsError(true);
       // Error Snackbar o.ä. hier dispatchen?
       // displaySuccess("Anmeldung fehlgeschlagen");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -85,6 +97,9 @@ const useAuth = () => {
     handleLogin,
     handleLogout,
     isLoggedIn,
+    isLoading,
+    isSuccess,
+    isError,
     username,
     setUserDataInReduxStore,
   };

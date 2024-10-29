@@ -1,7 +1,7 @@
 'use client';
 
-import { Dashboard } from '@/components/dashboard';
+import { SellPageComponent } from '@/components/sell-page';
 
 export default function SellPage() {
-  return <Dashboard />;
+  return <SellPageComponent />;
 }

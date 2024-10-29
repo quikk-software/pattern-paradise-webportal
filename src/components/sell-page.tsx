@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { PlusCircle, ShoppingBag, TestTube } from 'lucide-react';
 import Link from 'next/link';
 
-export function Dashboard() {
+export function SellPageComponent() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <header className="mb-8">

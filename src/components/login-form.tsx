@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,12 +14,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import useAuth from '@/lib/auth/useAuth';
+import RequestStatus from '@/lib/components/RequestStatus';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { handleLogin } = useAuth();
+  const { handleLogin, isLoading, isSuccess, isError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,8 +63,14 @@ export function LoginForm() {
               />
             </div>
             <Button className="w-full" onClick={handleSubmit} disabled={disabled}>
+              {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
               Log in
             </Button>
+            <RequestStatus
+              isSuccess={isSuccess}
+              isError={isError}
+              errorMessage="Login failed. Please check your email and password."
+            />
           </div>
         </form>
       </CardContent>
