@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { getProduct } from '@/lib/api/static/product/getProduct';
 import NotFoundPage from '@/app/not-found';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
+import { BuyNowButton } from '@/lib/components/BuyNowButton';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -34,10 +35,7 @@ export async function ProductPageComponent({ productId }: ProductPageComponentPr
                 </div>
               </div>
               <div>
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-3xl font-bold">€{product.price.toFixed(2)}</span>
-                  <Button className="px-8">Buy now</Button>
-                </div>
+                <BuyNowButton price={product.price} productId={product.id} />
               </div>
             </div>
           </div>

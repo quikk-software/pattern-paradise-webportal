@@ -28,6 +28,7 @@ export const useApiStates = () => {
       } catch (err: any) {
         setIsSuccess(false);
         setIsError(true);
+        console.log({ err });
         if (
           err?.error?.status !== undefined &&
           err?.error?.status !== '' &&

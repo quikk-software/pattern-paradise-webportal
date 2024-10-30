@@ -16,17 +16,20 @@ import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useCreateProduct } from '@/lib/api';
-import axios from 'axios';
-import logger from '@/lib/core/logger';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
+import logger from '@/lib/core/logger';
 
 const CATEGORIES = ['Crocheting', 'Knitting'];
 
+const FILE_SIZE_LIMIT = 5242880;
+
 export function ProductFormComponent() {
+  const [pattern, setPattern] = useState<File | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
+  const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
 
   const { mutate, isLoading } = useCreateProduct();
@@ -38,7 +41,31 @@ export function ProductFormComponent() {
     getValues,
   } = useForm();
 
-  const hasErrors = errors.title || errors.description || errors.price || imageError;
+  const hasErrors =
+    errors.title || errors.description || errors.price || imageError || patternError;
+
+  const handlePatternChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      if (selectedFile.type === 'application/pdf') {
+        if (selectedFile.size <= FILE_SIZE_LIMIT) {
+          setPattern(selectedFile);
+          setPatternError(undefined);
+        } else {
+          setPattern(null);
+          setPatternError(
+            `Your PDF file is to large. Please ensure that the file is below 5MB. Your file has a size of ${(
+              selectedFile.size /
+              (1024 * 1024)
+            ).toFixed(2)}MB`,
+          );
+        }
+      } else {
+        setPattern(null);
+        setPatternError('Please select a PDF file.');
+      }
+    }
+  };
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -52,11 +79,27 @@ export function ProductFormComponent() {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const convertFileToBase64 = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const onSubmit = async (data: any) => {
     if (images.length === 0 || images.length > 6) {
       setImageError('Please add 1 to 6 images.');
       return;
     }
+    setImageError(undefined);
+    if (!pattern) {
+      setPatternError('Please add a PDF with your pattern.');
+      return;
+    }
+    setPatternError(undefined);
 
     const urls = await handleImageUpload(
       images,
@@ -80,12 +123,20 @@ export function ProductFormComponent() {
       return;
     }
 
+    const patternPdfBase64 = await convertFileToBase64(pattern);
+    if (!patternPdfBase64) {
+      setPatternError(
+        "The pattern PDF couldn't be converted. Please check your file and try again.",
+      );
+      return;
+    }
     await mutate({
       title: data.title,
       description: data.description,
       price: data.price,
       imageUrls: urls,
       category,
+      patternPdfBase64,
     });
   };
 
@@ -178,7 +229,7 @@ export function ProductFormComponent() {
           </Select>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           <Label htmlFor="images" className="block text-lg font-semibold mb-2">
             Images (max. 6) <span className="text-red-500">*</span>
           </Label>
@@ -215,6 +266,14 @@ export function ProductFormComponent() {
             <p className="text-yellow-600 text-sm mt-2">Maximum number of images reached.</p>
           )}
           {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
+        </div>
+
+        <div className="flex flex-col">
+          <Label htmlFor="pattern" className="block text-lg font-semibold mb-2">
+            Your pattern (PDF) <span className="text-red-500">*</span>
+          </Label>
+          <Input type="file" accept=".pdf" onChange={handlePatternChange} />
+          {patternError ? <p className="text-yellow-600 text-sm mt-2">{patternError}</p> : null}
         </div>
 
         <Button type="submit" className="w-full">

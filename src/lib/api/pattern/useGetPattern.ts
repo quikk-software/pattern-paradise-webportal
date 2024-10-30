@@ -1,34 +1,35 @@
-import { useState } from 'react';
 import { client, getApi } from '@/@types';
-import type { PostTestingCommentRequest, PostTestingCommentResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useState } from 'react';
 
-export const useCreateTestingComment = () => {
-  const [data, setData] = useState<PostTestingCommentResponse | undefined>(undefined);
+export const useGetPattern = () => {
+  const [data, setData] = useState<any>(undefined);
 
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const mutate = async (testingComment: PostTestingCommentRequest) => {
+  const fetch = async (patternId: string) => {
     const response = await handleFn(
       async () =>
-        await client.api.postTestingComment(testingComment, {
+        await client.api.getPatternById(patternId, {
           ...(await getApi(accessToken, refreshToken, dispatch)),
         }),
     );
 
-    setData(response?.data);
+    const file = await response.blob();
 
-    return response?.data;
+    setData(file);
+
+    return file;
   };
 
   return {
     ...apiStates,
-    mutate,
+    fetch,
     data,
   };
 };

@@ -14,27 +14,27 @@ export const useListProducts = ({
   const [data, setData] = useState<GetProductResponse[]>([]);
 
   const { handleFn, ...apiStates } = useApiStates();
-  const { pageNumber: actualPageNumber, pageSize: actualPageSize } = usePagination(
-    pageNumber,
-    pageSize,
-  );
+  const pagination = usePagination(pageNumber, pageSize);
 
   const fetch = async () => {
     const response = await handleFn(
       async () =>
         await client.api.listProducts({
-          pageNumber: actualPageNumber,
-          pageSize: actualPageSize,
+          pageNumber: pagination.pageNumber,
+          pageSize: pagination.pageSize,
         }),
     );
 
     setData(response?.data.products);
+
+    pagination.handlePaginationPayload(response?.data);
 
     return response?.data;
   };
 
   return {
     ...apiStates,
+    ...pagination,
     fetch,
     data,
   };

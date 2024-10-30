@@ -3,8 +3,8 @@ import React from 'react';
 interface RequestStatusProps {
   isSuccess: boolean;
   isError: boolean;
-  successMessage?: string;
-  errorMessage?: string;
+  successMessage?: string | React.ReactNode;
+  errorMessage?: string | React.ReactNode;
 }
 
 const RequestStatus: React.FunctionComponent<RequestStatusProps> = ({

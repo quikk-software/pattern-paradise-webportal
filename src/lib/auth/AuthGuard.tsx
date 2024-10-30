@@ -14,14 +14,7 @@ import pages from '@/lib/hooks/routes';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
 
-const PUBLIC_URLS = [
-  '/',
-  '/auth/login',
-  '/auth/reset-password',
-  '/auth/registration',
-  '/products',
-  '/products/*',
-];
+const PUBLIC_URLS = ['/', '/auth/login', '/auth/reset-password', '/auth/registration', '/products'];
 
 function patternToRegex(pattern: string): RegExp {
   const regexString = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*');

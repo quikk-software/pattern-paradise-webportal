@@ -1,23 +1,23 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { ProfilePage } from '@/components/profile-page';
-import { useGetUser } from '@/lib/api';
+import { OrderDetails } from '@/components/order-details';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { useGetOrder } from '@/lib/api/order';
 
-export default function MePage() {
-  const { fetch, data: user, isLoading, isError } = useGetUser();
+export default function MyOrderDetailPage({ params }: { params: { orderId: string } }) {
+  const { fetch, data: order, isLoading, isError } = useGetOrder();
 
   useEffect(() => {
-    fetch();
-  }, []);
+    fetch(params.orderId);
+  }, [params.orderId]);
 
   if (isError) {
     return <NotFoundPage />;
   }
 
-  if (isLoading || !user) {
+  if (isLoading || !order) {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <LoadingSpinnerComponent />
@@ -25,5 +25,5 @@ export default function MePage() {
     );
   }
 
-  return <ProfilePage user={user} />;
+  return <OrderDetails order={order} />;
 }

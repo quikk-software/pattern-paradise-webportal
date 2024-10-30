@@ -16,6 +16,8 @@ import { User, ShoppingCart, TestTube } from 'lucide-react';
 import { useCreateUser } from '@/lib/api';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
+import RequestStatus from '@/lib/components/RequestStatus';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
@@ -32,7 +34,7 @@ export function RegistrationFormComponent() {
   const [roles, setRoles] = useState<string[]>([]);
   const [rolesError, setRolesError] = useState<string | undefined>(undefined);
 
-  const { mutate } = useCreateUser();
+  const { mutate, isSuccess, isError, isLoading, errorDetail } = useCreateUser();
 
   const {
     register,
@@ -151,31 +153,38 @@ export function RegistrationFormComponent() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" placeholder="First name" />
+              <Input id="firstName" placeholder="First name" {...register('firstName')} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" placeholder="Last name" />
+              <Input id="lastName" placeholder="Last name" {...register('lastName')} />
             </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
-            <Input id="username" placeholder="Choose a username" />
+            <Input id="username" placeholder="Choose a username" {...register('username')} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="instagram">Instagram</Label>
-            <Input id="instagram" placeholder="Your Instagram handle" />
+            <Input id="instagram" placeholder="Your Instagram handle" {...register('instagram')} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="tiktok">TikTok</Label>
-            <Input id="tiktok" placeholder="Your TikTok handle" />
+            <Input id="tiktok" placeholder="Your TikTok handle" {...register('tiktok')} />
           </div>
           <Button className="w-full" type="submit">
+            {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
             Register
           </Button>
           {!!hasErrors ? (
             <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
           ) : null}
+          <RequestStatus
+            isSuccess={isSuccess}
+            isError={isError}
+            successMessage="Your account has been created. You can login to your account now."
+            errorMessage={`Registration failed: ${errorDetail}`}
+          />
         </CardContent>
         <CardFooter className="flex flex-col items-start">
           <p className="text-sm text-muted-foreground">

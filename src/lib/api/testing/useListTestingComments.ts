@@ -19,10 +19,7 @@ export const useListTestingComments = ({
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
   const { handleFn, ...apiStates } = useApiStates();
-  const { pageNumber: actualPageNumber, pageSize: actualPageSize } = usePagination(
-    pageNumber,
-    pageSize,
-  );
+  const pagination = usePagination(pageNumber, pageSize);
 
   const fetch = async (testingId: string) => {
     const response = await handleFn(
@@ -30,8 +27,8 @@ export const useListTestingComments = ({
         await client.api.listTestingCommentsByTestingId(
           testingId,
           {
-            pageNumber: actualPageNumber,
-            pageSize: actualPageSize,
+            pageNumber: pagination.pageNumber,
+            pageSize: pagination.pageSize,
           },
           { ...(await getApi(accessToken, refreshToken, dispatch)) },
         ),
@@ -39,11 +36,14 @@ export const useListTestingComments = ({
 
     setData(response?.data.testingComments);
 
+    pagination.handlePaginationPayload(response?.data);
+
     return response?.data;
   };
 
   return {
     ...apiStates,
+    ...pagination,
     fetch,
     data,
   };

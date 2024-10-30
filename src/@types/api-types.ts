@@ -113,6 +113,7 @@ export interface PostProductRequest {
   description: string;
   category: string;
   price: number;
+  patternPdfBase64: string;
 }
 
 export interface PostProductResponse {
@@ -254,6 +255,61 @@ export interface ListTestingCommentsResponse {
   /** @example 3 */
   totalPages: number;
   testingComments: GetTestingCommentResponse[];
+}
+
+export interface PostOrderRequest {
+  productId: string;
+}
+
+export interface PostOrderResponse {
+  orderId: string;
+  paypalOrderId: string;
+  captureLink: string;
+}
+
+export interface GetOrderResponse {
+  id: string;
+  seller: GetUserAccountResponse;
+  customer: GetUserAccountResponse;
+  amount: number;
+  currency: string;
+  paypalFee: number;
+  paypalFeeCurrency: string;
+  platformFee: number;
+  platformFeeCurrency: string;
+  status: string;
+  productId: string;
+  productName: string;
+  productDescription: string;
+  productImageUrls: string[];
+  productPrice: number;
+  patternPdfId: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListOrdersResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  orders: GetOrderResponse[];
 }
 
 export interface ListApplicationErrorsResponse {
@@ -756,6 +812,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         category?: any;
         /** @example "any" */
         price?: any;
+        /** @example "any" */
+        patternPdfBase64?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1092,6 +1150,112 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/testing-comments/testings/${testingId}`,
         method: 'GET',
         query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Creates an order by the given request body data.
+     *
+     * @tags Order
+     * @name PostOrder
+     * @summary Creates an order.
+     * @request POST:/api/v1/orders
+     * @secure
+     */
+    postOrder: (
+      data: {
+        /** @example "any" */
+        productId?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostOrderResponse, any>({
+        path: `/api/v1/orders`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of orders of the authenticated user.
+     *
+     * @tags Order
+     * @name ListOrders
+     * @summary Gets the orders.
+     * @request GET:/api/v1/orders
+     * @secure
+     */
+    listOrders: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListOrdersResponse, any>({
+        path: `/api/v1/orders`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The order will be captured by a given ID. If the order cannot be found, an exception will be thrown.
+     *
+     * @tags Order
+     * @name CaptureOrder
+     * @summary Captures an order by paypal order ID.
+     * @request POST:/api/v1/orders/{paypalOrderId}/capture
+     * @secure
+     */
+    captureOrder: (paypalOrderId: string, params: RequestParams = {}) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/orders/${paypalOrderId}/capture`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The order will be queried by a given ID. If the order cannot be found, an exception will be thrown.
+     *
+     * @tags Order
+     * @name GetOrderById
+     * @summary Gets an order by ID.
+     * @request GET:/api/v1/orders/{orderId}
+     * @secure
+     */
+    getOrderById: (orderId: string, params: RequestParams = {}) =>
+      this.request<GetOrderResponse, NotFoundResponse>({
+        path: `/api/v1/orders/${orderId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The product will be queried by a given ID. If the pattern cannot be found, an exception will be thrown.
+     *
+     * @tags Pattern
+     * @name GetPatternById
+     * @summary Gets a pattern by ID.
+     * @request GET:/api/v1/patterns/{patternId}
+     * @secure
+     */
+    getPatternById: (patternId: string, params: RequestParams = {}) =>
+      this.request<any, NotFoundResponse>({
+        path: `/api/v1/patterns/${patternId}`,
+        method: 'GET',
         secure: true,
         format: 'json',
         ...params,

@@ -49,6 +49,16 @@ const pages: Page[] = [
     description: '',
   },
   {
+    title: 'My orders',
+    pathname: '/auth/me/orders',
+    description: '',
+  },
+  {
+    title: 'My order',
+    pathname: '/auth/me/orders/[orderId]',
+    description: '',
+  },
+  {
     title: 'Reset password',
     pathname: '/auth/reset-password',
     description: '',

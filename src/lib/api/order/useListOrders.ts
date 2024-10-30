@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { client, getApi } from '@/@types';
-import type { GetTestingResponse } from '@/@types/api-types';
+import type { GetOrderResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 
-export const useListTestings = ({
+export const useListOrders = ({
   pageNumber = 1,
   pageSize = 20,
 }: {
   pageNumber?: number;
   pageSize?: number;
 }) => {
-  const [data, setData] = useState<GetTestingResponse[]>([]);
+  const [data, setData] = useState<GetOrderResponse[]>([]);
 
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
@@ -21,19 +21,21 @@ export const useListTestings = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async () => {
+  const fetch = async (customPageNumber?: number, customPageSize?: number) => {
     const response = await handleFn(
       async () =>
-        await client.api.listTestings(
+        await client.api.listOrders(
           {
-            pageNumber: pagination.pageNumber,
-            pageSize: pagination.pageSize,
+            pageNumber: customPageNumber ?? pagination.pageNumber,
+            pageSize: customPageSize ?? pagination.pageSize,
           },
-          { ...(await getApi(accessToken, refreshToken, dispatch)) },
+          {
+            ...(await getApi(accessToken, refreshToken, dispatch)),
+          },
         ),
     );
 
-    setData(response?.data.testings);
+    setData(response?.data.orders);
 
     pagination.handlePaginationPayload(response?.data);
 

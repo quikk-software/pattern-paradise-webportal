@@ -19,10 +19,7 @@ export const useListTestingsByUserId = ({
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
   const { handleFn, ...apiStates } = useApiStates();
-  const { pageNumber: actualPageNumber, pageSize: actualPageSize } = usePagination(
-    pageNumber,
-    pageSize,
-  );
+  const pagination = usePagination(pageNumber, pageSize);
 
   const fetch = async (userId: string) => {
     const response = await handleFn(
@@ -30,8 +27,8 @@ export const useListTestingsByUserId = ({
         await client.api.listTestingsByUserId(
           userId,
           {
-            pageNumber: actualPageNumber,
-            pageSize: actualPageSize,
+            pageNumber: pagination.pageNumber,
+            pageSize: pagination.pageSize,
           },
           { ...(await getApi(accessToken, refreshToken, dispatch)) },
         ),
@@ -39,11 +36,14 @@ export const useListTestingsByUserId = ({
 
     setData(response?.data.testings);
 
+    pagination.handlePaginationPayload(response?.data);
+
     return response?.data;
   };
 
   return {
     ...apiStates,
+    ...pagination,
     fetch,
     data,
   };
