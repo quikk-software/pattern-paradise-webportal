@@ -5,57 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.sample" beforeDir="false" afterPath="$PROJECT_DIR$/.env.sample" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-bd7e3b9b.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-bd7e3b9b.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/me/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/me/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sell/orders/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/orders/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sell/products/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/products/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sell/submit/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/submit/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sell/testings/[testingId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/testings/[testingId]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sell/testings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/testings/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chat-screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat-screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/product-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/product-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/registration-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/registration-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sell-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sell-page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/testing-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/testing-page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/avatar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/avatar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/checkbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/checkbox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/scroll-area.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/scroll-area.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/select.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/select.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/textarea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/textarea.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/product/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/product/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/product/useCreateProduct.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/product/useCreateProduct.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/product/useDeleteProduct.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/product/useDeleteProduct.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/product/useGetProduct.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/product/useGetProduct.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/product/useListProducts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/product/useListProducts.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/static/product/getProduct.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/static/product/getProduct.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/static/product/listProducts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/static/product/listProducts.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useCreateTesting.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useCreateTesting.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useCreateTestingComment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useCreateTestingComment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useDeleteTesting.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useDeleteTesting.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useGetTesting.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useGetTesting.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useListTestingComments.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useListTestingComments.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useListTestings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useListTestings.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useListTestingsByUserId.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useListTestingsByUserId.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/user/useGetUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/user/useGetUser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/user/useUpdateUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/user/useUpdateUser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductImageSlider/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductImageSlider/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductListing/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductListing/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/RequestStatus/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/RequestStatus/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/features/common/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/features/common/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +63,7 @@
       <recent name="$PROJECT_DIR$/src/app/products/[productId]" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.format">
+  <component name="RunManager" selected="npm.generate-types">
     <configuration name="format" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -142,8 +96,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.format" />
         <item itemvalue="npm.generate-types" />
+        <item itemvalue="npm.format" />
         <item itemvalue="npm.lint" />
       </list>
     </recent_temporary>
@@ -164,7 +118,7 @@
       <option name="presentableId" value="Default" />
       <updated>1730103422276</updated>
       <workItem from="1730103423799" duration="3000" />
-      <workItem from="1730217150931" duration="22080000" />
+      <workItem from="1730217150931" duration="24513000" />
     </task>
     <servers />
   </component>

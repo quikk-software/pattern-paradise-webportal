@@ -33,6 +33,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm({ defaultValues: user });
 
@@ -65,6 +66,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       tiktokRef: data.tiktokRef,
       username: data.username,
       roles: data.roles,
+      paypalEmail: data.paypalEmail,
     });
   };
 
@@ -80,6 +82,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const initials =
     user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
+
+  const roles = watch('roles');
 
   return (
     <div className="flex flex-col gap-4">
@@ -245,7 +249,40 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   )}
                 />
               </div>
+              <p className="text-xs text-muted-foreground">
+                Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required to
+                add a valid PayPal email which is eligible of receiving money.{' '}
+                <a href="https://paypal.com" target="_blank" className="text-blue-500">
+                  Create a PayPal account for free here!
+                </a>
+              </p>
             </div>
+
+            {roles !== undefined && (roles.includes('Seller') || roles.includes('Tester')) ? (
+              <div className="space-y-2">
+                <Label htmlFor="paypalEmail">
+                  PayPal Email <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="paypalEmail"
+                  type="text"
+                  placeholder="Add a valid PayPal email"
+                  required
+                  {...register('paypalEmail', {
+                    required: 'PayPal email is required',
+                    pattern: {
+                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                      message: 'Invalid PayPal email address',
+                    },
+                  })}
+                />
+                {errors.paypalEmail ? (
+                  <p className="text-sm text-red-500 mb-2">
+                    {errors.paypalEmail.message as string}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
 
             <div className="space-y-2">
               <Label htmlFor="currentPassword">Current Password</Label>

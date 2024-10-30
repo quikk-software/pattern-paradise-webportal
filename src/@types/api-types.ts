@@ -19,6 +19,7 @@ export interface PostUserRequest {
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
+  paypalEmail?: string;
 }
 
 export interface PostUserResponse {
@@ -34,6 +35,7 @@ export interface PutUserRequest {
   tiktokRef?: string;
   imageUrl?: string;
   roles?: string[];
+  paypalEmail?: string;
 }
 
 export interface GetUserResponse {
@@ -45,6 +47,7 @@ export interface GetUserResponse {
   lastName?: string;
   instagramRef?: string;
   tiktokRef?: string;
+  paypalEmail?: string;
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;

@@ -31,7 +31,7 @@ const roleOptions = [
 ];
 
 export function RegistrationFormComponent() {
-  const [roles, setRoles] = useState<string[]>([]);
+  const [roles, setRoles] = useState<string[]>(['Buyer', 'Seller', 'Tester']);
   const [rolesError, setRolesError] = useState<string | undefined>(undefined);
 
   const { mutate, isSuccess, isError, isLoading, errorDetail } = useCreateUser();
@@ -62,10 +62,9 @@ export function RegistrationFormComponent() {
       username: data.username,
       instagramRef: data.instagram,
       tiktokRef: data.tiktok,
+      paypalEmail: data.paypalEmail,
       roles,
     });
-
-    // TODO: Redirect to success page
   };
 
   const handleRoleChange = (role: string) => {
@@ -149,6 +148,40 @@ export function RegistrationFormComponent() {
               ))}
               {!!rolesError ? <p className="text-sm text-red-500 mb-2">{rolesError}</p> : null}
             </div>
+            <p className="text-xs text-muted-foreground">
+              Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required to add
+              a valid PayPal email which is eligible of receiving money.{' '}
+              <a href="https://paypal.com" target="_blank" className="text-blue-500">
+                Create a PayPal account for free here!
+              </a>
+            </p>
+          </div>
+          <div className="space-y-2">
+            {roles.includes('Seller') || roles.includes('Tester') ? (
+              <div className="space-y-2">
+                <Label htmlFor="paypalEmail">
+                  PayPal Email <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="paypalEmail"
+                  type="text"
+                  placeholder="Add a valid PayPal email"
+                  required
+                  {...register('paypalEmail', {
+                    required: 'PayPal email is required',
+                    pattern: {
+                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                      message: 'Invalid PayPal email address',
+                    },
+                  })}
+                />
+                {errors.paypalEmail ? (
+                  <p className="text-sm text-red-500 mb-2">
+                    {errors.paypalEmail.message as string}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
