@@ -2,6 +2,7 @@ import { Api } from './api-types';
 import { getAccessTokenUsingRefreshToken, isTokenExpired } from '@/lib/auth/auth.utils';
 import type { Dispatch, AnyAction } from 'redux';
 import { setAccessToken, setPassword, setRefreshToken } from '@/lib/features/auth/authSlice';
+import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
 
 const client = new Api({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -24,12 +25,14 @@ const getApi = async (
   const headers: Record<any, any> = {
     headers: undefined,
   };
-  if (accessToken !== '') {
-    headers.Authorization = `Bearer ${accessToken}`;
+  const at = accessToken ?? getLocalStorageItem(LocalStorageKey.accessToken, null);
+  const rt = refreshToken ?? getLocalStorageItem(LocalStorageKey.refreshToken, null);
+  if (at !== '') {
+    headers.Authorization = `Bearer ${at}`;
   }
   const params = { headers };
   if (isTokenExpired(accessToken)) {
-    const res = await getAccessTokenUsingRefreshToken(refreshToken, () => {
+    const res = await getAccessTokenUsingRefreshToken(rt, () => {
       dispatch(setPassword(''));
       dispatch(setAccessToken(null));
       dispatch(setRefreshToken(null));
