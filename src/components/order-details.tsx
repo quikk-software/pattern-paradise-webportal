@@ -25,9 +25,15 @@ export function OrderDetails({ order }: OrderDetailsProps) {
     const url = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = url;
-    link.target = '_blank';
+    link.target = '_self';
+    link.download = file.name || 'pattern.pdf';
+    document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(url);
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    }, 1000);
   }, [file]);
 
   return (
@@ -63,8 +69,12 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               fetch(order.patternPdfId);
             }}
           >
-            {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-            <Download className="mr-2 h-4 w-4" /> Download pattern
+            {isLoading ? (
+              <LoadingSpinnerComponent size="sm" className="text-white" />
+            ) : (
+              <Download className="mr-2 h-4 w-4" />
+            )}
+            Download pattern
           </Button>
           <RequestStatus isSuccess={isSuccess} isError={isError} successMessage={''} />
         </div>
