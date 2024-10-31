@@ -31,7 +31,7 @@ const getApi = async (
     headers.Authorization = `Bearer ${at}`;
   }
   const params = { headers };
-  if (isTokenExpired(accessToken)) {
+  if (isTokenExpired(at)) {
     const res = await getAccessTokenUsingRefreshToken(rt, () => {
       dispatch(setPassword(''));
       dispatch(setAccessToken(null));

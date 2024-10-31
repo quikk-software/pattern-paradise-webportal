@@ -10,9 +10,10 @@ import { useRouter } from 'next/navigation';
 interface BuyNowButtonProps {
   price: number;
   productId: string;
+  callback?: () => void;
 }
 
-export function BuyNowButton({ price, productId }: BuyNowButtonProps) {
+export function BuyNowButton({ price, productId, callback }: BuyNowButtonProps) {
   const router = useRouter();
   const { mutate: createOrder, isError: createOrderIsError, data: orderData } = useCreateOrder();
   const {
@@ -61,6 +62,7 @@ export function BuyNowButton({ price, productId }: BuyNowButtonProps) {
               } catch (error) {
                 logger.error('Error capturing order:', error);
               }
+              callback && callback();
             }}
             onError={(err: any) => {
               logger.error('PayPal Buttons Error:', err);

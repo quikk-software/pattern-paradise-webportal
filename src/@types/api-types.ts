@@ -287,6 +287,8 @@ export interface GetOrderResponse {
   productImageUrls: string[];
   productPrice: number;
   patternPdfId: string;
+  paypalCaptureLink: string;
+  paypalOrderId: string;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -678,6 +680,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         instagramRef?: any;
         /** @example "any" */
         tiktokRef?: any;
+        /** @example "any" */
+        paypalEmail?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -744,6 +748,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         tiktokRef?: any;
         /** @example "any" */
         imageUrl?: any;
+        /** @example "any" */
+        paypalEmail?: any;
         /** @example "any" */
         roles?: any;
       },
