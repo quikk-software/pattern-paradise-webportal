@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { ArrowLeft, Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,16 +42,6 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   }, [file]);
 
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
-  const statusDisplayName = useMemo(() => {
-    switch (order.status) {
-      case 'CAPTURED':
-        return 'COMPLETED';
-      case 'COMPLETED':
-        return 'COMPLETED';
-      default:
-        return order.status;
-    }
-  }, [order.status]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -66,7 +56,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             variant="secondary"
             className={`text-lg${isPayed ? ' bg-green-400 text-white' : ''}`}
           >
-            Order Status: {statusDisplayName}
+            Order Status: {order.status}
           </Badge>
           {order.status === 'CREATED' ? (
             <div className="flex flex-col gap-2">
