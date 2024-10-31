@@ -7,6 +7,7 @@ import { getProduct } from '@/lib/api/static/product/getProduct';
 import NotFoundPage from '@/app/not-found';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
+import CreatedByRef from '@/lib/components/CreatedByRef';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -29,10 +30,7 @@ export async function ProductPageComponent({ productId }: ProductPageComponentPr
               <div>
                 <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
                 <p className="text-gray-600 mb-6">{product.description}</p>
-                <div className="flex items-center mb-6">
-                  <User className="h-5 w-5 mr-2" />
-                  <span className="text-sm text-gray-500">Created by PLACEHOLDER</span>
-                </div>
+                <CreatedByRef creatorId={product.creatorId} />
               </div>
               <div>
                 <BuyNowButton price={product.price} productId={product.id} />

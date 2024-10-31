@@ -139,6 +139,7 @@ export interface GetProductResponse {
   category: string;
   price: number;
   status: string;
+  creatorId: string;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -1253,6 +1254,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The orders will be queried by a given product ID and the authenticated user ID.
+     *
+     * @tags Order
+     * @name ListOrdersByProductId
+     * @summary Gets orders by a product ID and the authenticated user ID.
+     * @request GET:/api/v1/orders/products/{productId}
+     * @secure
+     */
+    listOrdersByProductId: (productId: string, params: RequestParams = {}) =>
+      this.request<ListOrdersResponse, any>({
+        path: `/api/v1/orders/products/${productId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
      * @description The product will be queried by a given ID. If the pattern cannot be found, an exception will be thrown.
      *
      * @tags Pattern
@@ -1267,6 +1286,206 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         secure: true,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name ApproveOrderWebhook
+     * @summary Posts a "approve order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/approve
+     * @secure
+     */
+    approveOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/approve`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name DeclineOrderWebhook
+     * @summary Posts a "decline order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/decline
+     * @secure
+     */
+    declineOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/decline`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name VoidOrderWebhook
+     * @summary Posts a "void order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/void
+     * @secure
+     */
+    voidOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/void`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name ExpireOrderWebhook
+     * @summary Posts a "expire order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/expire
+     * @secure
+     */
+    expireOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/expire`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name FailOrderWebhook
+     * @summary Posts a "fail order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/fail
+     * @secure
+     */
+    failOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/fail`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name PartiallyRefundOrderWebhook
+     * @summary Posts a "partially refund order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/partially-refund
+     * @secure
+     */
+    partiallyRefundOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/partially-refund`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name RefundOrderWebhook
+     * @summary Posts a "refund order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/refund
+     * @secure
+     */
+    refundOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/refund`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name ReverseOrderWebhook
+     * @summary Posts a "reverse order" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/reverse
+     * @secure
+     */
+    reverseOrderWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/reverse`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
   };

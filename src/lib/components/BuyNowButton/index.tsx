@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { useCaptureOrder, useCreateOrder } from '@/lib/api/order';
+import { useCaptureOrder, useCreateOrder, useListOrdersByProductId } from '@/lib/api/order';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import logger from '@/lib/core/logger';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { useRouter } from 'next/navigation';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface BuyNowButtonProps {
   price: number;
@@ -21,6 +22,12 @@ export function BuyNowButton({ price, productId, callback }: BuyNowButtonProps) 
     isSuccess: captureOrderIsSuccess,
     isError: captureOrderIsError,
   } = useCaptureOrder();
+  const {
+    fetch: fetchOrdersByProductId,
+    isLoading: listOrdersByProductIdIsLoading,
+    isSuccess: listOrdersByProductIdIsSuccess,
+    data: orders,
+  } = useListOrdersByProductId();
 
   const errorReason = useMemo(() => {
     if (captureOrderIsError) {
@@ -36,6 +43,22 @@ export function BuyNowButton({ price, productId, callback }: BuyNowButtonProps) 
     }
     router.push(`/auth/me/orders/${orderData.orderId}`);
   }, [captureOrderIsSuccess, orderData]);
+
+  useEffect(() => {
+    fetchOrdersByProductId(productId);
+  }, [productId]);
+
+  useEffect(() => {
+    if (!listOrdersByProductIdIsSuccess || orders?.length === 0) {
+      return;
+    }
+    // redirect to first order detail page related to the user matching this product
+    router.push(`/auth/me/orders/${orders[0].id}`);
+  }, [listOrdersByProductIdIsSuccess, orders]);
+
+  if (listOrdersByProductIdIsLoading) {
+    return <LoadingSpinnerComponent />;
+  }
 
   return (
     <PayPalScriptProvider

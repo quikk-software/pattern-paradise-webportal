@@ -12,6 +12,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import { useRouter } from 'next/navigation';
+import CreatedByRef from '@/lib/components/CreatedByRef';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -52,6 +53,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         />
         <div className="space-y-4">
           {!!order.productName ? <h1 className="text-3xl font-bold">{order.productName}</h1> : null}
+          <CreatedByRef creatorId={order.seller.id} />
           <Badge
             variant="secondary"
             className={`text-lg${isPayed ? ' bg-green-400 text-white' : ''}`}

@@ -34,7 +34,7 @@ export const useListTestingComments = ({
         ),
     );
 
-    setData(response?.data.testingComments);
+    setData((p) => [...p, ...response?.data.testingComments]);
 
     pagination.handlePaginationPayload(response?.data);
 

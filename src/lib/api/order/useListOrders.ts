@@ -35,7 +35,7 @@ export const useListOrders = ({
         ),
     );
 
-    setData(response?.data.orders);
+    setData((p) => [...p, ...response?.data.orders]);
 
     pagination.handlePaginationPayload(response?.data);
 

@@ -4,7 +4,7 @@ import type { GetProductResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 
-export const useListProducts = ({
+export const useListProductsByUserId = ({
   pageNumber = 1,
   pageSize = 20,
 }: {
@@ -16,10 +16,10 @@ export const useListProducts = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async () => {
+  const fetch = async (userId: string) => {
     const response = await handleFn(
       async () =>
-        await client.api.listProducts({
+        await client.api.listProductsByUserId(userId, {
           pageNumber: pagination.pageNumber,
           pageSize: pagination.pageSize,
         }),

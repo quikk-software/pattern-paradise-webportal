@@ -34,7 +34,7 @@ export const useListTestingsByUserId = ({
         ),
     );
 
-    setData(response?.data.testings);
+    setData((p) => [...p, ...response?.data.testings]);
 
     pagination.handlePaginationPayload(response?.data);
 
