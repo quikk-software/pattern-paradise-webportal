@@ -852,6 +852,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         pageNumber?: number;
         /** The page size. */
         pageSize?: number;
+        /** The query for a full text search. */
+        q?: string;
+        /** The status of the product. */
+        status?: string;
+        /** List of categories to filter products. */
+        categories?: string[];
+        /** The minimum price of a product to filter. */
+        minPrice?: number;
+        /** The maximum price of a product to filter. */
+        maxPrice?: number;
       },
       params: RequestParams = {},
     ) =>

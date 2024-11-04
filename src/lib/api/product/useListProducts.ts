@@ -4,6 +4,16 @@ import type { GetProductResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 
+type FilterObject = {
+  q?: string;
+  status?: string;
+  categories?: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  pageNumber?: number;
+  pageSize?: number;
+};
+
 export const useListProducts = ({
   pageNumber = 1,
   pageSize = 20,
@@ -16,12 +26,13 @@ export const useListProducts = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async () => {
+  const fetch = async (filter?: FilterObject) => {
     const response = await handleFn(
       async () =>
         await client.api.listProducts({
-          pageNumber: pagination.pageNumber,
-          pageSize: pagination.pageSize,
+          pageNumber: filter?.pageNumber ?? pagination.pageNumber,
+          pageSize: filter?.pageSize ?? pagination.pageSize,
+          ...filter,
         }),
     );
 
