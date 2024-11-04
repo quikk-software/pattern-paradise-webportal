@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
 import ProductListing from '@/lib/components/ProductListing';
 import { listProducts } from '@/lib/api/static/product/listProducts';
+import { ListingComponent } from '@/components/listing';
 
 export default async function Home() {
   const products = await listProducts();
@@ -33,7 +34,7 @@ export default async function Home() {
         </div>
       </section>
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <ProductListing products={products} />
+        <ListingComponent listingType={'sell'} />
       </section>
     </div>
   );

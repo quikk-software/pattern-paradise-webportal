@@ -13,7 +13,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { Search, Image, SlidersHorizontal, Trash } from 'lucide-react';
+import { Search, SlidersHorizontal, Trash } from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -21,7 +21,11 @@ import Link from 'next/link';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
-export function TestingListingComponent() {
+interface ListingComponentProps {
+  listingType: 'sell' | 'test';
+}
+
+export function ListingComponent({ listingType }: ListingComponentProps) {
   const [products, setProducts] = useState<GetProductResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
@@ -31,6 +35,9 @@ export function TestingListingComponent() {
   const [loadMore, setLoadMore] = useState(false);
 
   const { fetch, hasNextPage } = useListProducts({});
+
+  const status =
+    listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -42,7 +49,9 @@ export function TestingListingComponent() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const result = await fetch();
+      const result = await fetch({
+        status,
+      });
       setProducts(result?.products ?? []);
     };
     fetchProducts();
@@ -53,7 +62,15 @@ export function TestingListingComponent() {
       return;
     }
     const fetchProducts = async () => {
-      const result = await fetch();
+      const result = await fetch({
+        q: debouncedSearchTerm ?? undefined,
+        status,
+        categories: selectedCategory ? [selectedCategory] : ['All'],
+        minPrice: priceRange[0],
+        maxPrice: priceRange[1],
+        pageNumber: 1,
+        pageSize: 20,
+      });
       setProducts((p) => [...p, ...(result?.products ?? [])]);
       setLoadMore((p) => !p);
     };
@@ -64,7 +81,7 @@ export function TestingListingComponent() {
     const fetchProductsByFilter = async () => {
       const result = await fetch({
         q: debouncedSearchTerm ?? undefined,
-        status: 'Created',
+        status,
         categories: selectedCategory ? [selectedCategory] : ['All'],
         minPrice: priceRange[0],
         maxPrice: priceRange[1],
@@ -125,7 +142,9 @@ export function TestingListingComponent() {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Open Testings</h1>
+        <h1 className="text-2xl font-bold">
+          {listingType === 'sell' ? 'Find Patterns' : listingType === 'test' && 'Find Testings'}
+        </h1>
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <DrawerTrigger asChild>
             <Button variant={'outline'}>
@@ -151,7 +170,7 @@ export function TestingListingComponent() {
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search testings..."
+              placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
@@ -178,7 +197,11 @@ export function TestingListingComponent() {
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <span className="font-bold">${product.price}</span>
-                  <Link href={`/test/${product.id}`}>
+                  <Link
+                    href={`/${
+                      listingType === 'sell' ? 'products' : listingType === 'test' && 'test'
+                    }/${product.id}`}
+                  >
                     <Button>View Details</Button>
                   </Link>
                 </CardFooter>
@@ -198,7 +221,7 @@ export function TestingListingComponent() {
           ) : null}
           {products.length === 0 && (
             <p className="text-center text-muted-foreground mt-6">
-              No testings found matching your criteria.
+              Nothing found matching your criteria.
             </p>
           )}
         </main>

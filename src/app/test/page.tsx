@@ -1,5 +1,5 @@
-import { TestingListingComponent } from '@/components/testing-listing';
+import { ListingComponent } from '@/components/listing';
 
 export default function TestPage() {
-  return <TestingListingComponent />;
+  return <ListingComponent listingType={'test'} />;
 }
