@@ -187,6 +187,7 @@ export interface GetTestingResponse {
   creatorId: string;
   productId: string;
   status: string;
+  lastComment?: string;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -219,16 +220,18 @@ export interface PostTestingCommentRequest {
   testingId: string;
   comment: string;
   type: string;
-  fileUrls: string[];
-}
-
-export interface PostTestingCommentResponse {
-  testingCommentId: string;
+  files: {
+    url: string;
+    mimeType: string;
+  }[];
 }
 
 export interface GetTestingCommentResponse {
   id: string;
-  fileUrls: string[];
+  files: {
+    url: string;
+    mimeType: string;
+  }[];
   creatorId: string;
   testingId: string;
   message: string;
@@ -1129,15 +1132,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @example "any" */
         testingId?: any;
         /** @example "any" */
-        message?: any;
+        comment?: any;
         /** @example "any" */
-        fileUrls?: any;
+        files?: any;
         /** @example "any" */
         type?: any;
       },
       params: RequestParams = {},
     ) =>
-      this.request<PostTestingCommentResponse, any>({
+      this.request<GetTestingCommentResponse, any>({
         path: `/api/v1/testing-comments`,
         method: 'POST',
         body: data,

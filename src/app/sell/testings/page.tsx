@@ -6,12 +6,12 @@ import { useListTestingsByUserId } from '@/lib/api/testing';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
-export default function TestingsPage({ params }: { params: { productId: string } }) {
+export default function TestingsPage() {
   const { fetch, data: testings, isLoading, isError } = useListTestingsByUserId({});
 
   useEffect(() => {
-    fetch(params.productId);
-  }, [params.productId]);
+    fetch();
+  }, []);
 
   if (isError) {
     return <NotFoundPage />;

@@ -27,3 +27,11 @@ export const loadEnvVariable = (key: string) => {
   logger.warn(`Cannot access .env in DOM. Will be using empty string as value for ${key}.`);
   return '';
 };
+
+export const combineArraysById = (array1: any[], array2: any[], identifier: string) => {
+  const uniqueItems = new Map<number, any>();
+
+  [array1, array2].flat().forEach((item) => uniqueItems.set(item?.[identifier], item));
+
+  return Array.from(uniqueItems.values());
+};

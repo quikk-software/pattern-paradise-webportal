@@ -18,6 +18,7 @@ import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import Link from 'next/link';
+import { combineArraysById } from '@/lib/core/utils';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -71,7 +72,8 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
         pageNumber: 1,
         pageSize: 20,
       });
-      setProducts((p) => [...p, ...(result?.products ?? [])]);
+      setProducts((p) => [...combineArraysById(p, result?.products ?? [], 'id')]);
+
       setLoadMore((p) => !p);
     };
     fetchProducts();

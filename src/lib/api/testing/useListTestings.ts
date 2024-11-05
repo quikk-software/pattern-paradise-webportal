@@ -5,6 +5,7 @@ import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { combineArraysById } from '@/lib/core/utils';
 
 export const useListTestings = ({
   pageNumber = 1,
@@ -33,7 +34,7 @@ export const useListTestings = ({
         ),
     );
 
-    setData((p) => [...p, ...response?.data.testings]);
+    setData((p) => [...combineArraysById(p, response?.data.testings ?? [], 'id')]);
 
     pagination.handlePaginationPayload(response?.data);
 

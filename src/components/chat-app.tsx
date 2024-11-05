@@ -1,0 +1,318 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { PaperclipIcon, SendIcon, ArrowLeftIcon } from 'lucide-react';
+import {
+  useCreateTestingComment,
+  useListTestingComments,
+  useListTestings,
+} from '@/lib/api/testing';
+import { GetTestingCommentResponse } from '@/@types/api-types';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+import dayjs, { TIME_FORMAT } from '@/lib/core/dayjs';
+import { CldImage } from 'next-cloudinary';
+import { handleImageUpload } from '@/lib/features/common/utils';
+
+function getColor(uuid: string) {
+  let hash = 0;
+  for (let i = 0; i < uuid.length; i++) {
+    hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const hue = hash % 360;
+  const saturation = 60 + 20;
+  const lightness = 70 + 10;
+
+  const rgb = hslToRgb(hue, saturation / 100, lightness / 100);
+
+  return rgbToHex(rgb[0], rgb[1], rgb[2]);
+}
+
+function hslToRgb(h: number, s: number, l: number) {
+  let r, g, b;
+
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+
+  if (h < 60) {
+    r = c;
+    g = x;
+    b = 0;
+  } else if (h < 120) {
+    r = x;
+    g = c;
+    b = 0;
+  } else if (h < 180) {
+    r = 0;
+    g = c;
+    b = x;
+  } else if (h < 240) {
+    r = 0;
+    g = x;
+    b = c;
+  } else if (h < 300) {
+    r = x;
+    g = 0;
+    b = c;
+  } else {
+    r = c;
+    g = 0;
+    b = x;
+  }
+
+  return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+}
+
+function rgbToHex(r: number, g: number, b: number) {
+  return (
+    '#' +
+    [r, g, b]
+      .map((x) => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      })
+      .join('')
+  );
+}
+
+export function ChatAppComponent() {
+  const [messages, setMessages] = useState<GetTestingCommentResponse[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [selectedChat, setSelectedChat] = useState<string | null>(null);
+  const [showChatList, setShowChatList] = useState(true);
+
+  const { userId } = useSelector((s: Store) => s.auth);
+
+  const { fetch: fetchTestings, data: testings } = useListTestings({});
+  const { fetch: fetchTestingComments } = useListTestingComments({});
+  const { mutate: createTestingComment } = useCreateTestingComment();
+
+  useEffect(() => {
+    fetchTestings();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedChat) {
+      return;
+    }
+    const loadComments = async () => {
+      const result = await fetchTestingComments(selectedChat);
+      setMessages(result.testingComments);
+    };
+    loadComments();
+  }, [selectedChat]);
+
+  const handleSendMessage = async () => {
+    if (!selectedChat) {
+      return;
+    }
+    if (newMessage.trim() || files !== null) {
+      // @ts-ignore
+      const fileArray = Array.from(files);
+
+      const c = fileArray.map((file) => URL.createObjectURL(file));
+
+      const urls = await handleImageUpload(
+        c,
+        () => {},
+        () => {},
+        () => {},
+      );
+
+      const result = await createTestingComment({
+        type: 'Standard',
+        comment: newMessage,
+        files: urls.map((fu) => ({
+          url: fu.url,
+          mimeType: fu.mimeType,
+        })),
+        testingId: selectedChat,
+      });
+      if (result) {
+        setMessages([...messages, result]);
+        setNewMessage('');
+        setFiles(null);
+      }
+    }
+  };
+
+  const handleChatSelect = (testingId: string) => {
+    setSelectedChat(testingId);
+    setShowChatList(false);
+  };
+
+  return (
+    <div className="flex">
+      {/* Chat List */}
+      <div className={`${showChatList ? 'block' : 'hidden'} md:block w-full md:w-1/3 bg-white`}>
+        <Card className="h-full">
+          <CardContent className="p-4">
+            <h2 className="text-2xl font-bold mb-4">Chats</h2>
+            <ScrollArea className="h-[calc(100vh-8rem)]">
+              {testings.map((testing) => (
+                <div
+                  key={testing.id}
+                  className="flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg mb-2"
+                  onClick={() => handleChatSelect(testing.id)}
+                >
+                  <Avatar className="w-12 h-12 mr-3">
+                    <AvatarImage src={'/'} />
+                    <AvatarFallback>{'AF'}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <h3 className="font-semibold">Product name</h3>
+                    <p className="text-sm text-gray-500">{testing.lastComment}</p>
+                  </div>
+                  {/*{chat.unreadCount > 0 && (*/}
+                  {/*  <div className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">*/}
+                  {/*    {chat.unreadCount}*/}
+                  {/*  </div>*/}
+                  {/*)}*/}
+                </div>
+              ))}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Chat History */}
+      <div className={`${!showChatList ? 'block' : 'hidden'} md:block flex-1 bg-white`}>
+        <Card className="h-full flex flex-col">
+          <CardContent className="p-4 flex-1 overflow-hidden">
+            <div className="flex items-center mb-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden mr-2"
+                onClick={() => setShowChatList(true)}
+              >
+                <ArrowLeftIcon className="h-6 w-6" />
+              </Button>
+              <h2 className="text-2xl font-bold">Chat History</h2>
+            </div>
+            <ScrollArea className="h-[calc(100vh-12rem)]">
+              {messages
+                .slice(0)
+                .reverse()
+                .map((message) => (
+                  <div
+                    key={message.id}
+                    className={`mb-4 ${
+                      message.creatorId === userId ? 'ml-auto' : 'mr-auto'
+                    } max-w-[80%]`}
+                  >
+                    <div
+                      className={`flex items-start ${
+                        message.creatorId === userId ? 'flex-row-reverse' : ''
+                      }`}
+                    >
+                      <Avatar
+                        className={`w-8 h-8 ${message.creatorId === userId ? 'ml-2' : 'mr-2'}`}
+                      >
+                        <AvatarImage src="/" />
+                        <AvatarFallback>FB</AvatarFallback>
+                      </Avatar>
+                      <div
+                        className={`flex-1 rounded-lg p-3`}
+                        style={{
+                          backgroundColor: getColor(message.creatorId),
+                        }}
+                      >
+                        <div
+                          className={`flex justify-between items-baseline ${
+                            message.creatorId === userId ? 'flex-row-reverse' : ''
+                          }`}
+                        >
+                          <span className="font-semibold">
+                            {message.creatorId === userId ? 'You' : 'Other'}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {dayjs(message.createdAt).format(TIME_FORMAT)}
+                          </span>
+                        </div>
+
+                        <p
+                          className={`mt-1 ${
+                            message.creatorId === userId ? 'text-right' : 'text-left'
+                          }`}
+                        >
+                          {message.message}
+                        </p>
+                        <div className="flex flex-col gap-2">
+                          {message.files.length > 0
+                            ? message.files.map((file) =>
+                                file.mimeType.startsWith('image/') ? (
+                                  <CldImage
+                                    key={file.url}
+                                    alt="Pattern paradise"
+                                    src={file.url}
+                                    width="340"
+                                    height="250"
+                                    crop={{
+                                      type: 'auto',
+                                      source: true,
+                                    }}
+                                  />
+                                ) : (
+                                  <div
+                                    key={file.url}
+                                    className={`mt-2 ${
+                                      message.creatorId === userId ? 'text-right' : 'text-left'
+                                    }`}
+                                  >
+                                    <a
+                                      href={file.url}
+                                      className="text-blue-500 hover:underline"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <Button variant={'ghost'}>📎 Download file</Button>
+                                    </a>
+                                  </div>
+                                ),
+                              )
+                            : null}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </ScrollArea>
+            <div className="flex items-center">
+              <Input
+                type="text"
+                placeholder="Type a message..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                className="flex-1 mr-2"
+              />
+              <label htmlFor="file-upload" className="cursor-pointer">
+                <PaperclipIcon className="w-6 h-6 text-gray-500 hover:text-gray-700" />
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  multiple={true}
+                  max={6}
+                  onChange={(e) => setFiles(e.target.files)}
+                />
+              </label>
+              <Button onClick={handleSendMessage} className="ml-2">
+                <SendIcon className="w-4 h-4 mr-2" />
+                Send
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

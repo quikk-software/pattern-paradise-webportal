@@ -3,6 +3,7 @@ import { client } from '@/@types';
 import type { GetProductResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
+import { combineArraysById } from '@/lib/core/utils';
 
 type FilterObject = {
   q?: string;
@@ -36,7 +37,7 @@ export const useListProducts = ({
         }),
     );
 
-    setData((p) => [...p, ...response?.data.products]);
+    setData((p) => [...combineArraysById(p, response?.data.products ?? [], 'id')]);
 
     pagination.handlePaginationPayload(response?.data);
 

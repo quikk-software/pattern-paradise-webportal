@@ -8,7 +8,7 @@ export const handleImageUpload = async (
   errorCallback: () => void,
 ) => {
   startLoadingCallback();
-  const urls: string[] = [];
+  const urls: { url: string; mimeType: string }[] = [];
   const blobs: Blob[] = [];
   for await (const file of files) {
     const blob = await fetch(file).then((r) => r.blob());
@@ -28,7 +28,7 @@ export const handleImageUpload = async (
           },
         },
       );
-      urls.push(response.data.url);
+      urls.push({ url: response.data.url, mimeType: file.type });
     } catch (error) {
       errorCallback();
       logger.error('Error uploading image:', error);

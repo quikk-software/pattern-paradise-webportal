@@ -5,6 +5,7 @@ import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { combineArraysById } from '@/lib/core/utils';
 
 export const useListOrders = ({
   pageNumber = 1,
@@ -35,7 +36,7 @@ export const useListOrders = ({
         ),
     );
 
-    setData((p) => [...p, ...response?.data.orders]);
+    setData((p) => [...combineArraysById(p, response?.data.orders ?? [], 'id')]);
 
     pagination.handlePaginationPayload(response?.data);
 

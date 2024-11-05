@@ -18,7 +18,6 @@ import Link from 'next/link';
 import { useCreateProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
-import logger from '@/lib/core/logger';
 
 const CATEGORIES = ['Crocheting', 'Knitting'];
 
@@ -134,7 +133,7 @@ export function ProductFormComponent() {
       title: data.title,
       description: data.description,
       price: data.price,
-      imageUrls: urls,
+      imageUrls: urls.map((fu) => fu.url),
       category,
       patternPdfBase64,
     });

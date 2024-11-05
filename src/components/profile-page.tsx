@@ -39,7 +39,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const onSubmit = async (data: any) => {
     setImageError(undefined);
-    let urls: string[] = [];
+    let urls: { url: string; mimeType: string }[] = [];
     if (!!profileImage) {
       [urls] = await Promise.all([
         handleImageUpload(
@@ -61,7 +61,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       email: data.email,
       firstName: data.firstName ?? undefined,
       lastName: data.lastName ?? undefined,
-      imageUrl: urls.length > 0 ? urls[0] : undefined,
+      imageUrl: urls.length > 0 ? urls[0].url : undefined,
       instagramRef: data.instagramRef,
       tiktokRef: data.tiktokRef,
       username: data.username,

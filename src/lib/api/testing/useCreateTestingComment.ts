@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { client, getApi } from '@/@types';
-import type { PostTestingCommentRequest, PostTestingCommentResponse } from '@/@types/api-types';
+import type { PostTestingCommentRequest, GetTestingCommentResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 
 export const useCreateTestingComment = () => {
-  const [data, setData] = useState<PostTestingCommentResponse | undefined>(undefined);
+  const [data, setData] = useState<GetTestingCommentResponse | undefined>(undefined);
 
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);

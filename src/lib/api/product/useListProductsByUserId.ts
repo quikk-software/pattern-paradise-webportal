@@ -3,6 +3,7 @@ import { client } from '@/@types';
 import type { GetProductResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
+import { combineArraysById } from '@/lib/core/utils';
 
 export const useListProductsByUserId = ({
   pageNumber = 1,
@@ -25,7 +26,7 @@ export const useListProductsByUserId = ({
         }),
     );
 
-    setData((p) => [...p, ...response?.data.products]);
+    setData((p) => [...combineArraysById(p, response?.data.products ?? [], 'id')]);
 
     pagination.handlePaginationPayload(response?.data);
 
