@@ -33,7 +33,7 @@ export function BottomNavigation() {
   return (
     <div
       className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border"
-      id="bottom-nav"
+      id="bottom-navigation"
     >
       <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
         {menuItems.map((item) => (

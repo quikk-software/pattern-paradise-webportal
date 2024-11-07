@@ -38,7 +38,7 @@ export function SellPageComponent() {
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
           >
             <TestTube className="h-8 w-8" />
-            <span className="text-lg font-semibold">View open testings</span>
+            <span className="text-lg font-semibold">View your testings</span>
           </Button>
         </Link>
       </div>

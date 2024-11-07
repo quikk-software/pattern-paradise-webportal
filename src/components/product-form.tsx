@@ -18,6 +18,8 @@ import Link from 'next/link';
 import { useCreateProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
+import RequestStatus from '@/lib/components/RequestStatus';
+import { isError } from 'node:util';
 
 const CATEGORIES = ['Crocheting', 'Knitting'];
 
@@ -31,7 +33,7 @@ export function ProductFormComponent() {
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
 
-  const { mutate, isLoading } = useCreateProduct();
+  const { mutate, isLoading, isSuccess, isError } = useCreateProduct();
 
   const {
     register,
@@ -275,7 +277,7 @@ export function ProductFormComponent() {
           {patternError ? <p className="text-yellow-600 text-sm mt-2">{patternError}</p> : null}
         </div>
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={imageUploadIsLoading || isLoading}>
           {imageUploadIsLoading || isLoading ? (
             <LoadingSpinnerComponent size="sm" className="text-white" />
           ) : null}
@@ -284,6 +286,21 @@ export function ProductFormComponent() {
         {!!hasErrors ? (
           <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
         ) : null}
+        <RequestStatus
+          isSuccess={isSuccess}
+          isError={isError}
+          successMessage={
+            <span>
+              Your listing has been created successfully!
+              <br />
+              You can now{' '}
+              <Link href="/sell/testings" className="text-blue-500 underline">
+                start a tester call
+              </Link>
+              .
+            </span>
+          }
+        />
       </form>
       <Button asChild className="flex items-center space-x-2" variant="outline">
         <Link href="/sell">

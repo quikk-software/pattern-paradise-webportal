@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,6 +18,8 @@ import { Store } from '@/lib/redux/store';
 import dayjs, { TIME_FORMAT } from '@/lib/core/dayjs';
 import { CldImage } from 'next-cloudinary';
 import { handleImageUpload } from '@/lib/features/common/utils';
+import { useElementHeight } from '@/lib/core/useElementHeight';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -82,18 +84,46 @@ function rgbToHex(r: number, g: number, b: number) {
   );
 }
 
-export function ChatAppComponent() {
+interface ChatAppComponentProps {
+  testingId?: string;
+}
+
+export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
+  const [initialLoad, setInitialLoad] = useState(true);
   const [messages, setMessages] = useState<GetTestingCommentResponse[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [files, setFiles] = useState<FileList | null>(null);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [showChatList, setShowChatList] = useState(true);
+  const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
+  const bottomNavHeight = useElementHeight('bottom-navigation');
 
   const { fetch: fetchTestings, data: testings } = useListTestings({});
-  const { fetch: fetchTestingComments } = useListTestingComments({});
+  const {
+    fetch: fetchTestingComments,
+    hasNextPage: testingCommentsHasNextPage,
+    isLoading: testingCommentsIsLoading,
+  } = useListTestingComments({});
   const { mutate: createTestingComment } = useCreateTestingComment();
+
+  const bottomRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!testingId) {
+      return;
+    }
+    setSelectedChat(testingId);
+    setShowChatList(false);
+  }, [testingId]);
+
+  useEffect(() => {
+    if (bottomRef.current && !showChatList && initialLoad && messages.length > 0) {
+      bottomRef.current.scrollIntoView({ behavior: 'instant' });
+      setInitialLoad(false);
+    }
+  }, [messages, bottomRef.current, showChatList]);
 
   useEffect(() => {
     fetchTestings();
@@ -110,36 +140,49 @@ export function ChatAppComponent() {
     loadComments();
   }, [selectedChat]);
 
+  const loadMore = async () => {
+    if (!selectedChat) {
+      return;
+    }
+    const result = await fetchTestingComments(selectedChat);
+    setMessages((msgs) => [...msgs, ...result.testingComments]);
+  };
+
   const handleSendMessage = async () => {
     if (!selectedChat) {
       return;
     }
     if (newMessage.trim() || files !== null) {
-      // @ts-ignore
-      const fileArray = Array.from(files);
+      setSendMessageIsLoading(true);
+      try {
+        // @ts-ignore
+        const fileArray = Array.from(files ?? []);
 
-      const c = fileArray.map((file) => URL.createObjectURL(file));
+        const c = fileArray.map((file) => URL.createObjectURL(file));
 
-      const urls = await handleImageUpload(
-        c,
-        () => {},
-        () => {},
-        () => {},
-      );
+        const urls = await handleImageUpload(
+          c,
+          () => {},
+          () => {},
+          () => {},
+        );
 
-      const result = await createTestingComment({
-        type: 'Standard',
-        comment: newMessage,
-        files: urls.map((fu) => ({
-          url: fu.url,
-          mimeType: fu.mimeType,
-        })),
-        testingId: selectedChat,
-      });
-      if (result) {
-        setMessages([...messages, result]);
-        setNewMessage('');
-        setFiles(null);
+        const result = await createTestingComment({
+          type: 'Standard',
+          comment: newMessage,
+          files: urls.map((fu) => ({
+            url: fu.url,
+            mimeType: fu.mimeType,
+          })),
+          testingId: selectedChat,
+        });
+        if (result) {
+          setMessages([result, ...messages]);
+          setNewMessage('');
+          setFiles(null);
+        }
+      } finally {
+        setSendMessageIsLoading(false);
       }
     }
   };
@@ -150,7 +193,7 @@ export function ChatAppComponent() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex w-full">
       {/* Chat List */}
       <div className={`${showChatList ? 'block' : 'hidden'} md:block w-full md:w-1/3 bg-white`}>
         <Card className="h-full">
@@ -184,9 +227,12 @@ export function ChatAppComponent() {
       </div>
 
       {/* Chat History */}
-      <div className={`${!showChatList ? 'block' : 'hidden'} md:block flex-1 bg-white`}>
-        <Card className="h-full flex flex-col">
-          <CardContent className="p-4 flex-1 overflow-hidden">
+      <div
+        className={`${!showChatList ? 'block' : 'hidden'} md:block flex flex-col bg-white w-full`}
+      >
+        <Card className="flex flex-col" style={{ height: `calc(100vh - ${bottomNavHeight}px)` }}>
+          {/* Top navigation */}
+          <CardContent className="p-4 flex-none">
             <div className="flex items-center mb-4">
               <Button
                 variant="ghost"
@@ -198,101 +244,131 @@ export function ChatAppComponent() {
               </Button>
               <h2 className="text-2xl font-bold">Chat History</h2>
             </div>
-            <ScrollArea className="h-[calc(100vh-12rem)]">
-              {messages
-                .slice(0)
-                .reverse()
-                .map((message) => (
+          </CardContent>
+          {/* Chat History (Scroll Area) */}
+          <ScrollArea className="flex-grow p-4 overflow-y-auto">
+            {testingCommentsHasNextPage ? (
+              <Button
+                variant={'outline'}
+                className={'w-full mb-4'}
+                onClick={() => {
+                  loadMore();
+                }}
+              >
+                {testingCommentsIsLoading ? (
+                  <LoadingSpinnerComponent size="sm" className="text-white" />
+                ) : null}
+                Load more
+              </Button>
+            ) : null}
+            {messages
+              .slice(0)
+              .reverse()
+              .map((message) => (
+                <div
+                  key={message.id}
+                  className={`mb-4 ${
+                    message.creatorId === userId ? 'ml-auto' : 'mr-auto'
+                  } max-w-[80%] w-fit`}
+                >
                   <div
-                    key={message.id}
-                    className={`mb-4 ${
-                      message.creatorId === userId ? 'ml-auto' : 'mr-auto'
-                    } max-w-[80%]`}
+                    className={`flex items-start ${
+                      message.creatorId === userId ? 'flex-row-reverse' : ''
+                    }`}
                   >
+                    <Avatar className={`w-8 h-8 ${message.creatorId === userId ? 'ml-2' : 'mr-2'}`}>
+                      <AvatarImage src="/" />
+                      <AvatarFallback>FB</AvatarFallback>
+                    </Avatar>
                     <div
-                      className={`flex items-start ${
-                        message.creatorId === userId ? 'flex-row-reverse' : ''
-                      }`}
+                      className="flex-1 rounded-lg p-3"
+                      style={{
+                        backgroundColor: getColor(message.creatorId),
+                      }}
                     >
-                      <Avatar
-                        className={`w-8 h-8 ${message.creatorId === userId ? 'ml-2' : 'mr-2'}`}
-                      >
-                        <AvatarImage src="/" />
-                        <AvatarFallback>FB</AvatarFallback>
-                      </Avatar>
                       <div
-                        className={`flex-1 rounded-lg p-3`}
-                        style={{
-                          backgroundColor: getColor(message.creatorId),
-                        }}
+                        className={`flex gap-2 justify-between items-baseline ${
+                          message.creatorId === userId ? 'flex-row-reverse' : ''
+                        }`}
                       >
-                        <div
-                          className={`flex justify-between items-baseline ${
-                            message.creatorId === userId ? 'flex-row-reverse' : ''
-                          }`}
-                        >
-                          <span className="font-semibold">
-                            {message.creatorId === userId ? 'You' : 'Other'}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {dayjs(message.createdAt).format(TIME_FORMAT)}
-                          </span>
-                        </div>
+                        <span className="font-semibold">
+                          {message.creatorId === userId ? 'You' : 'Other'}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {dayjs(message.createdAt).format(TIME_FORMAT)}
+                        </span>
+                      </div>
 
-                        <p
-                          className={`mt-1 ${
-                            message.creatorId === userId ? 'text-right' : 'text-left'
-                          }`}
-                        >
-                          {message.message}
-                        </p>
-                        <div className="flex flex-col gap-2">
-                          {message.files.length > 0
-                            ? message.files.map((file) =>
-                                file.mimeType.startsWith('image/') ? (
-                                  <CldImage
-                                    key={file.url}
-                                    alt="Pattern paradise"
-                                    src={file.url}
-                                    width="340"
-                                    height="250"
-                                    crop={{
-                                      type: 'auto',
-                                      source: true,
-                                    }}
-                                  />
-                                ) : (
-                                  <div
-                                    key={file.url}
-                                    className={`mt-2 ${
-                                      message.creatorId === userId ? 'text-right' : 'text-left'
-                                    }`}
+                      <p
+                        className={`mt-1 ${
+                          message.creatorId === userId ? 'text-right' : 'text-left'
+                        }`}
+                      >
+                        {message.message}
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        {message.files.length > 0
+                          ? message.files.map((file) =>
+                              file.mimeType.startsWith('image/') ? (
+                                <CldImage
+                                  key={file.url}
+                                  alt="Pattern paradise"
+                                  src={file.url}
+                                  width="340"
+                                  height="250"
+                                  crop={{
+                                    type: 'auto',
+                                    source: true,
+                                  }}
+                                />
+                              ) : (
+                                <div
+                                  key={file.url}
+                                  className={`mt-2 ${
+                                    message.creatorId === userId ? 'text-right' : 'text-left'
+                                  }`}
+                                >
+                                  <a
+                                    href={file.url}
+                                    className="text-blue-500 hover:underline"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
-                                    <a
-                                      href={file.url}
-                                      className="text-blue-500 hover:underline"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <Button variant={'ghost'}>📎 Download file</Button>
-                                    </a>
-                                  </div>
-                                ),
-                              )
-                            : null}
-                        </div>
+                                    <Button variant={'ghost'}>📎 Download file</Button>
+                                  </a>
+                                </div>
+                              ),
+                            )
+                          : null}
                       </div>
                     </div>
                   </div>
-                ))}
-            </ScrollArea>
-            <div className="flex items-center">
+                </div>
+              ))}
+            {!showChatList ? <div ref={bottomRef} /> : null}
+          </ScrollArea>
+          {/* Message Input Area */}
+          <div className="p-4 flex-none border-t border-gray-200">
+            <div className="flex items-center gap-2">
+              {files && (
+                <div className="flex gap-2">
+                  {Array.from(files).map((file, index) => (
+                    <img
+                      key={`${index}-${file.name}`}
+                      alt={file.name}
+                      src={URL.createObjectURL(file)}
+                      width={50}
+                      height={50}
+                    />
+                  ))}
+                </div>
+              )}
               <Input
                 type="text"
                 placeholder="Type a message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                className="flex-1 mr-2"
+                className="flex-1"
               />
               <label htmlFor="file-upload" className="cursor-pointer">
                 <PaperclipIcon className="w-6 h-6 text-gray-500 hover:text-gray-700" />
@@ -300,17 +376,21 @@ export function ChatAppComponent() {
                   id="file-upload"
                   type="file"
                   className="hidden"
-                  multiple={true}
-                  max={6}
+                  multiple
+                  accept="image/*"
                   onChange={(e) => setFiles(e.target.files)}
                 />
               </label>
-              <Button onClick={handleSendMessage} className="ml-2">
-                <SendIcon className="w-4 h-4 mr-2" />
+              <Button onClick={handleSendMessage} className="ml-2" disabled={sendMessageIsLoading}>
+                {sendMessageIsLoading ? (
+                  <LoadingSpinnerComponent size="sm" className="text-white" />
+                ) : (
+                  <SendIcon className="w-4 h-4 mr-2" />
+                )}
                 Send
               </Button>
             </div>
-          </CardContent>
+          </div>
         </Card>
       </div>
     </div>

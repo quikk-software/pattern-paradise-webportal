@@ -201,7 +201,9 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
                   <span className="font-bold">${product.price}</span>
                   <Link
                     href={`/${
-                      listingType === 'sell' ? 'products' : listingType === 'test' && 'test'
+                      listingType === 'sell'
+                        ? 'products'
+                        : listingType === 'test' && 'test/products'
                     }/${product.id}`}
                   >
                     <Button>View Details</Button>

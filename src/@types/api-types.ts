@@ -183,9 +183,11 @@ export interface PutTestingRequest {
 
 export interface GetTestingResponse {
   id: string;
-  testers: string[];
+  testerIds: string[];
   creatorId: string;
+  creator: GetUserAccountResponse;
   productId: string;
+  product: GetProductResponse;
   status: string;
   lastComment?: string;
   /**
@@ -1091,6 +1093,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The testing will be queried by a given ID. If the testing cannot be found, an exception will be thrown.
+     *
+     * @tags Testing
+     * @name ApplyTesting
+     * @summary Applies to a testing by ID.
+     * @request POST:/api/v1/testings/{testingId}/apply
+     * @secure
+     */
+    applyTesting: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/testings/${testingId}/apply`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The query returns a list of testings of a given user ID.
      *
      * @tags Testing
@@ -1113,6 +1132,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/testings/users/${userId}`,
         method: 'GET',
         query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a testing of a given product ID.
+     *
+     * @tags Testing
+     * @name GetTestingByProductId
+     * @summary Gets the testings by product ID.
+     * @request GET:/api/v1/testings/products/{productId}
+     * @secure
+     */
+    getTestingByProductId: (productId: string, params: RequestParams = {}) =>
+      this.request<GetTestingResponse, any>({
+        path: `/api/v1/testings/products/${productId}`,
+        method: 'GET',
         secure: true,
         format: 'json',
         ...params,
