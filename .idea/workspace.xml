@@ -5,21 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/test/chats/[testingId]/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sell/testings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/testings/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/test/products/[productId]/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/bottom-navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/bottom-navigation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chat-app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat-app.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/listing.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/listing.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/product-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sell-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sell-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/test/products/[productId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/test/products/[productId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/tester-call-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/tester-call-page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/testing-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/testing-page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/core/dayjs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/core/dayjs.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,7 +71,7 @@
       <recent name="$PROJECT_DIR$/src/app/products/[productId]" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.format">
+  <component name="RunManager" selected="npm.generate-types">
     <configuration name="format" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -111,8 +104,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.format" />
         <item itemvalue="npm.generate-types" />
+        <item itemvalue="npm.format" />
         <item itemvalue="npm.lint" />
       </list>
     </recent_temporary>
@@ -134,7 +127,7 @@
       <updated>1730103422276</updated>
       <workItem from="1730103423799" duration="3000" />
       <workItem from="1730217150931" duration="39739000" />
-      <workItem from="1730795645460" duration="28925000" />
+      <workItem from="1730795645460" duration="35976000" />
     </task>
     <servers />
   </component>

@@ -179,11 +179,15 @@ export interface PostTestingResponse {
 
 export interface PutTestingRequest {
   testerIds: any[];
+  /** @example "neutral" */
+  theme?: string;
 }
 
 export interface GetTestingResponse {
   id: string;
   testerIds: string[];
+  /** @example "neutral" */
+  theme: string;
   creatorId: string;
   creator: GetUserAccountResponse;
   productId: string;
@@ -1045,6 +1049,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** @example "any" */
         testerIds?: any;
+        /** @example "any" */
+        theme?: any;
       },
       params: RequestParams = {},
     ) =>

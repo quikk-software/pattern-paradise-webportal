@@ -24,6 +24,7 @@
     "@types/react-scroll-to-bottom": "^4.2.5",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
+    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.3.1",

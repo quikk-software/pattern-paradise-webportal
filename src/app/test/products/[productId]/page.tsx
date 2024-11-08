@@ -38,5 +38,7 @@ export default function TestDetailsPage({ params }: { params: { productId: strin
     );
   }
 
-  return <TesterCallPage product={product} testing={testing} />;
+  const theme = testing?.theme ?? 'neutral';
+
+  return <TesterCallPage product={product} testing={testing} theme={theme} />;
 }
