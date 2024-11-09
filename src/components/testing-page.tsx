@@ -10,13 +10,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Rocket, PlusCircle, ShoppingBag, TestTube, SlidersHorizontal } from 'lucide-react';
+import { Rocket, PlusCircle, ShoppingBag, TestTube } from 'lucide-react';
 import ProductCard from '@/lib/components/ProductCard';
 import { useListTestingsByUserId, useUpdateTesting } from '@/lib/api/testing';
 import { GetTestingResponse } from '@/@types/api-types';
 import Link from 'next/link';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { useRouter } from 'next/navigation';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { themes } from '@/lib/core/themes';
 import ColorPalette from '@/lib/components/ColorPalette';
@@ -228,8 +227,8 @@ export function TestingPageComponent() {
                   selectedTheme
                     ? selectedTheme
                     : selectedTesting?.theme
-                      ? selectedTesting?.theme
-                      : 'neutral'
+                    ? selectedTesting?.theme
+                    : 'neutral'
                 }
                 selectedTheme={null}
               />

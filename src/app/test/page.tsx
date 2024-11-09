@@ -15,6 +15,11 @@ export default function TestPage() {
           <Link href="/test/chats">
             <Button className="w-full">My chats</Button>
           </Link>
+          <Link href="/sell/testings">
+            <Button className="w-full" variant="outline">
+              My testings
+            </Button>
+          </Link>
         </CardContent>
       </Card>
       <ListingComponent listingType={'test'} />
