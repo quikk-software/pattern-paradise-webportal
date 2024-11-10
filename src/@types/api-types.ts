@@ -1116,6 +1116,57 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The testing will be queried by a given ID. If the testing cannot be found, an exception will be thrown.
+     *
+     * @tags Testing
+     * @name ApproveTesting
+     * @summary Approves a testing by ID.
+     * @request PUT:/api/v1/testings/{testingId}/approve
+     * @secure
+     */
+    approveTesting: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/testings/${testingId}/approve`,
+        method: 'PUT',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The testing will be queried by a given ID. If the testing cannot be found, an exception will be thrown.
+     *
+     * @tags Testing
+     * @name DeclineTesting
+     * @summary Declines a testing by ID.
+     * @request PUT:/api/v1/testings/{testingId}/decline
+     * @secure
+     */
+    declineTesting: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/testings/${testingId}/decline`,
+        method: 'PUT',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The testing will be queried by a given ID. If the testing cannot be found, an exception will be thrown.
+     *
+     * @tags Testing
+     * @name AbortTesting
+     * @summary Aborts a testing by ID.
+     * @request PUT:/api/v1/testings/{testingId}/abort
+     * @secure
+     */
+    abortTesting: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/testings/${testingId}/abort`,
+        method: 'PUT',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The query returns a list of testings of a given user ID.
      *
      * @tags Testing

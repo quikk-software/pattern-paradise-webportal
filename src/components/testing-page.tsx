@@ -227,8 +227,8 @@ export function TestingPageComponent() {
                   selectedTheme
                     ? selectedTheme
                     : selectedTesting?.theme
-                    ? selectedTesting?.theme
-                    : 'neutral'
+                      ? selectedTesting?.theme
+                      : 'neutral'
                 }
                 selectedTheme={null}
               />
@@ -248,8 +248,11 @@ export function TestingPageComponent() {
               onClick={() => {
                 handleUpdateTestingClick(selectedTesting, selectedTheme);
               }}
+              disabled={mutateTestingIsLoading}
             >
-              Start tester call!
+              {mutateTestingIsLoading ? <LoadingSpinnerComponent size="sm" /> : null}
+              {selectedTesting?.status === 'Created' ? 'Start tester call!' : null}
+              {selectedTesting?.status !== 'Created' ? 'Update testing!' : null}
             </Button>
           </div>
         </DrawerContent>
