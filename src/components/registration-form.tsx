@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import useRedirect from '@/lib/core/useRedirect';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
@@ -33,6 +34,8 @@ const roleOptions = [
 export function RegistrationFormComponent() {
   const [roles, setRoles] = useState<string[]>(['Buyer', 'Seller', 'Tester']);
   const [rolesError, setRolesError] = useState<string | undefined>(undefined);
+
+  const { redirectUrl } = useRedirect();
 
   const { mutate, isSuccess, isError, isLoading, errorDetail } = useCreateUser();
 
@@ -77,6 +80,11 @@ export function RegistrationFormComponent() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card className="w-full max-w-2xl mx-auto border-none">
         <CardHeader>
+          <Link href={`/auth/login?redirect=${redirectUrl}`} className="w-full mb-4">
+            <Button variant="secondary" className="w-full">
+              Go to login
+            </Button>
+          </Link>
           <CardTitle>Register</CardTitle>
           <CardDescription>Create your account to get started.</CardDescription>
         </CardHeader>
@@ -222,7 +230,10 @@ export function RegistrationFormComponent() {
         <CardFooter className="flex flex-col items-start">
           <p className="text-sm text-muted-foreground">
             Already have an account?{' '}
-            <Link href="/auth/login" className="text-primary hover:underline">
+            <Link
+              href={`/auth/login?redirect=${redirectUrl}`}
+              className="text-primary hover:underline"
+            >
               Login here
             </Link>
           </p>

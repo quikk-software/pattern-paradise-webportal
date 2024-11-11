@@ -37,9 +37,9 @@ export const combineArraysById = (array1: any[], array2: any[], identifier: stri
   return Array.from(uniqueItems.values());
 };
 
-export const isPathnameInPages = (pathname: string, pages: Page[]) => {
+export const isPathnameInPages = (pathname: string, pages: string[]) => {
   return pages.some((page) => {
-    const regexPattern = page.pathname.replace(/\[.*?\]/g, '[^/]+');
+    const regexPattern = page.replace(/\[.*?\]/g, '[^/]+');
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(pathname);
   });

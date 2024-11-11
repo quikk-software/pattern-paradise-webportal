@@ -1,6 +1,6 @@
 'use client';
 
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { getAccessTokenUsingRefreshToken, isTokenValid } from '@/lib/auth/auth.utils';
@@ -14,15 +14,17 @@ import pages from '@/lib/hooks/routes';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
 
-const PUBLIC_URLS = ['/', '/auth/login', '/auth/reset-password', '/auth/registration', '/products'];
-
-function patternToRegex(pattern: string): RegExp {
-  const regexString = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*');
-  return new RegExp(`^${regexString}$`);
-}
+const PUBLIC_URLS = [
+  '/',
+  '/auth/login',
+  '/auth/reset-password',
+  '/auth/registration',
+  '/products',
+  '/test/products/[productId]',
+];
 
 const isPublicUrl = (url: string) => {
-  const isPublic = PUBLIC_URLS.some((pattern) => patternToRegex(pattern).test(url));
+  const isPublic = isPathnameInPages(url, PUBLIC_URLS);
   logger.debug(`${isPublic}: ${url}`);
   return isPublic;
 };
@@ -48,7 +50,12 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
       setUserDataInReduxStore(accessToken);
 
       // redirect to redirect URL if not already on a valid page
-      if (!isPathnameInPages(pathname, pages)) {
+      if (
+        !isPathnameInPages(
+          pathname,
+          pages.map((page) => page.pathname),
+        )
+      ) {
         router.push(redirectUrl);
       }
     }

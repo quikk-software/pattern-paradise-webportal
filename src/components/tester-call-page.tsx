@@ -11,11 +11,22 @@ import React from 'react';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { ArrowLeftRight } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+import { usePathname, useRouter } from 'next/navigation';
 
 function ApplyButton({ testingId, theme }: { testingId: string; theme: string }) {
   const { fetch: applyTesting, isSuccess, isError, isLoading } = useApplyTesting();
+  const { userId } = useSelector((store: Store) => store.auth);
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleApplyClick = async (testingId: string) => {
+    if (userId === '') {
+      router.push(`/auth/registration?redirect=${pathname}`);
+      return;
+    }
     await applyTesting(testingId);
   };
 
