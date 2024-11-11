@@ -8,7 +8,7 @@ import { setAccessToken, setRefreshToken } from '@/lib/features/auth/authSlice';
 import logger from '@/lib/core/logger';
 import { usePathname, useRouter } from 'next/navigation';
 import useRedirect from '@/lib/core/useRedirect';
-import { hasPageBeenMounted } from '@/lib/core/utils';
+import { hasPageBeenMounted, isPathnameInPages } from '@/lib/core/utils';
 import useAuth from '@/lib/auth/useAuth';
 import pages from '@/lib/hooks/routes';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
@@ -46,8 +46,9 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const onTokenValid = (accessToken: string | null) => {
     if (accessToken !== null) {
       setUserDataInReduxStore(accessToken);
+
       // redirect to redirect URL if not already on a valid page
-      if (!pages.map(({ pathname }) => pathname).includes(pathname)) {
+      if (!isPathnameInPages(pathname, pages)) {
         router.push(redirectUrl);
       }
     }

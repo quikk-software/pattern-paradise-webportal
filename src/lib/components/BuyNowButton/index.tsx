@@ -8,6 +8,8 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 interface BuyNowButtonProps {
   price: number;
@@ -18,6 +20,8 @@ interface BuyNowButtonProps {
 
 export function BuyNowButton({ price, productId, productStatus, callback }: BuyNowButtonProps) {
   const router = useRouter();
+  const { userId } = useSelector((s: Store) => s.auth);
+
   const { mutate: createOrder, isError: createOrderIsError, data: orderData } = useCreateOrder();
   const {
     mutate: captureOrder,
@@ -29,6 +33,7 @@ export function BuyNowButton({ price, productId, productStatus, callback }: BuyN
     isLoading: listOrdersByProductIdIsLoading,
     isSuccess: listOrdersByProductIdIsSuccess,
     data: orders,
+    setIsSuccess: setListOrdersByProductIdIsSuccess,
   } = useListOrdersByProductId();
 
   const errorReason = useMemo(() => {
@@ -76,12 +81,19 @@ export function BuyNowButton({ price, productId, productStatus, callback }: BuyN
           <PayPalButtons
             createOrder={async () => {
               try {
+                const order = orders.find((order) => order.customer.id === userId);
+                if (order?.status === 'CREATED') {
+                  logger.info("Order with status 'CREATED' for user already exists");
+                  return order.paypalOrderId;
+                }
                 const response = await createOrder({
                   productId,
                 });
                 return response.paypalOrderId;
               } catch (error) {
                 logger.error('Error creating order:', error);
+                setListOrdersByProductIdIsSuccess(false);
+                fetchOrdersByProductId(productId);
                 return '';
               }
             }}
@@ -90,11 +102,15 @@ export function BuyNowButton({ price, productId, productStatus, callback }: BuyN
                 await captureOrder(data.orderID);
               } catch (error) {
                 logger.error('Error capturing order:', error);
+                setListOrdersByProductIdIsSuccess(false);
+                fetchOrdersByProductId(productId);
               }
-              callback && callback();
+              callback !== undefined ? callback() : location.reload();
             }}
             onError={(err: any) => {
               logger.error('PayPal Buttons Error:', err);
+              setListOrdersByProductIdIsSuccess(false);
+              fetchOrdersByProductId(productId);
             }}
           />
         </div>

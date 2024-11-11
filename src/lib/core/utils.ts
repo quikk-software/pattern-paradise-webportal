@@ -1,4 +1,5 @@
 import logger from '@/lib/core/logger';
+import { Page } from '@/lib/hooks/routes/routes.types';
 
 export const executeAwaitableFunction = async (fn: (...args: any[]) => any | Promise<any>) => {
   if (fn.constructor.name == 'AsyncFunction') {
@@ -34,4 +35,12 @@ export const combineArraysById = (array1: any[], array2: any[], identifier: stri
   [array1, array2].flat().forEach((item) => uniqueItems.set(item?.[identifier], item));
 
   return Array.from(uniqueItems.values());
+};
+
+export const isPathnameInPages = (pathname: string, pages: Page[]) => {
+  return pages.some((page) => {
+    const regexPattern = page.pathname.replace(/\[.*?\]/g, '[^/]+');
+    const regex = new RegExp(`^${regexPattern}$`);
+    return regex.test(pathname);
+  });
 };

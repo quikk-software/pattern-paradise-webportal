@@ -11,7 +11,6 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
-import { useRouter } from 'next/navigation';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 
 interface OrderDetailsProps {
@@ -19,8 +18,6 @@ interface OrderDetailsProps {
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
-  const router = useRouter();
-
   const { fetch, isLoading, isSuccess, isError, data: file } = useGetPattern();
 
   useEffect(() => {
@@ -66,9 +63,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 price={order.productPrice}
                 productId={order.productId}
                 productStatus={'Released'}
-                callback={() => {
-                  router.refresh();
-                }}
+                callback={undefined}
               />
             </div>
           ) : null}

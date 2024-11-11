@@ -37,6 +37,7 @@ export async function ProductPageComponent({ productId }: ProductPageComponentPr
                   price={product.price}
                   productId={product.id}
                   productStatus={product.status}
+                  callback={undefined}
                 />
               </div>
             </div>

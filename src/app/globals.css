@@ -2,13 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  -webkit-text-size-adjust: 100%; /* Prevents font scaling on iOS */
-  touch-action: manipulation; /* Prevents pinch-to-zoom and double-tap zoom */
-}
-
-input, textarea, select {
-  font-size: 16px; /* Ensures no zoom on focus for iOS devices */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%; /* Prevents text scaling on iOS */
+    touch-action: manipulation; /* Prevents pinch-to-zoom and double-tap zoom */
+  },
+  input,
+  textarea,
+  select {
+    @apply text-base; /* Equivalent to font-size: 16px; in Tailwind */
+  }
 }
 
 body {
