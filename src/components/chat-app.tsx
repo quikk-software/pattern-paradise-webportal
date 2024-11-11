@@ -20,6 +20,7 @@ import { CldImage } from 'next-cloudinary';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useElementHeight } from '@/lib/core/useElementHeight';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import useWebSocket from '@/lib/hooks/useWebSocket';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -92,13 +93,18 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   const [initialLoad, setInitialLoad] = useState(true);
   const [messages, setMessages] = useState<GetTestingCommentResponse[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
   const [files, setFiles] = useState<FileList | null>(null);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [showChatList, setShowChatList] = useState(true);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
 
-  const { userId } = useSelector((s: Store) => s.auth);
+  const { userId, accessToken } = useSelector((s: Store) => s.auth);
   const bottomNavHeight = useElementHeight('bottom-navigation');
+  const { sendMessage, messages: socketMessages } = useWebSocket(
+    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/testing-comments/subscribe`,
+    accessToken,
+  );
 
   const { fetch: fetchTestings, data: testings } = useListTestings({});
   const {
@@ -119,11 +125,17 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   }, [testingId]);
 
   useEffect(() => {
-    if (bottomRef.current && !showChatList && initialLoad && messages.length > 0) {
+    if (
+      bottomRef.current &&
+      !showChatList &&
+      (initialLoad || hasNewSocketMessage) &&
+      messages.length > 0
+    ) {
       bottomRef.current.scrollIntoView({ behavior: 'instant' });
       setInitialLoad(false);
+      setHasNewSocketMessage(false);
     }
-  }, [messages, bottomRef.current, showChatList]);
+  }, [messages, bottomRef.current, showChatList, hasNewSocketMessage]);
 
   useEffect(() => {
     fetchTestings();
@@ -139,6 +151,20 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     };
     loadComments();
   }, [selectedChat]);
+
+  useEffect(() => {
+    const socketMessagesForThisChat = [
+      ...new Map(socketMessages.map((item) => [item.payload.id, item])).values(),
+    ]
+      .filter((socketMessage) => socketMessage.payload.testingId === selectedChat)
+      .map((socketMessage) => socketMessage.payload);
+
+    setMessages((msgs) =>
+      [
+        ...new Map([...socketMessagesForThisChat, ...msgs].map((item) => [item.id, item])).values(),
+      ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    );
+  }, [socketMessages]);
 
   const loadMore = async () => {
     if (!selectedChat) {
@@ -177,10 +203,11 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
           testingId: selectedChat,
         });
         if (result) {
-          setMessages([result, ...messages]);
           setNewMessage('');
           setFiles(null);
         }
+        sendMessage({ payload: result, event: 'testingcommentcreated' });
+        setHasNewSocketMessage(true);
       } finally {
         setSendMessageIsLoading(false);
       }
