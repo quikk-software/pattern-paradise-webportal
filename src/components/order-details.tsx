@@ -65,6 +65,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <BuyNowButton
                 price={order.productPrice}
                 productId={order.productId}
+                productStatus={'Released'}
                 callback={() => {
                   router.refresh();
                 }}

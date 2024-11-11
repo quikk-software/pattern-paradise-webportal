@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
@@ -33,7 +33,11 @@ export async function ProductPageComponent({ productId }: ProductPageComponentPr
                 <CreatedByRef creatorId={product.creatorId} />
               </div>
               <div>
-                <BuyNowButton price={product.price} productId={product.id} />
+                <BuyNowButton
+                  price={product.price}
+                  productId={product.id}
+                  productStatus={product.status}
+                />
               </div>
             </div>
           </div>

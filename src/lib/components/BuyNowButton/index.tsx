@@ -7,14 +7,16 @@ import logger from '@/lib/core/logger';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { InfoBoxComponent } from '@/components/info-box';
 
 interface BuyNowButtonProps {
   price: number;
   productId: string;
+  productStatus: string;
   callback?: () => void;
 }
 
-export function BuyNowButton({ price, productId, callback }: BuyNowButtonProps) {
+export function BuyNowButton({ price, productId, productStatus, callback }: BuyNowButtonProps) {
   const router = useRouter();
   const { mutate: createOrder, isError: createOrderIsError, data: orderData } = useCreateOrder();
   const {
@@ -58,6 +60,10 @@ export function BuyNowButton({ price, productId, callback }: BuyNowButtonProps) 
 
   if (listOrdersByProductIdIsLoading) {
     return <LoadingSpinnerComponent />;
+  }
+
+  if (productStatus !== 'Released') {
+    return <InfoBoxComponent message="This pattern is currently not for sale." severity="info" />;
   }
 
   return (

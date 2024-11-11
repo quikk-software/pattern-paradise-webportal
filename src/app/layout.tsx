@@ -65,6 +65,10 @@ export default function RootLayout({
         <meta property="og:site_name" content={APP_NAME} />
         <meta property="og:url" content={APP_DOMAIN} />
         <meta property="og:image" content={`${APP_DOMAIN}/icons/apple-touch-icon.png`} />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0"
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen pb-16">

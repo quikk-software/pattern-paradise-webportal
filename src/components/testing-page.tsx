@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Rocket, PlusCircle, ShoppingBag, TestTube } from 'lucide-react';
 import ProductCard from '@/lib/components/ProductCard';
-import { useListTestingsByUserId, useUpdateTesting } from '@/lib/api/testing';
+import { useAbortTesting, useListTestingsByUserId, useUpdateTesting } from '@/lib/api/testing';
 import { GetTestingResponse } from '@/@types/api-types';
 import Link from 'next/link';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
@@ -36,13 +36,15 @@ const getStatusColor = (status: GetTestingResponse['status']) => {
 };
 
 export function TestingPageComponent() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isUpdateTestingDrawerOpen, setIsUpdateTestingDrawerOpen] = useState(false);
+  const [isAbortTestingDrawerOpen, setIsAbortTestingDrawerOpen] = useState(false);
   const [refetch, setRefetch] = useState(true);
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [selectedTesting, setSelectedTesting] = useState<GetTestingResponse | null>(null);
 
   const { fetch: fetchTestings, data: testings, reset } = useListTestingsByUserId({});
   const { mutate: mutateTesting, isLoading: mutateTestingIsLoading } = useUpdateTesting();
+  const { fetch: fetchAbortTesting, isLoading: fetchAbortTestingIsLoading } = useAbortTesting();
 
   useEffect(() => {
     if (!refetch) {
@@ -54,11 +56,27 @@ export function TestingPageComponent() {
 
   const handleTesterCallDrawerClick = (testing: GetTestingResponse) => {
     setSelectedTheme(null);
-    setIsDrawerOpen(true);
+    setIsUpdateTestingDrawerOpen(true);
     setSelectedTesting(testing);
   };
 
-  const handleCancelTestingClick = async () => {};
+  const handleAbortTestingDrawerClick = (testing: GetTestingResponse) => {
+    setSelectedTheme(null);
+    setIsAbortTestingDrawerOpen(true);
+    setSelectedTesting(testing);
+  };
+
+  const handleAbortTestingClick = async (testing: GetTestingResponse | null) => {
+    if (!testing) {
+      return;
+    }
+
+    await fetchAbortTesting(testing.id);
+
+    reset();
+    setIsAbortTestingDrawerOpen(false);
+    setRefetch(true);
+  };
 
   const handleUpdateTestingClick = async (
     testing: GetTestingResponse | null,
@@ -73,7 +91,7 @@ export function TestingPageComponent() {
       theme: theme ?? undefined,
     });
     reset();
-    setIsDrawerOpen(false);
+    setIsUpdateTestingDrawerOpen(false);
     setSelectedTheme(null);
     setRefetch(true);
   };
@@ -168,7 +186,7 @@ export function TestingPageComponent() {
                       variant="destructive"
                       className="w-full"
                       onClick={() => {
-                        handleCancelTestingClick();
+                        handleAbortTestingDrawerClick(testing);
                       }}
                     >
                       Abort tester call
@@ -211,7 +229,7 @@ export function TestingPageComponent() {
           </Card>
         </div>
       </div>
-      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+      <Drawer open={isUpdateTestingDrawerOpen} onOpenChange={setIsUpdateTestingDrawerOpen}>
         <DrawerContent className="p-4">
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
             <DrawerHeader>
@@ -227,8 +245,8 @@ export function TestingPageComponent() {
                   selectedTheme
                     ? selectedTheme
                     : selectedTesting?.theme
-                      ? selectedTesting?.theme
-                      : 'neutral'
+                    ? selectedTesting?.theme
+                    : 'neutral'
                 }
                 selectedTheme={null}
               />
@@ -253,6 +271,37 @@ export function TestingPageComponent() {
               {mutateTestingIsLoading ? <LoadingSpinnerComponent size="sm" /> : null}
               {selectedTesting?.status === 'Created' ? 'Start tester call!' : null}
               {selectedTesting?.status !== 'Created' ? 'Update testing!' : null}
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
+      <Drawer open={isAbortTestingDrawerOpen} onOpenChange={setIsAbortTestingDrawerOpen}>
+        <DrawerContent className="p-4">
+          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+            <DrawerHeader>
+              <DrawerTitle>Are you sure?</DrawerTitle>
+              <DrawerTitle className="text-sm font-medium">
+                If you abort this testing, you&apos;ll have to re-create the product in order to
+                start the testing process again.
+              </DrawerTitle>
+            </DrawerHeader>
+            <Button
+              onClick={() => {
+                setIsAbortTestingDrawerOpen(false);
+              }}
+              variant={'outline'}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                handleAbortTestingClick(selectedTesting);
+              }}
+              variant={'destructive'}
+              disabled={fetchAbortTestingIsLoading}
+            >
+              {fetchAbortTestingIsLoading ? <LoadingSpinnerComponent size="sm" /> : null}
+              Abort testing
             </Button>
           </div>
         </DrawerContent>
