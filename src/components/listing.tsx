@@ -167,8 +167,8 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
         </Drawer>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="w-full md:w-64">
+      <div className="flex flex-col gap-6">
+        <div className="w-full">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -179,56 +179,52 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
             />
           </div>
         </div>
-        <div className="w-full md:w-64 mb-6">
+        <div className="w-full mb-6">
           <Button variant={'outline'} className={'w-full'} onClick={clearFilter}>
             <Trash />
             Clear Filter
           </Button>
         </div>
 
-        <main className="flex-1">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <Card key={product.id} className="flex flex-col justify-between">
-                <CardContent className="pt-4">
-                  <div>
-                    <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-                  </div>
-                  <h3 className="font-semibold">{product.title}</h3>
-                  <p className="text-sm text-muted-foreground">{product.category}</p>
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                  <span className="font-bold">${product.price}</span>
-                  <Link
-                    href={`/${
-                      listingType === 'sell'
-                        ? 'products'
-                        : listingType === 'test' && 'test/products'
-                    }/${product.id}`}
-                  >
-                    <Button>View Details</Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-          {hasNextPage ? (
-            <Button
-              variant={'outline'}
-              className={'w-full'}
-              onClick={() => {
-                setLoadMore(true);
-              }}
-            >
-              Load more
-            </Button>
-          ) : null}
-          {products.length === 0 && (
-            <p className="text-center text-muted-foreground mt-6">
-              Nothing found matching your criteria.
-            </p>
-          )}
-        </main>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {products.map((product) => (
+            <Card key={product.id} className="flex flex-col justify-between">
+              <CardContent className="pt-4">
+                <div>
+                  <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
+                </div>
+                <h3 className="font-semibold">{product.title}</h3>
+                <p className="text-sm text-muted-foreground">{product.category}</p>
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <span className="font-bold">${product.price}</span>
+                <Link
+                  href={`/${
+                    listingType === 'sell' ? 'products' : listingType === 'test' && 'test/products'
+                  }/${product.id}`}
+                >
+                  <Button>View Details</Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+        {hasNextPage ? (
+          <Button
+            variant={'outline'}
+            className={'w-full'}
+            onClick={() => {
+              setLoadMore(true);
+            }}
+          >
+            Load more
+          </Button>
+        ) : null}
+        {products.length === 0 && (
+          <p className="text-center text-muted-foreground mt-6">
+            Nothing found matching your criteria.
+          </p>
+        )}
       </div>
     </div>
   );

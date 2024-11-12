@@ -5,6 +5,7 @@ import { BottomNavigation } from '@/components/bottom-navigation';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME } from '@/lib/constants';
 import AuthGuard from '@/lib/auth/AuthGuard';
 import StoreProvider from '@/app/providers/StoreProvider';
+import { DisableZoomProvider } from '@/app/providers/DisableZoomProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -71,6 +72,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <DisableZoomProvider />
         <div className="flex flex-col h-dvh">
           <div className="flex-1 overflow-auto">
             <StoreProvider>
