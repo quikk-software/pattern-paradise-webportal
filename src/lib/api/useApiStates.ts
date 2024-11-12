@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import logger from '@/lib/core/logger';
 
 // List of routes where an error shouldn't be displayed
 const BLACKLISTED_ROUTES: string[] = [];
@@ -28,7 +29,7 @@ export const useApiStates = () => {
       } catch (err: any) {
         setIsSuccess(false);
         setIsError(true);
-        console.log({ err });
+        logger.error(err.message);
         if (
           err?.error?.status !== undefined &&
           err?.error?.status !== '' &&

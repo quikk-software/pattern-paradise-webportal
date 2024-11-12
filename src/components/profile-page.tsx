@@ -97,11 +97,21 @@ export function ProfilePage({ user }: ProfilePageProps) {
               router.push('/auth/me/orders');
             }}
             className="w-full"
+            variant={'outline'}
           >
             My orders
           </Button>
           <Button
+            onClick={() => {
+              router.push('/auth/me/testings');
+            }}
+            className="w-full"
             variant={'outline'}
+          >
+            My testings
+          </Button>
+          <Button
+            variant={'secondary'}
             onClick={() => {
               dispatch(reset());
             }}

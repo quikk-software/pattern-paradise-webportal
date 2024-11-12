@@ -94,6 +94,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   const [messages, setMessages] = useState<GetTestingCommentResponse[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
+  const [changedChat, setChangedChat] = useState(false);
   const [files, setFiles] = useState<FileList | null>(null);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [showChatList, setShowChatList] = useState(true);
@@ -111,6 +112,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     fetch: fetchTestingComments,
     hasNextPage: testingCommentsHasNextPage,
     isLoading: testingCommentsIsLoading,
+    reset,
   } = useListTestingComments({});
   const { mutate: createTestingComment } = useCreateTestingComment();
 
@@ -128,14 +130,15 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     if (
       bottomRef.current &&
       !showChatList &&
-      (initialLoad || hasNewSocketMessage) &&
+      (initialLoad || hasNewSocketMessage || changedChat) &&
       messages.length > 0
     ) {
       bottomRef.current.scrollIntoView({ behavior: 'instant' });
       setInitialLoad(false);
       setHasNewSocketMessage(false);
+      setChangedChat(false);
     }
-  }, [messages, bottomRef.current, showChatList, hasNewSocketMessage]);
+  }, [messages, bottomRef.current, showChatList, hasNewSocketMessage, changedChat]);
 
   useEffect(() => {
     fetchTestings();
@@ -217,16 +220,22 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   const handleChatSelect = (testingId: string) => {
     setSelectedChat(testingId);
     setShowChatList(false);
+    setChangedChat(true);
+    setMessages([]);
+    reset();
   };
 
   return (
     <div className="flex w-full">
       {/* Chat List */}
-      <div className={`${showChatList ? 'block' : 'hidden'} md:block w-full md:w-1/3 bg-white`}>
-        <Card className="h-full">
+      <div
+        className={`${showChatList ? 'block' : 'hidden'} md:block w-full md:w-1/3 bg-white`}
+        style={{ height: `calc(100vh - ${bottomNavHeight}px)` }}
+      >
+        <Card className="h-full overflow-y-auto">
           <CardContent className="p-4">
             <h2 className="text-2xl font-bold mb-4">Chats</h2>
-            <ScrollArea className="h-[calc(100vh-8rem)]">
+            <div>
               {testings.map((testing) => (
                 <div
                   key={testing.id}
@@ -234,21 +243,23 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   onClick={() => handleChatSelect(testing.id)}
                 >
                   <Avatar className="w-12 h-12 mr-3">
-                    <AvatarImage src={'/'} />
-                    <AvatarFallback>{'AF'}</AvatarFallback>
+                    <AvatarImage src={testing.product.imageUrls?.[0]} />
+                    <AvatarFallback>
+                      {testing.product.title.at(0)}
+                      {testing.product.title.at(1)}
+                    </AvatarFallback>
                   </Avatar>
-                  <div className="flex-1">
-                    <h3 className="font-semibold">Product name</h3>
-                    <p className="text-sm text-gray-500">{testing.lastComment}</p>
+                  <div className="flex flex-col flex-1 overflow-hidden">
+                    <h3 className="font-semibold truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
+                      {testing.product.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
+                      {testing.lastComment}
+                    </p>
                   </div>
-                  {/*{chat.unreadCount > 0 && (*/}
-                  {/*  <div className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">*/}
-                  {/*    {chat.unreadCount}*/}
-                  {/*  </div>*/}
-                  {/*)}*/}
                 </div>
               ))}
-            </ScrollArea>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -274,7 +285,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
           </CardContent>
           {/* Chat History (Scroll Area) */}
           <ScrollArea className="flex-grow p-4 overflow-y-auto">
-            {testingCommentsHasNextPage ? (
+            {testingCommentsHasNextPage && selectedChat !== null ? (
               <Button
                 variant={'outline'}
                 className={'w-full mb-4'}
@@ -337,17 +348,18 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                         {message.files.length > 0
                           ? message.files.map((file) =>
                               file.mimeType.startsWith('image/') ? (
-                                <CldImage
-                                  key={file.url}
-                                  alt="Pattern paradise"
-                                  src={file.url}
-                                  width="340"
-                                  height="250"
-                                  crop={{
-                                    type: 'auto',
-                                    source: true,
-                                  }}
-                                />
+                                <a href={file.url} key={file.url} target="_blank">
+                                  <CldImage
+                                    alt="Pattern paradise"
+                                    src={file.url}
+                                    width="340"
+                                    height="250"
+                                    crop={{
+                                      type: 'auto',
+                                      source: true,
+                                    }}
+                                  />
+                                </a>
                               ) : (
                                 <div
                                   key={file.url}
@@ -375,49 +387,53 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
             {!showChatList ? <div ref={bottomRef} /> : null}
           </ScrollArea>
           {/* Message Input Area */}
-          <div className="p-4 flex-none border-t border-gray-200">
-            <div className="flex items-center gap-2">
-              {files && (
-                <div className="flex gap-2">
-                  {Array.from(files).map((file, index) => (
-                    <img
-                      key={`${index}-${file.name}`}
-                      alt={file.name}
-                      src={URL.createObjectURL(file)}
-                      width={50}
-                      height={50}
-                    />
-                  ))}
-                </div>
-              )}
-              <Input
-                type="text"
-                placeholder="Type a message..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                className="flex-1"
-              />
-              <label htmlFor="file-upload" className="cursor-pointer">
-                <PaperclipIcon className="w-6 h-6 text-gray-500 hover:text-gray-700" />
-                <input
-                  id="file-upload"
-                  type="file"
-                  className="hidden"
-                  multiple
-                  accept="image/*"
-                  onChange={(e) => setFiles(e.target.files)}
-                />
-              </label>
-              <Button onClick={handleSendMessage} className="ml-2" disabled={sendMessageIsLoading}>
-                {sendMessageIsLoading ? (
-                  <LoadingSpinnerComponent size="sm" className="text-white" />
-                ) : (
-                  <SendIcon className="w-4 h-4 mr-2" />
+          {selectedChat !== null ? (
+            <div className="p-4 flex-none border-t border-gray-200">
+              <div className="flex flex-col gap-4">
+                {files && (
+                  <div className="flex gap-2">
+                    {Array.from(files).map((file, index) => (
+                      <img
+                        key={`${index}-${file.name}`}
+                        alt={file.name}
+                        src={URL.createObjectURL(file)}
+                        width={70}
+                        height={70}
+                      />
+                    ))}
+                  </div>
                 )}
-                Send
-              </Button>
+                <div className="flex items-center gap-3">
+                  <Input
+                    type="text"
+                    placeholder="Type a message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    className="flex-1"
+                  />
+                  <label htmlFor="file-upload" className="cursor-pointer">
+                    <PaperclipIcon className="w-6 h-6 text-gray-500 hover:text-gray-700" />
+                    <input
+                      id="file-upload"
+                      type="file"
+                      className="hidden"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => setFiles(e.target.files)}
+                    />
+                  </label>
+                  <Button onClick={handleSendMessage} disabled={sendMessageIsLoading}>
+                    Send
+                    {sendMessageIsLoading ? (
+                      <LoadingSpinnerComponent size="sm" className="text-white" />
+                    ) : (
+                      <SendIcon className="w-4 h-4 mr-2" />
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : null}
         </Card>
       </div>
     </div>

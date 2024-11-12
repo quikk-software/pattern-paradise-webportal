@@ -22,23 +22,23 @@ import {
 import { GetOrderResponse } from '@/@types/api-types';
 import { useRouter } from 'next/navigation';
 import { useListOrders } from '@/lib/api/order';
+import { combineArraysById } from '@/lib/core/utils';
 
 export function OrderListComponent() {
-  const {
-    fetch,
-    data: orders,
-    count,
-    hasNextPage,
-    hasPreviousPage,
-    pageSize,
-    pageNumber,
-  } = useListOrders({});
+  const [loadMore, setLoadMore] = useState(false);
 
-  console.log({ hasPreviousPage, hasNextPage });
+  const { fetch, data: orders, count, hasNextPage } = useListOrders({});
 
   useEffect(() => {
     fetch(1, 20);
   }, []);
+
+  useEffect(() => {
+    if (!loadMore) {
+      return;
+    }
+    fetch();
+  }, [loadMore]);
 
   const router = useRouter();
 
@@ -88,30 +88,18 @@ export function OrderListComponent() {
             </CardFooter>
           </Card>
         ))}
+        {hasNextPage ? (
+          <Button
+            variant={'outline'}
+            className={'w-full'}
+            onClick={() => {
+              setLoadMore(true);
+            }}
+          >
+            Load more
+          </Button>
+        ) : null}
       </div>
-      <Pagination className="mt-6">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={() => hasPreviousPage && fetch(pageNumber - 1, pageSize)}
-              className={!hasPreviousPage ? 'pointer-events-none opacity-50' : ''}
-            />
-          </PaginationItem>
-          {[...Array(count)].map((_, index) => (
-            <PaginationItem key={index}>
-              <PaginationLink href="#">{index + 1}</PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={() => hasNextPage && fetch(pageNumber + 1, pageSize)}
-              className={!hasNextPage ? 'pointer-events-none opacity-50' : ''}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 }

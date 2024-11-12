@@ -109,12 +109,12 @@ export function TestingPageComponent() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div className="p-8">
         <header className="mb-8">
           <h1 className="text-3xl font-bold">Your Testings</h1>
         </header>
 
-        <div className="grid gap-6 mb-8">
+        <div className="grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {testings.map((testing) => (
             <Card key={testing.product.id}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -140,7 +140,6 @@ export function TestingPageComponent() {
                   <Button
                     className="w-full"
                     onClick={() => {
-                      console.log(testing.id, 'OOOF');
                       handleTesterCallDrawerClick(testing);
                     }}
                     disabled={mutateTestingIsLoading}
@@ -173,7 +172,7 @@ export function TestingPageComponent() {
                       </Button>
                     </Link>
                     <Link
-                      href={`/test/chats/${testing.id}`}
+                      href={`/test/chats?testingId=${testing.id}`}
                       style={{
                         width: '100%',
                       }}
@@ -196,37 +195,6 @@ export function TestingPageComponent() {
               </CardFooter>
             </Card>
           ))}
-        </div>
-
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Explore Open Testings</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Patterns</CardTitle>
-              <PlusCircle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">25</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Recent Orders</CardTitle>
-              <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">12</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Testings</CardTitle>
-              <TestTube className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">3</div>
-            </CardContent>
-          </Card>
         </div>
       </div>
       <Drawer open={isUpdateTestingDrawerOpen} onOpenChange={setIsUpdateTestingDrawerOpen}>

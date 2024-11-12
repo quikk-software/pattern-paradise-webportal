@@ -71,11 +71,15 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen pb-16">
-          <StoreProvider>
-            <AuthGuard>{children}</AuthGuard>
-          </StoreProvider>
-          <BottomNavigation />
+        <div className="flex flex-col h-screen">
+          <div className="flex-1 overflow-auto">
+            <StoreProvider>
+              <AuthGuard>{children}</AuthGuard>
+            </StoreProvider>
+          </div>
+          <div className="flex-0">
+            <BottomNavigation />
+          </div>
         </div>
       </body>
     </html>
