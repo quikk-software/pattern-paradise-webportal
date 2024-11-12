@@ -1,13 +1,9 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
-import ProductListing from '@/lib/components/ProductListing';
-import { listProducts } from '@/lib/api/static/product/listProducts';
 import { ListingComponent } from '@/components/listing';
 
 export default async function Home() {
-  const products = await listProducts();
-
   return (
     <div>
       <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-muted">

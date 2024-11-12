@@ -178,14 +178,14 @@ export interface PostTestingResponse {
 }
 
 export interface PutTestingRequest {
-  testerIds: any[];
+  testerIds?: any[];
   /** @example "neutral" */
   theme?: string;
 }
 
 export interface GetTestingResponse {
   id: string;
-  testerIds: string[];
+  testerIds?: string[];
   /** @example "neutral" */
   theme: string;
   creatorId: string;
@@ -194,6 +194,11 @@ export interface GetTestingResponse {
   product: GetProductResponse;
   status: string;
   lastComment?: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  lastCommentCreatedAt?: string;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -268,6 +273,38 @@ export interface ListTestingCommentsResponse {
   /** @example 3 */
   totalPages: number;
   testingComments: GetTestingCommentResponse[];
+}
+
+export interface GetTesterApplicationResponse {
+  user: GetUserAccountResponse;
+  testing: GetTestingResponse;
+  assignedBy: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  assignedAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListTesterApplicationsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  testingsOnUsers: GetTesterApplicationResponse[];
 }
 
 export interface PostOrderRequest {
@@ -1112,6 +1149,36 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/testings/${testingId}/apply`,
         method: 'POST',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The tester applications will be queried by a given testing ID.
+     *
+     * @tags Testing
+     * @name ListTesterApplications
+     * @summary List tester applications by testing ID.
+     * @request GET:/api/v1/testings/{testingId}/applications
+     * @secure
+     */
+    listTesterApplications: (
+      testingId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The order direction. */
+        direction?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListTesterApplicationsResponse, any>({
+        path: `/api/v1/testings/${testingId}/applications`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
         ...params,
       }),
 

@@ -162,6 +162,16 @@ export function TestingPageComponent() {
                       Update tester call
                     </Button>
                     <Link
+                      href={`/sell/testings/${testing.id}`}
+                      style={{
+                        width: '100%',
+                      }}
+                    >
+                      <Button variant="outline" className="w-full">
+                        View tester applications
+                      </Button>
+                    </Link>
+                    <Link
                       href={`/test/products/${testing.product.id}`}
                       style={{
                         width: '100%',

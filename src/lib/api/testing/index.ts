@@ -11,3 +11,4 @@ export * from './useListTestings';
 export * from './useListTestingsByUserId';
 export * from './useCreateTestingComment';
 export * from './useListTestingComments';
+export * from './useListTesterApplications';
