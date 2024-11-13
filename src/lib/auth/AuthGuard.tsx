@@ -71,8 +71,8 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     }
 
     logger.debug(`Checking Access for <${pathname}>.`);
-    const at = accessToken ? accessToken : Cookie.get('accessToken') ?? null;
-    const rt = refreshToken ? refreshToken : Cookie.get('refreshToken') ?? null;
+    const at = accessToken ? accessToken : (Cookie.get('accessToken') ?? null);
+    const rt = refreshToken ? refreshToken : (Cookie.get('refreshToken') ?? null);
     if (isTokenValid(at)) {
       onTokenValid(at);
       dispatch(setAccessToken(at));
@@ -94,6 +94,11 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
       }
     })();
   };
+
+  useEffect(() => {
+    dispatch(setAccessToken(Cookie.get('accessToken') ?? null));
+    dispatch(setRefreshToken(Cookie.get('refreshToken') ?? null));
+  }, []);
 
   useEffect(() => {
     checkAuth(accessTokenFromStore, refreshTokenFromStore);
