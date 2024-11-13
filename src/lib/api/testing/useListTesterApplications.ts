@@ -5,6 +5,7 @@ import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { combineArraysById } from '@/lib/core/utils';
 
 export const useListTesterApplications = ({
   pageNumber = 1,
@@ -14,6 +15,7 @@ export const useListTesterApplications = ({
   pageSize?: number;
 }) => {
   const [data, setData] = useState<GetTesterApplicationResponse[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
 
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
@@ -21,7 +23,12 @@ export const useListTesterApplications = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async (testingId: string, direction: 'asc' | 'desc') => {
+  const fetch = async (
+    testingId: string,
+    direction: 'asc' | 'desc',
+    sortKey: 'updatedAt' | 'assignedAt',
+    filter: string[],
+  ) => {
     const response = await handleFn(
       async () =>
         await client.api.listTesterApplications(
@@ -30,14 +37,29 @@ export const useListTesterApplications = ({
             pageNumber: pagination.pageNumber,
             pageSize: pagination.pageSize,
             direction,
+            sortKey,
+            filter,
           },
           { ...(await getApi(accessToken, refreshToken, dispatch)) },
         ),
     );
 
-    setData((p) => [...p, ...(response?.data.testingsOnUsers ?? [])]);
+    setData((p) => [
+      ...combineArraysById(
+        p.map((e) => ({
+          ...e,
+          id: `${e.user.id}${e.testing.id}`,
+        })),
+        (response?.data.testingsOnUsers ?? []).map((e) => ({
+          ...e,
+          id: `${e.user.id}${e.testing.id}`,
+        })),
+        'id',
+      ),
+    ]);
 
     pagination.handlePaginationPayload(response?.data);
+    setTotalCount(response?.data.totalCount ?? 0);
 
     return response?.data;
   };
@@ -47,5 +69,7 @@ export const useListTesterApplications = ({
     ...pagination,
     fetch,
     data,
+    setData,
+    totalCount,
   };
 };

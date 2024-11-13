@@ -58,15 +58,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
       ]);
     }
     await mutate({
-      email: data.email,
+      email: data.email ?? undefined,
       firstName: data.firstName ?? undefined,
       lastName: data.lastName ?? undefined,
       imageUrl: urls.length > 0 ? urls[0].url : undefined,
-      instagramRef: data.instagramRef,
-      tiktokRef: data.tiktokRef,
-      username: data.username,
-      roles: data.roles,
-      paypalEmail: data.paypalEmail,
+      instagramRef: data.instagramRef ?? undefined,
+      tiktokRef: data.tiktokRef ?? undefined,
+      username: data.username ?? undefined,
+      roles: data.roles ?? undefined,
+      paypalEmail: data.paypalEmail ?? undefined,
     });
   };
 

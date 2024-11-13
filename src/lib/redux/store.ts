@@ -2,15 +2,21 @@
 import { rootReducer } from '@/lib/redux/rootReducer';
 import { CommonState, initialState as commonInitialState } from '@/lib/features/common/commonSlice';
 import { AuthState, initialState as authInitialState } from '@/lib/features/auth/authSlice';
+import {
+  TestingState,
+  initialState as testingInitialState,
+} from '@/lib/features/testing/testingSlice';
 
 export type Store = {
   common: CommonState;
   auth: AuthState;
+  testing: TestingState;
 };
 
 const initialStore: Store = {
   common: commonInitialState,
   auth: authInitialState,
+  testing: testingInitialState,
 };
 
 export const makeStore = () => {

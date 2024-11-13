@@ -294,6 +294,8 @@ export interface GetTesterApplicationResponse {
 export interface ListTesterApplicationsResponse {
   /** @example "3" */
   count: number;
+  /** @example "3" */
+  totalCount: number;
   /** @example false */
   hasPreviousPage: boolean;
   /** @example true */
@@ -1170,6 +1172,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         pageSize?: number;
         /** The order direction. */
         direction?: string;
+        /** The property key to sort by. */
+        sortKey?: string;
+        /** Properties to filter by. */
+        filter?: string[];
       },
       params: RequestParams = {},
     ) =>

@@ -6,8 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/sell/testings/[testingId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/sell/testings/[testingId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/tester-applicants-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/tester-applicants-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/testing/useListTesterApplications.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/testing/useListTesterApplications.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/redux/rootReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/redux/rootReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/redux/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/redux/store.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +133,7 @@
       <workItem from="1731230073251" duration="484000" />
       <workItem from="1731230588391" duration="13200000" />
       <workItem from="1731333354044" duration="12336000" />
-      <workItem from="1731424191844" duration="4533000" />
+      <workItem from="1731424191844" duration="16766000" />
     </task>
     <servers />
   </component>

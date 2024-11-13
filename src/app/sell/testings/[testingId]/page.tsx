@@ -1,32 +1,56 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useListTesterApplications } from '@/lib/api/testing';
+import { useGetTesting, useListTesterApplications } from '@/lib/api/testing';
 import NotFoundPage from '@/app/not-found';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { TesterApplicantsPage } from '@/components/tester-applicants-page';
 
 export default function TestingPage({ params }: { params: { testingId: string } }) {
   const testingId = params.testingId;
-  const [direction, setDirection] = useState<'asc' | 'desc'>('asc');
+  const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
+  const [sortKey, setSortKey] = useState<'updatedAt' | 'assignedAt'>('updatedAt');
+  const [filter, setFilter] = useState<string[]>([]);
 
-  const { fetch, data, isError, isLoading } = useListTesterApplications({});
+  const { fetch, data, isError, setData, reset, totalCount } = useListTesterApplications({});
+  const { fetch: fetchTesting, data: testing, isError: fetchTestingIsError } = useGetTesting();
 
   useEffect(() => {
-    fetch(testingId, direction);
-  }, [testingId, direction]);
+    fetch(testingId, direction, sortKey, filter);
+  }, [testingId, direction, filter]);
 
-  if (isError) {
+  useEffect(() => {
+    fetchTesting(testingId);
+  }, [testingId]);
+
+  if (!testing || isError || fetchTestingIsError) {
     return <NotFoundPage />;
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        <LoadingSpinnerComponent />
-      </div>
-    );
-  }
+  return (
+    <TesterApplicantsPage
+      applications={data}
+      directionFn={(overrideDirection: 'asc' | 'desc') => {
+        if (overrideDirection !== direction) {
+          setData([]);
+          reset();
+        }
 
-  return <TesterApplicantsPage applications={data} />;
+        setDirection(overrideDirection);
+      }}
+      sortKeyFn={(overrideSortKey: 'updatedAt' | 'assignedAt') => {
+        if (overrideSortKey !== sortKey) {
+          reset();
+        }
+        setSortKey(overrideSortKey);
+      }}
+      filterFn={(overrideFilter: string[]) => {
+        setData([]);
+        reset();
+        setFilter(overrideFilter);
+      }}
+      filter={filter}
+      totalApplicantsCount={totalCount}
+      testing={testing}
+    />
+  );
 }
