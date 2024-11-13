@@ -3,7 +3,11 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { getAccessTokenUsingRefreshToken, isTokenValid } from '@/lib/auth/auth.utils';
+import {
+  getAccessTokenUsingRefreshToken,
+  isTokenValid,
+  saveTokensToCookies,
+} from '@/lib/auth/auth.utils';
 import { setAccessToken, setRefreshToken } from '@/lib/features/auth/authSlice';
 import logger from '@/lib/core/logger';
 import { usePathname, useRouter } from 'next/navigation';
@@ -12,7 +16,7 @@ import { hasPageBeenMounted, isPathnameInPages } from '@/lib/core/utils';
 import useAuth from '@/lib/auth/useAuth';
 import pages from '@/lib/hooks/routes';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
+import Cookie from 'js-cookie';
 
 const PUBLIC_URLS = [
   '/',
@@ -67,8 +71,8 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     }
 
     logger.debug(`Checking Access for <${pathname}>.`);
-    const at = accessToken ?? getLocalStorageItem(LocalStorageKey.accessToken, null);
-    const rt = refreshToken ?? getLocalStorageItem(LocalStorageKey.refreshToken, null);
+    const at = accessToken ? accessToken : Cookie.get('accessToken') ?? null;
+    const rt = refreshToken ? refreshToken : Cookie.get('refreshToken') ?? null;
     if (isTokenValid(at)) {
       onTokenValid(at);
       dispatch(setAccessToken(at));
@@ -83,6 +87,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
       if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
         const newAccessToken: string = (res.data.access_token as string) ?? '';
         const newRefreshToken: string = (res.data.refresh_token as string) ?? '';
+        await saveTokensToCookies(newAccessToken, newRefreshToken);
         dispatch(setAccessToken(newAccessToken));
         dispatch(setRefreshToken(newRefreshToken));
         return;
@@ -90,9 +95,6 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     })();
   };
 
-  /**
-   * Taken from https://jasonwatmore.com/post/2021/08/30/next-js-redirect-to-login-page-if-unauthenticated
-   */
   useEffect(() => {
     checkAuth(accessTokenFromStore, refreshTokenFromStore);
 

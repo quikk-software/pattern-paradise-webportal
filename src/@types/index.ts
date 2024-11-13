@@ -1,8 +1,12 @@
 import { Api } from './api-types';
-import { getAccessTokenUsingRefreshToken, isTokenExpired } from '@/lib/auth/auth.utils';
+import {
+  getAccessTokenUsingRefreshToken,
+  isTokenExpired,
+  saveTokensToCookies,
+} from '@/lib/auth/auth.utils';
 import type { Dispatch, AnyAction } from 'redux';
 import { setAccessToken, setPassword, setRefreshToken } from '@/lib/features/auth/authSlice';
-import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
+import Cookie from 'js-cookie';
 
 const client = new Api({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -25,13 +29,13 @@ const getApi = async (
   const headers: Record<any, any> = {
     headers: undefined,
   };
-  const at = accessToken ?? getLocalStorageItem(LocalStorageKey.accessToken, null);
-  const rt = refreshToken ?? getLocalStorageItem(LocalStorageKey.refreshToken, null);
+  const at = accessToken ? accessToken : Cookie.get('accessToken') ?? null;
+  const rt = refreshToken ? refreshToken : Cookie.get('refreshToken') ?? null;
   if (at !== '') {
     headers.Authorization = `Bearer ${at}`;
   }
   const params = { headers };
-  if (isTokenExpired(at)) {
+  if (at !== null && rt !== null && isTokenExpired(at)) {
     const res = await getAccessTokenUsingRefreshToken(rt, () => {
       dispatch(setPassword(''));
       dispatch(setAccessToken(null));
@@ -43,6 +47,7 @@ const getApi = async (
       params.headers.Authorization = `Bearer ${newAccessToken}`;
       dispatch(setAccessToken(newAccessToken));
       dispatch(setRefreshToken(newRefreshToken));
+      await saveTokensToCookies(newAccessToken, newRefreshToken);
     }
   }
   return params;

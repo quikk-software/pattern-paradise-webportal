@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { getUserIdFromAccessToken, isTokenValid } from '@/lib/auth/auth.utils';
+import Cookie from 'js-cookie';
+import { getUserIdFromAccessToken, isTokenValid, saveTokensToCookies } from '@/lib/auth/auth.utils';
 import {
   reset,
   setAccessToken,
@@ -16,7 +17,6 @@ import logger from '@/lib/core/logger';
 import useRedirect from '@/lib/core/useRedirect';
 import { useRouter } from 'next/navigation';
 import { Store } from '@/lib/redux/store';
-import { getLocalStorageItem, LocalStorageKey } from '@/lib/core/localStorage.utils';
 import { useEffect, useState } from 'react';
 
 const useAuth = () => {
@@ -64,6 +64,9 @@ const useAuth = () => {
         // displaySuccess("Anmeldung erfolgreich");
         const accessToken = response.data.access_token;
         const refreshToken = response.data.refresh_token;
+
+        await saveTokensToCookies(accessToken, refreshToken);
+
         dispatch(setAccessToken(accessToken));
         dispatch(setRefreshToken(refreshToken));
         setUserDataInReduxStore(accessToken);
@@ -88,8 +91,9 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-    const accessToken =
-      accessTokenFromStore ?? getLocalStorageItem(LocalStorageKey.accessToken, null);
+    const accessToken = accessTokenFromStore
+      ? accessTokenFromStore
+      : Cookie.get('accessToken') ?? null;
     setIsLoggedIn(isTokenValid(accessToken));
   }, [accessTokenFromStore]);
 

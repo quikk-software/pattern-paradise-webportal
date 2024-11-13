@@ -15,6 +15,7 @@ import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { reset } from '@/lib/features/auth/authSlice';
+import RequestStatus from '@/lib/components/RequestStatus';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -27,7 +28,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { mutate, isLoading } = useUpdateUser();
+  const { mutate, isLoading, isSuccess, isError } = useUpdateUser();
 
   const {
     register,
@@ -310,13 +311,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading || imageIsLoading}>
-              {isLoading || imageIsLoading ? (
-                <LoadingSpinnerComponent size="sm" className="text-white" />
-              ) : null}
-              Save Changes
-            </Button>
-            {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
+            <div className="flex flex-col gap-2">
+              <Button type="submit" className="w-full" disabled={isLoading || imageIsLoading}>
+                {isLoading || imageIsLoading ? (
+                  <LoadingSpinnerComponent size="sm" className="text-white" />
+                ) : null}
+                Save Changes
+              </Button>
+              <RequestStatus isSuccess={isSuccess} isError={isError} />
+              {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
+            </div>
           </form>
         </CardContent>
       </Card>

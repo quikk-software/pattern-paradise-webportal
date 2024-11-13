@@ -1,10 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  LocalStorageKey,
-  removeLocalStorageItem,
-  setLocalStorageItem,
-} from '@/lib/core/localStorage.utils';
+import Cookies from 'js-cookie';
 
 export type AuthState = {
   userId: string;
@@ -45,17 +41,25 @@ export const authSlice = createSlice({
       state.password = action.payload;
     },
     setAccessToken: (state, action: PayloadAction<string | null>) => {
-      setLocalStorageItem(LocalStorageKey.accessToken, action.payload);
+      if (action.payload) {
+        Cookies.set('accessToken', action.payload);
+      } else {
+        Cookies.remove('accessToken');
+      }
       state.accessToken = action.payload;
     },
     setRefreshToken: (state, action: PayloadAction<string | null>) => {
+      if (action.payload) {
+        Cookies.set('refreshToken', action.payload);
+      } else {
+        Cookies.remove('refreshToken');
+      }
       state.refreshToken = action.payload;
-      setLocalStorageItem(LocalStorageKey.refreshToken, action.payload);
     },
     reset: (state) => {
       state = initialState;
-      removeLocalStorageItem(LocalStorageKey.accessToken);
-      removeLocalStorageItem(LocalStorageKey.refreshToken);
+      Cookies.remove('accessToken');
+      Cookies.remove('refreshToken');
       return state;
     },
   },

@@ -54,4 +54,30 @@ const getAccessTokenUsingRefreshToken = async (refreshToken: string, callback?: 
 const isTokenValid = (accessToken: string | null) =>
   accessToken !== null && accessToken !== '' && !isTokenExpired(accessToken);
 
-export { getUserIdFromAccessToken, getAccessTokenUsingRefreshToken, isTokenExpired, isTokenValid };
+const saveTokensToCookies = async (access_token: string, refresh_token: string) => {
+  const response = await fetch('/api/auth/callback', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      access_token,
+      refresh_token,
+    }),
+  });
+
+  const data = await response.json();
+  if (data.success) {
+    logger.info('Tokens saved in cookies');
+  } else {
+    logger.error('Failed to save tokens');
+  }
+};
+
+export {
+  getUserIdFromAccessToken,
+  getAccessTokenUsingRefreshToken,
+  isTokenExpired,
+  isTokenValid,
+  saveTokensToCookies,
+};
