@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Rocket, PlusCircle, ShoppingBag, TestTube } from 'lucide-react';
 import ProductCard from '@/lib/components/ProductCard';
 import { useAbortTesting, useListTestingsByUserId, useUpdateTesting } from '@/lib/api/testing';
 import { GetTestingResponse } from '@/@types/api-types';
@@ -136,31 +135,15 @@ export function TestingPageComponent() {
                 </div>
               </CardContent>
               <CardFooter>
-                {testing.status === 'Created' ? (
+                <div className="flex flex-col gap-2 w-full">
                   <Button
-                    className="w-full"
                     onClick={() => {
                       handleTesterCallDrawerClick(testing);
                     }}
-                    disabled={mutateTestingIsLoading}
                   >
-                    {mutateTestingIsLoading ? (
-                      <LoadingSpinnerComponent size="sm" className="text-white" />
-                    ) : (
-                      <Rocket />
-                    )}
-                    Start tester call
+                    Update tester call
                   </Button>
-                ) : null}
-                {testing.status === 'InProgress' ? (
-                  <div className="flex flex-col gap-2 w-full">
-                    <Button
-                      onClick={() => {
-                        handleTesterCallDrawerClick(testing);
-                      }}
-                    >
-                      Update tester call
-                    </Button>
+                  {testing.status === 'Created' ? (
                     <Link
                       href={`/sell/testings/${testing.id}`}
                       style={{
@@ -171,16 +154,18 @@ export function TestingPageComponent() {
                         View tester applications
                       </Button>
                     </Link>
-                    <Link
-                      href={`/test/products/${testing.product.id}`}
-                      style={{
-                        width: '100%',
-                      }}
-                    >
-                      <Button variant="outline" className="w-full">
-                        Go to tester call page
-                      </Button>
-                    </Link>
+                  ) : null}
+                  <Link
+                    href={`/test/products/${testing.product.id}`}
+                    style={{
+                      width: '100%',
+                    }}
+                  >
+                    <Button variant="outline" className="w-full">
+                      Go to tester call page
+                    </Button>
+                  </Link>
+                  {testing.status === 'InProgress' ? (
                     <Link
                       href={`/test/chats?testingId=${testing.id}`}
                       style={{
@@ -191,6 +176,8 @@ export function TestingPageComponent() {
                         View chat with testers
                       </Button>
                     </Link>
+                  ) : null}
+                  {testing.status === 'Created' || testing.status === 'InProgress' ? (
                     <Button
                       variant="destructive"
                       className="w-full"
@@ -200,8 +187,8 @@ export function TestingPageComponent() {
                     >
                       Abort tester call
                     </Button>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
               </CardFooter>
             </Card>
           ))}

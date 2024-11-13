@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,7 +14,11 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { addSelectedApplicant, removeSelectedApplicant } from '@/lib/features/testing/testingSlice';
+import {
+  addSelectedApplicant,
+  removeSelectedApplicant,
+  resetSelectedApplicants,
+} from '@/lib/features/testing/testingSlice';
 import { InfoBoxComponent } from '@/components/info-box';
 import {
   Drawer,
@@ -95,7 +99,7 @@ export function TesterApplicantsPage({
   filterFn: (filter: string[]) => void;
   filter: string[];
   totalApplicantsCount: number;
-  testing: GetTestingResponse;
+  testing?: GetTestingResponse;
 }) {
   const { requestSort, sortConfig } = useSortableData(applications);
   const [showAddApplicantsDrawer, setShowAddApplicantsDrawer] = useState<boolean>(false);
@@ -106,6 +110,10 @@ export function TesterApplicantsPage({
   const selectedApplicants = Object.values(sa);
 
   const { mutate, isLoading, isSuccess, isError } = useUpdateTesting();
+
+  useEffect(() => {
+    dispatch(resetSelectedApplicants());
+  }, [testing?.id]);
 
   const toggleApplicant = (user: GetUserAccountResponse) => {
     if (!!selectedApplicants.find((sa) => sa.id === user.id)) {
@@ -127,14 +135,17 @@ export function TesterApplicantsPage({
   };
 
   const handleAddApplicantsClick = async (
-    testingId: string,
     applicants: GetUserAccountResponse[],
+    testingId?: string,
   ) => {
+    if (!testingId) {
+      return;
+    }
     await mutate(testingId, {
       testerIds: applicants.map((user) => user.id),
     });
 
-    router.push(`/test/chats?testingId=${testing.id}`);
+    router.push(`/test/chats?testingId=${testingId}`);
   };
 
   return (
@@ -145,7 +156,7 @@ export function TesterApplicantsPage({
             <h1 className="text-2xl font-bold">Tester Applicants</h1>
             <Card>
               <CardHeader>
-                <CardTitle className="text-md">Sort by</CardTitle>
+                <CardTitle className="text-md">Filter</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
                 <div className="flex flex-start space-x-4 mb-4">
@@ -214,14 +225,17 @@ export function TesterApplicantsPage({
           {totalApplicantsCount >= MIN_TESTER_COUNT ? (
             <InfoBoxComponent message="Select at least 3 of your preferred testers by clicking on the user's card." />
           ) : null}
-          <Button
-            disabled={selectedApplicants.length < MIN_TESTER_COUNT}
-            onClick={() => {
-              setShowAddApplicantsDrawer(true);
-            }}
-          >
-            Complete selection
-          </Button>
+          <div className="w-full sticky top-4 z-50">
+            <Button
+              className="w-full"
+              disabled={selectedApplicants.length < MIN_TESTER_COUNT}
+              onClick={() => {
+                setShowAddApplicantsDrawer(true);
+              }}
+            >
+              Complete selection
+            </Button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {applications.map((application) => (
               <Card
@@ -309,7 +323,7 @@ export function TesterApplicantsPage({
               <DrawerTitle>Start testing process</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">
                 You are about to start the testing process for your pattern &apos;
-                {testing.product.title}&apos;. Are you ready to go with the following testers?
+                {testing?.product.title}&apos;. Are you ready to go with the following testers?
               </DrawerTitle>
             </DrawerHeader>
           </div>
@@ -347,7 +361,7 @@ export function TesterApplicantsPage({
             </Button>
             <Button
               onClick={() => {
-                handleAddApplicantsClick(testing.id, selectedApplicants);
+                handleAddApplicantsClick(selectedApplicants, testing?.id);
               }}
               variant={'default'}
             >

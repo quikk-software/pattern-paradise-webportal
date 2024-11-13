@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useGetTesting, useListTesterApplications } from '@/lib/api/testing';
-import NotFoundPage from '@/app/not-found';
 import { TesterApplicantsPage } from '@/components/tester-applicants-page';
 
 export default function TestingPage({ params }: { params: { testingId: string } }) {
@@ -11,8 +10,8 @@ export default function TestingPage({ params }: { params: { testingId: string } 
   const [sortKey, setSortKey] = useState<'updatedAt' | 'assignedAt'>('updatedAt');
   const [filter, setFilter] = useState<string[]>([]);
 
-  const { fetch, data, isError, setData, reset, totalCount } = useListTesterApplications({});
-  const { fetch: fetchTesting, data: testing, isError: fetchTestingIsError } = useGetTesting();
+  const { fetch, data, setData, reset, totalCount } = useListTesterApplications({});
+  const { fetch: fetchTesting, data: testing } = useGetTesting();
 
   useEffect(() => {
     fetch(testingId, direction, sortKey, filter);
@@ -21,10 +20,6 @@ export default function TestingPage({ params }: { params: { testingId: string } 
   useEffect(() => {
     fetchTesting(testingId);
   }, [testingId]);
-
-  if (!testing || isError || fetchTestingIsError) {
-    return <NotFoundPage />;
-  }
 
   return (
     <TesterApplicantsPage
