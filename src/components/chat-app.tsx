@@ -334,7 +334,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                           <AvatarImage src={user?.imageUrl} />
                           <AvatarFallback>
                             {user?.firstName?.at(0) && user?.lastName?.at(0)
-                              ? `${user.lastName.at(0)}${user.lastName.at(0)}`
+                              ? `${user.firstName.at(0)}${user.lastName.at(0)}`
                               : ''}
                           </AvatarFallback>
                         </Avatar>
