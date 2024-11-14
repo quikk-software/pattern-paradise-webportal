@@ -21,6 +21,7 @@ import { handleImageUpload } from '@/lib/features/common/utils';
 import { useElementHeight } from '@/lib/core/useElementHeight';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useWebSocket from '@/lib/hooks/useWebSocket';
+import Link from 'next/link';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -302,88 +303,109 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
             {messages
               .slice(0)
               .reverse()
-              .map((message) => (
-                <div
-                  key={message.id}
-                  className={`mb-4 ${
-                    message.creatorId === userId ? 'ml-auto' : 'mr-auto'
-                  } max-w-[80%] w-fit`}
-                >
+              .map((message) => {
+                const user = testings
+                  .find((testing) => testing.id === selectedChat)
+                  ?.testers?.find((tester) => tester.id === message.creatorId);
+                const otherName =
+                  user?.firstName && user?.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : user?.firstName
+                    ? user.firstName
+                    : user?.lastName
+                    ? user.lastName
+                    : user?.username ?? 'Other';
+                return (
                   <div
-                    className={`flex items-start ${
-                      message.creatorId === userId ? 'flex-row-reverse' : ''
-                    }`}
+                    key={message.id}
+                    className={`mb-4 ${
+                      message.creatorId === userId ? 'ml-auto' : 'mr-auto'
+                    } max-w-[80%] w-fit`}
                   >
-                    <Avatar className={`w-8 h-8 ${message.creatorId === userId ? 'ml-2' : 'mr-2'}`}>
-                      <AvatarImage src="/" />
-                      <AvatarFallback>FB</AvatarFallback>
-                    </Avatar>
                     <div
-                      className="flex-1 rounded-lg p-3"
-                      style={{
-                        backgroundColor: getColor(message.creatorId),
-                      }}
+                      className={`flex items-start ${
+                        message.creatorId === userId ? 'flex-row-reverse' : ''
+                      }`}
                     >
+                      <Link href={`/users/${user?.id}`}>
+                        <Avatar
+                          className={`w-8 h-8 ${message.creatorId === userId ? 'ml-2' : 'mr-2'}`}
+                        >
+                          <AvatarImage src={user?.imageUrl} />
+                          <AvatarFallback>
+                            {user?.firstName?.at(0) && user?.lastName?.at(0)
+                              ? `${user.lastName.at(0)}${user.lastName.at(0)}`
+                              : ''}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
                       <div
-                        className={`flex gap-2 justify-between items-baseline ${
-                          message.creatorId === userId ? 'flex-row-reverse' : ''
-                        }`}
+                        className="flex-1 rounded-lg p-3"
+                        style={{
+                          backgroundColor: getColor(message.creatorId),
+                        }}
                       >
-                        <span className="font-semibold">
-                          {message.creatorId === userId ? 'You' : 'Other'}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {dayjs(message.createdAt).format(TIME_FORMAT)}
-                        </span>
-                      </div>
+                        <div
+                          className={`flex gap-2 justify-between items-baseline ${
+                            message.creatorId === userId ? 'flex-row-reverse' : ''
+                          }`}
+                        >
+                          <span className="font-semibold">
+                            {message.creatorId === userId ? 'You' : otherName}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {dayjs(message.createdAt).format(TIME_FORMAT)}
+                          </span>
+                        </div>
 
-                      <p
-                        className={`mt-1 ${
-                          message.creatorId === userId ? 'text-right' : 'text-left'
-                        }`}
-                      >
-                        {message.message}
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {message.files.length > 0
-                          ? message.files.map((file) =>
-                              file.mimeType.startsWith('image/') ? (
-                                <a href={file.url} key={file.url} target="_blank">
-                                  <CldImage
-                                    alt="Pattern paradise"
-                                    src={file.url}
-                                    width="340"
-                                    height="250"
-                                    crop={{
-                                      type: 'auto',
-                                      source: true,
-                                    }}
-                                  />
-                                </a>
-                              ) : (
-                                <div
-                                  key={file.url}
-                                  className={`mt-2 ${
-                                    message.creatorId === userId ? 'text-right' : 'text-left'
-                                  }`}
-                                >
-                                  <a
-                                    href={file.url}
-                                    className="text-blue-500 hover:underline"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    <Button variant={'ghost'}>📎 Download file</Button>
+                        <p
+                          className={`mt-1 ${
+                            message.creatorId === userId ? 'text-right' : 'text-left'
+                          }`}
+                        >
+                          {message.message}
+                        </p>
+                        <div className="flex flex-col gap-2">
+                          {message.files.length > 0
+                            ? message.files.map((file) =>
+                                file.mimeType.startsWith('image/') ? (
+                                  <a href={file.url} key={file.url} target="_blank">
+                                    <CldImage
+                                      alt="Pattern paradise"
+                                      src={file.url}
+                                      width="340"
+                                      height="250"
+                                      crop={{
+                                        type: 'auto',
+                                        source: true,
+                                      }}
+                                    />
                                   </a>
-                                </div>
-                              ),
-                            )
-                          : null}
+                                ) : (
+                                  <div
+                                    key={file.url}
+                                    className={`mt-2 ${
+                                      message.creatorId === userId ? 'text-right' : 'text-left'
+                                    }`}
+                                  >
+                                    <a
+                                      href={file.url}
+                                      className="text-blue-500 hover:underline"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <Button variant={'ghost'}>📎 Download file</Button>
+                                    </a>
+                                  </div>
+                                ),
+                              )
+                            : null}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             {!showChatList ? <div ref={bottomRef} /> : null}
           </ScrollArea>
           {/* Message Input Area */}

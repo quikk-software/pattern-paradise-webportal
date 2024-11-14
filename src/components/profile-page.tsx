@@ -130,7 +130,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
             <div className="space-y-2 flex flex-col items-center">
               <Avatar className="w-32 h-32">
                 <AvatarImage src={profileImage} alt="Profile" />
-                {initials ? <AvatarFallback>{initials}</AvatarFallback> : null}
+                <AvatarFallback>{initials ? initials : ''}</AvatarFallback>
               </Avatar>
               <Label
                 htmlFor="picture"

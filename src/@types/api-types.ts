@@ -186,6 +186,7 @@ export interface PutTestingRequest {
 export interface GetTestingResponse {
   id: string;
   testerIds?: string[];
+  testers?: GetUserAccountResponse[];
   /** @example "neutral" */
   theme: string;
   creatorId: string;

@@ -6,8 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/useAuth.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/useAuth.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/sell/users/[userId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/users/[userId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat-app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat-app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/CreatedByRef/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/CreatedByRef/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +64,7 @@
       <recent name="$PROJECT_DIR$/src/lib/api/testing" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/app" />
       <recent name="$PROJECT_DIR$/src/app/test/chats/[testingId]" />
       <recent name="$PROJECT_DIR$/src/app/test/products" />
       <recent name="$PROJECT_DIR$/src/components" />
@@ -126,7 +131,7 @@
       <workItem from="1731230073251" duration="484000" />
       <workItem from="1731230588391" duration="13200000" />
       <workItem from="1731333354044" duration="12336000" />
-      <workItem from="1731424191844" duration="25856000" />
+      <workItem from="1731424191844" duration="27417000" />
     </task>
     <servers />
   </component>

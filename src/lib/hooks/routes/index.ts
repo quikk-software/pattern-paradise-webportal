@@ -85,7 +85,7 @@ const pages: Page[] = [
   },
   {
     title: "Seller's account",
-    pathname: '/sell/users/[userId]',
+    pathname: '/users/[userId]',
     description: '',
   },
   {
