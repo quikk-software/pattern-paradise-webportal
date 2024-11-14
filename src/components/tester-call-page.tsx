@@ -7,7 +7,7 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import { GetProductResponse, GetTestingResponse } from '@/@types/api-types';
 import { useApplyTesting } from '@/lib/api/testing';
 import { CldImage } from 'next-cloudinary';
-import React from 'react';
+import React, { useMemo } from 'react';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { ArrowLeftRight } from 'lucide-react';
@@ -15,7 +15,15 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
 
-function ApplyButton({ testingId, theme }: { testingId: string; theme: string }) {
+function ApplyButton({
+  testingId,
+  theme,
+  status,
+}: {
+  testingId: string;
+  theme: string;
+  status: string;
+}) {
   const { fetch: applyTesting, isSuccess, isError, isLoading } = useApplyTesting();
   const { userId } = useSelector((store: Store) => store.auth);
 
@@ -55,13 +63,30 @@ function ApplyButton({ testingId, theme }: { testingId: string; theme: string })
     rose: 'bg-rose-600 hover:bg-rose-700',
   };
 
+  const disableByStatus = status !== 'Created';
+
+  const getTestingStatusInfo = useMemo(() => {
+    switch (status) {
+      case 'InProgress':
+        return 'This tester call is closed';
+      case 'Aborted':
+        return 'This tester call is closed';
+      case 'Approved':
+        return 'This tester call is closed';
+      case 'Declined':
+        return 'This tester call is closed';
+      default:
+        return 'Apply as a Tester';
+    }
+  }, [status]);
+
   return (
     <div className={`block`}>
       <Button
         onClick={() => {
           handleApplyClick(testingId);
         }}
-        disabled={isLoading}
+        disabled={isLoading || disableByStatus}
         size={`lg`}
         className={classNames(
           themeClasses[theme] || 'bg-neutral-600 hover:bg-neutral-700',
@@ -69,7 +94,7 @@ function ApplyButton({ testingId, theme }: { testingId: string; theme: string })
         )}
       >
         {isLoading ? <LoadingSpinnerComponent size={`sm`} className={`text-white`} /> : null}
-        Apply as a Tester
+        {getTestingStatusInfo}
       </Button>
       <RequestStatus
         isSuccess={isSuccess}
@@ -166,7 +191,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
           <p className="text-xl text-gray-700 mb-6">
             Help us perfect our patterns and shape the future of crocheting and knitting!
           </p>
-          <ApplyButton testingId={testing.id} theme={theme} />
+          <ApplyButton testingId={testing.id} theme={theme} status={testing.status} />
         </section>
 
         {/* Pattern Information */}
@@ -271,7 +296,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
           >
             Ready to stitch with us?
           </h2>
-          <ApplyButton testingId={testing.id} theme={theme} />
+          <ApplyButton testingId={testing.id} theme={theme} status={testing.status} />
         </section>
       </main>
     </div>

@@ -6,7 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chat-app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat-app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/listing.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/listing.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/tester-applicants-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/tester-applicants-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/tester-call-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/tester-call-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/testing-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/testing-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-account.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +132,7 @@
       <workItem from="1731230073251" duration="484000" />
       <workItem from="1731230588391" duration="13200000" />
       <workItem from="1731333354044" duration="12336000" />
-      <workItem from="1731424191844" duration="29225000" />
+      <workItem from="1731424191844" duration="31952000" />
     </task>
     <servers />
   </component>

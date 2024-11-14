@@ -136,13 +136,6 @@ export function TestingPageComponent() {
               </CardContent>
               <CardFooter>
                 <div className="flex flex-col gap-2 w-full">
-                  <Button
-                    onClick={() => {
-                      handleTesterCallDrawerClick(testing);
-                    }}
-                  >
-                    Update tester call
-                  </Button>
                   {testing.status === 'Created' ? (
                     <Link
                       href={`/sell/testings/${testing.id}`}
@@ -150,21 +143,11 @@ export function TestingPageComponent() {
                         width: '100%',
                       }}
                     >
-                      <Button variant="outline" className="w-full">
+                      <Button variant="default" className="w-full">
                         View tester applications
                       </Button>
                     </Link>
                   ) : null}
-                  <Link
-                    href={`/test/products/${testing.product.id}`}
-                    style={{
-                      width: '100%',
-                    }}
-                  >
-                    <Button variant="outline" className="w-full">
-                      Go to tester call page
-                    </Button>
-                  </Link>
                   {testing.status === 'InProgress' ? (
                     <Link
                       href={`/test/chats?testingId=${testing.id}`}
@@ -172,8 +155,30 @@ export function TestingPageComponent() {
                         width: '100%',
                       }}
                     >
-                      <Button variant="outline" className="w-full">
+                      <Button variant="default" className="w-full">
                         View chat with testers
+                      </Button>
+                    </Link>
+                  ) : null}
+                  {testing.status !== 'Aborted' && testing.status !== 'Declined' ? (
+                    <Button
+                      onClick={() => {
+                        handleTesterCallDrawerClick(testing);
+                      }}
+                      variant="outline"
+                    >
+                      Select a theme
+                    </Button>
+                  ) : null}
+                  {testing.status === 'Created' ? (
+                    <Link
+                      href={`/test/products/${testing.product.id}`}
+                      style={{
+                        width: '100%',
+                      }}
+                    >
+                      <Button variant="outline" className="w-full">
+                        Go to tester call page
                       </Button>
                     </Link>
                   ) : null}
@@ -234,8 +239,7 @@ export function TestingPageComponent() {
               disabled={mutateTestingIsLoading}
             >
               {mutateTestingIsLoading ? <LoadingSpinnerComponent size="sm" /> : null}
-              {selectedTesting?.status === 'Created' ? 'Start tester call!' : null}
-              {selectedTesting?.status !== 'Created' ? 'Update testing!' : null}
+              Update tester call theme
             </Button>
           </div>
         </DrawerContent>

@@ -3,12 +3,15 @@
 import React, { useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Instagram, Music, ShoppingCart, User, TestTube } from 'lucide-react';
+import { ShoppingCart, User, TestTube } from 'lucide-react';
 import { GetUserAccountResponse } from '@/@types/api-types';
 import { useListProductsByUserId } from '@/lib/api';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import TikTokIcon from '@/lib/icons/TikTokIcon';
+import { Badge } from '@/components/ui/badge';
+import InstagramIcon from '@/lib/icons/InstagramIcon';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -55,24 +58,28 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
           <div className="flex gap-4 mb-4">
             {instagramRef ? (
               <a
-                href={instagramRef}
+                href={`https://instagram.com/${instagramRef}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-pink-600 hover:underline"
+                onClick={(e) => e.stopPropagation()}
               >
-                <Instagram size={20} />
-                Instagram
+                <Badge variant="secondary">
+                  <InstagramIcon className="w-4 h-4 mr-1" />
+                  Instagram
+                </Badge>
               </a>
             ) : null}
             {tiktokRef ? (
               <a
-                href={tiktokRef}
+                href={`https://tiktok.com/@${tiktokRef}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-black hover:underline"
+                onClick={(e) => e.stopPropagation()}
               >
-                <Music size={20} />
-                TikTok
+                <Badge variant="secondary">
+                  <TikTokIcon className="w-4 h-4 mr-1" />
+                  TikTok
+                </Badge>
               </a>
             ) : null}
           </div>
@@ -91,38 +98,42 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         </CardContent>
       </Card>
 
-      <h2 className="text-2xl font-bold mb-4">Associated Products</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <Card key={product.id}>
-            <CardContent className="p-4">
-              <img
-                src={product.imageUrls?.[0]}
-                alt={product.title}
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">${product.price.toFixed(2)}</span>
-                <Link href={`/products/${product.id}`}>
-                  <Button>Show details</Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {hasNextPage ? (
-          <Button
-            variant={'outline'}
-            onClick={() => {
-              fetch(user.id);
-            }}
-          >
-            {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-            Load more
-          </Button>
-        ) : null}
-      </div>
+      {products.length > 0 ? (
+        <>
+          <h2 className="text-2xl font-bold mb-4">Associated Products</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product) => (
+              <Card key={product.id}>
+                <CardContent className="p-4">
+                  <img
+                    src={product.imageUrls?.[0]}
+                    alt={product.title}
+                    className="w-full h-48 object-cover mb-4 rounded"
+                  />
+                  <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">${product.price.toFixed(2)}</span>
+                    <Link href={`/products/${product.id}`}>
+                      <Button>Show details</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+            {hasNextPage ? (
+              <Button
+                variant={'outline'}
+                onClick={() => {
+                  fetch(user.id);
+                }}
+              >
+                {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
+                Load more
+              </Button>
+            ) : null}
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }
