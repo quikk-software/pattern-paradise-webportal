@@ -31,7 +31,10 @@ const useAuth = () => {
 
   const { accessToken: accessTokenFromStore, username } = useSelector((store: Store) => store.auth);
 
-  const setUserDataInReduxStore = (accessToken: string) => {
+  const setUserDataInReduxStore = (accessToken: string | null) => {
+    if (!accessToken) {
+      return;
+    }
     const decodedToken = jwtDecode(accessToken);
     const userId = getUserIdFromAccessToken(accessToken);
     dispatch(setUserId(userId));
