@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +125,7 @@
       <workItem from="1731230073251" duration="484000" />
       <workItem from="1731230588391" duration="13200000" />
       <workItem from="1731333354044" duration="12336000" />
-      <workItem from="1731424191844" duration="23938000" />
+      <workItem from="1731424191844" duration="24621000" />
     </task>
     <servers />
   </component>
