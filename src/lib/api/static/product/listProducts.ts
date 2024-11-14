@@ -13,9 +13,7 @@ export const listProducts = async () => {
       },
     );
 
-    const data = await response.json();
-
-    return data.products;
+    return response.data.products;
   } catch (error) {
     logger.error(error);
     return [];

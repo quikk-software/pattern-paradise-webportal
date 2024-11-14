@@ -21,11 +21,9 @@ export const useGetUserById = () => {
         }),
     );
 
-    const data = await response.json();
+    setData(response.data);
 
-    setData(data);
-
-    return data;
+    return response.data;
   };
 
   return {

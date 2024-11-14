@@ -48,8 +48,6 @@ const getApi = async (
       dispatch(setAccessToken(newAccessToken));
       dispatch(setRefreshToken(newRefreshToken));
       await saveTokensToCookies(newAccessToken, newRefreshToken);
-
-      headers.Authorization = `Bearer ${newAccessToken}`;
     }
   }
   return params;
