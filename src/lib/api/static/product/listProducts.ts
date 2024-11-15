@@ -13,7 +13,7 @@ export const listProducts = async () => {
       },
     );
 
-    return response.data.products;
+    return response.data.products ?? [];
   } catch (error) {
     logger.error(error);
     return [];

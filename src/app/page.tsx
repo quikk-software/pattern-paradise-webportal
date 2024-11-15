@@ -2,8 +2,11 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
 import { ListingComponent } from '@/components/listing';
+import { listProducts } from '@/lib/api/static/product/listProducts';
 
 export default async function Home() {
+  const products = await listProducts();
+
   return (
     <div>
       <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-muted">
@@ -30,7 +33,7 @@ export default async function Home() {
         </div>
       </section>
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <ListingComponent listingType={'sell'} />
+        <ListingComponent listingType={'sell'} defaultProducts={products} />
       </section>
     </div>
   );

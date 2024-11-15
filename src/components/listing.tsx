@@ -24,10 +24,11 @@ const categories = ['All', 'Crocheting', 'Knitting'];
 
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
+  defaultProducts: GetProductResponse[];
 }
 
-export function ListingComponent({ listingType }: ListingComponentProps) {
-  const [products, setProducts] = useState<GetProductResponse[]>([]);
+export function ListingComponent({ listingType, defaultProducts }: ListingComponentProps) {
+  const [products, setProducts] = useState<GetProductResponse[]>(defaultProducts);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState('All');
