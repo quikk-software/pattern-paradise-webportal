@@ -7,6 +7,7 @@ export const listProducts = async () => {
       {
         pageNumber: 1,
         pageSize: 20,
+        status: 'Released',
       },
       {
         next: { revalidate: 1 },
