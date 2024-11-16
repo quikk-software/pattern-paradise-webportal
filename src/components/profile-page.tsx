@@ -34,6 +34,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
+  const [updateUserPasswordIsError, setUpdateUserPasswordIsError] = useState(false);
+  const [updateUserIsError, setUpdateUserIsError] = useState(false);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -41,13 +43,11 @@ export function ProfilePage({ user }: ProfilePageProps) {
     mutate: mutateUser,
     isLoading: updateUserIsLoading,
     isSuccess: updateUserIsSuccess,
-    isError: updateUserIsError,
   } = useUpdateUser();
   const {
     mutate: mutateUserPassword,
     isLoading: updateUserPasswordIsLoading,
     isSuccess: updateUserPasswordIsSuccess,
-    isError: updateUserPasswordIsError,
   } = useUpdateUserPassword();
 
   const {
@@ -61,6 +61,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const onSubmit = async (data: any) => {
     setImageError(undefined);
     setPasswordError(undefined);
+    setUpdateUserPasswordIsError(false);
+    setUpdateUserIsError(false);
     let urls: { url: string; mimeType: string }[] = [];
     if (!!profileImage) {
       [urls] = await Promise.all([
@@ -89,7 +91,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
       username: data.username ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
       paypalEmail: data.paypalEmail ? data.paypalEmail.toLowerCase().trim() : undefined,
-    }).catch();
+    }).catch(() => {
+      setUpdateUserIsError(true);
+    });
 
     if (data.newPassword !== data.confirmPassword) {
       setPasswordError('Passwords do not match');
@@ -97,7 +101,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
     mutateUserPassword({
       password: data.newPassword,
-    }).catch();
+    }).catch(() => {
+      setUpdateUserPasswordIsError(true);
+    });
   };
 
   const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
