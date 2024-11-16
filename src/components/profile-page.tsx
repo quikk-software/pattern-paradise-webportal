@@ -80,18 +80,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
       ]);
     }
     mutateUser({
-      email: data.email ?? undefined,
-      firstName: data.firstName ?? undefined,
-      lastName: data.lastName ?? undefined,
+      email: data.email ? data.email.toLowerCase().trim() : undefined,
+      firstName: data.firstName ? data.firstName.trim() : undefined,
+      lastName: data.lastName ? data.lastName.trim() : undefined,
       imageUrl: urls.length > 0 ? urls[0].url : undefined,
-      instagramRef: data.instagramRef ?? undefined,
-      tiktokRef: data.tiktokRef ?? undefined,
-      username: data.username ?? undefined,
+      instagramRef: data.instagramRef ? data.instagramRef.toLowerCase().trim() : undefined,
+      tiktokRef: data.tiktokRef ? data.tiktokRef.toLowerCase().trim() : undefined,
+      username: data.username ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
-      paypalEmail: data.paypalEmail ?? undefined,
+      paypalEmail: data.paypalEmail ? data.paypalEmail.toLowerCase().trim() : undefined,
     }).catch();
-
-    console.log('TEST');
 
     if (data.newPassword !== data.confirmPassword) {
       setPasswordError('Passwords do not match');
@@ -208,9 +206,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 type="email"
                 {...register('email', {
                   required: 'Email is required',
-                  onChange: (e) => {
-                    e.target.value = e.target.value.toLowerCase().trim();
-                  },
                 })}
                 onKeyDown={handleKeyDown}
               />
@@ -223,9 +218,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 id="username"
                 {...register('username', {
                   required: 'Username is required',
-                  onChange: (e) => {
-                    e.target.value = e.target.value.toLowerCase().trim();
-                  },
                 })}
                 onKeyDown={handleKeyDown}
               />
@@ -237,27 +229,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 <Label htmlFor="instagramRef">Instagram Handle</Label>
                 <Input
                   id="instagramRef"
-                  {...(register('instagramRef'),
-                  {
-                    onChange: (e) => {
-                      e.target.value = e.target.value.toLowerCase().trim();
-                    },
-                  })}
+                  {...(register('instagramRef'), {})}
                   onKeyDown={handleKeyDown}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tiktokRef">TikTok Handle</Label>
-                <Input
-                  id="tiktokRef"
-                  {...(register('tiktokRef'),
-                  {
-                    onChange: (e) => {
-                      e.target.value = e.target.value.toLowerCase().trim();
-                    },
-                  })}
-                  onKeyDown={handleKeyDown}
-                />
+                <Input id="tiktokRef" {...(register('tiktokRef'), {})} onKeyDown={handleKeyDown} />
               </div>
             </div>
 
@@ -352,9 +330,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
                       message: 'Invalid PayPal email address',
                     },
-                    onChange: (e) => {
-                      e.target.value = e.target.value.toLowerCase().trim();
-                    },
                   })}
                   onKeyDown={handleKeyDown}
                 />
@@ -380,9 +355,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       message:
                         'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
                     },
-                    onChange: (e) => {
-                      e.target.value = e.target.value.trim();
-                    },
                   })}
                   onKeyDown={handleKeyDown}
                 />
@@ -402,9 +374,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
                       message:
                         'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
-                    },
-                    onChange: (e) => {
-                      e.target.value = e.target.value.trim();
                     },
                   })}
                   onKeyDown={handleKeyDown}

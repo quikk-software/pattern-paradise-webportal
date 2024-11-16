@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -47,8 +47,6 @@ export function RegistrationFormComponent() {
     formState: { errors },
   } = useForm();
 
-  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-
   useEffect(() => {
     if (roles.length > 0) {
       setRolesError(undefined);
@@ -78,16 +76,9 @@ export function RegistrationFormComponent() {
     setRoles((prev) => (prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]));
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, currentIndex: number) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      if (currentIndex === inputRefs.current.length - 1) {
-        document
-          .getElementById('registrationForm')
-          ?.dispatchEvent(new Event('submit', { bubbles: true }));
-      } else {
-        inputRefs.current[currentIndex + 1]?.focus();
-      }
     }
   };
 
@@ -125,10 +116,7 @@ export function RegistrationFormComponent() {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
-              ref={(el) => {
-                inputRefs.current[0] = el;
-              }}
-              onKeyDown={(e) => handleKeyDown(e, 0)}
+              onKeyDown={handleKeyDown}
             />
             {errors.email ? (
               <p className="text-sm text-red-500 mb-2">{errors.email.message as string}</p>
@@ -146,18 +134,16 @@ export function RegistrationFormComponent() {
               required
               {...register('password', {
                 required: 'Password is required',
-                minLength: {
-                  value: 6,
-                  message: 'Password must be at least 6 characters',
+                pattern: {
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                  message:
+                    'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
                 },
                 onChange: (e) => {
                   e.target.value = e.target.value.trim();
                 },
               })}
-              ref={(el) => {
-                inputRefs.current[1] = el;
-              }}
-              onKeyDown={(e) => handleKeyDown(e, 1)}
+              onKeyDown={handleKeyDown}
             />
             {errors.password ? (
               <p className="text-sm text-red-500 mb-2">{errors.password.message as string}</p>
@@ -204,7 +190,7 @@ export function RegistrationFormComponent() {
                 </Label>
                 <Input
                   id="paypalEmail"
-                  type="text"
+                  type="email"
                   placeholder="Add a valid PayPal email"
                   required
                   {...register('paypalEmail', {
@@ -231,24 +217,30 @@ export function RegistrationFormComponent() {
               <Label htmlFor="firstName">First Name</Label>
               <Input
                 id="firstName"
+                type="text"
                 placeholder="First name"
-                {...register('firstName')}
-                ref={(el) => {
-                  inputRefs.current[2] = el;
-                }}
-                onKeyDown={(e) => handleKeyDown(e, 2)}
+                required={false}
+                {...register('firstName', {
+                  onChange: (e) => {
+                    e.target.value = e.target.value.trim();
+                  },
+                })}
+                onKeyDown={handleKeyDown}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last Name</Label>
               <Input
                 id="lastName"
+                type="text"
                 placeholder="Last name"
-                {...register('lastName')}
-                ref={(el) => {
-                  inputRefs.current[3] = el;
-                }}
-                onKeyDown={(e) => handleKeyDown(e, 3)}
+                required={false}
+                {...register('lastName', {
+                  onChange: (e) => {
+                    e.target.value = e.target.value.trim();
+                  },
+                })}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -257,16 +249,13 @@ export function RegistrationFormComponent() {
             <Input
               id="username"
               placeholder="Choose a username"
-              {...(register('username'),
-              {
+              required={false}
+              {...register('username', {
                 onChange: (e) => {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
-              ref={(el) => {
-                inputRefs.current[4] = el;
-              }}
-              onKeyDown={(e) => handleKeyDown(e, 4)}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div className="space-y-2">
@@ -277,16 +266,13 @@ export function RegistrationFormComponent() {
             <Input
               id="instagram"
               placeholder="Your Instagram handle"
-              {...(register('instagram'),
-              {
+              required={false}
+              {...register('instagram', {
                 onChange: (e) => {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
-              ref={(el) => {
-                inputRefs.current[5] = el;
-              }}
-              onKeyDown={(e) => handleKeyDown(e, 5)}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div className="space-y-2">
@@ -297,19 +283,16 @@ export function RegistrationFormComponent() {
             <Input
               id="tiktok"
               placeholder="Your TikTok handle"
-              {...(register('tiktok'),
-              {
+              required={false}
+              {...register('tiktok', {
                 onChange: (e) => {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
-              ref={(el) => {
-                inputRefs.current[6] = el;
-              }}
-              onKeyDown={(e) => handleKeyDown(e, 6)}
+              onKeyDown={handleKeyDown}
             />
           </div>
-          <Button className="w-full" type="submit">
+          <Button className="w-full" type="submit" disabled={isLoading || isSuccess}>
             {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
             Register
           </Button>

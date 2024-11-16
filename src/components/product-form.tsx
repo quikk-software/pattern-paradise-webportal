@@ -19,7 +19,6 @@ import { useCreateProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import RequestStatus from '@/lib/components/RequestStatus';
-import { isError } from 'node:util';
 
 const CATEGORIES = ['Crocheting', 'Knitting'];
 
@@ -132,13 +131,19 @@ export function ProductFormComponent() {
       return;
     }
     await mutate({
-      title: data.title,
-      description: data.description,
+      title: data.title.trim(),
+      description: data.description.trim(),
       price: data.price,
       imageUrls: urls.map((fu) => fu.url),
       category,
       patternPdfBase64,
     });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -162,9 +167,10 @@ export function ProductFormComponent() {
                 message: 'Please choose a title with no more than 30 characters',
               },
             })}
+            onKeyDown={handleKeyDown}
           />
           <p className="text-sm text-gray-500 mt-1">
-            {(getValues('title') ?? '')?.length}/80 characters
+            {(getValues('title') ?? '')?.length}/30 characters
           </p>
           {errors.title ? (
             <p className="text-sm text-red-500 mb-2">{errors.title.message as string}</p>
@@ -183,6 +189,7 @@ export function ProductFormComponent() {
             {...register('description', {
               required: 'Description is required',
             })}
+            onKeyDown={handleKeyDown}
           />
           {errors.description ? (
             <p className="text-sm text-red-500 mb-2">{errors.description.message as string}</p>
@@ -200,12 +207,13 @@ export function ProductFormComponent() {
             {...register('price', {
               required: 'Price is required',
               min: {
-                value: 0,
-                message: 'Price has to be greater than 0',
+                value: 0.0,
+                message: 'Price has to be greater than or equal to 0',
               },
             })}
             step="0.01"
             className="w-full"
+            onKeyDown={handleKeyDown}
           />
           {errors.price ? (
             <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>

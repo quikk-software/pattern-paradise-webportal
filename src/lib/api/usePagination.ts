@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 export const usePagination = (initialPageNumber: number = 1, initialPageSize: number = 20) => {
   const [count, setCount] = useState<number>(0);
   const [hasPreviousPage, setHasPreviousPage] = useState<boolean>(false);
-  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [pageSize, setPageSize] = useState<number>(initialPageSize);
 
