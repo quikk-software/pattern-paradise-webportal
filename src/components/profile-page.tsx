@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import { useUpdateUser } from '@/lib/api';
+import { useUpdateUser, useUpdateUserPassword } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -21,14 +21,34 @@ interface ProfilePageProps {
   user: GetUserResponse;
 }
 
+const passwordProps: {
+  newPassword?: string;
+  confirmPassword?: string;
+} = {
+  newPassword: undefined,
+  confirmPassword: undefined,
+};
+
 export function ProfilePage({ user }: ProfilePageProps) {
   const [profileImage, setProfileImage] = useState(user.imageUrl);
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
+  const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { mutate, isLoading, isSuccess, isError } = useUpdateUser();
+  const {
+    mutate: mutateUser,
+    isLoading: updateUserIsLoading,
+    isSuccess: updateUserIsSuccess,
+    isError: updateUserIsError,
+  } = useUpdateUser();
+  const {
+    mutate: mutateUserPassword,
+    isLoading: updateUserPasswordIsLoading,
+    isSuccess: updateUserPasswordIsSuccess,
+    isError: updateUserPasswordIsError,
+  } = useUpdateUserPassword();
 
   const {
     register,
@@ -36,10 +56,11 @@ export function ProfilePage({ user }: ProfilePageProps) {
     control,
     watch,
     formState: { errors },
-  } = useForm({ defaultValues: user });
+  } = useForm({ defaultValues: { ...user, ...passwordProps } });
 
   const onSubmit = async (data: any) => {
     setImageError(undefined);
+    setPasswordError(undefined);
     let urls: { url: string; mimeType: string }[] = [];
     if (!!profileImage) {
       [urls] = await Promise.all([
@@ -58,7 +79,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         ),
       ]);
     }
-    await mutate({
+    mutateUser({
       email: data.email ?? undefined,
       firstName: data.firstName ?? undefined,
       lastName: data.lastName ?? undefined,
@@ -68,7 +89,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
       username: data.username ?? undefined,
       roles: data.roles ?? undefined,
       paypalEmail: data.paypalEmail ?? undefined,
-    });
+    }).catch();
+
+    if (data.newPassword !== data.confirmPassword) {
+      setPasswordError('Passwords do not match');
+      return;
+    }
+    mutateUserPassword({
+      password: data.newPassword,
+    }).catch();
   };
 
   const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,7 +198,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
               <Input
                 id="email"
                 type="email"
-                {...register('email', { required: 'Email is required' })}
+                {...register('email', {
+                  required: 'Email is required',
+                  onChange: (e) => {
+                    e.target.value = e.target.value.toLowerCase().trim();
+                  },
+                })}
               />
               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
             </div>
@@ -178,7 +212,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
-                {...register('username', { required: 'Username is required' })}
+                {...register('username', {
+                  required: 'Username is required',
+                  onChange: (e) => {
+                    e.target.value = e.target.value.toLowerCase().trim();
+                  },
+                })}
               />
               {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
             </div>
@@ -186,11 +225,27 @@ export function ProfilePage({ user }: ProfilePageProps) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="instagramRef">Instagram Handle</Label>
-                <Input id="instagramRef" {...register('instagramRef')} />
+                <Input
+                  id="instagramRef"
+                  {...(register('instagramRef'),
+                  {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.toLowerCase().trim();
+                    },
+                  })}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tiktokRef">TikTok Handle</Label>
-                <Input id="tiktokRef" {...register('tiktokRef')} />
+                <Input
+                  id="tiktokRef"
+                  {...(register('tiktokRef'),
+                  {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.toLowerCase().trim();
+                    },
+                  })}
+                />
               </div>
             </div>
 
@@ -285,6 +340,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
                       message: 'Invalid PayPal email address',
                     },
+                    onChange: (e) => {
+                      e.target.value = e.target.value.toLowerCase().trim();
+                    },
                   })}
                 />
                 {errors.paypalEmail ? (
@@ -295,31 +353,73 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
             ) : null}
 
-            <div className="space-y-2">
-              <Label htmlFor="currentPassword">Current Password</Label>
-              <Input id="currentPassword" type="password" />
-            </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="newPassword">New Password</Label>
-                <Input id="newPassword" type="password" autoComplete="new-password" />
+                <Input
+                  id="newPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  {...register('newPassword', {
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                      message:
+                        'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
+                    },
+                    onChange: (e) => {
+                      e.target.value = e.target.value.trim();
+                    },
+                  })}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input id="confirmPassword" type="password" autoComplete="new-password" />
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  {...register('confirmPassword', {
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                      message:
+                        'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
+                    },
+                    onChange: (e) => {
+                      e.target.value = e.target.value.trim();
+                    },
+                  })}
+                />
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <Button type="submit" className="w-full" disabled={isLoading || imageIsLoading}>
-                {isLoading || imageIsLoading ? (
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={updateUserIsLoading || imageIsLoading}
+              >
+                {updateUserIsLoading || imageIsLoading || updateUserPasswordIsLoading ? (
                   <LoadingSpinnerComponent size="sm" className="text-white" />
                 ) : null}
                 Save Changes
               </Button>
-              <RequestStatus isSuccess={isSuccess} isError={isError} />
+              <RequestStatus
+                isSuccess={updateUserIsSuccess || updateUserPasswordIsSuccess}
+                isError={updateUserIsError}
+              />
+              <RequestStatus
+                isSuccess={false}
+                isError={updateUserPasswordIsError}
+                errorMessage={
+                  'Saving your new password failed. Please check your input and try again.'
+                }
+              />
               {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
+              {passwordError ? (
+                <p className="text-yellow-600 text-sm mt-2">{passwordError}</p>
+              ) : null}
             </div>
           </form>
         </CardContent>

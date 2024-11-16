@@ -19,6 +19,8 @@ import Link from 'next/link';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useRedirect from '@/lib/core/useRedirect';
+import TikTokIcon from '@/lib/icons/TikTokIcon';
+import InstagramIcon from '@/lib/icons/InstagramIcon';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
@@ -32,7 +34,7 @@ const roleOptions = [
 ];
 
 export function RegistrationFormComponent() {
-  const [roles, setRoles] = useState<string[]>(['Buyer', 'Seller', 'Tester']);
+  const [roles, setRoles] = useState<string[]>([]);
   const [rolesError, setRolesError] = useState<string | undefined>(undefined);
 
   const { redirectUrl } = useRedirect();
@@ -104,6 +106,9 @@ export function RegistrationFormComponent() {
                   value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
                   message: 'Invalid email address',
                 },
+                onChange: (e) => {
+                  e.target.value = e.target.value.toLowerCase().trim();
+                },
               })}
             />
             {errors.email ? (
@@ -125,6 +130,9 @@ export function RegistrationFormComponent() {
                 minLength: {
                   value: 6,
                   message: 'Password must be at least 6 characters',
+                },
+                onChange: (e) => {
+                  e.target.value = e.target.value.trim();
                 },
               })}
             />
@@ -182,6 +190,9 @@ export function RegistrationFormComponent() {
                       value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
                       message: 'Invalid PayPal email address',
                     },
+                    onChange: (e) => {
+                      e.target.value = e.target.value.toLowerCase().trim();
+                    },
                   })}
                 />
                 {errors.paypalEmail ? (
@@ -204,15 +215,48 @@ export function RegistrationFormComponent() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
-            <Input id="username" placeholder="Choose a username" {...register('username')} />
+            <Input
+              id="username"
+              placeholder="Choose a username"
+              {...(register('username'),
+              {
+                onChange: (e) => {
+                  e.target.value = e.target.value.toLowerCase().trim();
+                },
+              })}
+            />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="instagram">Instagram</Label>
-            <Input id="instagram" placeholder="Your Instagram handle" {...register('instagram')} />
+            <Label htmlFor="instagram" className="flex items-center gap-1">
+              <InstagramIcon className="w-4 h-4 inline" />
+              Instagram
+            </Label>
+            <Input
+              id="instagram"
+              placeholder="Your Instagram handle"
+              {...(register('instagram'),
+              {
+                onChange: (e) => {
+                  e.target.value = e.target.value.toLowerCase().trim();
+                },
+              })}
+            />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tiktok">TikTok</Label>
-            <Input id="tiktok" placeholder="Your TikTok handle" {...register('tiktok')} />
+            <Label htmlFor="tiktok" className="flex items-center gap-1">
+              <TikTokIcon className="w-4 h-4 inline" />
+              <span>TikTok</span>
+            </Label>
+            <Input
+              id="tiktok"
+              placeholder="Your TikTok handle"
+              {...(register('tiktok'),
+              {
+                onChange: (e) => {
+                  e.target.value = e.target.value.toLowerCase().trim();
+                },
+              })}
+            />
           </div>
           <Button className="w-full" type="submit">
             {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}

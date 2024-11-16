@@ -38,6 +38,10 @@ export interface PutUserRequest {
   paypalEmail?: string;
 }
 
+export interface PutUserPasswordRequest {
+  password?: string;
+}
+
 export interface GetUserResponse {
   id: string;
   email: string;
@@ -829,6 +833,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         secure: true,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Updates the user password by the given request body data and user ID.
+     *
+     * @tags User
+     * @name PutUserPassword
+     * @summary Updates the user
+     * @request PUT:/api/v1/users/{userId}/password
+     * @secure
+     */
+    putUserPassword: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        password?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/password`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
