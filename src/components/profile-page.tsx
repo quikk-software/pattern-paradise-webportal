@@ -91,6 +91,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
       paypalEmail: data.paypalEmail ?? undefined,
     }).catch();
 
+    console.log('TEST');
+
     if (data.newPassword !== data.confirmPassword) {
       setPasswordError('Passwords do not match');
       return;
@@ -364,7 +366,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
             ) : null}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid xs:grid-cols-1 xl:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="newPassword">New Password</Label>
                 <Input
@@ -384,6 +386,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   })}
                   onKeyDown={handleKeyDown}
                 />
+                {errors.newPassword && (
+                  <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm New Password</Label>
@@ -404,6 +409,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   })}
                   onKeyDown={handleKeyDown}
                 />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+                )}
               </div>
             </div>
 
@@ -418,10 +426,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 ) : null}
                 Save Changes
               </Button>
-              <RequestStatus
-                isSuccess={updateUserIsSuccess || updateUserPasswordIsSuccess}
-                isError={updateUserIsError}
-              />
+              {!passwordError ? (
+                <RequestStatus
+                  isSuccess={updateUserIsSuccess || updateUserPasswordIsSuccess}
+                  isError={updateUserIsError}
+                />
+              ) : null}
               <RequestStatus
                 isSuccess={false}
                 isError={updateUserPasswordIsError}
