@@ -110,6 +110,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
   const initials =
     user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
 
@@ -179,14 +185,14 @@ export function ProfilePage({ user }: ProfilePageProps) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
-                <Input id="firstName" {...register('firstName')} />
+                <Input id="firstName" {...register('firstName')} onKeyDown={handleKeyDown} />
                 {errors.firstName && (
                   <p className="text-red-500 text-sm">{errors.firstName.message}</p>
                 )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>
-                <Input id="lastName" {...register('lastName')} />
+                <Input id="lastName" {...register('lastName')} onKeyDown={handleKeyDown} />
                 {errors.lastName && (
                   <p className="text-red-500 text-sm">{errors.lastName.message}</p>
                 )}
@@ -204,6 +210,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     e.target.value = e.target.value.toLowerCase().trim();
                   },
                 })}
+                onKeyDown={handleKeyDown}
               />
               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
             </div>
@@ -218,6 +225,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     e.target.value = e.target.value.toLowerCase().trim();
                   },
                 })}
+                onKeyDown={handleKeyDown}
               />
               {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
             </div>
@@ -233,6 +241,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       e.target.value = e.target.value.toLowerCase().trim();
                     },
                   })}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
               <div className="space-y-2">
@@ -245,6 +254,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       e.target.value = e.target.value.toLowerCase().trim();
                     },
                   })}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
             </div>
@@ -344,6 +354,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       e.target.value = e.target.value.toLowerCase().trim();
                     },
                   })}
+                  onKeyDown={handleKeyDown}
                 />
                 {errors.paypalEmail ? (
                   <p className="text-sm text-red-500 mb-2">
@@ -371,6 +382,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       e.target.value = e.target.value.trim();
                     },
                   })}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
               <div className="space-y-2">
@@ -390,6 +402,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                       e.target.value = e.target.value.trim();
                     },
                   })}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
             </div>

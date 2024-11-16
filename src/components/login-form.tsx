@@ -26,7 +26,7 @@ export function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await handleLogin(email, password);
+    await handleLogin(email.toLowerCase().trim(), password.trim());
   };
 
   const disabled = !email || !password;

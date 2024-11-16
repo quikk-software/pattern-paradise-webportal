@@ -80,14 +80,12 @@ export function RegistrationFormComponent() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, currentIndex: number) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
       if (currentIndex === inputRefs.current.length - 1) {
-        // Submit form if it's the last input
         document
           .getElementById('registrationForm')
           ?.dispatchEvent(new Event('submit', { bubbles: true }));
       } else {
-        // Focus the next input
         inputRefs.current[currentIndex + 1]?.focus();
       }
     }
@@ -130,7 +128,7 @@ export function RegistrationFormComponent() {
               ref={(el) => {
                 inputRefs.current[0] = el;
               }}
-              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 0)}
+              onKeyDown={(e) => handleKeyDown(e, 0)}
             />
             {errors.email ? (
               <p className="text-sm text-red-500 mb-2">{errors.email.message as string}</p>
@@ -159,7 +157,7 @@ export function RegistrationFormComponent() {
               ref={(el) => {
                 inputRefs.current[1] = el;
               }}
-              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 1)}
+              onKeyDown={(e) => handleKeyDown(e, 1)}
             />
             {errors.password ? (
               <p className="text-sm text-red-500 mb-2">{errors.password.message as string}</p>
@@ -238,7 +236,7 @@ export function RegistrationFormComponent() {
                 ref={(el) => {
                   inputRefs.current[2] = el;
                 }}
-                onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 2)}
+                onKeyDown={(e) => handleKeyDown(e, 2)}
               />
             </div>
             <div className="space-y-2">
@@ -250,7 +248,7 @@ export function RegistrationFormComponent() {
                 ref={(el) => {
                   inputRefs.current[3] = el;
                 }}
-                onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 3)}
+                onKeyDown={(e) => handleKeyDown(e, 3)}
               />
             </div>
           </div>
@@ -268,7 +266,7 @@ export function RegistrationFormComponent() {
               ref={(el) => {
                 inputRefs.current[4] = el;
               }}
-              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 4)}
+              onKeyDown={(e) => handleKeyDown(e, 4)}
             />
           </div>
           <div className="space-y-2">
@@ -288,7 +286,7 @@ export function RegistrationFormComponent() {
               ref={(el) => {
                 inputRefs.current[5] = el;
               }}
-              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 5)}
+              onKeyDown={(e) => handleKeyDown(e, 5)}
             />
           </div>
           <div className="space-y-2">
@@ -308,7 +306,7 @@ export function RegistrationFormComponent() {
               ref={(el) => {
                 inputRefs.current[6] = el;
               }}
-              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 6)}
+              onKeyDown={(e) => handleKeyDown(e, 6)}
             />
           </div>
           <Button className="w-full" type="submit">
