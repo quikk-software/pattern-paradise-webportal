@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -47,6 +47,8 @@ export function RegistrationFormComponent() {
     formState: { errors },
   } = useForm();
 
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
   useEffect(() => {
     if (roles.length > 0) {
       setRolesError(undefined);
@@ -76,10 +78,25 @@ export function RegistrationFormComponent() {
     setRoles((prev) => (prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]));
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, currentIndex: number) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent default form submission
+      if (currentIndex === inputRefs.current.length - 1) {
+        // Submit form if it's the last input
+        document
+          .getElementById('registrationForm')
+          ?.dispatchEvent(new Event('submit', { bubbles: true }));
+      } else {
+        // Focus the next input
+        inputRefs.current[currentIndex + 1]?.focus();
+      }
+    }
+  };
+
   const hasErrors = errors.email || errors.password || rolesError;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form id="registrationForm" onSubmit={handleSubmit(onSubmit)}>
       <Card className="w-full max-w-2xl mx-auto border-none">
         <CardHeader>
           <Link href={`/auth/login?redirect=${redirectUrl}`} className="w-full mb-4">
@@ -110,6 +127,10 @@ export function RegistrationFormComponent() {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
+              ref={(el) => {
+                inputRefs.current[0] = el;
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 0)}
             />
             {errors.email ? (
               <p className="text-sm text-red-500 mb-2">{errors.email.message as string}</p>
@@ -135,6 +156,10 @@ export function RegistrationFormComponent() {
                   e.target.value = e.target.value.trim();
                 },
               })}
+              ref={(el) => {
+                inputRefs.current[1] = el;
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 1)}
             />
             {errors.password ? (
               <p className="text-sm text-red-500 mb-2">{errors.password.message as string}</p>
@@ -206,11 +231,27 @@ export function RegistrationFormComponent() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" placeholder="First name" {...register('firstName')} />
+              <Input
+                id="firstName"
+                placeholder="First name"
+                {...register('firstName')}
+                ref={(el) => {
+                  inputRefs.current[2] = el;
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 2)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" placeholder="Last name" {...register('lastName')} />
+              <Input
+                id="lastName"
+                placeholder="Last name"
+                {...register('lastName')}
+                ref={(el) => {
+                  inputRefs.current[3] = el;
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 3)}
+              />
             </div>
           </div>
           <div className="space-y-2">
@@ -224,6 +265,10 @@ export function RegistrationFormComponent() {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
+              ref={(el) => {
+                inputRefs.current[4] = el;
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 4)}
             />
           </div>
           <div className="space-y-2">
@@ -240,6 +285,10 @@ export function RegistrationFormComponent() {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
+              ref={(el) => {
+                inputRefs.current[5] = el;
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 5)}
             />
           </div>
           <div className="space-y-2">
@@ -256,6 +305,10 @@ export function RegistrationFormComponent() {
                   e.target.value = e.target.value.toLowerCase().trim();
                 },
               })}
+              ref={(el) => {
+                inputRefs.current[6] = el;
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleKeyDown(e, 6)}
             />
           </div>
           <Button className="w-full" type="submit">
