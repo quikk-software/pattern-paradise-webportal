@@ -117,6 +117,7 @@ export function RegistrationFormComponent() {
             <Input
               id="password"
               type="password"
+              autoComplete="new-password"
               placeholder="Create a password"
               required
               {...register('password', {
