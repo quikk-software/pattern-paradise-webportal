@@ -9,6 +9,10 @@
  * ---------------------------------------------------------------
  */
 
+export interface PostSubscriptionRequest {
+  paypalSubscriptionId: string;
+}
+
 export interface PostUserRequest {
   email: string;
   password: string;
@@ -1732,6 +1736,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/webhooks/paypal/reverse`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The authenticated user will be assigned to the "Pro" role. If the user already is assigned to the "Pro" role, an exception will be thrown. If the subscription is not active on PayPal, an exception will be thrown.
+     *
+     * @tags Subscription
+     * @name PostSubscription
+     * @summary Creates a subscription.
+     * @request POST:/api/v1/subscriptions
+     * @secure
+     */
+    postSubscription: (
+      data: {
+        /** @example "any" */
+        paypalSubscriptionId?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/subscriptions`,
         method: 'POST',
         body: data,
         secure: true,

@@ -73,7 +73,10 @@ export function BuyNowButton({ price, productId, productStatus, callback }: BuyN
 
   return (
     <PayPalScriptProvider
-      options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ?? '', currency: 'EUR' }}
+      options={{
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
+        currency: 'EUR',
+      }}
     >
       <div className="flex flex-col flex-start mb-6 gap-4">
         <span className="text-3xl font-bold">€{price.toFixed(2)}</span>

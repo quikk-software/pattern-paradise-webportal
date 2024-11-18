@@ -1,19 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { Check } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import SubscribeButton from '@/lib/components/SubscribeButton';
 
 export function PatternParadiseProComponent() {
-  const [isOpen, setIsOpen] = useState(false);
   const controls = useAnimation();
 
   useEffect(() => {
@@ -48,9 +46,9 @@ export function PatternParadiseProComponent() {
         'Yes, you can cancel your Pattern Paradise Pro subscription at any time. Your benefits will continue until the end of your current billing period.',
     },
     {
-      question: 'What happens when I cancel my subscription?',
+      question: 'What happens after I cancelled my subscription?',
       answer:
-        'Your patterns will not be marked as featured anymore, you will also not be able to use the Pro features when creating your pattern listings. Furthermore, existing patterns of yours which you have created with Pattern Paradise Pro will not loose translations and multi-pattern uploads.',
+        'Your patterns will not be marked as featured anymore, you will also not be able to use the Pro features when creating your pattern listings. Patterns which you have created with Pattern Paradise Pro will still have their translated patterns available for buyers.',
     },
     {
       question: 'How do the automatic translations work?',
@@ -96,16 +94,11 @@ export function PatternParadiseProComponent() {
             animate={controls}
             custom={1}
           >
-            Take your pattern business to the next level with our Pro plan
+            Take your pattern business to the next level with our Pro plan for just{' '}
+            <strong>€9.99</strong> per month
           </motion.p>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={controls} custom={2}>
-            <Button
-              size="lg"
-              className="bg-black hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105"
-              onClick={() => setIsOpen(true)}
-            >
-              Subscribe Now
-            </Button>
+            <SubscribeButton />
           </motion.div>
         </section>
 
@@ -152,13 +145,7 @@ export function PatternParadiseProComponent() {
             €9.99/month
           </motion.p>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={controls} custom={12}>
-            <Button
-              size="lg"
-              className="bg-black hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105"
-              onClick={() => setIsOpen(true)}
-            >
-              Get Started
-            </Button>
+            <SubscribeButton />
           </motion.div>
         </section>
 
@@ -190,53 +177,6 @@ export function PatternParadiseProComponent() {
           </Accordion>
         </section>
       </main>
-
-      {isOpen && (
-        <motion.div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div
-            className="bg-white rounded-lg p-8 max-w-md w-full"
-            initial={{ scale: 0.9, y: 20 }}
-            animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.9, y: 20 }}
-          >
-            <h2 className="text-2xl font-bold mb-4">Subscribe to Pattern Paradise Pro</h2>
-            <p className="mb-4 text-gray-600">
-              Enter your details to get started with your Pro subscription.
-            </p>
-            <form className="space-y-4">
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-              <Button
-                type="submit"
-                className="w-full bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
-              >
-                Start My Pro Subscription
-              </Button>
-            </form>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="mt-4 text-gray-600 hover:text-black"
-            >
-              Close
-            </button>
-          </motion.div>
-        </motion.div>
-      )}
     </div>
   );
 }
