@@ -35,6 +35,7 @@ export interface PutUserRequest {
   username?: string;
   firstName?: string;
   lastName?: string;
+  description?: string;
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
@@ -46,10 +47,16 @@ export interface PutUserPasswordRequest {
   password?: string;
 }
 
+export interface PutGalleryImagesRequest {
+  galleryImages: string[];
+}
+
 export interface GetUserResponse {
   id: string;
   email: string;
   username: string;
+  description?: string;
+  galleryImages: string[];
   isActive: boolean;
   isSponsored: boolean;
   firstName?: string;
@@ -98,6 +105,8 @@ export interface GetUserAccountResponse {
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
+  description?: string;
+  galleryImages: string[];
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
@@ -812,6 +821,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @example "any" */
         lastName?: any;
         /** @example "any" */
+        description?: any;
+        /** @example "any" */
         instagramRef?: any;
         /** @example "any" */
         tiktokRef?: any;
@@ -856,7 +867,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags User
      * @name PutUserPassword
-     * @summary Updates the user
+     * @summary Updates the users password.
      * @request PUT:/api/v1/users/{userId}/password
      * @secure
      */
@@ -874,6 +885,57 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Adds gallery images by the given request body data and user ID.
+     *
+     * @tags User
+     * @name PutGalleryImages
+     * @summary Adds gallery images.
+     * @request PUT:/api/v1/users/{userId}/gallery
+     * @secure
+     */
+    putGalleryImages: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        galleryImages?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/gallery`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Deletes a gallery image by the given query parameter data and user ID.
+     *
+     * @tags User
+     * @name DeleteGalleryImage
+     * @summary Deletes a gallery image.
+     * @request DELETE:/api/v1/users/{userId}/gallery
+     * @secure
+     */
+    deleteGalleryImage: (
+      userId: string,
+      query?: {
+        /** The image to delete. */
+        imageUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/gallery`,
+        method: 'DELETE',
+        query: query,
+        secure: true,
         ...params,
       }),
 

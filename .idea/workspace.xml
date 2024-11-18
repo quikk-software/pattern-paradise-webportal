@@ -5,15 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.sample" beforeDir="false" afterPath="$PROJECT_DIR$/.env.sample" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pattern-paradise-pro.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pattern-paradise-pro.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/BuyNowButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/BuyNowButton/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/info-box.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/info-box.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-account.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/user/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/user/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +137,7 @@
       <workItem from="1731424191844" duration="34137000" />
       <workItem from="1731660298222" duration="17000" />
       <workItem from="1731667195528" duration="1726000" />
-      <workItem from="1731926633617" duration="11469000" />
+      <workItem from="1731926633617" duration="16261000" />
     </task>
     <servers />
   </component>

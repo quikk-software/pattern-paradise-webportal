@@ -16,25 +16,21 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { reset } from '@/lib/features/auth/authSlice';
 import RequestStatus from '@/lib/components/RequestStatus';
+import EditPassword from '@/lib/components/EditPassword';
+import { InfoBoxComponent } from '@/components/info-box';
+import Link from 'next/link';
+import InstagramIcon from '@/lib/icons/InstagramIcon';
+import TikTokIcon from '@/lib/icons/TikTokIcon';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ProfilePageProps {
   user: GetUserResponse;
 }
 
-const passwordProps: {
-  newPassword?: string;
-  confirmPassword?: string;
-} = {
-  newPassword: undefined,
-  confirmPassword: undefined,
-};
-
 export function ProfilePage({ user }: ProfilePageProps) {
   const [profileImage, setProfileImage] = useState(user.imageUrl);
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
-  const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
-  const [updateUserPasswordIsError, setUpdateUserPasswordIsError] = useState(false);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
 
   const dispatch = useDispatch();
@@ -44,11 +40,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isLoading: updateUserIsLoading,
     isSuccess: updateUserIsSuccess,
   } = useUpdateUser();
-  const {
-    mutate: mutateUserPassword,
-    isLoading: updateUserPasswordIsLoading,
-    isSuccess: updateUserPasswordIsSuccess,
-  } = useUpdateUserPassword();
 
   const {
     register,
@@ -56,12 +47,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
     control,
     watch,
     formState: { errors },
-  } = useForm({ defaultValues: { ...user, ...passwordProps } });
+  } = useForm({ defaultValues: user });
 
-  const onSubmit = async (data: any) => {
+  const onPersonalDataSubmit = async (data: any) => {
     setImageError(undefined);
-    setPasswordError(undefined);
-    setUpdateUserPasswordIsError(false);
     setUpdateUserIsError(false);
     let urls: { url: string; mimeType: string }[] = [];
     if (!!profileImage) {
@@ -85,6 +74,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       email: data.email ? data.email.toLowerCase().trim() : undefined,
       firstName: data.firstName ? data.firstName.trim() : undefined,
       lastName: data.lastName ? data.lastName.trim() : undefined,
+      description: data.description ? data.description.trim() : undefined,
       imageUrl: urls.length > 0 ? urls[0].url : undefined,
       instagramRef: data.instagramRef ? data.instagramRef.toLowerCase().trim() : undefined,
       tiktokRef: data.tiktokRef ? data.tiktokRef.toLowerCase().trim() : undefined,
@@ -93,16 +83,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
       paypalEmail: data.paypalEmail ? data.paypalEmail.toLowerCase().trim() : undefined,
     }).catch(() => {
       setUpdateUserIsError(true);
-    });
-
-    if (data.newPassword !== data.confirmPassword) {
-      setPasswordError('Passwords do not match');
-      return;
-    }
-    mutateUserPassword({
-      password: data.newPassword,
-    }).catch(() => {
-      setUpdateUserPasswordIsError(true);
     });
   };
 
@@ -116,7 +96,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
     }
@@ -167,7 +147,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
           <CardTitle className="text-2xl font-bold text-center">Edit Profile</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onPersonalDataSubmit)} className="space-y-8">
             <div className="space-y-2 flex flex-col items-center">
               <Avatar className="w-32 h-32">
                 <AvatarImage src={profileImage} alt="Profile" />
@@ -185,6 +165,38 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 accept="image/*"
                 className="hidden"
                 onChange={selectImage}
+              />
+            </div>
+            <div className="space-y-2">
+              {!user.roles?.includes('Pro') ? (
+                <InfoBoxComponent
+                  severity="success"
+                  message="Your Pattern Paradise Pro subscription is active"
+                />
+              ) : (
+                <InfoBoxComponent
+                  severity="info"
+                  message={
+                    <span>
+                      Get access to extended features with{' '}
+                      <Link href="/pro" className="text-blue-500 underline">
+                        Pattern Paradise Pro
+                      </Link>
+                    </span>
+                  }
+                />
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Profile description</Label>
+              <Textarea
+                id="description"
+                placeholder="Write something about yourself..."
+                className="w-full"
+                rows={4}
+                {...register('description')}
+                onKeyDown={handleKeyDown}
               />
             </div>
 
@@ -232,16 +244,28 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="instagramRef">Instagram Handle</Label>
+                <Label htmlFor="instagramRef" className="flex gap-1 items-center">
+                  <InstagramIcon className="w-4 h-4" />
+                  Instagram username
+                </Label>
                 <Input
                   id="instagramRef"
-                  {...(register('instagramRef'), {})}
+                  {...register('instagramRef')}
                   onKeyDown={handleKeyDown}
+                  placeholder="the.patternparadise"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="tiktokRef">TikTok Handle</Label>
-                <Input id="tiktokRef" {...(register('tiktokRef'), {})} onKeyDown={handleKeyDown} />
+                <Label htmlFor="tiktokRef" className="flex gap-1 items-center">
+                  <TikTokIcon className="w-4 h-4" />
+                  TikTok username
+                </Label>
+                <Input
+                  id="tiktokRef"
+                  {...register('tiktokRef')}
+                  onKeyDown={handleKeyDown}
+                  placeholder="the.patternparadise"
+                />
               </div>
             </div>
 
@@ -347,81 +371,24 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
             ) : null}
 
-            <div className="grid xs:grid-cols-1 xl:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  {...register('newPassword', {
-                    pattern: {
-                      value:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                      message:
-                        'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
-                    },
-                  })}
-                  onKeyDown={handleKeyDown}
-                />
-                {errors.newPassword && (
-                  <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  {...register('confirmPassword', {
-                    pattern: {
-                      value:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                      message:
-                        'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
-                    },
-                  })}
-                  onKeyDown={handleKeyDown}
-                />
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
-                )}
-              </div>
-            </div>
-
             <div className="flex flex-col gap-2">
               <Button
                 type="submit"
                 className="w-full"
                 disabled={updateUserIsLoading || imageIsLoading}
               >
-                {updateUserIsLoading || imageIsLoading || updateUserPasswordIsLoading ? (
+                {updateUserIsLoading || imageIsLoading ? (
                   <LoadingSpinnerComponent size="sm" className="text-white" />
                 ) : null}
                 Save Changes
               </Button>
-              {!passwordError ? (
-                <RequestStatus
-                  isSuccess={updateUserIsSuccess || updateUserPasswordIsSuccess}
-                  isError={updateUserIsError}
-                />
-              ) : null}
-              <RequestStatus
-                isSuccess={false}
-                isError={updateUserPasswordIsError}
-                errorMessage={
-                  'Saving your new password failed. Please check your input and try again.'
-                }
-              />
+              <RequestStatus isSuccess={updateUserIsSuccess} isError={updateUserIsError} />
               {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
-              {passwordError ? (
-                <p className="text-yellow-600 text-sm mt-2">{passwordError}</p>
-              ) : null}
             </div>
           </form>
         </CardContent>
       </Card>
+      <EditPassword />
     </div>
   );
 }

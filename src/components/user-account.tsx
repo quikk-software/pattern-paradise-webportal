@@ -98,6 +98,15 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         </CardContent>
       </Card>
 
+      {user.description ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-2xl">About me</CardTitle>
+          </CardHeader>
+          <CardContent>{user.description}</CardContent>
+        </Card>
+      ) : null}
+
       {products.length > 0 ? (
         <>
           <h2 className="text-2xl font-bold mb-4">Associated Products</h2>

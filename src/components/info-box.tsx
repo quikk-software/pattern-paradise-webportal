@@ -1,48 +1,48 @@
-'use client'
+'use client';
 
-import { AlertCircle, CheckCircle2, Info, XCircle } from "lucide-react"
+import { AlertCircle, CheckCircle2, Info, XCircle } from 'lucide-react';
 
-type SeverityLevel = "info" | "success" | "warning" | "error"
+type SeverityLevel = 'info' | 'success' | 'warning' | 'error';
 
 interface InfoBoxProps {
-  severity?: SeverityLevel
-  title?: string
-  message: string
+  severity?: SeverityLevel;
+  title?: string;
+  message: string | React.ReactNode;
 }
 
 const severityConfig = {
   info: {
     icon: Info,
-    bgColor: "bg-blue-50",
-    textColor: "text-blue-800",
-    borderColor: "border-blue-300",
-    iconColor: "text-blue-400",
+    bgColor: 'bg-blue-50',
+    textColor: 'text-blue-800',
+    borderColor: 'border-blue-300',
+    iconColor: 'text-blue-400',
   },
   success: {
     icon: CheckCircle2,
-    bgColor: "bg-green-50",
-    textColor: "text-green-800",
-    borderColor: "border-green-300",
-    iconColor: "text-green-400",
+    bgColor: 'bg-green-50',
+    textColor: 'text-green-800',
+    borderColor: 'border-green-300',
+    iconColor: 'text-green-400',
   },
   warning: {
     icon: AlertCircle,
-    bgColor: "bg-yellow-50",
-    textColor: "text-yellow-800",
-    borderColor: "border-yellow-300",
-    iconColor: "text-yellow-400",
+    bgColor: 'bg-yellow-50',
+    textColor: 'text-yellow-800',
+    borderColor: 'border-yellow-300',
+    iconColor: 'text-yellow-400',
   },
   error: {
     icon: XCircle,
-    bgColor: "bg-red-50",
-    textColor: "text-red-800",
-    borderColor: "border-red-300",
-    iconColor: "text-red-400",
+    bgColor: 'bg-red-50',
+    textColor: 'text-red-800',
+    borderColor: 'border-red-300',
+    iconColor: 'text-red-400',
   },
-}
+};
 
-export function InfoBoxComponent({ severity = "info", title, message }: InfoBoxProps) {
-  const { icon: Icon, bgColor, textColor, borderColor, iconColor } = severityConfig[severity]
+export function InfoBoxComponent({ severity = 'info', title, message }: InfoBoxProps) {
+  const { icon: Icon, bgColor, textColor, borderColor, iconColor } = severityConfig[severity];
 
   return (
     <div className={`rounded-lg border ${borderColor} ${bgColor} p-4`}>
@@ -56,5 +56,5 @@ export function InfoBoxComponent({ severity = "info", title, message }: InfoBoxP
         </div>
       </div>
     </div>
-  )
+  );
 }
