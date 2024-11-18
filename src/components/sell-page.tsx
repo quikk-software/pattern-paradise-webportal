@@ -1,18 +1,40 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, ShoppingBag, TestTube } from 'lucide-react';
 import Link from 'next/link';
+import { useListProductsByUserId } from '@/lib/api';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+import ProductCard from '@/lib/components/ProductCard';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 export function SellPageComponent() {
+  const [loadMore, setLoadMore] = useState(false);
+
+  const { userId } = useSelector((s: Store) => s.auth);
+
+  const { fetch, data: products, isLoading, hasNextPage } = useListProductsByUserId({});
+
+  useEffect(() => {
+    fetch(userId);
+  }, [userId]);
+
+  useEffect(() => {
+    if (!loadMore) {
+      return;
+    }
+    fetch(userId);
+  }, [loadMore, userId]);
+
   return (
     <div className="p-8">
       <header className="mb-8">
         <h1 className="text-3xl font-bold">Your Crochet Hub</h1>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         <Link href="/sell/submit" className="block">
           <Button
             variant="outline"
@@ -41,6 +63,40 @@ export function SellPageComponent() {
           </Button>
         </Link>
       </div>
+      <h2 className="text-2xl font-bold mb-8">Your Patterns</h2>
+      {isLoading ? <LoadingSpinnerComponent /> : null}
+      {products.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.title}
+              price={product.price}
+              isFree={product.isFree}
+              image={product.imageUrls?.[0]}
+            />
+          ))}
+          {hasNextPage ? (
+            <Button
+              variant={'outline'}
+              className={'w-full'}
+              onClick={() => {
+                setLoadMore(true);
+              }}
+            >
+              Load more
+            </Button>
+          ) : null}
+        </div>
+      ) : (
+        <p>
+          No patterns available.
+          <Link href="/sell/submit" className="text-blue-500 underline">
+            Create a pattern here!
+          </Link>
+        </p>
+      )}
     </div>
   );
 }

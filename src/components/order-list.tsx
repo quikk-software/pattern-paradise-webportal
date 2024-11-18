@@ -23,6 +23,7 @@ import { GetOrderResponse } from '@/@types/api-types';
 import { useRouter } from 'next/navigation';
 import { useListOrders } from '@/lib/api/order';
 import { combineArraysById } from '@/lib/core/utils';
+import Link from 'next/link';
 
 interface OrderListComponentProps {
   filter?: 'customer' | 'seller';
@@ -67,7 +68,20 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
   return (
     <div className="container mx-auto p-4 max-w-2xl">
       <h1 className="text-2xl font-bold mb-6">My Orders</h1>
-      {count === 0 ? <p>You have no orders. Start shopping patterns!</p> : null}
+      {count === 0 ? (
+        <p>
+          You have no orders.{' '}
+          {filter === 'customer' ? (
+            <Link href="/" className="text-blue-500 underline">
+              Start shopping patterns!
+            </Link>
+          ) : (
+            <Link href="/sell/submit" className="text-blue-500 underline">
+              Create a pattern here!
+            </Link>
+          )}
+        </p>
+      ) : null}
       <div className="space-y-4">
         {orders.map((order) => (
           <Card key={order.id}>

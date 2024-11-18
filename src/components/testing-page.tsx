@@ -130,6 +130,7 @@ export function TestingPageComponent() {
                     id={testing.product.id}
                     name={testing.product.title}
                     price={testing.product.price}
+                    isFree={testing.product.isFree}
                     image={testing.product.imageUrls?.[0]}
                   />
                 </div>

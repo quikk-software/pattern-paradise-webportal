@@ -16,6 +16,7 @@ export default function ProductListing({ products }: { products: GetProductRespo
             id={product.id}
             name={product.title}
             price={product.price}
+            isFree={product.isFree}
             image={product.imageUrls?.[0]}
           />
         ))}

@@ -11,9 +11,10 @@ interface ProductCardProps {
   name: string;
   price: number;
   image: string;
+  isFree: boolean;
 }
 
-export default function ProductCard({ id, name, price, image }: ProductCardProps) {
+export default function ProductCard({ id, name, price, image, isFree }: ProductCardProps) {
   return (
     <Card key={id} className="flex flex-col">
       <CardHeader>
@@ -38,7 +39,11 @@ export default function ProductCard({ id, name, price, image }: ProductCardProps
           justifyContent: 'space-between',
         }}
       >
-        <span className="text-lg font-bold">€{price.toFixed(2)}</span>
+        {isFree ? (
+          <span className="text-lg font-bold">FOR FREE</span>
+        ) : (
+          <span className="text-lg font-bold">€{price.toFixed(2)}</span>
+        )}
         <Link href={`/products/${id}`}>
           <Button>Show details</Button>
         </Link>

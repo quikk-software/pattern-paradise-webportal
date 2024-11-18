@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -198,7 +198,11 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
                 <p className="text-sm text-muted-foreground">{product.category}</p>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <span className="font-bold">${product.price}</span>
+                {product.isFree ? (
+                  <span className="font-bold">FOR FREE</span>
+                ) : (
+                  <span className="font-bold">€{product.price.toFixed(2)}</span>
+                )}
                 <Link
                   href={`/${
                     listingType === 'sell' ? 'products' : listingType === 'test' && 'test/products'

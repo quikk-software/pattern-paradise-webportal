@@ -10,6 +10,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import Link from 'next/link';
 
 interface BuyNowButtonProps {
   price: number;
@@ -68,7 +69,26 @@ export function BuyNowButton({ price, productId, productStatus, callback }: BuyN
   }
 
   if (productStatus !== 'Released') {
-    return <InfoBoxComponent message="This pattern is currently not for sale." severity="info" />;
+    return (
+      <InfoBoxComponent
+        message={
+          <span>
+            This pattern is currently not for sale.
+            {productStatus === 'Created' ? (
+              <span>
+                {' '}
+                <Link href={`/test/products/${productId}`} className="text-blue-500 underline">
+                  Apply as a Tester here!
+                </Link>
+              </span>
+            ) : (
+              ''
+            )}
+          </span>
+        }
+        severity="info"
+      />
+    );
   }
 
   return (
