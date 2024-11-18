@@ -47,6 +47,7 @@ export interface GetUserResponse {
   email: string;
   username: string;
   isActive: boolean;
+  isSponsored: boolean;
   firstName?: string;
   lastName?: string;
   instagramRef?: string;
@@ -90,6 +91,7 @@ export interface GetUserAccountResponse {
   id: string;
   username: string;
   isActive: boolean;
+  isSponsored: boolean;
   firstName?: string;
   lastName?: string;
   instagramRef?: string;
@@ -120,7 +122,11 @@ export interface PostProductRequest {
   description: string;
   category: string;
   price: number;
-  patternPdfBase64: string;
+  isFree: boolean;
+  patternPdfsBase64: {
+    base64: string;
+    language: string;
+  }[];
 }
 
 export interface PostProductResponse {
@@ -133,6 +139,7 @@ export interface PutProductRequest {
   description: string;
   category: string;
   price: number;
+  isFree: boolean;
 }
 
 export interface GetProductResponse {
@@ -142,6 +149,7 @@ export interface GetProductResponse {
   description: string;
   category: string;
   price: number;
+  isFree: boolean;
   status: string;
   creatorId: string;
   /**
@@ -340,7 +348,10 @@ export interface GetOrderResponse {
   productDescription: string;
   productImageUrls: string[];
   productPrice: number;
-  patternPdfId: string;
+  orderPatternPdfs: {
+    patternPdfId: string;
+    language: string;
+  }[];
   paypalCaptureLink: string;
   paypalOrderId: string;
   /**
@@ -819,11 +830,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The user will be queried by a given ID. If the user cannot be found, an exception will be thrown.
+     * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
      *
      * @tags User
      * @name GetUserById
-     * @summary Gets an user by ID.
+     * @summary Gets an user by ID or username.
      * @request GET:/api/v1/users/{userId}
      * @secure
      */
@@ -863,7 +874,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The user will be queried by a given ID. If the user cannot be found or the user ID is not related to the authenticated user, an exception will be thrown.
+     * @description The user will be queried by a given ID or username. If the user cannot be found or the user ID is not related to the authenticated user, an exception will be thrown.
      *
      * @tags User
      * @name GetUser
@@ -902,7 +913,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @example "any" */
         price?: any;
         /** @example "any" */
-        patternPdfBase64?: any;
+        isFree?: any;
+        /** @example "any" */
+        patternPdfsBase64?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -973,6 +986,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         description?: any;
         /** @example "any" */
         category?: any;
+        /** @example "any" */
+        isFree?: any;
         /** @example "any" */
         price?: any;
       },
@@ -1483,7 +1498,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The product will be queried by a given ID. If the pattern cannot be found, an exception will be thrown.
+     * @description The pattern will be queried by a given ID. If the pattern cannot be found, an exception will be thrown.
      *
      * @tags Pattern
      * @name GetPatternById
@@ -1492,11 +1507,35 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     getPatternById: (patternId: string, params: RequestParams = {}) =>
-      this.request<any, NotFoundResponse>({
+      this.request<void, NotFoundResponse>({
         path: `/api/v1/patterns/${patternId}`,
         method: 'GET',
         secure: true,
-        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The patterns will be queried by a given product ID and optionally a language code. If the result length is greater than one, the results will be piped to a ZIP file.
+     *
+     * @tags Pattern
+     * @name ListPatternsByProductId
+     * @summary Lists patterns by a product ID.
+     * @request GET:/api/v1/patterns/products/{productId}
+     * @secure
+     */
+    listPatternsByProductId: (
+      productId: string,
+      query?: {
+        /** The language of the pattern. */
+        language?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/patterns/products/${productId}`,
+        method: 'GET',
+        query: query,
+        secure: true,
         ...params,
       }),
 

@@ -8,6 +8,7 @@ import NotFoundPage from '@/app/not-found';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
+import DownloadPatternZipButton from '../lib/components/DownloadPatternZipButton';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -33,12 +34,16 @@ export async function ProductPageComponent({ productId }: ProductPageComponentPr
                 <CreatedByRef creatorId={product.creatorId} />
               </div>
               <div>
-                <BuyNowButton
-                  price={product.price}
-                  productId={product.id}
-                  productStatus={product.status}
-                  callback={undefined}
-                />
+                {product.isFree ? (
+                  <DownloadPatternZipButton productId={product.id} />
+                ) : (
+                  <BuyNowButton
+                    price={product.price}
+                    productId={product.id}
+                    productStatus={product.status}
+                    callback={undefined}
+                  />
+                )}
               </div>
             </div>
           </div>

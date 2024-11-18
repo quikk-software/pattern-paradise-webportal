@@ -39,6 +39,11 @@ const pages: Page[] = [
     description: '',
   },
   {
+    title: 'Pattern Paradise Pro',
+    pathname: '/pro',
+    description: '',
+  },
+  {
     title: 'Login',
     pathname: '/auth/login',
     description: '',

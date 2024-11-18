@@ -12,6 +12,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
+import CountryFlag from '@/lib/components/CountryFlag';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -90,12 +91,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          {!!order.patternPdfId ? (
+          {order.orderPatternPdfs.map((pdf) => (
             <Button
+              key={pdf.patternPdfId}
               className="w-full sm:w-auto"
               disabled={order.status !== 'CAPTURED'}
               onClick={() => {
-                fetch(order.patternPdfId);
+                fetch(pdf.patternPdfId);
               }}
             >
               {isLoading ? (
@@ -103,9 +105,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               ) : (
                 <Download className="mr-2 h-4 w-4" />
               )}
-              Download pattern
+              Download pattern <CountryFlag languageCode={pdf.language} />
             </Button>
-          ) : null}
+          ))}
           <RequestStatus isSuccess={isSuccess} isError={isError} successMessage={''} />
         </div>
         <Button asChild className="flex items-center space-x-2" variant="outline">

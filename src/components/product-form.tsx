@@ -19,20 +19,32 @@ import { useCreateProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import RequestStatus from '@/lib/components/RequestStatus';
+import { Checkbox } from '@/components/ui/checkbox';
+import PdfSelector from '@/components/pdf-selector';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 const CATEGORIES = ['Crocheting', 'Knitting'];
 
 const FILE_SIZE_LIMIT = 5242880;
 
+export interface PDFFile {
+  file: File;
+  language: string;
+}
+
 export function ProductFormComponent() {
-  const [pattern, setPattern] = useState<File | null>(null);
+  const [patterns, setPatterns] = useState<PDFFile[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
+  const [isFree, setIsFree] = useState<boolean>(false);
 
-  const { mutate, isLoading, isSuccess, isError } = useCreateProduct();
+  const { roles } = useSelector((s: Store) => s.auth);
+
+  const { mutate, isLoading, isSuccess, isError, errorDetail } = useCreateProduct();
 
   const {
     register,
@@ -43,29 +55,6 @@ export function ProductFormComponent() {
 
   const hasErrors =
     errors.title || errors.description || errors.price || imageError || patternError;
-
-  const handlePatternChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      if (selectedFile.type === 'application/pdf') {
-        if (selectedFile.size <= FILE_SIZE_LIMIT) {
-          setPattern(selectedFile);
-          setPatternError(undefined);
-        } else {
-          setPattern(null);
-          setPatternError(
-            `Your PDF file is to large. Please ensure that the file is below 5MB. Your file has a size of ${(
-              selectedFile.size /
-              (1024 * 1024)
-            ).toFixed(2)}MB`,
-          );
-        }
-      } else {
-        setPattern(null);
-        setPatternError('Please select a PDF file.');
-      }
-    }
-  };
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -79,12 +68,16 @@ export function ProductFormComponent() {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const convertFileToBase64 = (file: File) => {
-    return new Promise<string>((resolve, reject) => {
+  const convertFileToBase64 = (pdf: PDFFile) => {
+    return new Promise<{ base64: string; language: string }>((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(pdf.file);
 
-      reader.onload = () => resolve(reader.result as string);
+      reader.onload = () =>
+        resolve({
+          base64: reader.result as string,
+          language: pdf.language,
+        });
       reader.onerror = (error) => reject(error);
     });
   };
@@ -95,7 +88,7 @@ export function ProductFormComponent() {
       return;
     }
     setImageError(undefined);
-    if (!pattern) {
+    if (patterns.length === 0) {
       setPatternError('Please add a PDF with your pattern.');
       return;
     }
@@ -123,20 +116,20 @@ export function ProductFormComponent() {
       return;
     }
 
-    const patternPdfBase64 = await convertFileToBase64(pattern);
-    if (!patternPdfBase64) {
-      setPatternError(
-        "The pattern PDF couldn't be converted. Please check your file and try again.",
-      );
-      return;
-    }
+    const promises: Promise<{ base64: string; language: string }>[] = [];
+    patterns.forEach((pattern) => {
+      promises.push(convertFileToBase64(pattern));
+    });
+    const patternPdfsBase64 = await Promise.all(promises);
+
     await mutate({
       title: data.title.trim(),
       description: data.description.trim(),
-      price: data.price,
+      price: isFree ? 0.0 : data.price,
+      isFree,
       imageUrls: urls.map((fu) => fu.url),
       category,
-      patternPdfBase64,
+      patternPdfsBase64,
     });
   };
 
@@ -196,28 +189,41 @@ export function ProductFormComponent() {
           ) : null}
         </div>
 
-        <div>
-          <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-            Price <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="price"
-            type="number"
-            placeholder="Enter price"
-            {...register('price', {
-              required: 'Price is required',
-              min: {
-                value: 0.0,
-                message: 'Price has to be greater than or equal to 0',
-              },
-            })}
-            step="0.01"
-            className="w-full"
-            onKeyDown={handleKeyDown}
-          />
-          {errors.price ? (
-            <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
-          ) : null}
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
+              Price (in Euro) <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="price"
+              type="number"
+              placeholder="Enter price"
+              {...register('price', {
+                required: !isFree ? 'Price is required' : undefined,
+                min: {
+                  value: 3.0,
+                  message: 'Price has to be greater than or equal to 3€',
+                },
+              })}
+              step="0.01"
+              className="w-full"
+              onKeyDown={handleKeyDown}
+              disabled={isFree}
+            />
+            {errors.price ? (
+              <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
+            ) : null}
+          </div>
+          <div className="flex gap-1">
+            <Checkbox
+              id="isfree-checkbox"
+              checked={isFree}
+              onCheckedChange={() => setIsFree((isFree) => !isFree)}
+            />
+            <Label htmlFor="isfree-checkbox" className="block text-sm">
+              Offer this pattern free of charge
+            </Label>
+          </div>
         </div>
 
         <div>
@@ -277,12 +283,12 @@ export function ProductFormComponent() {
           {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
         </div>
 
-        <div className="flex flex-col">
-          <Label htmlFor="pattern" className="block text-lg font-semibold mb-2">
-            Your pattern (PDF) <span className="text-red-500">*</span>
-          </Label>
-          <Input type="file" accept=".pdf" onChange={handlePatternChange} />
-          {patternError ? <p className="text-yellow-600 text-sm mt-2">{patternError}</p> : null}
+        <div className="w-full">
+          <PdfSelector
+            pdfFiles={patterns}
+            setPdfFiles={setPatterns}
+            isPro={roles.includes('Pro')}
+          />
         </div>
 
         <Button type="submit" className="w-full" disabled={imageUploadIsLoading || isLoading}>
@@ -308,6 +314,7 @@ export function ProductFormComponent() {
               .
             </span>
           }
+          errorMessage={errorDetail}
         />
       </form>
       <Button asChild className="flex items-center space-x-2" variant="outline">
