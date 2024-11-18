@@ -1,5 +1,6 @@
 import React from 'react';
+import { OrderListComponent } from '@/components/order-list';
 
 export default function SellOrdersPage() {
-  return <></>;
+  return <OrderListComponent filter={'seller'} />;
 }

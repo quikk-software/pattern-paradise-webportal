@@ -24,10 +24,21 @@ import { useRouter } from 'next/navigation';
 import { useListOrders } from '@/lib/api/order';
 import { combineArraysById } from '@/lib/core/utils';
 
-export function OrderListComponent() {
+interface OrderListComponentProps {
+  filter?: 'customer' | 'seller';
+}
+
+export function OrderListComponent({ filter }: OrderListComponentProps) {
   const [loadMore, setLoadMore] = useState(false);
 
-  const { fetch, data: orders, count, hasNextPage } = useListOrders({});
+  const {
+    fetch,
+    data: orders,
+    count,
+    hasNextPage,
+  } = useListOrders({
+    filter,
+  });
 
   useEffect(() => {
     fetch(1, 20);

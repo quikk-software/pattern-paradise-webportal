@@ -1498,6 +1498,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         pageNumber?: number;
         /** The page size. */
         pageSize?: number;
+        /** The status of the order. */
+        status?: string;
+        /** Filter for showing all, only the customers or only the sellers orders. */
+        filter?: string;
       },
       params: RequestParams = {},
     ) =>
@@ -1554,10 +1558,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/orders/products/{productId}
      * @secure
      */
-    listOrdersByProductId: (productId: string, params: RequestParams = {}) =>
+    listOrdersByProductId: (
+      productId: string,
+      query?: {
+        /** The status of the order. */
+        status?: string;
+        /** Filter for showing all, only the customers or only the sellers orders. */
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<ListOrdersResponse, any>({
         path: `/api/v1/orders/products/${productId}`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,

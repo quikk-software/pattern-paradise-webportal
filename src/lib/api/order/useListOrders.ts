@@ -10,9 +10,13 @@ import { combineArraysById } from '@/lib/core/utils';
 export const useListOrders = ({
   pageNumber = 1,
   pageSize = 20,
+  status,
+  filter,
 }: {
   pageNumber?: number;
   pageSize?: number;
+  status?: string;
+  filter?: 'customer' | 'seller';
 }) => {
   const [data, setData] = useState<GetOrderResponse[]>([]);
 
@@ -29,6 +33,8 @@ export const useListOrders = ({
           {
             pageNumber: customPageNumber ?? pagination.pageNumber,
             pageSize: customPageSize ?? pagination.pageSize,
+            status,
+            filter,
           },
           {
             ...(await getApi(accessToken, refreshToken, dispatch)),

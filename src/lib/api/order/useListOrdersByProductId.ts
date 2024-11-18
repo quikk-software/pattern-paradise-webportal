@@ -16,9 +16,13 @@ export const useListOrdersByProductId = () => {
   const fetch = async (productId: string) => {
     const response = await handleFn(
       async () =>
-        await client.api.listOrdersByProductId(productId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
-        }),
+        await client.api.listOrdersByProductId(
+          productId,
+          {},
+          {
+            ...(await getApi(accessToken, refreshToken, dispatch)),
+          },
+        ),
     );
 
     setData(response?.data.orders);
