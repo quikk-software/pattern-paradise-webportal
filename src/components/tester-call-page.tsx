@@ -14,15 +14,18 @@ import { ArrowLeftRight } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
+import * as test from 'node:test';
 
 function ApplyButton({
   testingId,
   theme,
   status,
+  creatorId,
 }: {
   testingId: string;
   theme: string;
   status: string;
+  creatorId: string;
 }) {
   const { fetch: applyTesting, isSuccess, isError, isLoading } = useApplyTesting();
   const { userId } = useSelector((store: Store) => store.auth);
@@ -64,6 +67,7 @@ function ApplyButton({
   };
 
   const disableByStatus = status !== 'Created';
+  const isCreator = userId === creatorId;
 
   const getTestingStatusInfo = useMemo(() => {
     switch (status) {
@@ -86,7 +90,7 @@ function ApplyButton({
         onClick={() => {
           handleApplyClick(testingId);
         }}
-        disabled={isLoading || disableByStatus}
+        disabled={isLoading || disableByStatus || isCreator}
         size={`lg`}
         className={classNames(
           themeClasses[theme] || 'bg-neutral-600 hover:bg-neutral-700',
@@ -191,7 +195,12 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
           <p className="text-xl text-gray-700 mb-6">
             Help us perfect our patterns and shape the future of crocheting and knitting!
           </p>
-          <ApplyButton testingId={testing.id} theme={theme} status={testing.status} />
+          <ApplyButton
+            testingId={testing.id}
+            theme={theme}
+            status={testing.status}
+            creatorId={testing.creatorId}
+          />
         </section>
 
         {/* Pattern Information */}
@@ -296,7 +305,12 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
           >
             Ready to stitch with us?
           </h2>
-          <ApplyButton testingId={testing.id} theme={theme} status={testing.status} />
+          <ApplyButton
+            testingId={testing.id}
+            theme={theme}
+            status={testing.status}
+            creatorId={testing.creatorId}
+          />
         </section>
       </main>
     </div>
