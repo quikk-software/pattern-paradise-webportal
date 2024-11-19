@@ -20,6 +20,13 @@ import { themes } from '@/lib/core/themes';
 import ColorPalette from '@/lib/components/ColorPalette';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const getStatusColor = (status: GetTestingResponse['status']) => {
   switch (status) {
@@ -46,6 +53,9 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
   const [refetch, setRefetch] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
+  const [selectedDurationInWeeks, setSelectedDurationInWeeks] = useState<string | undefined>(
+    undefined,
+  );
   const [selectedTesting, setSelectedTesting] = useState<GetTestingResponse | null>(null);
 
   const { userId } = useSelector((store: Store) => store.auth);
@@ -77,12 +87,14 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
 
   const handleTesterCallDrawerClick = (testing: GetTestingResponse) => {
     setSelectedTheme(null);
+    setSelectedDurationInWeeks(undefined);
     setIsUpdateTestingDrawerOpen(true);
     setSelectedTesting(testing);
   };
 
   const handleAbortTestingDrawerClick = (testing: GetTestingResponse) => {
     setSelectedTheme(null);
+    setSelectedDurationInWeeks(undefined);
     setIsAbortTestingDrawerOpen(true);
     setSelectedTesting(testing);
   };
@@ -102,6 +114,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
   const handleUpdateTestingClick = async (
     testing: GetTestingResponse | null,
     theme: string | null,
+    durationInWeeks: string | undefined,
   ) => {
     if (!testing) {
       return;
@@ -110,15 +123,21 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     await mutateTesting(testing.id, {
       testerIds: [],
       theme: theme ?? undefined,
+      durationInWeeks: !!durationInWeeks ? Number(durationInWeeks) : undefined,
     });
     reset();
     setIsUpdateTestingDrawerOpen(false);
     setSelectedTheme(null);
+    setSelectedDurationInWeeks(undefined);
     setRefetch(true);
   };
 
   const handleColorSelect = (theme: string) => {
     setSelectedTheme(theme === selectedTheme ? null : theme);
+  };
+
+  const handleDurationInWeeksSelect = () => {
+    setSelectedDurationInWeeks(undefined);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent, color: string) => {
@@ -207,7 +226,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         }}
                         variant="outline"
                       >
-                        Select a theme
+                        Set testing duration & theme
                       </Button>
                     ) : null}
                     {isOwner &&
@@ -244,6 +263,33 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
         <DrawerContent className="p-4">
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
             <DrawerHeader>
+              <DrawerTitle>Testing duration</DrawerTitle>
+              <DrawerTitle className="text-sm font-medium">
+                How much time do you want to give your testers to complete your pattern?
+              </DrawerTitle>
+            </DrawerHeader>
+            <div className="flex flex-col gap-2 items-center mb-4">
+              <span className="text-center">
+                Your testing is currently set to{' '}
+                <strong>
+                  {String(selectedTesting?.durationInWeeks ?? 2)} week
+                  {selectedTesting?.durationInWeeks === 1 ? '' : 's'}
+                </strong>
+              </span>
+              <Select value={selectedDurationInWeeks} onValueChange={setSelectedDurationInWeeks}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a duration" />
+                </SelectTrigger>
+                <SelectContent>
+                  {['1', '2', '3', '4', '5', '6'].map((weeks) => (
+                    <SelectItem key={weeks} value={weeks}>
+                      {weeks} week{weeks === '1' ? '' : 's'}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <DrawerHeader>
               <DrawerTitle>Select a theme (optional)</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">
                 This will be used for your Tester Call Page.
@@ -256,8 +302,8 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                   selectedTheme
                     ? selectedTheme
                     : selectedTesting?.theme
-                      ? selectedTesting?.theme
-                      : 'neutral'
+                    ? selectedTesting?.theme
+                    : 'neutral'
                 }
                 selectedTheme={null}
               />
@@ -275,7 +321,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
             </div>
             <Button
               onClick={() => {
-                handleUpdateTestingClick(selectedTesting, selectedTheme);
+                handleUpdateTestingClick(selectedTesting, selectedTheme, selectedDurationInWeeks);
               }}
               disabled={mutateTestingIsLoading}
             >

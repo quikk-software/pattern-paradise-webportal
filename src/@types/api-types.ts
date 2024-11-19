@@ -206,6 +206,7 @@ export interface ListProductsResponse {
 export interface PostTestingRequest {
   testerIds: string[];
   productId: string;
+  durationInWeeks: number;
 }
 
 export interface PostTestingResponse {
@@ -216,6 +217,7 @@ export interface PutTestingRequest {
   testerIds?: any[];
   /** @example "neutral" */
   theme?: string;
+  durationInWeeks?: number;
 }
 
 export interface GetTestingResponse {
@@ -224,6 +226,9 @@ export interface GetTestingResponse {
   testers?: GetUserAccountResponse[];
   /** @example "neutral" */
   theme: string;
+  durationInWeeks: number;
+  /** @format date-time */
+  dueDate?: string;
   creatorId: string;
   creator: GetUserAccountResponse;
   productId: string;
@@ -1156,6 +1161,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         productId?: any;
         /** @example "any" */
         testerIds?: any;
+        /** @example "any" */
+        durationInWeeks?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1212,6 +1219,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         testerIds?: any;
         /** @example "any" */
         theme?: any;
+        /** @example "any" */
+        durationInWeeks?: any;
       },
       params: RequestParams = {},
     ) =>

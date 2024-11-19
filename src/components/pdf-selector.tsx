@@ -9,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Trash2, Upload } from 'lucide-react';
 import { PDFFile } from '@/components/product-form';
@@ -135,7 +134,6 @@ export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelecto
                     <div className="flex justify-between items-center space-x-3">
                       <Select
                         value={pdfFile.language}
-                        disabled={!isPro}
                         onValueChange={(value) => handleLanguageChange(index, value)}
                       >
                         <SelectTrigger className="w-[180px]">
