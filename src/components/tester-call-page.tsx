@@ -14,18 +14,19 @@ import { ArrowLeftRight } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
-import * as test from 'node:test';
 
 function ApplyButton({
   testingId,
   theme,
   status,
   creatorId,
+  testerIds,
 }: {
   testingId: string;
   theme: string;
   status: string;
   creatorId: string;
+  testerIds: string[];
 }) {
   const { fetch: applyTesting, isSuccess, isError, isLoading } = useApplyTesting();
   const { userId } = useSelector((store: Store) => store.auth);
@@ -68,6 +69,7 @@ function ApplyButton({
 
   const disableByStatus = status !== 'Created';
   const isCreator = userId === creatorId;
+  const isTester = testerIds.includes(userId);
 
   const getTestingStatusInfo = useMemo(() => {
     switch (status) {
@@ -90,7 +92,7 @@ function ApplyButton({
         onClick={() => {
           handleApplyClick(testingId);
         }}
-        disabled={isLoading || disableByStatus || isCreator}
+        disabled={isLoading || disableByStatus || isCreator || isTester}
         size={`lg`}
         className={classNames(
           themeClasses[theme] || 'bg-neutral-600 hover:bg-neutral-700',
@@ -100,6 +102,8 @@ function ApplyButton({
         {isLoading ? <LoadingSpinnerComponent size={`sm`} className={`text-white`} /> : null}
         {getTestingStatusInfo}
       </Button>
+      {isCreator ? <p className="text-center">You are the creator of this tester call</p> : null}
+      {isTester ? <p className="text-center">You already applied for this tester call</p> : null}
       <RequestStatus
         isSuccess={isSuccess}
         isError={isError}
@@ -200,6 +204,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             theme={theme}
             status={testing.status}
             creatorId={testing.creatorId}
+            testerIds={testing.testerIds ?? []}
           />
         </section>
 
@@ -262,10 +267,17 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
                 Tester Requirements
               </h2>
               <ul className={`list-disc list-inside text-gray-700`}>
-                <li>Intermediate knitting skills</li>
+                <li>
+                  <strong>
+                    {testing.experience} {testing.product.category.toLowerCase()}
+                  </strong>{' '}
+                  skills
+                </li>
                 <li>Ability to follow written patterns</li>
                 <li>Provide detailed feedback on pattern clarity and accuracy</li>
-                <li>Complete the project within 3 weeks</li>
+                <li>
+                  Complete the project <strong>within {testing.durationInWeeks} weeks</strong>
+                </li>
                 <li>Share progress photos and final project images</li>
               </ul>
             </CardContent>
@@ -286,7 +298,6 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
               </h2>
               <ul className={`list-disc list-inside text-gray-700`}>
                 <li>Receive the pattern for free</li>
-                <li>Get rewards for successfully testing the pattern</li>
                 <li>Your name credited in the final pattern release</li>
                 <li>Opportunity to influence the design process</li>
                 <li>Connect with a community of fellow crafters</li>
@@ -310,6 +321,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             theme={theme}
             status={testing.status}
             creatorId={testing.creatorId}
+            testerIds={testing.testerIds ?? []}
           />
         </section>
       </main>
