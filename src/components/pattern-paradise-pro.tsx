@@ -10,8 +10,13 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import SubscribeButton from '@/lib/components/SubscribeButton';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+import Link from 'next/link';
 
 export function PatternParadiseProComponent() {
+  const { roles } = useSelector((s: Store) => s.auth);
+
   const controls = useAnimation();
 
   useEffect(() => {
@@ -57,6 +62,8 @@ export function PatternParadiseProComponent() {
     },
   ];
 
+  const isPro = roles.includes('Pro');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black">
       <header className="container mx-auto px-4 py-8 border-b border-gray-200">
@@ -97,9 +104,28 @@ export function PatternParadiseProComponent() {
             Take your pattern business to the next level with our Pro plan for just{' '}
             <strong>€9.99</strong> per month
           </motion.p>
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={controls} custom={2}>
-            <SubscribeButton />
-          </motion.div>
+          {isPro ? (
+            <span>
+              You already have a Pattern Paradise Pro subscription. Start using it by{' '}
+              <Link href="/sell/submit" className="text-blue-500 underline">
+                creating patterns
+              </Link>{' '}
+              or{' '}
+              <Link href="/test" className="text-blue-500 underline">
+                apply for tester calls
+              </Link>
+              !
+            </span>
+          ) : (
+            <motion.div
+              className="flex justify-center w-full"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={controls}
+              custom={2}
+            >
+              <SubscribeButton />
+            </motion.div>
+          )}
         </section>
 
         <section className="mb-16">
@@ -144,9 +170,28 @@ export function PatternParadiseProComponent() {
           >
             €9.99/month
           </motion.p>
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={controls} custom={12}>
-            <SubscribeButton />
-          </motion.div>
+          {isPro ? (
+            <span>
+              You already have a Pattern Paradise Pro subscription. Start using it by{' '}
+              <Link href="/sell/submit" className="text-blue-500 underline">
+                creating patterns
+              </Link>{' '}
+              or{' '}
+              <Link href="/test" className="text-blue-500 underline">
+                apply for tester calls
+              </Link>
+              !
+            </span>
+          ) : (
+            <motion.div
+              className="flex justify-center w-full"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={controls}
+              custom={12}
+            >
+              <SubscribeButton />
+            </motion.div>
+          )}
         </section>
 
         <section>

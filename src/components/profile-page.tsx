@@ -22,6 +22,7 @@ import Link from 'next/link';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { Textarea } from '@/components/ui/textarea';
+import ProInfoBox from '@/lib/components/ProInfoBox';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -168,24 +169,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               />
             </div>
             <div className="space-y-2">
-              {!user.roles?.includes('Pro') ? (
-                <InfoBoxComponent
-                  severity="success"
-                  message="Your Pattern Paradise Pro subscription is active"
-                />
-              ) : (
-                <InfoBoxComponent
-                  severity="info"
-                  message={
-                    <span>
-                      Get access to extended features with{' '}
-                      <Link href="/pro" className="text-blue-500 underline">
-                        Pattern Paradise Pro
-                      </Link>
-                    </span>
-                  }
-                />
-              )}
+              <ProInfoBox user={user} />
             </div>
 
             <div className="space-y-2">

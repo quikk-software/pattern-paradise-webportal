@@ -13,6 +13,10 @@ export interface PostSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface CancelSubscriptionRequest {
+  paypalSubscriptionId: string;
+}
+
 export interface PostUserRequest {
   email: string;
   password: string;
@@ -64,6 +68,12 @@ export interface GetUserResponse {
   instagramRef?: string;
   tiktokRef?: string;
   paypalEmail?: string;
+  paypalSubscriptionId?: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  paypalSubscriptionValidUntil?: string;
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
@@ -1822,7 +1832,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The authenticated user will be assigned to the "Pro" role. If the user already is assigned to the "Pro" role, an exception will be thrown. If the subscription is not active on PayPal, an exception will be thrown.
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name CancelSubscriptionWebhook
+     * @summary Posts a "cancel subscription" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/subscription/cancel
+     * @secure
+     */
+    cancelSubscriptionWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/subscription/cancel`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The authenticated user will be assigned to the Pro role. If the user already is assigned to the "Pro" role, an exception will be thrown. If the subscription is not active on PayPal, an exception will be thrown.
      *
      * @tags Subscription
      * @name PostSubscription
@@ -1843,6 +1878,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description PayPal will be informed about the cancelled subscription. If the subscription is not active on PayPal, an exception will be thrown.
+     *
+     * @tags Subscription
+     * @name CancelSubscription
+     * @summary Cancels a subscription.
+     * @request POST:/api/v1/subscriptions/{subscriptionId}/cancel
+     * @secure
+     */
+    cancelSubscription: (subscriptionId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/subscriptions/${subscriptionId}/cancel`,
+        method: 'POST',
+        secure: true,
         ...params,
       }),
   };
