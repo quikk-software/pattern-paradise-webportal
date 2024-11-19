@@ -56,6 +56,9 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
   const [selectedDurationInWeeks, setSelectedDurationInWeeks] = useState<string | undefined>(
     undefined,
   );
+  const [selectedExperienceLevel, setSelectedExperienceLevel] = useState<string | undefined>(
+    undefined,
+  );
   const [selectedTesting, setSelectedTesting] = useState<GetTestingResponse | null>(null);
 
   const { userId } = useSelector((store: Store) => store.auth);
@@ -115,6 +118,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     testing: GetTestingResponse | null,
     theme: string | null,
     durationInWeeks: string | undefined,
+    experience: string | undefined,
   ) => {
     if (!testing) {
       return;
@@ -124,6 +128,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
       testerIds: [],
       theme: theme ?? undefined,
       durationInWeeks: !!durationInWeeks ? Number(durationInWeeks) : undefined,
+      experience,
     });
     reset();
     setIsUpdateTestingDrawerOpen(false);
@@ -226,7 +231,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         }}
                         variant="outline"
                       >
-                        Set testing duration & theme
+                        Update testing
                       </Button>
                     ) : null}
                     {isOwner &&
@@ -261,7 +266,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
       </div>
       <Drawer open={isUpdateTestingDrawerOpen} onOpenChange={setIsUpdateTestingDrawerOpen}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+          <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
             <DrawerHeader>
               <DrawerTitle>Testing duration</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">
@@ -284,6 +289,30 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                   {['1', '2', '3', '4', '5', '6'].map((weeks) => (
                     <SelectItem key={weeks} value={weeks}>
                       {weeks} week{weeks === '1' ? '' : 's'}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <DrawerHeader>
+              <DrawerTitle>Tester experience level</DrawerTitle>
+              <DrawerTitle className="text-sm font-medium">
+                What experience level do your testers need to complete your pattern?
+              </DrawerTitle>
+            </DrawerHeader>
+            <div className="flex flex-col gap-2 items-center mb-4">
+              <span className="text-center">
+                The experience level is currently set to{' '}
+                <strong>{selectedTesting?.experience ?? 'Intermediate'}</strong>
+              </span>
+              <Select value={selectedExperienceLevel} onValueChange={setSelectedExperienceLevel}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a duration" />
+                </SelectTrigger>
+                <SelectContent>
+                  {['Beginner', 'Intermediate', 'Professional'].map((experience) => (
+                    <SelectItem key={experience} value={experience}>
+                      {experience}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -321,7 +350,12 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
             </div>
             <Button
               onClick={() => {
-                handleUpdateTestingClick(selectedTesting, selectedTheme, selectedDurationInWeeks);
+                handleUpdateTestingClick(
+                  selectedTesting,
+                  selectedTheme,
+                  selectedDurationInWeeks,
+                  selectedExperienceLevel,
+                );
               }}
               disabled={mutateTestingIsLoading}
             >
