@@ -1367,6 +1367,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         pageNumber?: number;
         /** The page size. */
         pageSize?: number;
+        /** Filter for showing all, only the customers or only the sellers testings. */
+        filter?: string;
       },
       params: RequestParams = {},
     ) =>

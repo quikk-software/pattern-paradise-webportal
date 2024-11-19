@@ -26,6 +26,7 @@ export function SellPageComponent() {
       return;
     }
     fetch(userId);
+    setLoadMore((p) => !p);
   }, [loadMore, userId]);
 
   return (

@@ -22,7 +22,6 @@ import {
 import { GetOrderResponse } from '@/@types/api-types';
 import { useRouter } from 'next/navigation';
 import { useListOrders } from '@/lib/api/order';
-import { combineArraysById } from '@/lib/core/utils';
 import Link from 'next/link';
 
 interface OrderListComponentProps {
@@ -35,7 +34,6 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
   const {
     fetch,
     data: orders,
-    count,
     hasNextPage,
   } = useListOrders({
     filter,
@@ -50,6 +48,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
       return;
     }
     fetch();
+    setLoadMore((p) => !p);
   }, [loadMore]);
 
   const router = useRouter();
@@ -68,7 +67,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
   return (
     <div className="container mx-auto p-4 max-w-2xl">
       <h1 className="text-2xl font-bold mb-6">My Orders</h1>
-      {count === 0 ? (
+      {orders.length === 0 ? (
         <p>
           You have no orders.{' '}
           {filter === 'customer' ? (

@@ -10,9 +10,11 @@ import { combineArraysById } from '@/lib/core/utils';
 export const useListTestingsByUserId = ({
   pageNumber = 1,
   pageSize = 20,
+  filter,
 }: {
   pageNumber?: number;
   pageSize?: number;
+  filter?: 'customer' | 'seller';
 }) => {
   const [data, setData] = useState<GetTestingResponse[]>([]);
 
@@ -30,6 +32,7 @@ export const useListTestingsByUserId = ({
           {
             pageNumber: pagination.pageNumber,
             pageSize: pagination.pageSize,
+            filter,
           },
           { ...(await getApi(accessToken, refreshToken, dispatch)) },
         ),

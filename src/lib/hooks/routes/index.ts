@@ -99,6 +99,11 @@ const pages: Page[] = [
     description: '',
   },
   {
+    title: 'My testings',
+    pathname: '/test/testings',
+    description: '',
+  },
+  {
     title: 'Pattern',
     pathname: '/products/[productId]',
     description: '',

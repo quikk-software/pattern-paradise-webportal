@@ -12,9 +12,17 @@ interface ProductCardProps {
   price: number;
   image: string;
   isFree: boolean;
+  isTesterCall?: boolean;
 }
 
-export default function ProductCard({ id, name, price, image, isFree }: ProductCardProps) {
+export default function ProductCard({
+  id,
+  name,
+  price,
+  image,
+  isFree,
+  isTesterCall = false,
+}: ProductCardProps) {
   return (
     <Card key={id} className="flex flex-col">
       <CardHeader>
@@ -44,9 +52,15 @@ export default function ProductCard({ id, name, price, image, isFree }: ProductC
         ) : (
           <span className="text-lg font-bold">€{price.toFixed(2)}</span>
         )}
-        <Link href={`/products/${id}`}>
-          <Button>Show details</Button>
-        </Link>
+        {isTesterCall ? (
+          <Link href={`/test/products/${id}`}>
+            <Button>Show tester call</Button>
+          </Link>
+        ) : (
+          <Link href={`/products/${id}`}>
+            <Button>Show details</Button>
+          </Link>
+        )}
       </CardFooter>
     </Card>
   );

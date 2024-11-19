@@ -15,7 +15,7 @@ export default function TestPage() {
           <Link href="/test/chats">
             <Button className="w-full">My chats</Button>
           </Link>
-          <Link href="/sell/testings">
+          <Link href="/test/testings">
             <Button className="w-full" variant="outline">
               My testings
             </Button>
