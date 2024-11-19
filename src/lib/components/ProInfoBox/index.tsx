@@ -82,8 +82,8 @@ export default function ProInfoBox({ user }: ProInfoBoxProps) {
                 subscription will keep all translations, documents and media you have added so far.
               </DrawerTitle>
               <DrawerTitle className="text-sm font-semibold">
-                You will automatically logged out and redirected to the login page after canceling
-                your Pattern Paradise Pro subscription.
+                You will automatically be logged out and redirected to the login page after
+                canceling your Pattern Paradise Pro subscription.
               </DrawerTitle>
             </DrawerHeader>
             <Button
