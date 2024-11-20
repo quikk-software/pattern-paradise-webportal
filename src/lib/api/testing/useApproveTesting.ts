@@ -3,7 +3,7 @@ import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 
-export const useApproveesting = () => {
+export const useApproveTesting = () => {
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 

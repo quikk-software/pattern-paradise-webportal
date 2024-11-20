@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
 import { ListingComponent } from '@/components/listing';
 import { listProducts } from '@/lib/api/static/product/listProducts';
+import { NavbarComponent } from '@/components/navbar';
 
 export default async function Home() {
   const products = await listProducts();
 
   return (
     <div>
+      <NavbarComponent />
       <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-muted">
         <div className="container px-4 md:px-6 mx-auto">
           <div className="flex flex-col items-center space-y-4 text-center">

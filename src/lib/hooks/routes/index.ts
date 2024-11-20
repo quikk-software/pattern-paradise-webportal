@@ -44,6 +44,26 @@ const pages: Page[] = [
     description: '',
   },
   {
+    title: 'About Pattern Paradise',
+    pathname: '/about',
+    description: '',
+  },
+  {
+    title: 'Frequently asked questions on Pattern Paradise',
+    pathname: '/faq',
+    description: '',
+  },
+  {
+    title: 'Imprint',
+    pathname: '/imprint',
+    description: '',
+  },
+  {
+    title: 'Privacy policy',
+    pathname: '/privacy',
+    description: '',
+  },
+  {
     title: 'Login',
     pathname: '/auth/login',
     description: '',

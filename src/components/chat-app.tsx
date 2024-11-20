@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { PaperclipIcon, SendIcon, ArrowLeftIcon, DownloadIcon } from 'lucide-react';
+import { PaperclipIcon, SendIcon, ArrowLeftIcon, DownloadIcon, StarIcon } from 'lucide-react';
 import {
   useCreateTestingComment,
+  useListTesterApplications,
   useListTestingComments,
   useListTestings,
 } from '@/lib/api/testing';
@@ -24,6 +25,8 @@ import useWebSocket from '@/lib/hooks/useWebSocket';
 import Link from 'next/link';
 import { useGetPattern, useListPatternsByProductId } from '@/lib/api/pattern';
 import { InfoBoxComponent } from '@/components/info-box';
+import { useRouter } from 'next/navigation';
+import ReviewDrawer from '@/lib/components/ReviewDrawer';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -104,6 +107,9 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   const [selectedTestingStatus, setSelectedTestingStatus] = useState<string | null>(null);
   const [showChatList, setShowChatList] = useState(true);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
+  const [isReviewDrawerOpen, setIsReviewDrawerOpen] = useState(false);
+
+  const router = useRouter();
 
   const { userId, accessToken } = useSelector((s: Store) => s.auth);
   const bottomNavHeight = useElementHeight('bottom-navigation');
@@ -123,7 +129,6 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   const {
     fetch: downloadPattern,
     isLoading: downloadPatternIsLoading,
-    isSuccess: downloadPatternIsSuccess,
     data: file,
   } = useListPatternsByProductId();
 
@@ -272,6 +277,23 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     await downloadPattern(productId);
   };
 
+  const handleReviewClick = async (testingId: string | null) => {
+    if (!testingId) {
+      return;
+    }
+    setIsReviewDrawerOpen(true);
+  };
+
+  const handleActionPayload = (payload?: string) => {
+    if (!payload) {
+      return;
+    }
+    // handle link
+    if (payload?.startsWith('https://') || payload.startsWith('/')) {
+      router.push(payload);
+    }
+  };
+
   const isInactive = selectedTestingStatus !== 'InProgress';
 
   return (
@@ -332,7 +354,21 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                 </Button>
                 <h2 className="text-2xl font-bold">Chat History</h2>
               </div>
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-end gap-2">
+                {testings.find((testing) => testing.id === selectedTestingId)?.creatorId !==
+                userId ? (
+                  // TODO: Create API route which fetches the testers (testerOnUser) and disable this button if the state is not in progress
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={!selectedTestingId}
+                    onClick={() => {
+                      handleReviewClick(selectedTestingId);
+                    }}
+                  >
+                    <StarIcon className="h-6 w-6" />
+                  </Button>
+                ) : null}
                 <Button
                   variant="outline"
                   size="icon"
@@ -380,6 +416,8 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                     : user?.lastName
                     ? user.lastName
                     : user?.username ?? 'Other';
+                const isCreator = message.creatorId === userId;
+
                 return (
                   <>
                     {message.type === 'System' ? (
@@ -396,29 +434,44 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                                 {dayjs(message.createdAt).format(TIME_FORMAT)}
                               </span>
                             </div>
-
                             <p className={'mt-1 text-left text-secondary'}>{message.message}</p>
+                            {message.actions.length > 0 ? (
+                              <div className="flex flex-col gap-2">
+                                {message.actions.map((action) => (
+                                  <div key={action.id} className="w-full">
+                                    <Button
+                                      variant={
+                                        (action.variant as
+                                          | 'default'
+                                          | 'destructive'
+                                          | 'outline'
+                                          | 'secondary'
+                                          | 'ghost'
+                                          | 'link'
+                                          | null
+                                          | undefined) ?? 'default'
+                                      }
+                                      onClick={() => {
+                                        handleActionPayload(action.payload);
+                                      }}
+                                    >
+                                      {action.description}
+                                    </Button>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
                           </div>
                         </div>
                       </div>
                     ) : (
                       <div
                         key={message.id}
-                        className={`mb-4 ${
-                          message.creatorId === userId ? 'ml-auto' : 'mr-auto'
-                        } max-w-[80%] w-fit`}
+                        className={`mb-4 ${isCreator ? 'ml-auto' : 'mr-auto'} max-w-[80%] w-fit`}
                       >
-                        <div
-                          className={`flex items-start ${
-                            message.creatorId === userId ? 'flex-row-reverse' : ''
-                          }`}
-                        >
+                        <div className={`flex items-start ${isCreator ? 'flex-row-reverse' : ''}`}>
                           <Link href={`/users/${user?.id}`}>
-                            <Avatar
-                              className={`w-8 h-8 ${
-                                message.creatorId === userId ? 'ml-2' : 'mr-2'
-                              }`}
-                            >
+                            <Avatar className={`w-8 h-8 ${isCreator ? 'ml-2' : 'mr-2'}`}>
                               <AvatarImage src={user?.imageUrl} />
                               <AvatarFallback>
                                 {user?.firstName?.at(0) && user?.lastName?.at(0)
@@ -428,29 +481,48 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                             </Avatar>
                           </Link>
                           <div
-                            className="flex-1 rounded-lg p-3"
+                            className={`flex-1 rounded-lg p-3 ${
+                              message.type === 'Review'
+                                ? 'bg-yellow-100 border-2 border-yellow-300 dark:bg-yellow-900 dark:border-yellow-700'
+                                : undefined
+                            } rounded-lg p-3 max-w-xs`}
                             style={{
-                              backgroundColor: getColor(message.creatorId),
+                              backgroundColor:
+                                message.type === 'Review' ? undefined : getColor(message.creatorId),
                             }}
                           >
+                            {message.type === 'Review' && (
+                              <div className="flex items-center mb-1">
+                                <StarIcon className="w-4 h-4 text-yellow-500 mr-1" />
+                                <span className="text-sm font-semibold">Review</span>
+                              </div>
+                            )}
                             <div
                               className={`flex gap-2 justify-between items-baseline ${
-                                message.creatorId === userId ? 'flex-row-reverse' : ''
+                                isCreator ? 'flex-row-reverse' : ''
                               }`}
                             >
-                              <span className="font-semibold">
-                                {message.creatorId === userId ? 'You' : otherName}
+                              <span
+                                className={`font-semibold ${
+                                  message.type === 'Review'
+                                    ? 'text-gray-800 dark:text-gray-200'
+                                    : ''
+                                }`}
+                              >
+                                {isCreator ? 'You' : otherName}
                               </span>
-                              <span className="text-xs text-gray-500">
+                              <span
+                                className={`text-xs ${
+                                  message.type === 'Review'
+                                    ? 'text-gray-800 dark:text-gray-200'
+                                    : 'text-gray-500'
+                                }`}
+                              >
                                 {dayjs(message.createdAt).format(TIME_FORMAT)}
                               </span>
                             </div>
 
-                            <p
-                              className={`mt-1 ${
-                                message.creatorId === userId ? 'text-right' : 'text-left'
-                              }`}
-                            >
+                            <p className={`mt-1 ${isCreator ? 'text-right' : 'text-left'}`}>
                               {message.message}
                             </p>
                             <div className="flex flex-col gap-2">
@@ -472,9 +544,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                                     ) : (
                                       <div
                                         key={file.url}
-                                        className={`mt-2 ${
-                                          message.creatorId === userId ? 'text-right' : 'text-left'
-                                        }`}
+                                        className={`mt-2 ${isCreator ? 'text-right' : 'text-left'}`}
                                       >
                                         <a
                                           href={file.url}
@@ -549,6 +619,13 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
           ) : null}
         </Card>
       </div>
+      {selectedTestingId !== null ? (
+        <ReviewDrawer
+          drawerIsOpen={isReviewDrawerOpen}
+          setDrawerIsOpen={setIsReviewDrawerOpen}
+          testingId={selectedTestingId}
+        />
+      ) : null}
     </div>
   );
 }

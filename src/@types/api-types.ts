@@ -287,6 +287,12 @@ export interface GetTestingCommentResponse {
     url: string;
     mimeType: string;
   }[];
+  actions: {
+    id: string;
+    description: string;
+    variant: string;
+    payload?: string;
+  }[];
   creatorId: string;
   testingId: string;
   message: string;

@@ -21,6 +21,10 @@ import Cookie from 'js-cookie';
 const PUBLIC_URLS = [
   '/',
   '/pro',
+  '/about',
+  '/faq',
+  '/imprint',
+  '/privacy',
   '/auth/login',
   '/auth/reset-password',
   '/auth/registration',
