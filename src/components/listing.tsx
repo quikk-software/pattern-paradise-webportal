@@ -36,7 +36,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
 
-  const { fetch, hasNextPage } = useListProducts({});
+  const { fetch, hasNextPage, isLoading } = useListProducts({});
 
   const status =
     listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
@@ -187,7 +187,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <Card key={product.id} className="flex flex-col justify-between">
               <CardContent className="pt-4">
@@ -221,11 +221,12 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             onClick={() => {
               setLoadMore(true);
             }}
+            disabled={isLoading}
           >
             Load more
           </Button>
         ) : null}
-        {products.length === 0 && (
+        {products.length === 0 && !isLoading && (
           <p className="text-center text-muted-foreground mt-6">
             Nothing found matching your criteria.
           </p>
