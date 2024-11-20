@@ -1122,6 +1122,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description Releases the product by the given product ID.
+     *
+     * @tags Product
+     * @name ReleaseProduct
+     * @summary Releases the product.
+     * @request PUT:/api/v1/products/{productId}/release
+     * @secure
+     */
+    releaseProduct: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/products/${productId}/release`,
+        method: 'PUT',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The query returns a list of products of a given user ID.
      *
      * @tags Product

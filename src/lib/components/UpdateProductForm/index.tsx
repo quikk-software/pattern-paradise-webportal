@@ -15,43 +15,51 @@ import {
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { useCreateProduct } from '@/lib/api';
+import { useUpdateProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
-import PdfSelector from '@/components/pdf-selector';
-import { useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 import { CATEGORIES } from '@/lib/constants';
+import { GetProductResponse } from '@/@types/api-types';
 
-export interface PDFFile {
-  file: File;
-  language: string;
+interface UpdateProductFormProps {
+  initialData: GetProductResponse;
 }
 
-export function ProductFormComponent() {
-  const [patterns, setPatterns] = useState<PDFFile[]>([]);
-  const [images, setImages] = useState<string[]>([]);
+export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
+  const [images, setImages] = useState<string[]>(initialData.imageUrls ?? []);
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
-  const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
-  const [isFree, setIsFree] = useState<boolean>(false);
+  const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
 
-  const { roles } = useSelector((s: Store) => s.auth);
-
-  const { mutate, isLoading, isSuccess, isError, errorDetail } = useCreateProduct();
+  const { mutate, isLoading, isSuccess, isError, errorDetail } = useUpdateProduct();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm();
+  } = useForm({
+    defaultValues: initialData
+      ? {
+          title: initialData.title,
+          description: initialData.description,
+          imageUrls: initialData.imageUrls,
+          price: initialData.price,
+          category: initialData.category,
+        }
+      : {
+          title: '',
+          description: '',
+          imageUrls: [],
+          price: 0,
+          category: '',
+        },
+  });
 
-  const hasErrors =
-    errors.title || errors.description || errors.price || imageError || patternError;
+  const hasErrors = errors.title || errors.description || errors.price;
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -65,34 +73,17 @@ export function ProductFormComponent() {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const convertFileToBase64 = (pdf: PDFFile) => {
-    return new Promise<{ base64: string; language: string }>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(pdf.file);
-
-      reader.onload = () =>
-        resolve({
-          base64: reader.result as string,
-          language: pdf.language,
-        });
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const onSubmit = async (data: any) => {
     if (images.length === 0 || images.length > 6) {
       setImageError('Please add 1 to 6 images.');
       return;
     }
     setImageError(undefined);
-    if (patterns.length === 0) {
-      setPatternError('Please add a PDF with your pattern.');
-      return;
-    }
-    setPatternError(undefined);
+
+    const newImages = images.filter((image) => !initialData.imageUrls.includes(image));
 
     const urls = await handleImageUpload(
-      images,
+      newImages,
       () => {
         if (hasErrors) {
           setImageError('Please fill out the form before uploading');
@@ -113,20 +104,18 @@ export function ProductFormComponent() {
       return;
     }
 
-    const promises: Promise<{ base64: string; language: string }>[] = [];
-    patterns.forEach((pattern) => {
-      promises.push(convertFileToBase64(pattern));
-    });
-    const patternPdfsBase64 = await Promise.all(promises);
-
-    await mutate({
+    await mutate(initialData.id, {
       title: data.title.trim(),
       description: data.description.trim(),
       price: isFree ? 0.0 : data.price,
       isFree,
-      imageUrls: urls.map((fu) => fu.url),
+      imageUrls: [
+        ...new Set([
+          ...images.filter((image) => image.startsWith('http://res.cloudinary.com/')),
+          ...urls.map((fu) => fu.url),
+        ]),
+      ],
       category,
-      patternPdfsBase64,
     });
   };
 
@@ -280,19 +269,11 @@ export function ProductFormComponent() {
           {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
         </div>
 
-        <div className="w-full">
-          <PdfSelector
-            pdfFiles={patterns}
-            setPdfFiles={setPatterns}
-            isPro={roles.includes('Pro')}
-          />
-        </div>
-
         <Button type="submit" className="w-full" disabled={imageUploadIsLoading || isLoading}>
           {imageUploadIsLoading || isLoading ? (
             <LoadingSpinnerComponent size="sm" className="text-white" />
           ) : null}
-          Submit pattern
+          Update pattern
         </Button>
         {!!hasErrors ? (
           <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
@@ -300,17 +281,7 @@ export function ProductFormComponent() {
         <RequestStatus
           isSuccess={isSuccess}
           isError={isError}
-          successMessage={
-            <span>
-              Your listing has been created successfully!
-              <br />
-              You can now{' '}
-              <Link href="/sell/testings" className="text-blue-500 underline">
-                start a tester call
-              </Link>
-              .
-            </span>
-          }
+          successMessage={<span>Your listing has been updated successfully!</span>}
           errorMessage={errorDetail}
         />
       </form>

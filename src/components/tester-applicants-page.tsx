@@ -32,6 +32,7 @@ import { useUpdateTesting } from '@/lib/api/testing';
 import { useRouter } from 'next/navigation';
 import RequestStatus from '@/lib/components/RequestStatus';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
+import Link from 'next/link';
 
 const MIN_TESTER_COUNT = 3;
 
@@ -244,20 +245,24 @@ export function TesterApplicantsPage({
                 )}
                 <CardHeader>
                   <div className="flex items-center space-x-4">
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage
-                        src={application.user.imageUrl}
-                        alt={`${application.user.firstName} ${application.user.lastName}`}
-                      />
-                      <AvatarFallback>
-                        {application.user.firstName?.[0]}
-                        {application.user.lastName?.[0]}
-                      </AvatarFallback>
-                    </Avatar>
+                    <Link href={`/users/${application.user.id}`} passHref>
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage
+                          src={application.user.imageUrl}
+                          alt={`${application.user.firstName} ${application.user.lastName}`}
+                        />
+                        <AvatarFallback>
+                          {application.user.firstName?.[0]}
+                          {application.user.lastName?.[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Link>
                     <div>
-                      <h2 className="text-lg font-semibold">
-                        {application.user.firstName} {application.user.lastName}
-                      </h2>
+                      <Link href={`/users/${application.user.id}`}>
+                        <h2 className="text-lg font-semibold underline text-blue-500">
+                          {application.user.firstName} {application.user.lastName}
+                        </h2>
+                      </Link>
                       <p className="text-sm text-muted-foreground">@{application.user.username}</p>
                     </div>
                   </div>

@@ -92,7 +92,7 @@ function ApplyButton({
         onClick={() => {
           handleApplyClick(testingId);
         }}
-        disabled={isLoading || disableByStatus || isCreator || isTester}
+        disabled={isLoading || disableByStatus || isCreator || isTester || isSuccess}
         size={`lg`}
         className={classNames(
           themeClasses[theme] || 'bg-neutral-600 hover:bg-neutral-700',

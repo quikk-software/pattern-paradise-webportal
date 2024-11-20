@@ -18,6 +18,7 @@ export default function ProductListing({ products }: { products: GetProductRespo
             price={product.price}
             isFree={product.isFree}
             image={product.imageUrls?.[0]}
+            creatorId={product.creatorId}
           />
         ))}
       </div>

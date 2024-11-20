@@ -195,6 +195,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                       isFree={testing.product.isFree}
                       image={testing.product.imageUrls?.[0]}
                       isTesterCall={true}
+                      creatorId={testing.creatorId}
                     />
                   </div>
                 </CardContent>

@@ -23,7 +23,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
     const link = document.createElement('a');
     link.href = url;
     link.target = '_self';
-    link.download = file.name ?? 'patterns.zip';
+    link.download = file.name ?? 'patterns';
     document.body.appendChild(link);
     link.click();
 

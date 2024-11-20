@@ -9,6 +9,26 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import ProductCard from '@/lib/components/ProductCard';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
+
+const getStatusColor = (status?: string) => {
+  switch (status) {
+    case 'Created':
+      return 'text-yellow-500';
+    case 'InProgress':
+      return 'text-blue-500';
+    case 'Released':
+      return 'text-green-500';
+    case 'Declined':
+      return 'text-red-500';
+    case 'Aborted':
+      return 'text-red-500';
+    case 'Deleted':
+      return 'text-red-500';
+    default:
+      return 'text-gray-500';
+  }
+};
 
 export function SellPageComponent() {
   const [loadMore, setLoadMore] = useState(false);
@@ -68,16 +88,42 @@ export function SellPageComponent() {
       {isLoading ? <LoadingSpinnerComponent /> : null}
       {products.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              name={product.title}
-              price={product.price}
-              isFree={product.isFree}
-              image={product.imageUrls?.[0]}
-            />
-          ))}
+          {products.map((product) => {
+            const isCreator = userId === product.creatorId;
+            return (
+              <Card key={product.id}>
+                {isCreator ? (
+                  <CardHeader className="flex w-full">
+                    <CardDescription
+                      className={`text-sm font-semibold text-right ${getStatusColor(
+                        product.status,
+                      )}`}
+                    >
+                      {product.status}
+                    </CardDescription>
+                  </CardHeader>
+                ) : null}
+                <CardContent>
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.title}
+                    price={product.price}
+                    isFree={product.isFree}
+                    image={product.imageUrls?.[0]}
+                    creatorId={product.creatorId}
+                    status={product.status}
+                    unavailable={
+                      product.status === 'Deleted' ||
+                      product.status === 'Aborted' ||
+                      product.status === 'Declined'
+                    }
+                    isProductView={true}
+                  />
+                </CardContent>
+              </Card>
+            );
+          })}
           {hasNextPage ? (
             <Button
               variant={'outline'}

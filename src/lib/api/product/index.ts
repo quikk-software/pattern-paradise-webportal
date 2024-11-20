@@ -2,4 +2,6 @@ export * from './useGetProduct';
 export * from './useDeleteProduct';
 export * from './useListProducts';
 export * from './useCreateProduct';
+export * from './useUpdateProduct';
+export * from './useReleaseProduct';
 export * from './useListProductsByUserId';

@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Store, Tag, TestTube2, Settings2 } from 'lucide-react';
+import { Store, Tag, Volleyball, Settings2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 
 const menuItems = [
   { id: 'shop', label: 'Shop', icon: Store, href: '/' },
   { id: 'sell', label: 'Sell', icon: Tag, href: '/sell' },
-  { id: 'test', label: 'Test', icon: TestTube2, href: '/test' },
+  { id: 'test', label: 'Test', icon: Volleyball, href: '/test' },
   { id: 'me', label: 'Me', icon: Settings2, href: '/auth/me' },
 ];
 
