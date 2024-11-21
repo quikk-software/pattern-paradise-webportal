@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShoppingCart, User, TestTube } from 'lucide-react';
+import { ShoppingCart, User, Volleyball } from 'lucide-react';
 import { GetUserAccountResponse } from '@/@types/api-types';
 import { useListProductsByUserId } from '@/lib/api';
 import Link from 'next/link';
@@ -23,7 +23,7 @@ const roleOptions = [
   {
     id: 'Tester',
     label: 'Tester',
-    icon: TestTube,
+    icon: Volleyball,
   },
 ];
 
