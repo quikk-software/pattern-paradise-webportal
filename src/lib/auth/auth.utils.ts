@@ -35,7 +35,7 @@ const getAccessTokenUsingRefreshToken = async (refreshToken: string, callback?: 
   if (refreshToken !== '') {
     try {
       return await axios.post(
-        `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/cbj/protocol/openid-connect/token`,
+        `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}/protocol/openid-connect/token`,
         qs.stringify({
           grant_type: 'refresh_token',
           client_id: 'cbj',
