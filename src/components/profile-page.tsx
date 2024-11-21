@@ -202,7 +202,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">
+                Email <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -215,7 +217,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">
+                Username <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="username"
                 {...register('username', {
