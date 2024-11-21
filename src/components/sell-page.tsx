@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, ShoppingBag, TestTube } from 'lucide-react';
+import { PlusCircle, ShoppingBag, Volleyball } from 'lucide-react';
 import Link from 'next/link';
 import { useListProductsByUserId } from '@/lib/api';
 import { useSelector } from 'react-redux';
@@ -79,8 +79,8 @@ export function SellPageComponent() {
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
           >
-            <TestTube className="h-8 w-8" />
-            <span className="text-lg font-semibold">View your testings</span>
+            <Volleyball className="h-8 w-8" />
+            <span className="text-lg font-semibold">My tester calls</span>
           </Button>
         </Link>
       </div>

@@ -328,7 +328,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </p>
             </div>
 
-            {roles !== undefined && (roles.includes('Seller') || roles.includes('Tester')) ? (
+            {roles !== undefined && roles.includes('Seller') ? (
               <div className="space-y-2">
                 <Label htmlFor="paypalEmail">
                   PayPal Email <span className="text-red-500">*</span>

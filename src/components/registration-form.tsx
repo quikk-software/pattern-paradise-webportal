@@ -12,7 +12,7 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
-import { User, ShoppingCart, TestTube } from 'lucide-react';
+import { User, ShoppingCart, Volleyball } from 'lucide-react';
 import { useCreateUser } from '@/lib/api';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
@@ -28,7 +28,7 @@ const roleOptions = [
   {
     id: 'Tester',
     label: 'Tester',
-    icon: TestTube,
+    icon: Volleyball,
     description: 'Try out new patterns and provide feedback',
   },
 ];
@@ -175,15 +175,15 @@ export function RegistrationFormComponent() {
               {!!rolesError ? <p className="text-sm text-red-500 mb-2">{rolesError}</p> : null}
             </div>
             <p className="text-xs text-muted-foreground">
-              Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required to add
-              a valid PayPal email which is eligible of receiving money.{' '}
+              Note: Users with the role &apos;Seller&apos; are required to add a valid PayPal email
+              which is eligible of receiving money.{' '}
               <a href="https://paypal.com" target="_blank" className="text-blue-500">
                 Create a PayPal account for free here!
               </a>
             </p>
           </div>
           <div className="space-y-2">
-            {roles.includes('Seller') || roles.includes('Tester') ? (
+            {roles.includes('Seller') ? (
               <div className="space-y-2">
                 <Label htmlFor="paypalEmail">
                   PayPal Email <span className="text-red-500">*</span>
