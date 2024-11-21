@@ -38,7 +38,13 @@ const useAuth = () => {
     const decodedToken = jwtDecode(accessToken);
     const userId = getUserIdFromAccessToken(accessToken);
     dispatch(setUserId(userId));
-    dispatch(setRoles((decodedToken as any)?.resource_access?.cbj?.roles ?? []));
+    dispatch(
+      setRoles(
+        (decodedToken as any)?.resource_access?.[
+          process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'cbj'
+        ]?.roles ?? [],
+      ),
+    );
   };
 
   const handleLogin = async (username: string, password: string) => {
@@ -96,7 +102,7 @@ const useAuth = () => {
   useEffect(() => {
     const accessToken = accessTokenFromStore
       ? accessTokenFromStore
-      : Cookie.get('accessToken') ?? null;
+      : (Cookie.get('accessToken') ?? null);
     setIsLoggedIn(isTokenValid(accessToken));
   }, [accessTokenFromStore]);
 
