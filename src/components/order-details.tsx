@@ -74,17 +74,17 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           <div className="space-y-2">
             {!!order.productPrice ? (
               <p>
-                <strong>Order price:</strong> {order.productPrice}€
+                <strong>Order price:</strong> {order.productPrice}$
               </p>
             ) : null}
             {!!order.paypalFee ? (
               <p>
-                <strong>PayPal fee:</strong> {order.paypalFee.toFixed(2)}€
+                <strong>PayPal fee:</strong> {order.paypalFee.toFixed(2)}$
               </p>
             ) : null}
             {!!order.platformFee ? (
               <p>
-                <strong>Platform fee:</strong> {order.platformFee.toFixed(2)}€
+                <strong>Platform fee:</strong> {order.platformFee.toFixed(2)}$
               </p>
             ) : null}
             <p>

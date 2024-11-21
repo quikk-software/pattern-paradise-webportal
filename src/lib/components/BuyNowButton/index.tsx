@@ -95,11 +95,11 @@ export function BuyNowButton({ price, productId, productStatus, callback }: BuyN
     <PayPalScriptProvider
       options={{
         clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
-        currency: 'EUR',
+        currency: 'USD',
       }}
     >
       <div className="flex flex-col flex-start mb-6 gap-4">
-        <span className="text-3xl font-bold">€{price.toFixed(2)}</span>
+        <span className="text-3xl font-bold">${price.toFixed(2)}</span>
         <div className="flex flex-col gap-2">
           <PayPalButtons
             createOrder={async () => {

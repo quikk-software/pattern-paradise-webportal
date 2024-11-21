@@ -43,7 +43,7 @@ export function PatternParadiseProComponent() {
     },
     {
       question: 'How much does Pattern Paradise Pro cost?',
-      answer: 'The Pattern Paradise Pro subscription is available for just €9.99 per month.',
+      answer: 'The Pattern Paradise Pro subscription is available for just $9.99 per month.',
     },
     {
       question: 'Can I cancel my subscription at any time?',
@@ -102,7 +102,7 @@ export function PatternParadiseProComponent() {
             custom={1}
           >
             Take your pattern business to the next level with our Pro plan for just{' '}
-            <strong>€9.99</strong> per month
+            <strong>$9.99</strong> per month
           </motion.p>
           {isPro ? (
             <span>
@@ -168,7 +168,7 @@ export function PatternParadiseProComponent() {
             animate={controls}
             custom={10}
           >
-            €9.99/month
+            $9.99/month
           </motion.p>
           {isPro ? (
             <span>

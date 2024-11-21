@@ -189,7 +189,7 @@ export function ProductFormComponent() {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Price (in Euro) <span className="text-red-500">*</span>
+              Price (in $) <span className="text-red-500">*</span>
             </Label>
             <Input
               id="price"
@@ -199,7 +199,7 @@ export function ProductFormComponent() {
                 required: !isFree ? 'Price is required' : undefined,
                 min: {
                   value: 3.0,
-                  message: 'Price has to be greater than or equal to 3€',
+                  message: 'Price has to be greater than or equal to 3.00$',
                 },
               })}
               step="0.01"

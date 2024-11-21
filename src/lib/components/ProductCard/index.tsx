@@ -103,7 +103,7 @@ export default function ProductCard({
         {isFree ? (
           <span className="text-lg font-bold">FOR FREE</span>
         ) : (
-          <span className="text-lg font-bold">€{price.toFixed(2)}</span>
+          <span className="text-lg font-bold">${price.toFixed(2)}</span>
         )}
         {isTesterCall ? (
           <Link href={`/test/products/${id}`}>

@@ -201,7 +201,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
                 {product.isFree ? (
                   <span className="font-bold">FOR FREE</span>
                 ) : (
-                  <span className="font-bold">€{product.price.toFixed(2)}</span>
+                  <span className="font-bold">${product.price.toFixed(2)}</span>
                 )}
                 <Link
                   href={`/${
