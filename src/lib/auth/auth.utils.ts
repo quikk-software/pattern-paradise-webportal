@@ -38,7 +38,7 @@ const getAccessTokenUsingRefreshToken = async (refreshToken: string, callback?: 
         `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}/protocol/openid-connect/token`,
         qs.stringify({
           grant_type: 'refresh_token',
-          client_id: 'cbj',
+          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
           refresh_token: refreshToken,
         }),
       );
