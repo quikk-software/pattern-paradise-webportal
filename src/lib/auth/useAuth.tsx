@@ -56,7 +56,7 @@ const useAuth = () => {
         `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}/protocol/openid-connect/token`,
         qs.stringify({
           grant_type: 'password',
-          client_id: 'cbj',
+          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
           username: username,
           password: password,
           scope: 'openid profile',
