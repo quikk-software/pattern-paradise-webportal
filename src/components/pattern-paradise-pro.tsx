@@ -52,7 +52,7 @@ export function PatternParadiseProComponent() {
         'Yes, you can cancel your Pattern Paradise Pro subscription at any time. Your benefits will continue until the end of your current billing period.',
     },
     {
-      question: 'What happens after I cancelled my subscription?',
+      question: 'What happens after I cancel my subscription?',
       answer:
         'Your patterns will not be marked as featured anymore, you will also not be able to use the Pro features when creating your pattern listings. Patterns which you have created with Pattern Paradise Pro will still have their translated patterns available for buyers.',
     },
