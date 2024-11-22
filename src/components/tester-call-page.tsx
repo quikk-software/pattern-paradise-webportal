@@ -7,13 +7,15 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import { GetProductResponse, GetTestingResponse } from '@/@types/api-types';
 import { useApplyTesting } from '@/lib/api/testing';
 import { CldImage } from 'next-cloudinary';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { ArrowLeftRight } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
+import { useGetUserById } from '@/lib/api';
+import Link from 'next/link';
 
 function ApplyButton({
   testingId,
@@ -190,11 +192,19 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
           </h1>
           <h3
             className={classNames(
-              'text-4xl md:text-6xl font-bold mb-4',
+              'text-4xl md:text-6xl font-bold mb-2',
               themeTextClasses[theme] || 'text-neutral-800',
             )}
           >
             {product.title}!
+          </h3>
+          <h3
+            className={classNames(
+              'text-md md:text-lg font-bold mb-4 italic underline',
+              themeTextClasses[theme] || 'text-neutral-800',
+            )}
+          >
+            <Link href={`/users/${testing.creator.username}`}>by @{testing.creator.username}</Link>
           </h3>
           <p className="text-xl text-gray-700 mb-6">
             Help us perfect our patterns and shape the future of crocheting and knitting!

@@ -84,7 +84,7 @@ export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelecto
           <CardTitle className="text-md font-medium">
             Select multiple patterns and add different languages.
           </CardTitle>
-        ) : (
+        ) : process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true' ? (
           <CardTitle className="text-md font-medium">
             Upgrade to{' '}
             <Link href={'/pro'} className="text-blue-500 underline">
@@ -92,7 +92,7 @@ export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelecto
             </Link>{' '}
             in order to upload multiple patterns in different languages.
           </CardTitle>
-        )}
+        ) : null}
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

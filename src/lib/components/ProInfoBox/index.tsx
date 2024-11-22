@@ -33,6 +33,10 @@ export default function ProInfoBox({ user }: ProInfoBoxProps) {
 
   const isCancelled = !!user.paypalSubscriptionValidUntil;
 
+  if (process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE !== 'true') {
+    return null;
+  }
+
   return (
     <>
       {user.roles?.includes('Pro') ? (

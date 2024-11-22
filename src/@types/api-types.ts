@@ -17,6 +17,15 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface RequestPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  newPassword: string;
+  verificationCode: string;
+}
+
 export interface PostUserRequest {
   email: string;
   password: string;
@@ -526,7 +535,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://localhost:3001/';
+  public baseUrl: string = 'http://0.0.0.0:3001/';
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -701,11 +710,11 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title 'Crochet by Jasmin' platform
+ * @title Pattern Paradise
  * @version 1.0.0
- * @baseUrl http://localhost:3001/
+ * @baseUrl http://0.0.0.0:3001/
  *
- * The 'Crochet by Jasmin' platform enables buyers, sellers and testers to get the most out of crochet patterns.
+ * The Pattern Paradise platform enables buyers, sellers and testers to get the most out of patterns.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
@@ -978,6 +987,58 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         secure: true,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Requests a password mail by the given request body data.
+     *
+     * @tags User
+     * @name RequestPassword
+     * @summary Requests a password mail.
+     * @request POST:/api/v1/users/passwords/request-password
+     * @secure
+     */
+    requestPassword: (
+      data: {
+        /** @example "any" */
+        email?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/passwords/request-password`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Updates the user password by the given verification code and request body data.
+     *
+     * @tags User
+     * @name ResetPassword
+     * @summary Updates the users password by verification code.
+     * @request PUT:/api/v1/users/passwords/reset-password
+     * @secure
+     */
+    resetPassword: (
+      data: {
+        /** @example "any" */
+        newPassword?: any;
+        /** @example "any" */
+        verificationCode?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/passwords/reset-password`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
