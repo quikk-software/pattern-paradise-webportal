@@ -5,8 +5,8 @@ const useVerificationCode = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const redirectParam = params.get('code');
-    setVerificationCode(redirectParam ?? undefined);
+    const verificationCode = params.get('code');
+    setVerificationCode(verificationCode ?? undefined);
   }, []);
 
   return {

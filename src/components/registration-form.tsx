@@ -23,6 +23,8 @@ import TikTokIcon from '@/lib/icons/TikTokIcon';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 
+const ALLOWED_ROLES = ['Buyer', 'Seller', 'Tester'];
+
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
   { id: 'Seller', label: 'Seller', icon: User, description: 'List and sell your patterns' },
@@ -34,7 +36,11 @@ const roleOptions = [
   },
 ];
 
-export function RegistrationFormComponent() {
+interface RegistrationFormComponent {
+  preselectedRoles: string[];
+}
+
+export function RegistrationFormComponent({ preselectedRoles }: RegistrationFormComponent) {
   const [roles, setRoles] = useState<string[]>([]);
   const [rolesError, setRolesError] = useState<string | undefined>(undefined);
 
@@ -47,6 +53,10 @@ export function RegistrationFormComponent() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    setRoles(preselectedRoles.filter((role) => ALLOWED_ROLES.includes(role)));
+  }, [preselectedRoles]);
 
   useEffect(() => {
     if (roles.length > 0) {
