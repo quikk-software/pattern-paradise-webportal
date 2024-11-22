@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { useForm } from 'react-hook-form';
+import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 
 const passwordProps: {
   newPassword?: string;
@@ -70,9 +71,8 @@ export default function EditPassword() {
                 {...register('newPassword', {
                   required: 'New password is required',
                   pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                    message:
-                      'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
+                    value: PASSWORD_REGEX,
+                    message: PASSWORD_REGEX_MESSAGE,
                   },
                 })}
                 onKeyDown={handleKeyDown}
@@ -90,9 +90,8 @@ export default function EditPassword() {
                 {...register('confirmPassword', {
                   required: 'Confirm password is required',
                   pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                    message:
-                      'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
+                    value: PASSWORD_REGEX,
+                    message: PASSWORD_REGEX_MESSAGE,
                   },
                 })}
                 onKeyDown={handleKeyDown}

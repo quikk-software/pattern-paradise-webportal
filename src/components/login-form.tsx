@@ -16,10 +16,12 @@ import Link from 'next/link';
 import useAuth from '@/lib/auth/useAuth';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import RequestPasswordDrawer from '@/lib/components/RequestPasswordDrawer';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isRequestPasswordDrawerOpen, setIsRequestPasswordDrawerOpen] = useState(false);
 
   const { handleLogin, isLoading, isSuccess, isError } = useAuth();
 
@@ -74,14 +76,29 @@ export function LoginForm() {
           </div>
         </form>
       </CardContent>
-      <CardFooter>
-        <p className="text-sm text-muted-foreground">
+      <CardFooter className="flex flex-col items-end gap-4">
+        <p className="text-sm text-muted-foreground text-right">
           Don&apos;t have an account?{' '}
           <Link href="/auth/registration" className="text-primary hover:underline">
             Register here
           </Link>
         </p>
+        <p className="text-sm text-muted-foreground text-right">
+          Forgot your password?{' '}
+          <span
+            onClick={() => setIsRequestPasswordDrawerOpen(true)}
+            className="text-primary hover:underline"
+          >
+            Reset here
+          </span>
+        </p>
       </CardFooter>
+      {isRequestPasswordDrawerOpen ? (
+        <RequestPasswordDrawer
+          drawerIsOpen={isRequestPasswordDrawerOpen}
+          setDrawerIsOpen={setIsRequestPasswordDrawerOpen}
+        />
+      ) : null}
     </Card>
   );
 }

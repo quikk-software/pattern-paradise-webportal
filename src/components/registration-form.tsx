@@ -21,6 +21,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useRedirect from '@/lib/core/useRedirect';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
+import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
@@ -135,9 +136,8 @@ export function RegistrationFormComponent() {
               {...register('password', {
                 required: 'Password is required',
                 pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                  message:
-                    'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character',
+                  value: PASSWORD_REGEX,
+                  message: PASSWORD_REGEX_MESSAGE,
                 },
                 onChange: (e) => {
                   e.target.value = e.target.value.trim();

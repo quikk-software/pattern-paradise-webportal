@@ -5,3 +5,5 @@ export * from './useUpdateUser';
 export * from './useUpdateUserPassword';
 export * from './useAddGalleryImages';
 export * from './useDeleteGalleryImage';
+export * from './useRequestPassword';
+export * from './useResetPassword';
