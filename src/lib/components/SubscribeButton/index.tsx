@@ -69,7 +69,7 @@ export default function SubscribeButton() {
         <Link href="/auth/registration?redirect=/pro">
           <Button
             size="lg"
-            className="bg-black hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105"
+            className="font-bold py-4 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105"
           >
             Subscribe Now
           </Button>
