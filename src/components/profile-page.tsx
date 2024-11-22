@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import { useUpdateUser, useUpdateUserPassword } from '@/lib/api';
+import { useUpdateUser } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -17,8 +17,6 @@ import { useDispatch } from 'react-redux';
 import { reset } from '@/lib/features/auth/authSlice';
 import RequestStatus from '@/lib/components/RequestStatus';
 import EditPassword from '@/lib/components/EditPassword';
-import { InfoBoxComponent } from '@/components/info-box';
-import Link from 'next/link';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { Textarea } from '@/components/ui/textarea';
@@ -123,15 +121,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
             variant={'outline'}
           >
             My orders
-          </Button>
-          <Button
-            onClick={() => {
-              router.push('/auth/me/testings');
-            }}
-            className="w-full"
-            variant={'outline'}
-          >
-            My testings
           </Button>
           <Button
             variant={'secondary'}
