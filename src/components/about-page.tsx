@@ -83,7 +83,7 @@ export default function AboutPage() {
           <motion.div className="md:w-1/2 mb-8 md:mb-0" variants={fadeIn}>
             <h2 className="text-3xl font-semibold mb-4">Join Our Creative Community</h2>
             <p className="text-lg mb-4">
-              Pattern Paradise is more than just a marketplace – it's a thriving community of
+              Pattern Paradise is more than just a marketplace – it&apos;s a thriving community of
               passionate crafters, designers, and artists.
             </p>
             <p className="text-lg">
@@ -114,7 +114,7 @@ export default function AboutPage() {
           Ready to Join Pattern Paradise?
         </motion.h2>
         <motion.p className="text-xl text-muted-foreground mb-8" variants={fadeIn}>
-          Start your journey in the world's most vibrant handmade pattern community today!
+          Start your journey in the world&apos;s most vibrant handmade pattern community today!
         </motion.p>
         <motion.div variants={fadeIn}>
           <Button asChild size="lg">
