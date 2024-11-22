@@ -8,14 +8,17 @@ const NAV_LINKS = [
   {
     href: '/about',
     name: 'About',
+    enabled: true,
   },
   {
     href: '/faq',
     name: 'FAQ',
+    enabled: true,
   },
   {
     href: '/pro',
     name: 'Pro',
+    enabled: process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true',
   },
 ];
 
@@ -36,6 +39,8 @@ export function NavbarComponent() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const filteredNavLinks = NAV_LINKS.filter((link) => link.enabled);
+
   return (
     <nav ref={navRef} className="bg-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +53,7 @@ export function NavbarComponent() {
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             <div className="flex space-x-4">
-              {NAV_LINKS.map(({ href, name }) => (
+              {filteredNavLinks.map(({ href, name }) => (
                 <NavLink key={name} href={href}>
                   {name}
                 </NavLink>
@@ -75,7 +80,7 @@ export function NavbarComponent() {
       {/* Mobile menu */}
       <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1">
-          {NAV_LINKS.map(({ href, name }) => (
+          {filteredNavLinks.map(({ href, name }) => (
             <MobileNavLink key={name} href={href}>
               {name}
             </MobileNavLink>
