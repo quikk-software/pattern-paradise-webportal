@@ -1,33 +1,59 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import creativeWomenIllustration from '@/assets/illustrations/undraw_creative_woman_re_u5tk.svg';
-import connectIllustration from '@/assets/illustrations/undraw_connection_re_lcud.svg';
 
-export default function AboutPageComponent() {
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6 },
+};
+
+const stagger = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section */}
-      <section className="text-center mb-16">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Pattern Paradise 👋</h1>
-        <p className="text-xl text-muted-foreground mb-8">
+      <motion.section
+        className="text-center mb-16"
+        initial="initial"
+        animate="animate"
+        variants={stagger}
+      >
+        <motion.h1 className="text-4xl font-bold mb-4" variants={fadeIn}>
+          Welcome to Pattern Paradise 👋
+        </motion.h1>
+        <motion.p className="text-xl text-muted-foreground mb-8" variants={fadeIn}>
           Connecting creatives worldwide to share, perfect, and celebrate handmade pattern
           creations.
-        </p>
-        <Image
-          src={creativeWomenIllustration}
-          alt="Colorful yarn and crochet hooks"
-          width={600}
-          height={600}
-          className="rounded-lg shadow-lg mx-auto"
-        />
-      </section>
+        </motion.p>
+        <motion.div variants={fadeIn}>
+          <Image
+            src="/placeholder.svg?height=400&width=800"
+            alt="Colorful yarn and crochet hooks"
+            width={800}
+            height={400}
+            className="rounded-lg shadow-lg mx-auto"
+          />
+        </motion.div>
+      </motion.section>
 
       {/* Features Section */}
-      <section className="mb-16">
-        <h2 className="text-3xl font-semibold mb-8 text-center">What We Offer</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+      <motion.section className="mb-16" initial="initial" animate="animate" variants={stagger}>
+        <motion.h2 className="text-3xl font-semibold mb-8 text-center" variants={fadeIn}>
+          What We Offer
+        </motion.h2>
+        <motion.div className="grid md:grid-cols-3 gap-8" variants={stagger}>
           <FeatureCard
             title="Buy & Sell Patterns"
             description="A marketplace for unique crochet and knitting patterns, supporting independent designers."
@@ -43,13 +69,18 @@ export default function AboutPageComponent() {
             description="Work together on tutorials and designs with our advanced collaboration features."
             icon="🤝"
           />
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* Community Section */}
-      <section className="mb-16 bg-muted p-8 rounded-lg">
+      <motion.section
+        className="mb-16 bg-muted p-8 rounded-lg"
+        initial="initial"
+        animate="animate"
+        variants={stagger}
+      >
         <div className="md:flex items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
+          <motion.div className="md:w-1/2 mb-8 md:mb-0" variants={fadeIn}>
             <h2 className="text-3xl font-semibold mb-4">Join Our Creative Community</h2>
             <p className="text-lg mb-4">
               Pattern Paradise is more than just a marketplace – it&apos;s a thriving community of
@@ -59,29 +90,38 @@ export default function AboutPageComponent() {
               Share your creations, get inspired, and connect with like-minded individuals from
               around the globe.
             </p>
-          </div>
-          <div className="md:w-1/2 md:pl-8">
+          </motion.div>
+          <motion.div className="md:w-1/2 md:pl-8" variants={fadeIn}>
             <Image
-              src={connectIllustration}
+              src="/placeholder.svg?height=300&width=500"
               alt="Community of crafters"
-              width={600}
-              height={600}
+              width={500}
+              height={300}
               className="rounded-lg shadow-lg mx-auto"
             />
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Call to Action */}
-      <section className="text-center">
-        <h2 className="text-3xl font-semibold mb-4">Ready to Join Pattern Paradise?</h2>
-        <p className="text-xl text-muted-foreground mb-8">
+      <motion.section
+        className="text-center"
+        initial="initial"
+        animate="animate"
+        variants={stagger}
+      >
+        <motion.h2 className="text-3xl font-semibold mb-4" variants={fadeIn}>
+          Ready to Join Pattern Paradise?
+        </motion.h2>
+        <motion.p className="text-xl text-muted-foreground mb-8" variants={fadeIn}>
           Start your journey in the world&apos;s most vibrant handmade pattern community today!
-        </p>
-        <Button asChild size="lg">
-          <Link href="/auth/registration">Join Now</Link>
-        </Button>
-      </section>
+        </motion.p>
+        <motion.div variants={fadeIn}>
+          <Button asChild size="lg">
+            <Link href="/auth/registration">Join Now</Link>
+          </Button>
+        </motion.div>
+      </motion.section>
     </div>
   );
 }
@@ -96,16 +136,18 @@ function FeatureCard({
   icon: string;
 }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <span className="text-4xl mr-2">{icon}</span>
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription>{description}</CardDescription>
-      </CardContent>
-    </Card>
+    <motion.div variants={fadeIn}>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <span className="text-4xl mr-2">{icon}</span>
+            {title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CardDescription>{description}</CardDescription>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }
