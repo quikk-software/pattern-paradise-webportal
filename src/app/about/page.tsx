@@ -5,7 +5,7 @@ import { NavbarComponent } from '@/components/navbar';
 export default function AboutPage() {
   return (
     <div>
-      <NavbarComponent />
+      <NavbarComponent background="none" />
       <AboutPageComponent />
     </div>
   );

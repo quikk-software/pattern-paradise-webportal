@@ -37,19 +37,19 @@ export default function AnimatedLanding() {
   const isLoggedIn = !!accessToken;
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-muted overflow-hidden">
+    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary to-[#ffd700] overflow-hidden">
       <motion.div
-        className="container px-4 md:px-6 mx-auto"
+        className="container px-4 md:px-6 mx-auto relative"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="flex flex-col items-center space-y-4 text-center">
+        <div className="flex flex-col items-center space-y-8 text-center relative z-10">
           <motion.div className="space-y-2" variants={itemVariants}>
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-white drop-shadow-md">
               Welcome to {APP_NAME}
             </h1>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+            <p className="mx-auto max-w-[700px] text-white/90 md:text-xl drop-shadow">
               Discover beautiful crochet and knitting patterns for your next project. From cozy
               blankets to cute amigurumi, we&apos;ve got you covered!
             </p>
@@ -57,20 +57,34 @@ export default function AnimatedLanding() {
           <motion.div className="space-x-4" variants={itemVariants}>
             {isLoggedIn ? (
               <Link href="/sell">
-                <Button>Start selling</Button>
+                <Button className="bg-white text-[#f4930b] hover:bg-white/90 font-semibold">
+                  Start selling
+                </Button>
               </Link>
             ) : (
               <Link href="/auth/registration?preselectedRoles=Seller&redirect=/sell">
-                <Button>Start selling</Button>
+                <Button className="bg-white text-[#f4930b] hover:bg-white/90 font-semibold">
+                  Start selling
+                </Button>
               </Link>
             )}
             {isLoggedIn ? (
               <Link href="/test">
-                <Button variant="outline">Show tester calls</Button>
+                <Button
+                  variant="outline"
+                  className="bg-transparent border-white text-white border-2 font-semibold"
+                >
+                  Show tester calls
+                </Button>
               </Link>
             ) : (
               <Link href="/auth/registration?preselectedRoles=Tester&redirect=/test">
-                <Button variant="outline">Become a tester</Button>
+                <Button
+                  variant="outline"
+                  className="bg-transparent border-white text-white border-2 font-semibold"
+                >
+                  Become a tester
+                </Button>
               </Link>
             )}
           </motion.div>

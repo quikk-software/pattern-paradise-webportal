@@ -16,10 +16,17 @@ interface BuyNowButtonProps {
   price: number;
   productId: string;
   productStatus: string;
+  creatorId?: string;
   callback?: () => void;
 }
 
-export function BuyNowButton({ price, productId, productStatus, callback }: BuyNowButtonProps) {
+export function BuyNowButton({
+  price,
+  productId,
+  productStatus,
+  creatorId,
+  callback,
+}: BuyNowButtonProps) {
   const router = useRouter();
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -63,6 +70,12 @@ export function BuyNowButton({ price, productId, productStatus, callback }: BuyN
     // redirect to first order detail page related to the user matching this product
     router.push(`/auth/me/orders/${orders[0].id}`);
   }, [listOrdersByProductIdIsSuccess, orders]);
+
+  const isOwner = creatorId === userId;
+
+  if (isOwner) {
+    return null;
+  }
 
   if (listOrdersByProductIdIsLoading) {
     return <LoadingSpinnerComponent />;

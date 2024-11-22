@@ -7,11 +7,11 @@
     -webkit-text-size-adjust: 100%; /* Prevents text scaling on iOS */
     touch-action: manipulation; /* Prevents pinch-to-zoom and double-tap zoom */
   },
-  input,
-  textarea,
-  select {
-    @apply text-base; /* Equivalent to font-size: 16px; in Tailwind */
-  }
+input,
+textarea,
+select {
+  @apply text-base; /* Equivalent to font-size: 16px; in Tailwind */
+}
 }
 
 body {
@@ -32,8 +32,8 @@ body {
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 35 91% 50%; /* Slightly darker HSL color for stronger contrast */
+    --primary-foreground: 0 0% 100%; /* White text for readability */
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
@@ -44,7 +44,7 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: 35 91% 50%; /* Matching the slightly darker primary color */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -59,8 +59,8 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary: 35 91% 50%; /* Retaining the darker primary color for dark mode */
+    --primary-foreground: 0 0% 100%; /* High contrast in dark mode */
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
@@ -71,7 +71,7 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --ring: 35 91% 50%; /* Matching the darker primary color */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
