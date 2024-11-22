@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import creativeWomenIllustration from '@/assets/illustrations/undraw_creative_woman_re_u5tk.svg';
+import connectIllustration from '@/assets/illustrations/undraw_connection_re_lcud.svg';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -39,10 +41,10 @@ export default function AboutPage() {
         </motion.p>
         <motion.div variants={fadeIn}>
           <Image
-            src="/placeholder.svg?height=400&width=800"
+            src={creativeWomenIllustration}
             alt="Colorful yarn and crochet hooks"
-            width={800}
-            height={400}
+            width={600}
+            height={600}
             className="rounded-lg shadow-lg mx-auto"
           />
         </motion.div>
@@ -93,10 +95,10 @@ export default function AboutPage() {
           </motion.div>
           <motion.div className="md:w-1/2 md:pl-8" variants={fadeIn}>
             <Image
-              src="/placeholder.svg?height=300&width=500"
+              src={connectIllustration}
               alt="Community of crafters"
-              width={500}
-              height={300}
+              width={600}
+              height={600}
               className="rounded-lg shadow-lg mx-auto"
             />
           </motion.div>
