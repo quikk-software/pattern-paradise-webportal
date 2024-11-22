@@ -11,7 +11,7 @@ export default async function Home() {
 
   return (
     <div>
-      <NavbarComponent />
+      <NavbarComponent background="primary" />
       <AnimatedLanding />
       <section className="w-full py-12 md:py-24 lg:py-32">
         <ListingComponent listingType={'sell'} defaultProducts={products} />
