@@ -22,6 +22,10 @@ export default function SubscribeButton() {
 
   const isLoggedIn = accessToken !== null;
 
+  if (process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE !== 'true') {
+    return null;
+  }
+
   if (!process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || !process.env.NEXT_PUBLIC_PAYPAL_PLAN_ID) {
     return null;
   }
