@@ -1,5 +1,8 @@
 {
   "name": "Pattern Paradise",
+  "short_name": "Pattern Paradise",
+  "id": "pattern-paradise",
+  "description": "Find, sell and test patterns from creatives around the world!",
   "icons": [],
   "theme_color": "#f4930b",
   "background_color": "#FFFFFF",
