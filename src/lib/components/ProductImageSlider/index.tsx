@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { CldImage } from 'next-cloudinary';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { ChevronLeft, ChevronRight, HandIcon } from 'lucide-react';
 
 interface ProductImageSliderProps {
   imageUrls: string[];
@@ -22,36 +22,33 @@ export default function ProductImageSlider({ imageUrls, title }: ProductImageSli
   };
 
   return (
-    <div className="relative aspect-square">
-      <CldImage
-        alt={`${title} - Image ${currentImageIndex + 1}`}
-        src={imageUrls[currentImageIndex]}
-        width="1000"
-        height="1000"
-        crop={{
-          type: 'auto',
-          source: true,
-        }}
-      />
-      <div className="absolute inset-0 flex items-center justify-between p-4 w-full bottom-0">
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full bg-white/80 backdrop-blur-sm"
-          onClick={prevImage}
-          aria-label="Previous image"
+    <div>
+      <div className="grid grid-cols-1 gap-2">
+        <Carousel
+          className={`w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto`}
         >
-          <ChevronLeft className="h-6 w-6" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full bg-white/80 backdrop-blur-sm"
-          onClick={nextImage}
-          aria-label="Next image"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </Button>
+          <CarouselContent>
+            {imageUrls.map((src, index) => (
+              <CarouselItem key={index}>
+                <div className={`flex flex-col items-center`}>
+                  <CldImage
+                    key={src}
+                    alt={`${title} view ${index + 1}`}
+                    src={src}
+                    width={400}
+                    height={400}
+                    className={`rounded-lg shadow-md`}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        <div className="flex justify-center gap-1">
+          <ChevronLeft className="w-4 h-4 text-primary" />
+          <HandIcon className="w-4 h-4 text-primary" />
+          <ChevronRight className="w-4 h-4 text-primary" />
+        </div>
       </div>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {imageUrls.map((_, index) => (

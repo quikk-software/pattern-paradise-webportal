@@ -80,7 +80,7 @@ export default function ProductCard({
     <Card key={id} className="flex flex-col">
       <CardHeader>
         <CldImage
-          alt="Pattern paradise"
+          alt={name}
           src={image}
           width="340"
           height="250"
