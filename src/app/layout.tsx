@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { BottomNavigation } from '@/components/bottom-navigation';
-import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME } from '@/lib/constants';
+import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
 import AuthGuard from '@/lib/auth/AuthGuard';
 import StoreProvider from '@/app/providers/StoreProvider';
 
@@ -46,7 +46,7 @@ export default function RootLayout({
         <meta name="msapplication-config" content="/favicons/browserconfig.xml" />
         <meta name="msapplication-TileColor" content="#2B5797" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content={THEME_COLOR} />
 
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
