@@ -1,7 +1,7 @@
 {
   "name": "Pattern Paradise",
   "icons": [],
-  "theme_color": "#000000",
+  "theme_color": "#f4930b",
   "background_color": "#FFFFFF",
   "start_url": "/",
   "display": "standalone",

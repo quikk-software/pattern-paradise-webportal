@@ -28,11 +28,12 @@ export function PatternParadiseProComponent() {
   }, [controls]);
 
   const features = [
-    'Select multiple patterns with language options',
-    'Automatic translation of listings into various languages',
+    'Upload multiple patterns with language options per listing',
     'Featured patterns marked and displayed at the top',
     'Featured tester calls marked and displayed at the top',
-    'Automatic translation of tester call pages',
+    'Appear at the top of tester applicant&apos;s lists',
+    'Share documents and videos in tester call chats',
+    'Share your profile with a personalized Pattern Paradise link',
   ];
 
   const faqs = [
@@ -51,7 +52,7 @@ export function PatternParadiseProComponent() {
         'Yes, you can cancel your Pattern Paradise Pro subscription at any time. Your benefits will continue until the end of your current billing period.',
     },
     {
-      question: 'What happens after I cancelled my subscription?',
+      question: 'What happens after I cancel my subscription?',
       answer:
         'Your patterns will not be marked as featured anymore, you will also not be able to use the Pro features when creating your pattern listings. Patterns which you have created with Pattern Paradise Pro will still have their translated patterns available for buyers.',
     },
@@ -68,7 +69,7 @@ export function PatternParadiseProComponent() {
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black">
       <header className="container mx-auto px-4 py-8 border-b border-gray-200">
         <motion.h1
-          className="text-4xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-black"
+          className="text-4xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-black"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
