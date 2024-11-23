@@ -6,6 +6,41 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/100.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/102.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/102.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/1024.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/114.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/114.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/120.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/120.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/128.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/128.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/144.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/144.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/152.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/152.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/16.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/16.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/167.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/167.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/172.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/172.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/180.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/180.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/196.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/196.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/20.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/20.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/216.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/216.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/256.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/256.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/29.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/29.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/32.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/32.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/40.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/48.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/48.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/50.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/50.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/512.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/512.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/55.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/55.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/57.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/57.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/58.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/58.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/60.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/64.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/64.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/66.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/66.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/72.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/72.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/76.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/76.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/80.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/80.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/87.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/87.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/88.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/88.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/92.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/92.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/Contents.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,11 +100,11 @@
       <recent name="$PROJECT_DIR$/src/lib/api/testing" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/icons/main" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/app" />
       <recent name="$PROJECT_DIR$/src/app/test/chats/[testingId]" />
       <recent name="$PROJECT_DIR$/src/app/test/products" />
-      <recent name="$PROJECT_DIR$/src/app/products/[productId]" />
     </key>
   </component>
   <component name="RunManager" selected="npm.generate-types">
@@ -135,7 +170,7 @@
       <workItem from="1731424191844" duration="34137000" />
       <workItem from="1731660298222" duration="17000" />
       <workItem from="1731667195528" duration="1726000" />
-      <workItem from="1731926633617" duration="94380000" />
+      <workItem from="1731926633617" duration="94679000" />
     </task>
     <servers />
   </component>
