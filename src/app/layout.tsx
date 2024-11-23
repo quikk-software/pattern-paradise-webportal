@@ -50,7 +50,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-icon-180x180.png" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
