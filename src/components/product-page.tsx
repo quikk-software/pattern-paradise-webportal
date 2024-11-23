@@ -25,7 +25,7 @@ export async function ProductPageComponent({ productId }: ProductPageComponentPr
     <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
       <Card className="overflow-hidden">
         <CardContent className="p-6">
-          <div className="grid gap-8 md:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-4">
             <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
             <div className="flex flex-col justify-between">
               <div>
