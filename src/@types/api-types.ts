@@ -888,24 +888,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
-     *
-     * @tags User
-     * @name GetUserById
-     * @summary Gets an user by ID or username.
-     * @request GET:/api/v1/users/{userId}
-     * @secure
-     */
-    getUserById: (userId: string, params: RequestParams = {}) =>
-      this.request<GetUserAccountResponse, NotFoundResponse>({
-        path: `/api/v1/users/${userId}`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
      * @description Updates the user password by the given request body data and user ID.
      *
      * @tags User
@@ -979,6 +961,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'DELETE',
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
+     *
+     * @tags User
+     * @name GetUserById
+     * @summary Gets an user by ID or username.
+     * @request GET:/api/v1/users/account/{userId}
+     * @secure
+     */
+    getUserById: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUserAccountResponse, NotFoundResponse>({
+        path: `/api/v1/users/account/${userId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
         ...params,
       }),
 
