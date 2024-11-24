@@ -21,6 +21,7 @@ import InstagramIcon from '@/lib/icons/InstagramIcon';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { Textarea } from '@/components/ui/textarea';
 import ProInfoBox from '@/lib/components/ProInfoBox';
+import ResendCodeInfoBox from '@/lib/components/ResendCodeInfoBox';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -160,6 +161,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
             <div className="space-y-2">
               <ProInfoBox user={user} />
             </div>
+
+            {user.email && !user.isMailConfirmed ? (
+              <div className="space-y-2">
+                <ResendCodeInfoBox
+                  email={user.email}
+                  type={'email confirmation'}
+                  mailType={'UserConfirmEmail'}
+                />
+              </div>
+            ) : null}
 
             <div className="space-y-2">
               <Label htmlFor="description">Profile description</Label>
@@ -340,6 +351,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   })}
                   onKeyDown={handleKeyDown}
                 />
+                {user.paypalEmail &&
+                !user.isPayPalMailConfirmed &&
+                user.roles?.includes('Seller') ? (
+                  <ResendCodeInfoBox
+                    email={user.paypalEmail}
+                    type={'PayPal email confirmation'}
+                    mailType={'UserConfirmPaypalEmail'}
+                  />
+                ) : null}
                 {errors.paypalEmail ? (
                   <p className="text-sm text-red-500 mb-2">
                     {errors.paypalEmail.message as string}

@@ -25,6 +25,14 @@ export interface VerifyCodeResponse {
   successMessage: string;
 }
 
+export interface ResendCodeRequest {
+  mailType: string;
+}
+
+export interface ResendCodeResponse {
+  successMessage: string;
+}
+
 export interface RequestPasswordRequest {
   email: string;
 }
@@ -1101,6 +1109,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         secure: true,
         type: ContentType.Json,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Resends the users code by the given request body data.
+     *
+     * @tags User
+     * @name ResendCode
+     * @summary Resends the code of a given mail type and a user.
+     * @request PUT:/api/v1/users/verification-codes/resend-code
+     * @secure
+     */
+    resendCode: (
+      data: {
+        /** @example "any" */
+        mailType?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/verification-codes/resend-code`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 

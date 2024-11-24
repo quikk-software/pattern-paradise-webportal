@@ -205,7 +205,9 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
                 )}
                 <Link
                   href={`/${
-                    listingType === 'sell' ? 'products' : listingType === 'test' && 'test/products'
+                    listingType === 'sell'
+                      ? 'products'
+                      : listingType === 'test' && '/app/test/products'
                   }/${product.id}`}
                 >
                   <Button>View Details</Button>
