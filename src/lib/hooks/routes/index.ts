@@ -135,7 +135,7 @@ const pages: Page[] = [
   },
   {
     title: 'Pattern',
-    pathname: '/products/[productId]',
+    pathname: '/app/products/[productId]',
     description: '',
   },
 

@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
@@ -20,6 +19,7 @@ import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import Link from 'next/link';
 import { combineArraysById } from '@/lib/core/utils';
 import PriceFilter from '@/components/price-filter';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -82,27 +82,25 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProducts();
   }, [loadMore]);
 
-  useEffect(() => {
-    const fetchProductsByFilter = async () => {
-      const result = await fetch({
-        q: debouncedSearchTerm ?? undefined,
-        status,
-        categories: selectedCategory ? [selectedCategory] : ['All'],
-        minPrice: priceRange[0],
-        maxPrice: priceRange[1],
-        pageNumber: 1,
-        pageSize: 20,
-      });
-      setProducts(result.products);
-    };
-    fetchProductsByFilter();
-  }, [debouncedSearchTerm, selectedCategory, priceRange]);
+  const fetchProductsByFilter = async () => {
+    const result = await fetch({
+      q: debouncedSearchTerm ?? undefined,
+      status,
+      categories: selectedCategory ? [selectedCategory] : ['All'],
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      pageNumber: 1,
+      pageSize: 20,
+    });
+    setProducts(result.products);
+    setIsDrawerOpen(false);
+  };
 
   const clearFilter = () => {
     setSearchTerm('');
     setDebouncedSearchTerm('');
     setSelectedCategory('All');
-    setPriceRange([0.01, 100]);
+    setPriceRange([3, 100]);
   };
 
   const FilterContent = () => (
@@ -127,12 +125,21 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       </div>
 
       <PriceFilter
-        priceRange={priceRange}
-        setPriceRange={setPriceRange}
         onFilterChange={(filter) => {
           setIsFree(filter.isFree);
+          setPriceRange([filter.minPrice, 100]);
         }}
       />
+      <Button
+        onClick={() => {
+          fetchProductsByFilter();
+        }}
+        disabled={isLoading}
+        className="w-full"
+      >
+        {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
+        Apply filters
+      </Button>
     </div>
   );
 
@@ -185,8 +192,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/${
-                listingType === 'sell' ? 'products' : listingType === 'test' && 'app/test/products'
+              href={`/app${
+                listingType === 'sell' ? '/products' : listingType === 'test' && '/test/products'
               }/${product.id}`}
             >
               <Card className="flex flex-col justify-between">
