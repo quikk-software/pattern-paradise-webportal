@@ -186,7 +186,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             <Link
               key={product.id}
               href={`/${
-                listingType === 'sell' ? 'products' : listingType === 'test' && '/app/test/products'
+                listingType === 'sell' ? 'products' : listingType === 'test' && 'app/test/products'
               }/${product.id}`}
             >
               <Card className="flex flex-col justify-between">
