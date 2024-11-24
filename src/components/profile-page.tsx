@@ -351,6 +351,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   })}
                   onKeyDown={handleKeyDown}
                 />
+                <p className="text-xs text-muted-foreground">
+                  ⚠️ Note: If you change your PayPal email address, you will need to{' '}
+                  <strong>confirm</strong> it again by clicking on the link in the{' '}
+                  <strong>email</strong> we send you. In the meantime, all your released products
+                  will be set to <strong>&apos;Hidden&apos;</strong> status and will no longer be
+                  displayed to Pattern Paradise users.
+                </p>
                 {user.paypalEmail &&
                 !user.isPayPalMailConfirmed &&
                 user.roles?.includes('Seller') ? (
