@@ -56,7 +56,7 @@ export function SellPageComponent() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        <Link href="/sell/submit" className="block">
+        <Link href="/app/sell/submit" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2"
@@ -65,7 +65,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Create a new pattern</span>
           </Button>
         </Link>
-        <Link href="/sell/orders" className="block">
+        <Link href="/app/sell/orders" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -74,7 +74,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Show my orders</span>
           </Button>
         </Link>
-        <Link href="/sell/testings" className="block">
+        <Link href="/app/sell/testings" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -139,7 +139,7 @@ export function SellPageComponent() {
       ) : (
         <p>
           No patterns available.
-          <Link href="/sell/submit" className="text-blue-500 underline">
+          <Link href="/app/sell/submit" className="text-blue-500 underline">
             Create a pattern here!
           </Link>
         </p>

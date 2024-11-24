@@ -17,6 +17,14 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface VerifyCodeRequest {
+  verificationCode: string;
+}
+
+export interface VerifyCodeResponse {
+  successMessage: string;
+}
+
 export interface RequestPasswordRequest {
   email: string;
 }
@@ -71,12 +79,14 @@ export interface GetUserResponse {
   description?: string;
   galleryImages: string[];
   isActive: boolean;
+  isMailConfirmed: boolean;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
   instagramRef?: string;
   tiktokRef?: string;
   paypalEmail?: string;
+  isPayPalMailConfirmed: boolean;
   paypalSubscriptionId?: string;
   /**
    * @format date-time
@@ -1039,6 +1049,58 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Confirms the users PayPal email by the given verification code and request body data.
+     *
+     * @tags User
+     * @name ConfirmPayPalMail
+     * @summary Confirms the PayPal mail of a user.
+     * @request PUT:/api/v1/users/verification-codes/confirm-paypal-mail
+     * @secure
+     */
+    confirmPayPalMail: (
+      data: {
+        /** @example "any" */
+        verificationCode?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<VerifyCodeResponse, any>({
+        path: `/api/v1/users/verification-codes/confirm-paypal-mail`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Confirms the users email by the given verification code and request body data.
+     *
+     * @tags User
+     * @name ConfirmMail
+     * @summary Confirms the mail of a user.
+     * @request PUT:/api/v1/users/verification-codes/confirm-mail
+     * @secure
+     */
+    confirmMail: (
+      data: {
+        /** @example "any" */
+        verificationCode?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<VerifyCodeResponse, any>({
+        path: `/api/v1/users/verification-codes/confirm-mail`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
         ...params,
       }),
 

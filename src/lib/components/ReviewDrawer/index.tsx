@@ -75,7 +75,7 @@ export default function ReviewDrawer({
       });
     } finally {
       setDrawerIsOpen(false);
-      router.push(`/test/chats?testingId=${testingId}`);
+      router.push(`/app/test/chats?testingId=${testingId}`);
     }
   };
 

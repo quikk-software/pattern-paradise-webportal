@@ -115,7 +115,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         <CardContent className="flex flex-col gap-4">
           <Button
             onClick={() => {
-              router.push('/auth/me/orders');
+              router.push('/app/auth/me/orders');
             }}
             className="w-full"
             variant={'outline'}

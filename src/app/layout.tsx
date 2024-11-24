@@ -3,7 +3,6 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
-import AuthGuard from '@/lib/auth/AuthGuard';
 import StoreProvider from '@/app/providers/StoreProvider';
 
 const geistSans = localFont({
@@ -77,9 +76,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="flex flex-col h-dvh">
           <div className="flex-1 overflow-auto">
-            <StoreProvider>
-              <AuthGuard>{children}</AuthGuard>
-            </StoreProvider>
+            <StoreProvider>{children}</StoreProvider>
           </div>
           <div className="flex-0">
             <BottomNavigation />

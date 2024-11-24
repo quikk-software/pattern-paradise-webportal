@@ -305,7 +305,7 @@ export function ProductFormComponent() {
               Your listing has been created successfully!
               <br />
               You can now{' '}
-              <Link href="/sell/testings" className="text-blue-500 underline">
+              <Link href="/app/sell/testings" className="text-blue-500 underline">
                 start a tester call
               </Link>
               .
@@ -315,7 +315,7 @@ export function ProductFormComponent() {
         />
       </form>
       <Button asChild className="flex items-center space-x-2" variant="outline">
-        <Link href="/sell">
+        <Link href="/app/sell">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Go back
         </Link>

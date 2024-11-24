@@ -286,7 +286,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         />
       </form>
       <Button asChild className="flex items-center space-x-2" variant="outline">
-        <Link href="/sell">
+        <Link href="/app/sell">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Go back
         </Link>

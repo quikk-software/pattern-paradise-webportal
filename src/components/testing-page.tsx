@@ -163,11 +163,11 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
           <p>
             You have no testings yet.{' '}
             {filter === 'customer' ? (
-              <Link href="/test" className="text-blue-500 underline">
+              <Link href="/app/test" className="text-blue-500 underline">
                 Explore open Tester Calls here
               </Link>
             ) : (
-              <Link href="/sell/submit" className="text-blue-500 underline">
+              <Link href="/app/sell/submit" className="text-blue-500 underline">
                 Create a pattern and start a Tester Call here!
               </Link>
             )}
@@ -203,7 +203,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                   <div className="flex flex-col gap-2 w-full">
                     {isOwner && testing.status === 'Created' ? (
                       <Link
-                        href={`/sell/testings/${testing.id}`}
+                        href={`/app/sell/testings/${testing.id}`}
                         style={{
                           width: '100%',
                         }}
@@ -215,7 +215,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                     ) : null}
                     {testing.status === 'InProgress' ? (
                       <Link
-                        href={`/test/chats?testingId=${testing.id}`}
+                        href={`/app/test/chats?testingId=${testing.id}`}
                         style={{
                           width: '100%',
                         }}

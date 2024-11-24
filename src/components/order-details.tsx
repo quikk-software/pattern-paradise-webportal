@@ -111,7 +111,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           <RequestStatus isSuccess={isSuccess} isError={isError} successMessage={''} />
         </div>
         <Button asChild className="flex items-center space-x-2" variant="outline">
-          <Link href="/auth/me/orders">
+          <Link href="/app/auth/me/orders">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Go back
           </Link>

@@ -7,9 +7,9 @@ import { usePathname, useRouter } from 'next/navigation';
 
 const menuItems = [
   { id: 'shop', label: 'Shop', icon: Store, href: '/' },
-  { id: 'sell', label: 'Sell', icon: Tag, href: '/sell' },
-  { id: 'test', label: 'Test', icon: Volleyball, href: '/test' },
-  { id: 'me', label: 'Me', icon: CircleUser, href: '/auth/me' },
+  { id: 'sell', label: 'Sell', icon: Tag, href: '/app/sell' },
+  { id: 'test', label: 'Test', icon: Volleyball, href: '/app/test' },
+  { id: 'me', label: 'Me', icon: CircleUser, href: '/app/auth/me' },
 ];
 
 export function BottomNavigation() {

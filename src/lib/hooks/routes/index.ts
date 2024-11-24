@@ -70,17 +70,22 @@ const pages: Page[] = [
   },
   {
     title: 'My profile',
-    pathname: '/auth/me',
+    pathname: '/app/auth/me',
+    description: '',
+  },
+  {
+    title: 'Confirmation',
+    pathname: '/app/auth/confirm',
     description: '',
   },
   {
     title: 'My orders',
-    pathname: '/auth/me/orders',
+    pathname: '/app/auth/me/orders',
     description: '',
   },
   {
     title: 'My order',
-    pathname: '/auth/me/orders/[orderId]',
+    pathname: '/app/auth/me/orders/[orderId]',
     description: '',
   },
   {
@@ -90,27 +95,27 @@ const pages: Page[] = [
   },
   {
     title: 'Sell patterns',
-    pathname: '/sell',
+    pathname: '/app/sell',
     description: '',
   },
   {
     title: 'Submit a pattern',
-    pathname: '/sell/submit',
+    pathname: '/app/sell/submit',
     description: '',
   },
   {
     title: 'Your orders',
-    pathname: '/sell/orders',
+    pathname: '/app/sell/orders',
     description: '',
   },
   {
     title: 'Your testings',
-    pathname: '/sell/testings',
+    pathname: '/app/sell/testings',
     description: '',
   },
   {
     title: 'Update your product',
-    pathname: '/sell/products/[productId]',
+    pathname: '/app/sell/products/[productId]',
     description: '',
   },
   {
@@ -120,12 +125,12 @@ const pages: Page[] = [
   },
   {
     title: 'Test patterns',
-    pathname: '/test',
+    pathname: '/app/test',
     description: '',
   },
   {
     title: 'My testings',
-    pathname: '/test/testings',
+    pathname: '/app/test/testings',
     description: '',
   },
   {

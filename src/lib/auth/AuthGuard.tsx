@@ -1,6 +1,6 @@
 'use client';
 
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import {
@@ -17,26 +17,8 @@ import useAuth from '@/lib/auth/useAuth';
 import pages from '@/lib/hooks/routes';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Cookie from 'js-cookie';
-
-const PUBLIC_URLS = [
-  '/',
-  '/pro',
-  '/about',
-  '/faq',
-  '/imprint',
-  '/privacy',
-  '/auth/login',
-  '/auth/reset-password',
-  '/auth/registration',
-  '/products',
-  '/test/products/[productId]',
-];
-
-const isPublicUrl = (url: string) => {
-  const isPublic = isPathnameInPages(url, PUBLIC_URLS);
-  logger.debug(`${isPublic}: ${url}`);
-  return isPublic;
-};
+import { buildQueryString } from '@/lib/utils';
+import useGetAllSearchParams from '@/lib/core/useGetAllSearchParams';
 
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
@@ -45,9 +27,9 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const pathname = usePathname();
   const router = useRouter();
   const { redirectUrl } = useRedirect();
+  const allSearchParams = useGetAllSearchParams();
   const { setUserDataInReduxStore, isLoggedIn } = useAuth();
 
-  const isAccessibleWithoutAccount = isPublicUrl(pathname);
   const pageMounted = hasPageBeenMounted();
 
   const { accessToken: accessTokenFromStore, refreshToken: refreshTokenFromStore } = useSelector(
@@ -71,7 +53,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   };
 
   const checkAuth = (accessToken: string | null, refreshToken: string | null) => {
-    if (isLoggedIn || isAccessibleWithoutAccount) {
+    if (isLoggedIn) {
       return;
     }
 
@@ -115,12 +97,14 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   }, [accessTokenFromStore, refreshTokenFromStore]);
 
   useEffect(() => {
-    if (isLoggedIn === false && pageMounted && !isPublicUrl(pathname)) {
-      router.push(`/auth/login?redirect=${pathname}`);
+    if (isLoggedIn === false && pageMounted) {
+      const query = allSearchParams ? buildQueryString(allSearchParams) : null;
+      const encodedRedirect = query ? encodeURIComponent(`${pathname}?${query}`) : pathname;
+      router.push(`/auth/login?redirect=${encodedRedirect}`);
     }
-  }, [isLoggedIn, pageMounted, pathname]);
+  }, [isLoggedIn, pageMounted, pathname, allSearchParams]);
 
-  if (isLoggedIn || isAccessibleWithoutAccount) {
+  if (isLoggedIn) {
     return <>{children}</>;
   }
 

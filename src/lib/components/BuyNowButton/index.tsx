@@ -56,7 +56,7 @@ export function BuyNowButton({
     if (!captureOrderIsSuccess || !orderData?.orderId) {
       return;
     }
-    router.push(`/auth/me/orders/${orderData.orderId}`);
+    router.push(`/app/auth/me/orders/${orderData.orderId}`);
   }, [captureOrderIsSuccess, orderData]);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export function BuyNowButton({
       return;
     }
     // redirect to first order detail page related to the user matching this product
-    router.push(`/auth/me/orders/${orders[0].id}`);
+    router.push(`/app/auth/me/orders/${orders[0].id}`);
   }, [listOrdersByProductIdIsSuccess, orders]);
 
   const isOwner = creatorId === userId;
@@ -90,7 +90,7 @@ export function BuyNowButton({
             {productStatus === 'Created' ? (
               <span>
                 {' '}
-                <Link href={`/test/products/${productId}`} className="text-blue-500 underline">
+                <Link href={`/app/test/products/${productId}`} className="text-blue-500 underline">
                   Apply as a Tester here!
                 </Link>
               </span>

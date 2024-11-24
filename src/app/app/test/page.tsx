@@ -12,10 +12,10 @@ export default function TestPage() {
           <CardTitle className="text-2xl font-bold text-center">Quick Links</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <Link href="/test/chats">
+          <Link href="/app/test/chats">
             <Button className="w-full">My chats</Button>
           </Link>
-          <Link href="/test/testings">
+          <Link href="/app/test/testings">
             <Button className="w-full" variant="outline">
               My testings
             </Button>

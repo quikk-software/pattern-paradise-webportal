@@ -7,3 +7,5 @@ export * from './useAddGalleryImages';
 export * from './useDeleteGalleryImage';
 export * from './useRequestPassword';
 export * from './useResetPassword';
+export * from './useConfirmPayPalMail';
+export * from './useConfirmMail';
