@@ -143,7 +143,7 @@ export default function ReviewDrawer({
           </div>
           <div className="flex flex-col gap-4 w-full">
             <p className="text-sm">
-              Note: Reviews will be publicly available to all users of Pattern Paradise. This
+              ⚠️ Note: Reviews will be publicly available to all users of Pattern Paradise. This
               includes your review images, message and like/dislike choice.
             </p>
             <Button

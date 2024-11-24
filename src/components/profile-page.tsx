@@ -324,8 +324,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required to
-                add a valid PayPal email which is eligible of receiving money.{' '}
+                ⚠️ Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required
+                to add a valid PayPal email which is eligible of receiving money.{' '}
                 <a href="https://paypal.com" target="_blank" className="text-blue-500">
                   Create a PayPal account for free here!
                 </a>
