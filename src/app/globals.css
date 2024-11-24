@@ -99,3 +99,17 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+@layer components {
+  .range-slider-track {
+    @apply bg-muted;
+  }
+
+  .range-slider-range {
+    @apply bg-primary;
+  }
+
+  .range-slider-thumb {
+    @apply focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+}

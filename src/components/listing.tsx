@@ -19,6 +19,7 @@ import { useListProducts } from '@/lib/api';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import Link from 'next/link';
 import { combineArraysById } from '@/lib/core/utils';
+import PriceFilter from '@/components/price-filter';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -32,7 +33,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [priceRange, setPriceRange] = useState([0.01, 100]);
+  const [priceRange, setPriceRange] = useState([3, 100]);
+  const [isFree, setIsFree] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
 
@@ -68,7 +70,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         q: debouncedSearchTerm ?? undefined,
         status,
         categories: selectedCategory ? [selectedCategory] : ['All'],
-        minPrice: priceRange[0],
+        minPrice: isFree ? 0 : priceRange[0],
         maxPrice: priceRange[1],
         pageNumber: 1,
         pageSize: 20,
@@ -124,21 +126,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         ))}
       </div>
 
-      <div>
-        <h2 className="text-lg font-semibold mb-2">Price Range</h2>
-        <Slider
-          min={0.01}
-          max={100}
-          step={0.01}
-          value={priceRange}
-          onValueChange={setPriceRange}
-          className="mb-2"
-        />
-        <div className="flex justify-between text-sm text-muted-foreground">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
-        </div>
-      </div>
+      <PriceFilter
+        priceRange={priceRange}
+        setPriceRange={setPriceRange}
+        onFilterChange={(filter) => {
+          setIsFree(filter.isFree);
+        }}
+      />
     </div>
   );
 
