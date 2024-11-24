@@ -111,7 +111,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       isFree,
       imageUrls: [
         ...new Set([
-          ...images.filter((image) => image.startsWith('http://res.cloudinary.com/')),
+          ...images.filter((image) => image.startsWith('https://res.cloudinary.com/')),
           ...urls.map((fu) => fu.url),
         ]),
       ],

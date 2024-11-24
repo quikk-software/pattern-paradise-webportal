@@ -4,11 +4,7 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
 
-    console.log({ params: request.nextUrl });
-
     const allParams = Array.from(searchParams.entries());
-
-    console.log('All params:', allParams);
 
     return new Response(JSON.stringify({ allParams }), {
       status: 200,
