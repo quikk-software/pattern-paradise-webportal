@@ -60,6 +60,7 @@ export default function ProductCard({
     isLoading: releaseProductIsLoading,
     isSuccess: releaseProductIsSuccess,
     isError: releaseProductIsError,
+    errorDetail: releaseProductErrorDetails,
   } = useReleaseProduct();
 
   const isCreator = userId === creatorId;
@@ -153,7 +154,8 @@ export default function ProductCard({
                     <Link href="/app/sell/testings" className="text-blue-500 underline">
                       testing
                     </Link>
-                    , your pattern will be ranked the lowest in search results on Pattern Paradise.
+                    , your pattern will be <strong>ranked the lowest</strong> in search results on
+                    Pattern Paradise.
                   </DrawerTitle>
                 </DrawerHeader>
                 <Button
@@ -176,6 +178,7 @@ export default function ProductCard({
                 <RequestStatus
                   isSuccess={releaseProductIsSuccess}
                   isError={releaseProductIsError}
+                  errorMessage={releaseProductErrorDetails}
                 />
               </div>
             </DrawerContent>

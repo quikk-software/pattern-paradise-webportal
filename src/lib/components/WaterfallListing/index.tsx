@@ -26,17 +26,22 @@ export default function WaterfallListing({
   });
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-2">
       {productGroups.map((group, groupIndex) => (
-        <div className="flex flex-col gap-4" key={groupIndex}>
+        <div
+          className="flex flex-col gap-2"
+          key={groupIndex}
+          style={{ flexBasis: `calc(100% / ${columns})`, flexGrow: 0 }}
+        >
           {group.map((product) => (
             <Link
               key={product.id}
               href={`/app${
                 listingType === 'sell' ? '/products' : listingType === 'test' && '/test/products'
               }/${product.id}`}
+              className="w-full"
             >
-              <Card className="flex flex-col justify-between">
+              <Card className="flex flex-col justify-between w-full">
                 <CardContent className="pt-4 flex flex-col gap-4">
                   <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
                   <div className="flex flex-col gap-1">

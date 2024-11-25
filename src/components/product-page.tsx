@@ -1,24 +1,42 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import { getProduct } from '@/lib/api/static/product/getProduct';
 import NotFoundPage from '@/app/not-found';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import DownloadPatternZipButton from '../lib/components/DownloadPatternZipButton';
+import { useGetProduct } from '@/lib/api';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface ProductPageComponentProps {
   productId: string;
 }
 
-export async function ProductPageComponent({ productId }: ProductPageComponentProps) {
-  const product = await getProduct(productId);
+export default function ProductPageComponent({ productId }: ProductPageComponentProps) {
+  const { fetch, data: product, isLoading, isError } = useGetProduct();
 
-  if (!product) {
+  useEffect(() => {
+    if (!productId) {
+      return;
+    }
+    fetch(productId);
+  }, [productId]);
+
+  if (isError) {
     return <NotFoundPage />;
+  }
+
+  if (isLoading || !product) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <LoadingSpinnerComponent />
+      </div>
+    );
   }
 
   return (
