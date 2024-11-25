@@ -31,7 +31,7 @@ export function PatternParadiseProComponent() {
     'Upload multiple patterns with language options per listing',
     'Featured patterns marked and displayed at the top',
     'Featured tester calls marked and displayed at the top',
-    'Appear at the top of tester applicant&apos;s lists',
+    "Appear at the top of tester applicant's lists",
     'Share documents and videos in tester call chats',
     'Share your profile with a personalized Pattern Paradise link',
   ];
