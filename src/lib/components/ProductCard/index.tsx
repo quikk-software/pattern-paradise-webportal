@@ -154,7 +154,8 @@ export default function ProductCard({
                     <Link href="/app/sell/testings" className="text-blue-500 underline">
                       testing
                     </Link>
-                    , your pattern will be ranked the lowest in search results on Pattern Paradise.
+                    , your pattern will be <strong>ranked the lowest</strong> in search results on
+                    Pattern Paradise.
                   </DrawerTitle>
                 </DrawerHeader>
                 <Button
