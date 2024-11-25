@@ -50,7 +50,7 @@ export default function ProductImageSlider({ imageUrls, title }: ProductImageSli
           <ChevronRight className="w-4 h-4 text-primary" />
         </div>
       </div>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div>
         {imageUrls.map((_, index) => (
           <div
             key={index}

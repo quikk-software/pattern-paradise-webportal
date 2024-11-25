@@ -19,7 +19,7 @@ export default function SellUserPage({ params }: { params: { userId: string } })
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
+      <div className="flex justify-center items-center h-full">
         <LoadingSpinnerComponent />
       </div>
     );

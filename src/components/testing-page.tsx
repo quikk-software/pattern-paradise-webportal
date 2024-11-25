@@ -68,6 +68,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     data: testings,
     hasNextPage,
     reset,
+    isLoading: fetchTestingsIsLoading,
   } = useListTestingsByUserId({ filter });
   const { mutate: mutateTesting, isLoading: mutateTestingIsLoading } = useUpdateTesting();
   const { fetch: fetchAbortTesting, isLoading: fetchAbortTestingIsLoading } = useAbortTesting();
@@ -141,10 +142,6 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     setSelectedTheme(theme === selectedTheme ? null : theme);
   };
 
-  const handleDurationInWeeksSelect = () => {
-    setSelectedDurationInWeeks(undefined);
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent, color: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -159,6 +156,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
           <h1 className="text-3xl font-bold">Your Testings</h1>
         </header>
 
+        {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
         {testings.length === 0 ? (
           <p>
             You have no testings yet.{' '}
@@ -174,85 +172,87 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
           </p>
         ) : null}
 
-        <div className="grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {testings.map((testing) => {
-            const isOwner = userId === testing.creatorId;
-            return (
-              <Card key={testing.product.id}>
-                <CardHeader className="flex flex-row items-center justify-end space-y-0 pb-2">
-                  <CardDescription
-                    className={`text-sm font-semibold ${getStatusColor(testing.status)}`}
-                  >
-                    {testing.status}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between items-center">
-                    <ProductCard
-                      id={testing.product.id}
-                      name={testing.product.title}
-                      price={testing.product.price}
-                      isFree={testing.product.isFree}
-                      image={testing.product.imageUrls?.[0]}
-                      isTesterCall={true}
-                      creatorId={testing.creatorId}
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <div className="flex flex-col gap-2 w-full">
-                    {isOwner && testing.status === 'Created' ? (
-                      <Link
-                        href={`/app/sell/testings/${testing.id}`}
-                        style={{
-                          width: '100%',
-                        }}
-                      >
-                        <Button variant="default" className="w-full">
-                          View tester applications
+        {testings.length > 0 ? (
+          <div className="grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {testings.map((testing) => {
+              const isOwner = userId === testing.creatorId;
+              return (
+                <Card key={testing.product.id}>
+                  <CardHeader className="flex flex-row items-center justify-end space-y-0 pb-2">
+                    <CardDescription
+                      className={`text-sm font-semibold ${getStatusColor(testing.status)}`}
+                    >
+                      {testing.status}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-between items-center">
+                      <ProductCard
+                        id={testing.product.id}
+                        name={testing.product.title}
+                        price={testing.product.price}
+                        isFree={testing.product.isFree}
+                        image={testing.product.imageUrls?.[0]}
+                        isTesterCall={true}
+                        creatorId={testing.creatorId}
+                      />
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <div className="flex flex-col gap-2 w-full">
+                      {isOwner && testing.status === 'Created' ? (
+                        <Link
+                          href={`/app/sell/testings/${testing.id}`}
+                          style={{
+                            width: '100%',
+                          }}
+                        >
+                          <Button variant="default" className="w-full">
+                            View tester applications
+                          </Button>
+                        </Link>
+                      ) : null}
+                      {testing.status === 'InProgress' ? (
+                        <Link
+                          href={`/app/test/chats?testingId=${testing.id}`}
+                          style={{
+                            width: '100%',
+                          }}
+                        >
+                          <Button variant="default" className="w-full">
+                            View chat with testers
+                          </Button>
+                        </Link>
+                      ) : null}
+                      {isOwner && testing.status === 'Created' ? (
+                        <Button
+                          onClick={() => {
+                            handleTesterCallDrawerClick(testing);
+                          }}
+                          variant="outline"
+                        >
+                          Update testing
                         </Button>
-                      </Link>
-                    ) : null}
-                    {testing.status === 'InProgress' ? (
-                      <Link
-                        href={`/app/test/chats?testingId=${testing.id}`}
-                        style={{
-                          width: '100%',
-                        }}
-                      >
-                        <Button variant="default" className="w-full">
-                          View chat with testers
+                      ) : null}
+                      {isOwner &&
+                      (testing.status === 'Created' || testing.status === 'InProgress') ? (
+                        <Button
+                          variant="destructive"
+                          className="w-full"
+                          onClick={() => {
+                            handleAbortTestingDrawerClick(testing);
+                          }}
+                        >
+                          Abort tester call
                         </Button>
-                      </Link>
-                    ) : null}
-                    {isOwner && testing.status === 'Created' ? (
-                      <Button
-                        onClick={() => {
-                          handleTesterCallDrawerClick(testing);
-                        }}
-                        variant="outline"
-                      >
-                        Update testing
-                      </Button>
-                    ) : null}
-                    {isOwner &&
-                    (testing.status === 'Created' || testing.status === 'InProgress') ? (
-                      <Button
-                        variant="destructive"
-                        className="w-full"
-                        onClick={() => {
-                          handleAbortTestingDrawerClick(testing);
-                        }}
-                      >
-                        Abort tester call
-                      </Button>
-                    ) : null}
-                  </div>
-                </CardFooter>
-              </Card>
-            );
-          })}
-        </div>
+                      ) : null}
+                    </div>
+                  </CardFooter>
+                </Card>
+              );
+            })}
+          </div>
+        ) : null}
         {hasNextPage ? (
           <Button
             variant="outline"
@@ -308,7 +308,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
               </span>
               <Select value={selectedExperienceLevel} onValueChange={setSelectedExperienceLevel}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a duration" />
+                  <SelectValue placeholder="Select an experience level" />
                 </SelectTrigger>
                 <SelectContent>
                   {['Beginner', 'Intermediate', 'Professional'].map((experience) => (

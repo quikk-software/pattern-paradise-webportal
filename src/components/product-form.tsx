@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, ChangeEvent } from 'react';
-import { ArrowLeft, X } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,6 +24,9 @@ import PdfSelector from '@/components/pdf-selector';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { CATEGORIES } from '@/lib/constants';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 export interface PDFFile {
   file: File;
@@ -32,12 +35,22 @@ export interface PDFFile {
 
 export function ProductFormComponent() {
   const [patterns, setPatterns] = useState<PDFFile[]>([]);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<{ url: string; name: string }[]>([]);
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<
+    | {
+        status: string;
+        type: string;
+      }
+    | undefined
+  >(undefined);
+  const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
+    [],
+  );
 
   const { roles } = useSelector((s: Store) => s.auth);
 
@@ -56,7 +69,10 @@ export function ProductFormComponent() {
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
+      const newImages = Array.from(files).map((file) => ({
+        url: URL.createObjectURL(file),
+        name: file.name,
+      }));
       setImages((prev) => [...prev, ...newImages].slice(0, 6));
     }
   };
@@ -85,6 +101,7 @@ export function ProductFormComponent() {
       return;
     }
     setImageError(undefined);
+    setUploadStatus(undefined);
     if (patterns.length === 0) {
       setPatternError('Please add a PDF with your pattern.');
       return;
@@ -92,7 +109,7 @@ export function ProductFormComponent() {
     setPatternError(undefined);
 
     const urls = await handleImageUpload(
-      images,
+      images.map((image) => image.url),
       () => {
         if (hasErrors) {
           setImageError('Please fill out the form before uploading');
@@ -102,14 +119,31 @@ export function ProductFormComponent() {
       },
       () => {
         setImageUploadIsLoading(false);
+        setUploadStatus({
+          type: 'info',
+          status: 'Image upload successful',
+        });
       },
       () => {
         setImageError('Error uploading images. Please try again.');
+      },
+      (fileIndex, progress) => {
+        const currentProgress = {
+          fileIndex,
+          progress,
+        };
+        const uploadProgressCopy = [...uploadProgress];
+        uploadProgressCopy.push(currentProgress);
+        setUploadProgress(uploadProgressCopy);
       },
     );
 
     if (!urls) {
       setImageError("Images couldn't be uploaded. Please try again later.");
+      setUploadStatus({
+        type: 'error',
+        status: 'Image upload failed',
+      });
       return;
     }
 
@@ -127,6 +161,11 @@ export function ProductFormComponent() {
       imageUrls: urls.map((fu) => fu.url),
       category,
       patternPdfsBase64,
+    });
+
+    setUploadStatus({
+      type: 'success',
+      status: 'Upload successful',
     });
   };
 
@@ -249,7 +288,7 @@ export function ProductFormComponent() {
             {images.map((img, index) => (
               <div key={index} className="relative">
                 <img
-                  src={img}
+                  src={img.url}
                   alt={`Product ${index + 1}`}
                   className="w-full h-32 object-cover rounded-md"
                 />
@@ -294,6 +333,58 @@ export function ProductFormComponent() {
           ) : null}
           Submit pattern
         </Button>
+
+        {uploadStatus ? (
+          <Badge
+            variant="secondary"
+            className={`text-lg bg-${
+              uploadStatus.type === 'success'
+                ? 'green'
+                : uploadStatus.type === 'error'
+                ? 'red'
+                : 'blue'
+            }-400 text-white`}
+          >
+            {uploadStatus.status}
+          </Badge>
+        ) : null}
+
+        {!uploadStatus &&
+          uploadProgress.map((up) => (
+            <div key={up.fileIndex} className="p-1">
+              <Card className="w-full mb-2">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <FileIcon className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-sm font-medium truncate max-w-[200px]">
+                        {images[up.fileIndex]?.name}
+                      </span>
+                    </div>
+                    <span className="text-xs font-semibold text-muted-foreground">
+                      {up.progress === 100 ? (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      ) : (
+                        `${Math.round(up.progress)}%`
+                      )}
+                    </span>
+                  </div>
+                  <Progress
+                    value={up.progress}
+                    className="h-2 transition-all duration-300 ease-in-out"
+                    style={{
+                      background: `linear-gradient(90deg, 
+                                var(--primary) 0%, 
+                                var(--primary) ${up.progress}%, 
+                                var(--muted) ${up.progress}%, 
+                                var(--muted) 100%)`,
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+
         {!!hasErrors ? (
           <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
         ) : null}
