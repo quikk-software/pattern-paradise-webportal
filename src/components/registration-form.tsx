@@ -185,8 +185,8 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
               {!!rolesError ? <p className="text-sm text-red-500 mb-2">{rolesError}</p> : null}
             </div>
             <p className="text-xs text-muted-foreground">
-              Note: Users with the role &apos;Seller&apos; are required to add a valid PayPal email
-              which is eligible of receiving money.{' '}
+              ⚠️ Note: Users with the role &apos;Seller&apos; are required to add a valid PayPal
+              email which is eligible of receiving money.{' '}
               <a href="https://paypal.com" target="_blank" className="text-blue-500">
                 Create a PayPal account for free here!
               </a>

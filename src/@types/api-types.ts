@@ -17,6 +17,22 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface VerifyCodeRequest {
+  verificationCode: string;
+}
+
+export interface VerifyCodeResponse {
+  successMessage: string;
+}
+
+export interface ResendCodeRequest {
+  mailType: string;
+}
+
+export interface ResendCodeResponse {
+  successMessage: string;
+}
+
 export interface RequestPasswordRequest {
   email: string;
 }
@@ -71,12 +87,14 @@ export interface GetUserResponse {
   description?: string;
   galleryImages: string[];
   isActive: boolean;
+  isMailConfirmed: boolean;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
   instagramRef?: string;
   tiktokRef?: string;
   paypalEmail?: string;
+  isPayPalMailConfirmed: boolean;
   paypalSubscriptionId?: string;
   /**
    * @format date-time
@@ -878,24 +896,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
-     *
-     * @tags User
-     * @name GetUserById
-     * @summary Gets an user by ID or username.
-     * @request GET:/api/v1/users/{userId}
-     * @secure
-     */
-    getUserById: (userId: string, params: RequestParams = {}) =>
-      this.request<GetUserAccountResponse, NotFoundResponse>({
-        path: `/api/v1/users/${userId}`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
      * @description Updates the user password by the given request body data and user ID.
      *
      * @tags User
@@ -973,6 +973,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
+     *
+     * @tags User
+     * @name GetUserById
+     * @summary Gets an user by ID or username.
+     * @request GET:/api/v1/users/account/{userId}
+     * @secure
+     */
+    getUserById: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUserAccountResponse, NotFoundResponse>({
+        path: `/api/v1/users/account/${userId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
      * @description The user will be queried by a given ID or username. If the user cannot be found or the user ID is not related to the authenticated user, an exception will be thrown.
      *
      * @tags User
@@ -1035,6 +1053,83 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/passwords/reset-password`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Confirms the users PayPal email by the given verification code and request body data.
+     *
+     * @tags User
+     * @name ConfirmPayPalMail
+     * @summary Confirms the PayPal mail of a user.
+     * @request PUT:/api/v1/users/verification-codes/confirm-paypal-mail
+     * @secure
+     */
+    confirmPayPalMail: (
+      data: {
+        /** @example "any" */
+        verificationCode?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<VerifyCodeResponse, any>({
+        path: `/api/v1/users/verification-codes/confirm-paypal-mail`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Confirms the users email by the given verification code and request body data.
+     *
+     * @tags User
+     * @name ConfirmMail
+     * @summary Confirms the mail of a user.
+     * @request PUT:/api/v1/users/verification-codes/confirm-mail
+     * @secure
+     */
+    confirmMail: (
+      data: {
+        /** @example "any" */
+        verificationCode?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<VerifyCodeResponse, any>({
+        path: `/api/v1/users/verification-codes/confirm-mail`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Resends the users code by the given request body data.
+     *
+     * @tags User
+     * @name ResendCode
+     * @summary Resends the code of a given mail type and a user.
+     * @request PUT:/api/v1/users/verification-codes/resend-code
+     * @secure
+     */
+    resendCode: (
+      data: {
+        /** @example "any" */
+        mailType?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/verification-codes/resend-code`,
         method: 'PUT',
         body: data,
         secure: true,

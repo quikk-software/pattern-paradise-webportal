@@ -108,11 +108,11 @@ export function PatternParadiseProComponent() {
           {isPro ? (
             <span>
               You already have a Pattern Paradise Pro subscription. Start using it by{' '}
-              <Link href="/sell/submit" className="text-blue-500 underline">
+              <Link href="/app/sell/submit" className="text-blue-500 underline">
                 creating patterns
               </Link>{' '}
               or{' '}
-              <Link href="/test" className="text-blue-500 underline">
+              <Link href="/app/test" className="text-blue-500 underline">
                 apply for tester calls
               </Link>
               !
@@ -174,11 +174,11 @@ export function PatternParadiseProComponent() {
           {isPro ? (
             <span>
               You already have a Pattern Paradise Pro subscription. Start using it by{' '}
-              <Link href="/sell/submit" className="text-blue-500 underline">
+              <Link href="/app/sell/submit" className="text-blue-500 underline">
                 creating patterns
               </Link>{' '}
               or{' '}
-              <Link href="/test" className="text-blue-500 underline">
+              <Link href="/app/test" className="text-blue-500 underline">
                 apply for tester calls
               </Link>
               !

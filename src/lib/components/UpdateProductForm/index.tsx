@@ -111,7 +111,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       isFree,
       imageUrls: [
         ...new Set([
-          ...images.filter((image) => image.startsWith('http://res.cloudinary.com/')),
+          ...images.filter((image) => image.startsWith('https://res.cloudinary.com/')),
           ...urls.map((fu) => fu.url),
         ]),
       ],
@@ -286,7 +286,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         />
       </form>
       <Button asChild className="flex items-center space-x-2" variant="outline">
-        <Link href="/sell">
+        <Link href="/app/sell">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Go back
         </Link>

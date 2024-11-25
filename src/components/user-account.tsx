@@ -122,7 +122,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
                   <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">${product.price.toFixed(2)}</span>
-                    <Link href={`/products/${product.id}`}>
+                    <Link href={`/app/products/${product.id}`}>
                       <Button>Show details</Button>
                     </Link>
                   </div>

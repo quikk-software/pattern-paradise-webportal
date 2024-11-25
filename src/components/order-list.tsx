@@ -75,7 +75,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
               Start shopping patterns!
             </Link>
           ) : (
-            <Link href="/sell/submit" className="text-blue-500 underline">
+            <Link href="/app/sell/submit" className="text-blue-500 underline">
               Create a pattern here!
             </Link>
           )}
@@ -103,7 +103,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
                 variant="outline"
                 className="w-full"
                 onClick={() => {
-                  router.push(`/auth/me/orders/${order.id}`);
+                  router.push(`/app/auth/me/orders/${order.id}`);
                 }}
               >
                 View Details

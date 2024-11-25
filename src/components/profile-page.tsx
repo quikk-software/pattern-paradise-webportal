@@ -21,6 +21,7 @@ import InstagramIcon from '@/lib/icons/InstagramIcon';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { Textarea } from '@/components/ui/textarea';
 import ProInfoBox from '@/lib/components/ProInfoBox';
+import ResendCodeInfoBox from '@/lib/components/ResendCodeInfoBox';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -115,7 +116,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         <CardContent className="flex flex-col gap-4">
           <Button
             onClick={() => {
-              router.push('/auth/me/orders');
+              router.push('/app/auth/me/orders');
             }}
             className="w-full"
             variant={'outline'}
@@ -160,6 +161,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
             <div className="space-y-2">
               <ProInfoBox user={user} />
             </div>
+
+            {user.email && !user.isMailConfirmed ? (
+              <div className="space-y-2">
+                <ResendCodeInfoBox
+                  email={user.email}
+                  type={'email confirmation'}
+                  mailType={'UserConfirmEmail'}
+                />
+              </div>
+            ) : null}
 
             <div className="space-y-2">
               <Label htmlFor="description">Profile description</Label>
@@ -313,8 +324,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required to
-                add a valid PayPal email which is eligible of receiving money.{' '}
+                ⚠️ Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required
+                to add a valid PayPal email which is eligible of receiving money.{' '}
                 <a href="https://paypal.com" target="_blank" className="text-blue-500">
                   Create a PayPal account for free here!
                 </a>
@@ -340,6 +351,22 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   })}
                   onKeyDown={handleKeyDown}
                 />
+                <p className="text-xs text-muted-foreground">
+                  ⚠️ Note: If you change your PayPal email address, you will need to{' '}
+                  <strong>confirm</strong> it again by clicking on the link in the{' '}
+                  <strong>email</strong> we send you. In the meantime, all your released products
+                  will be set to <strong>&apos;Hidden&apos;</strong> status and will no longer be
+                  displayed to Pattern Paradise users.
+                </p>
+                {user.paypalEmail &&
+                !user.isPayPalMailConfirmed &&
+                user.roles?.includes('Seller') ? (
+                  <ResendCodeInfoBox
+                    email={user.paypalEmail}
+                    type={'PayPal email confirmation'}
+                    mailType={'UserConfirmPaypalEmail'}
+                  />
+                ) : null}
                 {errors.paypalEmail ? (
                   <p className="text-sm text-red-500 mb-2">
                     {errors.paypalEmail.message as string}

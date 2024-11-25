@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductImageSlider/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductImageSlider/index.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +20,7 @@
     <setting file="file://$PROJECT_DIR$/src/components/like-dislike-buttons.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/login-form.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/navbar.tsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/price-filter.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/product-page.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/registration-form.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/reset-password.tsx" root0="FORCE_HIGHLIGHTING" />
@@ -42,24 +37,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "staging",
-    "last_opened_file_path": "/Users/mac/Desktop/Repos/cbj/src/app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "npm.format.executor": "Run",
-    "npm.generate-types.executor": "Run",
-    "npm.lint.executor": "Run",
-    "prettierjs.PrettierConfiguration.Package": "/Users/mac/Desktop/Repos/cbj/node_modules/prettier",
-    "ts.external.directory.path": "/Users/mac/Desktop/Repos/cbj/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;staging&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mac/Desktop/Repos/cbj/src/app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;npm.format.executor&quot;: &quot;Run&quot;,
+    &quot;npm.generate-types.executor&quot;: &quot;Run&quot;,
+    &quot;npm.lint.executor&quot;: &quot;Run&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/mac/Desktop/Repos/cbj/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/mac/Desktop/Repos/cbj/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/app" />
@@ -68,11 +63,11 @@
       <recent name="$PROJECT_DIR$/src/lib/api/testing" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/app/app" />
+      <recent name="$PROJECT_DIR$/src/app/app/auth" />
       <recent name="$PROJECT_DIR$/public/icons/main" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/app" />
-      <recent name="$PROJECT_DIR$/src/app/test/chats/[testingId]" />
-      <recent name="$PROJECT_DIR$/src/app/test/products" />
     </key>
   </component>
   <component name="RunManager" selected="npm.generate-types">
@@ -138,7 +133,7 @@
       <workItem from="1731424191844" duration="34137000" />
       <workItem from="1731660298222" duration="17000" />
       <workItem from="1731667195528" duration="1726000" />
-      <workItem from="1731926633617" duration="96859000" />
+      <workItem from="1731926633617" duration="115877000" />
     </task>
     <servers />
   </component>

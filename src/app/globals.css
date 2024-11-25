@@ -99,3 +99,25 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+@layer components {
+  .range-slider-track {
+    @apply bg-muted;
+  }
+
+  .range-slider-range {
+    @apply bg-primary;
+  }
+
+  .range-slider-thumb {
+    @apply focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+}
+
+.slider {
+  touch-action: pan-y; /* Allow vertical scrolling but prevent horizontal issues */
+}
+
+[role="slider"] {
+  touch-action: none; /* Prevent scrolling when interacting with the slider */
+}

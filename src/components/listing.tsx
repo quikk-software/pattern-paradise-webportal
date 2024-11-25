@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
@@ -19,6 +18,11 @@ import { useListProducts } from '@/lib/api';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import Link from 'next/link';
 import { combineArraysById } from '@/lib/core/utils';
+import PriceFilter from '@/components/price-filter';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import WaterfallListing from '@/lib/components/WaterfallListing';
+import useScreenSize from '@/lib/core/useScreenSize';
+import ColumnListing from '@/lib/components/ColumnListing';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -32,11 +36,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [priceRange, setPriceRange] = useState([0.01, 100]);
+  const [priceRange, setPriceRange] = useState([3, 100]);
+  const [isFree, setIsFree] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
+  const screenSize = useScreenSize();
 
   const status =
     listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
@@ -68,7 +74,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         q: debouncedSearchTerm ?? undefined,
         status,
         categories: selectedCategory ? [selectedCategory] : ['All'],
-        minPrice: priceRange[0],
+        minPrice: isFree ? 0 : priceRange[0],
         maxPrice: priceRange[1],
         pageNumber: 1,
         pageSize: 20,
@@ -80,27 +86,25 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProducts();
   }, [loadMore]);
 
-  useEffect(() => {
-    const fetchProductsByFilter = async () => {
-      const result = await fetch({
-        q: debouncedSearchTerm ?? undefined,
-        status,
-        categories: selectedCategory ? [selectedCategory] : ['All'],
-        minPrice: priceRange[0],
-        maxPrice: priceRange[1],
-        pageNumber: 1,
-        pageSize: 20,
-      });
-      setProducts(result.products);
-    };
-    fetchProductsByFilter();
-  }, [debouncedSearchTerm, selectedCategory, priceRange]);
+  const fetchProductsByFilter = async () => {
+    const result = await fetch({
+      q: debouncedSearchTerm ?? undefined,
+      status,
+      categories: selectedCategory ? [selectedCategory] : ['All'],
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      pageNumber: 1,
+      pageSize: 20,
+    });
+    setProducts(result.products);
+    setIsDrawerOpen(false);
+  };
 
   const clearFilter = () => {
     setSearchTerm('');
     setDebouncedSearchTerm('');
     setSelectedCategory('All');
-    setPriceRange([0.01, 100]);
+    setPriceRange([3, 100]);
   };
 
   const FilterContent = () => (
@@ -124,21 +128,22 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         ))}
       </div>
 
-      <div>
-        <h2 className="text-lg font-semibold mb-2">Price Range</h2>
-        <Slider
-          min={0.01}
-          max={100}
-          step={0.01}
-          value={priceRange}
-          onValueChange={setPriceRange}
-          className="mb-2"
-        />
-        <div className="flex justify-between text-sm text-muted-foreground">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
-        </div>
-      </div>
+      <PriceFilter
+        onFilterChange={(filter) => {
+          setIsFree(filter.isFree);
+          setPriceRange([filter.minPrice, 100]);
+        }}
+      />
+      <Button
+        onClick={() => {
+          fetchProductsByFilter();
+        }}
+        disabled={isLoading}
+        className="w-full"
+      >
+        {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
+        Apply filters
+      </Button>
     </div>
   );
 
@@ -187,33 +192,16 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <Card key={product.id} className="flex flex-col justify-between">
-              <CardContent className="pt-4">
-                <div>
-                  <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-                </div>
-                <h3 className="font-semibold">{product.title}</h3>
-                <p className="text-sm text-muted-foreground">{product.category}</p>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                {product.isFree ? (
-                  <span className="font-bold">FOR FREE</span>
-                ) : (
-                  <span className="font-bold">${product.price.toFixed(2)}</span>
-                )}
-                <Link
-                  href={`/${
-                    listingType === 'sell' ? 'products' : listingType === 'test' && 'test/products'
-                  }/${product.id}`}
-                >
-                  <Button>View Details</Button>
-                </Link>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+        <WaterfallListing
+          products={products}
+          listingType={listingType}
+          columns={
+            screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' || screenSize === 'lg'
+              ? 2
+              : 4
+          }
+        />
+
         {hasNextPage ? (
           <Button
             variant={'outline'}

@@ -28,7 +28,7 @@ export const handleImageUpload = async (
           },
         },
       );
-      urls.push({ url: response.data.url, mimeType: file.type });
+      urls.push({ url: response.data.url.replace('http://', 'https://'), mimeType: file.type });
     } catch (error) {
       errorCallback();
       logger.error('Error uploading image:', error);

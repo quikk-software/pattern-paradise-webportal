@@ -136,7 +136,7 @@ export function TesterApplicantsPage({
       testerIds: applicants.map((user) => user.id),
     });
 
-    router.push(`/test/chats?testingId=${testingId}`);
+    router.push(`/app/test/chats?testingId=${testingId}`);
   };
 
   return (
