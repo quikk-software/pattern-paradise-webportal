@@ -56,11 +56,6 @@ export function PatternParadiseProComponent() {
       answer:
         'Your patterns will not be marked as featured anymore, you will also not be able to use the Pro features when creating your pattern listings. Patterns which you have created with Pattern Paradise Pro will still have their translated patterns available for buyers.',
     },
-    {
-      question: 'How do the automatic translations work?',
-      answer:
-        'Our advanced AI-powered translation system automatically translates your patterns and tester calls into multiple languages, helping you reach a global audience without extra effort.',
-    },
   ];
 
   const isPro = roles.includes('Pro');
