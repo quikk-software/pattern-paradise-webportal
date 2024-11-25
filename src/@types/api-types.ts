@@ -355,6 +355,7 @@ export interface ListTestingCommentsResponse {
 export interface GetTesterApplicationResponse {
   user: GetUserAccountResponse;
   testing: GetTestingResponse;
+  status: string;
   assignedBy: string;
   /**
    * @format date-time

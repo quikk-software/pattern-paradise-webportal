@@ -14,7 +14,11 @@ export default function TestingPage({ params }: { params: { testingId: string } 
   const { fetch: fetchTesting, data: testing } = useGetTesting();
 
   useEffect(() => {
-    fetch(testingId, direction, sortKey, filter);
+    fetch(testingId, {
+      direction,
+      sortKey,
+      filter,
+    });
   }, [testingId, direction, filter]);
 
   useEffect(() => {

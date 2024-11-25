@@ -23,3 +23,10 @@ export type ProductFilterObject = {
   pageNumber?: number;
   pageSize?: number;
 };
+
+export type TesterApplicationFilterObject = {
+  direction: 'asc' | 'desc';
+  sortKey: 'updatedAt' | 'assignedAt';
+  filter: string[];
+  status?: string[];
+};

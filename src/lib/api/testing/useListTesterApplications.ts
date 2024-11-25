@@ -6,6 +6,7 @@ import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { combineArraysById } from '@/lib/core/utils';
+import { TesterApplicationFilterObject } from '@/lib/constants';
 
 export const useListTesterApplications = ({
   pageNumber = 1,
@@ -23,12 +24,7 @@ export const useListTesterApplications = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async (
-    testingId: string,
-    direction: 'asc' | 'desc',
-    sortKey: 'updatedAt' | 'assignedAt',
-    filter: string[],
-  ) => {
+  const fetch = async (testingId: string, filter: TesterApplicationFilterObject) => {
     const response = await handleFn(
       async () =>
         await client.api.listTesterApplications(
@@ -36,9 +32,7 @@ export const useListTesterApplications = ({
           {
             pageNumber: pagination.pageNumber,
             pageSize: pagination.pageSize,
-            direction,
-            sortKey,
-            filter,
+            ...filter,
           },
           { ...(await getApi(accessToken, refreshToken, dispatch)) },
         ),
