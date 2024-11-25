@@ -17,7 +17,7 @@ export default function FAQPageComponent() {
         <div className="bg-white rounded-lg shadow-lg p-6">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 What is Pattern Paradise?
               </AccordionTrigger>
               <AccordionContent>
@@ -28,7 +28,7 @@ export default function FAQPageComponent() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 How does Pattern Paradise make money?
               </AccordionTrigger>
               <AccordionContent>
@@ -43,7 +43,7 @@ export default function FAQPageComponent() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 What is a pattern?
               </AccordionTrigger>
               <AccordionContent>
@@ -54,7 +54,7 @@ export default function FAQPageComponent() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 How are patterns delivered?
               </AccordionTrigger>
               <AccordionContent>
@@ -63,7 +63,7 @@ export default function FAQPageComponent() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-5">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 Can I sell my own patterns on Pattern Paradise?
               </AccordionTrigger>
               <AccordionContent>
@@ -73,7 +73,7 @@ export default function FAQPageComponent() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-6">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 What makes Pattern Paradise unique?
               </AccordionTrigger>
               <AccordionContent>
@@ -84,7 +84,7 @@ export default function FAQPageComponent() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-7">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 How can I collaborate on pattern testing?
               </AccordionTrigger>
               <AccordionContent>
@@ -110,7 +110,7 @@ export default function FAQPageComponent() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-8">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513]">
+              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 Is there a membership fee to join Pattern Paradise?
               </AccordionTrigger>
               <AccordionContent>

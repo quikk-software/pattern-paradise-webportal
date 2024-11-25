@@ -209,7 +209,7 @@ export function PatternParadiseProComponent() {
                 custom={index + 14}
               >
                 <AccordionItem value={`item-${index}`}>
-                  <AccordionTrigger className="text-black hover:text-gray-600">
+                  <AccordionTrigger className="text-black hover:text-gray-600 text-left">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
