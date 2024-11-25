@@ -26,10 +26,10 @@ export default function WaterfallListing({
   });
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-2">
       {productGroups.map((group, groupIndex) => (
         <div
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-2"
           key={groupIndex}
           style={{ flexBasis: `calc(100% / ${columns})`, flexGrow: 0 }}
         >
