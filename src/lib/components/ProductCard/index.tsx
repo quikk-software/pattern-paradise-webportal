@@ -60,7 +60,7 @@ export default function ProductCard({
     isLoading: releaseProductIsLoading,
     isSuccess: releaseProductIsSuccess,
     isError: releaseProductIsError,
-    errorDetails: releaseProductErrorDetails,
+    errorDetail: releaseProductErrorDetails,
   } = useReleaseProduct();
 
   const isCreator = userId === creatorId;
