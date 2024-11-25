@@ -60,6 +60,7 @@ export default function ProductCard({
     isLoading: releaseProductIsLoading,
     isSuccess: releaseProductIsSuccess,
     isError: releaseProductIsError,
+    errorDetails: releaseProductErrorDetails,
   } = useReleaseProduct();
 
   const isCreator = userId === creatorId;
@@ -176,6 +177,7 @@ export default function ProductCard({
                 <RequestStatus
                   isSuccess={releaseProductIsSuccess}
                   isError={releaseProductIsError}
+                  errorMessage={releaseProductErrorDetails}
                 />
               </div>
             </DrawerContent>
