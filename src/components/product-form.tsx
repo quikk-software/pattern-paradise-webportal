@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, ChangeEvent } from 'react';
-import { ArrowLeft, CheckCircle2, FileIcon, X } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, FileIcon, PartyPopper, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,6 +27,7 @@ import { CATEGORIES } from '@/lib/constants';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 export interface PDFFile {
   file: File;
@@ -41,6 +42,7 @@ export function ProductFormComponent() {
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
+  const [showResetDrawer, setShowResetDrawer] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<
     | {
         status: string;
@@ -61,6 +63,7 @@ export function ProductFormComponent() {
     handleSubmit,
     formState: { errors },
     getValues,
+    reset,
   } = useForm();
 
   const hasErrors =
@@ -173,6 +176,22 @@ export function ProductFormComponent() {
     if (e.key === 'Enter') {
       e.preventDefault();
     }
+  };
+
+  const handleResetFormClick = () => {
+    setImages([]);
+    setPatterns([]);
+    setCategory('Crocheting');
+    setImageError(undefined);
+    setPatternError(undefined);
+    setImageUploadIsLoading(false);
+    setIsFree(false);
+    setUploadStatus(undefined);
+    setUploadProgress([]);
+
+    setShowResetDrawer(false);
+
+    reset();
   };
 
   return (
@@ -327,12 +346,25 @@ export function ProductFormComponent() {
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={imageUploadIsLoading || isLoading}>
-          {imageUploadIsLoading || isLoading ? (
-            <LoadingSpinnerComponent size="sm" className="text-white" />
-          ) : null}
-          Submit pattern
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button
+            className="w-full"
+            variant="outline"
+            disabled={imageUploadIsLoading || isLoading}
+            onClick={() => {
+              setShowResetDrawer(true);
+            }}
+            type="button"
+          >
+            Reset form
+          </Button>
+          <Button type="submit" className="w-full" disabled={imageUploadIsLoading || isLoading}>
+            {imageUploadIsLoading || isLoading ? (
+              <LoadingSpinnerComponent size="sm" className="text-white" />
+            ) : null}
+            Upload pattern
+          </Button>
+        </div>
 
         {uploadStatus ? (
           <Badge
@@ -341,8 +373,8 @@ export function ProductFormComponent() {
               uploadStatus.type === 'success'
                 ? 'green'
                 : uploadStatus.type === 'error'
-                ? 'red'
-                : 'blue'
+                  ? 'red'
+                  : 'blue'
             }-400 text-white`}
           >
             {uploadStatus.status}
@@ -411,6 +443,29 @@ export function ProductFormComponent() {
           Go back
         </Link>
       </Button>
+      <Drawer open={showResetDrawer} onOpenChange={setShowResetDrawer}>
+        <DrawerContent className="p-4">
+          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+            <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
+              <DrawerTitle>Reset form</DrawerTitle>
+              <DrawerTitle className="text-sm font-medium">
+                Are you sure you want to reset the form?
+              </DrawerTitle>
+            </DrawerHeader>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowResetDrawer(false);
+              }}
+            >
+              Go to login
+            </Button>
+            <Button variant="destructive" onClick={handleResetFormClick}>
+              Reset form
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

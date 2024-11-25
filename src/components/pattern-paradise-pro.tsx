@@ -13,6 +13,7 @@ import SubscribeButton from '@/lib/components/SubscribeButton';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import Link from 'next/link';
+import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
 
 export function PatternParadiseProComponent() {
   const { roles } = useSelector((s: Store) => s.auth);
@@ -31,7 +32,7 @@ export function PatternParadiseProComponent() {
     'Upload multiple patterns with language options per listing',
     'Featured patterns marked and displayed at the top',
     'Featured tester calls marked and displayed at the top',
-    'Appear at the top of tester applicant&apos;s lists',
+    "Appear at the top of tester applicant's lists",
     'Share documents and videos in tester call chats',
     'Share your profile with a personalized Pattern Paradise link',
   ];
@@ -44,7 +45,7 @@ export function PatternParadiseProComponent() {
     },
     {
       question: 'How much does Pattern Paradise Pro cost?',
-      answer: 'The Pattern Paradise Pro subscription is available for just $9.99 per month.',
+      answer: `\`The Pattern Paradise Pro subscription is available for just ${PRO_MEMBERSHIP_PRICE} per month.\`,`,
     },
     {
       question: 'Can I cancel my subscription at any time?',
@@ -55,11 +56,6 @@ export function PatternParadiseProComponent() {
       question: 'What happens after I cancel my subscription?',
       answer:
         'Your patterns will not be marked as featured anymore, you will also not be able to use the Pro features when creating your pattern listings. Patterns which you have created with Pattern Paradise Pro will still have their translated patterns available for buyers.',
-    },
-    {
-      question: 'How do the automatic translations work?',
-      answer:
-        'Our advanced AI-powered translation system automatically translates your patterns and tester calls into multiple languages, helping you reach a global audience without extra effort.',
     },
   ];
 
@@ -103,7 +99,7 @@ export function PatternParadiseProComponent() {
             custom={1}
           >
             Take your pattern business to the next level with our Pro plan for just{' '}
-            <strong>$9.99</strong> per month
+            <strong>{PRO_MEMBERSHIP_PRICE}</strong> per month
           </motion.p>
           {isPro ? (
             <span>
@@ -169,7 +165,7 @@ export function PatternParadiseProComponent() {
             animate={controls}
             custom={10}
           >
-            $9.99/month
+            {PRO_MEMBERSHIP_PRICE}/month
           </motion.p>
           {isPro ? (
             <span>

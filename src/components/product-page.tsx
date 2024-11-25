@@ -12,12 +12,17 @@ import CreatedByRef from '@/lib/components/CreatedByRef';
 import DownloadPatternZipButton from '../lib/components/DownloadPatternZipButton';
 import { useGetProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+import { InfoBoxComponent } from '@/components/info-box';
 
 interface ProductPageComponentProps {
   productId: string;
 }
 
 export default function ProductPageComponent({ productId }: ProductPageComponentProps) {
+  const { userId } = useSelector((s: Store) => s.auth);
+
   const { fetch, data: product, isLoading, isError } = useGetProduct();
 
   useEffect(() => {
@@ -39,20 +44,25 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
     );
   }
 
+  const isOwner = product.creatorId === userId;
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
       <Card className="overflow-hidden">
         <CardContent className="p-6">
           <div className="grid gap-8 md:grid-cols-4">
             <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-            <div className="flex flex-col justify-between">
-              <div>
-                <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
-                <p className="text-gray-600 mb-6">{product.description}</p>
+            <div className="flex flex-col justify-between gap-6">
+              <div className="flex flex-col gap-4">
+                <h1 className="text-3xl font-bold">{product.title}</h1>
+                <p className="text-gray-600">{product.description}</p>
                 <CreatedByRef creatorId={product.creatorId} />
               </div>
-              <div>
-                {product.isFree ? (
+              <div className="flex flex-col gap-4">
+                {isOwner ? (
+                  <InfoBoxComponent message="You are the owner of this pattern" severity="info" />
+                ) : null}
+                {product.isFree || isOwner ? (
                   <DownloadPatternZipButton productId={product.id} />
                 ) : (
                   <BuyNowButton

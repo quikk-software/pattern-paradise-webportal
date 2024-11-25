@@ -4,16 +4,7 @@ import type { GetProductResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { combineArraysById } from '@/lib/core/utils';
-
-type FilterObject = {
-  q?: string;
-  status?: string;
-  categories?: string[];
-  minPrice?: number;
-  maxPrice?: number;
-  pageNumber?: number;
-  pageSize?: number;
-};
+import { ProductFilterObject } from '@/lib/constants';
 
 export const useListProducts = ({
   pageNumber = 1,
@@ -27,7 +18,7 @@ export const useListProducts = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async (filter?: FilterObject) => {
+  const fetch = async (filter?: ProductFilterObject) => {
     const response = await handleFn(
       async () =>
         await client.api.listProducts({

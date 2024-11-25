@@ -6,12 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShoppingCart, User, Volleyball } from 'lucide-react';
 import { GetUserAccountResponse } from '@/@types/api-types';
 import { useListProductsByUserId } from '@/lib/api';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { Badge } from '@/components/ui/badge';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
+import WaterfallListing from '@/lib/components/WaterfallListing';
+import useScreenSize from '@/lib/core/useScreenSize';
+import { useListTestings, useListTestingsByUserId } from '@/lib/api/testing';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -30,10 +30,17 @@ const roleOptions = [
 export default function UserAccountComponent({ user }: UserAccountComponentProps) {
   const { imageUrl, firstName, lastName, username, instagramRef, tiktokRef, roles } = user;
 
-  const { fetch, data: products, isLoading, hasNextPage } = useListProductsByUserId({});
+  const screenSize = useScreenSize();
+
+  const { fetch: fetchProducts, data: products } = useListProductsByUserId({
+    pageNumber: 1,
+    pageSize: 4,
+  });
 
   useEffect(() => {
-    fetch(user.id);
+    fetchProducts(user.id, {
+      status: 'Released',
+    });
   }, [user.id]);
 
   return (
@@ -110,36 +117,21 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
       {products.length > 0 ? (
         <>
           <h2 className="text-2xl font-bold mb-4">Associated Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <Card key={product.id}>
-                <CardContent className="p-4">
-                  <img
-                    src={product.imageUrls?.[0]}
-                    alt={product.title}
-                    className="w-full h-48 object-cover mb-4 rounded"
-                  />
-                  <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">${product.price.toFixed(2)}</span>
-                    <Link href={`/app/products/${product.id}`}>
-                      <Button>Show details</Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-            {hasNextPage ? (
-              <Button
-                variant={'outline'}
-                onClick={() => {
-                  fetch(user.id);
-                }}
-              >
-                {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-                Load more
-              </Button>
-            ) : null}
+          <div className="flex flex-col gap-6">
+            <WaterfallListing
+              products={products}
+              listingType={'sell'}
+              columns={
+                screenSize === 'xs' ||
+                screenSize === 'sm' ||
+                screenSize === 'md' ||
+                screenSize === 'lg'
+                  ? 2
+                  : products.length < 4
+                    ? products.length
+                    : 4
+              }
+            />
           </div>
         </>
       ) : null}

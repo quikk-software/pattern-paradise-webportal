@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useListPatternsByProductId } from '@/lib/api/pattern';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { Download } from 'lucide-react';
 
 interface DownloadPatternButtonProps {
   productId: string;
@@ -33,7 +34,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
     }, 1000);
   }, [file]);
 
-  const handleZipDownloadClick = async () => {
+  const handleDownloadClick = async () => {
     await fetch(productId);
   };
 
@@ -41,12 +42,16 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
     <div>
       <Button
         onClick={() => {
-          handleZipDownloadClick();
+          handleDownloadClick();
         }}
         disabled={isLoading || isSuccess}
       >
-        {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-        Download ZIP file
+        {isLoading ? (
+          <LoadingSpinnerComponent size="sm" className="text-white w-full" />
+        ) : (
+          <Download />
+        )}
+        Download pattern
       </Button>
       <RequestStatus isSuccess={isSuccess} isError={isError} />
     </div>
