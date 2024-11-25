@@ -13,7 +13,7 @@ export default async function Home() {
     <div>
       <NavbarComponent background="primary" />
       <AnimatedLanding />
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      <section className="container mx-auto py-12 md:py-24 lg:py-32">
         <ListingComponent listingType={'sell'} defaultProducts={products} />
       </section>
     </div>

@@ -20,6 +20,9 @@ import Link from 'next/link';
 import { combineArraysById } from '@/lib/core/utils';
 import PriceFilter from '@/components/price-filter';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import WaterfallListing from '@/lib/components/WaterfallListing';
+import useScreenSize from '@/lib/core/useScreenSize';
+import ColumnListing from '@/lib/components/ColumnListing';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -39,6 +42,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [loadMore, setLoadMore] = useState(false);
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
+  const screenSize = useScreenSize();
 
   const status =
     listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
@@ -188,40 +192,16 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-          {products.map((product) => (
-            <Link
-              key={product.id}
-              href={`/app${
-                listingType === 'sell' ? '/products' : listingType === 'test' && '/test/products'
-              }/${product.id}`}
-            >
-              <Card className="flex flex-col justify-between">
-                <CardContent className="pt-4 flex flex-col gap-4">
-                  <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-                  <div className="flex flex-col gap-1">
-                    <h3 className="font-semibold md:text-lg lg:text-xl">{product.title}</h3>
-                    <p className="text-sm text-muted-foreground md:text-base lg:text-lg">
-                      {product.category}
-                    </p>
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                  {product.isFree ? (
-                    <span className="font-bold text-sm md:text-base lg:text-lg">FOR FREE</span>
-                  ) : (
-                    <span className="font-bold text-sm md:text-base lg:text-lg">
-                      ${product.price.toFixed(2)}
-                    </span>
-                  )}
-                  <span className="underline text-right text-xs md:text-base lg:text-lg">
-                    Details
-                  </span>
-                </CardFooter>
-              </Card>
-            </Link>
-          ))}
-        </div>
+        <WaterfallListing
+          products={products}
+          listingType={listingType}
+          columns={
+            screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' || screenSize === 'lg'
+              ? 2
+              : 4
+          }
+        />
+
         {hasNextPage ? (
           <Button
             variant={'outline'}
