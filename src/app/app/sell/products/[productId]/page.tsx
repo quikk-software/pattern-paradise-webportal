@@ -19,7 +19,7 @@ export default function UpdateProductPage({ params }: { params: { productId: str
 
   if (isLoading || !product) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
+      <div className="flex justify-center items-center h-full">
         <LoadingSpinnerComponent />
       </div>
     );

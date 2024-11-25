@@ -67,6 +67,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
             setImageError('Image upload failed. Please use another image or try again later.');
             setImageIsLoading(false);
           },
+          // TODO: Add progress handler
+          () => {},
         ),
       ]);
     }

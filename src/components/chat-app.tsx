@@ -237,6 +237,8 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
           () => {},
           () => {},
           () => {},
+          // TODO: Add progress handler
+          () => {},
         );
 
         const result = await createTestingComment({
@@ -412,10 +414,10 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   user?.firstName && user?.lastName
                     ? `${user.firstName} ${user.lastName}`
                     : user?.firstName
-                    ? user.firstName
-                    : user?.lastName
-                    ? user.lastName
-                    : user?.username ?? 'Other';
+                      ? user.firstName
+                      : user?.lastName
+                        ? user.lastName
+                        : (user?.username ?? 'Other');
                 const isCreator = message.creatorId === userId;
 
                 return (

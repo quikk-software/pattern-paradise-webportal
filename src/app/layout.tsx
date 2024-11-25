@@ -73,7 +73,7 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <div className="flex flex-col h-dvh">
           <div className="flex-1 overflow-auto">
             <StoreProvider>{children}</StoreProvider>

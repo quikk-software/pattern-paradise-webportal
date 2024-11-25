@@ -136,14 +136,15 @@ export function SellPageComponent() {
             </Button>
           ) : null}
         </div>
-      ) : (
+      ) : null}
+      {products.length === 0 && !isLoading ? (
         <p>
           No patterns available.
           <Link href="/app/sell/submit" className="text-blue-500 underline">
             Create a pattern here!
           </Link>
         </p>
-      )}
+      ) : null}
     </div>
   );
 }

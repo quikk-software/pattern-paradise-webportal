@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, ChangeEvent } from 'react';
-import { ArrowLeft, X } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,17 +22,30 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CATEGORIES } from '@/lib/constants';
 import { GetProductResponse } from '@/@types/api-types';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
 }
 
 export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
-  const [images, setImages] = useState<string[]>(initialData.imageUrls ?? []);
+  const [images, setImages] = useState<{ url: string; name: string }[]>([]);
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
+  const [uploadStatus, setUploadStatus] = useState<
+    | {
+        status: string;
+        type: string;
+      }
+    | undefined
+  >(undefined);
+  const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
+    [],
+  );
 
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useUpdateProduct();
 
@@ -64,7 +77,10 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
+      const newImages = Array.from(files).map((file) => ({
+        url: URL.createObjectURL(file),
+        name: file.name,
+      }));
       setImages((prev) => [...prev, ...newImages].slice(0, 6));
     }
   };
@@ -80,7 +96,9 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     }
     setImageError(undefined);
 
-    const newImages = images.filter((image) => !initialData.imageUrls.includes(image));
+    const newImages = images
+      .filter((image) => !initialData.imageUrls.includes(image.url))
+      .map((image) => image.url);
 
     const urls = await handleImageUpload(
       newImages,
@@ -97,6 +115,15 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       () => {
         setImageError('Error uploading images. Please try again.');
       },
+      (fileIndex, progress) => {
+        const currentProgress = {
+          fileIndex,
+          progress,
+        };
+        const uploadProgressCopy = [...uploadProgress];
+        uploadProgressCopy.push(currentProgress);
+        setUploadProgress(uploadProgressCopy);
+      },
     );
 
     if (!urls) {
@@ -111,7 +138,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       isFree,
       imageUrls: [
         ...new Set([
-          ...images.filter((image) => image.startsWith('https://res.cloudinary.com/')),
+          ...images.filter((image) => image.url.startsWith('https://res.cloudinary.com/')),
           ...urls.map((fu) => fu.url),
         ]),
       ],
@@ -238,7 +265,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             {images.map((img, index) => (
               <div key={index} className="relative">
                 <img
-                  src={img}
+                  src={img.url}
                   alt={`Product ${index + 1}`}
                   className="w-full h-32 object-cover rounded-md"
                 />
@@ -275,6 +302,58 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           ) : null}
           Update pattern
         </Button>
+
+        {uploadStatus ? (
+          <Badge
+            variant="secondary"
+            className={`text-lg bg-${
+              uploadStatus.type === 'success'
+                ? 'green'
+                : uploadStatus.type === 'error'
+                ? 'red'
+                : 'blue'
+            }-400 text-white`}
+          >
+            {uploadStatus.status}
+          </Badge>
+        ) : null}
+
+        {!uploadStatus &&
+          uploadProgress.map((up) => (
+            <div key={up.fileIndex} className="p-1">
+              <Card className="w-full mb-2">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <FileIcon className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-sm font-medium truncate max-w-[200px]">
+                        {images[up.fileIndex]?.name}
+                      </span>
+                    </div>
+                    <span className="text-xs font-semibold text-muted-foreground">
+                      {up.progress === 100 ? (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      ) : (
+                        `${Math.round(up.progress)}%`
+                      )}
+                    </span>
+                  </div>
+                  <Progress
+                    value={up.progress}
+                    className="h-2 transition-all duration-300 ease-in-out"
+                    style={{
+                      background: `linear-gradient(90deg, 
+                                var(--primary) 0%, 
+                                var(--primary) ${up.progress}%, 
+                                var(--muted) ${up.progress}%, 
+                                var(--muted) 100%)`,
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+
         {!!hasErrors ? (
           <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
         ) : null}
