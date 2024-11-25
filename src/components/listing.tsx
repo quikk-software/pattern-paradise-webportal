@@ -216,6 +216,9 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             Load more
           </Button>
         ) : null}
+
+        {isLoading ? <LoadingSpinnerComponent /> : null}
+
         {products.length === 0 && !isLoading && (
           <p className="text-center text-muted-foreground mt-6">
             Nothing found matching your criteria.
