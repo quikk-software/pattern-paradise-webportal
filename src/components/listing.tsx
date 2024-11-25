@@ -198,6 +198,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           columns={
             screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' || screenSize === 'lg'
               ? 2
+              : products.length < 4
+              ? products.length
               : 4
           }
         />
