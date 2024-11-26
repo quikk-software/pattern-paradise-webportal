@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/faq-page-component.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/faq-page-component.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pattern-paradise-pro.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pattern-paradise-pro.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/BuyNowButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/BuyNowButton/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,11 +67,11 @@
       <recent name="$PROJECT_DIR$/src/lib/api/testing" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/app" />
       <recent name="$PROJECT_DIR$/src/app/app" />
       <recent name="$PROJECT_DIR$/src/app/app/auth" />
       <recent name="$PROJECT_DIR$/public/icons/main" />
       <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/src/app" />
     </key>
   </component>
   <component name="RunManager" selected="npm.generate-types">

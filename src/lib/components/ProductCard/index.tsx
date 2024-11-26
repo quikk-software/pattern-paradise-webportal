@@ -111,7 +111,7 @@ export default function ProductCard({
             <Button>Show tester call</Button>
           </Link>
         ) : (
-          <Link href={`/app/products/${id}`}>
+          <Link href={`/products/${id}`}>
             <Button>Show details</Button>
           </Link>
         )}

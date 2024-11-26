@@ -51,8 +51,8 @@ export function InfoBoxComponent({ severity = 'info', title, message }: InfoBoxP
           <Icon className="h-5 w-5" aria-hidden="true" />
         </div>
         <div className="flex-1">
-          {title && <h3 className={`text-sm font-medium ${textColor}`}>{title}</h3>}
-          <div className={`text-sm ${textColor}`}>{message}</div>
+          {title && <h3 className={`text-sm text-left font-medium ${textColor}`}>{title}</h3>}
+          <div className={`text-sm text-left ${textColor}`}>{message}</div>
         </div>
       </div>
     </div>

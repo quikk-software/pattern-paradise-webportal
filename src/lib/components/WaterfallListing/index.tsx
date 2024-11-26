@@ -36,8 +36,10 @@ export default function WaterfallListing({
           {group.map((product) => (
             <Link
               key={product.id}
-              href={`/app${
-                listingType === 'sell' ? '/products' : listingType === 'test' && '/test/products'
+              href={`${
+                listingType === 'sell'
+                  ? '/products'
+                  : listingType === 'test' && '/app/test/products'
               }/${product.id}`}
               className="w-full"
             >
