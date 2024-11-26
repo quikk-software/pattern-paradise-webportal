@@ -13,8 +13,8 @@ import { useUpdateUser } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { reset, setRoles, setUsername } from '@/lib/features/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { reset } from '@/lib/features/auth/authSlice';
 import RequestStatus from '@/lib/components/RequestStatus';
 import EditPassword from '@/lib/components/EditPassword';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
@@ -24,6 +24,8 @@ import ProInfoBox from '@/lib/components/ProInfoBox';
 import ResendCodeInfoBox from '@/lib/components/ResendCodeInfoBox';
 import useAction from '@/lib/core/useAction';
 import { Badge } from '@/components/ui/badge';
+import { refreshAccessToken } from '@/lib/auth/auth.utils';
+import { Store } from '@/lib/redux/store';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -38,6 +40,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const { action } = useAction();
 
   const dispatch = useDispatch();
+  const { refreshToken } = useSelector((s: Store) => s.auth);
+
   const router = useRouter();
   const {
     mutate: mutateUser,
@@ -105,12 +109,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       paypalEmail: data.paypalEmail ? data.paypalEmail.toLowerCase().trim() : undefined,
     })
       .then(() => {
-        if (data.roles) {
-          dispatch(setRoles(data.roles));
-        }
-        if (data.username) {
-          dispatch(setUsername(data.username.toLowerCase().trim()));
-        }
+        refreshAccessToken(refreshToken, dispatch);
       })
       .catch(() => {
         setUpdateUserIsError(true);

@@ -7,6 +7,7 @@ import {
   getAccessTokenUsingRefreshToken,
   isTokenValid,
   saveTokensToCookies,
+  setUserDataInReduxStore,
 } from '@/lib/auth/auth.utils';
 import { setAccessToken, setRefreshToken } from '@/lib/features/auth/authSlice';
 import logger from '@/lib/core/logger';
@@ -28,7 +29,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const router = useRouter();
   const { redirectUrl } = useRedirect();
   const allSearchParams = useGetAllSearchParams();
-  const { setUserDataInReduxStore, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const pageMounted = hasPageBeenMounted();
 
@@ -75,7 +76,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
         await saveTokensToCookies(newAccessToken, newRefreshToken);
         dispatch(setAccessToken(newAccessToken));
         dispatch(setRefreshToken(newRefreshToken));
-        setUserDataInReduxStore(newAccessToken);
+        setUserDataInReduxStore(newAccessToken, dispatch);
         return;
       }
     })();

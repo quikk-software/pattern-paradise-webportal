@@ -15,8 +15,8 @@ const RequestStatus: React.FunctionComponent<RequestStatusProps> = ({
 }) => {
   return (
     <>
-      {isSuccess ? <p className="text-green-500 text-left">{successMessage}</p> : null}
-      {isError ? <p className="text-red-500 text-left">{errorMessage}</p> : null}
+      {isSuccess ? <p className="text-green-500">{successMessage}</p> : null}
+      {isError ? <p className="text-red-500">{errorMessage}</p> : null}
     </>
   );
 };

@@ -14,6 +14,9 @@ export const useGetUser = () => {
   const { handleFn, ...apiStates } = useApiStates();
 
   const fetch = async (userIdOverride?: string) => {
+    if (!userId && !userIdOverride) {
+      return;
+    }
     const response = await handleFn(
       async () =>
         await client.api.getUser(userIdOverride ?? userId, {

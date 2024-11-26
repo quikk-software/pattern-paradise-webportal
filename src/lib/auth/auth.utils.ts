@@ -2,6 +2,17 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import qs from 'qs';
 import logger from '@/lib/core/logger';
+import Cookie from 'js-cookie';
+import {
+  setAccessToken,
+  setRefreshToken,
+  setRoles,
+  setUserId,
+} from '@/lib/features/auth/authSlice';
+import { isPathnameInPages } from '@/lib/core/utils';
+import pages from '@/lib/hooks/routes';
+import { AnyAction, Dispatch } from 'redux';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 /**
  * Function returns the user ID inside of an access token.
@@ -31,24 +42,27 @@ const isTokenExpired = (token: string) => {
  @param refreshToken
  @param callback
  **/
-const getAccessTokenUsingRefreshToken = async (refreshToken: string, callback?: () => void) => {
-  if (refreshToken !== '') {
-    try {
-      return await axios.post(
-        `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}/protocol/openid-connect/token`,
-        qs.stringify({
-          grant_type: 'refresh_token',
-          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
-          refresh_token: refreshToken,
-        }),
-      );
-    } catch (err) {
-      logger.error({ err });
-      !!callback && callback();
-      return undefined;
-    }
+const getAccessTokenUsingRefreshToken = async (
+  refreshToken: string | null,
+  callback?: () => void,
+) => {
+  if (refreshToken === '' && refreshToken === null) {
+    return undefined;
   }
-  return undefined;
+  try {
+    return await axios.post(
+      `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}/protocol/openid-connect/token`,
+      qs.stringify({
+        grant_type: 'refresh_token',
+        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
+        refresh_token: refreshToken,
+      }),
+    );
+  } catch (err) {
+    logger.error({ err });
+    !!callback && callback();
+    return undefined;
+  }
 };
 
 const isTokenValid = (accessToken: string | null) =>
@@ -74,7 +88,41 @@ const saveTokensToCookies = async (access_token: string, refresh_token: string) 
   }
 };
 
+const setUserDataInReduxStore = (accessToken: string | null, dispatch: Dispatch<AnyAction>) => {
+  if (!accessToken) {
+    return;
+  }
+  const decodedToken = jwtDecode(accessToken);
+  const userId = getUserIdFromAccessToken(accessToken);
+
+  dispatch(setUserId(userId));
+  dispatch(
+    setRoles(
+      (decodedToken as any)?.resource_access?.[process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'cbj']
+        ?.roles ?? [],
+    ),
+  );
+};
+
+const refreshAccessToken = async (refreshToken: string | null, dispatch: Dispatch<AnyAction>) => {
+  if (refreshToken === null) {
+    return;
+  }
+
+  const res = await getAccessTokenUsingRefreshToken(refreshToken);
+  if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
+    const newAccessToken: string = (res.data.access_token as string) ?? '';
+    const newRefreshToken: string = (res.data.refresh_token as string) ?? '';
+    await saveTokensToCookies(newAccessToken, newRefreshToken);
+    dispatch(setAccessToken(newAccessToken));
+    dispatch(setRefreshToken(newRefreshToken));
+    setUserDataInReduxStore(newAccessToken, dispatch);
+  }
+};
+
 export {
+  setUserDataInReduxStore,
+  refreshAccessToken,
   getUserIdFromAccessToken,
   getAccessTokenUsingRefreshToken,
   isTokenExpired,

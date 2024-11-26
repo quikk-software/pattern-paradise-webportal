@@ -3,7 +3,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
 import Cookie from 'js-cookie';
 import { getUserIdFromAccessToken, isTokenValid, saveTokensToCookies } from '@/lib/auth/auth.utils';
 import {
@@ -33,23 +32,6 @@ const useAuth = () => {
   const { fetch } = useGetUser();
 
   const { accessToken: accessTokenFromStore, username } = useSelector((store: Store) => store.auth);
-
-  const setUserDataInReduxStore = (accessToken: string | null) => {
-    if (!accessToken) {
-      return;
-    }
-    const decodedToken = jwtDecode(accessToken);
-    const userId = getUserIdFromAccessToken(accessToken);
-
-    dispatch(setUserId(userId));
-    dispatch(
-      setRoles(
-        (decodedToken as any)?.resource_access?.[
-          process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'cbj'
-        ]?.roles ?? [],
-      ),
-    );
-  };
 
   const handleLogin = async (username: string, password: string) => {
     if (username === '' || password === '') {
@@ -114,6 +96,9 @@ const useAuth = () => {
       const fetchAndSetUserData = async () => {
         const userId = getUserIdFromAccessToken(accessToken);
         const user = await fetch(userId);
+        if (!user) {
+          return;
+        }
         dispatch(setUserId(user.id));
         dispatch(setRoles(user.roles ?? []));
       };
@@ -129,7 +114,6 @@ const useAuth = () => {
     isSuccess,
     isError,
     username,
-    setUserDataInReduxStore,
   };
 };
 
