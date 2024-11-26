@@ -14,7 +14,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { reset } from '@/lib/features/auth/authSlice';
+import { reset, setRoles } from '@/lib/features/auth/authSlice';
 import RequestStatus from '@/lib/components/RequestStatus';
 import EditPassword from '@/lib/components/EditPassword';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
@@ -103,9 +103,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
       username: data.username ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
       paypalEmail: data.paypalEmail ? data.paypalEmail.toLowerCase().trim() : undefined,
-    }).catch(() => {
-      setUpdateUserIsError(true);
-    });
+    })
+      .then(() => {
+        if (!data.roles) {
+          return;
+        }
+        dispatch(setRoles(data.roles));
+      })
+      .catch(() => {
+        setUpdateUserIsError(true);
+      });
   };
 
   const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
