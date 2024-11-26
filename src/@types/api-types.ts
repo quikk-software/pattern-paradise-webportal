@@ -387,6 +387,10 @@ export interface ListTesterApplicationsResponse {
   testingsOnUsers: GetTesterApplicationResponse[];
 }
 
+export interface PostCaptureOrderResponse {
+  orderId: string;
+}
+
 export interface PostOrderRequest {
   productId: string;
 }
@@ -1502,6 +1506,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         direction?: string;
         /** The property key to sort by. */
         sortKey?: string;
+        /** The status to filter by. */
+        status?: string[];
         /** Properties to filter by. */
         filter?: string[];
       },
@@ -1742,10 +1748,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     captureOrder: (paypalOrderId: string, params: RequestParams = {}) =>
-      this.request<void, NotFoundResponse>({
+      this.request<PostCaptureOrderResponse, NotFoundResponse>({
         path: `/api/v1/orders/${paypalOrderId}/capture`,
         method: 'POST',
         secure: true,
+        format: 'json',
         ...params,
       }),
 

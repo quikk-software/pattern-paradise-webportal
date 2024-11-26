@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import CountryFlag from '@/lib/components/CountryFlag';
+import { useRouter } from 'next/navigation';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -20,6 +21,8 @@ interface OrderDetailsProps {
 
 export function OrderDetails({ order }: OrderDetailsProps) {
   const { fetch, isLoading, isSuccess, isError, data: file } = useGetPattern();
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!file) {
@@ -63,8 +66,8 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <BuyNowButton
                 price={order.productPrice}
                 productId={order.productId}
+                productName={order.productName}
                 productStatus={'Released'}
-                callback={undefined}
               />
             </div>
           ) : null}

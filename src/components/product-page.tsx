@@ -15,6 +15,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { InfoBoxComponent } from '@/components/info-box';
+import { router } from 'next/client';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -68,9 +69,10 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                   <BuyNowButton
                     price={product.price}
                     productId={product.id}
+                    productName={product.title}
                     productStatus={product.status}
                     creatorId={product.creatorId}
-                    callback={undefined}
+                    callback={(orderId: string) => router.push(`/app/auth/me/orders/${orderId}`)}
                   />
                 )}
               </div>
