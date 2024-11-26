@@ -31,7 +31,7 @@ import { useElementHeight } from '@/lib/core/useElementHeight';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useWebSocket from '@/lib/hooks/useWebSocket';
 import Link from 'next/link';
-import { useGetPattern, useListPatternsByProductId } from '@/lib/api/pattern';
+import { useListPatternsByProductId } from '@/lib/api/pattern';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
 import ReviewDrawer from '@/lib/components/ReviewDrawer';
@@ -464,10 +464,10 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                     user?.firstName && user?.lastName
                       ? `${user.firstName} ${user.lastName}`
                       : user?.firstName
-                      ? user.firstName
-                      : user?.lastName
-                      ? user.lastName
-                      : user?.username ?? 'Other';
+                        ? user.firstName
+                        : user?.lastName
+                          ? user.lastName
+                          : (user?.username ?? 'Other');
                   const isCreator = message.creatorId === userId;
 
                   return (
