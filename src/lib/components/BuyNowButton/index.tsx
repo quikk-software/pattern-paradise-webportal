@@ -201,7 +201,7 @@ export function BuyNowButton({
         <Lock />
         Buy Now
       </Button>
-      <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      <Drawer open={isOpen} onOpenChange={setIsOpen} dismissible={false}>
         <DrawerContent className="p-4">
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4  max-h-[60vh] overflow-y-auto">
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
