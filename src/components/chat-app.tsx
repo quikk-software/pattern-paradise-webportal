@@ -464,10 +464,10 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                     user?.firstName && user?.lastName
                       ? `${user.firstName} ${user.lastName}`
                       : user?.firstName
-                        ? user.firstName
-                        : user?.lastName
-                          ? user.lastName
-                          : (user?.username ?? 'Other');
+                      ? user.firstName
+                      : user?.lastName
+                      ? user.lastName
+                      : user?.username ?? 'Other';
                   const isCreator = message.creatorId === userId;
 
                   return (
@@ -580,7 +580,11 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                                 </span>
                               </div>
 
-                              <p className={`mt-1 ${isCreator ? 'text-right' : 'text-left'}`}>
+                              <p
+                                className={`mt-1 ${
+                                  isCreator ? 'text-right' : 'text-left'
+                                } break-words whitespace-normal overflow-hidden`}
+                              >
                                 {message.message}
                               </p>
                               <div className="flex flex-col gap-2">
