@@ -18,6 +18,7 @@ import useRedirect from '@/lib/core/useRedirect';
 import { useRouter } from 'next/navigation';
 import { Store } from '@/lib/redux/store';
 import { useEffect, useState } from 'react';
+import { useGetUser } from '@/lib/api';
 
 const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
@@ -29,6 +30,8 @@ const useAuth = () => {
   const { redirectUrl } = useRedirect();
   const { push } = useRouter();
 
+  const { fetch } = useGetUser();
+
   const { accessToken: accessTokenFromStore, username } = useSelector((store: Store) => store.auth);
 
   const setUserDataInReduxStore = (accessToken: string | null) => {
@@ -37,6 +40,7 @@ const useAuth = () => {
     }
     const decodedToken = jwtDecode(accessToken);
     const userId = getUserIdFromAccessToken(accessToken);
+
     dispatch(setUserId(userId));
     dispatch(
       setRoles(
@@ -78,7 +82,6 @@ const useAuth = () => {
 
         dispatch(setAccessToken(accessToken));
         dispatch(setRefreshToken(refreshToken));
-        setUserDataInReduxStore(accessToken);
 
         setIsSuccess(true);
 
@@ -103,11 +106,18 @@ const useAuth = () => {
     const accessToken = accessTokenFromStore
       ? accessTokenFromStore
       : Cookie.get('accessToken') ?? null;
+
     const isValid = isTokenValid(accessToken);
     setIsLoggedIn(isValid);
 
-    if (isValid) {
-      setUserDataInReduxStore(accessToken);
+    if (isValid && accessToken !== null) {
+      const fetchAndSetUserData = async () => {
+        const userId = getUserIdFromAccessToken(accessToken);
+        const user = await fetch(userId);
+        dispatch(setUserId(user.id));
+        dispatch(setRoles(user.roles ?? []));
+      };
+      fetchAndSetUserData();
     }
   }, [accessTokenFromStore]);
 

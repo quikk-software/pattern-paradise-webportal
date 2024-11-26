@@ -38,8 +38,6 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
 
   const onTokenValid = (accessToken: string | null) => {
     if (accessToken !== null) {
-      setUserDataInReduxStore(accessToken);
-
       // redirect to redirect URL if not already on a valid page
       if (
         !isPathnameInPages(
@@ -64,7 +62,6 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
       onTokenValid(at);
       dispatch(setAccessToken(at));
       dispatch(setRefreshToken(rt));
-      setUserDataInReduxStore(at);
       return;
     }
     (async () => {
@@ -87,7 +84,6 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   useEffect(() => {
     dispatch(setAccessToken(Cookie.get('accessToken') ?? null));
     dispatch(setRefreshToken(Cookie.get('refreshToken') ?? null));
-    setUserDataInReduxStore(Cookie.get('accessToken') ?? null);
   }, []);
 
   useEffect(() => {
