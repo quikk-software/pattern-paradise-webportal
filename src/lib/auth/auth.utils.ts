@@ -46,7 +46,7 @@ const getAccessTokenUsingRefreshToken = async (
   refreshToken: string | null,
   callback?: () => void,
 ) => {
-  if (refreshToken === '' && refreshToken === null) {
+  if (refreshToken === '' || refreshToken === null) {
     return undefined;
   }
   try {
