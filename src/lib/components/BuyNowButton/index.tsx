@@ -11,8 +11,14 @@ import { InfoBoxComponent } from '@/components/info-box';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import Link from 'next/link';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { ShieldCheck, Lock } from 'lucide-react';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer';
+import { ShieldCheck, Lock, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { isTokenValid } from '@/lib/auth/auth.utils';
 import QuickSignUp from '@/lib/components/QuickSignUp';
@@ -203,7 +209,15 @@ export function BuyNowButton({
       </Button>
       <Drawer open={isOpen} onOpenChange={setIsOpen} dismissible={!isLoggedIn}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4  max-h-[60vh] overflow-y-auto">
+          <div
+            className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto"
+            style={{
+              height: '80vh',
+            }}
+          >
+            <DrawerClose className="flex justify-end" onClick={() => setIsOpen(false)}>
+              <X className="text-muted-foreground p-2 w-10 h-10" />
+            </DrawerClose>
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <ShieldCheck className="w-20 h-20 text-green-500" />
               <div className="flex flex-col gap-2">
