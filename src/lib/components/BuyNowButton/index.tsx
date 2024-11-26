@@ -203,7 +203,7 @@ export function BuyNowButton({
       </Button>
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4  max-h-[80vh] overflow-y-auto">
+          <div className="mx-auto w-full max-w-sm flex flex-col gap-4  max-h-[60vh] overflow-y-auto">
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <ShieldCheck className="w-20 h-20 text-green-500" />
               <div className="flex flex-col gap-2">
