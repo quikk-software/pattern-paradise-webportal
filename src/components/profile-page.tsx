@@ -14,7 +14,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { reset, setRoles } from '@/lib/features/auth/authSlice';
+import { reset, setRoles, setUsername } from '@/lib/features/auth/authSlice';
 import RequestStatus from '@/lib/components/RequestStatus';
 import EditPassword from '@/lib/components/EditPassword';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
@@ -105,10 +105,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
       paypalEmail: data.paypalEmail ? data.paypalEmail.toLowerCase().trim() : undefined,
     })
       .then(() => {
-        if (!data.roles) {
-          return;
+        if (data.roles) {
+          dispatch(setRoles(data.roles));
         }
-        dispatch(setRoles(data.roles));
+        if (data.username) {
+          dispatch(setUsername(data.username.toLowerCase().trim()));
+        }
       })
       .catch(() => {
         setUpdateUserIsError(true);
