@@ -102,8 +102,13 @@ const useAuth = () => {
   useEffect(() => {
     const accessToken = accessTokenFromStore
       ? accessTokenFromStore
-      : (Cookie.get('accessToken') ?? null);
-    setIsLoggedIn(isTokenValid(accessToken));
+      : Cookie.get('accessToken') ?? null;
+    const isValid = isTokenValid(accessToken);
+    setIsLoggedIn(isValid);
+
+    if (isValid) {
+      setUserDataInReduxStore(accessToken);
+    }
   }, [accessTokenFromStore]);
 
   return {
