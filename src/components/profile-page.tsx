@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,6 +22,8 @@ import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { Textarea } from '@/components/ui/textarea';
 import ProInfoBox from '@/lib/components/ProInfoBox';
 import ResendCodeInfoBox from '@/lib/components/ResendCodeInfoBox';
+import useAction from '@/lib/core/useAction';
+import { Badge } from '@/components/ui/badge';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -32,6 +34,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
+
+  const { action } = useAction();
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -48,6 +52,22 @@ export function ProfilePage({ user }: ProfilePageProps) {
     watch,
     formState: { errors },
   } = useForm({ defaultValues: user });
+
+  const rolesRef = useRef<HTMLDivElement | null>(null);
+
+  const executeScroll = () => {
+    rolesRef.current?.scrollIntoView();
+  };
+
+  useEffect(() => {
+    switch (action) {
+      case 'scrollToRoles':
+        executeScroll();
+        break;
+      default:
+        break;
+    }
+  }, [action]);
 
   const onPersonalDataSubmit = async (data: any) => {
     setImageError(undefined);
@@ -108,6 +128,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
 
   const roles = watch('roles');
+  const highlightRoles = action === 'scrollToRoles';
 
   return (
     <div className="flex flex-col gap-4">
@@ -259,8 +280,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>Roles</Label>
+            <div className="space-y-2" ref={rolesRef}>
+              {highlightRoles ? (
+                <Badge variant="secondary" className="text-md">
+                  {'❗️'} Roles
+                </Badge>
+              ) : null}
+              {!highlightRoles ? <Label>Roles</Label> : null}
               <div className="flex space-x-4">
                 <Controller
                   name="roles"
@@ -326,8 +352,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                ⚠️ Note: Users with the role &apos;Tester&apos; or &apos;Seller&apos; are required
-                to add a valid PayPal email which is eligible of receiving money.{' '}
+                ⚠️ Note: Users with the role &apos;Seller&apos; are required to add a valid PayPal
+                email which is eligible of receiving money.{' '}
                 <a href="https://paypal.com" target="_blank" className="text-blue-500">
                   Create a PayPal account for free here!
                 </a>
