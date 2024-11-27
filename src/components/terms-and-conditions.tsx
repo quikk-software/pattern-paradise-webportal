@@ -494,33 +494,6 @@ export default function TermsAndConditions() {
                 </p>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="contact-us">
-              <AccordionTrigger>Contact Us</AccordionTrigger>
-              <AccordionContent>
-                <p>
-                  If you wish to file a complaint about the website or require additional
-                  information regarding its use, please contact us:
-                </p>
-                <address className="not-italic">
-                  <strong>QUIKK Software GmbH</strong>
-                  <br />
-                  Hahler Straße 285
-                  <br />
-                  32425 Minden
-                  <br />
-                  Germany
-                  <br />
-                  <br />
-                  Email:{' '}
-                  <a
-                    href="mailto:help@pattern-paradise.shop"
-                    className="text-blue-600 hover:underline"
-                  >
-                    help@pattern-paradise.shop
-                  </a>
-                </address>
-              </AccordionContent>
-            </AccordionItem>
           </Accordion>
         </CardContent>
       </Card>
