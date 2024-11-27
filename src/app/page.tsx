@@ -1,6 +1,3 @@
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { APP_NAME } from '@/lib/constants';
 import { ListingComponent } from '@/components/listing';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 import { NavbarComponent } from '@/components/navbar';

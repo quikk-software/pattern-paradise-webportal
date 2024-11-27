@@ -59,6 +59,11 @@ const pages: Page[] = [
     description: '',
   },
   {
+    title: 'Help',
+    pathname: '/help',
+    description: '',
+  },
+  {
     title: 'Privacy Policy, Terms and Conditions',
     pathname: '/terms-and-privacy',
     description: '',
