@@ -441,11 +441,19 @@ export default function TermsAndConditions() {
                   purchase, as all sales are final due to the digital nature of the products. If a
                   buyer encounters issues with accessing a purchased pattern, they should contact
                   our support team at{' '}
-                  <Link href="mailto:help@pattern-paradise.shop">help@pattern-paradise.shop</Link>{' '}
-                  or our <Link href="/help">contact form</Link> for assistance. We track when a
-                  pattern has been downloaded by a user. If we see evidence that the user has not
-                  downloaded the pattern after they have successfully purchased it and they ask for
-                  a refund, we will arrange for a refund to be made.
+                  <Link
+                    href="mailto:help@pattern-paradise.shop"
+                    className="text-blue-500 underline"
+                  >
+                    help@pattern-paradise.shop
+                  </Link>{' '}
+                  or our{' '}
+                  <Link href="/help" className="text-blue-500 underline">
+                    contact form
+                  </Link>{' '}
+                  for assistance. We track when a pattern has been downloaded by a user. If we see
+                  evidence that the user has not downloaded the pattern after they have successfully
+                  purchased it and they ask for a refund, we will arrange for a refund to be made.
                 </p>
 
                 <p>Sellers are responsible for ensuring:</p>
@@ -462,9 +470,18 @@ export default function TermsAndConditions() {
                   community. If a buyer believes a pattern they purchased is defective or
                   significantly different from its description, they can report the issue to our
                   support team by{' '}
-                  <Link href="mailto:help@pattern-paradise.shop">writing us an email</Link> or using
-                  our <Link href="/help">contact form</Link>. We will review the claim and work with
-                  both the buyer and seller to resolve the matter fairly.
+                  <Link
+                    href="mailto:help@pattern-paradise.shop"
+                    className="text-blue-500 underline"
+                  >
+                    writing us an email
+                  </Link>{' '}
+                  or using our{' '}
+                  <Link href="/help" className="text-blue-500 underline">
+                    contact form
+                  </Link>
+                  . We will review the claim and work with both the buyer and seller to resolve the
+                  matter fairly.
                 </p>
 
                 <p>
@@ -478,7 +495,13 @@ export default function TermsAndConditions() {
 
                 <p>
                   If you have questions or concerns about this policy, please contact us at{' '}
-                  <Link href="mailto:help@pattern-paradise.shop">help@pattern-paradise.shop</Link>.
+                  <Link
+                    href="mailto:help@pattern-paradise.shop"
+                    className="text-blue-500 underline"
+                  >
+                    help@pattern-paradise.shop
+                  </Link>
+                  .
                 </p>
               </AccordionContent>
             </AccordionItem>
