@@ -17,6 +17,11 @@ const NAV_LINKS = [
     enabled: true,
   },
   {
+    href: '/help',
+    name: 'Help',
+    enabled: true,
+  },
+  {
     href: '/pro',
     name: 'Pro',
     enabled: process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true',

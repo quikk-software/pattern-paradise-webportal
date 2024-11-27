@@ -241,6 +241,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 type="email"
                 {...register('email', {
                   required: 'Email is required',
+                  pattern: {
+                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                    message: 'Invalid email address',
+                  },
                 })}
                 onKeyDown={handleKeyDown}
               />
