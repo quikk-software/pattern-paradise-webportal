@@ -50,7 +50,7 @@ export default function TermsAndConditions() {
             &apos;we&apos;, &apos;us&apos; or &apos;our&apos;. or &apos;our&apos;. You, the user of
             this website, are referred to as &apos;you&apos; or &apos;your&apos;.
           </p>
-          <Accordion type="single" collapsible className="w-full" value={'payment-policy'}>
+          <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="supplemental-terms">
               <AccordionTrigger>Supplemental Terms</AccordionTrigger>
               <AccordionContent>
