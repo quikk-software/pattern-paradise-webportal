@@ -7,6 +7,7 @@ import {
   getAccessTokenUsingRefreshToken,
   isTokenValid,
   saveTokensToCookies,
+  setUserDataInReduxStore,
 } from '@/lib/auth/auth.utils';
 import { setAccessToken, setRefreshToken } from '@/lib/features/auth/authSlice';
 import logger from '@/lib/core/logger';
@@ -28,7 +29,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const router = useRouter();
   const { redirectUrl } = useRedirect();
   const allSearchParams = useGetAllSearchParams();
-  const { setUserDataInReduxStore, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const pageMounted = hasPageBeenMounted();
 
@@ -38,8 +39,6 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
 
   const onTokenValid = (accessToken: string | null) => {
     if (accessToken !== null) {
-      setUserDataInReduxStore(accessToken);
-
       // redirect to redirect URL if not already on a valid page
       if (
         !isPathnameInPages(
@@ -64,7 +63,6 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
       onTokenValid(at);
       dispatch(setAccessToken(at));
       dispatch(setRefreshToken(rt));
-      setUserDataInReduxStore(at);
       return;
     }
     (async () => {
@@ -78,7 +76,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
         await saveTokensToCookies(newAccessToken, newRefreshToken);
         dispatch(setAccessToken(newAccessToken));
         dispatch(setRefreshToken(newRefreshToken));
-        setUserDataInReduxStore(newAccessToken);
+        setUserDataInReduxStore(newAccessToken, dispatch);
         return;
       }
     })();
@@ -87,7 +85,6 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   useEffect(() => {
     dispatch(setAccessToken(Cookie.get('accessToken') ?? null));
     dispatch(setRefreshToken(Cookie.get('refreshToken') ?? null));
-    setUserDataInReduxStore(Cookie.get('accessToken') ?? null);
   }, []);
 
   useEffect(() => {

@@ -13,10 +13,13 @@ export const useGetUser = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async () => {
+  const fetch = async (userIdOverride?: string) => {
+    if (!userId && !userIdOverride) {
+      return;
+    }
     const response = await handleFn(
       async () =>
-        await client.api.getUser(userId, {
+        await client.api.getUser(userIdOverride ?? userId, {
           ...(await getApi(accessToken, refreshToken, dispatch)),
         }),
     );

@@ -31,7 +31,7 @@ import { useElementHeight } from '@/lib/core/useElementHeight';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useWebSocket from '@/lib/hooks/useWebSocket';
 import Link from 'next/link';
-import { useGetPattern, useListPatternsByProductId } from '@/lib/api/pattern';
+import { useListPatternsByProductId } from '@/lib/api/pattern';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
 import ReviewDrawer from '@/lib/components/ReviewDrawer';
@@ -580,7 +580,11 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                                 </span>
                               </div>
 
-                              <p className={`mt-1 ${isCreator ? 'text-right' : 'text-left'}`}>
+                              <p
+                                className={`mt-1 ${
+                                  isCreator ? 'text-right' : 'text-left'
+                                } break-words whitespace-normal overflow-hidden`}
+                              >
                                 {message.message}
                               </p>
                               <div className="flex flex-col gap-2">

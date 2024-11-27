@@ -157,7 +157,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
         </header>
 
         {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
-        {testings.length === 0 ? (
+        {testings.length === 0 && !fetchTestingsIsLoading ? (
           <p>
             You have no testings yet.{' '}
             {filter === 'customer' ? (

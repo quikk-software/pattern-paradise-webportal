@@ -59,8 +59,8 @@ const pages: Page[] = [
     description: '',
   },
   {
-    title: 'Privacy policy',
-    pathname: '/privacy',
+    title: 'Privacy Policy, Terms and Conditions',
+    pathname: '/terms-and-privacy',
     description: '',
   },
   {

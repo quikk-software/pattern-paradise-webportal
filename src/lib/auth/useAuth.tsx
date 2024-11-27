@@ -3,7 +3,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
 import Cookie from 'js-cookie';
 import { getUserIdFromAccessToken, isTokenValid, saveTokensToCookies } from '@/lib/auth/auth.utils';
 import {
@@ -18,6 +17,7 @@ import useRedirect from '@/lib/core/useRedirect';
 import { useRouter } from 'next/navigation';
 import { Store } from '@/lib/redux/store';
 import { useEffect, useState } from 'react';
+import { useGetUser } from '@/lib/api';
 
 const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
@@ -29,23 +29,9 @@ const useAuth = () => {
   const { redirectUrl } = useRedirect();
   const { push } = useRouter();
 
-  const { accessToken: accessTokenFromStore, username } = useSelector((store: Store) => store.auth);
+  const { fetch } = useGetUser();
 
-  const setUserDataInReduxStore = (accessToken: string | null) => {
-    if (!accessToken) {
-      return;
-    }
-    const decodedToken = jwtDecode(accessToken);
-    const userId = getUserIdFromAccessToken(accessToken);
-    dispatch(setUserId(userId));
-    dispatch(
-      setRoles(
-        (decodedToken as any)?.resource_access?.[
-          process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'cbj'
-        ]?.roles ?? [],
-      ),
-    );
-  };
+  const { accessToken: accessTokenFromStore, username } = useSelector((store: Store) => store.auth);
 
   const handleLogin = async (username: string, password: string) => {
     if (username === '' || password === '') {
@@ -78,7 +64,6 @@ const useAuth = () => {
 
         dispatch(setAccessToken(accessToken));
         dispatch(setRefreshToken(refreshToken));
-        setUserDataInReduxStore(accessToken);
 
         setIsSuccess(true);
 
@@ -102,8 +87,23 @@ const useAuth = () => {
   useEffect(() => {
     const accessToken = accessTokenFromStore
       ? accessTokenFromStore
-      : (Cookie.get('accessToken') ?? null);
-    setIsLoggedIn(isTokenValid(accessToken));
+      : Cookie.get('accessToken') ?? null;
+
+    const isValid = isTokenValid(accessToken);
+    setIsLoggedIn(isValid);
+
+    if (isValid && accessToken !== null) {
+      const fetchAndSetUserData = async () => {
+        const userId = getUserIdFromAccessToken(accessToken);
+        const user = await fetch(userId);
+        if (!user) {
+          return;
+        }
+        dispatch(setUserId(user.id));
+        dispatch(setRoles(user.roles ?? []));
+      };
+      fetchAndSetUserData();
+    }
   }, [accessTokenFromStore]);
 
   return {
@@ -114,7 +114,6 @@ const useAuth = () => {
     isSuccess,
     isError,
     username,
-    setUserDataInReduxStore,
   };
 };
 

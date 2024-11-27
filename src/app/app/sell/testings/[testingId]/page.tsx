@@ -18,6 +18,7 @@ export default function TestingPage({ params }: { params: { testingId: string } 
       direction,
       sortKey,
       filter,
+      status: ['Created'],
     });
   }, [testingId, direction, filter]);
 
