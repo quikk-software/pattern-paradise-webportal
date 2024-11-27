@@ -11,8 +11,8 @@ export default function PrivacyPolicy() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-left mb-4">Privacy Policy</CardTitle>
-        <CardTitle className="text-lg font-medium text-left mb-4">
+        <CardTitle className="text-3xl font-bold text-left mb-2">Privacy Policy</CardTitle>
+        <CardTitle className="text-md font-medium text-left mb-4">
           Last updated on: 27 Nov 2024
         </CardTitle>
       </CardHeader>
