@@ -6,16 +6,16 @@ import {
 } from '@/components/ui/accordion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PrivacyPolicy from '@/components/privacy-policy';
+import Imprint from '@/components/imprint';
 
 export default function TermsAndConditions() {
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl space-y-4">
+      <Imprint />
       <PrivacyPolicy />
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl font-bold text-center mb-4">
-            Terms and Conditions
-          </CardTitle>
+          <CardTitle className="text-3xl font-bold text-left mb-4">Terms and Conditions</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="mb-4">

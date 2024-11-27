@@ -60,7 +60,7 @@ const pages: Page[] = [
   },
   {
     title: 'Privacy Policy, Terms and Conditions',
-    pathname: '/privacy-and-terms',
+    pathname: '/terms-and-privacy',
     description: '',
   },
   {

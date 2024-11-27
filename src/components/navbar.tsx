@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, Volleyball, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
   {
@@ -19,6 +20,11 @@ const NAV_LINKS = [
     href: '/pro',
     name: 'Pro',
     enabled: process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true',
+  },
+  {
+    href: '/terms-and-privacy',
+    name: 'Terms and Privacy',
+    enabled: true,
   },
 ];
 
@@ -60,7 +66,7 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
               <span>Pattern Paradise</span>
             </Link>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          <div className="hidden sm:ml-6 sm:flex sm:items-center flex flex-row gap-4">
             <div className="flex space-x-4">
               {filteredNavLinks.map(({ href, name }) => (
                 <NavLink key={name} href={href} background={background}>
