@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Accordion,
   AccordionContent,
@@ -7,8 +9,29 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PrivacyPolicy from '@/components/privacy-policy';
 import Imprint from '@/components/imprint';
+import Link from 'next/link';
+import useAction from '@/lib/core/useAction';
+import { MutableRefObject, useEffect, useRef } from 'react';
 
 export default function TermsAndConditions() {
+  const { action } = useAction();
+
+  const paymentPolicyRef = useRef<HTMLDivElement | null>(null);
+
+  const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
+    ref.current?.scrollIntoView();
+  };
+
+  useEffect(() => {
+    switch (action) {
+      case 'scrollToPaymentPolicy':
+        executeScroll(paymentPolicyRef);
+        break;
+      default:
+        break;
+    }
+  }, [action]);
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl space-y-4">
       <Imprint />
@@ -27,7 +50,7 @@ export default function TermsAndConditions() {
             &apos;we&apos;, &apos;us&apos; or &apos;our&apos;. or &apos;our&apos;. You, the user of
             this website, are referred to as &apos;you&apos; or &apos;your&apos;.
           </p>
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full" value={'payment-policy'}>
             <AccordionItem value="supplemental-terms">
               <AccordionTrigger>Supplemental Terms</AccordionTrigger>
               <AccordionContent>
@@ -350,12 +373,112 @@ export default function TermsAndConditions() {
                 </p>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="payments-policy">
-              <AccordionTrigger>Payments Policy</AccordionTrigger>
+            <AccordionItem value="payment-policy" ref={paymentPolicyRef}>
+              <AccordionTrigger
+                style={{
+                  fontWeight: action === 'scrollToPaymentPolicy' ? 'bold' : 'normal',
+                }}
+              >
+                {action === 'scrollToPaymentPolicy' ? '💡 ' : ''}Payment Policy
+              </AccordionTrigger>
               <AccordionContent>
                 <p>
-                  The website enables users to buy and sell Contributions. By participating, you
-                  agree to our Payments Policy, incorporated into these Terms and Conditions.
+                  All payments on Pattern Paradise are processed securely through our payment
+                  gateway partner{' '}
+                  <Link
+                    href="https://paypal.com"
+                    target="_blank"
+                    className="text-blue-500 underline"
+                  >
+                    PayPal
+                  </Link>
+                  . Buyers can purchase crochet and knitting patterns directly from designers via a
+                  seamless and secure checkout process. Upon successful payment, buyers will receive
+                  access to their purchased digital pattern(s) as downloadable files.
+                </p>
+
+                <p>
+                  Pattern Paradise operates on a commission-based business model. To support the
+                  maintenance and improvement of our platform, we retain a 5% commission fee from
+                  the gross value of each pattern sold. This commission is automatically deducted
+                  from the payment received by the seller. The remaining amount is transferred to
+                  the seller&apos;s account after processing.
+                </p>
+
+                <p className="mt-1">For example:</p>
+
+                <p className="mb-1">
+                  If a pattern is sold for $10.00, Pattern Paradise will keep $0.50 as platform fee
+                  and $9.50 will be transferred to the PayPal account provided by the seller.
+                  Regarding fees of our payment gateway partner PayPal, please refer to{' '}
+                  <Link
+                    href="https://www.paypal.com/al/webapps/mpp/merchant-fees"
+                    target="_blank"
+                    className="text-blue-500 underline"
+                  >
+                    PayPal Merchant Fees
+                  </Link>
+                  .
+                </p>
+
+                <p>
+                  Patterns sold on Pattern Paradise are digital products delivered instantly after
+                  purchase. Due to the intangible and non-returnable nature of digital goods,
+                  refunds or exchanges are not possible once a pattern has been purchased and
+                  downloaded. Buyers are encouraged to review the product details and any
+                  accompanying previews or descriptions carefully before completing their purchase.
+                  We try to ensure that only satisfactory patterns are published on Pattern Paradise
+                  by encouraging sellers to test their patterns with public tester calls. Patterns
+                  that are not free and haven&apos;t been officially tested through a tester call
+                  will be marked and ranked lower on the platform.
+                </p>
+
+                <p>Buyers are responsible for ensuring:</p>
+
+                <p>
+                  That they have the necessary tools, skills, and materials to use the purchased
+                  patterns. That the pattern meets their requirements before completing the
+                  purchase, as all sales are final due to the digital nature of the products. If a
+                  buyer encounters issues with accessing a purchased pattern, they should contact
+                  our support team at{' '}
+                  <Link href="mailto:help@pattern-paradise.shop">help@pattern-paradise.shop</Link>{' '}
+                  or our <Link href="/help">contact form</Link> for assistance. We track when a
+                  pattern has been downloaded by a user. If we see evidence that the user has not
+                  downloaded the pattern after they have successfully purchased it and they ask for
+                  a refund, we will arrange for a refund to be made.
+                </p>
+
+                <p>Sellers are responsible for ensuring:</p>
+
+                <p>
+                  The originality and quality of the patterns they upload to the platform, that the
+                  patterns meet the descriptions provided in their listings and timely resolution of
+                  buyer inquiries related to their products.
+                </p>
+
+                <p>
+                  While refunds are not possible after digital products have been downloaded,
+                  Pattern Paradise is committed to fostering trust and satisfaction within our
+                  community. If a buyer believes a pattern they purchased is defective or
+                  significantly different from its description, they can report the issue to our
+                  support team by{' '}
+                  <Link href="mailto:help@pattern-paradise.shop">writing us an email</Link> or using
+                  our <Link href="/help">contact form</Link>. We will review the claim and work with
+                  both the buyer and seller to resolve the matter fairly.
+                </p>
+
+                <p>
+                  By purchasing or selling on Pattern Paradise, you agree to this Payment Policy. We
+                  reserve the right to update this policy as needed to reflect changes in our
+                  business model or applicable regulations. Any updates will be communicated to
+                  users and posted on our platform.
+                </p>
+
+                <p>Thank you for being part of the Pattern Paradise community!</p>
+
+                <p>
+                  If you have questions or concerns about this policy, please contact us at{' '}
+                  <Link href="mailto:help@pattern-paradise.shop">help@pattern-paradise.shop</Link>.
                 </p>
               </AccordionContent>
             </AccordionItem>
