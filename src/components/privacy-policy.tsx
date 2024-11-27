@@ -12,6 +12,9 @@ export default function PrivacyPolicy() {
     <Card>
       <CardHeader>
         <CardTitle className="text-3xl font-bold text-left mb-4">Privacy Policy</CardTitle>
+        <CardTitle className="text-lg font-medium text-left mb-4">
+          Last updated on: 27 Nov 2024
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Accordion type="single" collapsible className="w-full">
