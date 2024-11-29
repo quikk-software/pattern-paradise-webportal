@@ -31,10 +31,11 @@ import { useElementHeight } from '@/lib/core/useElementHeight';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useWebSocket from '@/lib/hooks/useWebSocket';
 import Link from 'next/link';
-import { useListPatternsByProductId } from '@/lib/api/pattern';
+import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
 import ReviewDrawer from '@/lib/components/ReviewDrawer';
+import { buildUserName } from '@/lib/features/chat/utils';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -139,10 +140,10 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   } = useListTestingComments({});
   const { mutate: createTestingComment } = useCreateTestingComment();
   const {
-    fetch: downloadPattern,
-    isLoading: downloadPatternIsLoading,
+    fetch: downloadPatterns,
+    isLoading: downloadPatternsIsLoading,
     data: file,
-  } = useListPatternsByProductId();
+  } = useDownloadPatternsByProductId();
   const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications(
     {},
   );
@@ -297,7 +298,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     if (!productId) {
       return;
     }
-    await downloadPattern(productId);
+    await downloadPatterns(productId);
   };
 
   const handleReviewClick = async (testingId: string | null) => {
@@ -317,10 +318,10 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     }
   };
 
-  const isInactive = selectedTestingStatus !== 'InProgress' && selectedTestingStatus !== null;
-  const isTester = !!testerApplications.find(
-    (testerApplication) => testerApplication.user.id === userId,
-  );
+  const isInactive = selectedTestingStatus !== 'InProgress';
+  const isTesterOrCreator =
+    !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
+    testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
   const status = testerApplications.find(
     (testerApplication) => testerApplication.user.id === userId,
   )?.status;
@@ -405,8 +406,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   <h2 className="text-2xl font-bold">Chat History</h2>
                 </div>
                 <div className="flex items-center justify-end gap-2">
-                  {testings.find((testing) => testing.id === selectedTestingId)?.creatorId ===
-                    userId || status === 'InProgress' ? (
+                  {status === 'InProgress' ? (
                     <Button
                       variant="outline"
                       size="icon"
@@ -421,7 +421,9 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   <Button
                     variant="outline"
                     size="icon"
-                    disabled={!selectedProductIdByTesting || downloadPatternIsLoading || !isTester}
+                    disabled={
+                      !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
+                    }
                     onClick={() => {
                       handleDownloadPatternClick(selectedProductIdByTesting);
                     }}
@@ -457,19 +459,18 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                 .slice(0)
                 .reverse()
                 .map((message) => {
-                  const user = testings
-                    .find((testing) => testing.id === selectedTestingId)
-                    ?.testers?.find((tester) => tester.id === message.creatorId);
-                  const otherName =
-                    user?.firstName && user?.lastName
-                      ? `${user.firstName} ${user.lastName}`
-                      : user?.firstName
-                      ? user.firstName
-                      : user?.lastName
-                      ? user.lastName
-                      : user?.username ?? 'Other';
+                  const currentTesting = testings.find(
+                    (testing) => testing.id === selectedTestingId,
+                  );
+                  const user = currentTesting?.testers?.find(
+                    (tester) => tester.id === message.creatorId,
+                  );
+                  const creatorUser =
+                    currentTesting?.creatorId === message.creatorId
+                      ? currentTesting.creator
+                      : undefined;
+                  const otherName = buildUserName(user) || buildUserName(creatorUser) || 'Other';
                   const isCreator = message.creatorId === userId;
-
                   return (
                     <>
                       {message.type === 'System' ? (

@@ -20,7 +20,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
-import PdfSelector from '@/components/pdf-selector';
+import FileSelector from '@/components/file-selector';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { CATEGORIES } from '@/lib/constants';
@@ -84,20 +84,6 @@ export function ProductFormComponent() {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const convertFileToBase64 = (pdf: PDFFile) => {
-    return new Promise<{ base64: string; language: string }>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(pdf.file);
-
-      reader.onload = () =>
-        resolve({
-          base64: reader.result as string,
-          language: pdf.language,
-        });
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const onSubmit = async (data: any) => {
     if (images.length === 0 || images.length > 6) {
       setImageError('Please add 1 to 6 images.');
@@ -150,21 +136,23 @@ export function ProductFormComponent() {
       return;
     }
 
-    const promises: Promise<{ base64: string; language: string }>[] = [];
-    patterns.forEach((pattern) => {
-      promises.push(convertFileToBase64(pattern));
-    });
-    const patternPdfsBase64 = await Promise.all(promises);
+    const formData = new FormData();
 
-    await mutate({
-      title: data.title.trim(),
-      description: data.description.trim(),
-      price: isFree ? 0.0 : data.price,
-      isFree,
-      imageUrls: urls.map((fu) => fu.url),
-      category,
-      patternPdfsBase64,
-    });
+    patterns.forEach((pattern) => formData.append('files', pattern.file));
+
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('category', category);
+    formData.append('price', String(isFree ? data.price : 0));
+    formData.append('isFree', isFree ? 'true' : 'false');
+
+    formData.append('imageUrls', JSON.stringify(urls.map(({ url }) => url)));
+    formData.append(
+      'languages',
+      JSON.stringify(patterns.map(({ language, file }) => ({ language, fileName: file.name }))),
+    );
+
+    await mutate(formData);
 
     setUploadStatus({
       type: 'success',
@@ -339,9 +327,9 @@ export function ProductFormComponent() {
         </div>
 
         <div className="w-full">
-          <PdfSelector
-            pdfFiles={patterns}
-            setPdfFiles={setPatterns}
+          <FileSelector
+            selectedFiles={patterns}
+            setSelectedFiles={setPatterns}
             isPro={roles.includes('Pro')}
           />
         </div>
@@ -373,8 +361,8 @@ export function ProductFormComponent() {
               uploadStatus.type === 'success'
                 ? 'green'
                 : uploadStatus.type === 'error'
-                  ? 'red'
-                  : 'blue'
+                ? 'red'
+                : 'blue'
             }-400 text-white`}
           >
             {uploadStatus.status}

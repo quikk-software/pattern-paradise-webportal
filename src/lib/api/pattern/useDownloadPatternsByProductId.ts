@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { useState } from 'react';
 
-export const useGetPattern = () => {
+export const useDownloadPatternsByProductId = () => {
   const [data, setData] = useState<any>(undefined);
 
   const dispatch = useDispatch();
@@ -12,12 +12,18 @@ export const useGetPattern = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (patternId: string) => {
+  const fetch = async (productId: string, language?: string) => {
     const response = await handleFn(
       async () =>
-        await client.api.getPatternById(patternId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
-        }),
+        await client.api.downloadPatterns(
+          productId,
+          {
+            language,
+          },
+          {
+            ...(await getApi(accessToken, refreshToken, dispatch)),
+          },
+        ),
     );
 
     const file = await response.blob();

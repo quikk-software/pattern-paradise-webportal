@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,7 +14,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Trash2, Upload } from 'lucide-react';
 import { PDFFile } from '@/components/product-form';
 import Link from 'next/link';
-import React from 'react';
 
 const languages = [
   { code: 'ar', name: 'Arabic', country: 'SA' },
@@ -39,39 +39,67 @@ const languages = [
 ];
 
 interface PdfSelectorProps {
-  pdfFiles: PDFFile[];
-  setPdfFiles: React.Dispatch<React.SetStateAction<PDFFile[]>>;
+  selectedFiles: PDFFile[];
+  setSelectedFiles: React.Dispatch<React.SetStateAction<PDFFile[]>>;
   isPro: boolean;
 }
 
-export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelectorProps) {
+interface GroupedFiles {
+  [key: string]: PDFFile[];
+}
+
+export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }: PdfSelectorProps) {
+  const [groupedFiles, setGroupedFiles] = useState<GroupedFiles>({});
+
+  useEffect(() => {
+    const grouped = selectedFiles.reduce((acc: GroupedFiles, file) => {
+      if (!acc[file.language]) {
+        acc[file.language] = [];
+      }
+      acc[file.language].push(file);
+      return acc;
+    }, {});
+    setGroupedFiles(grouped);
+  }, [selectedFiles]);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const files = event.target.files;
     if (files) {
-      const newPdfFiles = Array.from(files)
-        .filter((file) => file.type === 'application/pdf')
-        .map((file) => ({
-          file,
-          language: 'en',
-        }));
+      const newFiles = Array.from(files).map((file) => ({
+        file,
+        language: 'en',
+      }));
       if (isPro) {
-        setPdfFiles((prevFiles) => [...prevFiles, ...newPdfFiles]);
+        setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
       } else {
-        setPdfFiles(newPdfFiles?.at(0) ? [newPdfFiles.at(0)!] : []);
+        // set language to other files language or default to english
+        setSelectedFiles((prevFiles) => [
+          ...prevFiles,
+          ...newFiles.map((file) => ({
+            ...file,
+            language: prevFiles.at(0)?.language ?? 'en',
+          })),
+        ]);
       }
     }
     event.target.value = '';
   };
 
-  const handleLanguageChange = (index: number, language: string) => {
-    setPdfFiles((prevFiles) =>
-      prevFiles.map((file, i) => (i === index ? { ...file, language } : file)),
+  const handleLanguageChange = (oldLanguage: string, newLanguage: string) => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.map((file) =>
+        file.language === oldLanguage ? { ...file, language: newLanguage } : file,
+      ),
     );
   };
 
-  const handleRemoveFile = (index: number) => {
-    setPdfFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  const handleRemoveFile = (language: string, index: number) => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.filter(
+        (file) => !(file.language === language && groupedFiles[language].indexOf(file) === index),
+      ),
+    );
   };
 
   return (
@@ -82,7 +110,10 @@ export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelecto
         </CardTitle>
         {isPro ? (
           <CardTitle className="text-md font-medium">
-            Select multiple patterns and add different languages.
+            You can add multiple files at once. By default, all files will be automatically assigned
+            to the &apos;English&apos; language group. However, you can select a different language
+            for the entire group of files. After changing the language for that group, any new files
+            you add will again be automatically assigned to the &apos;English&apos; language group.
           </CardTitle>
         ) : process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true' ? (
           <CardTitle className="text-md font-medium">
@@ -106,12 +137,11 @@ export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelecto
                 <p className="mb-2 text-sm text-gray-500">
                   <span className="font-semibold">Click to upload</span>
                 </p>
-                <p className="text-xs text-gray-500">PDF files only</p>
               </div>
               <input
                 id="pdf-upload"
                 type="file"
-                accept=".pdf"
+                accept=".pdf,image/*"
                 onChange={handleFileChange}
                 className="hidden"
                 multiple
@@ -119,22 +149,16 @@ export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelecto
             </label>
           </div>
 
-          {pdfFiles.length > 0 && (
+          {Object.keys(groupedFiles).length > 0 && (
             <div className="space-y-4">
               <h3 className="text-md font-semibold">Selected Files</h3>
-              {pdfFiles.map((pdfFile, index) => (
-                <Card key={index} className="p-4">
-                  <div className="flex flex-col justify-center md:flex-row md:items-center md:justify-between gap-2">
-                    <div className="flex items-center space-x-3">
-                      <FileText className="w-6 h-6 text-blue-500" />
-                      <span className="font-medium truncate max-w-[200px]">
-                        {pdfFile.file.name}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center space-x-3">
+              {Object.entries(groupedFiles).map(([language, files]) => (
+                <Card key={language} className="p-4">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="flex-grow">
                       <Select
-                        value={pdfFile.language}
-                        onValueChange={(value) => handleLanguageChange(index, value)}
+                        value={language}
+                        onValueChange={(value) => handleLanguageChange(language, value)}
                       >
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Select language" />
@@ -150,16 +174,28 @@ export default function PdfSelector({ pdfFiles, setPdfFiles, isPro }: PdfSelecto
                           ))}
                         </SelectContent>
                       </Select>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleRemoveFile(index);
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                    </div>
+                    <div className="flex-grow space-y-2">
+                      {files.map((file, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <FileText className="w-6 h-6 text-blue-500" />
+                            <span className="font-medium truncate max-w-[200px]">
+                              {file.file.name}
+                            </span>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              handleRemoveFile(language, index);
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </Card>

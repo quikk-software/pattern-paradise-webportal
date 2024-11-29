@@ -9,20 +9,22 @@ import { cn } from '@/lib/utils';
 
 interface PriceFilterProps {
   onFilterChange: (filter: { isFree: boolean; minPrice: number }) => void;
+  value: number;
+  isFree: boolean;
   maxPrice?: number;
 }
 
-export default function PriceFilter({ onFilterChange, maxPrice = 100 }: PriceFilterProps) {
-  const [isFree, setIsFree] = useState(false);
-  const [minPrice, setMinPrice] = useState(3);
-
+export default function PriceFilter({
+  isFree,
+  value,
+  onFilterChange,
+  maxPrice = 100,
+}: PriceFilterProps) {
   const handleFreeChange = (checked: boolean) => {
-    setIsFree(checked);
-    onFilterChange({ isFree: checked, minPrice });
+    onFilterChange({ isFree: checked, minPrice: 3 });
   };
 
   const handlePriceChange = (value: number[]) => {
-    setMinPrice(value[0]);
     onFilterChange({ isFree, minPrice: value[0] });
   };
 
@@ -36,15 +38,20 @@ export default function PriceFilter({ onFilterChange, maxPrice = 100 }: PriceFil
               <Label htmlFor="price-range" className="text-sm font-medium text-muted-foreground">
                 Minimum price
               </Label>
-              <span className="text-sm font-semibold text-primary">${minPrice.toFixed(2)}</span>
+              <span className="text-sm font-semibold text-primary">${value.toFixed(2)}</span>
             </div>
             <Slider
               id="price-range"
               min={3}
               max={maxPrice}
               step={0.01}
-              value={[minPrice]}
+              defaultValue={[value]}
               onValueChange={handlePriceChange}
+              onClick={() => {
+                if (isFree) {
+                  handleFreeChange(false);
+                }
+              }}
               disabled={isFree}
               className={cn(
                 'w-full',
@@ -62,7 +69,7 @@ export default function PriceFilter({ onFilterChange, maxPrice = 100 }: PriceFil
               htmlFor="free"
               className="text-sm font-medium leading-none cursor-pointer select-none"
             >
-              Show only free patterns
+              Show free patterns
             </Label>
           </div>
         </div>

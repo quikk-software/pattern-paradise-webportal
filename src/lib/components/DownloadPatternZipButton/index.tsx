@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { useListPatternsByProductId } from '@/lib/api/pattern';
+import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Download } from 'lucide-react';
@@ -14,7 +14,7 @@ interface DownloadPatternButtonProps {
 const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonProps> = ({
   productId,
 }) => {
-  const { fetch, isLoading, isSuccess, isError, data: file } = useListPatternsByProductId();
+  const { fetch, isLoading, isSuccess, isError, data: file } = useDownloadPatternsByProductId();
 
   useEffect(() => {
     if (!file) {
