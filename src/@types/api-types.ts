@@ -166,19 +166,6 @@ export interface ListUserAccountsResponse {
   users: GetUserAccountResponse[];
 }
 
-export interface PostProductRequest {
-  imageUrls: string[];
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  isFree: boolean;
-  patternPdfsBase64: {
-    base64: string;
-    language: string;
-  }[];
-}
-
 export interface PostProductResponse {
   productId: string;
 }
@@ -195,6 +182,12 @@ export interface PutProductRequest {
 export interface GetProductResponse {
   id: string;
   imageUrls: string[];
+  files: {
+    id: string;
+    objectName: string;
+    language: string;
+    fieldName: string;
+  }[];
   title: string;
   description: string;
   category: string;
@@ -417,9 +410,11 @@ export interface GetOrderResponse {
   productDescription: string;
   productImageUrls: string[];
   productPrice: number;
-  orderPatternPdfs: {
-    patternPdfId: string;
+  orderPatternFiles: {
+    id: string;
     language: string;
+    objectName: string;
+    fieldName: string;
   }[];
   paypalCaptureLink: string;
   paypalOrderId: string;
@@ -449,6 +444,29 @@ export interface ListOrdersResponse {
   /** @example 3 */
   totalPages: number;
   orders: GetOrderResponse[];
+}
+
+export interface GetFileResponse {
+  id: string;
+  objectName: string;
+  fieldName: string;
+  language: string;
+}
+
+export interface ListFilesResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  orders: GetFileResponse[];
 }
 
 export interface ListApplicationErrorsResponse {
@@ -625,8 +643,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-              ? JSON.stringify(property)
-              : `${property}`,
+            ? JSON.stringify(property)
+            : `${property}`,
         );
         return formData;
       }, new FormData()),
@@ -1143,7 +1161,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description Creates a product by the given request body data.
+     * @description Creates a product with files and metadata provided in the request body.
      *
      * @tags Product
      * @name PostProduct
@@ -1153,20 +1171,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     postProduct: (
       data: {
-        /** @example "any" */
-        imageUrls?: any;
-        /** @example "any" */
-        title?: any;
-        /** @example "any" */
-        description?: any;
-        /** @example "any" */
-        category?: any;
-        /** @example "any" */
-        price?: any;
-        /** @example "any" */
-        isFree?: any;
-        /** @example "any" */
-        patternPdfsBase64?: any;
+        /** Array of files to upload. */
+        files: File[];
+        /** Array of product image URLs. */
+        imageUrls: string[];
+        /** Array of languages related to files. */
+        languages: {
+          language?: string;
+          fileName?: string;
+        }[];
+        /** The title of the product. */
+        title: string;
+        /** A description of the product. */
+        description: string;
+        /** The category of the product. */
+        category: string;
+        /** The price of the product. */
+        price: number;
+        /** Indicates if the product is free (true/false). */
+        isFree: string;
       },
       params: RequestParams = {},
     ) =>
@@ -1175,8 +1198,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'POST',
         body: data,
         secure: true,
-        type: ContentType.Json,
-        format: 'json',
+        headers: {},
         ...params,
       }),
 
@@ -1820,15 +1842,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The patterns will be queried by a given product ID and optionally a language code. If the result length is greater than one, the results will be piped to a ZIP file.
+     * @description The patterns will be queried by a given product ID and optionally by language. If the pattern cannot be found, an exception will be thrown.
      *
      * @tags Pattern
-     * @name ListPatternsByProductId
-     * @summary Lists patterns by a product ID.
-     * @request GET:/api/v1/patterns/products/{productId}
+     * @name DownloadPatterns
+     * @summary Downloads patterns by product ID.
+     * @request GET:/api/v1/patterns/{productId}/download
      * @secure
      */
-    listPatternsByProductId: (
+    downloadPatterns: (
       productId: string,
       query?: {
         /** The language of the pattern. */
@@ -1837,7 +1859,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<void, NotFoundResponse>({
-        path: `/api/v1/patterns/products/${productId}`,
+        path: `/api/v1/patterns/${productId}/download`,
         method: 'GET',
         query: query,
         secure: true,

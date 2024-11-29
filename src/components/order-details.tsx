@@ -6,23 +6,20 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
-import { useGetPattern } from '@/lib/api/pattern';
+import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import CountryFlag from '@/lib/components/CountryFlag';
-import { useRouter } from 'next/navigation';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
-  const { fetch, isLoading, isSuccess, isError, data: file } = useGetPattern();
-
-  const router = useRouter();
+  const { fetch, isLoading, isSuccess, isError, data: file } = useDownloadPatternsByProductId();
 
   useEffect(() => {
     if (!file) {
@@ -94,13 +91,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          {order.orderPatternPdfs.map((pdf) => (
+          {order.orderPatternFiles.map((pdf) => (
             <Button
-              key={pdf.patternPdfId}
+              key={pdf.id}
               className="w-full sm:w-auto"
               disabled={order.status !== 'CAPTURED'}
               onClick={() => {
-                fetch(pdf.patternPdfId);
+                fetch(order.productId, pdf.language);
               }}
             >
               {isLoading ? (

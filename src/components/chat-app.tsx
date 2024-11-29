@@ -31,7 +31,7 @@ import { useElementHeight } from '@/lib/core/useElementHeight';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useWebSocket from '@/lib/hooks/useWebSocket';
 import Link from 'next/link';
-import { useListPatternsByProductId } from '@/lib/api/pattern';
+import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
 import ReviewDrawer from '@/lib/components/ReviewDrawer';
@@ -142,7 +142,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     fetch: downloadPattern,
     isLoading: downloadPatternIsLoading,
     data: file,
-  } = useListPatternsByProductId();
+  } = useDownloadPatternsByProductId();
   const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications(
     {},
   );

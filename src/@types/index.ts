@@ -29,8 +29,8 @@ const getApi = async (
   const headers: Record<any, any> = {
     headers: undefined,
   };
-  const at = accessToken ? accessToken : Cookie.get('accessToken') ?? null;
-  const rt = refreshToken ? refreshToken : Cookie.get('refreshToken') ?? null;
+  const at = accessToken ? accessToken : (Cookie.get('accessToken') ?? null);
+  const rt = refreshToken ? refreshToken : (Cookie.get('refreshToken') ?? null);
   if (at !== '') {
     headers.Authorization = `Bearer ${at}`;
   }

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { client, getApi } from '@/@types';
-import type { PostProductRequest, PostProductResponse } from '@/@types/api-types';
+import axios from 'axios';
+import type { PostProductResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { getApi } from '@/@types';
 
 export const useCreateProduct = () => {
   const [data, setData] = useState<PostProductResponse | undefined>(undefined);
@@ -13,13 +14,16 @@ export const useCreateProduct = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const mutate = async (product: PostProductRequest) => {
-    const response = await handleFn(
-      async () =>
-        await client.api.postProduct(product, {
+  const mutate = async (product: FormData) => {
+    const response = await handleFn(async () => {
+      return await axios.post<PostProductResponse>(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`,
+        product,
+        {
           ...(await getApi(accessToken, refreshToken, dispatch)),
-        }),
-    );
+        },
+      );
+    });
 
     setData(response?.data);
 

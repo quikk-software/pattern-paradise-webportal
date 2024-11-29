@@ -6,7 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/terms-and-conditions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/terms-and-conditions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat-app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat-app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/order-details.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/order-details.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pdf-selector.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/file-selector.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/product-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/product-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/pattern/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/pattern/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/pattern/useGetPattern.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/pattern/useListPatternsByProductId.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/pattern/useDownloadPatternsByProductId.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/product/useCreateProduct.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/product/useCreateProduct.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/DownloadPatternZipButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/DownloadPatternZipButton/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,6 +153,7 @@
       <workItem from="1731660298222" duration="17000" />
       <workItem from="1731667195528" duration="1726000" />
       <workItem from="1731926633617" duration="115877000" />
+      <workItem from="1732796570065" duration="13476000" />
     </task>
     <servers />
   </component>
