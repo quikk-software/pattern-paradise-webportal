@@ -140,8 +140,8 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   } = useListTestingComments({});
   const { mutate: createTestingComment } = useCreateTestingComment();
   const {
-    fetch: downloadPattern,
-    isLoading: downloadPatternIsLoading,
+    fetch: downloadPatterns,
+    isLoading: downloadPatternsIsLoading,
     data: file,
   } = useDownloadPatternsByProductId();
   const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications(
@@ -298,7 +298,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     if (!productId) {
       return;
     }
-    await downloadPattern(productId);
+    await downloadPatterns(productId);
   };
 
   const handleReviewClick = async (testingId: string | null) => {
@@ -318,10 +318,10 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     }
   };
 
-  const isInactive = selectedTestingStatus !== 'InProgress' && selectedTestingStatus !== null;
-  const isTester = !!testerApplications.find(
-    (testerApplication) => testerApplication.user.id === userId,
-  );
+  const isInactive = selectedTestingStatus !== 'InProgress';
+  const isTesterOrCreator =
+    !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
+    testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
   const status = testerApplications.find(
     (testerApplication) => testerApplication.user.id === userId,
   )?.status;
@@ -406,8 +406,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   <h2 className="text-2xl font-bold">Chat History</h2>
                 </div>
                 <div className="flex items-center justify-end gap-2">
-                  {testings.find((testing) => testing.id === selectedTestingId)?.creatorId ===
-                    userId || status === 'InProgress' ? (
+                  {status === 'InProgress' ? (
                     <Button
                       variant="outline"
                       size="icon"
@@ -422,7 +421,9 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   <Button
                     variant="outline"
                     size="icon"
-                    disabled={!selectedProductIdByTesting || downloadPatternIsLoading || !isTester}
+                    disabled={
+                      !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
+                    }
                     onClick={() => {
                       handleDownloadPatternClick(selectedProductIdByTesting);
                     }}
