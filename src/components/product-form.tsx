@@ -152,10 +152,6 @@ export function ProductFormComponent() {
       JSON.stringify(patterns.map(({ language, file }) => ({ language, fileName: file.name }))),
     );
 
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
     await mutate(formData);
 
     setUploadStatus({
@@ -365,8 +361,8 @@ export function ProductFormComponent() {
               uploadStatus.type === 'success'
                 ? 'green'
                 : uploadStatus.type === 'error'
-                  ? 'red'
-                  : 'blue'
+                ? 'red'
+                : 'blue'
             }-400 text-white`}
           >
             {uploadStatus.status}

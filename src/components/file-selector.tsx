@@ -109,7 +109,12 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
           {isPro ? 'Select patterns' : 'Select pattern'} <span className="text-red-500">*</span>
         </CardTitle>
         {isPro ? (
-          <CardTitle className="text-md font-medium">Select different languages.</CardTitle>
+          <CardTitle className="text-md font-medium">
+            You can add multiple files at once. By default, all files will be automatically assigned
+            to the &apos;English&apos; language group. However, you can select a different language
+            for the entire group of files. After changing the language for that group, any new files
+            you add will again be automatically assigned to the &apos;English&apos; language group.
+          </CardTitle>
         ) : process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true' ? (
           <CardTitle className="text-md font-medium">
             Upgrade to{' '}

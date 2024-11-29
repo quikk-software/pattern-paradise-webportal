@@ -39,6 +39,9 @@ export default function TermsAndConditions() {
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-left mb-4">Terms and Conditions</CardTitle>
+          <CardTitle className="text-md font-medium text-left mb-4">
+            Last updated on: 29 Nov 2024
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="mb-4">
@@ -47,34 +50,10 @@ export default function TermsAndConditions() {
           </p>
           <p className="mb-4">
             In the following we refer to us, QUIKK Software GmbH, as &apos;Pattern Paradise&apos;,
-            &apos;we&apos;, &apos;us&apos; or &apos;our&apos;. or &apos;our&apos;. You, the user of
-            this website, are referred to as &apos;you&apos; or &apos;your&apos;.
+            &apos;we&apos;, &apos;us&apos; or &apos;our&apos;. You, the user of this website, are
+            referred to as &apos;you&apos; or &apos;your&apos;.
           </p>
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="supplemental-terms">
-              <AccordionTrigger>Supplemental Terms</AccordionTrigger>
-              <AccordionContent>
-                <p>
-                  Additional terms or policies may be posted on the website periodically, and such
-                  documents are considered part of this agreement by reference. We reserve the right
-                  to modify these Terms and Conditions, including our Payments Policy, at any time
-                  and for any reason, at our sole discretion.
-                </p>
-                <p>
-                  Updates to these terms will be indicated by the &apos;Last updated&apos; date, and
-                  you waive any requirement for specific notification of changes. It is your
-                  responsibility to review these Terms and Conditions regularly. Continued use of
-                  the website after revised terms are posted constitutes your acceptance of the
-                  updates.
-                </p>
-                <p>
-                  The information provided on the website is not intended for use or distribution in
-                  any jurisdiction or country where such use would violate applicable laws or
-                  require registration. Users accessing the website from other regions are
-                  responsible for ensuring compliance with local laws.
-                </p>
-              </AccordionContent>
-            </AccordionItem>
             <AccordionItem value="users-under-18">
               <AccordionTrigger>Users Under 18</AccordionTrigger>
               <AccordionContent>
@@ -89,14 +68,21 @@ export default function TermsAndConditions() {
                 </p>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="user-representations">
-              <AccordionTrigger>User Representations</AccordionTrigger>
+            <AccordionItem value="user-registration">
+              <AccordionTrigger>User Registration</AccordionTrigger>
               <AccordionContent>
                 <p>
-                  By registering, you confirm that the information you provide is accurate, current,
-                  and complete. You agree to promptly update your registration details as necessary
-                  to maintain their accuracy. You also affirm that you have the legal capacity to
-                  agree to these Terms and Conditions.
+                  By registering on this website, you agree to maintain the confidentiality of your
+                  password and accept responsibility for all activities that occur under your
+                  account. We reserve the right to modify, reclaim, or remove any username we
+                  determine, at our sole discretion, to be inappropriate, obscene, or otherwise
+                  objectionable.
+                </p>
+                <p>
+                  You confirm that the information you provide is accurate, current, and complete.
+                  You agree to promptly update your registration details as necessary to maintain
+                  their accuracy. You also affirm that you have the legal capacity to agree to these
+                  Terms and Conditions.
                 </p>
                 <p>
                   If you are a minor, you have obtained parental or guardian permission to use the
@@ -109,18 +95,6 @@ export default function TermsAndConditions() {
                   If any information you provide is found to be false, inaccurate, outdated, or
                   incomplete, we reserve the right to suspend or terminate your account and deny
                   future access to the website.
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="user-registration">
-              <AccordionTrigger>User Registration</AccordionTrigger>
-              <AccordionContent>
-                <p>
-                  By registering on this website, you agree to maintain the confidentiality of your
-                  password and accept responsibility for all activities that occur under your
-                  account. We reserve the right to modify, reclaim, or remove any username we
-                  determine, at our sole discretion, to be inappropriate, obscene, or otherwise
-                  objectionable.
                 </p>
               </AccordionContent>
             </AccordionItem>
