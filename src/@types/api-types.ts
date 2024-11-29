@@ -643,8 +643,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-            ? JSON.stringify(property)
-            : `${property}`,
+              ? JSON.stringify(property)
+              : `${property}`,
         );
         return formData;
       }, new FormData()),
@@ -1198,7 +1198,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'POST',
         body: data,
         secure: true,
-        headers: {},
+        type: ContentType.FormData,
+        format: 'json',
         ...params,
       }),
 
@@ -1821,23 +1822,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description The pattern will be queried by a given ID. If the pattern cannot be found, an exception will be thrown.
-     *
-     * @tags Pattern
-     * @name GetPatternById
-     * @summary Gets a pattern by ID.
-     * @request GET:/api/v1/patterns/{patternId}
-     * @secure
-     */
-    getPatternById: (patternId: string, params: RequestParams = {}) =>
-      this.request<void, NotFoundResponse>({
-        path: `/api/v1/patterns/${patternId}`,
-        method: 'GET',
-        secure: true,
         ...params,
       }),
 
