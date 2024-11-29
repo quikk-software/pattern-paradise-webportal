@@ -37,7 +37,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [priceRange, setPriceRange] = useState([3, 100]);
-  const [isFree, setIsFree] = useState(false);
+  const [isFree, setIsFree] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
 
@@ -91,7 +91,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       q: debouncedSearchTerm ?? undefined,
       status,
       categories: selectedCategory ? [selectedCategory] : ['All'],
-      minPrice: priceRange[0],
+      minPrice: isFree ? 0 : priceRange[0],
       maxPrice: priceRange[1],
       pageNumber: 1,
       pageSize: 20,
@@ -133,6 +133,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           setIsFree(filter.isFree);
           setPriceRange([filter.minPrice, 100]);
         }}
+        value={priceRange[0]}
+        isFree={isFree}
       />
       <Button
         onClick={() => {

@@ -35,6 +35,7 @@ import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
 import ReviewDrawer from '@/lib/components/ReviewDrawer';
+import { buildUserName } from '@/lib/features/chat/utils';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -457,19 +458,18 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                 .slice(0)
                 .reverse()
                 .map((message) => {
-                  const user = testings
-                    .find((testing) => testing.id === selectedTestingId)
-                    ?.testers?.find((tester) => tester.id === message.creatorId);
-                  const otherName =
-                    user?.firstName && user?.lastName
-                      ? `${user.firstName} ${user.lastName}`
-                      : user?.firstName
-                      ? user.firstName
-                      : user?.lastName
-                      ? user.lastName
-                      : user?.username ?? 'Other';
+                  const currentTesting = testings.find(
+                    (testing) => testing.id === selectedTestingId,
+                  );
+                  const user = currentTesting?.testers?.find(
+                    (tester) => tester.id === message.creatorId,
+                  );
+                  const creatorUser =
+                    currentTesting?.creatorId === message.creatorId
+                      ? currentTesting.creator
+                      : undefined;
+                  const otherName = buildUserName(user) || buildUserName(creatorUser) || 'Other';
                   const isCreator = message.creatorId === userId;
-
                   return (
                     <>
                       {message.type === 'System' ? (
