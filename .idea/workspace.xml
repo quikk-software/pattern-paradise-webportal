@@ -7,7 +7,48 @@
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/terms-and-conditions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/terms-and-conditions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/auth/confirm/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/confirm/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/auth/me/orders/[orderId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/me/orders/[orderId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/auth/me/orders/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/me/orders/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/auth/me/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/me/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/auth/me/testings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/me/testings/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/sell/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/sell/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/sell/orders/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/sell/orders/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/sell/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/sell/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/sell/products/[productId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/sell/products/[productId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/sell/submit/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/sell/submit/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/sell/testings/[testingId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/sell/testings/[testingId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/sell/testings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/sell/testings/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/test/chats/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/test/chats/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/test/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/test/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/test/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/test/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/test/products/[productId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/test/products/[productId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/test/testings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/test/testings/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/products/[productId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/products/[productId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/animated-landing.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/animated-landing.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/bottom-navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/bottom-navigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat-app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat-app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/confirm-code.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/confirm-code.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/faq-page-component.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/faq-page-component.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/insufficient-roles.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/insufficient-roles.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/order-details.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/order-details.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/order-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/order-list.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pattern-paradise-pro.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pattern-paradise-pro.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/product-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/product-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sell-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sell-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/tester-applicants-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/tester-applicants-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/testing-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/testing-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/BuyNowButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/BuyNowButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ColumnListing/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ColumnListing/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ReviewDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ReviewDrawer/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/UpdateProductForm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/UpdateProductForm/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/WaterfallListing/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/WaterfallListing/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,11 +111,11 @@
       <recent name="$PROJECT_DIR$/src/lib/api/testing" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/app" />
       <recent name="$PROJECT_DIR$/src/app/app" />
+      <recent name="$PROJECT_DIR$/src/app/app/secure" />
+      <recent name="$PROJECT_DIR$/src/app" />
       <recent name="$PROJECT_DIR$/src/app/app/auth" />
       <recent name="$PROJECT_DIR$/public/icons/main" />
-      <recent name="$PROJECT_DIR$/src/components" />
     </key>
   </component>
   <component name="RunManager" selected="npm.generate-types">

@@ -70,7 +70,7 @@ function PayPalButton({ price, productId, userId, disabled, callback }: PayPalBu
     if (!captureOrderIsSuccess || !orderData?.orderId) {
       return;
     }
-    router.push(`/app/auth/me/orders/${orderData.orderId}`);
+    router.push(`/app/secure/auth/me/orders/${orderData.orderId}`);
   }, [captureOrderIsSuccess, orderData]);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ function PayPalButton({ price, productId, userId, disabled, callback }: PayPalBu
       return;
     }
     // redirect to first order detail page related to the user matching this product
-    router.push(`/app/auth/me/orders/${orders[0].id}`);
+    router.push(`/app/secure/auth/me/orders/${orders[0].id}`);
   }, [listOrdersByProductIdIsSuccess, orders]);
 
   if (listOrdersByProductIdIsLoading) {
@@ -186,7 +186,10 @@ export function BuyNowButton({
             {productStatus === 'Created' ? (
               <span>
                 {' '}
-                <Link href={`/app/test/products/${productId}`} className="text-blue-500 underline">
+                <Link
+                  href={`/app/secure/test/products/${productId}`}
+                  className="text-blue-500 underline"
+                >
                   Apply as a Tester here!
                 </Link>
               </span>
@@ -260,7 +263,7 @@ export function BuyNowButton({
                     signupCallback={() =>
                       router.push(
                         `/auth/login?redirect=${encodeURIComponent(
-                          `/products/${productId}?action=toggleBuyNow`,
+                          `/app/products/${productId}?action=toggleBuyNow`,
                         )}`,
                       )
                     }

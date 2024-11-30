@@ -84,18 +84,21 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
 
   const isOwner = product.creatorId === userId;
 
-  const filesGroupedByLanguage = product.files.reduce((acc, file) => {
-    if (!acc[file.language]) {
-      acc[file.language] = [];
-    }
+  const filesGroupedByLanguage = product.files.reduce(
+    (acc, file) => {
+      if (!acc[file.language]) {
+        acc[file.language] = [];
+      }
 
-    const isDuplicate = acc[file.language].some((existingFile) => existingFile.id === file.id);
-    if (!isDuplicate) {
-      acc[file.language].push(file);
-    }
+      const isDuplicate = acc[file.language].some((existingFile) => existingFile.id === file.id);
+      if (!isDuplicate) {
+        acc[file.language].push(file);
+      }
 
-    return acc;
-  }, {} as { [language: string]: typeof product.files });
+      return acc;
+    },
+    {} as { [language: string]: typeof product.files },
+  );
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
@@ -146,7 +149,9 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                     productName={product.title}
                     productStatus={product.status}
                     creatorId={product.creatorId}
-                    callback={(orderId: string) => router.push(`/app/auth/me/orders/${orderId}`)}
+                    callback={(orderId: string) =>
+                      router.push(`/app/secure/auth/me/orders/${orderId}`)
+                    }
                   />
                 )}
               </div>

@@ -107,11 +107,11 @@ export default function ProductCard({
           <span className="text-lg font-bold">${price.toFixed(2)}</span>
         )}
         {isTesterCall ? (
-          <Link href={`/app/test/products/${id}`}>
+          <Link href={`/app/secure/test/products/${id}`}>
             <Button>Show tester call</Button>
           </Link>
         ) : (
-          <Link href={`/products/${id}`}>
+          <Link href={`/app/products/${id}`}>
             <Button>Show details</Button>
           </Link>
         )}
@@ -121,7 +121,7 @@ export default function ProductCard({
           <CardFooter className="w-full flex flex-col gap-6">
             <hr className="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10 w-full" />
             <div className="flex justify-end items-center gap-2 w-full">
-              <Link href={`/app/sell/products/${id}`}>
+              <Link href={`/app/secure/sell/products/${id}`}>
                 <Button variant="secondary">Update product</Button>
               </Link>
               <Button
@@ -151,7 +151,7 @@ export default function ProductCard({
                   <DrawerTitle>Release pattern</DrawerTitle>
                   <DrawerTitle className="text-sm font-medium">
                     If you release your pattern yourself without testers approving it in a{' '}
-                    <Link href="/app/sell/testings" className="text-blue-500 underline">
+                    <Link href="/app/secure/sell/testings" className="text-blue-500 underline">
                       testing
                     </Link>
                     , your pattern will be <strong>ranked the lowest</strong> in search results on
