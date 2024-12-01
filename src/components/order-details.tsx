@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
+import { InfoBoxComponent } from '@/components/info-box';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -17,6 +18,7 @@ interface OrderDetailsProps {
 
 export function OrderDetails({ order }: OrderDetailsProps) {
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
+  const isCreated = order.status === 'CREATED';
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -34,8 +36,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           >
             Order Status: {order.status}
           </Badge>
-          {order.status === 'CREATED' ? (
+          {isCreated ? (
             <div className="flex flex-col gap-2">
+              <InfoBoxComponent
+                severity="warning"
+                title="One last step"
+                message="Please complete your payment with PayPal by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
+              />
               <BuyNowButton
                 price={order.productPrice}
                 productId={order.productId}
@@ -67,11 +74,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          <DownloadPatternZipButton
-            files={order.files}
-            productId={order.productId}
-            productTitle={order.productName}
-          />
+          {isPayed ? (
+            <DownloadPatternZipButton
+              files={order.files}
+              productId={order.productId}
+              productTitle={order.productName}
+            />
+          ) : null}
         </div>
         <Button asChild className="flex items-center space-x-2" variant="outline">
           <Link href="/app/secure/auth/me/orders">

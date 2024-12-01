@@ -10,6 +10,7 @@ import {
   isTokenValid,
   saveTokensToCookies,
 } from '@/lib/auth/auth.utils';
+import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -107,6 +108,7 @@ export default async function RootLayout({
           <div className="flex-1 overflow-auto">
             <StoreProvider>{children}</StoreProvider>
           </div>
+          <CookieConsentBanner />
           <div className="flex-0">
             <BottomNavigation />
           </div>

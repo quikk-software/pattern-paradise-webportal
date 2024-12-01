@@ -6,12 +6,22 @@ import {
 } from '@/components/ui/accordion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import { MutableRefObject } from 'react';
+import useAction from '@/lib/core/useAction';
 
-export default function PrivacyPolicy() {
+interface PrivacyPolicyProps {
+  privacyPolicyRef: MutableRefObject<HTMLDivElement | null>;
+}
+
+export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) {
+  const { action } = useAction();
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-left mb-2">Privacy Policy</CardTitle>
+        <CardTitle className="text-3xl font-bold text-left mb-2" ref={privacyPolicyRef}>
+          {action === 'scrollToPrivacyPolicy' ? '💡 ' : ''}Privacy Policy
+        </CardTitle>
         <CardTitle className="text-md font-medium text-left mb-4">
           Last updated on: 27 Nov 2024
         </CardTitle>

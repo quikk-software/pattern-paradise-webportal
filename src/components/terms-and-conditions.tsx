@@ -17,6 +17,7 @@ export default function TermsAndConditions() {
   const { action } = useAction();
 
   const paymentPolicyRef = useRef<HTMLDivElement | null>(null);
+  const privacyPolicyRef = useRef<HTMLDivElement | null>(null);
 
   const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView();
@@ -27,6 +28,9 @@ export default function TermsAndConditions() {
       case 'scrollToPaymentPolicy':
         executeScroll(paymentPolicyRef);
         break;
+      case 'scrollToPrivacyPolicy':
+        executeScroll(privacyPolicyRef);
+        break;
       default:
         break;
     }
@@ -35,7 +39,7 @@ export default function TermsAndConditions() {
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl space-y-4">
       <Imprint />
-      <PrivacyPolicy />
+      <PrivacyPolicy privacyPolicyRef={privacyPolicyRef} />
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-left mb-4">Terms and Conditions</CardTitle>
