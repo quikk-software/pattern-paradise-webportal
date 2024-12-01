@@ -33,6 +33,7 @@ import { useRouter } from 'next/navigation';
 import RequestStatus from '@/lib/components/RequestStatus';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import Link from 'next/link';
+import NoDataInfoBox from '@/lib/components/NoDataInfoBox';
 
 const MIN_TESTER_COUNT = 3;
 
@@ -209,7 +210,7 @@ export function TesterApplicantsPage({
               </CardContent>
             </Card>
           </div>
-          {totalApplicantsCount < MIN_TESTER_COUNT ? (
+          {totalApplicantsCount < MIN_TESTER_COUNT && !fetchTesterApplicationsIsLoading ? (
             <InfoBoxComponent
               severity="warning"
               message={`There are currently not enough applications for your tester call. Testers available: ${totalApplicantsCount} / Testers needed: ${MIN_TESTER_COUNT}.`}
@@ -229,6 +230,15 @@ export function TesterApplicantsPage({
               Complete selection
             </Button>
           </div>
+          {applications.length === 0 && !fetchTesterApplicationsIsLoading ? (
+            <NoDataInfoBox
+              title={'No applications yet'}
+              description={
+                "It looks like there are no applications yet. You'll receive email notifications if someone applied to your tester call."
+              }
+            />
+          ) : null}
+          {fetchTesterApplicationsIsLoading ? <LoadingSpinnerComponent /> : null}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {applications.map((application) => (
               <Card
@@ -324,8 +334,7 @@ export function TesterApplicantsPage({
               </DrawerTitle>
             </DrawerHeader>
           </div>
-          <div className="flex flex-col gap-4 max-h-48 overflow-y-auto">
-            {fetchTesterApplicationsIsLoading ? <LoadingSpinnerComponent /> : null}
+          <div className="flex flex-col gap-4 overflow-y-auto">
             {selectedApplicants.map((applicant) => (
               <div className="flex items-center space-x-4" key={applicant.id}>
                 <Avatar className="w-12 h-12">
