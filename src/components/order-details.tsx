@@ -1,46 +1,24 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { ArrowLeft, Download } from 'lucide-react';
+import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
-import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
-import RequestStatus from '@/lib/components/RequestStatus';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
-import CountryFlag from '@/lib/components/CountryFlag';
+import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
+import { InfoBoxComponent } from '@/components/info-box';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
-  const { fetch, isLoading, isSuccess, isError, data: file } = useDownloadPatternsByProductId();
-
-  useEffect(() => {
-    if (!file) {
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_self';
-    link.download =
-      file.name ?? `${order.productName.toLowerCase().replace(/\s/g, '')}_pattern.pdf`;
-    document.body.appendChild(link);
-    link.click();
-
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      document.body.removeChild(link);
-    }, 1000);
-  }, [file]);
-
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
+  const isCreated = order.status === 'CREATED';
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -58,8 +36,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           >
             Order Status: {order.status}
           </Badge>
-          {order.status === 'CREATED' ? (
+          {isCreated ? (
             <div className="flex flex-col gap-2">
+              <InfoBoxComponent
+                severity="warning"
+                title="One last step"
+                message="Please complete your payment with PayPal by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
+              />
               <BuyNowButton
                 price={order.productPrice}
                 productId={order.productId}
@@ -91,24 +74,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          {order.files.map((file) => (
-            <Button
-              key={file.id}
-              className="w-full sm:w-auto"
-              disabled={order.status !== 'CAPTURED'}
-              onClick={() => {
-                fetch(order.productId, file.language);
-              }}
-            >
-              {isLoading ? (
-                <LoadingSpinnerComponent size="sm" className="text-white" />
-              ) : (
-                <Download className="mr-2 h-4 w-4" />
-              )}
-              Download pattern <CountryFlag languageCode={file.language} />
-            </Button>
-          ))}
-          <RequestStatus isSuccess={isSuccess} isError={isError} successMessage={''} />
+          {isPayed ? (
+            <DownloadPatternZipButton
+              files={order.files}
+              productId={order.productId}
+              productTitle={order.productName}
+            />
+          ) : null}
         </div>
         <Button asChild className="flex items-center space-x-2" variant="outline">
           <Link href="/app/secure/auth/me/orders">

@@ -235,14 +235,14 @@ export function BuyNowButton({
                       <span>
                         You&apos;re not logged in. You can{' '}
                         <Link
-                          href={`/auth/login?redirect=/products/${productId}?action=toggleBuyNow`}
+                          href={`/auth/login?redirect=/app/products/${productId}?action=toggleBuyNow`}
                           className="text-blue-500 underline"
                         >
                           log in
                         </Link>{' '}
                         or{' '}
                         <Link
-                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/products/${productId}?action=toggleBuyNow`}
+                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/app/products/${productId}?action=toggleBuyNow`}
                           className="text-blue-500 underline"
                         >
                           register
