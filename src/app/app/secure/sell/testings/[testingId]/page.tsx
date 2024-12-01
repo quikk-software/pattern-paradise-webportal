@@ -10,7 +10,14 @@ export default function TestingPage({ params }: { params: { testingId: string } 
   const [sortKey, setSortKey] = useState<'updatedAt' | 'assignedAt'>('updatedAt');
   const [filter, setFilter] = useState<string[]>([]);
 
-  const { fetch, data, setData, reset, totalCount } = useListTesterApplications({});
+  const {
+    fetch,
+    data,
+    setData,
+    reset,
+    totalCount,
+    isLoading: fetchTesterApplicationsIsLoading,
+  } = useListTesterApplications({});
   const { fetch: fetchTesting, data: testing } = useGetTesting();
 
   useEffect(() => {
@@ -51,6 +58,7 @@ export default function TestingPage({ params }: { params: { testingId: string } 
       filter={filter}
       totalApplicantsCount={totalCount}
       testing={testing}
+      fetchTesterApplicationsIsLoading={fetchTesterApplicationsIsLoading}
     />
   );
 }

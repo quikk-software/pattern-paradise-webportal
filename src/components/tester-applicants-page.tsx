@@ -83,6 +83,7 @@ export function TesterApplicantsPage({
   filter,
   totalApplicantsCount,
   testing,
+  fetchTesterApplicationsIsLoading,
 }: {
   applications: GetTesterApplicationResponse[];
   directionFn: (direction: 'asc' | 'desc') => void;
@@ -91,6 +92,7 @@ export function TesterApplicantsPage({
   filter: string[];
   totalApplicantsCount: number;
   testing?: GetTestingResponse;
+  fetchTesterApplicationsIsLoading: boolean;
 }) {
   const { requestSort, sortConfig } = useSortableData(applications);
   const [showAddApplicantsDrawer, setShowAddApplicantsDrawer] = useState<boolean>(false);
@@ -323,6 +325,7 @@ export function TesterApplicantsPage({
             </DrawerHeader>
           </div>
           <div className="flex flex-col gap-4 max-h-48 overflow-y-auto">
+            {fetchTesterApplicationsIsLoading ? <LoadingSpinnerComponent /> : null}
             {selectedApplicants.map((applicant) => (
               <div className="flex items-center space-x-4" key={applicant.id}>
                 <Avatar className="w-12 h-12">
