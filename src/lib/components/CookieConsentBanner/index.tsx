@@ -47,8 +47,8 @@ export default function CookieConsentBanner() {
             <div className="flex flex-col gap-2">
               <h2 className="text-lg font-semibold mb-2 text-primary">We value your privacy 🍪</h2>
               <p className="text-sm text-muted-foreground">
-                We use cookies to enhance your browsing experience. By clicking "Accept", you
-                consent to our use of cookies.
+                We use cookies to enhance your browsing experience. By clicking &apos;Accept&apos;,
+                you consent to our use of cookies.
               </p>
             </div>
             <div className="flex gap-2 justify-end">
