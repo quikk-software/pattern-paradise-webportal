@@ -550,7 +550,7 @@ export default function TermsAndConditions() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="site-management">
-              <AccordionTrigger>website Management</AccordionTrigger>
+              <AccordionTrigger>Website Management</AccordionTrigger>
               <AccordionContent>
                 <p>
                   We reserve the right, though we are not obligated, to monitor the website for any
@@ -562,31 +562,6 @@ export default function TermsAndConditions() {
                   content that are excessively large or place a significant burden on our systems.
                   Furthermore, we may manage the website as necessary to ensure its proper
                   functionality and to protect our rights and property.
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="privacy-policy">
-              <AccordionTrigger>Privacy Policy</AccordionTrigger>
-              <AccordionContent>
-                <p>
-                  We prioritize data privacy and security. Please review our{' '}
-                  <a href="https://ribblr.com/privacy" className="text-blue-600 hover:underline">
-                    Privacy Policy
-                  </a>
-                  , which is incorporated into these Terms and Conditions. By using the website, you
-                  agree to its terms.
-                </p>
-                <p>
-                  The website is primarily hosted in Europe. If you access the website from outside
-                  Europe, such as the United States or Asia, you consent to your data being
-                  transferred to and processed in Europe or the United States, in accordance with
-                  applicable laws.
-                </p>
-                <p>
-                  We do not knowingly collect data from or market to individuals under 13 years of
-                  age. In compliance with the U.S. Children&apos;s Online Privacy Protection Act, if
-                  we become aware that a child under 13 has submitted personal information without
-                  verified parental consent, we will promptly delete that data.
                 </p>
               </AccordionContent>
             </AccordionItem>

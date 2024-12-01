@@ -310,8 +310,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
               uploadStatus.type === 'success'
                 ? 'green'
                 : uploadStatus.type === 'error'
-                ? 'red'
-                : 'blue'
+                  ? 'red'
+                  : 'blue'
             }-400 text-white`}
           >
             {uploadStatus.status}
@@ -365,7 +365,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         />
       </form>
       <Button asChild className="flex items-center space-x-2" variant="outline">
-        <Link href="/app/sell">
+        <Link href="/app/secure/sell">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Go back
         </Link>

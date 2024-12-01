@@ -23,7 +23,7 @@ export default function InsufficientRoles({ roleType }: InsufficientRolesProps) 
         </CardContent>
         <CardFooter className="flex justify-center">
           <Button asChild>
-            <Link href="/app/auth/me?action=scrollToRoles">Add Role {roleType}</Link>
+            <Link href="/app/secure/secure/auth/me?action=scrollToRoles">Add Role {roleType}</Link>
           </Button>
         </CardFooter>
       </Card>

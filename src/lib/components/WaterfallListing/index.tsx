@@ -38,8 +38,8 @@ export default function WaterfallListing({
               key={product.id}
               href={`${
                 listingType === 'sell'
-                  ? '/products'
-                  : listingType === 'test' && '/app/test/products'
+                  ? '/app/products'
+                  : listingType === 'test' && '/app/secure/test/products'
               }/${product.id}`}
               className="w-full"
             >

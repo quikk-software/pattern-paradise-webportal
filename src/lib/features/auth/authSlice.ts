@@ -41,16 +41,26 @@ export const authSlice = createSlice({
       state.password = action.payload;
     },
     setAccessToken: (state, action: PayloadAction<string | null>) => {
-      if (action.payload) {
-        Cookies.set('accessToken', action.payload);
+      if (!!action.payload) {
+        if (!!Cookies.get('accessToken')) {
+          Cookies.remove('accessToken');
+          Cookies.set('accessToken', action.payload);
+        } else {
+          Cookies.set('accessToken', action.payload);
+        }
       } else {
         Cookies.remove('accessToken');
       }
       state.accessToken = action.payload;
     },
     setRefreshToken: (state, action: PayloadAction<string | null>) => {
-      if (action.payload) {
-        Cookies.set('refreshToken', action.payload);
+      if (!!action.payload) {
+        if (!!Cookies.get('refreshToken')) {
+          Cookies.remove('refreshToken');
+          Cookies.set('refreshToken', action.payload);
+        } else {
+          Cookies.set('refreshToken', action.payload);
+        }
       } else {
         Cookies.remove('refreshToken');
       }

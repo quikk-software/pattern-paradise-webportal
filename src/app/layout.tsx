@@ -4,6 +4,12 @@ import './globals.css';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
 import StoreProvider from '@/app/providers/StoreProvider';
+import { cookies } from 'next/headers';
+import {
+  getAccessTokenUsingRefreshToken,
+  isTokenValid,
+  saveTokensToCookies,
+} from '@/lib/auth/auth.utils';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -27,11 +33,34 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+async function refreshAccessToken(refreshToken: string) {
+  try {
+    const res = await getAccessTokenUsingRefreshToken(refreshToken);
+    if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
+      await saveTokensToCookies(res.data.access_token, res.data.refresh_token);
+    }
+    return null;
+  } catch (error) {
+    console.error('Error during token refresh:', error);
+    return null;
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get('accessToken')?.value;
+  const refreshToken = cookieStore.get('refreshToken')?.value;
+
+  if (!accessToken || !isTokenValid(accessToken)) {
+    if (refreshToken && isTokenValid(refreshToken)) {
+      await refreshAccessToken(refreshToken);
+    }
+  }
+
   return (
     <html lang="en">
       <head>

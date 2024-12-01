@@ -91,13 +91,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          {order.orderPatternFiles.map((pdf) => (
+          {order.files.map((file) => (
             <Button
-              key={pdf.id}
+              key={file.id}
               className="w-full sm:w-auto"
               disabled={order.status !== 'CAPTURED'}
               onClick={() => {
-                fetch(order.productId, pdf.language);
+                fetch(order.productId, file.language);
               }}
             >
               {isLoading ? (
@@ -105,13 +105,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               ) : (
                 <Download className="mr-2 h-4 w-4" />
               )}
-              Download pattern <CountryFlag languageCode={pdf.language} />
+              Download pattern <CountryFlag languageCode={file.language} />
             </Button>
           ))}
           <RequestStatus isSuccess={isSuccess} isError={isError} successMessage={''} />
         </div>
         <Button asChild className="flex items-center space-x-2" variant="outline">
-          <Link href="/app/auth/me/orders">
+          <Link href="/app/secure/auth/me/orders">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Go back
           </Link>

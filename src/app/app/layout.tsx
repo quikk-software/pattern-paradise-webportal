@@ -1,15 +1,9 @@
-import AuthGuard from '@/lib/auth/AuthGuard';
-import { Suspense } from 'react';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import TokenWrapper from '@/app/wrappers/TokenWrapper';
 
 export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <Suspense fallback={<LoadingSpinnerComponent className="h-lvh" />}>
-      <AuthGuard>{children}</AuthGuard>
-    </Suspense>
-  );
+  return <TokenWrapper>{children}</TokenWrapper>;
 }

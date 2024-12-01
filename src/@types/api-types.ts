@@ -396,6 +396,12 @@ export interface PostOrderResponse {
 
 export interface GetOrderResponse {
   id: string;
+  files: {
+    id: string;
+    objectName: string;
+    language: string;
+    fieldName: string;
+  }[];
   seller: GetUserAccountResponse;
   customer: GetUserAccountResponse;
   amount: number;
@@ -410,12 +416,6 @@ export interface GetOrderResponse {
   productDescription: string;
   productImageUrls: string[];
   productPrice: number;
-  orderPatternFiles: {
-    id: string;
-    language: string;
-    objectName: string;
-    fieldName: string;
-  }[];
   paypalCaptureLink: string;
   paypalOrderId: string;
   /**

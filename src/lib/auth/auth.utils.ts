@@ -65,8 +65,8 @@ const getAccessTokenUsingRefreshToken = async (
   }
 };
 
-const isTokenValid = (accessToken: string | null) =>
-  accessToken !== null && accessToken !== '' && !isTokenExpired(accessToken);
+const isTokenValid = (token: string | null) =>
+  token !== null && token !== '' && !isTokenExpired(token);
 
 const saveTokensToCookies = async (access_token: string, refresh_token: string) => {
   const response = await fetch('/api/auth/callback', {

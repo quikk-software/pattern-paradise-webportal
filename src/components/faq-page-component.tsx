@@ -99,11 +99,11 @@ export default function FAQPageComponent() {
                   Register as a Tester
                 </Link>{' '}
                 or update your selected roles in your{' '}
-                <Link href="/app/auth/me" className="text-blue-500 underline">
+                <Link href="/app/secure/auth/me" className="text-blue-500 underline">
                   Profile Settings
                 </Link>
                 . Once you have everything set up, you can{' '}
-                <Link href="/app/test" className="text-blue-500 underline">
+                <Link href="/app/secure/test" className="text-blue-500 underline">
                   browse Tester Calls
                 </Link>
                 .

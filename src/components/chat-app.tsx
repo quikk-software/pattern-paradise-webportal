@@ -345,7 +345,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   Chats will be displayed here if you have applied for a tester call and have been
                   accepted.
                 </p>
-                <Link href="/app/test">
+                <Link href="/app/secure/test">
                   <Button>Show Tester Calls</Button>
                 </Link>
               </div>
