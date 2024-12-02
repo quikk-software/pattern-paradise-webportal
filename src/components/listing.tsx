@@ -86,6 +86,10 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProducts();
   }, [loadMore]);
 
+  useEffect(() => {
+    fetchProductsByFilter();
+  }, [debouncedSearchTerm]);
+
   const fetchProductsByFilter = async () => {
     const result = await fetch({
       q: debouncedSearchTerm ?? undefined,
@@ -197,13 +201,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         <WaterfallListing
           products={products}
           listingType={listingType}
-          columns={
-            screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' || screenSize === 'lg'
-              ? 2
-              : products.length < 4
-              ? products.length
-              : 4
-          }
+          columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
         />
 
         {hasNextPage ? (

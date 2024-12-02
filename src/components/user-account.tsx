@@ -11,7 +11,6 @@ import { Badge } from '@/components/ui/badge';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
-import { useListTestings, useListTestingsByUserId } from '@/lib/api/testing';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -128,8 +127,8 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
                 screenSize === 'lg'
                   ? 2
                   : products.length < 4
-                    ? products.length
-                    : 4
+                  ? products.length
+                  : 4
               }
             />
           </div>

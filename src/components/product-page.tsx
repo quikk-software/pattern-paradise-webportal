@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import { useRouter } from 'next/navigation';
@@ -50,18 +50,18 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
   const isOwner = product.creatorId === userId;
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
+    <div className="container mx-auto max-w-lg px-4 py-8 flex flex-col gap-8">
       <Card className="overflow-hidden">
         <CardContent className="p-6">
-          <div className="grid gap-8 md:grid-cols-4">
+          <div className="grid gap-8">
             <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-            <div className="flex flex-col justify-between gap-6">
-              <div className="flex flex-col gap-4">
+            <div className="flex flex-col justify-between gap-4">
+              <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold">{product.title}</h1>
                 <p className="text-gray-600">{product.description}</p>
-                <CreatedByRef creatorId={product.creatorId} />
               </div>
-              <div className="flex flex-col gap-4">
+              <CreatedByRef creatorId={product.creatorId} />
+              <div className="flex flex-col gap-2">
                 {isOwner ? (
                   <InfoBoxComponent message="You are the owner of this pattern" severity="info" />
                 ) : null}
