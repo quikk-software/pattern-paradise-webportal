@@ -173,7 +173,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   }, [messages, bottomRef.current, showChatList, hasNewSocketMessage, changedChat]);
 
   useEffect(() => {
-    fetchTestings();
+    fetchTestings(['InProgress', 'Aborted', 'Declined', 'Approved']);
   }, []);
 
   useEffect(() => {
@@ -215,7 +215,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     const link = document.createElement('a');
     link.href = url;
     link.target = '_self';
-    link.download = file.name ?? 'patterns';
+    link.download = file.name ?? 'testing_patterns.zip';
     document.body.appendChild(link);
     link.click();
 
@@ -319,6 +319,8 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   };
 
   const isInactive = selectedTestingStatus !== 'InProgress';
+  const isAborted = selectedTestingStatus === 'Aborted';
+  const isDeclined = selectedTestingStatus === 'Declined';
   const isTesterOrCreator =
     !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
     testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
@@ -432,11 +434,17 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                   </Button>
                 </div>
               </div>
-              {isInactive ? (
+              {isInactive && !isAborted && !isDeclined ? (
                 <InfoBoxComponent
                   severity="info"
                   message={`This testing is currently not active.`}
                 />
+              ) : null}
+              {isAborted ? (
+                <InfoBoxComponent severity="warning" message={`This testing has been aborted.`} />
+              ) : null}
+              {isDeclined ? (
+                <InfoBoxComponent severity="warning" message={`This testing has been declined.`} />
               ) : null}
             </CardContent>
             {/* Chat History (Scroll Area) */}

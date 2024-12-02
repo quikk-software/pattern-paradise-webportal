@@ -1409,6 +1409,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     listTestings: (
       query?: {
+        v?: string;
+        /** List of status to filter testings. */
+        status?: string[];
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
