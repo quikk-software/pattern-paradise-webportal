@@ -15,7 +15,7 @@ export default function InsufficientRoles({ roleType }: InsufficientRolesProps) 
           <CardTitle className="text-2xl font-bold text-center">Insufficient Roles</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center space-y-4">
-          <ShieldAlert className="w-32 h-32 text-red-500" />
+          <ShieldAlert className="w-32 h-32 text-primary" />
           <p className="text-center text-gray-600">
             You don&apos;t have the necessary role <strong>&apos;{roleType}&apos;</strong> to access
             this page. Please add this role to your profile to continue.

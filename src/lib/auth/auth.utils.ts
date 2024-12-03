@@ -88,12 +88,11 @@ const saveTokensToCookies = async (access_token: string, refresh_token: string) 
   }
 };
 
-const setUserDataInReduxStore = (accessToken: string | null, dispatch: Dispatch<AnyAction>) => {
-  if (!accessToken) {
-    return;
-  }
+const setUserDataInReduxStore = (accessToken: string, dispatch: Dispatch<AnyAction>) => {
   const decodedToken = jwtDecode(accessToken);
   const userId = getUserIdFromAccessToken(accessToken);
+
+  console.log({ decodedToken });
 
   dispatch(setUserId(userId));
   dispatch(
