@@ -535,7 +535,9 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                           <div
                             className={`flex items-start ${isCreator ? 'flex-row-reverse' : ''}`}
                           >
-                            <Link href={`/users/${user?.id}`}>
+                            <Link
+                              href={isCreator ? `/users/${creatorUser?.id}` : `/users/${user?.id}`}
+                            >
                               <Avatar className={`w-8 h-8 ${isCreator ? 'ml-2' : 'mr-2'}`}>
                                 <AvatarImage src={user?.imageUrl} />
                                 <AvatarFallback>
