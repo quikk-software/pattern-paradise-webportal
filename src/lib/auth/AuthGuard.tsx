@@ -1,14 +1,9 @@
 'use client';
 
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import {
-  getAccessTokenUsingRefreshToken,
-  isTokenValid,
-  saveTokensToCookies,
-  setUserDataInReduxStore,
-} from '@/lib/auth/auth.utils';
+import { isTokenValid, refreshAccessToken, setUserDataInReduxStore } from '@/lib/auth/auth.utils';
 import {
   setAccessToken,
   setCheckAuthIsLoading,
@@ -61,25 +56,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
           const encodedRedirect = query ? encodeURIComponent(`${pathname}?${query}`) : pathname;
           router.push(`/auth/login?redirect=${encodedRedirect}`);
         } else {
-          const res = await getAccessTokenUsingRefreshToken(refreshToken);
-          logger.debug(`Refreshed access token and refresh token.`);
-
-          if (
-            res?.data !== undefined &&
-            'access_token' in res.data &&
-            'refresh_token' in res.data
-          ) {
-            const newAccessToken: string = (res.data.access_token as string) ?? '';
-            const newRefreshToken: string = (res.data.refresh_token as string) ?? '';
-
-            await saveTokensToCookies(newAccessToken, newRefreshToken);
-
-            dispatch(setAccessToken(newAccessToken));
-            dispatch(setRefreshToken(newRefreshToken));
-            setUserDataInReduxStore(newAccessToken, dispatch);
-
-            logger.debug(`Saved refreshed access token and refresh token.`);
-          }
+          await refreshAccessToken(refreshToken, dispatch);
         }
       }
     } finally {

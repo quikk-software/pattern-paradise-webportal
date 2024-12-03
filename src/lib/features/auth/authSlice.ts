@@ -77,6 +77,11 @@ export const authSlice = createSlice({
       Cookies.remove('refreshToken');
       return state;
     },
+    logout: (state) => {
+      state.password = '';
+      state.accessToken = null;
+      state.refreshToken = null;
+    },
   },
 });
 
@@ -89,5 +94,6 @@ export const {
   setRefreshToken,
   setCheckAuthIsLoading,
   reset,
+  logout,
 } = authSlice.actions;
 export default authSlice.reducer;

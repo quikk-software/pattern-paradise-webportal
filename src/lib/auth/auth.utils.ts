@@ -2,17 +2,14 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import qs from 'qs';
 import logger from '@/lib/core/logger';
-import Cookie from 'js-cookie';
 import {
   setAccessToken,
+  setPassword,
   setRefreshToken,
   setRoles,
   setUserId,
 } from '@/lib/features/auth/authSlice';
-import { isPathnameInPages } from '@/lib/core/utils';
-import pages from '@/lib/hooks/routes';
 import { AnyAction, Dispatch } from 'redux';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 /**
  * Function returns the user ID inside of an access token.
@@ -44,13 +41,14 @@ const isTokenExpired = (token: string) => {
  **/
 const getAccessTokenUsingRefreshToken = async (
   refreshToken: string | null,
+  dispatch?: Dispatch<any>,
   callback?: () => void,
 ) => {
   if (refreshToken === '' || refreshToken === null) {
     return undefined;
   }
   try {
-    return await axios.post(
+    const res = await axios.post(
       `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}/protocol/openid-connect/token`,
       qs.stringify({
         grant_type: 'refresh_token',
@@ -58,10 +56,19 @@ const getAccessTokenUsingRefreshToken = async (
         refresh_token: refreshToken,
       }),
     );
+    if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
+      const newAccessToken: string = (res.data.access_token as string) ?? null;
+      const newRefreshToken: string = (res.data.refresh_token as string) ?? null;
+      dispatch?.(setAccessToken(newAccessToken));
+      dispatch?.(setRefreshToken(newRefreshToken));
+      await saveTokensToCookies(newAccessToken, newRefreshToken);
+
+      return newAccessToken;
+    }
   } catch (err) {
     logger.error({ err });
     !!callback && callback();
-    return undefined;
+    return null;
   }
 };
 
@@ -105,18 +112,17 @@ const setUserDataInReduxStore = (accessToken: string, dispatch: Dispatch<AnyActi
 
 const refreshAccessToken = async (refreshToken: string | null, dispatch: Dispatch<AnyAction>) => {
   if (refreshToken === null) {
+    logger.debug(`Refresh token is not set.`);
     return;
   }
 
-  const res = await getAccessTokenUsingRefreshToken(refreshToken);
-  if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
-    const newAccessToken: string = (res.data.access_token as string) ?? '';
-    const newRefreshToken: string = (res.data.refresh_token as string) ?? '';
-    await saveTokensToCookies(newAccessToken, newRefreshToken);
-    dispatch(setAccessToken(newAccessToken));
-    dispatch(setRefreshToken(newRefreshToken));
-    setUserDataInReduxStore(newAccessToken, dispatch);
-  }
+  await getAccessTokenUsingRefreshToken(refreshToken, dispatch, () => {
+    logger.debug(`Couldn't refresh access token. Log out...`);
+
+    dispatch(setPassword(''));
+    dispatch(setAccessToken(null));
+    dispatch(setRefreshToken(null));
+  });
 };
 
 export {

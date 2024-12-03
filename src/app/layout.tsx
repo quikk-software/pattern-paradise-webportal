@@ -5,12 +5,9 @@ import { BottomNavigation } from '@/components/bottom-navigation';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
 import StoreProvider from '@/app/providers/StoreProvider';
 import { cookies } from 'next/headers';
-import {
-  getAccessTokenUsingRefreshToken,
-  isTokenValid,
-  saveTokensToCookies,
-} from '@/lib/auth/auth.utils';
+import { getAccessTokenUsingRefreshToken, isTokenValid } from '@/lib/auth/auth.utils';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
+import logger from '@/lib/core/logger';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -36,14 +33,9 @@ export const metadata: Metadata = {
 
 async function refreshAccessToken(refreshToken: string) {
   try {
-    const res = await getAccessTokenUsingRefreshToken(refreshToken);
-    if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
-      await saveTokensToCookies(res.data.access_token, res.data.refresh_token);
-    }
-    return null;
+    await getAccessTokenUsingRefreshToken(refreshToken);
   } catch (error) {
-    console.error('Error during token refresh:', error);
-    return null;
+    logger.error('Error during token refresh:', error);
   }
 }
 
