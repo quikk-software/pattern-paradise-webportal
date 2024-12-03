@@ -40,6 +40,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [isFree, setIsFree] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
+  const [triggerLoad, setTriggerLoad] = useState(false);
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
   const screenSize = useScreenSize();
@@ -90,6 +91,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProductsByFilter();
   }, [debouncedSearchTerm]);
 
+  useEffect(() => {
+    if (!triggerLoad) {
+      return;
+    }
+    fetchProductsByFilter();
+  }, [triggerLoad]);
+
   const fetchProductsByFilter = async () => {
     const result = await fetch({
       q: debouncedSearchTerm ?? undefined,
@@ -102,6 +110,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     });
     setProducts(result.products);
     setIsDrawerOpen(false);
+    setTriggerLoad(false);
   };
 
   const clearFilter = () => {
@@ -109,6 +118,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setDebouncedSearchTerm('');
     setSelectedCategory('All');
     setPriceRange([3, 100]);
+    setTriggerLoad(true);
   };
 
   const FilterContent = () => (
