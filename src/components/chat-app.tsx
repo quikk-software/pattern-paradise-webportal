@@ -352,29 +352,31 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                 </Link>
               </div>
             ) : null}
-            {testings.map((testing) => (
-              <div
-                key={testing.id}
-                className="flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg mb-2"
-                onClick={() => handleChatSelect(testing)}
-              >
-                <Avatar className="w-12 h-12 mr-3">
-                  <AvatarImage src={testing.product.imageUrls?.[0]} />
-                  <AvatarFallback>
-                    {testing.product.title.at(0)}
-                    {testing.product.title.at(1)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col flex-1 overflow-hidden">
-                  <h3 className="font-semibold truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
-                    {testing.product.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
-                    {testing.lastComment}
-                  </p>
+            <div className="space-y-2">
+              {testings.map((testing) => (
+                <div
+                  key={testing.id}
+                  className="flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg mb-2"
+                  onClick={() => handleChatSelect(testing)}
+                >
+                  <Avatar className="w-12 h-12 mr-3">
+                    <AvatarImage src={testing.product.imageUrls?.[0]} />
+                    <AvatarFallback>
+                      {testing.product.title.at(0)}
+                      {testing.product.title.at(1)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col flex-1 overflow-hidden">
+                    <h3 className="font-semibold truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
+                      {testing.product.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
+                      {testing.lastComment}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
