@@ -45,7 +45,6 @@ export default function PriceInput({
           return true;
         },
       })}
-      onValueChange={(value, name, values) => console.log(value, name, values)}
     />
   );
 }

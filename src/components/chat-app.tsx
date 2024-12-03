@@ -324,6 +324,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   const isTesterOrCreator =
     !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
     testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
+
   const status = testerApplications.find(
     (testerApplication) => testerApplication.user.id === userId,
   )?.status;
