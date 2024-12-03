@@ -6,9 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/order-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/order-list.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/wrappers/TokenWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/wrappers/TokenWrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/order-details.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/order-details.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/product-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/product-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/product-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-account.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/UpdateProductForm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/UpdateProductForm/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +149,7 @@
       <workItem from="1731667195528" duration="1726000" />
       <workItem from="1731926633617" duration="115877000" />
       <workItem from="1732796570065" duration="18565000" />
-      <workItem from="1733217487660" duration="1826000" />
+      <workItem from="1733217487660" duration="4027000" />
     </task>
     <servers />
   </component>

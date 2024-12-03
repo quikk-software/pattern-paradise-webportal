@@ -17,8 +17,6 @@ export default function TokenWrapper({ children }: PropsWithChildren) {
       .find((row) => row.startsWith('refreshToken='))
       ?.split('=')[1];
 
-    console.log({ accessToken, refreshToken });
-
     dispatch(setAccessToken(accessToken || null));
     dispatch(setRefreshToken(refreshToken || null));
   }, [dispatch]);

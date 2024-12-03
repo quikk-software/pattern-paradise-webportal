@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, ChangeEvent } from 'react';
-import { ArrowLeft, CheckCircle2, FileIcon, PartyPopper, X } from 'lucide-react';
+import { CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -28,6 +28,10 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import GoBackButton from '@/lib/components/GoBackButton';
+import CurrencyInput from 'react-currency-input-field';
+import { cn } from '@/lib/utils';
+import PriceInput from '@/lib/components/PriceInput';
 
 export interface PDFFile {
   file: File;
@@ -237,26 +241,12 @@ export function ProductFormComponent() {
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
               Price (in $) <span className="text-red-500">*</span>
             </Label>
-            <Input
-              id="price"
-              type="number"
-              placeholder="Enter price"
-              {...register('price', {
-                required: !isFree ? 'Price is required' : undefined,
-                min: {
-                  value: 3.0,
-                  message: 'Price has to be greater than or equal to 3.00$',
-                },
-              })}
-              step="0.01"
-              className="w-full"
-              onKeyDown={handleKeyDown}
-              disabled={isFree}
-            />
+            <PriceInput isFree={isFree} handleKeyDown={handleKeyDown} register={register} />
             {errors.price ? (
               <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
             ) : null}
           </div>
+
           <div className="flex gap-1">
             <Checkbox
               id="isfree-checkbox"
@@ -425,12 +415,7 @@ export function ProductFormComponent() {
           errorMessage={errorDetail}
         />
       </form>
-      <Button asChild className="flex items-center space-x-2" variant="outline">
-        <Link href="/app/secure/sell">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Go back
-        </Link>
-      </Button>
+      <GoBackButton />
       <Drawer open={showResetDrawer} onOpenChange={setShowResetDrawer}>
         <DrawerContent className="p-4">
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4">

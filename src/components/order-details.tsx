@@ -1,17 +1,15 @@
 'use client';
 
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
-import Link from 'next/link';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import { InfoBoxComponent } from '@/components/info-box';
 import UserDetailsCard from '@/lib/components/UserDetailsCard';
+import GoBackButton from '@/lib/components/GoBackButton';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -93,12 +91,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             />
           ) : null}
         </div>
-        <Button asChild className="flex items-center space-x-2" variant="outline">
-          <Link href="/app/secure/auth/me/orders">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Go back
-          </Link>
-        </Button>
+        <GoBackButton />
       </div>
     </div>
   );

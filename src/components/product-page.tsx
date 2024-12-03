@@ -7,15 +7,13 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import NotFoundPage from '@/app/not-found';
 import { Store } from '@/lib/redux/store';
 import { InfoBoxComponent } from '@/components/info-box';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
-import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import { useRouter } from 'next/navigation';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
+import GoBackButton from '@/lib/components/GoBackButton';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -88,12 +86,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
           </div>
         </CardContent>
       </Card>
-      <Button asChild className="flex items-center space-x-2" variant="outline">
-        <Link href="/">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Go back
-        </Link>
-      </Button>
+      <GoBackButton />
     </div>
   );
 }

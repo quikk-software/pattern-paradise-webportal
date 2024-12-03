@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, ChangeEvent } from 'react';
-import { ArrowLeft, CheckCircle2, FileIcon, X } from 'lucide-react';
+import { CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
-import Link from 'next/link';
 import { useUpdateProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
@@ -22,27 +21,27 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CATEGORIES } from '@/lib/constants';
 import { GetProductResponse } from '@/@types/api-types';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import GoBackButton from '@/lib/components/GoBackButton';
+import PriceInput from '@/lib/components/PriceInput';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
 }
 
 export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
-  const [images, setImages] = useState<{ url: string; name: string }[]>([]);
+  const [images, setImages] = useState<{ url: string; name: string }[]>(
+    initialData.imageUrls.map((url) => ({
+      url,
+      name: url?.split('/').at(-1) ?? 'image',
+    })),
+  );
+  console.log({ images });
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
-  const [uploadStatus, setUploadStatus] = useState<
-    | {
-        status: string;
-        type: string;
-      }
-    | undefined
-  >(undefined);
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
@@ -60,14 +59,14 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           title: initialData.title,
           description: initialData.description,
           imageUrls: initialData.imageUrls,
-          price: initialData.price,
+          price: String(initialData.price),
           category: initialData.category,
         }
       : {
           title: '',
           description: '',
           imageUrls: [],
-          price: 0,
+          price: '0.0',
           category: '',
         },
   });
@@ -134,11 +133,13 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     await mutate(initialData.id, {
       title: data.title.trim(),
       description: data.description.trim(),
-      price: isFree ? 0.0 : data.price,
+      price: isFree ? 0.0 : parseFloat(data.price.replace(',', '.')),
       isFree,
       imageUrls: [
         ...new Set([
-          ...images.filter((image) => image.url.startsWith('https://res.cloudinary.com/')),
+          ...images
+            .filter((image) => image.url.startsWith('https://res.cloudinary.com/'))
+            .map((image) => image.url),
           ...urls.map((fu) => fu.url),
         ]),
       ],
@@ -207,26 +208,17 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
               Price (in $) <span className="text-red-500">*</span>
             </Label>
-            <Input
-              id="price"
-              type="number"
-              placeholder="Enter price"
-              {...register('price', {
-                required: !isFree ? 'Price is required' : undefined,
-                min: {
-                  value: 3.0,
-                  message: 'Price has to be greater than or equal to 3.00$',
-                },
-              })}
-              step="0.01"
-              className="w-full"
-              onKeyDown={handleKeyDown}
-              disabled={isFree}
+            <PriceInput
+              isFree={isFree}
+              handleKeyDown={handleKeyDown}
+              register={register}
+              defaultValue={initialData.price}
             />
             {errors.price ? (
               <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
             ) : null}
           </div>
+
           <div className="flex gap-1">
             <Checkbox
               id="isfree-checkbox"
@@ -303,56 +295,40 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           Update pattern
         </Button>
 
-        {uploadStatus ? (
-          <Badge
-            variant="secondary"
-            className={`text-lg bg-${
-              uploadStatus.type === 'success'
-                ? 'green'
-                : uploadStatus.type === 'error'
-                  ? 'red'
-                  : 'blue'
-            }-400 text-white`}
-          >
-            {uploadStatus.status}
-          </Badge>
-        ) : null}
-
-        {!uploadStatus &&
-          uploadProgress.map((up) => (
-            <div key={up.fileIndex} className="p-1">
-              <Card className="w-full mb-2">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <FileIcon className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-sm font-medium truncate max-w-[200px]">
-                        {images[up.fileIndex]?.name}
-                      </span>
-                    </div>
-                    <span className="text-xs font-semibold text-muted-foreground">
-                      {up.progress === 100 ? (
-                        <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      ) : (
-                        `${Math.round(up.progress)}%`
-                      )}
+        {uploadProgress.map((up) => (
+          <div key={up.fileIndex} className="p-1">
+            <Card className="w-full mb-2">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <FileIcon className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm font-medium truncate max-w-[200px]">
+                      {images[up.fileIndex]?.name}
                     </span>
                   </div>
-                  <Progress
-                    value={up.progress}
-                    className="h-2 transition-all duration-300 ease-in-out"
-                    style={{
-                      background: `linear-gradient(90deg, 
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    {up.progress === 100 ? (
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                    ) : (
+                      `${Math.round(up.progress)}%`
+                    )}
+                  </span>
+                </div>
+                <Progress
+                  value={up.progress}
+                  className="h-2 transition-all duration-300 ease-in-out"
+                  style={{
+                    background: `linear-gradient(90deg, 
                                 var(--primary) 0%, 
                                 var(--primary) ${up.progress}%, 
                                 var(--muted) ${up.progress}%, 
                                 var(--muted) 100%)`,
-                    }}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          ))}
+                  }}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        ))}
 
         {!!hasErrors ? (
           <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
@@ -364,12 +340,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           errorMessage={errorDetail}
         />
       </form>
-      <Button asChild className="flex items-center space-x-2" variant="outline">
-        <Link href="/app/secure/sell">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Go back
-        </Link>
-      </Button>
+      <GoBackButton />
     </div>
   );
 }

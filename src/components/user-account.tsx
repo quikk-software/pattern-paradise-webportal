@@ -7,6 +7,7 @@ import { useListProductsByUserId } from '@/lib/api';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import UserDetailsCard from '@/lib/components/UserDetailsCard';
+import GoBackButton from '@/lib/components/GoBackButton';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -28,6 +29,8 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
   return (
     <div className="container mx-auto p-6 space-y-8">
+      <GoBackButton />
+
       <UserDetailsCard user={user} showRoles={true} />
 
       {user.description ? (
@@ -53,8 +56,8 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
                 screenSize === 'lg'
                   ? 2
                   : products.length < 4
-                    ? products.length
-                    : 4
+                  ? products.length
+                  : 4
               }
             />
           </div>
