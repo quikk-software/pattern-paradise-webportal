@@ -37,7 +37,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       name: url?.split('/').at(-1) ?? 'image',
     })),
   );
-  console.log({ images });
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);

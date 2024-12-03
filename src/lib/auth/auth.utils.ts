@@ -99,8 +99,6 @@ const setUserDataInReduxStore = (accessToken: string, dispatch: Dispatch<AnyActi
   const decodedToken = jwtDecode(accessToken);
   const userId = getUserIdFromAccessToken(accessToken);
 
-  console.log({ decodedToken });
-
   dispatch(setUserId(userId));
   dispatch(
     setRoles(
