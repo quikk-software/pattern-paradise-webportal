@@ -11,6 +11,7 @@ import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import { InfoBoxComponent } from '@/components/info-box';
+import UserDetailsCard from '@/lib/components/UserDetailsCard';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -27,7 +28,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           imageUrls={order.productImageUrls}
           title={order?.productName ?? 'Pattern images'}
         />
-        <div className="space-y-4">
+        <div className="space-y-8">
           <div className="space-y-2">
             {!!order.productName ? (
               <h1 className="text-3xl font-bold">{order.productName}</h1>
@@ -79,6 +80,10 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             <p>
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
+          </div>
+          <div className="space-y-2">
+            <h5 className="font-semibold">Bought by</h5>
+            <UserDetailsCard user={order.customer} />
           </div>
           {isPayed ? (
             <DownloadPatternZipButton
