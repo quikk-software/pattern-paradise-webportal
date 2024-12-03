@@ -21,8 +21,12 @@ const useWebSocket = (url: string, token: string | null): UseWebSocketReturn => 
 
   const connectWebSocket = () => {
     if (!token) {
+      logger.info("WebSocket connection can't be established");
+
       return;
     }
+
+    logger.info('Try to establish WebSocket connection');
 
     const ws = new WebSocket(url, [token]);
 
