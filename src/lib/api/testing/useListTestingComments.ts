@@ -22,14 +22,20 @@ export const useListTestingComments = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async (testingId: string) => {
+  const fetch = async (
+    testingId: string,
+    {
+      overridePageNumber,
+      overridePageSize,
+    }: { overridePageNumber?: number; overridePageSize?: number },
+  ) => {
     const response = await handleFn(
       async () =>
         await client.api.listTestingCommentsByTestingId(
           testingId,
           {
-            pageNumber: pagination.pageNumber,
-            pageSize: pagination.pageSize,
+            pageNumber: overridePageNumber ?? pagination.pageNumber,
+            pageSize: overridePageSize ?? pagination.pageSize,
           },
           { ...(await getApi(accessToken, refreshToken, dispatch)) },
         ),

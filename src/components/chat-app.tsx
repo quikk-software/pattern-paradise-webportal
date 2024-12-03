@@ -181,7 +181,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
       return;
     }
     const loadComments = async () => {
-      const result = await fetchTestingComments(selectedTestingId);
+      const result = await fetchTestingComments(selectedTestingId, {});
       setMessages(result.testingComments);
     };
     fetchTesterApplications(selectedTestingId, {
@@ -238,7 +238,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
     if (!selectedTestingId) {
       return;
     }
-    const result = await fetchTestingComments(selectedTestingId);
+    const result = await fetchTestingComments(selectedTestingId, {});
     setMessages((msgs) => [...msgs, ...result.testingComments]);
   };
 
@@ -285,13 +285,15 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
   };
 
   const handleChatSelect = (testing: GetTestingResponse) => {
+    if (selectedTestingId !== testing.id) {
+      setChangedChat(true);
+      setMessages([]);
+      reset();
+    }
+    setShowChatList(false);
     setSelectedTestingId(testing.id);
     setSelectedProductIdByTesting(testing.productId);
     setSelectedTestingStatus(testing.status);
-    setShowChatList(false);
-    setChangedChat(true);
-    setMessages([]);
-    reset();
   };
 
   const handleDownloadPatternClick = async (productId: string | null) => {
@@ -334,7 +336,7 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
       {/* Chat List */}
       <div
         className={`${showChatList ? 'block' : 'hidden'} md:block w-full md:w-1/3 bg-white`}
-        style={{ height: `calc(100vh - ${bottomNavHeight}px)` }}
+        style={{ height: `calc(100svh - ${bottomNavHeight}px)` }}
       >
         <Card className="h-full overflow-y-auto">
           <CardContent className="p-4 flex flex-col gap-4">
@@ -669,6 +671,11 @@ export function ChatAppComponent({ testingId }: ChatAppComponentProps) {
                       placeholder="Type a message..."
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          handleSendMessage();
+                        }
+                      }}
                       className="flex-1"
                     />
                     <label htmlFor="file-upload" className="cursor-pointer">
