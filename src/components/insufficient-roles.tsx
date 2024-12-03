@@ -2,6 +2,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ShieldAlert } from 'lucide-react';
+import GoBackButton from '@/lib/components/GoBackButton';
 
 interface InsufficientRolesProps {
   roleType: 'Tester' | 'Seller';
@@ -21,8 +22,9 @@ export default function InsufficientRoles({ roleType }: InsufficientRolesProps) 
             this page. Please add this role to your profile to continue.
           </p>
         </CardContent>
-        <CardFooter className="flex justify-center">
-          <Button asChild>
+        <CardFooter className="flex flex-col justify-center items-center gap-2 w-full">
+          <GoBackButton />
+          <Button asChild className="w-full">
             <Link href="/app/secure/auth/me?action=scrollToRoles">Add Role {roleType}</Link>
           </Button>
         </CardFooter>
