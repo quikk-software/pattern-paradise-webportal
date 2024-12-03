@@ -106,7 +106,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
                 </div>
                 <div className="space-y-2">
                   <h5 className="font-semibold">
-                    {filter === 'customer' ? 'Bought by' : 'Sold by'}
+                    {filter === 'customer' ? 'Sold by' : 'Bought by'}
                   </h5>
                   <UserDetailsCard user={filter === 'customer' ? order.seller : order.customer} />
                 </div>
