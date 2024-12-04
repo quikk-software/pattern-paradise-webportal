@@ -321,7 +321,7 @@ export default function ChatHistory({
           </p>
         </div>
       ) : (
-        <Card className="flex flex-col" style={{ height: `calc(100vh - ${bottomNavHeight}px)` }}>
+        <Card className="flex flex-col" style={{ height: `calc(100svh - ${bottomNavHeight}px)` }}>
           {/* Top navigation */}
           <CardContent className="p-4 flex-none">
             <div className="flex flex-row justify-between items-center">
