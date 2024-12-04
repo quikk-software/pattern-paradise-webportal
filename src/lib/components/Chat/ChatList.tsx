@@ -24,8 +24,11 @@ export default function ChatList({
 }: ChatListProps) {
   return (
     <div
-      className={`${showChatList ? 'block' : 'hidden'} md:block w-full md:w-1/3 bg-white`}
-      style={{ height: `calc(100svh - ${bottomNavHeight}px)` }}
+      className="md:block w-full md:w-1/3 bg-white"
+      style={{
+        ...(showChatList ? { display: 'block' } : { display: 'hidden' }),
+        ...{ height: `calc(100svh - ${bottomNavHeight}px)` },
+      }}
     >
       <Card className="h-full overflow-y-auto">
         <CardContent className="p-4 flex flex-col gap-4">
