@@ -175,7 +175,10 @@ export default function ChatHistory({
       return;
     }
     const loadComments = async () => {
-      const result = await fetchTestingComments(selectedTestingId, {});
+      const result = await fetchTestingComments(selectedTestingId, {
+        overridePageNumber: 1,
+        overridePageSize: 20,
+      });
       setMessages(result.testingComments);
     };
     fetchTesterApplications(selectedTestingId, {
