@@ -308,7 +308,10 @@ export default function ChatHistory({
   )?.status;
 
   return (
-    <div className={`${!showChatList ? 'block' : 'hidden'} md:block flex flex-col bg-white w-full`}>
+    <div
+      className="md:block flex flex-col bg-white w-full"
+      style={!showChatList ? { display: 'block' } : { display: 'hidden' }}
+    >
       {!selectedTestingId ? (
         <div className="flex flex-col h-full items-center justify-center text-center p-4">
           <MessageCircle className="h-16 w-16 text-primary mb-4" />
