@@ -332,54 +332,59 @@ export default function ChatHistory({
         <Card className="flex flex-col" style={{ height: `calc(100svh - ${bottomNavHeight}px)` }}>
           {/* Top navigation */}
           <CardContent className="p-4 flex-none">
-            <div className="flex flex-row justify-between items-center">
-              <div className="flex items-center justify-start">
-                <Button
-                  variant="ghost"
-                  size="default"
-                  className="md:hidden mr-2"
-                  onClick={() => router.push('/app/secure/test/chats')}
-                >
-                  <ArrowLeftIcon className="h-6 w-6" />
-                </Button>
-                <h2 className="text-2xl font-bold">Chat History</h2>
-              </div>
-              <div className="flex items-center justify-end gap-2">
-                {status === 'InProgress' ? (
+            <div className="space-y-2 w-full">
+              <div className="flex flex-row justify-between items-center">
+                <div className="flex items-center justify-start">
+                  <Button
+                    variant="ghost"
+                    size="default"
+                    className="md:hidden mr-2"
+                    onClick={() => router.push('/app/secure/test/chats')}
+                  >
+                    <ArrowLeftIcon className="h-6 w-6" />
+                  </Button>
+                  <h2 className="text-2xl font-bold">Chat History</h2>
+                </div>
+                <div className="flex items-center justify-end gap-2">
+                  {status === 'InProgress' ? (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      disabled={!selectedTestingId || isInactive}
+                      onClick={() => {
+                        handleReviewClick(selectedTestingId);
+                      }}
+                    >
+                      <StarIcon className="h-6 w-6" />
+                    </Button>
+                  ) : null}
                   <Button
                     variant="outline"
                     size="icon"
-                    disabled={!selectedTestingId || isInactive}
+                    disabled={
+                      !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
+                    }
                     onClick={() => {
-                      handleReviewClick(selectedTestingId);
+                      handleDownloadPatternClick(selectedProductIdByTesting);
                     }}
                   >
-                    <StarIcon className="h-6 w-6" />
+                    <DownloadIcon className="h-6 w-6" />
                   </Button>
-                ) : null}
-                <Button
-                  variant="outline"
-                  size="icon"
-                  disabled={
-                    !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
-                  }
-                  onClick={() => {
-                    handleDownloadPatternClick(selectedProductIdByTesting);
-                  }}
-                >
-                  <DownloadIcon className="h-6 w-6" />
-                </Button>
+                </div>
               </div>
+              {isInactive && !isAborted && !isDeclined ? (
+                <InfoBoxComponent
+                  severity="info"
+                  message={`This testing is currently not active.`}
+                />
+              ) : null}
+              {isAborted ? (
+                <InfoBoxComponent severity="warning" message={`This testing has been aborted.`} />
+              ) : null}
+              {isDeclined ? (
+                <InfoBoxComponent severity="warning" message={`This testing has been declined.`} />
+              ) : null}
             </div>
-            {isInactive && !isAborted && !isDeclined ? (
-              <InfoBoxComponent severity="info" message={`This testing is currently not active.`} />
-            ) : null}
-            {isAborted ? (
-              <InfoBoxComponent severity="warning" message={`This testing has been aborted.`} />
-            ) : null}
-            {isDeclined ? (
-              <InfoBoxComponent severity="warning" message={`This testing has been declined.`} />
-            ) : null}
           </CardContent>
           {/* Chat History (Scroll Area) */}
           <ScrollArea className="flex-grow px-4 overflow-y-auto">
