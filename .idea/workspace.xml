@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ReviewDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ReviewDrawer/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/secure/test/chats/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/test/chats/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat-app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat-app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/listing.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/listing.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +145,7 @@
       <workItem from="1731667195528" duration="1726000" />
       <workItem from="1731926633617" duration="115877000" />
       <workItem from="1732796570065" duration="18565000" />
-      <workItem from="1733217487660" duration="18718000" />
+      <workItem from="1733217487660" duration="26190000" />
     </task>
     <servers />
   </component>

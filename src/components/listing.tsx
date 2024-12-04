@@ -158,7 +158,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         className="w-full"
       >
         {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-        Apply filters
+        Apply Filter
       </Button>
     </div>
   );
@@ -173,7 +173,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           <DrawerTrigger asChild>
             <Button variant={'outline'}>
               <SlidersHorizontal className="mr-2 h-4 w-4" />
-              Filters
+              Filter
             </Button>
           </DrawerTrigger>
           <DrawerContent>
