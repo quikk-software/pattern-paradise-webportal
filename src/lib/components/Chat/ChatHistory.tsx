@@ -26,6 +26,7 @@ import { useCreateTestingComment, useListTesterApplications } from '@/lib/api/te
 import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { useRouter } from 'next/navigation';
 import useWebSocket from '@/lib/hooks/useWebSocket';
+import { cn } from '@/lib/utils';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -310,10 +311,14 @@ export default function ChatHistory({
     (testerApplication) => testerApplication.user.id === userId,
   )?.status;
 
+  console.log({ showChatList });
+
   return (
     <div
-      className="md:block flex flex-col bg-white w-full"
-      style={!showChatList ? { display: 'block' } : { display: 'hidden' }}
+      className={cn('flex flex-col bg-white w-full md:w-2/3', {
+        'hidden md:block': showChatList,
+        'block md:block': !showChatList,
+      })}
     >
       {!selectedTestingId ? (
         <div className="flex flex-col h-full items-center justify-center text-center p-4">
@@ -480,7 +485,7 @@ export default function ChatHistory({
                         >
                           <Link
                             href={
-                              isCreator ? `/users/${sellerUser?.id}` : `/users/${testerUser?.id}`
+                              sellerUser ? `/users/${sellerUser?.id}` : `/users/${testerUser?.id}`
                             }
                           >
                             <Avatar

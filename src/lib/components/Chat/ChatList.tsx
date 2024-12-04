@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { GetTestingResponse } from '@/@types/api-types';
+import { cn } from '@/lib/utils';
 
 interface ChatListProps {
   showChatList: boolean;
@@ -24,10 +25,12 @@ export default function ChatList({
 }: ChatListProps) {
   return (
     <div
-      className="md:block w-full md:w-1/3 bg-white"
+      className={cn('bg-white w-full md:w-1/3', {
+        'block md:block': showChatList,
+        'hidden md:block': !showChatList,
+      })}
       style={{
-        ...(showChatList ? { display: 'block' } : { display: 'hidden' }),
-        ...{ height: `calc(100svh - ${bottomNavHeight}px)` },
+        height: `calc(100svh - ${bottomNavHeight}px)`,
       }}
     >
       <Card className="h-full overflow-y-auto">
