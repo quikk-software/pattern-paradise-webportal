@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import NotFoundPage from '@/app/not-found';
 import { Store } from '@/lib/redux/store';
-import { InfoBoxComponent } from '@/components/info-box';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -14,6 +13,7 @@ import CreatedByRef from '@/lib/components/CreatedByRef';
 import { useRouter } from 'next/navigation';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import GoBackButton from '@/lib/components/GoBackButton';
+import { InfoBoxComponent } from '@/components/info-box';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -53,16 +53,18 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
         <CardContent className="p-6">
           <div className="grid gap-8">
             <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-            <div className="flex flex-col justify-between gap-4">
+            <div className="flex flex-col justify-between gap-8">
               <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold">{product.title}</h1>
                 <p className="text-gray-600">{product.description}</p>
               </div>
-              <CreatedByRef creatorId={product.creatorId} />
-              <div className="flex flex-col gap-2">
+              <div className="space-y-2">
+                <CreatedByRef creatorId={product.creatorId} />
                 {isOwner ? (
-                  <InfoBoxComponent message="You are the owner of this pattern" severity="info" />
+                  <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
                 ) : null}
+              </div>
+              <div className="flex flex-col gap-2">
                 {product.isFree || isOwner ? (
                   <DownloadPatternZipButton
                     productId={product.id}
@@ -74,8 +76,6 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                     price={product.price}
                     productId={product.id}
                     productName={product.title}
-                    productStatus={product.status}
-                    creatorId={product.creatorId}
                     callback={(orderId: string) =>
                       router.push(`/app/secure/auth/me/orders/${orderId}`)
                     }

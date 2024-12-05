@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -10,14 +10,19 @@ import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton'
 import { InfoBoxComponent } from '@/components/info-box';
 import UserDetailsCard from '@/lib/components/UserDetailsCard';
 import GoBackButton from '@/lib/components/GoBackButton';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
+  const { userId } = useSelector((s: Store) => s.auth);
+
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
   const isCreated = order.status === 'CREATED';
+  const isSeller = order.seller.id === userId;
 
   return (
     <div className="container mx-auto max-w-lg px-4 py-8">
@@ -35,7 +40,12 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <p className="text-gray-600">{order.productDescription}</p>
             ) : null}
           </div>
-          <CreatedByRef creatorId={order.seller.id} />
+          <div className="space-y-2 w-full">
+            <CreatedByRef creatorId={order.seller.id} />
+            {isSeller ? (
+              <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
+            ) : null}
+          </div>
           <div className="space-y-2">
             <Badge
               variant="secondary"
@@ -43,7 +53,8 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             >
               Order Status: {order.status}
             </Badge>
-            {isCreated ? (
+
+            {isCreated && !isSeller ? (
               <div className="flex flex-col gap-2">
                 <InfoBoxComponent
                   severity="warning"
@@ -54,7 +65,6 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                   price={order.productPrice}
                   productId={order.productId}
                   productName={order.productName}
-                  productStatus={'Released'}
                 />
               </div>
             ) : null}
@@ -65,12 +75,12 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 <strong>Order price:</strong> {order.productPrice}$
               </p>
             ) : null}
-            {!!order.paypalFee ? (
+            {!!order.paypalFee && isSeller ? (
               <p>
                 <strong>PayPal fee:</strong> {order.paypalFee.toFixed(2)}$
               </p>
             ) : null}
-            {!!order.platformFee ? (
+            {!!order.platformFee && isSeller ? (
               <p>
                 <strong>Platform fee:</strong> {order.platformFee.toFixed(2)}$
               </p>
@@ -79,11 +89,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          <div className="space-y-2">
-            <h5 className="font-semibold">Bought by</h5>
-            <UserDetailsCard user={order.customer} />
-          </div>
-          {isPayed ? (
+          {isSeller ? (
+            <div className="space-y-2">
+              <h5 className="font-semibold">Bought by</h5>
+              <UserDetailsCard user={order.customer} />
+            </div>
+          ) : null}
+          {isPayed || isSeller ? (
             <DownloadPatternZipButton
               files={order.files}
               productId={order.productId}

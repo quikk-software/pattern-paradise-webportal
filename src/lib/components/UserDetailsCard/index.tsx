@@ -32,8 +32,8 @@ export default function UserDetailsCard({
   return (
     <Card key={user.id} className={`relative cursor-pointer transition-all`}>
       <CardHeader>
-        <div className="flex items-center space-x-4">
-          <Link href={`/users/${user.id}`} passHref>
+        <Link href={`/users/${user.id}`}>
+          <div className="flex items-center space-x-4">
             <Avatar className="w-12 h-12">
               <AvatarImage src={user.imageUrl} alt={`${user.firstName} ${user.lastName}`} />
               <AvatarFallback>
@@ -41,9 +41,7 @@ export default function UserDetailsCard({
                 {user.lastName?.[0]}
               </AvatarFallback>
             </Avatar>
-          </Link>
-          <div>
-            <Link href={`/users/${user.id}`}>
+            <div>
               {user.firstName && user.lastName ? (
                 <h2 className="text-lg font-semibold underline text-blue-500">
                   {user.firstName} {user.lastName}
@@ -56,9 +54,9 @@ export default function UserDetailsCard({
               >
                 @{user.username}
               </p>
-            </Link>
+            </div>
           </div>
-        </div>
+        </Link>
       </CardHeader>
       {showCardContent ? (
         <CardContent>
