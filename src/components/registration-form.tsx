@@ -78,7 +78,6 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
       username: data.username,
       instagramRef: data.instagram,
       tiktokRef: data.tiktok,
-      paypalEmail: data.paypalEmail,
       roles,
     });
   };
@@ -185,42 +184,9 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
               {!!rolesError ? <p className="text-sm text-red-500 mb-2">{rolesError}</p> : null}
             </div>
             <p className="text-xs text-muted-foreground">
-              ⚠️ Note: Users with the role &apos;Seller&apos; are required to add a valid PayPal
-              email which is eligible of receiving money.{' '}
-              <a href="https://paypal.com" target="_blank" className="text-blue-500">
-                Create a PayPal account for free here!
-              </a>
+              ⚠️ Note: Users with the role &apos;Seller&apos; are required to connect a valid PayPal
+              account in their profile settings that is authorised to receive money.
             </p>
-          </div>
-          <div className="space-y-2">
-            {roles.includes('Seller') ? (
-              <div className="space-y-2">
-                <Label htmlFor="paypalEmail">
-                  PayPal Email <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="paypalEmail"
-                  type="email"
-                  placeholder="Add a valid PayPal email"
-                  required
-                  {...register('paypalEmail', {
-                    required: 'PayPal email is required',
-                    pattern: {
-                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
-                      message: 'Invalid PayPal email address',
-                    },
-                    onChange: (e) => {
-                      e.target.value = e.target.value.toLowerCase().trim();
-                    },
-                  })}
-                />
-                {errors.paypalEmail ? (
-                  <p className="text-sm text-red-500 mb-2">
-                    {errors.paypalEmail.message as string}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
