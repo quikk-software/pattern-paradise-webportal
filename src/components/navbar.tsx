@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Menu, Volleyball, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
+import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 
 const NAV_LINKS = [
   {
@@ -65,9 +65,9 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
               href="/"
               className={`text-lg font-bold text-${
                 background === 'primary' ? 'white' : 'black'
-              } flex gap-2 items-center`}
+              } flex gap-1 items-center`}
             >
-              <Volleyball />
+              <PatternParadiseIcon className="w-8 h-8" />
               <span>Pattern Paradise</span>
             </Link>
           </div>

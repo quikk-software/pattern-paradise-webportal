@@ -10,6 +10,7 @@ import { Store } from '@/lib/redux/store';
 import ProductCard from '@/lib/components/ProductCard';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
+import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 
 const getStatusColor = (status?: string) => {
   switch (status) {
@@ -79,7 +80,7 @@ export function SellPageComponent() {
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
           >
-            <Volleyball className="h-8 w-8" />
+            <PatternParadiseIcon className="h-8 w-8" />
             <span className="text-lg font-semibold">My tester calls</span>
           </Button>
         </Link>
