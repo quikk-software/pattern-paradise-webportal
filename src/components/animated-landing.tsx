@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { APP_NAME } from '@/lib/constants';
+import { APP_NAME, THEME_COLOR } from '@/lib/constants';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 
@@ -37,7 +37,9 @@ export default function AnimatedLanding() {
   const isLoggedIn = !!accessToken;
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary to-[#ed8332] overflow-hidden">
+    <section
+      className={`w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary to-[${THEME_COLOR}] overflow-hidden`}
+    >
       <motion.div
         className="container px-4 md:px-6 mx-auto relative"
         variants={containerVariants}
