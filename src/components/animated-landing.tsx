@@ -38,7 +38,7 @@ export default function AnimatedLanding() {
 
   return (
     <section
-      className={`w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary to-[#ed8332] overflow-hidden`}
+      className={`w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary to-[#ffbc5c] overflow-hidden`}
     >
       <motion.div
         className="container px-4 md:px-6 mx-auto relative"
