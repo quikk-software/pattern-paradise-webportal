@@ -1,7 +1,7 @@
 ﻿export const APP_NAME = 'Pattern Paradise';
 export const APP_DESCRIPTION = 'Find, sell and test patterns from creatives around the world!';
 export const APP_DOMAIN = 'https://pattern-paradise.shop';
-export const THEME_COLOR = '#f4930b';
+export const THEME_COLOR = '#ed8332';
 
 export const PRO_MEMBERSHIP_PRICE = '$9.99';
 

@@ -149,18 +149,22 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     }
   };
 
+  const isCustomer = filter === 'customer';
+
   return (
     <>
       <div className="p-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold">Your Testings</h1>
+          <h1 className="text-3xl font-bold">
+            {isCustomer ? 'Your Testings' : 'Your Tester Calls'}
+          </h1>
         </header>
 
         {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
         {testings.length === 0 && !fetchTestingsIsLoading ? (
           <p>
             You have no testings yet.{' '}
-            {filter === 'customer' ? (
+            {isCustomer ? (
               <Link href="/app/secure/test" className="text-blue-500 underline">
                 Explore open Tester Calls here
               </Link>

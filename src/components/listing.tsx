@@ -40,6 +40,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [isFree, setIsFree] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
+  const [triggerLoad, setTriggerLoad] = useState(false);
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
   const screenSize = useScreenSize();
@@ -86,6 +87,17 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProducts();
   }, [loadMore]);
 
+  useEffect(() => {
+    fetchProductsByFilter();
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (!triggerLoad) {
+      return;
+    }
+    fetchProductsByFilter();
+  }, [triggerLoad]);
+
   const fetchProductsByFilter = async () => {
     const result = await fetch({
       q: debouncedSearchTerm ?? undefined,
@@ -98,6 +110,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     });
     setProducts(result.products);
     setIsDrawerOpen(false);
+    setTriggerLoad(false);
   };
 
   const clearFilter = () => {
@@ -105,6 +118,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setDebouncedSearchTerm('');
     setSelectedCategory('All');
     setPriceRange([3, 100]);
+    setTriggerLoad(true);
   };
 
   const FilterContent = () => (
@@ -144,7 +158,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         className="w-full"
       >
         {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-        Apply filters
+        Apply Filter
       </Button>
     </div>
   );
@@ -159,7 +173,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           <DrawerTrigger asChild>
             <Button variant={'outline'}>
               <SlidersHorizontal className="mr-2 h-4 w-4" />
-              Filters
+              Filter
             </Button>
           </DrawerTrigger>
           <DrawerContent>
@@ -197,13 +211,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         <WaterfallListing
           products={products}
           listingType={listingType}
-          columns={
-            screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' || screenSize === 'lg'
-              ? 2
-              : products.length < 4
-              ? products.length
-              : 4
-          }
+          columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
         />
 
         {hasNextPage ? (

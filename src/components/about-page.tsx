@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import creativeWomenIllustration from '@/assets/illustrations/undraw_creative_woman_re_u5tk.svg';
 import connectIllustration from '@/assets/illustrations/undraw_connection_re_lcud.svg';
+import { APP_NAME } from '@/lib/constants';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -33,7 +34,7 @@ export default function AboutPage() {
         variants={stagger}
       >
         <motion.h1 className="text-4xl font-bold mb-4" variants={fadeIn}>
-          Welcome to Pattern Paradise 👋
+          Welcome to {APP_NAME} 👋
         </motion.h1>
         <motion.p className="text-xl text-muted-foreground mb-8" variants={fadeIn}>
           Connecting creatives worldwide to share, perfect, and celebrate handmade pattern

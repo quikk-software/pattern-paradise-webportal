@@ -17,6 +17,10 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface PostUserPayPalReferralResponse {
+  actionUrl: string;
+}
+
 export interface VerifyCodeRequest {
   verificationCode: string;
 }
@@ -52,7 +56,6 @@ export interface PostUserRequest {
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
-  paypalEmail?: string;
 }
 
 export interface PostUserResponse {
@@ -69,7 +72,6 @@ export interface PutUserRequest {
   tiktokRef?: string;
   imageUrl?: string;
   roles?: string[];
-  paypalEmail?: string;
 }
 
 export interface PutUserPasswordRequest {
@@ -93,8 +95,7 @@ export interface GetUserResponse {
   lastName?: string;
   instagramRef?: string;
   tiktokRef?: string;
-  paypalEmail?: string;
-  isPayPalMailConfirmed: boolean;
+  paypalMerchantIsActive: boolean;
   paypalSubscriptionId?: string;
   /**
    * @format date-time
@@ -139,6 +140,7 @@ export interface GetUserAccountResponse {
   id: string;
   username: string;
   isActive: boolean;
+  paypalMerchantIsActive: boolean;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
@@ -492,6 +494,7 @@ export interface GetApplicationErrorResponse {
   userId: string;
   /** @example "Access to resource not allowed." */
   errorReason: string;
+  paypalDebugId?: string;
   /** @example "/api/v1" */
   source: string;
   /**
@@ -832,8 +835,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         instagramRef?: any;
         /** @example "any" */
         tiktokRef?: any;
-        /** @example "any" */
-        paypalEmail?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -902,8 +903,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         tiktokRef?: any;
         /** @example "any" */
         imageUrl?: any;
-        /** @example "any" */
-        paypalEmail?: any;
         /** @example "any" */
         roles?: any;
       },
@@ -996,6 +995,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description Creates a PayPal referral for the authenticated user by the given request body data and user ID.
+     *
+     * @tags User
+     * @name PostUserPayPalReferral
+     * @summary Creates a PayPal referral for the user.
+     * @request POST:/api/v1/users/{userId}/paypal-referral
+     * @secure
+     */
+    postUserPayPalReferral: (userId: string, params: RequestParams = {}) =>
+      this.request<PostUserPayPalReferralResponse, any>({
+        path: `/api/v1/users/${userId}/paypal-referral`,
+        method: 'POST',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
      * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
      *
      * @tags User
@@ -1080,32 +1097,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description Confirms the users PayPal email by the given verification code and request body data.
-     *
-     * @tags User
-     * @name ConfirmPayPalMail
-     * @summary Confirms the PayPal mail of a user.
-     * @request PUT:/api/v1/users/verification-codes/confirm-paypal-mail
-     * @secure
-     */
-    confirmPayPalMail: (
-      data: {
-        /** @example "any" */
-        verificationCode?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<VerifyCodeResponse, any>({
-        path: `/api/v1/users/verification-codes/confirm-paypal-mail`,
-        method: 'PUT',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: 'json',
         ...params,
       }),
 
@@ -1409,6 +1400,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     listTestings: (
       query?: {
+        /** List of status to filter testings. */
+        status?: string[];
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
@@ -1847,6 +1840,56 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name ApproveMerchantWebhook
+     * @summary Posts a "merchant approve" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/merchant/approve
+     * @secure
+     */
+    approveMerchantWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/merchant/approve`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name MerchantConsentRevokedWebhook
+     * @summary Posts a "merchant consent revoked" PayPal webhook event.
+     * @request POST:/api/v1/webhooks/paypal/merchant/consent-revoked
+     * @secure
+     */
+    merchantConsentRevokedWebhook: (
+      data: {
+        /** @example "any" */
+        resource?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/paypal/merchant/consent-revoked`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 

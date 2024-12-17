@@ -275,7 +275,11 @@ export function TesterApplicantsPage({
                           {application.user.firstName} {application.user.lastName}
                         </h2>
                       </Link>
-                      <p className="text-sm text-muted-foreground">@{application.user.username}</p>
+                      <p
+                        className={`${application.user.firstName && application.user.lastName ? 'text-sm' : 'text-lg'} text-muted-foreground`}
+                      >
+                        @{application.user.username}
+                      </p>
                     </div>
                   </div>
                 </CardHeader>

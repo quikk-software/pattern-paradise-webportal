@@ -10,6 +10,7 @@ import { Store } from '@/lib/redux/store';
 import ProductCard from '@/lib/components/ProductCard';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
+import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 
 const getStatusColor = (status?: string) => {
   switch (status) {
@@ -52,7 +53,7 @@ export function SellPageComponent() {
   return (
     <div className="p-8">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold">Your Crochet Hub</h1>
+        <h1 className="text-3xl font-bold">Actions</h1>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -79,7 +80,7 @@ export function SellPageComponent() {
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
           >
-            <Volleyball className="h-8 w-8" />
+            <PatternParadiseIcon className="h-8 w-8" />
             <span className="text-lg font-semibold">My tester calls</span>
           </Button>
         </Link>

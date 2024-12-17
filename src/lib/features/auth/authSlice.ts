@@ -9,6 +9,7 @@ export type AuthState = {
   roles: string[];
   accessToken: string | null;
   refreshToken: string | null;
+  checkAuthIsLoading: boolean;
 };
 
 export const initialState: AuthState = {
@@ -18,6 +19,7 @@ export const initialState: AuthState = {
   roles: [],
   accessToken: null,
   refreshToken: null,
+  checkAuthIsLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -66,11 +68,19 @@ export const authSlice = createSlice({
       }
       state.refreshToken = action.payload;
     },
+    setCheckAuthIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.checkAuthIsLoading = action.payload;
+    },
     reset: (state) => {
       state = initialState;
       Cookies.remove('accessToken');
       Cookies.remove('refreshToken');
       return state;
+    },
+    logout: (state) => {
+      state.password = '';
+      state.accessToken = null;
+      state.refreshToken = null;
     },
   },
 });
@@ -82,6 +92,8 @@ export const {
   setPassword,
   setAccessToken,
   setRefreshToken,
+  setCheckAuthIsLoading,
   reset,
+  logout,
 } = authSlice.actions;
 export default authSlice.reducer;

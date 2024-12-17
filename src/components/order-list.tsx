@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation';
 import { useListOrders } from '@/lib/api/order';
 import Link from 'next/link';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import UserDetailsCard from '@/lib/components/UserDetailsCard';
 
 interface OrderListComponentProps {
   filter?: 'customer' | 'seller';
@@ -96,12 +97,18 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
                   {order.status}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-8">
                 <div className="flex justify-between items-center">
                   <div className="text-2xl font-bold">${order.productPrice.toFixed(2)}</div>
                   <div className="text-sm text-muted-foreground">
                     {new Date(order.createdAt).toDateString()}
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <h5 className="font-semibold">
+                    {filter === 'customer' ? 'Sold by' : 'Bought by'}
+                  </h5>
+                  <UserDetailsCard user={filter === 'customer' ? order.seller : order.customer} />
                 </div>
               </CardContent>
               <CardFooter>

@@ -7,15 +7,15 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import { GetProductResponse, GetTestingResponse } from '@/@types/api-types';
 import { useApplyTesting } from '@/lib/api/testing';
 import { CldImage } from 'next-cloudinary';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { ArrowLeftRight } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
-import { useGetUserById } from '@/lib/api';
 import Link from 'next/link';
+import GoBackButton from '@/lib/components/GoBackButton';
 
 function ApplyButton({
   testingId,
@@ -23,12 +23,16 @@ function ApplyButton({
   status,
   creatorId,
   testerIds,
+  hasApplied,
+  setHasApplied,
 }: {
   testingId: string;
   theme: string;
   status: string;
   creatorId: string;
   testerIds: string[];
+  hasApplied: boolean;
+  setHasApplied: (state: boolean) => void;
 }) {
   const { fetch: applyTesting, isSuccess, isError, isLoading } = useApplyTesting();
   const { userId } = useSelector((store: Store) => store.auth);
@@ -42,6 +46,7 @@ function ApplyButton({
       return;
     }
     await applyTesting(testingId);
+    setHasApplied(true);
   };
 
   const themeClasses: any = {
@@ -94,7 +99,7 @@ function ApplyButton({
         onClick={() => {
           handleApplyClick(testingId);
         }}
-        disabled={isLoading || disableByStatus || isCreator || isTester || isSuccess}
+        disabled={isLoading || disableByStatus || isCreator || isTester || isSuccess || hasApplied}
         size={`lg`}
         className={classNames(
           themeClasses[theme] || 'bg-neutral-600 hover:bg-neutral-700',
@@ -122,6 +127,8 @@ interface TesterCallPageProps {
 }
 
 export function TesterCallPage({ product, testing, theme }: TesterCallPageProps) {
+  const [hasApplied, setHasApplied] = useState(false);
+
   const themeTextClasses: any = {
     slate: 'text-slate-600',
     gray: 'text-gray-600',
@@ -175,11 +182,14 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
   return (
     <div
       className={classNames(
-        'min-h-screen bg-gradient-to-b to-white',
+        'bg-gradient-to-b to-white',
         themeBgClasses[theme] || 'from-neutral-100',
       )}
     >
       <main className={`container mx-auto px-4 py-8`}>
+        <div className="flex justify-start items-start">
+          <GoBackButton className="mb-8 w-fit" />
+        </div>
         {/* Hero Section */}
         <section className="text-center mb-8">
           <h1
@@ -215,6 +225,8 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             status={testing.status}
             creatorId={testing.creatorId}
             testerIds={testing.testerIds ?? []}
+            hasApplied={hasApplied}
+            setHasApplied={setHasApplied}
           />
         </section>
 
@@ -332,6 +344,8 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             status={testing.status}
             creatorId={testing.creatorId}
             testerIds={testing.testerIds ?? []}
+            hasApplied={hasApplied}
+            setHasApplied={setHasApplied}
           />
         </section>
       </main>

@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import { useUpdateUser } from '@/lib/api';
+import { useCreatePayPalReferral, useUpdateUser } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -48,6 +48,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isLoading: updateUserIsLoading,
     isSuccess: updateUserIsSuccess,
   } = useUpdateUser();
+  const {
+    mutate: createPayPalReferral,
+    isLoading: createPayPalReferralIsLoading,
+    isSuccess: createPayPalReferralIsSuccess,
+    data: paypalReferralData,
+  } = useCreatePayPalReferral();
 
   const {
     register,
@@ -72,6 +78,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
         break;
     }
   }, [action]);
+
+  useEffect(() => {
+    if (!createPayPalReferralIsSuccess || !paypalReferralData) {
+      return;
+    }
+    router.push(paypalReferralData.actionUrl);
+  }, [createPayPalReferralIsSuccess, paypalReferralData]);
 
   const onPersonalDataSubmit = async (data: any) => {
     setImageError(undefined);
@@ -106,7 +119,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
       tiktokRef: data.tiktokRef ? data.tiktokRef.toLowerCase().trim() : undefined,
       username: data.username ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
-      paypalEmail: data.paypalEmail ? data.paypalEmail.toLowerCase().trim() : undefined,
     })
       .then(() => {
         refreshAccessToken(refreshToken, dispatch);
@@ -124,6 +136,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
         setProfileImage((e.target?.result as string) ?? '/placeholder.svg?height=100&width=100');
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCreatePayPalReferralClick = async () => {
+    const result = await createPayPalReferral();
+
+    router.push(result.actionUrl);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -202,6 +220,124 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 />
               </div>
             ) : null}
+
+            {user.paypalMerchantIsActive ? (
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="paypalEmail">Disconnect PayPal</Label>
+                <Button variant="secondary" onClick={() => {}}>
+                  {createPayPalReferralIsLoading ? (
+                    <LoadingSpinnerComponent size="sm" className="text-white" />
+                  ) : null}
+                  Disconnect PayPal account
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  ⚠️ Note: Please be aware that all your released products will be set to{' '}
+                  <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
+                  Pattern Paradise users after disconnecting.
+                </p>
+              </div>
+            ) : null}
+
+            {roles !== undefined && roles.includes('Seller') && !user.paypalMerchantIsActive ? (
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="paypalEmail">Connect PayPal</Label>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    handleCreatePayPalReferralClick();
+                  }}
+                  disabled={createPayPalReferralIsLoading || createPayPalReferralIsSuccess}
+                >
+                  {createPayPalReferralIsLoading ? (
+                    <LoadingSpinnerComponent size="sm" className="text-white" />
+                  ) : null}
+                  Connect PayPal account
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  ⚠️ Note: You can disconnect your PayPal from Pattern Paradise after connection
+                  anytime. Please be aware that all your released products will be set to{' '}
+                  <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
+                  Pattern Paradise users after disconnecting.
+                </p>
+              </div>
+            ) : null}
+
+            <div className="space-y-2" ref={rolesRef}>
+              {highlightRoles ? (
+                <Badge variant="secondary" className="text-md">
+                  {'❗️'} Roles
+                </Badge>
+              ) : null}
+              {!highlightRoles ? <Label>Roles</Label> : null}
+              <div className="flex space-x-4">
+                <Controller
+                  name="roles"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="Buyer"
+                          checked={field.value?.includes('Buyer')}
+                          onCheckedChange={(checked) => {
+                            const updatedRoles = checked
+                              ? [...(field?.value ?? []), 'Buyer']
+                              : field?.value?.filter((role) => role !== 'Buyer');
+                            field.onChange(updatedRoles);
+                          }}
+                        />
+                        <label
+                          htmlFor="buyer"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Buyer
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="Seller"
+                          checked={field?.value?.includes('Seller')}
+                          onCheckedChange={(checked) => {
+                            const updatedRoles = checked
+                              ? [...(field?.value ?? []), 'Seller']
+                              : field?.value?.filter((role) => role !== 'Seller');
+                            field.onChange(updatedRoles);
+                          }}
+                        />
+                        <label
+                          htmlFor="seller"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Seller
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="Tester"
+                          checked={field.value?.includes('Tester')}
+                          onCheckedChange={(checked) => {
+                            const updatedRoles = checked
+                              ? [...(field?.value ?? []), 'Tester']
+                              : field?.value?.filter((role) => role !== 'Tester');
+                            field.onChange(updatedRoles);
+                          }}
+                        />
+                        <label
+                          htmlFor="tester"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Tester
+                        </label>
+                      </div>
+                    </>
+                  )}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                ⚠️ Note: Users with the role &apos;Seller&apos; are required to connect a valid
+                PayPal account which is eligible of receiving money.
+              </p>
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="description">Profile description</Label>
@@ -291,129 +427,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 />
               </div>
             </div>
-
-            <div className="space-y-2" ref={rolesRef}>
-              {highlightRoles ? (
-                <Badge variant="secondary" className="text-md">
-                  {'❗️'} Roles
-                </Badge>
-              ) : null}
-              {!highlightRoles ? <Label>Roles</Label> : null}
-              <div className="flex space-x-4">
-                <Controller
-                  name="roles"
-                  control={control}
-                  render={({ field }) => (
-                    <>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="Buyer"
-                          checked={field.value?.includes('Buyer')}
-                          onCheckedChange={(checked) => {
-                            const updatedRoles = checked
-                              ? [...(field?.value ?? []), 'Buyer']
-                              : field?.value?.filter((role) => role !== 'Buyer');
-                            field.onChange(updatedRoles);
-                          }}
-                        />
-                        <label
-                          htmlFor="buyer"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Buyer
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="Seller"
-                          checked={field?.value?.includes('Seller')}
-                          onCheckedChange={(checked) => {
-                            const updatedRoles = checked
-                              ? [...(field?.value ?? []), 'Seller']
-                              : field?.value?.filter((role) => role !== 'Seller');
-                            field.onChange(updatedRoles);
-                          }}
-                        />
-                        <label
-                          htmlFor="seller"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Seller
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="Tester"
-                          checked={field.value?.includes('Tester')}
-                          onCheckedChange={(checked) => {
-                            const updatedRoles = checked
-                              ? [...(field?.value ?? []), 'Tester']
-                              : field?.value?.filter((role) => role !== 'Tester');
-                            field.onChange(updatedRoles);
-                          }}
-                        />
-                        <label
-                          htmlFor="tester"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Tester
-                        </label>
-                      </div>
-                    </>
-                  )}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                ⚠️ Note: Users with the role &apos;Seller&apos; are required to add a valid PayPal
-                email which is eligible of receiving money.{' '}
-                <a href="https://paypal.com" target="_blank" className="text-blue-500">
-                  Create a PayPal account for free here!
-                </a>
-              </p>
-            </div>
-
-            {roles !== undefined && roles.includes('Seller') ? (
-              <div className="space-y-2">
-                <Label htmlFor="paypalEmail">
-                  PayPal Email <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="paypalEmail"
-                  type="text"
-                  placeholder="Add a valid PayPal email"
-                  required
-                  {...register('paypalEmail', {
-                    required: 'PayPal email is required',
-                    pattern: {
-                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
-                      message: 'Invalid PayPal email address',
-                    },
-                  })}
-                  onKeyDown={handleKeyDown}
-                />
-                <p className="text-xs text-muted-foreground">
-                  ⚠️ Note: If you change your PayPal email address, you will need to{' '}
-                  <strong>confirm</strong> it again by clicking on the link in the{' '}
-                  <strong>email</strong> we send you. In the meantime, all your released products
-                  will be set to <strong>&apos;Hidden&apos;</strong> status and will no longer be
-                  displayed to Pattern Paradise users.
-                </p>
-                {user.paypalEmail &&
-                !user.isPayPalMailConfirmed &&
-                user.roles?.includes('Seller') ? (
-                  <ResendCodeInfoBox
-                    email={user.paypalEmail}
-                    type={'PayPal email confirmation'}
-                    mailType={'UserConfirmPaypalEmail'}
-                  />
-                ) : null}
-                {errors.paypalEmail ? (
-                  <p className="text-sm text-red-500 mb-2">
-                    {errors.paypalEmail.message as string}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
 
             <div className="flex flex-col gap-2">
               <Button

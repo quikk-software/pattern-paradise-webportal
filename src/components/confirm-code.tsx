@@ -11,7 +11,7 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { useConfirmMail, useConfirmPayPalMail } from '@/lib/api';
+import { useConfirmMail } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useEffect, useMemo } from 'react';
 
@@ -24,13 +24,6 @@ export default function ConfirmCodeComponent({
   verificationCode,
   verificationType,
 }: ConfirmCodeComponentProps) {
-  const {
-    mutate: confirmPayPalMail,
-    isLoading: confirmPayPalMailIsLoading,
-    isSuccess: confirmPayPalMailIsSuccess,
-    isError: confirmPayPalMailIsError,
-    data: confirmPayPalMailData,
-  } = useConfirmPayPalMail();
   const {
     mutate: confirmMail,
     isLoading: confirmMailIsLoading,
@@ -49,11 +42,6 @@ export default function ConfirmCodeComponent({
           verificationCode,
         });
         break;
-      case 'UserConfirmPaypalEmail':
-        confirmPayPalMail({
-          verificationCode,
-        });
-        break;
       default:
         break;
     }
@@ -63,16 +51,14 @@ export default function ConfirmCodeComponent({
     switch (verificationType) {
       case 'UserConfirmEmail':
         return 'email';
-      case 'UserConfirmPaypalEmail':
-        return 'PayPal email';
       default:
         return 'code';
     }
   }, [verificationCode]);
 
-  const isLoading = confirmPayPalMailIsLoading || confirmMailIsLoading;
-  const isSuccess = confirmPayPalMailIsSuccess || confirmMailsSuccess;
-  const isError = confirmPayPalMailIsError || confirmMailsError;
+  const isLoading = confirmMailIsLoading;
+  const isSuccess = confirmMailsSuccess;
+  const isError = confirmMailsError;
 
   if (isLoading) {
     return (
@@ -137,7 +123,6 @@ export default function ConfirmCodeComponent({
             {!verificationCode ? 'Missing verification code' : null}
           </CardTitle>
           <CardDescription className="text-center">
-            {!!confirmPayPalMailData ? confirmPayPalMailData.successMessage : null}
             {!!confirmMailData ? confirmMailData.successMessage : null}
             {isError ? `We encountered an issue while verifying your ${displayName}.` : null}
             {!verificationCode

@@ -21,7 +21,7 @@ export default function CreatedByRef({ creatorId }: CreatedByRefProps) {
   }
 
   return (
-    <div className="flex items-center mb-6">
+    <div className="flex items-center">
       <User className="h-5 w-5 mr-2" />
       <Link href={`/users/${creatorId}`}>
         <span

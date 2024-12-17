@@ -23,13 +23,12 @@ import { Button } from '@/components/ui/button';
 import { isTokenValid } from '@/lib/auth/auth.utils';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
+import { useGetProduct } from '@/lib/api';
 
 interface BuyNowButtonProps {
   price: number;
   productId: string;
   productName: string;
-  productStatus: string;
-  creatorId?: string;
   callback?: (orderId: string) => void;
 }
 
@@ -82,7 +81,7 @@ function PayPalButton({ price, productId, userId, disabled, callback }: PayPalBu
       return;
     }
     // redirect to first order detail page related to the user matching this product
-    router.push(`/app/secure/auth/me/orders/${orders[0].id}`);
+    router.push(`/app/secure/auth/me/orders/${orders[0].id}?action=toggleBuyNow`);
   }, [listOrdersByProductIdIsSuccess, orders]);
 
   if (listOrdersByProductIdIsLoading) {
@@ -146,20 +145,19 @@ function PayPalButton({ price, productId, userId, disabled, callback }: PayPalBu
   );
 }
 
-export function BuyNowButton({
-  price,
-  productId,
-  productName,
-  productStatus,
-  creatorId,
-  callback,
-}: BuyNowButtonProps) {
+export function BuyNowButton({ price, productId, productName, callback }: BuyNowButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
   const { action } = useAction();
 
   const { accessToken, userId } = useSelector((s: Store) => s.auth);
+
+  const { fetch: fetchProduct, data: product, isLoading: fetchProductIsLoading } = useGetProduct();
+
+  useEffect(() => {
+    fetchProduct(productId);
+  }, [productId]);
 
   useEffect(() => {
     if (!action) {
@@ -170,20 +168,19 @@ export function BuyNowButton({
     }
   }, [action]);
 
-  const isOwner = creatorId === userId;
   const isLoggedIn = isTokenValid(accessToken);
 
-  if (isOwner) {
-    return <InfoBoxComponent severity="info" message="You are the owner of this pattern" />;
+  if (fetchProductIsLoading) {
+    return <LoadingSpinnerComponent />;
   }
 
-  if (productStatus !== 'Released') {
+  if (product?.status !== 'Released') {
     return (
       <InfoBoxComponent
         message={
           <span>
             This pattern is currently not for sale.
-            {productStatus === 'Created' ? (
+            {product?.status === 'Created' ? (
               <span>
                 {' '}
                 <Link
@@ -212,19 +209,14 @@ export function BuyNowButton({
       </Button>
       <Drawer open={isOpen} onOpenChange={setIsOpen} dismissible={!isLoggedIn}>
         <DrawerContent className="p-4">
-          <div
-            className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto"
-            style={{
-              height: '80vh',
-            }}
-          >
+          <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto">
             <DrawerClose className="flex justify-end" onClick={() => setIsOpen(false)}>
               <X className="text-muted-foreground p-2 w-10 h-10" />
             </DrawerClose>
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <ShieldCheck className="w-20 h-20 text-green-500" />
               <div className="flex flex-col gap-2">
-                <DrawerTitle>Complete your order</DrawerTitle>
+                <DrawerTitle>Complete Your Order</DrawerTitle>
                 <DrawerTitle className="font-medium text-md">{productName}</DrawerTitle>
               </div>
               {!isLoggedIn ? (

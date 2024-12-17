@@ -114,7 +114,7 @@ const pages: Page[] = [
     description: '',
   },
   {
-    title: 'Your testings',
+    title: 'Your tester calls',
     pathname: '/app/secure/sell/testings',
     description: '',
   },

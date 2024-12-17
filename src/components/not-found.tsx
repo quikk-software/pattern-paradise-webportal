@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, CloudOff } from 'lucide-react';
+import { Store, CloudOff } from 'lucide-react';
+import GoBackButton from '@/lib/components/GoBackButton';
 
 export function NotFoundComponent() {
   return (
@@ -13,12 +14,15 @@ export function NotFoundComponent() {
         Oops! It seems like you&apos;ve ventured into uncharted territory. The page you&apos;re
         looking for has gone on an adventure.
       </p>
-      <Button asChild className="flex items-center space-x-2">
-        <Link href="/">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Return to Home
-        </Link>
-      </Button>
+      <div className="space-y-4 w-full">
+        <GoBackButton />
+        <Button asChild className="flex items-center space-x-2">
+          <Link href="/">
+            <Store className="w-4 h-4 mr-2" />
+            Return to Home
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }

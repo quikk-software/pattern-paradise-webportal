@@ -5,11 +5,88 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/android-icon-144x144.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/android-icon-144x144.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/android-icon-192x192.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/android-icon-192x192.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/android-icon-36x36.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/android-icon-36x36.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/android-icon-48x48.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/android-icon-48x48.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/android-icon-72x72.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/android-icon-72x72.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/android-icon-96x96.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/android-icon-96x96.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-114x114.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-114x114.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-120x120.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-120x120.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-144x144.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-144x144.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-152x152.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-152x152.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-180x180.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-180x180.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-57x57.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-57x57.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-60x60.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-60x60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-72x72.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-72x72.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-76x76.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-76x76.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon-precomposed.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon-precomposed.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/apple-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/apple-icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/browserconfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/browserconfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/favicon-16x16.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/favicon-16x16.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/favicon-32x32.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/favicon-32x32.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/favicon-96x96.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/favicon-96x96.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/ms-icon-144x144.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/ms-icon-144x144.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/ms-icon-150x150.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/ms-icon-150x150.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/ms-icon-310x310.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/ms-icon-310x310.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicons/ms-icon-70x70.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicons/ms-icon-70x70.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/android/android-launchericon-144-144.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/android/android-launchericon-144-144.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/android/android-launchericon-192-192.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/android/android-launchericon-192-192.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/android/android-launchericon-48-48.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/android/android-launchericon-48-48.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/android/android-launchericon-512-512.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/android/android-launchericon-512-512.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/android/android-launchericon-72-72.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/android/android-launchericon-72-72.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/android/android-launchericon-96-96.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/android/android-launchericon-96-96.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/appstore.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/appstore.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/100.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/1024.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/114.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/114.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/120.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/120.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/128.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/128.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/144.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/144.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/152.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/152.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/16.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/16.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/167.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/167.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/180.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/180.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/192.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/192.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/20.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/20.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/256.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/256.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/29.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/29.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/32.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/32.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/40.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/50.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/50.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/512.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/512.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/57.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/57.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/58.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/58.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/60.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/64.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/64.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/72.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/72.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/76.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/76.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/80.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/80.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/main/87.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/main/87.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/icons/playstore.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/icons/playstore.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-bd7e3b9b.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-bd7e3b9b.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/mails/contact/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/mails/contact/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/secure/auth/confirm/paypal/referral-approved/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/confirm/paypal/referral-approved/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/secure/auth/confirm/paypal/referral-removed/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/confirm/paypal/referral-removed/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/wrappers/TokenWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/wrappers/TokenWrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/api/user/useCreatePayPalReferral.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/user/useCreatePayPalReferral.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/Chat/ChatHistory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Chat/ChatHistory.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/Chat/ChatList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Chat/ChatList.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/components/CookieConsentBanner/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/CookieConsentBanner/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/GoBackButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/GoBackButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/NoDataInfoBox/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/NoDataInfoBox/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/PriceInput/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/PriceInput/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/UserDetailsCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/UserDetailsCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/features/chat/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/features/chat/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/icons/PatternParadiseIcon.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/icons/PatternParadiseIcon.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +97,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/app/paypal-revoked/page.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/animated-landing.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/bottom-navigation.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/chat-app.tsx" root0="FORCE_HIGHLIGHTING" />
@@ -32,6 +110,7 @@
     <setting file="file://$PROJECT_DIR$/src/components/product-page.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/registration-form.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/reset-password.tsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/successful-onboarding.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/terms-and-conditions.tsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/components/tester-call-page.tsx" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -67,16 +146,17 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/app" />
+      <recent name="$PROJECT_DIR$/public/favicons" />
+      <recent name="$PROJECT_DIR$/public/icons" />
+      <recent name="$PROJECT_DIR$/public/icons/main" />
       <recent name="$PROJECT_DIR$/src/assets/illustrations" />
-      <recent name="$PROJECT_DIR$/src/lib/api/pattern" />
-      <recent name="$PROJECT_DIR$/src/lib/api/testing" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/lib" />
       <recent name="$PROJECT_DIR$/src/app/app" />
       <recent name="$PROJECT_DIR$/src/app/app/secure" />
       <recent name="$PROJECT_DIR$/src/app" />
       <recent name="$PROJECT_DIR$/src/app/app/auth" />
-      <recent name="$PROJECT_DIR$/public/icons/main" />
     </key>
   </component>
   <component name="RunManager" selected="npm.generate-types">
@@ -144,6 +224,9 @@
       <workItem from="1731667195528" duration="1726000" />
       <workItem from="1731926633617" duration="115877000" />
       <workItem from="1732796570065" duration="18565000" />
+      <workItem from="1733217487660" duration="26305000" />
+      <workItem from="1733331168226" duration="21133000" />
+      <workItem from="1734269997430" duration="8503000" />
     </task>
     <servers />
   </component>

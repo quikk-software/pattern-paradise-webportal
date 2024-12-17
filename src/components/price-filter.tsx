@@ -20,12 +20,16 @@ export default function PriceFilter({
   onFilterChange,
   maxPrice = 100,
 }: PriceFilterProps) {
-  const handleFreeChange = (checked: boolean) => {
-    onFilterChange({ isFree: checked, minPrice: 3 });
+  // Local state for slider value to ensure smooth interaction
+  const [sliderValue, setSliderValue] = useState(value);
+
+  // Debounced update to parent state
+  const handleSliderChangeEnd = () => {
+    onFilterChange({ isFree, minPrice: sliderValue });
   };
 
-  const handlePriceChange = (value: number[]) => {
-    onFilterChange({ isFree, minPrice: value[0] });
+  const handleFreeChange = (checked: boolean) => {
+    onFilterChange({ isFree: checked, minPrice: sliderValue });
   };
 
   return (
@@ -34,19 +38,22 @@ export default function PriceFilter({
         <h2 className="text-2xl font-bold mb-4 text-primary">Price Filter</h2>
         <div className="space-y-6">
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="price-range" className="text-sm font-medium text-muted-foreground">
-                Minimum price
+                Minimum price (double-click slider to activate price range filter)
               </Label>
-              <span className="text-sm font-semibold text-primary">${value.toFixed(2)}</span>
+              <span className="text-sm font-semibold text-primary self-end">
+                ${sliderValue.toFixed(2)}
+              </span>
             </div>
             <Slider
               id="price-range"
               min={3}
               max={maxPrice}
               step={0.01}
-              defaultValue={[value]}
-              onValueChange={handlePriceChange}
+              value={[sliderValue]} // Local state value for smooth sliding
+              onValueChange={(value) => setSliderValue(value[0])} // Update local state
+              onValueCommit={handleSliderChangeEnd} // Commit only on end of sliding
               onClick={() => {
                 if (isFree) {
                   handleFreeChange(false);
