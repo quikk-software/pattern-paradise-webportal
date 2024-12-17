@@ -38,6 +38,10 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     try {
       logger.debug(`Checking Access for <${pathname}>.`);
 
+      const query = allSearchParams ? buildQueryString(allSearchParams) : null;
+      const redirect = query ? `${pathname}?${query}` : pathname;
+      const encodedRedirect = query ? encodeURIComponent(`${pathname}?${query}`) : pathname;
+
       if (isTokenValid(accessToken)) {
         logger.debug(`Access token from store is valid.`);
         logger.debug(`Redirect user to <${pathname}>.`);
@@ -45,15 +49,13 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
         dispatch(setAccessToken(accessToken));
         dispatch(setRefreshToken(refreshToken));
         setUserDataInReduxStore(accessToken!, dispatch);
-        router.push(pathname);
+        router.push(redirect);
       } else {
         logger.debug(`Access token from store is invalid. Get access token from refresh token.`);
 
         if (refreshToken === null || !isTokenValid(refreshToken)) {
           logger.debug(`Refresh token from store is invalid. User will be logged out...`);
 
-          const query = allSearchParams ? buildQueryString(allSearchParams) : null;
-          const encodedRedirect = query ? encodeURIComponent(`${pathname}?${query}`) : pathname;
           router.push(`/auth/login?redirect=${encodedRedirect}`);
         } else {
           await refreshAccessToken(refreshToken, dispatch);

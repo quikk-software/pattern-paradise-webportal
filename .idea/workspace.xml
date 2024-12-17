@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app/secure/auth/confirm/paypal/referral-approved/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/confirm/paypal/referral-approved/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/successful-onboarding.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/successful-onboarding.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/auth/AuthGuard.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +149,7 @@
       <workItem from="1732796570065" duration="18565000" />
       <workItem from="1733217487660" duration="26305000" />
       <workItem from="1733331168226" duration="21133000" />
-      <workItem from="1734269997430" duration="12500000" />
+      <workItem from="1734269997430" duration="14091000" />
     </task>
     <servers />
   </component>

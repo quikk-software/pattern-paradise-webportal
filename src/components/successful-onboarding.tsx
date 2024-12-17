@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CheckCircle, ArrowRight, Mail } from 'lucide-react';
+import { CheckCircle, ArrowRight } from 'lucide-react';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
 
