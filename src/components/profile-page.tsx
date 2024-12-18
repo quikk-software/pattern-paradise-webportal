@@ -154,6 +154,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
 
   const roles = watch('roles');
+  const highlightPayPal = action === 'scrollToPayPal';
   const highlightRoles = action === 'scrollToRoles';
 
   return (
@@ -240,7 +241,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
             {roles !== undefined && roles.includes('Seller') && !user.paypalMerchantIsActive ? (
               <div className="flex flex-col gap-2">
-                <Label htmlFor="paypalEmail">Connect PayPal</Label>
+                {highlightPayPal ? (
+                  <Badge variant="secondary" className="text-md">
+                    {'❗️'} Connect PayPal
+                  </Badge>
+                ) : null}
+                {!highlightPayPal ? <Label>Connect PayPal</Label> : null}
                 <Button
                   variant="secondary"
                   onClick={() => {

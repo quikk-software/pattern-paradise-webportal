@@ -13,14 +13,21 @@ import {
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function SuccessfulOnboarding() {
   const [showConfetti, setShowConfetti] = useState(true);
+
+  const params = useSearchParams();
 
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 5000);
     return () => clearTimeout(timer);
   }, []);
+
+  const accountStatus = params.get('accountStatus');
+  const merchantId = params.get('merchantIdInPayPal') ?? 'not found';
+  const accountType = accountStatus === 'BUSINESS_ACCOUNT' ? 'Business' : 'Regular';
 
   return (
     <div className="bg-gradient-to-b from-orange-100 to-white flex flex-col justify-between">
@@ -41,7 +48,7 @@ export default function SuccessfulOnboarding() {
             <p className="text-lg">
               Congratulations! You&apos;re onboarding was successful. You&apos;ll receive an Email
               once you&apos;re set to receive Payments. You can also check your current PayPal
-              Merchant status
+              Merchant status{' '}
               <Link href="/app/secure/auth/me" className="text-blue-500 underline">
                 in your Profile
               </Link>
@@ -51,9 +58,8 @@ export default function SuccessfulOnboarding() {
             <div className="bg-orange-50 p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Your Account Information:</h3>
               <ul className="list-disc list-inside space-y-1">
-                <li>Merchant ID: 1234567890</li>
-                <li>Business Name: Your Business Name</li>
-                <li>Account Type: Business</li>
+                <li>Merchant ID: {merchantId}</li>
+                <li>Account Type: {accountType}</li>
               </ul>
             </div>
 
@@ -68,20 +74,20 @@ export default function SuccessfulOnboarding() {
                 </li>
                 <li>
                   After Creating a Pattern, you can{' '}
-                  <Link className="text-blue-500 underline" href="">
+                  <Link className="text-blue-500 underline" href="/app/secure/test/testings">
                     Individualize your Tester Call
                   </Link>
                 </li>
                 <li>Post your Tester Call on Social Media and gather Tester Applications</li>
                 <li>
                   Choose your Testers and{' '}
-                  <Link className="text-blue-500 underline" href="">
+                  <Link className="text-blue-500 underline" href="/app/secure/test/chats">
                     Chat with them
                   </Link>
                 </li>
                 <li>
                   After your Testers approved your Pattern, you can{' '}
-                  <Link className="text-blue-500 underline" href="">
+                  <Link className="text-blue-500 underline" href="/app/secure/sell">
                     Release your Pattern
                   </Link>{' '}
                   to the public
