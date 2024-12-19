@@ -248,7 +248,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 ) : null}
                 {!highlightPayPal ? <Label>Connect PayPal</Label> : null}
                 <Button
-                  variant="secondary"
+                  variant="default"
                   onClick={() => {
                     handleCreatePayPalReferralClick();
                   }}
