@@ -2,15 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, ShoppingBag, Volleyball } from 'lucide-react';
+import { PlusCircle, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
-import { useListProductsByUserId } from '@/lib/api';
+import { useGetUser, useListProductsByUserId } from '@/lib/api';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import ProductCard from '@/lib/components/ProductCard';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
+import { InfoBoxComponent } from '@/components/info-box';
 
 const getStatusColor = (status?: string) => {
   switch (status) {
@@ -37,10 +38,15 @@ export function SellPageComponent() {
   const { userId } = useSelector((s: Store) => s.auth);
 
   const { fetch, data: products, isLoading, hasNextPage } = useListProductsByUserId({});
+  const { fetch: fetchUser, data: user } = useGetUser();
 
   useEffect(() => {
     fetch(userId);
   }, [userId]);
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     if (!loadMore) {
@@ -52,8 +58,24 @@ export function SellPageComponent() {
 
   return (
     <div className="p-8">
-      <header className="mb-8">
+      <header className="flex flex-col gap-4 mb-8">
         <h1 className="text-3xl font-bold">Actions</h1>
+        {user?.paypalMerchantIsActive === false ? (
+          <InfoBoxComponent
+            message={
+              <>
+                In order to create and sell patterns, you must{' '}
+                <Link
+                  href="/app/secure/auth/me?action=scrollToPayPal"
+                  className="text-blue-500 underline"
+                >
+                  connect PayPal
+                </Link>{' '}
+                to your Pattern Paradise account.
+              </>
+            }
+          />
+        ) : null}
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">

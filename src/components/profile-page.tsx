@@ -26,6 +26,8 @@ import useAction from '@/lib/core/useAction';
 import { Badge } from '@/components/ui/badge';
 import { refreshAccessToken } from '@/lib/auth/auth.utils';
 import { Store } from '@/lib/redux/store';
+import { InfoBoxComponent } from '@/components/info-box';
+import Link from 'next/link';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -224,15 +226,23 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
             {user.paypalMerchantIsActive ? (
               <div className="flex flex-col gap-2">
-                <Label htmlFor="paypalEmail">Disconnect PayPal</Label>
-                <Button variant="secondary" onClick={() => {}}>
-                  {createPayPalReferralIsLoading ? (
-                    <LoadingSpinnerComponent size="sm" className="text-white" />
-                  ) : null}
-                  Disconnect PayPal account
-                </Button>
+                <InfoBoxComponent message="Your PayPal is connected to your Pattern Paradise account." />
+                <Link href="/app/secure/sell/submit" className="w-full">
+                  <Button variant="secondary" className="w-full">
+                    Create a Pattern here
+                  </Button>
+                </Link>
                 <p className="text-xs text-muted-foreground">
-                  ⚠️ Note: Please be aware that all your released products will be set to{' '}
+                  ⚠️ Note: You can disconnect your PayPal from your Pattern Paradise account from
+                  your{' '}
+                  <Link
+                    href="https://paypal.com"
+                    target="_blank"
+                    className="text-blue-500 underline"
+                  >
+                    PayPal dashboard
+                  </Link>
+                  . Please be aware that all your released products will be set to{' '}
                   <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
                   Pattern Paradise users after disconnecting.
                 </p>
@@ -240,31 +250,33 @@ export function ProfilePage({ user }: ProfilePageProps) {
             ) : null}
 
             {roles !== undefined && roles.includes('Seller') && !user.paypalMerchantIsActive ? (
-              <div className="flex flex-col gap-2">
+              <div className="space-y-2">
                 {highlightPayPal ? (
                   <Badge variant="secondary" className="text-md">
                     {'❗️'} Connect PayPal
                   </Badge>
                 ) : null}
-                {!highlightPayPal ? <Label>Connect PayPal</Label> : null}
-                <Button
-                  variant="default"
-                  onClick={() => {
-                    handleCreatePayPalReferralClick();
-                  }}
-                  disabled={createPayPalReferralIsLoading || createPayPalReferralIsSuccess}
-                >
-                  {createPayPalReferralIsLoading ? (
-                    <LoadingSpinnerComponent size="sm" className="text-white" />
-                  ) : null}
-                  Connect PayPal account
-                </Button>
-                <p className="text-xs text-muted-foreground">
-                  ⚠️ Note: You can disconnect your PayPal from Pattern Paradise after connection
-                  anytime. Please be aware that all your released products will be set to{' '}
-                  <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
-                  Pattern Paradise users after disconnecting.
-                </p>
+                <div className="flex flex-col gap-2">
+                  {!highlightPayPal ? <Label>Connect PayPal</Label> : null}
+                  <Button
+                    variant="default"
+                    onClick={() => {
+                      handleCreatePayPalReferralClick();
+                    }}
+                    disabled={createPayPalReferralIsLoading || createPayPalReferralIsSuccess}
+                  >
+                    {createPayPalReferralIsLoading ? (
+                      <LoadingSpinnerComponent size="sm" className="text-white" />
+                    ) : null}
+                    Connect PayPal account
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    ⚠️ Note: You can disconnect your PayPal from Pattern Paradise after connection
+                    anytime. Please be aware that all your released products will be set to{' '}
+                    <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
+                    Pattern Paradise users after disconnecting.
+                  </p>
+                </div>
               </div>
             ) : null}
 

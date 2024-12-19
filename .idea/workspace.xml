@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/sw.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sell-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sell-page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/successful-onboarding.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/successful-onboarding.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -146,7 +149,7 @@
       <workItem from="1732796570065" duration="18565000" />
       <workItem from="1733217487660" duration="26305000" />
       <workItem from="1733331168226" duration="21133000" />
-      <workItem from="1734269997430" duration="26392000" />
+      <workItem from="1734269997430" duration="31659000" />
     </task>
     <servers />
   </component>

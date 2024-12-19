@@ -44,9 +44,9 @@ export default function SuccessfulOnboarding() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-lg">
-              Congratulations! You&apos;re onboarding was successful. You&apos;ll receive an Email
-              once you&apos;re set to receive Payments. You can also check your current PayPal
-              Merchant status{' '}
+              Congratulations! Your onboarding was successful. You&apos;ll receive an Email once
+              you&apos;re set to receive Payments. You can also check your current PayPal Merchant
+              status{' '}
               <Link href="/app/secure/auth/me" className="text-blue-500 underline">
                 in your Profile
               </Link>
