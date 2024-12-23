@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -8,7 +8,6 @@ import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import { InfoBoxComponent } from '@/components/info-box';
-import UserDetailsCard from '@/lib/components/UserDetailsCard';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
@@ -89,12 +88,6 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          {isSeller ? (
-            <div className="space-y-2">
-              <h5 className="font-semibold">Bought by</h5>
-              <UserDetailsCard user={order.customer} />
-            </div>
-          ) : null}
           {isPayed || isSeller ? (
             <DownloadPatternZipButton
               files={order.files}
