@@ -23,15 +23,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import FileSelector from '@/components/file-selector';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { CATEGORIES } from '@/lib/constants';
+import { CATEGORIES, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import GoBackButton from '@/lib/components/GoBackButton';
-import CurrencyInput from 'react-currency-input-field';
-import { cn } from '@/lib/utils';
 import PriceInput from '@/lib/components/PriceInput';
+import HashtagInput from '@/components/hashtag-input';
 
 export interface PDFFile {
   file: File;
@@ -42,6 +41,7 @@ export function ProductFormComponent() {
   const [patterns, setPatterns] = useState<PDFFile[]>([]);
   const [images, setImages] = useState<{ url: string; name: string }[]>([]);
   const [category, setCategory] = useState<string>('Crocheting');
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
@@ -80,7 +80,7 @@ export function ProductFormComponent() {
         url: URL.createObjectURL(file),
         name: file.name,
       }));
-      setImages((prev) => [...prev, ...newImages].slice(0, 6));
+      setImages((prev) => [...prev, ...newImages].slice(0, IMAGE_LIMIT));
     }
   };
 
@@ -89,8 +89,8 @@ export function ProductFormComponent() {
   };
 
   const onSubmit = async (data: any) => {
-    if (images.length === 0 || images.length > 6) {
-      setImageError('Please add 1 to 6 images.');
+    if (images.length === 0 || images.length > IMAGE_LIMIT) {
+      setImageError(`Please add 1 to ${IMAGE_LIMIT} images.`);
       return;
     }
     setImageError(undefined);
@@ -147,10 +147,11 @@ export function ProductFormComponent() {
     formData.append('title', data.title);
     formData.append('description', data.description);
     formData.append('category', category);
-    formData.append('price', String(isFree ? data.price : 0));
+    formData.append('price', String(!isFree ? data.price : 0));
     formData.append('isFree', isFree ? 'true' : 'false');
 
     formData.append('imageUrls', JSON.stringify(urls.map(({ url }) => url)));
+    formData.append('hashtags', JSON.stringify(hashtags));
     formData.append(
       'languages',
       JSON.stringify(patterns.map(({ language, file }) => ({ language, fileName: file.name }))),
@@ -173,6 +174,7 @@ export function ProductFormComponent() {
   const handleResetFormClick = () => {
     setImages([]);
     setPatterns([]);
+    setHashtags([]);
     setCategory('Crocheting');
     setImageError(undefined);
     setPatternError(undefined);
@@ -236,6 +238,13 @@ export function ProductFormComponent() {
           ) : null}
         </div>
 
+        <div>
+          <Label htmlFor="hashtags" className="block text-lg font-semibold mb-2">
+            Hashtags (max. {HASHTAG_LIMIT})
+          </Label>
+          <HashtagInput hashtags={hashtags} setHashtags={setHashtags} limit={HASHTAG_LIMIT} />
+        </div>
+
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
@@ -279,7 +288,7 @@ export function ProductFormComponent() {
 
         <div className="flex flex-col">
           <Label htmlFor="images" className="block text-lg font-semibold mb-2">
-            Images (max. 6) <span className="text-red-500">*</span>
+            Images (max. {IMAGE_LIMIT}) <span className="text-red-500">*</span>
           </Label>
           <div className="grid grid-cols-3 gap-4 mb-4">
             {images.map((img, index) => (
@@ -307,10 +316,10 @@ export function ProductFormComponent() {
             accept="image/*"
             multiple
             onChange={handleImageSelect}
-            disabled={images.length >= 6}
+            disabled={images.length >= IMAGE_LIMIT}
             className="cursor-pointer"
           />
-          {images.length >= 6 && (
+          {images.length >= IMAGE_LIMIT && (
             <p className="text-yellow-600 text-sm mt-2">Maximum number of images reached.</p>
           )}
           {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}

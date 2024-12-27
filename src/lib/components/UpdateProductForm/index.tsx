@@ -19,12 +19,13 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CATEGORIES } from '@/lib/constants';
+import { CATEGORIES, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
 import { GetProductResponse } from '@/@types/api-types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import GoBackButton from '@/lib/components/GoBackButton';
 import PriceInput from '@/lib/components/PriceInput';
+import HashtagInput from '@/components/hashtag-input';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
@@ -37,6 +38,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       name: url?.split('/').at(-1) ?? 'image',
     })),
   );
+  const [hashtags, setHashtags] = useState<string[]>(initialData.hashtags);
   const [category, setCategory] = useState<string>('Crocheting');
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
@@ -58,6 +60,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           title: initialData.title,
           description: initialData.description,
           imageUrls: initialData.imageUrls,
+          hashtags: initialData.hashtags,
           price: String(initialData.price),
           category: initialData.category,
         }
@@ -65,6 +68,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           title: '',
           description: '',
           imageUrls: [],
+          hashtags: [],
           price: '0.0',
           category: '',
         },
@@ -79,7 +83,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         url: URL.createObjectURL(file),
         name: file.name,
       }));
-      setImages((prev) => [...prev, ...newImages].slice(0, 6));
+      setImages((prev) => [...prev, ...newImages].slice(0, IMAGE_LIMIT));
     }
   };
 
@@ -88,8 +92,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   };
 
   const onSubmit = async (data: any) => {
-    if (images.length === 0 || images.length > 6) {
-      setImageError('Please add 1 to 6 images.');
+    if (images.length === 0 || images.length > IMAGE_LIMIT) {
+      setImageError(`Please add 1 to ${IMAGE_LIMIT} images.`);
       return;
     }
     setImageError(undefined);
@@ -134,6 +138,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       description: data.description.trim(),
       price: isFree ? 0.0 : parseFloat(data.price.replace(',', '.')),
       isFree,
+      hashtags,
       imageUrls: [
         ...new Set([
           ...images
@@ -202,6 +207,13 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           ) : null}
         </div>
 
+        <div>
+          <Label htmlFor="hashtags" className="block text-lg font-semibold mb-2">
+            Hashtags (max. {HASHTAG_LIMIT})
+          </Label>
+          <HashtagInput hashtags={hashtags} setHashtags={setHashtags} limit={HASHTAG_LIMIT} />
+        </div>
+
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
@@ -250,7 +262,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
 
         <div className="flex flex-col">
           <Label htmlFor="images" className="block text-lg font-semibold mb-2">
-            Images (max. 6) <span className="text-red-500">*</span>
+            Images (max. {IMAGE_LIMIT}) <span className="text-red-500">*</span>
           </Label>
           <div className="grid grid-cols-3 gap-4 mb-4">
             {images.map((img, index) => (
@@ -278,10 +290,10 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             accept="image/*"
             multiple
             onChange={handleImageSelect}
-            disabled={images.length >= 6}
+            disabled={images.length >= IMAGE_LIMIT}
             className="cursor-pointer"
           />
-          {images.length >= 6 && (
+          {images.length >= IMAGE_LIMIT && (
             <p className="text-yellow-600 text-sm mt-2">Maximum number of images reached.</p>
           )}
           {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}

@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { InfoBoxComponent } from '@/components/info-box';
+import ProductHashtags from '@/components/product-hashtags';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -57,6 +58,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
               <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold">{product.title}</h1>
                 <p className="text-gray-600">{product.description}</p>
+                <ProductHashtags hashtags={product.hashtags} />
               </div>
               <div className="space-y-2">
                 <CreatedByRef creatorId={product.creatorId} />

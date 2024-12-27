@@ -23,6 +23,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import ColumnListing from '@/lib/components/ColumnListing';
+import HashtagInput from '@/components/hashtag-input';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -38,6 +39,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [priceRange, setPriceRange] = useState([3, 100]);
   const [isFree, setIsFree] = useState(true);
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [triggerLoad, setTriggerLoad] = useState(false);
@@ -75,6 +77,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         q: debouncedSearchTerm ?? undefined,
         status,
         categories: selectedCategory ? [selectedCategory] : ['All'],
+        hashtags,
         minPrice: isFree ? 0 : priceRange[0],
         maxPrice: priceRange[1],
         pageNumber: 1,
@@ -105,6 +108,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       categories: selectedCategory ? [selectedCategory] : ['All'],
       minPrice: isFree ? 0 : priceRange[0],
       maxPrice: priceRange[1],
+      hashtags,
       pageNumber: 1,
       pageSize: 20,
     });
@@ -119,6 +123,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setSelectedCategory('All');
     setPriceRange([3, 100]);
     setTriggerLoad(true);
+    setHashtags([]);
   };
 
   const FilterContent = () => (
@@ -141,6 +146,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </div>
         ))}
       </div>
+
+      <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
 
       <PriceFilter
         onFilterChange={(filter) => {

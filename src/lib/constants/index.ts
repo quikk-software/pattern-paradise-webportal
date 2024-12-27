@@ -18,6 +18,7 @@ export type ProductFilterObject = {
   q?: string;
   status?: string;
   categories?: string[];
+  hashtags?: string[];
   minPrice?: number;
   maxPrice?: number;
   pageNumber?: number;
@@ -30,3 +31,6 @@ export type TesterApplicationFilterObject = {
   filter: string[];
   status?: string[];
 };
+
+export const HASHTAG_LIMIT = 10;
+export const IMAGE_LIMIT = 6;
