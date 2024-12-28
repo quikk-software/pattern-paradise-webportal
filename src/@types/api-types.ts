@@ -172,6 +172,7 @@ export interface PostProductResponse {
 export interface PutProductRequest {
   imageUrls: any[];
   hashtags: any[];
+  subCategories: any[];
   title: string;
   description: string;
   category: string;
@@ -1168,6 +1169,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         imageUrls: string[];
         /** Array of hashtags. */
         hashtags: string[];
+        /** Array of sub categories. */
+        subCategories: string[];
         /** Array of languages related to files. */
         languages: {
           language?: string;
@@ -1217,6 +1220,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         status?: string;
         /** List of categories to filter products. */
         categories?: string[];
+        /** List of hashtags to filter products. */
+        hashtags?: string[];
         /** The minimum price of a product to filter. */
         minPrice?: number;
         /** The maximum price of a product to filter. */
@@ -1247,6 +1252,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** @example "any" */
         imageUrls?: any;
+        /** @example "any" */
+        hashtags?: any;
+        /** @example "any" */
+        subCategories?: any;
         /** @example "any" */
         title?: any;
         /** @example "any" */

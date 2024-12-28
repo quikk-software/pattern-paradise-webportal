@@ -76,34 +76,36 @@ export default function HashtagInput({ hashtags, setHashtags, limit }: HashtagIn
         </p>
       ) : null}
       {hasLimit ? (
-        <div className="mb-4">
+        <div>
           <Progress value={progressPercentage} className="w-full" />
           <p className="text-sm text-muted-foreground mt-1">
             {hashtagCount} / {limit} hashtags used
           </p>
         </div>
       ) : null}
-      <div className="flex flex-wrap gap-2">
-        {hashtags.map((tag, index) => (
-          <div
-            key={index}
-            className="bg-primary text-primary-foreground px-3 py-1 rounded-full flex items-center"
-          >
-            #{tag}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="ml-1 h-5 w-5"
-              onClick={(event) => {
-                event.preventDefault();
-                removeHashtag(tag);
-              }}
+      {hashtags.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {hashtags.map((tag, index) => (
+            <div
+              key={index}
+              className="bg-primary text-primary-foreground px-3 py-1 rounded-full flex items-center"
             >
-              <X className="h-3 w-3" />
-            </Button>
-          </div>
-        ))}
-      </div>
+              #{tag}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="ml-1 h-5 w-5"
+                onClick={(event) => {
+                  event.preventDefault();
+                  removeHashtag(tag);
+                }}
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

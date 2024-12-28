@@ -4,25 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Search, SlidersHorizontal, Trash } from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
-import ProductImageSlider from '@/lib/components/ProductImageSlider';
-import Link from 'next/link';
 import { combineArraysById } from '@/lib/core/utils';
 import PriceFilter from '@/components/price-filter';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
-import ColumnListing from '@/lib/components/ColumnListing';
 import HashtagInput from '@/components/hashtag-input';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
@@ -123,11 +113,17 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setSelectedCategory('All');
     setPriceRange([3, 100]);
     setTriggerLoad(true);
+    setIsFree(true);
     setHashtags([]);
   };
 
   const FilterContent = () => (
     <div className="space-y-6">
+      <div>
+        <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
+        <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
+      </div>
+
       <div>
         <h2 className="text-lg font-semibold mb-2">Category</h2>
         {categories.map((category) => (
@@ -146,8 +142,6 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </div>
         ))}
       </div>
-
-      <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
 
       <PriceFilter
         onFilterChange={(filter) => {
@@ -185,9 +179,6 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </DrawerTrigger>
           <DrawerContent>
             <div className="mx-auto w-full max-w-sm">
-              <DrawerHeader>
-                <DrawerTitle>Filter Options</DrawerTitle>
-              </DrawerHeader>
               <div className="p-4">
                 <FilterContent />
               </div>
