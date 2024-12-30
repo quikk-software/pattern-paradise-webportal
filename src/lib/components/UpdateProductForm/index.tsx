@@ -5,13 +5,6 @@ import { CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { useUpdateProduct } from '@/lib/api';
@@ -26,6 +19,8 @@ import { Progress } from '@/components/ui/progress';
 import GoBackButton from '@/lib/components/GoBackButton';
 import PriceInput from '@/lib/components/PriceInput';
 import HashtagInput from '@/components/hashtag-input';
+import { MultiSelect } from '@/components/multi-select';
+import { SelectedOptions } from '@/components/selected-options';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
@@ -39,7 +34,13 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     })),
   );
   const [hashtags, setHashtags] = useState<string[]>(initialData.hashtags);
-  const [category, setCategory] = useState<string>('Crocheting');
+  const [category, setCategory] = useState<{
+    craft: string;
+    options: { [key: string]: { name: string; selected: boolean }[] };
+  }>({
+    craft: 'Crocheting',
+    options: {},
+  });
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
@@ -139,6 +140,9 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       price: isFree ? 0.0 : parseFloat(data.price.replace(',', '.')),
       isFree,
       hashtags,
+      subCategories: Object.values(category.options)
+        .map((options) => options.map((option) => option.name))
+        .flat(),
       imageUrls: [
         ...new Set([
           ...images
@@ -147,7 +151,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           ...urls.map((fu) => fu.url),
         ]),
       ],
-      category,
+      category: category.craft,
     });
   };
 
@@ -242,22 +246,12 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           </div>
         </div>
 
-        <div>
+        <div className="flex flex-col gap-4">
           <Label htmlFor="category" className="block text-lg font-semibold mb-2">
             Category <span className="text-red-500">*</span>
           </Label>
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORIES.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <MultiSelect onChange={(value) => setCategory(value)} initialCategories={CATEGORIES} />
+          <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />
         </div>
 
         <div className="flex flex-col">

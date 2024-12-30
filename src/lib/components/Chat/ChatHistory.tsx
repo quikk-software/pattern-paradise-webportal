@@ -311,8 +311,6 @@ export default function ChatHistory({
     (testerApplication) => testerApplication.user.id === userId,
   )?.status;
 
-  console.log({ showChatList });
-
   return (
     <div
       className={cn('flex flex-col bg-white w-full md:w-2/3', {

@@ -5,13 +5,6 @@ import { CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
@@ -31,6 +24,8 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/u
 import GoBackButton from '@/lib/components/GoBackButton';
 import PriceInput from '@/lib/components/PriceInput';
 import HashtagInput from '@/components/hashtag-input';
+import { MultiSelect } from '@/components/multi-select';
+import { SelectedOptions } from '@/components/selected-options';
 
 export interface PDFFile {
   file: File;
@@ -40,7 +35,13 @@ export interface PDFFile {
 export function ProductFormComponent() {
   const [patterns, setPatterns] = useState<PDFFile[]>([]);
   const [images, setImages] = useState<{ url: string; name: string }[]>([]);
-  const [category, setCategory] = useState<string>('Crocheting');
+  const [category, setCategory] = useState<{
+    craft: string;
+    options: { [key: string]: { name: string; selected: boolean }[] };
+  }>({
+    craft: 'Crocheting',
+    options: {},
+  });
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
@@ -146,10 +147,23 @@ export function ProductFormComponent() {
 
     formData.append('title', data.title);
     formData.append('description', data.description);
-    formData.append('category', category);
+    formData.append('category', category.craft);
     formData.append('price', String(!isFree ? data.price : 0));
     formData.append('isFree', isFree ? 'true' : 'false');
 
+    console.log({
+      t: Object.values(category.options)
+        .map((options) => options.map((option) => option.name))
+        .flat(),
+    });
+    formData.append(
+      'subCategories',
+      JSON.stringify(
+        Object.values(category.options)
+          .map((options) => options.map((option) => option.name))
+          .flat(),
+      ),
+    );
     formData.append('imageUrls', JSON.stringify(urls.map(({ url }) => url)));
     formData.append('hashtags', JSON.stringify(hashtags));
     formData.append(
@@ -175,7 +189,10 @@ export function ProductFormComponent() {
     setImages([]);
     setPatterns([]);
     setHashtags([]);
-    setCategory('Crocheting');
+    setCategory({
+      craft: 'Crocheting',
+      options: {},
+    });
     setImageError(undefined);
     setPatternError(undefined);
     setImageUploadIsLoading(false);
@@ -268,22 +285,12 @@ export function ProductFormComponent() {
           </div>
         </div>
 
-        <div>
+        <div className="flex flex-col gap-4">
           <Label htmlFor="category" className="block text-lg font-semibold mb-2">
             Category <span className="text-red-500">*</span>
           </Label>
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORIES.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <MultiSelect onChange={(value) => setCategory(value)} initialCategories={CATEGORIES} />
+          <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />
         </div>
 
         <div className="flex flex-col">
