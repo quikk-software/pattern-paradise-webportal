@@ -183,6 +183,7 @@ export interface PutProductRequest {
 export interface GetProductResponse {
   id: string;
   imageUrls: string[];
+  subCategories: string[];
   hashtags: string[];
   files: {
     id: string;

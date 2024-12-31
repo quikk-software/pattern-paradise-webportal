@@ -54,16 +54,6 @@ export const CATEGORIES = [
         ],
       },
       {
-        name: 'Pattern Type',
-        options: [
-          { name: 'Shawls', selected: false },
-          { name: 'Scarves', selected: false },
-          { name: 'Hats', selected: false },
-          { name: 'Bags', selected: false },
-          { name: 'Blankets', selected: false },
-        ],
-      },
-      {
         name: 'Special Features',
         options: [
           { name: 'Seamless Patterns', selected: false },
@@ -116,17 +106,6 @@ export const CATEGORIES = [
           { name: 'Cables', selected: false },
           { name: 'Brioche', selected: false },
           { name: 'Double Knitting', selected: false },
-        ],
-      },
-      {
-        name: 'Pattern Type',
-        options: [
-          { name: 'Sweaters', selected: false },
-          { name: 'Cardigans', selected: false },
-          { name: 'Socks', selected: false },
-          { name: 'Mittens/Gloves', selected: false },
-          { name: 'Cowls', selected: false },
-          { name: 'Lace Knitting', selected: false },
         ],
       },
       {

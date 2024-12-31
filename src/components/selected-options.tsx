@@ -17,9 +17,11 @@ export function SelectedOptions({ selectedOptions }: SelectedOptionsProps) {
   }
 
   return (
-    <div>
-      <Label className="block text-lg font-semibold mb-2">Selected Options</Label>
-      <div className="text-md font-semibold mb-2">{craft}</div>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <Label className="block text-lg font-semibold">Selected Categories</Label>
+        <div className="text-md underline">{craft}</div>
+      </div>
       <div className="space-y-4">
         {Object.entries(options).map(
           ([subcategory, selectedOpts]) =>

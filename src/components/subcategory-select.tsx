@@ -15,11 +15,13 @@ export function SubcategorySelect({ subcategory, onOptionToggle }: SubcategorySe
       {subcategory.options.map((option: any, index: any) => (
         <div key={`${option.name}-${index}`} className="flex items-center space-x-2">
           <Checkbox
-            id={`${subcategory.name}-${option}`}
+            id={`${subcategory.name}-${option.name}`}
             checked={option.selected}
             onCheckedChange={() => onOptionToggle(subcategory.name, option)}
           />
-          <Label htmlFor={`${subcategory.name}-${option.name}`}>{option.name}</Label>
+          <Label className="cursor-pointer" htmlFor={`${subcategory.name}-${option.name}`}>
+            {option.name}
+          </Label>
         </div>
       ))}
     </div>

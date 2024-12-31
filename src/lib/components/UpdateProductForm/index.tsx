@@ -22,6 +22,28 @@ import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 
+function updateSelectedFlags(
+  data: any,
+  category: string,
+  subCategories: { name: string; selected: boolean }[],
+) {
+  return data.map((item: any) => {
+    if (item.name === category) {
+      return {
+        ...item,
+        subcategories: item.subcategories.map((subcategory: any) => ({
+          ...subcategory,
+          options: subcategory.options.map((option: { name: string; selected: boolean }) => ({
+            ...option,
+            selected: subCategories.some((subCategory) => subCategory.name === option.name),
+          })),
+        })),
+      };
+    }
+    return { ...item };
+  });
+}
+
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
 }
@@ -38,7 +60,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     craft: string;
     options: { [key: string]: { name: string; selected: boolean }[] };
   }>({
-    craft: 'Crocheting',
+    craft: initialData.category,
     options: {},
   });
   const [imageError, setImageError] = useState<string | undefined>(undefined);
@@ -76,6 +98,12 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   });
 
   const hasErrors = errors.title || errors.description || errors.price;
+
+  const updatedCategories = updateSelectedFlags(
+    CATEGORIES,
+    initialData.category,
+    initialData.subCategories.map((subCategory) => ({ name: subCategory, selected: true })),
+  );
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -246,11 +274,17 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <Label htmlFor="category" className="block text-lg font-semibold mb-2">
-            Category <span className="text-red-500">*</span>
-          </Label>
-          <MultiSelect onChange={(value) => setCategory(value)} initialCategories={CATEGORIES} />
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="category" className="block text-lg font-semibold mb-2">
+              Category <span className="text-red-500">*</span>
+            </Label>
+            <MultiSelect
+              onChange={(value) => setCategory(value)}
+              initialCategories={updatedCategories}
+              injectCategories={true}
+            />
+          </div>
           <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />
         </div>
 

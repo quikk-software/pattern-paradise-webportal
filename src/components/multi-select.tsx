@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchBar } from './search-bar';
 import { CategoryAccordion } from './category-accordion';
 import { CraftSelector } from './craft-selector';
@@ -9,9 +9,10 @@ interface MultiSelectProps {
     craft: string;
     options: { [key: string]: { name: string; selected: boolean }[] };
   }) => void;
+  injectCategories: boolean;
 }
 
-export function MultiSelect({ initialCategories, onChange }: MultiSelectProps) {
+export function MultiSelect({ initialCategories, onChange, injectCategories }: MultiSelectProps) {
   const [selectedCraft, setSelectedCraft] = useState<string>('Crocheting');
   const [categories, setCategories] = useState<any>(initialCategories);
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,11 +20,12 @@ export function MultiSelect({ initialCategories, onChange }: MultiSelectProps) {
   const handleCraftChange = (craft: string) => {
     setSelectedCraft(craft);
     onChange({ craft, options: {} });
+    setCategories(initialCategories);
   };
 
   const handleOptionToggle = (
-    subcategoryName: string,
-    selectedOption: { name: string; selected: boolean },
+    subcategoryName?: string,
+    selectedOption?: { name: string; selected: boolean },
   ) => {
     const newCategories = categories.map((category: any) => {
       if (category.name === selectedCraft) {
@@ -34,7 +36,7 @@ export function MultiSelect({ initialCategories, onChange }: MultiSelectProps) {
               return {
                 ...subcategory,
                 options: subcategory.options.map((option: any) => {
-                  if (option.name === selectedOption.name) {
+                  if (option.name === selectedOption?.name) {
                     return { ...option, selected: !option.selected };
                   }
                   return option;
@@ -63,6 +65,13 @@ export function MultiSelect({ initialCategories, onChange }: MultiSelectProps) {
 
     onChange({ craft: selectedCraft, options: selectedOptions || {} });
   };
+
+  useEffect(() => {
+    if (!injectCategories) {
+      return;
+    }
+    handleOptionToggle();
+  }, [injectCategories]);
 
   const selectedCategory = categories.find((category: any) => category.name === selectedCraft);
 

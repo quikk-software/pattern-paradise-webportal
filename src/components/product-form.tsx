@@ -285,11 +285,17 @@ export function ProductFormComponent() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <Label htmlFor="category" className="block text-lg font-semibold mb-2">
-            Category <span className="text-red-500">*</span>
-          </Label>
-          <MultiSelect onChange={(value) => setCategory(value)} initialCategories={CATEGORIES} />
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="category" className="block text-lg font-semibold mb-2">
+              Category <span className="text-red-500">*</span>
+            </Label>
+            <MultiSelect
+              onChange={(value) => setCategory(value)}
+              initialCategories={CATEGORIES}
+              injectCategories={false}
+            />
+          </div>
           <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />
         </div>
 
