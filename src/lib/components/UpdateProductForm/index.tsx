@@ -81,6 +81,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     handleSubmit,
     formState: { errors },
     getValues,
+    watch,
   } = useForm({
     defaultValues: initialData
       ? {
@@ -194,6 +195,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     }
   };
 
+  const titleWatch = watch('title');
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
       <form
@@ -217,8 +220,10 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             })}
             onKeyDown={handleKeyDown}
           />
-          <p className="text-sm text-gray-500 mt-1">
-            {(getValues('title') ?? '')?.length}/30 characters
+          <p
+            className={`text-sm ${titleWatch.length <= 30 ? 'text-gray-500' : 'text-red-500'} mt-1`}
+          >
+            {(titleWatch ?? '').length}/30 characters
           </p>
           {errors.title ? (
             <p className="text-sm text-red-500 mb-2">{errors.title.message as string}</p>
