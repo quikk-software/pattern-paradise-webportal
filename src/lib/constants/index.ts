@@ -7,6 +7,14 @@ export const PRO_MEMBERSHIP_PRICE = '$9.99';
 
 export const SUPPORT_EMAIL = 'help@pattern-paradise.shop';
 
+export type ExperienceLevel = 'Beginner' | 'Intermediate' | 'Professional';
+export const EXPERIENCE_LEVELS = ['Beginner', 'Intermediate', 'Professional'];
+export enum ExperienceLevels {
+  Beginner = 'Beginner',
+  Intermediate = 'Intermediate',
+  Professional = 'Professional',
+}
+
 export const CATEGORIES = [
   {
     name: 'Crocheting',

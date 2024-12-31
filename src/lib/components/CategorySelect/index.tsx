@@ -1,5 +1,5 @@
 import * as Select from '@radix-ui/react-select';
-import { CATEGORIES } from '@/lib/constants';
+import {} from '@/lib/constants';
 import { ChevronDownIcon } from 'lucide-react';
 
 interface CategorySelectProps {

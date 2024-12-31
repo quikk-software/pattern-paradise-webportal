@@ -291,7 +291,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
               <ul className={`list-disc list-inside text-gray-700`}>
                 <li>
                   <strong>
-                    {testing.experience} {testing.product.category.toLowerCase()}
+                    {testing.product.experience} {testing.product.category.toLowerCase()}
                   </strong>{' '}
                   skills
                 </li>

@@ -12,7 +12,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CATEGORIES, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
+import { CATEGORIES, ExperienceLevel, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
 import { GetProductResponse } from '@/@types/api-types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -21,6 +21,7 @@ import PriceInput from '@/lib/components/PriceInput';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
+import ExperienceSelect from '@/lib/components/ExperienceSelect';
 
 function updateSelectedFlags(
   data: any,
@@ -63,6 +64,9 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     craft: initialData.category,
     options: {},
   });
+  const [selectedExperienceLevel, setSelectedExperienceLevel] = useState<ExperienceLevel>(
+    initialData.experience as ExperienceLevel,
+  );
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
@@ -166,6 +170,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       title: data.title.trim(),
       description: data.description.trim(),
       price: isFree ? 0.0 : parseFloat(data.price.replace(',', '.')),
+      experience: selectedExperienceLevel,
       isFree,
       hashtags,
       subCategories: Object.values(category.options)
@@ -271,6 +276,18 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             <Label htmlFor="isfree-checkbox" className="block text-sm">
               Offer this pattern free of charge
             </Label>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="experienceLevel" className="block text-lg font-semibold mb-2">
+              Experience Level <span className="text-red-500">*</span>
+            </Label>
+            <ExperienceSelect
+              selectedExperienceLevel={selectedExperienceLevel}
+              setSelectedExperienceLevel={setSelectedExperienceLevel}
+            />
           </div>
         </div>
 

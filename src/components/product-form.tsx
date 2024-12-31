@@ -16,7 +16,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import FileSelector from '@/components/file-selector';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { CATEGORIES, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
+import {
+  CATEGORIES,
+  ExperienceLevel,
+  ExperienceLevels,
+  HASHTAG_LIMIT,
+  IMAGE_LIMIT,
+} from '@/lib/constants';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,6 +32,7 @@ import PriceInput from '@/lib/components/PriceInput';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
+import ExperienceSelect from '@/lib/components/ExperienceSelect';
 
 export interface PDFFile {
   file: File;
@@ -47,6 +54,9 @@ export function ProductFormComponent() {
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
+  const [selectedExperienceLevel, setSelectedExperienceLevel] = useState<ExperienceLevel>(
+    ExperienceLevels.Intermediate,
+  );
   const [showResetDrawer, setShowResetDrawer] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<
     | {
@@ -147,6 +157,7 @@ export function ProductFormComponent() {
 
     formData.append('title', data.title);
     formData.append('description', data.description);
+    formData.append('experience', selectedExperienceLevel);
     formData.append('category', category.craft);
     formData.append('price', String(!isFree ? data.price : 0));
     formData.append('isFree', isFree ? 'true' : 'false');
@@ -282,6 +293,18 @@ export function ProductFormComponent() {
             <Label htmlFor="isfree-checkbox" className="block text-sm">
               Offer this pattern free of charge
             </Label>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="experienceLevel" className="block text-lg font-semibold mb-2">
+              Experience Level <span className="text-red-500">*</span>
+            </Label>
+            <ExperienceSelect
+              selectedExperienceLevel={selectedExperienceLevel}
+              setSelectedExperienceLevel={setSelectedExperienceLevel}
+            />
           </div>
         </div>
 

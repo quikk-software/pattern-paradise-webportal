@@ -178,6 +178,7 @@ export interface PutProductRequest {
   category: string;
   price: number;
   isFree: boolean;
+  experience: string;
 }
 
 export interface GetProductResponse {
@@ -196,6 +197,7 @@ export interface GetProductResponse {
   category: string;
   price: number;
   isFree: boolean;
+  experience: string;
   isSponsored: boolean;
   status: string;
   creatorId: string;
@@ -231,7 +233,6 @@ export interface PostTestingRequest {
   testerIds: string[];
   productId: string;
   durationInWeeks: number;
-  experience: string;
 }
 
 export interface PostTestingResponse {
@@ -243,7 +244,6 @@ export interface PutTestingRequest {
   /** @example "neutral" */
   theme?: string;
   durationInWeeks?: number;
-  experience?: string;
 }
 
 export interface GetTestingResponse {
@@ -253,7 +253,6 @@ export interface GetTestingResponse {
   /** @example "neutral" */
   theme: string;
   durationInWeeks: number;
-  experience: string;
   /** @format date-time */
   dueDate?: string;
   creatorId: string;
@@ -1187,6 +1186,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         price: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
+        /** The experience level of the product. */
+        experience: string;
       },
       params: RequestParams = {},
     ) =>
@@ -1386,8 +1387,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         testerIds?: any;
         /** @example "any" */
         durationInWeeks?: any;
-        /** @example "any" */
-        experience?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1448,8 +1447,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         theme?: any;
         /** @example "any" */
         durationInWeeks?: any;
-        /** @example "any" */
-        experience?: any;
       },
       params: RequestParams = {},
     ) =>
