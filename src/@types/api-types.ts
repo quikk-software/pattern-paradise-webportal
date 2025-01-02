@@ -1214,6 +1214,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     listProducts: (
       query?: {
+        subcategories?: string;
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
@@ -1224,6 +1225,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         status?: string;
         /** List of categories to filter products. */
         categories?: string[];
+        /** List of subcategories to filter products. */
+        subCategories?: string[];
         /** List of hashtags to filter products. */
         hashtags?: string[];
         /** The minimum price of a product to filter. */

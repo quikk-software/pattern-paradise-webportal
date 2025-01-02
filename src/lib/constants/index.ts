@@ -137,6 +137,7 @@ export type ProductFilterObject = {
   q?: string;
   status?: string;
   categories?: string[];
+  subCategories?: string[];
   hashtags?: string[];
   minPrice?: number;
   maxPrice?: number;

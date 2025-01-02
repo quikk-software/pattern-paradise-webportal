@@ -162,11 +162,6 @@ export function ProductFormComponent() {
     formData.append('price', String(!isFree ? data.price : 0));
     formData.append('isFree', isFree ? 'true' : 'false');
 
-    console.log({
-      t: Object.values(category.options)
-        .map((options) => options.map((option) => option.name))
-        .flat(),
-    });
     formData.append(
       'subCategories',
       JSON.stringify(
@@ -242,9 +237,9 @@ export function ProductFormComponent() {
             onKeyDown={handleKeyDown}
           />
           <p
-            className={`text-sm ${titleWatch.length <= 30 ? 'text-gray-500' : 'text-red-500'} mt-1`}
+            className={`text-sm ${titleWatch?.length <= 30 ? 'text-gray-500' : 'text-red-500'} mt-1`}
           >
-            {(titleWatch ?? '').length}/30 characters
+            {(titleWatch ?? '')?.length}/30 characters
           </p>
           {errors.title ? (
             <p className="text-sm text-red-500 mb-2">{errors.title.message as string}</p>

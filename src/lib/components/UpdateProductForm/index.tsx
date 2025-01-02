@@ -22,28 +22,7 @@ import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
-
-function updateSelectedFlags(
-  data: any,
-  category: string,
-  subCategories: { name: string; selected: boolean }[],
-) {
-  return data.map((item: any) => {
-    if (item.name === category) {
-      return {
-        ...item,
-        subcategories: item.subcategories.map((subcategory: any) => ({
-          ...subcategory,
-          options: subcategory.options.map((option: { name: string; selected: boolean }) => ({
-            ...option,
-            selected: subCategories.some((subCategory) => subCategory.name === option.name),
-          })),
-        })),
-      };
-    }
-    return { ...item };
-  });
-}
+import { updateSelectedFlags } from '@/lib/utils';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
@@ -80,7 +59,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     watch,
   } = useForm({
     defaultValues: initialData

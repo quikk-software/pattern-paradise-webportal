@@ -10,10 +10,16 @@ interface MultiSelectProps {
     options: { [key: string]: { name: string; selected: boolean }[] };
   }) => void;
   injectCategories: boolean;
+  overrideCraft?: string;
 }
 
-export function MultiSelect({ initialCategories, onChange, injectCategories }: MultiSelectProps) {
-  const [selectedCraft, setSelectedCraft] = useState<string>('Crocheting');
+export function MultiSelect({
+  initialCategories,
+  onChange,
+  injectCategories,
+  overrideCraft,
+}: MultiSelectProps) {
+  const [selectedCraft, setSelectedCraft] = useState<string>(overrideCraft ?? 'Crocheting');
   const [categories, setCategories] = useState<any>(initialCategories);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -85,9 +91,15 @@ export function MultiSelect({ initialCategories, onChange, injectCategories }: M
       };
     }) || [];
 
+  if (selectedCraft === 'All') {
+    return null;
+  }
+
   return (
     <div className="w-full mx-auto space-y-4">
-      <CraftSelector selectedCraft={selectedCraft} onCraftChange={handleCraftChange} />
+      {!overrideCraft ? (
+        <CraftSelector selectedCraft={selectedCraft} onCraftChange={handleCraftChange} />
+      ) : null}
       <SearchBar value={searchTerm} onChange={setSearchTerm} />
       <CategoryAccordion
         subcategories={filteredSubcategories}

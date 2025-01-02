@@ -14,6 +14,8 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import HashtagInput from '@/components/hashtag-input';
+import { MultiSelect } from '@/components/multi-select';
+import { CATEGORIES } from '@/lib/constants';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -26,7 +28,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [products, setProducts] = useState<GetProductResponse[]>(defaultProducts);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState<{
+    craft: string;
+    options: { [key: string]: { name: string; selected: boolean }[] };
+  }>({
+    craft: 'All',
+    options: {},
+  });
   const [priceRange, setPriceRange] = useState([3, 100]);
   const [isFree, setIsFree] = useState(true);
   const [hashtags, setHashtags] = useState<string[]>([]);
@@ -66,7 +74,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       const result = await fetch({
         q: debouncedSearchTerm ?? undefined,
         status,
-        categories: selectedCategory ? [selectedCategory] : ['All'],
+        categories: selectedCategory ? [selectedCategory.craft] : ['All'],
         hashtags,
         minPrice: isFree ? 0 : priceRange[0],
         maxPrice: priceRange[1],
@@ -95,7 +103,10 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     const result = await fetch({
       q: debouncedSearchTerm ?? undefined,
       status,
-      categories: selectedCategory ? [selectedCategory] : ['All'],
+      categories: selectedCategory ? [selectedCategory.craft] : ['All'],
+      subCategories: Object.values(selectedCategory.options)
+        .map((options) => options.map((option) => option.name))
+        .flat(),
       minPrice: isFree ? 0 : priceRange[0],
       maxPrice: priceRange[1],
       hashtags,
@@ -110,7 +121,10 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const clearFilter = () => {
     setSearchTerm('');
     setDebouncedSearchTerm('');
-    setSelectedCategory('All');
+    setSelectedCategory({
+      craft: 'All',
+      options: {},
+    });
     setPriceRange([3, 100]);
     setTriggerLoad(true);
     setIsFree(true);
@@ -130,8 +144,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           <div key={category} className="flex items-center space-x-2 mb-2">
             <Checkbox
               id={category}
-              checked={selectedCategory === category}
-              onCheckedChange={() => setSelectedCategory(category)}
+              checked={selectedCategory.craft === category}
+              onCheckedChange={() =>
+                setSelectedCategory({
+                  craft: category,
+                  options: {},
+                })
+              }
             />
             <label
               htmlFor={category}
@@ -142,6 +161,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </div>
         ))}
       </div>
+
+      <MultiSelect
+        initialCategories={CATEGORIES}
+        onChange={(value) => setSelectedCategory(value)}
+        injectCategories={false}
+        overrideCraft={selectedCategory.craft}
+      />
 
       <PriceFilter
         onFilterChange={(filter) => {
@@ -178,7 +204,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             </Button>
           </DrawerTrigger>
           <DrawerContent>
-            <div className="mx-auto w-full max-w-sm">
+            <div className="mx-auto w-full max-w-sm max-h-[100vh] overflow-y-auto">
               <div className="p-4">
                 <FilterContent />
               </div>
