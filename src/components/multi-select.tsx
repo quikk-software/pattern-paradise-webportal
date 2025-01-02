@@ -23,6 +23,13 @@ export function MultiSelect({
   const [categories, setCategories] = useState<any>(initialCategories);
   const [searchTerm, setSearchTerm] = useState('');
 
+  useEffect(() => {
+    if (!injectCategories) {
+      return;
+    }
+    handleOptionToggle();
+  }, [injectCategories]);
+
   const handleCraftChange = (craft: string) => {
     setSelectedCraft(craft);
     onChange({ craft, options: {} });
@@ -71,13 +78,6 @@ export function MultiSelect({
 
     onChange({ craft: selectedCraft, options: selectedOptions || {} });
   };
-
-  useEffect(() => {
-    if (!injectCategories) {
-      return;
-    }
-    handleOptionToggle();
-  }, [injectCategories]);
 
   const selectedCategory = categories.find((category: any) => category.name === selectedCraft);
 

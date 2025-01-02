@@ -17,7 +17,9 @@ export function SubcategorySelect({ subcategory, onOptionToggle }: SubcategorySe
           <Checkbox
             id={`${subcategory.name}-${option.name}`}
             checked={option.selected}
-            onCheckedChange={() => onOptionToggle(subcategory.name, option)}
+            onCheckedChange={() => {
+              onOptionToggle(subcategory.name, option);
+            }}
           />
           <Label className="cursor-pointer" htmlFor={`${subcategory.name}-${option.name}`}>
             {option.name}

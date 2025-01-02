@@ -16,6 +16,8 @@ import useScreenSize from '@/lib/core/useScreenSize';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { CATEGORIES } from '@/lib/constants';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -140,26 +142,25 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
 
       <div>
         <h2 className="text-lg font-semibold mb-2">Category</h2>
-        {categories.map((category) => (
-          <div key={category} className="flex items-center space-x-2 mb-2">
-            <Checkbox
-              id={category}
-              checked={selectedCategory.craft === category}
-              onCheckedChange={() =>
-                setSelectedCategory({
-                  craft: category,
-                  options: {},
-                })
-              }
-            />
-            <label
-              htmlFor={category}
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              {category}
-            </label>
-          </div>
-        ))}
+        <RadioGroup
+          value={selectedCategory.craft}
+          onValueChange={(value) =>
+            setSelectedCategory({
+              craft: value,
+              options: {},
+            })
+          }
+          className="flex flex-col space-y-1"
+        >
+          {categories.map((category) => (
+            <div className="flex items-center space-x-2" key={category}>
+              <RadioGroupItem value={category} id={category?.toLowerCase()} />
+              <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
+                {category}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
       </div>
 
       <MultiSelect
