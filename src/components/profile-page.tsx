@@ -28,6 +28,7 @@ import { refreshAccessToken } from '@/lib/auth/auth.utils';
 import { Store } from '@/lib/redux/store';
 import { InfoBoxComponent } from '@/components/info-box';
 import Link from 'next/link';
+import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -38,6 +39,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
+  const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
 
   const { action } = useAction();
 
@@ -152,6 +154,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
   };
 
+  const handleDisconnectPayPal = () => {};
+
   const initials =
     user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
 
@@ -163,7 +167,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     <div className="flex flex-col gap-4">
       <Card className="w-full max-w-2xl mx-auto border-none">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Quick Links</CardTitle>
+          <CardTitle className="text-2xl font-bold">Quick Links</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Button
@@ -185,9 +189,84 @@ export function ProfilePage({ user }: ProfilePageProps) {
           </Button>
         </CardContent>
       </Card>
+      {user.roles?.includes('Seller') ? (
+        <Card className="w-full max-w-2xl mx-auto border-none">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">Manage PayPal</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            {user.paypalMerchantIsActive && !user.paypalPaymentsReceivable ? (
+              <InfoBoxComponent
+                severity="warning"
+                message={
+                  <span>
+                    <strong>Attention:</strong> You currently cannot receive payments due to
+                    restriction on your PayPal account. Please reach out to PayPal Customer Support
+                    or connect to{' '}
+                    <Link
+                      href="https://www.paypal.com"
+                      target="_blank"
+                      className="text-blue-500 underline"
+                    >
+                      https://www.paypal.com
+                    </Link>{' '}
+                    for more information.
+                  </span>
+                }
+              />
+            ) : null}
+            {user.paypalMerchantIsActive && !user.paypalPrimaryEmailConfirmed ? (
+              <InfoBoxComponent
+                severity="warning"
+                message={
+                  <span>
+                    <strong>Attention:</strong> Please confirm your email address on{' '}
+                    <Link
+                      href="https://www.paypal.com/businessprofile/settings"
+                      target="_blank"
+                      className="text-blue-500 underline"
+                    >
+                      https://www.paypal.com/businessprofile/settings
+                    </Link>{' '}
+                    in order to receive payments! You currently cannot receive payments.
+                  </span>
+                }
+              />
+            ) : null}
+
+            {user.paypalMerchantIsActive ? (
+              <div className="flex flex-col gap-2">
+                <InfoBoxComponent message="Your PayPal is connected to your Pattern Paradise account." />
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => setIsDisconnectPayPalDrawerOpen(true)}
+                >
+                  Disconnect PayPal
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  ⚠️ Note: You can also disconnect your PayPal from your Pattern Paradise account
+                  from your{' '}
+                  <Link
+                    href="https://paypal.com"
+                    target="_blank"
+                    className="text-blue-500 underline"
+                  >
+                    PayPal dashboard
+                  </Link>
+                  . Please be aware that all your released products will be set to{' '}
+                  <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
+                  Pattern Paradise users after disconnecting.
+                </p>
+              </div>
+            ) : null}
+          </CardContent>
+        </Card>
+      ) : null}
+
       <Card className="w-full max-w-2xl mx-auto border-none">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Edit Profile</CardTitle>
+          <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onPersonalDataSubmit)} className="space-y-8">
@@ -221,31 +300,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   type={'email confirmation'}
                   mailType={'UserConfirmEmail'}
                 />
-              </div>
-            ) : null}
-
-            {user.paypalMerchantIsActive ? (
-              <div className="flex flex-col gap-2">
-                <InfoBoxComponent message="Your PayPal is connected to your Pattern Paradise account." />
-                <Link href="/app/secure/sell/submit" className="w-full">
-                  <Button variant="secondary" className="w-full">
-                    Create a Pattern here
-                  </Button>
-                </Link>
-                <p className="text-xs text-muted-foreground">
-                  ⚠️ Note: You can disconnect your PayPal from your Pattern Paradise account from
-                  your{' '}
-                  <Link
-                    href="https://paypal.com"
-                    target="_blank"
-                    className="text-blue-500 underline"
-                  >
-                    PayPal dashboard
-                  </Link>
-                  . Please be aware that all your released products will be set to{' '}
-                  <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
-                  Pattern Paradise users after disconnecting.
-                </p>
               </div>
             ) : null}
 
@@ -464,6 +518,14 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardContent>
       </Card>
       <EditPassword />
+      <ConfirmDrawer
+        isOpen={isDisconnectPayPalDrawerOpen}
+        setIsOpen={setIsDisconnectPayPalDrawerOpen}
+        description="Disconnecting your PayPal account will prevent you from offering PayPal services and products on Pattern Paradise. Do you wish to continue?"
+        callbackFn={() => {
+          handleDisconnectPayPal();
+        }}
+      />
     </div>
   );
 }

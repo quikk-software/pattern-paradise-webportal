@@ -96,6 +96,8 @@ export interface GetUserResponse {
   instagramRef?: string;
   tiktokRef?: string;
   paypalMerchantIsActive: boolean;
+  paypalPaymentsReceivable: boolean;
+  paypalPrimaryEmailConfirmed: boolean;
   paypalSubscriptionId?: string;
   /**
    * @format date-time
@@ -1264,6 +1266,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         description?: any;
         /** @example "any" */
         category?: any;
+        /** @example "any" */
+        experience?: any;
         /** @example "any" */
         isFree?: any;
         /** @example "any" */
