@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import { useCreatePayPalReferral, useUpdateUser } from '@/lib/api';
+import { useCreatePayPalReferral, useRemovePayPalReferral, useUpdateUser } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -44,7 +44,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const { action } = useAction();
 
   const dispatch = useDispatch();
-  const { refreshToken } = useSelector((s: Store) => s.auth);
+  const { refreshToken, userId } = useSelector((s: Store) => s.auth);
 
   const router = useRouter();
   const {
@@ -58,6 +58,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isSuccess: createPayPalReferralIsSuccess,
     data: paypalReferralData,
   } = useCreatePayPalReferral();
+  const { mutate: removePayPalReferral, isLoading: removePayPalReferralIsLoading } =
+    useRemovePayPalReferral();
 
   const {
     register,
@@ -154,7 +156,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
   };
 
-  const handleDisconnectPayPal = () => {};
+  const handleDisconnectPayPal = (userId: string) => {
+    removePayPalReferral(userId).then(() => {
+      setIsDisconnectPayPalDrawerOpen(false);
+      router.refresh();
+    });
+  };
 
   const initials =
     user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
@@ -522,9 +529,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         isOpen={isDisconnectPayPalDrawerOpen}
         setIsOpen={setIsDisconnectPayPalDrawerOpen}
         description="Disconnecting your PayPal account will prevent you from offering PayPal services and products on Pattern Paradise. Do you wish to continue?"
-        callbackFn={() => {
-          handleDisconnectPayPal();
-        }}
+        callbackFn={() => handleDisconnectPayPal(userId)}
       />
     </div>
   );

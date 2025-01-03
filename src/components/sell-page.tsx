@@ -110,55 +110,59 @@ export function SellPageComponent() {
       <h2 className="text-2xl font-bold mb-8">Your Patterns</h2>
       {isLoading ? <LoadingSpinnerComponent /> : null}
       {products.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {products.map((product) => {
-            const isCreator = userId === product.creatorId;
-            return (
-              <Card key={product.id}>
-                {isCreator ? (
-                  <CardHeader className="flex w-full">
-                    <CardDescription
-                      className={`text-sm font-semibold text-right ${getStatusColor(
-                        product.status,
-                      )}`}
-                    >
-                      {product.status}
-                    </CardDescription>
-                  </CardHeader>
-                ) : null}
-                <CardContent>
-                  <ProductCard
-                    key={product.id}
-                    id={product.id}
-                    name={product.title}
-                    price={product.price}
-                    isFree={product.isFree}
-                    image={product.imageUrls?.[0]}
-                    creatorId={product.creatorId}
-                    status={product.status}
-                    unavailable={
-                      product.status === 'Deleted' ||
-                      product.status === 'Aborted' ||
-                      product.status === 'Declined'
-                    }
-                    isProductView={true}
-                  />
-                </CardContent>
-              </Card>
-            );
-          })}
-          {hasNextPage ? (
-            <Button
-              variant={'outline'}
-              className={'w-full'}
-              onClick={() => {
-                setLoadMore(true);
-              }}
-            >
-              Load more
-            </Button>
-          ) : null}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {products.map((product) => {
+              const isCreator = userId === product.creatorId;
+              return (
+                <Card key={product.id}>
+                  {isCreator ? (
+                    <CardHeader className="flex w-full">
+                      <CardDescription
+                        className={`text-sm font-semibold text-right ${getStatusColor(
+                          product.status,
+                        )}`}
+                      >
+                        {product.status}
+                      </CardDescription>
+                    </CardHeader>
+                  ) : null}
+                  <CardContent>
+                    <ProductCard
+                      key={product.id}
+                      id={product.id}
+                      name={product.title}
+                      price={product.price}
+                      isFree={product.isFree}
+                      image={product.imageUrls?.[0]}
+                      creatorId={product.creatorId}
+                      status={product.status}
+                      unavailable={
+                        product.status === 'Deleted' ||
+                        product.status === 'Aborted' ||
+                        product.status === 'Declined'
+                      }
+                      isProductView={true}
+                    />
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+          <div className="flex">
+            {hasNextPage ? (
+              <Button
+                variant={'outline'}
+                className={'w-full'}
+                onClick={() => {
+                  setLoadMore(true);
+                }}
+              >
+                Load more
+              </Button>
+            ) : null}
+          </div>
+        </>
       ) : null}
       {products.length === 0 && !isLoading ? (
         <p>

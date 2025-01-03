@@ -1016,6 +1016,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description Removes a PayPal referral of the authenticated user by the given user ID.
+     *
+     * @tags User
+     * @name DeleteUserPayPalReferral
+     * @summary Removes the PayPal referral of the user.
+     * @request DELETE:/api/v1/users/{userId}/paypal-referral
+     * @secure
+     */
+    deleteUserPayPalReferral: (userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/paypal-referral`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
      *
      * @tags User

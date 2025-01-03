@@ -3,9 +3,6 @@ import React from 'react';
 const PatternParadiseIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
     stroke="currentColor"
