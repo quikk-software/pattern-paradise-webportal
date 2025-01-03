@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, ShoppingBag } from 'lucide-react';
+import { PlusCircle, ShoppingBag, ChartNoAxesCombined } from 'lucide-react';
 import Link from 'next/link';
 import { useGetUser, useListProductsByUserId } from '@/lib/api';
 import { useSelector } from 'react-redux';
@@ -78,7 +78,7 @@ export function SellPageComponent() {
         ) : null}
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
         <Link href="/app/secure/sell/submit" className="block">
           <Button
             variant="outline"
@@ -86,6 +86,15 @@ export function SellPageComponent() {
           >
             <PlusCircle className="h-8 w-8" />
             <span className="text-lg font-semibold">Create Pattern</span>
+          </Button>
+        </Link>
+        <Link href="/app/secure/sell/dashboard" className="block">
+          <Button
+            variant="outline"
+            className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
+          >
+            <ChartNoAxesCombined className="h-8 w-8" />
+            <span className="text-lg font-semibold">Show Analytics</span>
           </Button>
         </Link>
         <Link href="/app/secure/sell/orders" className="block">
@@ -111,7 +120,7 @@ export function SellPageComponent() {
       {isLoading ? <LoadingSpinnerComponent /> : null}
       {products.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {products.map((product) => {
               const isCreator = userId === product.creatorId;
               return (
