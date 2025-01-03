@@ -85,7 +85,7 @@ export function SellPageComponent() {
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2"
           >
             <PlusCircle className="h-8 w-8" />
-            <span className="text-lg font-semibold">Create a new pattern</span>
+            <span className="text-lg font-semibold">Create Pattern</span>
           </Button>
         </Link>
         <Link href="/app/secure/sell/orders" className="block">
@@ -94,7 +94,7 @@ export function SellPageComponent() {
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
           >
             <ShoppingBag className="h-8 w-8" />
-            <span className="text-lg font-semibold">Show my orders</span>
+            <span className="text-lg font-semibold">Show My Orders</span>
           </Button>
         </Link>
         <Link href="/app/secure/sell/testings" className="block">
@@ -102,8 +102,8 @@ export function SellPageComponent() {
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
           >
-            <PatternParadiseIcon className="h-8 w-8" />
-            <span className="text-lg font-semibold">My tester calls</span>
+            <PatternParadiseIcon className="h-8 w-8 fill-black" />
+            <span className="text-lg font-semibold">My Tester Calls</span>
           </Button>
         </Link>
       </div>

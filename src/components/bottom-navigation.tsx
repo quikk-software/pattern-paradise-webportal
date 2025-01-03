@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Store, Tag, Volleyball, CircleUser } from 'lucide-react';
+import { Store, Tag, CircleUser } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
+import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 
 const menuItems = [
   { id: 'shop', label: 'Shop', icon: Store, href: '/' },
   { id: 'sell', label: 'Sell', icon: Tag, href: '/app/secure/sell' },
-  { id: 'test', label: 'Test', icon: Volleyball, href: '/app/secure/test' },
+  { id: 'test', label: 'Test', icon: PatternParadiseIcon, href: '/app/secure/test' },
   { id: 'me', label: 'Me', icon: CircleUser, href: '/app/secure/auth/me' },
 ];
 

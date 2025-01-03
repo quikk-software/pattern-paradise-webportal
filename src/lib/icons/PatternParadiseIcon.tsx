@@ -1,13 +1,17 @@
 import React from 'react';
 
 const PatternParadiseIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 1170 1162" className={className}>
+  <svg
+    viewBox="0 0 1170 1170"
+    className={className}
+    fill="currentColor"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
     <path
-      fill="#FFFFFF"
-      opacity="1.000000"
-      stroke="none"
-      d="
-M369.610718,212.633636
+      d="M369.610718,212.633636
 	C415.148102,186.155914 463.380615,168.009171 515.038513,159.424805
 	C559.739197,151.996628 604.591492,151.468155 649.409241,158.310379
 	C733.551025,171.156128 807.475464,206.064499 870.563904,263.083160

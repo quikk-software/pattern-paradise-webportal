@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, User, Volleyball } from 'lucide-react';
+import { ShoppingCart, User } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { GetUserAccountResponse } from '@/@types/api-types';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
+import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart },
@@ -14,7 +15,7 @@ const roleOptions = [
   {
     id: 'Tester',
     label: 'Tester',
-    icon: Volleyball,
+    icon: PatternParadiseIcon,
   },
 ];
 

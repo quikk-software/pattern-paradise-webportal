@@ -67,7 +67,7 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
                 background === 'primary' ? 'white' : 'black'
               } flex gap-1 items-center`}
             >
-              <PatternParadiseIcon className="w-8 h-8" />
+              <PatternParadiseIcon className="w-8 h-8 fill-white" />
               <span>Pattern Paradise</span>
             </Link>
           </div>
