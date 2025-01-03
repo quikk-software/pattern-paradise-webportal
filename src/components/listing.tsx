@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Search, SlidersHorizontal, Trash } from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
@@ -18,6 +17,7 @@ import { MultiSelect } from '@/components/multi-select';
 import { CATEGORIES } from '@/lib/constants';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { updateSelectedFlags } from '@/lib/utils';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -133,62 +133,12 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setHashtags([]);
   };
 
-  const FilterContent = () => (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
-        <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
-      </div>
-
-      <div>
-        <h2 className="text-lg font-semibold mb-2">Category</h2>
-        <RadioGroup
-          value={selectedCategory.craft}
-          onValueChange={(value) =>
-            setSelectedCategory({
-              craft: value,
-              options: {},
-            })
-          }
-          className="flex flex-col space-y-1"
-        >
-          {categories.map((category) => (
-            <div className="flex items-center space-x-2" key={category}>
-              <RadioGroupItem value={category} id={category?.toLowerCase()} />
-              <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
-                {category}
-              </Label>
-            </div>
-          ))}
-        </RadioGroup>
-      </div>
-
-      <MultiSelect
-        initialCategories={CATEGORIES}
-        onChange={(value) => setSelectedCategory(value)}
-        injectCategories={false}
-        overrideCraft={selectedCategory.craft}
-      />
-
-      <PriceFilter
-        onFilterChange={(filter) => {
-          setIsFree(filter.isFree);
-          setPriceRange([filter.minPrice, 100]);
-        }}
-        value={priceRange[0]}
-        isFree={isFree}
-      />
-      <Button
-        onClick={() => {
-          fetchProductsByFilter();
-        }}
-        disabled={isLoading}
-        className="w-full"
-      >
-        {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-        Apply Filter
-      </Button>
-    </div>
+  const updatedCategories = updateSelectedFlags(
+    CATEGORIES,
+    selectedCategory.craft,
+    Object.values(selectedCategory.options)
+      .flat()
+      .map((option) => ({ name: option.name, selected: option.selected })),
   );
 
   return (
@@ -207,7 +157,66 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           <DrawerContent>
             <div className="mx-auto w-full max-w-sm max-h-[100vh] overflow-y-auto">
               <div className="p-4">
-                <FilterContent />
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
+                    <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
+                  </div>
+
+                  <div>
+                    <h2 className="text-lg font-semibold mb-2">Category</h2>
+                    <RadioGroup
+                      value={selectedCategory.craft}
+                      onValueChange={(value) =>
+                        setSelectedCategory({
+                          craft: value,
+                          options: {},
+                        })
+                      }
+                      className="flex flex-col space-y-1"
+                    >
+                      {categories.map((category) => (
+                        <div className="flex items-center space-x-2" key={category}>
+                          <RadioGroupItem value={category} id={category?.toLowerCase()} />
+                          <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
+                            {category}
+                          </Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+
+                  <MultiSelect
+                    initialCategories={updatedCategories}
+                    onChange={(value) => {
+                      console.log(value);
+                      setSelectedCategory(value);
+                    }}
+                    injectCategories={true}
+                    overrideCraft={selectedCategory.craft}
+                  />
+
+                  <PriceFilter
+                    onFilterChange={(filter) => {
+                      setIsFree(filter.isFree);
+                      setPriceRange([filter.minPrice, 100]);
+                    }}
+                    value={priceRange[0]}
+                    isFree={isFree}
+                  />
+                  <Button
+                    onClick={() => {
+                      fetchProductsByFilter();
+                    }}
+                    disabled={isLoading}
+                    className="w-full"
+                  >
+                    {isLoading ? (
+                      <LoadingSpinnerComponent size="sm" className="text-white" />
+                    ) : null}
+                    Apply Filter
+                  </Button>
+                </div>
               </div>
             </div>
           </DrawerContent>

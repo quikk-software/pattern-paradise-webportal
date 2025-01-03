@@ -316,6 +316,7 @@ export function ProductFormComponent() {
               onChange={(value) => setCategory(value)}
               initialCategories={CATEGORIES}
               injectCategories={false}
+              initialCraft={'Crocheting'}
             />
           </div>
           <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />

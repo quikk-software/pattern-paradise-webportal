@@ -11,6 +11,7 @@ interface MultiSelectProps {
   }) => void;
   injectCategories: boolean;
   overrideCraft?: string;
+  initialCraft?: string;
 }
 
 export function MultiSelect({
@@ -18,8 +19,9 @@ export function MultiSelect({
   onChange,
   injectCategories,
   overrideCraft,
+  initialCraft,
 }: MultiSelectProps) {
-  const [selectedCraft, setSelectedCraft] = useState<string>(overrideCraft ?? 'Crocheting');
+  const [selectedCraft, setSelectedCraft] = useState<string | undefined>(initialCraft);
   const [categories, setCategories] = useState<any>(initialCategories);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -29,6 +31,14 @@ export function MultiSelect({
     }
     handleOptionToggle();
   }, [injectCategories]);
+
+  useEffect(() => {
+    if (!overrideCraft) {
+      return;
+    }
+    setSelectedCraft(overrideCraft);
+    setCategories(initialCategories);
+  }, [overrideCraft, initialCategories]);
 
   const handleCraftChange = (craft: string) => {
     setSelectedCraft(craft);
@@ -40,6 +50,10 @@ export function MultiSelect({
     subcategoryName?: string,
     selectedOption?: { name: string; selected: boolean },
   ) => {
+    if (!selectedCraft) {
+      return;
+    }
+
     const newCategories = categories.map((category: any) => {
       if (category.name === selectedCraft) {
         return {
@@ -91,7 +105,7 @@ export function MultiSelect({
       };
     }) || [];
 
-  if (selectedCraft === 'All') {
+  if (!selectedCraft || selectedCraft === 'All') {
     return null;
   }
 

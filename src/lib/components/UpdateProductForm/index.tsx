@@ -283,6 +283,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
               onChange={(value) => setCategory(value)}
               initialCategories={updatedCategories}
               injectCategories={true}
+              initialCraft={initialData.category}
             />
           </div>
           <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />

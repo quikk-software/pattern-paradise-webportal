@@ -76,7 +76,7 @@ const isTokenValid = (token: string | null) =>
   token !== null && token !== '' && !isTokenExpired(token);
 
 const saveTokensToCookies = async (access_token: string, refresh_token: string) => {
-  const response = await fetch('/api/auth/callback', {
+  const response = await fetch(`${process.env.URL ?? ''}/api/auth/callback`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
