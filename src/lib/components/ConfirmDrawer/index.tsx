@@ -32,6 +32,7 @@ export default function ConfirmDrawer({
               setIsOpen(false);
             }}
             variant={'outline'}
+            disabled={isLoading}
           >
             Cancel
           </Button>

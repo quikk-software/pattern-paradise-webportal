@@ -58,8 +58,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isSuccess: createPayPalReferralIsSuccess,
     data: paypalReferralData,
   } = useCreatePayPalReferral();
-  const { mutate: removePayPalReferral, isLoading: removePayPalReferralIsLoading } =
-    useRemovePayPalReferral();
+  const {
+    mutate: removePayPalReferral,
+    isLoading: removePayPalReferralIsLoading,
+    isError: removePayPalReferralIsError,
+    errorDetail,
+  } = useRemovePayPalReferral();
 
   const {
     register,
@@ -159,7 +163,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const handleDisconnectPayPal = (userId: string) => {
     removePayPalReferral(userId).then(() => {
       setIsDisconnectPayPalDrawerOpen(false);
-      router.refresh();
+      router.push('/app/secure/auth/confirm/paypal/referral-removed');
     });
   };
 
@@ -249,8 +253,17 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   className="w-full"
                   onClick={() => setIsDisconnectPayPalDrawerOpen(true)}
                 >
+                  {removePayPalReferralIsLoading ? (
+                    <LoadingSpinnerComponent size="sm" className="text-black" />
+                  ) : null}
                   Disconnect PayPal
                 </Button>
+                {removePayPalReferralIsError ? (
+                  <p className="text-red-500 text-sm">
+                    Something went wrong while disconnecting your PayPal account from Pattern
+                    Paradise{errorDetail ? `: ${errorDetail}` : ''}
+                  </p>
+                ) : null}
                 <p className="text-xs text-muted-foreground">
                   ⚠️ Note: You can also disconnect your PayPal from your Pattern Paradise account
                   from your{' '}
@@ -530,6 +543,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         setIsOpen={setIsDisconnectPayPalDrawerOpen}
         description="Disconnecting your PayPal account will prevent you from offering PayPal services and products on Pattern Paradise. Do you wish to continue?"
         callbackFn={() => handleDisconnectPayPal(userId)}
+        isLoading={removePayPalReferralIsLoading}
       />
     </div>
   );
