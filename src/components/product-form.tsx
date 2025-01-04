@@ -237,7 +237,7 @@ export function ProductFormComponent() {
             onKeyDown={handleKeyDown}
           />
           <p
-            className={`text-sm ${titleWatch?.length <= 30 ? 'text-gray-500' : 'text-red-500'} mt-1`}
+            className={`text-sm ${!titleWatch || titleWatch?.length <= 30 ? 'text-gray-500' : 'text-red-500'} mt-1`}
           >
             {(titleWatch ?? '')?.length}/30 characters
           </p>
