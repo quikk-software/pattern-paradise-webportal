@@ -87,7 +87,7 @@ export function SellPageComponent() {
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2"
             disabled={!user?.paypalMerchantIsActive}
-            onChange={() => router.push('/app/secure/sell/submit')}
+            onClick={() => router.push('/app/secure/sell/submit')}
           >
             <PlusCircle className="h-8 w-8" />
             <span className="text-lg font-semibold">Create Pattern</span>
