@@ -109,12 +109,12 @@ const pages: Page[] = [
     description: '',
   },
   {
-    title: 'Your orders',
+    title: 'My orders',
     pathname: '/app/secure/sell/orders',
     description: '',
   },
   {
-    title: 'Your tester calls',
+    title: 'My tester calls',
     pathname: '/app/secure/sell/testings',
     description: '',
   },

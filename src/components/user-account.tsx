@@ -49,16 +49,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
             <WaterfallListing
               products={products}
               listingType={'sell'}
-              columns={
-                screenSize === 'xs' ||
-                screenSize === 'sm' ||
-                screenSize === 'md' ||
-                screenSize === 'lg'
-                  ? 2
-                  : products.length < 4
-                  ? products.length
-                  : 4
-              }
+              columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
             />
           </div>
         </div>

@@ -150,9 +150,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     <>
       <div className="p-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold">
-            {isCustomer ? 'Your Testings' : 'Your Tester Calls'}
-          </h1>
+          <h1 className="text-3xl font-bold">{isCustomer ? 'My Testings' : 'My Tester Calls'}</h1>
         </header>
 
         {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}

@@ -7,7 +7,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import NotFoundPage from '@/app/not-found';
 import { Store } from '@/lib/redux/store';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import { useRouter } from 'next/navigation';
