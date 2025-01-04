@@ -12,6 +12,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { InfoBoxComponent } from '@/components/info-box';
+import { useRouter } from 'next/navigation';
 
 const getStatusColor = (status?: string) => {
   switch (status) {
@@ -34,6 +35,8 @@ const getStatusColor = (status?: string) => {
 
 export function SellPageComponent() {
   const [loadMore, setLoadMore] = useState(false);
+
+  const router = useRouter();
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -79,15 +82,17 @@ export function SellPageComponent() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-        <Link href="/app/secure/sell/submit" className="block">
+        <div className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2"
+            disabled={!user?.paypalMerchantIsActive}
+            onChange={() => router.push('/app/secure/sell/submit')}
           >
             <PlusCircle className="h-8 w-8" />
             <span className="text-lg font-semibold">Create Pattern</span>
           </Button>
-        </Link>
+        </div>
         <Link href="/app/secure/sell/dashboard" className="block">
           <Button
             variant="outline"
@@ -116,6 +121,7 @@ export function SellPageComponent() {
           </Button>
         </Link>
       </div>
+
       <h2 className="text-2xl font-bold mb-8">Your Patterns</h2>
       {isLoading ? <LoadingSpinnerComponent /> : null}
       {products.length > 0 ? (
