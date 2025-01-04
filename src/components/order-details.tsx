@@ -19,7 +19,8 @@ interface OrderDetailsProps {
 export function OrderDetails({ order }: OrderDetailsProps) {
   const { userId } = useSelector((s: Store) => s.auth);
 
-  const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
+  const isPayed =
+    order.status === 'CAPTURED' || order.status === 'APPROVED' || order.status === 'COMPLETED';
   const isCreated = order.status === 'CREATED';
   const isSeller = order.seller.id === userId;
 
