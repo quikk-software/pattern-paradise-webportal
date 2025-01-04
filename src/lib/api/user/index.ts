@@ -10,3 +10,4 @@ export * from './useResetPassword';
 export * from './useCreatePayPalReferral';
 export * from './useConfirmMail';
 export * from './useResendCode';
+export * from './useRemovePayPalReferral';

@@ -1,28 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Search, SlidersHorizontal, Trash } from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
-import ProductImageSlider from '@/lib/components/ProductImageSlider';
-import Link from 'next/link';
 import { combineArraysById } from '@/lib/core/utils';
 import PriceFilter from '@/components/price-filter';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
-import ColumnListing from '@/lib/components/ColumnListing';
+import HashtagInput from '@/components/hashtag-input';
+import { MultiSelect } from '@/components/multi-select';
+import { CATEGORIES } from '@/lib/constants';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { updateSelectedFlags } from '@/lib/utils';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -35,9 +30,16 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [products, setProducts] = useState<GetProductResponse[]>(defaultProducts);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState<{
+    craft: string;
+    options: { [key: string]: { name: string; selected: boolean }[] };
+  }>({
+    craft: 'All',
+    options: {},
+  });
   const [priceRange, setPriceRange] = useState([3, 100]);
   const [isFree, setIsFree] = useState(true);
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [triggerLoad, setTriggerLoad] = useState(false);
@@ -74,7 +76,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       const result = await fetch({
         q: debouncedSearchTerm ?? undefined,
         status,
-        categories: selectedCategory ? [selectedCategory] : ['All'],
+        categories: selectedCategory ? [selectedCategory.craft] : ['All'],
+        hashtags,
         minPrice: isFree ? 0 : priceRange[0],
         maxPrice: priceRange[1],
         pageNumber: 1,
@@ -102,9 +105,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     const result = await fetch({
       q: debouncedSearchTerm ?? undefined,
       status,
-      categories: selectedCategory ? [selectedCategory] : ['All'],
+      categories: selectedCategory ? [selectedCategory.craft] : ['All'],
+      subCategories: Object.values(selectedCategory.options)
+        .map((options) => options.map((option) => option.name))
+        .flat(),
       minPrice: isFree ? 0 : priceRange[0],
       maxPrice: priceRange[1],
+      hashtags,
       pageNumber: 1,
       pageSize: 20,
     });
@@ -116,51 +123,22 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const clearFilter = () => {
     setSearchTerm('');
     setDebouncedSearchTerm('');
-    setSelectedCategory('All');
+    setSelectedCategory({
+      craft: 'All',
+      options: {},
+    });
     setPriceRange([3, 100]);
     setTriggerLoad(true);
+    setIsFree(true);
+    setHashtags([]);
   };
 
-  const FilterContent = () => (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-lg font-semibold mb-2">Category</h2>
-        {categories.map((category) => (
-          <div key={category} className="flex items-center space-x-2 mb-2">
-            <Checkbox
-              id={category}
-              checked={selectedCategory === category}
-              onCheckedChange={() => setSelectedCategory(category)}
-            />
-            <label
-              htmlFor={category}
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              {category}
-            </label>
-          </div>
-        ))}
-      </div>
-
-      <PriceFilter
-        onFilterChange={(filter) => {
-          setIsFree(filter.isFree);
-          setPriceRange([filter.minPrice, 100]);
-        }}
-        value={priceRange[0]}
-        isFree={isFree}
-      />
-      <Button
-        onClick={() => {
-          fetchProductsByFilter();
-        }}
-        disabled={isLoading}
-        className="w-full"
-      >
-        {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-        Apply Filter
-      </Button>
-    </div>
+  const updatedCategories = updateSelectedFlags(
+    CATEGORIES,
+    selectedCategory.craft,
+    Object.values(selectedCategory.options)
+      .flat()
+      .map((option) => ({ name: option.name, selected: option.selected })),
   );
 
   return (
@@ -177,12 +155,68 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             </Button>
           </DrawerTrigger>
           <DrawerContent>
-            <div className="mx-auto w-full max-w-sm">
-              <DrawerHeader>
-                <DrawerTitle>Filter Options</DrawerTitle>
-              </DrawerHeader>
+            <div className="mx-auto w-full max-w-sm max-h-[100vh] overflow-y-auto">
               <div className="p-4">
-                <FilterContent />
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
+                    <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
+                  </div>
+
+                  <div>
+                    <h2 className="text-lg font-semibold mb-2">Category</h2>
+                    <RadioGroup
+                      value={selectedCategory.craft}
+                      onValueChange={(value) =>
+                        setSelectedCategory({
+                          craft: value,
+                          options: {},
+                        })
+                      }
+                      className="flex flex-col space-y-1"
+                    >
+                      {categories.map((category) => (
+                        <div className="flex items-center space-x-2" key={category}>
+                          <RadioGroupItem value={category} id={category?.toLowerCase()} />
+                          <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
+                            {category}
+                          </Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+
+                  <MultiSelect
+                    initialCategories={updatedCategories}
+                    onChange={(value) => {
+                      console.log(value);
+                      setSelectedCategory(value);
+                    }}
+                    injectCategories={true}
+                    overrideCraft={selectedCategory.craft}
+                  />
+
+                  <PriceFilter
+                    onFilterChange={(filter) => {
+                      setIsFree(filter.isFree);
+                      setPriceRange([filter.minPrice, 100]);
+                    }}
+                    value={priceRange[0]}
+                    isFree={isFree}
+                  />
+                  <Button
+                    onClick={() => {
+                      fetchProductsByFilter();
+                    }}
+                    disabled={isLoading}
+                    className="w-full"
+                  >
+                    {isLoading ? (
+                      <LoadingSpinnerComponent size="sm" className="text-white" />
+                    ) : null}
+                    Apply Filter
+                  </Button>
+                </div>
               </div>
             </div>
           </DrawerContent>

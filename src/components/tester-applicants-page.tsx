@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Instagram, ChevronUp, ChevronDown, Check } from 'lucide-react';
+import { ChevronUp, ChevronDown, Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   GetTesterApplicationResponse,
@@ -34,6 +34,7 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import Link from 'next/link';
 import NoDataInfoBox from '@/lib/components/NoDataInfoBox';
+import InstagramIcon from '@/lib/icons/InstagramIcon';
 
 const MIN_TESTER_COUNT = 3;
 
@@ -293,7 +294,7 @@ export function TesterApplicantsPage({
                         onClick={(e) => e.stopPropagation()}
                       >
                         <Badge variant="secondary">
-                          <Instagram className="w-4 h-4 mr-1" />
+                          <InstagramIcon className="w-4 h-4 mr-1" />
                           Instagram
                         </Badge>
                       </a>

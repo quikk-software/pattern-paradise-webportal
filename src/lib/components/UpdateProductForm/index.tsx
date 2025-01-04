@@ -5,13 +5,6 @@ import { CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { useUpdateProduct } from '@/lib/api';
@@ -19,12 +12,17 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CATEGORIES } from '@/lib/constants';
+import { CATEGORIES, ExperienceLevel, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
 import { GetProductResponse } from '@/@types/api-types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import GoBackButton from '@/lib/components/GoBackButton';
 import PriceInput from '@/lib/components/PriceInput';
+import HashtagInput from '@/components/hashtag-input';
+import { MultiSelect } from '@/components/multi-select';
+import { SelectedOptions } from '@/components/selected-options';
+import ExperienceSelect from '@/lib/components/ExperienceSelect';
+import { updateSelectedFlags } from '@/lib/utils';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
@@ -37,7 +35,17 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       name: url?.split('/').at(-1) ?? 'image',
     })),
   );
-  const [category, setCategory] = useState<string>('Crocheting');
+  const [hashtags, setHashtags] = useState<string[]>(initialData.hashtags);
+  const [category, setCategory] = useState<{
+    craft: string;
+    options: { [key: string]: { name: string; selected: boolean }[] };
+  }>({
+    craft: initialData.category,
+    options: {},
+  });
+  const [selectedExperienceLevel, setSelectedExperienceLevel] = useState<ExperienceLevel>(
+    initialData.experience as ExperienceLevel,
+  );
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
@@ -51,13 +59,14 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
+    watch,
   } = useForm({
     defaultValues: initialData
       ? {
           title: initialData.title,
           description: initialData.description,
           imageUrls: initialData.imageUrls,
+          hashtags: initialData.hashtags,
           price: String(initialData.price),
           category: initialData.category,
         }
@@ -65,12 +74,19 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           title: '',
           description: '',
           imageUrls: [],
+          hashtags: [],
           price: '0.0',
           category: '',
         },
   });
 
   const hasErrors = errors.title || errors.description || errors.price;
+
+  const updatedCategories = updateSelectedFlags(
+    CATEGORIES,
+    initialData.category,
+    initialData.subCategories.map((subCategory) => ({ name: subCategory, selected: true })),
+  );
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -79,7 +95,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         url: URL.createObjectURL(file),
         name: file.name,
       }));
-      setImages((prev) => [...prev, ...newImages].slice(0, 6));
+      setImages((prev) => [...prev, ...newImages].slice(0, IMAGE_LIMIT));
     }
   };
 
@@ -88,8 +104,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   };
 
   const onSubmit = async (data: any) => {
-    if (images.length === 0 || images.length > 6) {
-      setImageError('Please add 1 to 6 images.');
+    if (images.length === 0 || images.length > IMAGE_LIMIT) {
+      setImageError(`Please add 1 to ${IMAGE_LIMIT} images.`);
       return;
     }
     setImageError(undefined);
@@ -133,7 +149,12 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       title: data.title.trim(),
       description: data.description.trim(),
       price: isFree ? 0.0 : parseFloat(data.price.replace(',', '.')),
+      experience: selectedExperienceLevel,
       isFree,
+      hashtags,
+      subCategories: Object.values(category.options)
+        .map((options) => options.map((option) => option.name))
+        .flat(),
       imageUrls: [
         ...new Set([
           ...images
@@ -142,7 +163,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           ...urls.map((fu) => fu.url),
         ]),
       ],
-      category,
+      category: category.craft,
     });
   };
 
@@ -151,6 +172,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       e.preventDefault();
     }
   };
+
+  const titleWatch = watch('title');
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
@@ -175,8 +198,10 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             })}
             onKeyDown={handleKeyDown}
           />
-          <p className="text-sm text-gray-500 mt-1">
-            {(getValues('title') ?? '')?.length}/30 characters
+          <p
+            className={`text-sm ${!titleWatch || titleWatch?.length <= 30 ? 'text-gray-500' : 'text-red-500'} mt-1`}
+          >
+            {(titleWatch ?? '').length}/30 characters
           </p>
           {errors.title ? (
             <p className="text-sm text-red-500 mb-2">{errors.title.message as string}</p>
@@ -200,6 +225,13 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           {errors.description ? (
             <p className="text-sm text-red-500 mb-2">{errors.description.message as string}</p>
           ) : null}
+        </div>
+
+        <div>
+          <Label htmlFor="hashtags" className="block text-lg font-semibold mb-2">
+            Hashtags (max. {HASHTAG_LIMIT})
+          </Label>
+          <HashtagInput hashtags={hashtags} setHashtags={setHashtags} limit={HASHTAG_LIMIT} />
         </div>
 
         <div className="flex flex-col gap-4">
@@ -230,27 +262,36 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="category" className="block text-lg font-semibold mb-2">
-            Category <span className="text-red-500">*</span>
-          </Label>
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORIES.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="experienceLevel" className="block text-lg font-semibold mb-2">
+              Experience Level <span className="text-red-500">*</span>
+            </Label>
+            <ExperienceSelect
+              selectedExperienceLevel={selectedExperienceLevel}
+              setSelectedExperienceLevel={setSelectedExperienceLevel}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="category" className="block text-lg font-semibold mb-2">
+              Category <span className="text-red-500">*</span>
+            </Label>
+            <MultiSelect
+              onChange={(value) => setCategory(value)}
+              initialCategories={updatedCategories}
+              injectCategories={true}
+              initialCraft={initialData.category}
+            />
+          </div>
+          <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />
         </div>
 
         <div className="flex flex-col">
           <Label htmlFor="images" className="block text-lg font-semibold mb-2">
-            Images (max. 6) <span className="text-red-500">*</span>
+            Images (max. {IMAGE_LIMIT}) <span className="text-red-500">*</span>
           </Label>
           <div className="grid grid-cols-3 gap-4 mb-4">
             {images.map((img, index) => (
@@ -278,10 +319,10 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             accept="image/*"
             multiple
             onChange={handleImageSelect}
-            disabled={images.length >= 6}
+            disabled={images.length >= IMAGE_LIMIT}
             className="cursor-pointer"
           />
-          {images.length >= 6 && (
+          {images.length >= IMAGE_LIMIT && (
             <p className="text-yellow-600 text-sm mt-2">Maximum number of images reached.</p>
           )}
           {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}

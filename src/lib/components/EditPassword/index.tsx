@@ -57,7 +57,7 @@ export default function EditPassword() {
   return (
     <Card className="w-full max-w-2xl mx-auto border-none">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">Update Password</CardTitle>
+        <CardTitle className="text-2xl font-bold">Update Password</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onPasswordSubmit)} className="space-y-8">

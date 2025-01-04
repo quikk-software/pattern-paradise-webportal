@@ -1,14 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CldImage } from 'next-cloudinary';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -19,12 +12,14 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/u
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useDeleteProduct, useReleaseProduct } from '@/lib/api';
 import RequestStatus from '@/lib/components/RequestStatus';
+import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
+import ProductImageSlider from '@/lib/components/ProductImageSlider';
 
 interface ProductCardProps {
   id: string;
   name: string;
   price: number;
-  image: string;
+  imageUrls: string[];
   isFree: boolean;
   creatorId: string;
   status?: string;
@@ -37,7 +32,7 @@ export default function ProductCard({
   id,
   name,
   price,
-  image,
+  imageUrls,
   isFree,
   creatorId,
   status,
@@ -49,12 +44,7 @@ export default function ProductCard({
   const [isDeleteProductDrawerOpen, setIsDeleteProductDrawerOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
-  const {
-    fetch: deleteProduct,
-    isLoading: deleteProductIsLoading,
-    isSuccess: deleteProductIsSuccess,
-    isError: deleteProductIsError,
-  } = useDeleteProduct();
+  const { fetch: deleteProduct, isLoading: deleteProductIsLoading } = useDeleteProduct();
   const {
     mutate: releaseProduct,
     isLoading: releaseProductIsLoading,
@@ -80,16 +70,7 @@ export default function ProductCard({
   return (
     <Card key={id} className="flex flex-col">
       <CardHeader>
-        <CldImage
-          alt={name}
-          src={image}
-          width="340"
-          height="250"
-          crop={{
-            type: 'auto',
-            source: true,
-          }}
-        />
+        <ProductImageSlider imageUrls={imageUrls} title={name} />
       </CardHeader>
       <CardContent className="flex-grow">
         <CardTitle>{name}</CardTitle>
@@ -183,34 +164,15 @@ export default function ProductCard({
               </div>
             </DrawerContent>
           </Drawer>
-          <Drawer open={isDeleteProductDrawerOpen} onOpenChange={setIsDeleteProductDrawerOpen}>
-            <DrawerContent className="p-4">
-              <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
-                <DrawerHeader>
-                  <DrawerTitle>Are you sure?</DrawerTitle>
-                </DrawerHeader>
-                <Button
-                  onClick={() => {
-                    setIsDeleteProductDrawerOpen(false);
-                  }}
-                  variant={'outline'}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleDeleteProductClick(id);
-                  }}
-                  variant={'destructive'}
-                  disabled={deleteProductIsLoading}
-                >
-                  {deleteProductIsLoading ? <LoadingSpinnerComponent size="sm" /> : null}
-                  Delete pattern
-                </Button>
-                <RequestStatus isSuccess={deleteProductIsSuccess} isError={deleteProductIsError} />
-              </div>
-            </DrawerContent>
-          </Drawer>
+          <ConfirmDrawer
+            isOpen={isDeleteProductDrawerOpen}
+            setIsOpen={setIsDeleteProductDrawerOpen}
+            callbackFn={() => {
+              handleDeleteProductClick(id).then(() => setIsDeleteProductDrawerOpen(false));
+            }}
+            isLoading={deleteProductIsLoading}
+            description="You cannot restore deleted patterns."
+          />
         </>
       ) : null}
     </Card>

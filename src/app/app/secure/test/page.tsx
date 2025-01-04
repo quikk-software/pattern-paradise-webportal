@@ -9,7 +9,7 @@ export default function TestPage() {
     <div className="container mx-auto flex flex-col gap-4">
       <Card className="w-full border-none">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Quick Links</CardTitle>
+          <CardTitle className="text-2xl font-bold">Quick Links</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Link href={'/app/secure/test/chats'}>

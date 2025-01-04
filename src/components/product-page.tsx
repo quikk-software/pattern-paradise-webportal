@@ -7,13 +7,16 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import NotFoundPage from '@/app/not-found';
 import { Store } from '@/lib/redux/store';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import { useRouter } from 'next/navigation';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { InfoBoxComponent } from '@/components/info-box';
+import ProductHashtags from '@/components/product-hashtags';
+import ShowMoreText from '@/lib/components/ShowMoreText';
+import ProductCategories from '@/lib/components/ProductCategories';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -54,9 +57,14 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
           <div className="grid gap-8">
             <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
             <div className="flex flex-col justify-between gap-8">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-4">
                 <h1 className="text-3xl font-bold">{product.title}</h1>
-                <p className="text-gray-600">{product.description}</p>
+                <ProductCategories
+                  category={product.category}
+                  subCategories={product.subCategories}
+                />
+                <ShowMoreText description={product.description} maxRows={4} />
+                <ProductHashtags hashtags={product.hashtags} />
               </div>
               <div className="space-y-2">
                 <CreatedByRef creatorId={product.creatorId} />

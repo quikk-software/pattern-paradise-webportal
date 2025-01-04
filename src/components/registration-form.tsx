@@ -12,7 +12,7 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
-import { User, ShoppingCart, Volleyball } from 'lucide-react';
+import { User, ShoppingCart } from 'lucide-react';
 import { useCreateUser } from '@/lib/api';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
@@ -22,6 +22,7 @@ import useRedirect from '@/lib/core/useRedirect';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
+import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 
 const ALLOWED_ROLES = ['Buyer', 'Seller', 'Tester'];
 
@@ -31,7 +32,7 @@ const roleOptions = [
   {
     id: 'Tester',
     label: 'Tester',
-    icon: Volleyball,
+    icon: PatternParadiseIcon,
     description: 'Try out new patterns and provide feedback',
   },
 ];

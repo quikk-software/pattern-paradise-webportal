@@ -96,6 +96,8 @@ export interface GetUserResponse {
   instagramRef?: string;
   tiktokRef?: string;
   paypalMerchantIsActive: boolean;
+  paypalPaymentsReceivable: boolean;
+  paypalPrimaryEmailConfirmed: boolean;
   paypalSubscriptionId?: string;
   /**
    * @format date-time
@@ -105,9 +107,6 @@ export interface GetUserResponse {
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
-  mollieCustomerId?: string;
-  mollieCreatedAt?: string;
-  mollieDashboardLink?: string;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -174,16 +173,21 @@ export interface PostProductResponse {
 
 export interface PutProductRequest {
   imageUrls: any[];
+  hashtags: any[];
+  subCategories: any[];
   title: string;
   description: string;
   category: string;
   price: number;
   isFree: boolean;
+  experience: string;
 }
 
 export interface GetProductResponse {
   id: string;
   imageUrls: string[];
+  subCategories: string[];
+  hashtags: string[];
   files: {
     id: string;
     objectName: string;
@@ -195,6 +199,8 @@ export interface GetProductResponse {
   category: string;
   price: number;
   isFree: boolean;
+  experience: string;
+  isSponsored: boolean;
   status: string;
   creatorId: string;
   /**
@@ -229,7 +235,6 @@ export interface PostTestingRequest {
   testerIds: string[];
   productId: string;
   durationInWeeks: number;
-  experience: string;
 }
 
 export interface PostTestingResponse {
@@ -241,7 +246,6 @@ export interface PutTestingRequest {
   /** @example "neutral" */
   theme?: string;
   durationInWeeks?: number;
-  experience?: string;
 }
 
 export interface GetTestingResponse {
@@ -251,7 +255,6 @@ export interface GetTestingResponse {
   /** @example "neutral" */
   theme: string;
   durationInWeeks: number;
-  experience: string;
   /** @format date-time */
   dueDate?: string;
   creatorId: string;
@@ -1013,6 +1016,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description Removes a PayPal referral of the authenticated user by the given user ID.
+     *
+     * @tags User
+     * @name DeleteUserPayPalReferral
+     * @summary Removes the PayPal referral of the user.
+     * @request DELETE:/api/v1/users/{userId}/paypal-referral
+     * @secure
+     */
+    deleteUserPayPalReferral: (userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/paypal-referral`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
      *
      * @tags User
@@ -1166,6 +1186,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         files: File[];
         /** Array of product image URLs. */
         imageUrls: string[];
+        /** Array of hashtags. */
+        hashtags: string[];
+        /** Array of sub categories. */
+        subCategories: string[];
         /** Array of languages related to files. */
         languages: {
           language?: string;
@@ -1181,6 +1205,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         price: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
+        /** The experience level of the product. */
+        experience: string;
       },
       params: RequestParams = {},
     ) =>
@@ -1205,6 +1231,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     listProducts: (
       query?: {
+        subcategories?: string;
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
@@ -1215,6 +1242,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         status?: string;
         /** List of categories to filter products. */
         categories?: string[];
+        /** List of subcategories to filter products. */
+        subCategories?: string[];
+        /** List of hashtags to filter products. */
+        hashtags?: string[];
         /** The minimum price of a product to filter. */
         minPrice?: number;
         /** The maximum price of a product to filter. */
@@ -1246,11 +1277,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @example "any" */
         imageUrls?: any;
         /** @example "any" */
+        hashtags?: any;
+        /** @example "any" */
+        subCategories?: any;
+        /** @example "any" */
         title?: any;
         /** @example "any" */
         description?: any;
         /** @example "any" */
         category?: any;
+        /** @example "any" */
+        experience?: any;
         /** @example "any" */
         isFree?: any;
         /** @example "any" */
@@ -1374,8 +1411,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         testerIds?: any;
         /** @example "any" */
         durationInWeeks?: any;
-        /** @example "any" */
-        experience?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1436,8 +1471,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         theme?: any;
         /** @example "any" */
         durationInWeeks?: any;
-        /** @example "any" */
-        experience?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1847,245 +1880,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description The webhook will parse the event
      *
      * @tags Webhook
-     * @name ApproveMerchantWebhook
-     * @summary Posts a "merchant approve" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/merchant/approve
+     * @name PaypalWebhook
+     * @summary Handles all PayPal webhook events.
+     * @request POST:/api/v1/webhooks/paypal
      * @secure
      */
-    approveMerchantWebhook: (
+    paypalWebhook: (
       data: {
+        /** @example "any" */
+        request?: any;
         /** @example "any" */
         resource?: any;
       },
       params: RequestParams = {},
     ) =>
       this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/merchant/approve`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name MerchantConsentRevokedWebhook
-     * @summary Posts a "merchant consent revoked" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/merchant/consent-revoked
-     * @secure
-     */
-    merchantConsentRevokedWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/merchant/consent-revoked`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name ApproveOrderWebhook
-     * @summary Posts a "approve order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/approve
-     * @secure
-     */
-    approveOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/approve`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name DeclineOrderWebhook
-     * @summary Posts a "decline order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/decline
-     * @secure
-     */
-    declineOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/decline`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name VoidOrderWebhook
-     * @summary Posts a "void order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/void
-     * @secure
-     */
-    voidOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/void`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name ExpireOrderWebhook
-     * @summary Posts a "expire order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/expire
-     * @secure
-     */
-    expireOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/expire`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name FailOrderWebhook
-     * @summary Posts a "fail order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/fail
-     * @secure
-     */
-    failOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/fail`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name PartiallyRefundOrderWebhook
-     * @summary Posts a "partially refund order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/partially-refund
-     * @secure
-     */
-    partiallyRefundOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/partially-refund`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name RefundOrderWebhook
-     * @summary Posts a "refund order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/refund
-     * @secure
-     */
-    refundOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/refund`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description The webhook will parse the event
-     *
-     * @tags Webhook
-     * @name ReverseOrderWebhook
-     * @summary Posts a "reverse order" PayPal webhook event.
-     * @request POST:/api/v1/webhooks/paypal/reverse
-     * @secure
-     */
-    reverseOrderWebhook: (
-      data: {
-        /** @example "any" */
-        resource?: any;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/v1/webhooks/paypal/reverse`,
+        path: `/api/v1/webhooks/paypal`,
         method: 'POST',
         body: data,
         secure: true,

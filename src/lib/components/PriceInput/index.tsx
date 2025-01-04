@@ -19,11 +19,11 @@ export default function PriceInput({
     <CurrencyInput
       id="price"
       type="text"
-      placeholder="Enter price (e.g. 9,99)"
+      placeholder="Enter price (e.g. 9,999.99)"
       decimalsLimit={2}
       decimalScale={2}
-      decimalSeparator={','}
-      groupSeparator={'.'}
+      decimalSeparator={'.'}
+      groupSeparator={','}
       allowNegativeValue={false}
       allowDecimals={true}
       disabled={isFree}
@@ -35,7 +35,10 @@ export default function PriceInput({
       {...register('price', {
         required: !isFree ? 'Price is required' : undefined,
         validate: (value: any) => {
-          const normalizedValue = parseFloat(value.replace(',', '.'));
+          if (isFree) {
+            return true;
+          }
+          const normalizedValue = parseFloat(value);
           if (isNaN(normalizedValue)) {
             return 'Please enter a valid number';
           }

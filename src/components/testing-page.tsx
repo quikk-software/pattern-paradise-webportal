@@ -56,9 +56,6 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
   const [selectedDurationInWeeks, setSelectedDurationInWeeks] = useState<string | undefined>(
     undefined,
   );
-  const [selectedExperienceLevel, setSelectedExperienceLevel] = useState<string | undefined>(
-    undefined,
-  );
   const [selectedTesting, setSelectedTesting] = useState<GetTestingResponse | null>(null);
 
   const { userId } = useSelector((store: Store) => store.auth);
@@ -119,7 +116,6 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     testing: GetTestingResponse | null,
     theme: string | null,
     durationInWeeks: string | undefined,
-    experience: string | undefined,
   ) => {
     if (!testing) {
       return;
@@ -129,7 +125,6 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
       testerIds: [],
       theme: theme ?? undefined,
       durationInWeeks: !!durationInWeeks ? Number(durationInWeeks) : undefined,
-      experience,
     });
     reset();
     setIsUpdateTestingDrawerOpen(false);
@@ -155,9 +150,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     <>
       <div className="p-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold">
-            {isCustomer ? 'Your Testings' : 'Your Tester Calls'}
-          </h1>
+          <h1 className="text-3xl font-bold">{isCustomer ? 'My Testings' : 'My Tester Calls'}</h1>
         </header>
 
         {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
@@ -196,7 +189,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         name={testing.product.title}
                         price={testing.product.price}
                         isFree={testing.product.isFree}
-                        image={testing.product.imageUrls?.[0]}
+                        imageUrls={testing.product.imageUrls}
                         isTesterCall={true}
                         creatorId={testing.creatorId}
                       />
@@ -300,30 +293,6 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
               </Select>
             </div>
             <DrawerHeader>
-              <DrawerTitle>Tester experience level</DrawerTitle>
-              <DrawerTitle className="text-sm font-medium">
-                What experience level do your testers need to complete your pattern?
-              </DrawerTitle>
-            </DrawerHeader>
-            <div className="flex flex-col gap-2 items-center mb-4">
-              <span className="text-center">
-                The experience level is currently set to{' '}
-                <strong>{selectedTesting?.experience ?? 'Intermediate'}</strong>
-              </span>
-              <Select value={selectedExperienceLevel} onValueChange={setSelectedExperienceLevel}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select an experience level" />
-                </SelectTrigger>
-                <SelectContent>
-                  {['Beginner', 'Intermediate', 'Professional'].map((experience) => (
-                    <SelectItem key={experience} value={experience}>
-                      {experience}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <DrawerHeader>
               <DrawerTitle>Select a theme (optional)</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">
                 This will be used for your Tester Call Page.
@@ -336,8 +305,8 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                   selectedTheme
                     ? selectedTheme
                     : selectedTesting?.theme
-                    ? selectedTesting?.theme
-                    : 'neutral'
+                      ? selectedTesting?.theme
+                      : 'neutral'
                 }
                 selectedTheme={null}
               />
@@ -355,12 +324,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
             </div>
             <Button
               onClick={() => {
-                handleUpdateTestingClick(
-                  selectedTesting,
-                  selectedTheme,
-                  selectedDurationInWeeks,
-                  selectedExperienceLevel,
-                );
+                handleUpdateTestingClick(selectedTesting, selectedTheme, selectedDurationInWeeks);
               }}
               disabled={mutateTestingIsLoading}
             >

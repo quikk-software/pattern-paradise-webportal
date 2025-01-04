@@ -7,7 +7,126 @@ export const PRO_MEMBERSHIP_PRICE = '$9.99';
 
 export const SUPPORT_EMAIL = 'help@pattern-paradise.shop';
 
-export const CATEGORIES = ['Crocheting', 'Knitting'];
+export type ExperienceLevel = 'Beginner' | 'Intermediate' | 'Professional';
+export const EXPERIENCE_LEVELS = ['Beginner', 'Intermediate', 'Professional'];
+export enum ExperienceLevels {
+  Beginner = 'Beginner',
+  Intermediate = 'Intermediate',
+  Professional = 'Professional',
+}
+
+export const CATEGORIES = [
+  {
+    name: 'Crocheting',
+    subcategories: [
+      {
+        name: 'Project Type',
+        options: [
+          { name: 'Clothing', selected: false },
+          { name: 'Accessories', selected: false },
+          { name: 'Home Decor', selected: false },
+          { name: 'Toys/Amigurumi', selected: false },
+          { name: 'Seasonal/Holiday Items', selected: false },
+        ],
+      },
+      {
+        name: 'Yarn Weight',
+        options: [
+          { name: 'Lace', selected: false },
+          { name: 'Fingering', selected: false },
+          { name: 'Sport', selected: false },
+          { name: 'DK (Double Knitting)', selected: false },
+          { name: 'Worsted', selected: false },
+          { name: 'Bulky', selected: false },
+          { name: 'Super Bulky', selected: false },
+        ],
+      },
+      {
+        name: 'Recipient',
+        options: [
+          { name: 'Women', selected: false },
+          { name: 'Men', selected: false },
+          { name: 'Children', selected: false },
+          { name: 'Babies', selected: false },
+          { name: 'Pets', selected: false },
+        ],
+      },
+      {
+        name: 'Techniques',
+        options: [
+          { name: 'Tunisian Crochet', selected: false },
+          { name: 'Filet Crochet', selected: false },
+          { name: 'Overlay Crochet', selected: false },
+          { name: 'Mosaic Crochet', selected: false },
+          { name: 'Granny Squares', selected: false },
+        ],
+      },
+      {
+        name: 'Special Features',
+        options: [
+          { name: 'Seamless Patterns', selected: false },
+          { name: 'Quick Projects', selected: false },
+          { name: 'Scrap Yarn Projects', selected: false },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Knitting',
+    subcategories: [
+      {
+        name: 'Project Type',
+        options: [
+          { name: 'Clothing', selected: false },
+          { name: 'Accessories', selected: false },
+          { name: 'Home Decor', selected: false },
+          { name: 'Toys/Amigurumi', selected: false },
+          { name: 'Seasonal/Holiday Items', selected: false },
+        ],
+      },
+      {
+        name: 'Yarn Weight',
+        options: [
+          { name: 'Lace', selected: false },
+          { name: 'Fingering', selected: false },
+          { name: 'Sport', selected: false },
+          { name: 'DK (Double Knitting)', selected: false },
+          { name: 'Worsted', selected: false },
+          { name: 'Bulky', selected: false },
+          { name: 'Super Bulky', selected: false },
+        ],
+      },
+      {
+        name: 'Recipient',
+        options: [
+          { name: 'Women', selected: false },
+          { name: 'Men', selected: false },
+          { name: 'Children', selected: false },
+          { name: 'Babies', selected: false },
+          { name: 'Pets', selected: false },
+        ],
+      },
+      {
+        name: 'Techniques',
+        options: [
+          { name: 'Lace Knitting', selected: false },
+          { name: 'Fair Isle/Colorwork', selected: false },
+          { name: 'Cables', selected: false },
+          { name: 'Brioche', selected: false },
+          { name: 'Double Knitting', selected: false },
+        ],
+      },
+      {
+        name: 'Special Features',
+        options: [
+          { name: 'Top-Down Construction', selected: false },
+          { name: 'Knit-in-the-Round', selected: false },
+          { name: 'One-Skein Projects', selected: false },
+        ],
+      },
+    ],
+  },
+];
 
 export const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
@@ -18,6 +137,8 @@ export type ProductFilterObject = {
   q?: string;
   status?: string;
   categories?: string[];
+  subCategories?: string[];
+  hashtags?: string[];
   minPrice?: number;
   maxPrice?: number;
   pageNumber?: number;
@@ -30,3 +151,6 @@ export type TesterApplicationFilterObject = {
   filter: string[];
   status?: string[];
 };
+
+export const HASHTAG_LIMIT = 10;
+export const IMAGE_LIMIT = 6;
