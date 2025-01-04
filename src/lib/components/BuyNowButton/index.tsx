@@ -80,8 +80,14 @@ function PayPalButton({ price, productId, userId, disabled, callback }: PayPalBu
     if (!listOrdersByProductIdIsSuccess || orders?.length === 0) {
       return;
     }
-    // redirect to first order detail page related to the user matching this product
-    router.push(`/app/secure/auth/me/orders/${orders[0].id}?action=toggleBuyNow`);
+    const customerOrder = orders.find((order) => order.customer.id === userId);
+    const sellerOrder = orders.find((order) => order.seller.id === userId);
+
+    if (!!customerOrder) {
+      router.push(`/app/secure/auth/me/orders/${customerOrder.id}?action=toggleBuyNow`);
+    } else if (!!sellerOrder) {
+      router.push(`/app/secure/sell/orders`);
+    }
   }, [listOrdersByProductIdIsSuccess, orders]);
 
   if (listOrdersByProductIdIsLoading) {
