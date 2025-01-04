@@ -19,7 +19,7 @@ interface ProductCardProps {
   id: string;
   name: string;
   price: number;
-  image: string;
+  imageUrls: string[];
   isFree: boolean;
   creatorId: string;
   status?: string;
@@ -32,7 +32,7 @@ export default function ProductCard({
   id,
   name,
   price,
-  image,
+  imageUrls,
   isFree,
   creatorId,
   status,
@@ -70,7 +70,7 @@ export default function ProductCard({
   return (
     <Card key={id} className="flex flex-col">
       <CardHeader>
-        <ProductImageSlider imageUrls={[image]} title={name} />
+        <ProductImageSlider imageUrls={imageUrls} title={name} />
       </CardHeader>
       <CardContent className="flex-grow">
         <CardTitle>{name}</CardTitle>

@@ -189,7 +189,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         name={testing.product.title}
                         price={testing.product.price}
                         isFree={testing.product.isFree}
-                        image={testing.product.imageUrls?.[0]}
+                        imageUrls={testing.product.imageUrls}
                         isTesterCall={true}
                         creatorId={testing.creatorId}
                       />
