@@ -399,6 +399,37 @@ export interface PostOrderResponse {
   captureLink: string;
 }
 
+export interface GetOrderAnalyticsResponse {
+  totalSales: number;
+  totalRevenue: number;
+  averageSaleRevenue: number;
+  completionRate: string;
+  totalRevenuePerMonth: {
+    /** @example "03.2024" */
+    month: string;
+    revenue: number;
+  }[];
+  totalSalesOfCurrentMonth: number;
+  lastSales: {
+    userId: string;
+    fullName?: string;
+    imageUrl?: string;
+    username: string;
+    revenue: number;
+  }[];
+  feesComparisonPerMonth: {
+    /** @example "03.2024" */
+    month: string;
+    totalPayPalFee: number;
+    totalPlatformFee: number;
+  }[];
+  orderStatusDistribution: {
+    /** @example "PENDING" */
+    status: string;
+    count: number;
+  }[];
+}
+
 export interface GetOrderResponse {
   id: string;
   files: {
@@ -1846,6 +1877,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/orders/products/${productId}`,
         method: 'GET',
         query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a set of analytics for the orders of the authenticated seller user.
+     *
+     * @tags Order
+     * @name GetOrderAnalytics
+     * @summary Gets the analytics for all orders of seller.
+     * @request GET:/api/v1/orders/{userId}/analytics
+     * @secure
+     */
+    getOrderAnalytics: (userId: string, params: RequestParams = {}) =>
+      this.request<GetOrderAnalyticsResponse, any>({
+        path: `/api/v1/orders/${userId}/analytics`,
+        method: 'GET',
         secure: true,
         format: 'json',
         ...params,
