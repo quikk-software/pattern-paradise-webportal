@@ -26,7 +26,6 @@ export function FeesComparison({ fees }: FeesComparisonProps) {
           color: 'hsl(var(--chart-2))',
         },
       }}
-      className="h-[400px]"
     >
       <ResponsiveContainer width="100%" height={400}>
         <BarChart

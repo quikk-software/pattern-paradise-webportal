@@ -43,7 +43,6 @@ export function StatusDistribution({ orderStatusDistribution }: StatusDistributi
           color: 'hsl(var(--chart-2))',
         },
       }}
-      className="h-[300px]"
     >
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
