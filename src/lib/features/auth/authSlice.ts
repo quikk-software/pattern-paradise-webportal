@@ -79,6 +79,8 @@ export const authSlice = createSlice({
     },
     logout: (state) => {
       state.password = '';
+      state.userId = '';
+      state.username = '';
       state.accessToken = null;
       state.refreshToken = null;
     },
