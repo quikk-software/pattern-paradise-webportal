@@ -22,7 +22,7 @@ export default function TestDetailsPage({ params }: { params: { productId: strin
   } = useGetProduct();
 
   useEffect(() => {
-    fetchProduct(params.productId);
+    fetchProduct(params.productId, false);
     fetchTesting(params.productId);
   }, [params.productId]);
 

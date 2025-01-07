@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, BarChart } from 'lucide-react';
 import { useGetProductMetrics } from '@/lib/api/metric';
 import React, { useEffect } from 'react';
-import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface ProductMetricsProps {

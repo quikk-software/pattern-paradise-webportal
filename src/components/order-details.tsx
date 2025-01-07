@@ -26,7 +26,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   const { fetch: fetchProduct, data: product, isLoading: fetchProductIsLoading } = useGetProduct();
 
   useEffect(() => {
-    fetchProduct(order.productId);
+    fetchProduct(order.productId, false);
   }, [order.productId]);
 
   if (fetchProductIsLoading) {

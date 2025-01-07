@@ -13,12 +13,16 @@ export const useGetProduct = () => {
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
-  const fetch = async (productId: string) => {
+  const fetch = async (productId: string, trackMetrics: boolean = true) => {
     const response = await handleFn(
       async () =>
-        await client.api.getProductById(productId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
-        }),
+        await client.api.getProductById(
+          productId,
+          { trackMetrics },
+          {
+            ...(await getApi(accessToken, refreshToken, dispatch)),
+          },
+        ),
     );
 
     setData(response?.data);

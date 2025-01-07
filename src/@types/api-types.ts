@@ -1363,10 +1363,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/products/{productId}
      * @secure
      */
-    getProductById: (productId: string, params: RequestParams = {}) =>
+    getProductById: (
+      productId: string,
+      query?: {
+        /** If metrics should be tracked. */
+        trackMetrics?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetProductResponse, NotFoundResponse>({
         path: `/api/v1/products/${productId}`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,
