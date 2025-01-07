@@ -64,7 +64,7 @@ export function PayPalButton({
         <CardContent className="space-y-4">
           {!status || status === 'CREATED' ? (
             <div className="space-y-2">
-              <Label htmlFor="custom-price">Enter custom price (min. ${price.toFixed(2)})</Label>
+              <Label htmlFor="custom-price">Enter custom price (optional)</Label>
               <CurrencyInput
                 id="price"
                 type="text"
