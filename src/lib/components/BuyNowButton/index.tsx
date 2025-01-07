@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
@@ -19,29 +18,21 @@ import { Button } from '@/components/ui/button';
 import { isTokenValid } from '@/lib/auth/auth.utils';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
-import { useGetProduct } from '@/lib/api';
 import { PayPalButton } from '@/lib/components/PayPalButton';
+import { GetProductResponse } from '@/@types/api-types';
 
 interface BuyNowButtonProps {
-  price: number;
-  productId: string;
-  productName: string;
+  product: GetProductResponse;
   callback?: (orderId: string) => void;
 }
 
-export function BuyNowButton({ price, productId, productName, callback }: BuyNowButtonProps) {
+export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
   const { action } = useAction();
 
   const { accessToken, userId } = useSelector((s: Store) => s.auth);
-
-  const { fetch: fetchProduct, data: product, isLoading: fetchProductIsLoading } = useGetProduct();
-
-  useEffect(() => {
-    fetchProduct(productId);
-  }, [productId]);
 
   useEffect(() => {
     if (!action) {
@@ -54,10 +45,6 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
 
   const isLoggedIn = isTokenValid(accessToken);
 
-  if (fetchProductIsLoading) {
-    return <LoadingSpinnerComponent />;
-  }
-
   if (product?.status !== 'Released') {
     return (
       <InfoBoxComponent
@@ -68,7 +55,7 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
               <span>
                 {' '}
                 <Link
-                  href={`/app/secure/test/products/${productId}`}
+                  href={`/app/secure/test/products/${product.id}`}
                   className="text-blue-500 underline"
                 >
                   Apply as a Tester here!
@@ -86,7 +73,7 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-3xl font-bold">${price.toFixed(2)}</span>
+      <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
       <Button className="w-full" onClick={() => setIsOpen(true)}>
         <Lock />
         Buy Now
@@ -106,7 +93,9 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
               <ShieldCheck className="w-20 h-20 text-green-500" />
               <div className="flex flex-col gap-2">
                 <DrawerTitle className="text-center">Your Order</DrawerTitle>
-                <DrawerTitle className="font-medium text-md text-center">{productName}</DrawerTitle>
+                <DrawerTitle className="font-medium text-md text-center">
+                  {product.title}
+                </DrawerTitle>
               </div>
               {!isLoggedIn ? (
                 <div className="flex flex-col gap-4">
@@ -116,14 +105,14 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
                       <span>
                         You&apos;re not logged in. You can{' '}
                         <Link
-                          href={`/auth/login?redirect=/app/products/${productId}?action=toggleBuyNow`}
+                          href={`/auth/login?redirect=/app/products/${product.id}?action=toggleBuyNow`}
                           className="text-blue-500 underline"
                         >
                           log in
                         </Link>{' '}
                         or{' '}
                         <Link
-                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/app/products/${productId}?action=toggleBuyNow`}
+                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/app/products/${product.id}?action=toggleBuyNow`}
                           className="text-blue-500 underline"
                         >
                           register
@@ -144,7 +133,7 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
                     signupCallback={() =>
                       router.push(
                         `/auth/login?redirect=${encodeURIComponent(
-                          `/app/products/${productId}?action=toggleBuyNow`,
+                          `/app/products/${product.id}?action=toggleBuyNow`,
                         )}`,
                       )
                     }
@@ -153,8 +142,8 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
               ) : null}
               <PayPalButton
                 disabled={!isLoggedIn}
-                price={price}
-                productId={productId}
+                price={product.price}
+                productId={product.id}
                 userId={userId}
                 callback={callback}
               />

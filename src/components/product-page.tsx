@@ -17,6 +17,7 @@ import { InfoBoxComponent } from '@/components/info-box';
 import ProductHashtags from '@/components/product-hashtags';
 import ShowMoreText from '@/lib/components/ShowMoreText';
 import ProductCategories from '@/lib/components/ProductCategories';
+import ProductMetrics from '@/lib/components/ProductMetrics';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -69,7 +70,10 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
               <div className="space-y-2">
                 <CreatedByRef creatorId={product.creatorId} />
                 {isOwner ? (
-                  <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
+                  <>
+                    <ProductMetrics productId={product.id} />
+                    <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
+                  </>
                 ) : null}
               </div>
               <div className="flex flex-col gap-2">
@@ -81,9 +85,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                   />
                 ) : (
                   <BuyNowButton
-                    price={product.price}
-                    productId={product.id}
-                    productName={product.title}
+                    product={product}
                     callback={(orderId: string) =>
                       router.push(`/app/secure/auth/me/orders/${orderId}`)
                     }

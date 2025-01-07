@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -11,6 +11,10 @@ import { InfoBoxComponent } from '@/components/info-box';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import ProductMetrics from '@/lib/components/ProductMetrics';
+import { useGetProduct } from '@/lib/api';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import Link from 'next/link';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -18,6 +22,16 @@ interface OrderDetailsProps {
 
 export function OrderDetails({ order }: OrderDetailsProps) {
   const { userId } = useSelector((s: Store) => s.auth);
+
+  const { fetch: fetchProduct, data: product, isLoading: fetchProductIsLoading } = useGetProduct();
+
+  useEffect(() => {
+    fetchProduct(order.productId);
+  }, [order.productId]);
+
+  if (fetchProductIsLoading) {
+    return <LoadingSpinnerComponent />;
+  }
 
   const isPayed =
     order.status === 'CAPTURED' || order.status === 'APPROVED' || order.status === 'COMPLETED';
@@ -43,7 +57,10 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           <div className="space-y-2 w-full">
             <CreatedByRef creatorId={order.seller.id} />
             {isSeller ? (
-              <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
+              <>
+                <ProductMetrics productId={order.productId} />
+                <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
+              </>
             ) : null}
           </div>
           <div className="space-y-2">
@@ -61,11 +78,18 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                   title="One last step"
                   message="Please complete your payment with PayPal by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
                 />
-                <BuyNowButton
-                  price={order.productPrice}
-                  productId={order.productId}
-                  productName={order.productName}
-                />
+                {!!product ? (
+                  <BuyNowButton product={product} />
+                ) : (
+                  <p className="text-sm text-red-500 mb-2">
+                    Couldn&apos;t load pattern details. Please reload or try again later. If this
+                    error persists, please reach out to us{' '}
+                    <Link href="/help" target="_blank" className="text-blue-500 underline">
+                      here
+                    </Link>
+                    .
+                  </p>
+                )}
               </div>
             ) : null}
           </div>

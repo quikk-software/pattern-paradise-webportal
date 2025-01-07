@@ -17,6 +17,10 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface GetUserMetricsResponse {
+  profileViews: number;
+}
+
 export interface PostUserPayPalReferralResponse {
   actionUrl: string;
 }
@@ -165,6 +169,11 @@ export interface ListUserAccountsResponse {
   /** @example 3 */
   totalPages: number;
   users: GetUserAccountResponse[];
+}
+
+export interface GetProductMetricsResponse {
+  productViews: number;
+  productImpressions: number;
 }
 
 export interface PostProductResponse {
@@ -2018,6 +2027,59 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     cancelSubscription: (subscriptionId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/subscriptions/${subscriptionId}/cancel`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The metrics contain profile views.
+     *
+     * @tags Metrics
+     * @name GetUserMetrics
+     * @summary Gets the metrics of the authenticated user.
+     * @request GET:/api/v1/metrics/users/{userId}
+     * @secure
+     */
+    getUserMetrics: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUserMetricsResponse, any>({
+        path: `/api/v1/metrics/users/${userId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The metrics contain product views and impressions.
+     *
+     * @tags Metrics
+     * @name GetProductMetrics
+     * @summary Gets the metrics of the product for the authenticated user.
+     * @request GET:/api/v1/metrics/products/{productId}
+     * @secure
+     */
+    getProductMetrics: (productId: string, params: RequestParams = {}) =>
+      this.request<GetProductMetricsResponse, any>({
+        path: `/api/v1/metrics/products/${productId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The impression will be created based on the given product ID. If the product cannot be found, an exception will be thrown.
+     *
+     * @tags Metrics
+     * @name PostProductImpression
+     * @summary Creates a product impression.
+     * @request POST:/api/v1/metrics/products/{productId}/impressions
+     * @secure
+     */
+    postProductImpression: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/metrics/products/${productId}/impressions`,
         method: 'POST',
         secure: true,
         ...params,

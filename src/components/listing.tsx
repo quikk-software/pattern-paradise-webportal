@@ -189,7 +189,6 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
                   <MultiSelect
                     initialCategories={updatedCategories}
                     onChange={(value) => {
-                      console.log(value);
                       setSelectedCategory(value);
                     }}
                     injectCategories={true}
