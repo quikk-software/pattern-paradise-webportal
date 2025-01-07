@@ -391,6 +391,7 @@ export interface PostCaptureOrderResponse {
 
 export interface PostOrderRequest {
   productId: string;
+  customPrice?: number;
 }
 
 export interface PostOrderResponse {
@@ -452,6 +453,7 @@ export interface GetOrderResponse {
   productDescription: string;
   productImageUrls: string[];
   productPrice: number;
+  isCustomPrice: boolean;
   paypalCaptureLink: string;
   paypalOrderId: string;
   /**
@@ -1774,6 +1776,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** @example "any" */
         productId?: any;
+        /** @example "any" */
+        customPrice?: any;
       },
       params: RequestParams = {},
     ) =>

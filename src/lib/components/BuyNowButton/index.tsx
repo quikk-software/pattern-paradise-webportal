@@ -1,10 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useCaptureOrder, useCreateOrder, useListOrdersByProductId } from '@/lib/api/order';
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
-import logger from '@/lib/core/logger';
-import RequestStatus from '@/lib/components/RequestStatus';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
@@ -24,131 +20,13 @@ import { isTokenValid } from '@/lib/auth/auth.utils';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
 import { useGetProduct } from '@/lib/api';
+import { PayPalButton } from '@/lib/components/PayPalButton';
 
 interface BuyNowButtonProps {
   price: number;
   productId: string;
   productName: string;
   callback?: (orderId: string) => void;
-}
-
-interface PayPalButtonProps {
-  price: number;
-  productId: string;
-  userId: string;
-  disabled: boolean;
-  callback?: (orderId: string) => void;
-}
-
-function PayPalButton({ price, productId, userId, disabled, callback }: PayPalButtonProps) {
-  const router = useRouter();
-
-  const { mutate: createOrder, isError: createOrderIsError, data: orderData } = useCreateOrder();
-  const {
-    mutate: captureOrder,
-    isSuccess: captureOrderIsSuccess,
-    isError: captureOrderIsError,
-  } = useCaptureOrder();
-  const {
-    fetch: fetchOrdersByProductId,
-    isLoading: listOrdersByProductIdIsLoading,
-    isSuccess: listOrdersByProductIdIsSuccess,
-    data: orders,
-    setIsSuccess: setListOrdersByProductIdIsSuccess,
-  } = useListOrdersByProductId();
-
-  const errorReason = useMemo(() => {
-    if (captureOrderIsError) {
-      return "We couldn't authorize your payment. Please try again and consider using another PayPal account.";
-    } else if (createOrderIsError) {
-      return 'Something went wrong while creating your order. Please try again and consider reloading the page.';
-    }
-  }, [createOrderIsError, captureOrderIsError]);
-
-  useEffect(() => {
-    if (!captureOrderIsSuccess || !orderData?.orderId) {
-      return;
-    }
-    router.push(`/app/secure/auth/me/orders/${orderData.orderId}`);
-  }, [captureOrderIsSuccess, orderData]);
-
-  useEffect(() => {
-    fetchOrdersByProductId(productId);
-  }, [productId]);
-
-  useEffect(() => {
-    if (!listOrdersByProductIdIsSuccess || orders?.length === 0) {
-      return;
-    }
-    const customerOrder = orders.find((order) => order.customer.id === userId);
-    const sellerOrder = orders.find((order) => order.seller.id === userId);
-
-    if (!!customerOrder) {
-      router.push(`/app/secure/auth/me/orders/${customerOrder.id}?action=toggleBuyNow`);
-    } else if (!!sellerOrder) {
-      router.push(`/app/secure/sell/orders`);
-    }
-  }, [listOrdersByProductIdIsSuccess, orders]);
-
-  if (listOrdersByProductIdIsLoading) {
-    return <LoadingSpinnerComponent />;
-  }
-
-  return (
-    <PayPalScriptProvider
-      options={{
-        clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
-        currency: 'USD',
-      }}
-    >
-      <div className="flex flex-col flex-start mb-6 gap-4 w-full">
-        <span className="text-lg font-bold">${price.toFixed(2)}</span>
-        <div className="flex flex-col gap-2">
-          <PayPalButtons
-            disabled={disabled}
-            createOrder={async () => {
-              try {
-                const order = orders.find((order) => order.customer.id === userId);
-                if (order?.status === 'CREATED') {
-                  logger.info("Order with status 'CREATED' for user already exists");
-                  return order.paypalOrderId;
-                }
-                const response = await createOrder({
-                  productId,
-                });
-                return response.paypalOrderId;
-              } catch (error) {
-                logger.error('Error creating order:', error);
-                setListOrdersByProductIdIsSuccess(false);
-                fetchOrdersByProductId(productId);
-                return '';
-              }
-            }}
-            onApprove={async (data: { orderID: string }) => {
-              try {
-                const orderId = await captureOrder(data.orderID);
-                callback !== undefined ? callback(orderId) : location.reload();
-              } catch (error) {
-                logger.error('Error capturing order:', error);
-                setListOrdersByProductIdIsSuccess(false);
-                fetchOrdersByProductId(productId);
-              }
-            }}
-            onError={(err: any) => {
-              logger.error('PayPal Buttons Error:', err);
-              setListOrdersByProductIdIsSuccess(false);
-              fetchOrdersByProductId(productId);
-            }}
-          />
-        </div>
-      </div>
-      <RequestStatus
-        isSuccess={captureOrderIsSuccess}
-        isError={createOrderIsError || captureOrderIsError}
-        errorMessage={errorReason}
-      />
-    </PayPalScriptProvider>
-  );
 }
 
 export function BuyNowButton({ price, productId, productName, callback }: BuyNowButtonProps) {
@@ -214,7 +92,12 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
         Buy Now
       </Button>
       <Drawer open={isOpen} onOpenChange={setIsOpen} dismissible={!isLoggedIn}>
-        <DrawerContent className="p-4">
+        <DrawerContent
+          className="p-4"
+          style={{
+            maxHeight: '90vh',
+          }}
+        >
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto">
             <DrawerClose className="flex justify-end" onClick={() => setIsOpen(false)}>
               <X className="text-muted-foreground p-2 w-10 h-10" />
