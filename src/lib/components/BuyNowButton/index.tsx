@@ -105,8 +105,8 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <ShieldCheck className="w-20 h-20 text-green-500" />
               <div className="flex flex-col gap-2">
-                <DrawerTitle>Your Order</DrawerTitle>
-                <DrawerTitle className="font-medium text-md">{productName}</DrawerTitle>
+                <DrawerTitle className="text-center">Your Order</DrawerTitle>
+                <DrawerTitle className="font-medium text-md text-center">{productName}</DrawerTitle>
               </div>
               {!isLoggedIn ? (
                 <div className="flex flex-col gap-4">
