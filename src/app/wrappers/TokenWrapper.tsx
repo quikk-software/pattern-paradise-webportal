@@ -3,6 +3,7 @@
 import { PropsWithChildren, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAccessToken, setRefreshToken } from '@/lib/features/auth/authSlice';
+import { setUserDataInReduxStore } from '@/lib/auth/auth.utils';
 
 export default function TokenWrapper({ children }: PropsWithChildren) {
   const dispatch = useDispatch();
@@ -19,6 +20,9 @@ export default function TokenWrapper({ children }: PropsWithChildren) {
 
     dispatch(setAccessToken(accessToken || null));
     dispatch(setRefreshToken(refreshToken || null));
+    if (!!accessToken) {
+      setUserDataInReduxStore(accessToken, dispatch);
+    }
   }, [dispatch]);
 
   return <>{children}</>;

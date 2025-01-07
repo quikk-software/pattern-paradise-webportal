@@ -32,12 +32,16 @@ export function usePayPalOrder(
   }, [productId]);
 
   useEffect(() => {
-    if (!captureOrderIsSuccess || !orderData?.orderId) return;
+    if (!captureOrderIsSuccess || !orderData?.orderId) {
+      return;
+    }
     router.push(`/app/secure/auth/me/orders/${orderData.orderId}`);
   }, [captureOrderIsSuccess, orderData, router]);
 
   useEffect(() => {
-    if (!listOrdersByProductIdIsSuccess || !orders || orders.length === 0) return;
+    if (!listOrdersByProductIdIsSuccess || !orders || orders.length === 0) {
+      return;
+    }
     const customerOrder = orders.find((order) => order.customer.id === userId);
     const sellerOrder = orders.find((order) => order.seller.id === userId);
 
