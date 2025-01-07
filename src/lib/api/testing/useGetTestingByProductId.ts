@@ -13,12 +13,18 @@ export const useGetTestingByProductId = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (productId: string) => {
+  const fetch = async (productId: string, trackMetrics: boolean = true) => {
     const response = await handleFn(
       async () =>
-        await client.api.getTestingByProductId(productId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
-        }),
+        await client.api.getTestingByProductId(
+          productId,
+          {
+            trackMetrics,
+          },
+          {
+            ...(await getApi(accessToken, refreshToken, dispatch)),
+          },
+        ),
     );
 
     setData(response?.data);

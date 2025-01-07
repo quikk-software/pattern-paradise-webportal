@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import TestingMetrics from '@/lib/components/TestingMetrics';
 
 const getStatusColor = (status: GetTestingResponse['status']) => {
   switch (status) {
@@ -183,7 +184,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col gap-2">
                       <ProductCard
                         id={testing.product.id}
                         name={testing.product.title}
@@ -193,6 +194,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         isTesterCall={true}
                         creatorId={testing.creatorId}
                       />
+                      <TestingMetrics testingId={testing.id} />
                     </div>
                   </CardContent>
                   <CardFooter>

@@ -1,22 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, BarChart } from 'lucide-react';
-import { useGetProductMetrics } from '@/lib/api/metric';
+import { useGetTestingMetrics } from '@/lib/api/metric';
 import React, { useEffect } from 'react';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
-interface ProductMetricsProps {
-  productId: string;
+interface TestingMetricsProps {
+  testingId: string;
 }
 
-export default function ProductMetrics({ productId }: ProductMetricsProps) {
-  const { fetch, data, isLoading, isError } = useGetProductMetrics();
+export default function TestingMetrics({ testingId }: TestingMetricsProps) {
+  const { fetch, data, isLoading, isError } = useGetTestingMetrics();
 
   useEffect(() => {
-    if (!productId) {
+    if (!testingId) {
       return;
     }
-    fetch(productId);
-  }, [productId]);
+    fetch(testingId);
+  }, [testingId]);
 
   if (isError) {
     return null;
@@ -37,7 +37,7 @@ export default function ProductMetrics({ productId }: ProductMetricsProps) {
           <Eye className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{data.productViews}</div>
+          <div className="text-2xl font-bold">{data.testingViews}</div>
           <p className="text-xs text-muted-foreground">Total views</p>
         </CardContent>
       </Card>
@@ -47,7 +47,7 @@ export default function ProductMetrics({ productId }: ProductMetricsProps) {
           <BarChart className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{data.productImpressions}</div>
+          <div className="text-2xl font-bold">{data.testingImpressions}</div>
           <p className="text-xs text-muted-foreground">Total impressions</p>
         </CardContent>
       </Card>

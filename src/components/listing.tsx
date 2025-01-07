@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
@@ -18,7 +18,7 @@ import { CATEGORIES } from '@/lib/constants';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { updateSelectedFlags } from '@/lib/utils';
-import { useCreateProductImpression } from '@/lib/api/metric';
+import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -46,7 +46,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [triggerLoad, setTriggerLoad] = useState(false);
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
-  const { mutate } = useCreateProductImpression();
+  const { mutate: mutateProductImpression } = useCreateProductImpression();
+  const { mutate: mutateTestingImpression } = useCreateTestingImpression();
   const screenSize = useScreenSize();
 
   const status =
@@ -136,7 +137,16 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   };
 
   const handleImpression = async (productId: string) => {
-    await mutate(productId);
+    switch (listingType) {
+      case 'sell':
+        await mutateProductImpression(productId);
+        break;
+      case 'test':
+        await mutateTestingImpression(productId);
+        break;
+      default:
+        break;
+    }
   };
 
   const updatedCategories = updateSelectedFlags(

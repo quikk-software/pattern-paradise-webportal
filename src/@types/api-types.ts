@@ -240,6 +240,11 @@ export interface ListProductsResponse {
   products: GetProductResponse[];
 }
 
+export interface GetTestingMetricsResponse {
+  testingViews: number;
+  testingImpressions: number;
+}
+
 export interface PostTestingRequest {
   testerIds: string[];
   productId: string;
@@ -1719,10 +1724,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/testings/products/{productId}
      * @secure
      */
-    getTestingByProductId: (productId: string, params: RequestParams = {}) =>
+    getTestingByProductId: (
+      productId: string,
+      query?: {
+        /** If metrics should be tracked. */
+        trackMetrics?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetTestingResponse, any>({
         path: `/api/v1/testings/products/${productId}`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,
@@ -2085,6 +2098,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The metrics contain testing views and impressions.
+     *
+     * @tags Metrics
+     * @name GetTestingMetrics
+     * @summary Gets the metrics of the product for the authenticated user.
+     * @request GET:/api/v1/metrics/testings/{testingId}
+     * @secure
+     */
+    getTestingMetrics: (testingId: string, params: RequestParams = {}) =>
+      this.request<GetTestingMetricsResponse, any>({
+        path: `/api/v1/metrics/testings/${testingId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
      * @description The impression will be created based on the given product ID. If the product cannot be found, an exception will be thrown.
      *
      * @tags Metrics
@@ -2096,6 +2127,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     postProductImpression: (productId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/metrics/products/${productId}/impressions`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The impression will be created based on the given testing ID. If the testing cannot be found, an exception will be thrown.
+     *
+     * @tags Metrics
+     * @name PostTestingImpression
+     * @summary Creates a testing impression.
+     * @request POST:/api/v1/metrics/testings/products/{productId}/impressions
+     * @secure
+     */
+    postTestingImpression: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/metrics/testings/products/${productId}/impressions`,
         method: 'POST',
         secure: true,
         ...params,
