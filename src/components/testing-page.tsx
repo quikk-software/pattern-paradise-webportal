@@ -1,14 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import ProductCard from '@/lib/components/ProductCard';
 import { useAbortTesting, useListTestingsByUserId, useUpdateTesting } from '@/lib/api/testing';
@@ -27,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import TestingMetrics from '@/lib/components/TestingMetrics';
 
 const getStatusColor = (status: GetTestingResponse['status']) => {
   switch (status) {
@@ -194,7 +186,6 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         isTesterCall={true}
                         creatorId={testing.creatorId}
                       />
-                      <TestingMetrics testingId={testing.id} />
                     </div>
                   </CardContent>
                   <CardFooter>

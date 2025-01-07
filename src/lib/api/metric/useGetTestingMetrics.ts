@@ -13,10 +13,10 @@ export const useGetTestingMetrics = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (testingId: string) => {
+  const fetch = async (productId: string) => {
     const response = await handleFn(
       async () =>
-        await client.api.getTestingMetrics(testingId, {
+        await client.api.getTestingMetrics(productId, {
           ...(await getApi(accessToken, refreshToken, dispatch)),
         }),
     );

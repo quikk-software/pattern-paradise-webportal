@@ -15,6 +15,7 @@ import ProductMetrics from '@/lib/components/ProductMetrics';
 import { useGetProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
+import TestingMetrics from '@/lib/components/TestingMetrics';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -57,10 +58,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           <div className="space-y-2 w-full">
             <CreatedByRef creatorId={order.seller.id} />
             {isSeller ? (
-              <>
-                <ProductMetrics productId={order.productId} />
-                <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
-              </>
+              <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
             ) : null}
           </div>
           <div className="space-y-2">
@@ -120,6 +118,10 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               productTitle={order.productName}
             />
           ) : null}
+          <div className="flex flex-col gap-2">
+            <ProductMetrics productId={order.productId} />
+            <TestingMetrics productId={order.productId} />
+          </div>
         </div>
         <GoBackButton />
       </div>

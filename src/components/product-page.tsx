@@ -18,6 +18,7 @@ import ProductHashtags from '@/components/product-hashtags';
 import ShowMoreText from '@/lib/components/ShowMoreText';
 import ProductCategories from '@/lib/components/ProductCategories';
 import ProductMetrics from '@/lib/components/ProductMetrics';
+import TestingMetrics from '@/lib/components/TestingMetrics';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -70,10 +71,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
               <div className="space-y-2">
                 <CreatedByRef creatorId={product.creatorId} />
                 {isOwner ? (
-                  <>
-                    <ProductMetrics productId={product.id} />
-                    <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
-                  </>
+                  <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
                 ) : null}
               </div>
               <div className="flex flex-col gap-2">
@@ -91,6 +89,10 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                     }
                   />
                 )}
+                <div className="flex flex-col gap-2 mt-4">
+                  <ProductMetrics productId={product.id} />
+                  <TestingMetrics productId={product.id} />
+                </div>
               </div>
             </div>
           </div>

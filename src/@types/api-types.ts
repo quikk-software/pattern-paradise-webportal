@@ -2103,12 +2103,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Metrics
      * @name GetTestingMetrics
      * @summary Gets the metrics of the product for the authenticated user.
-     * @request GET:/api/v1/metrics/testings/{testingId}
+     * @request GET:/api/v1/metrics/testings/{productId}
      * @secure
      */
-    getTestingMetrics: (testingId: string, params: RequestParams = {}) =>
+    getTestingMetrics: (productId: string, params: RequestParams = {}) =>
       this.request<GetTestingMetricsResponse, any>({
-        path: `/api/v1/metrics/testings/${testingId}`,
+        path: `/api/v1/metrics/testings/${productId}`,
         method: 'GET',
         secure: true,
         format: 'json',
