@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -8,15 +8,53 @@ interface WaterfallListingProps {
   products: GetProductResponse[];
   listingType: string;
   columns: number;
+  onImpression?: (productId: string) => Promise<void>;
 }
 
 export default function WaterfallListing({
   products,
   listingType,
   columns,
+  onImpression,
 }: WaterfallListingProps) {
-  const productGroups: GetProductResponse[][] = [];
+  const productRefs = useRef<(HTMLElement | null)[]>([]);
+  const observedProductIds = useRef<Set<string>>(new Set());
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(async (entry) => {
+          if (entry.isIntersecting) {
+            const productId = entry.target.getAttribute('data-product-id');
+            if (productId && !observedProductIds.current.has(productId)) {
+              observedProductIds.current.add(productId);
+
+              try {
+                if (onImpression) {
+                  await onImpression(productId);
+                }
+              } catch (error) {
+                console.error(`Error tracking impression for product ${productId}:`, error);
+              }
+
+              observer.unobserve(entry.target);
+            }
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+
+    productRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [onImpression]);
+
+  const productGroups: GetProductResponse[][] = [];
   for (let i = 0; i < columns; i++) {
     productGroups[i] = [];
   }
@@ -33,7 +71,7 @@ export default function WaterfallListing({
           key={groupIndex}
           style={{ flexBasis: `calc(100% / ${columns})`, flexGrow: 0 }}
         >
-          {group.map((product) => (
+          {group.map((product, index) => (
             <Link
               key={product.id}
               href={`${
@@ -43,7 +81,13 @@ export default function WaterfallListing({
               }/${product.id}`}
               className="w-full"
             >
-              <Card className="flex flex-col justify-between w-full">
+              <Card
+                ref={(el) => {
+                  if (el) productRefs.current[index] = el;
+                }}
+                data-product-id={product.id}
+                className="flex flex-col justify-between w-full"
+              >
                 <CardContent className="pt-4 flex flex-col gap-4">
                   <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
                   <div className="flex flex-col gap-1">

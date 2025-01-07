@@ -18,6 +18,7 @@ import { CATEGORIES } from '@/lib/constants';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { updateSelectedFlags } from '@/lib/utils';
+import { useCreateProductImpression } from '@/lib/api/metric';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -45,6 +46,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [triggerLoad, setTriggerLoad] = useState(false);
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
+  const { mutate } = useCreateProductImpression();
   const screenSize = useScreenSize();
 
   const status =
@@ -131,6 +133,10 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setTriggerLoad(true);
     setIsFree(true);
     setHashtags([]);
+  };
+
+  const handleImpression = async (productId: string) => {
+    await mutate(productId);
   };
 
   const updatedCategories = updateSelectedFlags(
@@ -245,6 +251,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           products={products}
           listingType={listingType}
           columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+          onImpression={(productId) => handleImpression(productId)}
         />
 
         {hasNextPage ? (
