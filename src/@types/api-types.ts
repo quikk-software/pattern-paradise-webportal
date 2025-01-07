@@ -1083,10 +1083,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/users/account/{userId}
      * @secure
      */
-    getUserById: (userId: string, params: RequestParams = {}) =>
+    getUserById: (
+      userId: string,
+      query?: {
+        /** If metrics should be tracked. */
+        trackMetrics?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetUserAccountResponse, NotFoundResponse>({
         path: `/api/v1/users/account/${userId}`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,

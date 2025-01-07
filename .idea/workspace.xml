@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/product/useGetProduct.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/product/useGetProduct.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/api/user/useGetUserById.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/user/useGetUserById.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/CreatedByRef/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/CreatedByRef/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +156,7 @@
       <workItem from="1734973349078" duration="3432000" />
       <workItem from="1735312812415" duration="3565000" />
       <workItem from="1735399704002" duration="69696000" />
-      <workItem from="1736154315833" duration="18613000" />
+      <workItem from="1736154315833" duration="19210000" />
     </task>
     <servers />
   </component>

@@ -13,12 +13,18 @@ export const useGetUserById = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (userId: string) => {
+  const fetch = async (userId: string, trackMetrics: boolean = true) => {
     const response = await handleFn(
       async () =>
-        await client.api.getUserById(userId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
-        }),
+        await client.api.getUserById(
+          userId,
+          {
+            trackMetrics,
+          },
+          {
+            ...(await getApi(accessToken, refreshToken, dispatch)),
+          },
+        ),
     );
 
     setData(response.data);
