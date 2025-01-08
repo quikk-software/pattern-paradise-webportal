@@ -119,15 +119,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
         ),
       ]);
     }
+
     mutateUser({
-      email: data.email ? data.email.toLowerCase().trim() : undefined,
-      firstName: data.firstName ? data.firstName.trim() : undefined,
-      lastName: data.lastName ? data.lastName.trim() : undefined,
-      description: data.description ? data.description.trim() : undefined,
+      email: data.email.trim() ? data.email.toLowerCase().trim() : undefined,
+      firstName: data.firstName.trim() ? data.firstName.trim() : undefined,
+      lastName: data.lastName.trim() ? data.lastName.trim() : undefined,
+      description: data.description.trim() ? data.description.trim() : undefined,
       imageUrl: urls.length > 0 ? urls[0].url : undefined,
-      instagramRef: data.instagramRef ? data.instagramRef.toLowerCase().trim() : undefined,
-      tiktokRef: data.tiktokRef ? data.tiktokRef.toLowerCase().trim() : undefined,
-      username: data.username ? data.username.toLowerCase().trim() : undefined,
+      instagramRef: data.instagramRef.trim() ? data.instagramRef.toLowerCase().trim() : undefined,
+      tiktokRef: data.tiktokRef.trim() ? data.tiktokRef.toLowerCase().trim() : undefined,
+      username: data.username.trim() ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
     })
       .then(() => {
