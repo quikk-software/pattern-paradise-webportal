@@ -19,6 +19,7 @@ import ShowMoreText from '@/lib/components/ShowMoreText';
 import ProductCategories from '@/lib/components/ProductCategories';
 import ProductMetrics from '@/lib/components/ProductMetrics';
 import TestingMetrics from '@/lib/components/TestingMetrics';
+import { ReportProduct } from '@/lib/components/ReportProduct';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -69,7 +70,10 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                 <ProductHashtags hashtags={product.hashtags} />
               </div>
               <div className="space-y-2">
-                <CreatedByRef creatorId={product.creatorId} />
+                <div className="flex gap-2 justify-between items-center">
+                  <CreatedByRef creatorId={product.creatorId} />
+                  <ReportProduct productId={product.id} />
+                </div>
                 {isOwner ? (
                   <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
                 ) : null}

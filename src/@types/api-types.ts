@@ -17,6 +17,47 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface PostUserReportRequest {
+  reason: string;
+  comment?: string;
+}
+
+export interface GetUserReportResponse {
+  reason: string;
+  reporterComment?: string;
+  defendantComment?: string;
+  adminComment?: string;
+  status: string;
+  reporter: GetUserAccountResponse;
+  defendant: GetUserAccountResponse;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListUserReportsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  userReports: GetUserReportResponse[];
+}
+
 export interface GetUserMetricsResponse {
   profileViews: number;
 }
@@ -169,6 +210,48 @@ export interface ListUserAccountsResponse {
   /** @example 3 */
   totalPages: number;
   users: GetUserAccountResponse[];
+}
+
+export interface PostProductReportRequest {
+  reason: string;
+  comment?: string;
+}
+
+export interface GetProductReportResponse {
+  reason: string;
+  reporterComment?: string;
+  defendantComment?: string;
+  adminComment?: string;
+  status: string;
+  reporter: GetUserAccountResponse;
+  defendant: GetUserAccountResponse;
+  product: GetProductResponse;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListProductReportsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  productReports: GetProductReportResponse[];
 }
 
 export interface GetProductMetricsResponse {
@@ -2146,6 +2229,134 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/metrics/testings/products/${productId}/impressions`,
         method: 'POST',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The reports can only be retrieved by the reporter, defendant or admin.
+     *
+     * @tags Reports
+     * @name ListUserReports
+     * @summary Lists user reports.
+     * @request GET:/api/v1/reports/users
+     * @secure
+     */
+    listUserReports: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The order direction. */
+        direction?: string;
+        /** The status of the report. */
+        status?: string;
+        /** The reason of the report. */
+        reason?: string;
+        /** The userId (reporter or defendant) of the report. */
+        userId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListUserReportsResponse, any>({
+        path: `/api/v1/reports/users`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The reports can only be retrieved by the reporter, defendant or admin.
+     *
+     * @tags Reports
+     * @name ListProductReports
+     * @summary Lists the reports for the given product.
+     * @request GET:/api/v1/reports/products
+     * @secure
+     */
+    listProductReports: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The order direction. */
+        direction?: string;
+        /** The status of the report. */
+        status?: string;
+        /** The reason of the report. */
+        reason?: string;
+        /** The user ID (reporter or defendant) of the report. */
+        userId?: string;
+        /** The product ID of the report. */
+        productId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListProductReportsResponse, any>({
+        path: `/api/v1/reports/products`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The report will be created based on the given user ID. If the user cannot be found, an exception will be thrown.
+     *
+     * @tags Reports
+     * @name PostUserReport
+     * @summary Creates a report for a user.
+     * @request POST:/api/v1/reports/users/{userId}
+     * @secure
+     */
+    postUserReport: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        reason?: any;
+        /** @example "any" */
+        comment?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/reports/users/${userId}`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The report will be created based on the given product ID. If the product cannot be found, an exception will be thrown.
+     *
+     * @tags Reports
+     * @name PostProductReport
+     * @summary Creates a report for a product.
+     * @request POST:/api/v1/reports/products/{productId}
+     * @secure
+     */
+    postProductReport: (
+      productId: string,
+      data: {
+        /** @example "any" */
+        reason?: any;
+        /** @example "any" */
+        comment?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/reports/products/${productId}`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
   };
