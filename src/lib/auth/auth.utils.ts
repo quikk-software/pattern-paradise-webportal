@@ -59,6 +59,7 @@ const getAccessTokenUsingRefreshToken = async (
     if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
       const newAccessToken: string = (res.data.access_token as string) ?? null;
       const newRefreshToken: string = (res.data.refresh_token as string) ?? null;
+      console.log({ newAccessToken });
       dispatch?.(setAccessToken(newAccessToken));
       dispatch?.(setRefreshToken(newRefreshToken));
       await saveTokensToCookies(newAccessToken, newRefreshToken);

@@ -8,6 +8,7 @@ import { cookies } from 'next/headers';
 import { getAccessTokenUsingRefreshToken, isTokenValid } from '@/lib/auth/auth.utils';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import logger from '@/lib/core/logger';
+import { CookiesProvider } from 'next-client-cookies/server';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -96,15 +97,17 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        <div className="flex flex-col h-dvh">
-          <div className="flex-1 overflow-auto">
-            <StoreProvider>{children}</StoreProvider>
+        <CookiesProvider>
+          <div className="flex flex-col h-dvh">
+            <div className="flex-1 overflow-auto">
+              <StoreProvider>{children}</StoreProvider>
+            </div>
+            <CookieConsentBanner />
+            <div className="flex-0">
+              <BottomNavigation />
+            </div>
           </div>
-          <CookieConsentBanner />
-          <div className="flex-0">
-            <BottomNavigation />
-          </div>
-        </div>
+        </CookiesProvider>
       </body>
     </html>
   );

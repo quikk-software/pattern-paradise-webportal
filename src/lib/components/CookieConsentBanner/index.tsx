@@ -1,17 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import CookieConsent, { Cookies } from 'react-cookie-consent';
+import CookieConsent from 'react-cookie-consent';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useCookies } from 'next-client-cookies';
 
 const COOKIE_CONSENT_NAME = 'pp-cookie-consent';
 
 export default function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
 
+  const cookieStore = useCookies();
+
   useEffect(() => {
-    const consentGiven = Cookies.get(COOKIE_CONSENT_NAME);
+    const consentGiven = cookieStore.get(COOKIE_CONSENT_NAME);
     if (consentGiven === undefined) {
       setVisible(true);
     }

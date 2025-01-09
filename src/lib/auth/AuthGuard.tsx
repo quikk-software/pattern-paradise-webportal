@@ -10,6 +10,7 @@ import {
   setRefreshToken,
 } from '@/lib/features/auth/authSlice';
 import logger from '@/lib/core/logger';
+import { useCookies } from 'next-client-cookies';
 import { usePathname, useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { buildQueryString } from '@/lib/utils';
@@ -21,6 +22,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const dispatch = useDispatch();
   const pathname = usePathname();
   const router = useRouter();
+  const cookieStore = useCookies();
   const allSearchParams = useGetAllSearchParams();
 
   const {
@@ -30,13 +32,31 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   } = useSelector((store: Store) => store.auth);
 
   const checkAuth = async (
-    accessToken: string | null,
-    refreshToken: string | null,
+    accessTokenFromStore: string | null,
+    refreshTokenFromStore: string | null,
     pathname: string,
   ) => {
     dispatch(setCheckAuthIsLoading(true));
     try {
       logger.debug(`Checking Access for <${pathname}>.`);
+
+      const accessTokenFromCookies = cookieStore.get('accessToken') ?? null;
+      const refreshTokenFromCookies = cookieStore.get('refreshToken') ?? null;
+
+      let accessToken = null;
+      let refreshToken = null;
+
+      if (isTokenValid(accessTokenFromStore)) {
+        accessToken = accessTokenFromStore;
+      } else if (isTokenValid(accessTokenFromCookies)) {
+        refreshToken = accessTokenFromCookies;
+      }
+
+      if (isTokenValid(refreshTokenFromStore)) {
+        accessToken = refreshTokenFromStore;
+      } else if (isTokenValid(refreshTokenFromCookies)) {
+        refreshToken = refreshTokenFromCookies;
+      }
 
       const query = allSearchParams ? buildQueryString(allSearchParams) : null;
       const redirect = query ? `${pathname}?${query}` : pathname;
@@ -67,6 +87,9 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   };
 
   useEffect(() => {
+    if (isTokenValid(accessTokenFromStore)) {
+      return;
+    }
     checkAuth(accessTokenFromStore, refreshTokenFromStore, pathname);
   }, [accessTokenFromStore, refreshTokenFromStore, pathname]);
 

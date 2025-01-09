@@ -65,11 +65,8 @@ const useAuth = () => {
         }),
       );
       if (response.status === 200) {
-        // Success Snackbar o.ä. hier dispatchen?
-        // displaySuccess("Anmeldung erfolgreich");
         const accessToken = response.data.access_token;
         const refreshToken = response.data.refresh_token;
-
         await saveTokensToCookies(accessToken, refreshToken);
 
         dispatch(setAccessToken(accessToken));

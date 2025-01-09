@@ -143,7 +143,7 @@ export function ProductReports() {
         <CardContent>
           <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="status">Status {filters.status}</Label>
+              <Label htmlFor="status">Status</Label>
               <Select
                 value={filters.status ?? 'all'}
                 onValueChange={(value) => handleFilterChange('status', value)}
@@ -171,21 +171,19 @@ export function ProductReports() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="FRAUDULENT_ACTIVITY">Fraudulent activity</SelectItem>
-                  <SelectItem value="IMPERSONATION">Impersonation</SelectItem>
-                  <SelectItem value="INAPPROPRIATE_BEHAVIOR">Inappropriate behavior</SelectItem>
-                  <SelectItem value="UNSOLICITED_PROMOTIONS_SPAM">
-                    Unsolicited promotions/spam
+                  <SelectItem value="COPYRIGHT_INFRINGEMENT">Copyright infringement</SelectItem>
+                  <SelectItem value="TRADEMARK_VIOLATION">Trademark violation</SelectItem>
+                  <SelectItem value="INAPPROPRIATE_CONTENT">Inappropriate content</SelectItem>
+                  <SelectItem value="MISLEADING_OR_FALSE_DESCRIPTION">
+                    Misleading or false description
                   </SelectItem>
-                  <SelectItem value="SUSPICIOUS_ACTIVITY">Suspicious activity</SelectItem>
-                  <SelectItem value="SELLING_PROHIBITED_CONTENT">
-                    Selling prohibited content
+                  <SelectItem value="DUPLICATE_CONTENT">Duplicate content</SelectItem>
+                  <SelectItem value="BROKEN_OR_INCOMPLETE_FILES">
+                    Broken or incomplete files
                   </SelectItem>
-                  <SelectItem value="MULTIPLE_VIOLATIONS">Multiple violations</SelectItem>
-                  <SelectItem value="INCOMPLETE_PROFILE_OR_FAKE_INFORMATION">
-                    Incomplete profile or fake information
-                  </SelectItem>
-                  <SelectItem value="VIOLATION_OF_AUP">Violation of AUP</SelectItem>
+                  <SelectItem value="LOW_QUALITY_OR_ERRORS">Low quality or errors</SelectItem>
+                  <SelectItem value="UNAPPROVED_FORMATS">Unapproved formats</SelectItem>
+                  <SelectItem value="VIOLATES_AUP">Violates AUP</SelectItem>
                 </SelectContent>
               </Select>
             </div>
