@@ -5,6 +5,7 @@ import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useCookies } from 'next-client-cookies';
 
 export const useListUserReports = ({
   pageNumber = 1,
@@ -15,6 +16,7 @@ export const useListUserReports = ({
 }) => {
   const [data, setData] = useState<GetUserReportResponse[]>([]);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -41,7 +43,7 @@ export const useListUserReports = ({
             reason,
           },
           {
-            ...(await getApi(accessToken, refreshToken, dispatch)),
+            ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
           },
         ),
     );

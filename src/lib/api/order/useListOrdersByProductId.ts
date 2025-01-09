@@ -4,10 +4,12 @@ import type { GetOrderResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useCookies } from 'next-client-cookies';
 
 export const useListOrdersByProductId = () => {
   const [data, setData] = useState<GetOrderResponse[]>([]);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -20,7 +22,7 @@ export const useListOrdersByProductId = () => {
           productId,
           {},
           {
-            ...(await getApi(accessToken, refreshToken, dispatch)),
+            ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
           },
         ),
     );

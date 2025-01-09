@@ -4,10 +4,12 @@ import type { GetProductMetricsResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useCookies } from 'next-client-cookies';
 
 export const useGetProductMetrics = () => {
   const [data, setData] = useState<GetProductMetricsResponse | undefined>(undefined);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -17,7 +19,7 @@ export const useGetProductMetrics = () => {
     const response = await handleFn(
       async () =>
         await client.api.getProductMetrics(productId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
         }),
     );
 

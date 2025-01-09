@@ -2,8 +2,10 @@ import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useCookies } from 'next-client-cookies';
 
 export const useCreateProductImpression = () => {
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -13,7 +15,7 @@ export const useCreateProductImpression = () => {
     await handleFn(
       async () =>
         await client.api.postProductImpression(productId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
         }),
     );
   };

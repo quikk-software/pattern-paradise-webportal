@@ -6,6 +6,7 @@ import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { combineArraysById } from '@/lib/core/utils';
+import { useCookies } from 'next-client-cookies';
 
 export const useListOrders = ({
   pageNumber = 1,
@@ -20,6 +21,7 @@ export const useListOrders = ({
 }) => {
   const [data, setData] = useState<GetOrderResponse[]>([]);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -37,7 +39,7 @@ export const useListOrders = ({
             filter,
           },
           {
-            ...(await getApi(accessToken, refreshToken, dispatch)),
+            ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
           },
         ),
     );

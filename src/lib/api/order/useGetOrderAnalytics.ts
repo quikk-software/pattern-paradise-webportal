@@ -4,10 +4,12 @@ import type { GetOrderAnalyticsResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useCookies } from 'next-client-cookies';
 
 export const useGetOrderAnalytics = () => {
   const [data, setData] = useState<GetOrderAnalyticsResponse | undefined>(undefined);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -17,7 +19,7 @@ export const useGetOrderAnalytics = () => {
     const response = await handleFn(
       async () =>
         await client.api.getOrderAnalytics(userId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
         }),
     );
 

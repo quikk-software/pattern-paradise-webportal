@@ -24,12 +24,15 @@ import { useRouter } from 'next/navigation';
 import { Store } from '@/lib/redux/store';
 import { useEffect, useState } from 'react';
 import { useGetUser } from '@/lib/api';
+import { useCookies } from 'next-client-cookies';
 
 const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const cookieStore = useCookies();
 
   const dispatch = useDispatch();
   const { redirectUrl } = useRedirect();
@@ -67,7 +70,7 @@ const useAuth = () => {
       if (response.status === 200) {
         const accessToken = response.data.access_token;
         const refreshToken = response.data.refresh_token;
-        await saveTokensToCookies(accessToken, refreshToken);
+        await saveTokensToCookies(accessToken, refreshToken, cookieStore);
 
         dispatch(setAccessToken(accessToken));
         dispatch(setRefreshToken(refreshToken));
@@ -124,7 +127,7 @@ const useAuth = () => {
 
     const isValid = isTokenValid(accessToken);
     if (!isValid) {
-      getAccessTokenUsingRefreshToken(refreshToken).then((newAccessToken) => {
+      getAccessTokenUsingRefreshToken(refreshToken, cookieStore).then((newAccessToken) => {
         handleAccessToken(newAccessToken ?? null, !!newAccessToken);
       });
     } else {

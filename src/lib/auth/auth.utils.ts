@@ -9,6 +9,7 @@ import {
   setRoles,
   setUserId,
 } from '@/lib/features/auth/authSlice';
+import { Cookies } from 'next-client-cookies';
 import { AnyAction, Dispatch } from 'redux';
 
 /**
@@ -41,6 +42,7 @@ const isTokenExpired = (token: string) => {
  **/
 const getAccessTokenUsingRefreshToken = async (
   refreshToken: string | null,
+  cookieStore: Cookies,
   dispatch?: Dispatch<any>,
   callback?: () => void,
 ) => {
@@ -62,7 +64,7 @@ const getAccessTokenUsingRefreshToken = async (
       console.log({ newAccessToken });
       dispatch?.(setAccessToken(newAccessToken));
       dispatch?.(setRefreshToken(newRefreshToken));
-      await saveTokensToCookies(newAccessToken, newRefreshToken);
+      await saveTokensToCookies(newAccessToken, newRefreshToken, cookieStore);
 
       return newAccessToken;
     }
@@ -76,24 +78,13 @@ const getAccessTokenUsingRefreshToken = async (
 const isTokenValid = (token: string | null) =>
   token !== null && token !== '' && !isTokenExpired(token);
 
-const saveTokensToCookies = async (access_token: string, refresh_token: string) => {
-  const response = await fetch(`${process.env.URL ?? ''}/api/auth/callback`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      access_token,
-      refresh_token,
-    }),
-  });
-
-  const data = await response.json();
-  if (data.success) {
-    logger.info('Tokens saved in cookies');
-  } else {
-    logger.error('Failed to save tokens');
-  }
+const saveTokensToCookies = async (
+  accessToken: string,
+  refresh_token: string,
+  cookieStore: Cookies,
+) => {
+  cookieStore.set('accessToken', accessToken);
+  cookieStore.set('refreshToken', refresh_token);
 };
 
 const setUserDataInReduxStore = (accessToken: string, dispatch: Dispatch<AnyAction>) => {
@@ -109,13 +100,17 @@ const setUserDataInReduxStore = (accessToken: string, dispatch: Dispatch<AnyActi
   );
 };
 
-const refreshAccessToken = async (refreshToken: string | null, dispatch: Dispatch<AnyAction>) => {
+const refreshAccessToken = async (
+  refreshToken: string | null,
+  dispatch: Dispatch<AnyAction>,
+  cookieStore: Cookies,
+) => {
   if (refreshToken === null) {
     logger.debug(`Refresh token is not set.`);
     return;
   }
 
-  await getAccessTokenUsingRefreshToken(refreshToken, dispatch, () => {
+  await getAccessTokenUsingRefreshToken(refreshToken, cookieStore, dispatch, () => {
     logger.debug(`Couldn't refresh access token. Log out...`);
 
     dispatch(setPassword(''));

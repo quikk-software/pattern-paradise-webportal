@@ -4,10 +4,12 @@ import type { GetUserResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useCookies } from 'next-client-cookies';
 
 export const useGetUser = () => {
   const [data, setData] = useState<GetUserResponse | undefined>(undefined);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
 
@@ -20,7 +22,7 @@ export const useGetUser = () => {
     const response = await handleFn(
       async () =>
         await client.api.getUser(userIdOverride ?? userId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
         }),
     );
 

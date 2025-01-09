@@ -78,7 +78,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
 
           router.push(`/auth/login?redirect=${encodedRedirect}`);
         } else {
-          await refreshAccessToken(refreshToken, dispatch);
+          await refreshAccessToken(refreshToken, dispatch, cookieStore);
         }
       }
     } finally {

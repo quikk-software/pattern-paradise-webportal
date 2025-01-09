@@ -30,6 +30,7 @@ import { InfoBoxComponent } from '@/components/info-box';
 import Link from 'next/link';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
+import { useCookies } from 'next-client-cookies';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -44,6 +45,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const { action } = useAction();
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { refreshToken, userId } = useSelector((s: Store) => s.auth);
 
@@ -133,7 +135,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       roles: data.roles ?? undefined,
     })
       .then(() => {
-        refreshAccessToken(refreshToken, dispatch);
+        refreshAccessToken(refreshToken, dispatch, cookieStore);
       })
       .catch(() => {
         setUpdateUserIsError(true);

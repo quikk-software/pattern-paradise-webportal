@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { useState } from 'react';
 import type { GetTestingResponse } from '@/@types/api-types';
+import { useCookies } from 'next-client-cookies';
 
 export const useGetTestingByProductId = () => {
   const [data, setData] = useState<GetTestingResponse | undefined>(undefined);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -22,7 +24,7 @@ export const useGetTestingByProductId = () => {
             trackMetrics,
           },
           {
-            ...(await getApi(accessToken, refreshToken, dispatch)),
+            ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
           },
         ),
     );

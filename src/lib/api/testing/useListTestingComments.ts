@@ -6,6 +6,7 @@ import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { combineArraysById } from '@/lib/core/utils';
+import { useCookies } from 'next-client-cookies';
 
 export const useListTestingComments = ({
   pageNumber = 1,
@@ -16,6 +17,7 @@ export const useListTestingComments = ({
 }) => {
   const [data, setData] = useState<GetTestingCommentResponse[]>([]);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -37,7 +39,7 @@ export const useListTestingComments = ({
             pageNumber: overridePageNumber ?? pagination.pageNumber,
             pageSize: overridePageSize ?? pagination.pageSize,
           },
-          { ...(await getApi(accessToken, refreshToken, dispatch)) },
+          { ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)) },
         ),
     );
 

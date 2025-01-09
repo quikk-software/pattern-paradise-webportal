@@ -5,10 +5,12 @@ import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { getApi } from '@/@types';
+import { useCookies } from 'next-client-cookies';
 
 export const useCreateProduct = () => {
   const [data, setData] = useState<PostProductResponse | undefined>(undefined);
 
+  const cookieStore = useCookies();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
@@ -20,7 +22,7 @@ export const useCreateProduct = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`,
         product,
         {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
         },
       );
     });
