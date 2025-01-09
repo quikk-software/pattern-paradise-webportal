@@ -5,7 +5,6 @@ import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { combineArraysById } from '@/lib/core/utils';
 
 export const useListUserReports = ({
   pageNumber = 1,
@@ -20,7 +19,7 @@ export const useListUserReports = ({
   const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
   const { handleFn, ...apiStates } = useApiStates();
-  const pagination = usePagination(pageNumber, pageSize);
+  const pagination = usePagination(pageNumber, pageSize, false);
 
   const fetch = async (
     customPageNumber?: number,
@@ -47,7 +46,7 @@ export const useListUserReports = ({
         ),
     );
 
-    setData((p) => [...combineArraysById(p, response?.data.userReports ?? [], 'id')]);
+    setData(response?.data.userReports);
 
     pagination.handlePaginationPayload(response?.data);
 

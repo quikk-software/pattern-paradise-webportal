@@ -1,5 +1,4 @@
-import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import logger from '@/lib/core/logger';
 
 // List of routes where an error shouldn't be displayed
@@ -13,53 +12,48 @@ export const useApiStates = () => {
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
-  const dispatch = useDispatch();
-
-  const handleFn = useCallback(
-    async <T>(fn: () => Promise<T>, ignoreIsLoading = false) => {
+  const handleFn = async <T>(fn: () => Promise<T>, ignoreIsLoading = false) => {
+    if (!ignoreIsLoading) {
+      setIsLoading(true);
+    }
+    setIsCalled((ic) => !ic);
+    try {
+      const result = await fn();
+      setIsSuccess(true);
+      setIsError(false);
+      return result;
+    } catch (err: any) {
+      setIsSuccess(false);
+      setIsError(true);
+      logger.error(err.message);
+      if (
+        err?.error?.status !== undefined &&
+        err?.error?.status !== '' &&
+        err?.error?.detail !== '' &&
+        err?.error?.detail !== undefined
+      ) {
+        setValidationErrors(err?.error?.errors ?? []);
+        setErrorDetail(err?.error?.detail);
+        if (!BLACKLISTED_ROUTES.some((route) => err?.url.includes(route))) {
+          // Don't show error dialogs for now due to possible overlapping dialogs
+          // dispatch(setErrorValidationErrors(err?.error?.errors ?? []));
+          // dispatch(setErrorText(err?.error?.detail));
+          // dispatch(setErrorCode(err?.error?.status));
+          // if (err?.error?.status >= 500) {
+          //   dispatch(setErrorSeverity('severe'));
+          // } else {
+          //   dispatch(setErrorSeverity('moderate'));
+          // }
+          // dispatch(setErrorIsVisible(true));
+        }
+      }
+      throw err;
+    } finally {
       if (!ignoreIsLoading) {
-        setIsLoading(true);
+        setIsLoading(false);
       }
-      setIsCalled((ic) => !ic);
-      try {
-        const result = await fn();
-        setIsSuccess(true);
-        setIsError(false);
-        return result;
-      } catch (err: any) {
-        setIsSuccess(false);
-        setIsError(true);
-        logger.error(err.message);
-        if (
-          err?.error?.status !== undefined &&
-          err?.error?.status !== '' &&
-          err?.error?.detail !== '' &&
-          err?.error?.detail !== undefined
-        ) {
-          setValidationErrors(err?.error?.errors ?? []);
-          setErrorDetail(err?.error?.detail);
-          if (!BLACKLISTED_ROUTES.some((route) => err?.url.includes(route))) {
-            // Don't show error dialogs for now due to possible overlapping dialogs
-            // dispatch(setErrorValidationErrors(err?.error?.errors ?? []));
-            // dispatch(setErrorText(err?.error?.detail));
-            // dispatch(setErrorCode(err?.error?.status));
-            // if (err?.error?.status >= 500) {
-            //   dispatch(setErrorSeverity('severe'));
-            // } else {
-            //   dispatch(setErrorSeverity('moderate'));
-            // }
-            // dispatch(setErrorIsVisible(true));
-          }
-        }
-        throw err;
-      } finally {
-        if (!ignoreIsLoading) {
-          setIsLoading(false);
-        }
-      }
-    },
-    [dispatch],
-  );
+    }
+  };
 
   return {
     isLoading,

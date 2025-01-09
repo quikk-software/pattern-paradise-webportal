@@ -13,6 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
+import { useGetProductReportsCount } from '@/lib/api/report';
+import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
 
 const getStatusColor = (status?: string) => {
   switch (status) {
@@ -41,10 +43,13 @@ export function SellPageComponent() {
   const { userId } = useSelector((s: Store) => s.auth);
 
   const { fetch, data: products, isLoading, hasNextPage } = useListProductsByUserId({});
+  const { fetch: fetchProductReportsCount, data: productReportsCount } =
+    useGetProductReportsCount();
   const { fetch: fetchUser, data: user } = useGetUser();
 
   useEffect(() => {
     fetch(userId);
+    fetchProductReportsCount(userId);
   }, [userId]);
 
   useEffect(() => {
@@ -63,6 +68,9 @@ export function SellPageComponent() {
     <div className="p-8">
       <header className="flex flex-col gap-4 mb-8">
         <h1 className="text-3xl font-bold">Actions</h1>
+        {productReportsCount && productReportsCount > 0 ? (
+          <OpenIncidentsInfoBox type="product" count={productReportsCount} />
+        ) : null}
         {user?.paypalMerchantIsActive === false ? (
           <InfoBoxComponent
             message={

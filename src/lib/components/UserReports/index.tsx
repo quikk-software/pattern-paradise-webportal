@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useListProductReports } from '@/lib/api/report';
+import { useListUserReports } from '@/lib/api/report';
 import dayjs, { ADVANCED_DATE_FORMAT } from '@/lib/core/dayjs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -32,15 +32,15 @@ const initialFilters: FilterOptions = {
 
 function getReasonDisplayText(value: string): string {
   const displayTextMap: Record<string, string> = {
-    COPYRIGHT_INFRINGEMENT: 'Copyright infringement',
-    TRADEMARK_VIOLATION: 'Trademark violation',
-    INAPPROPRIATE_CONTENT: 'Inappropriate content',
-    MISLEADING_OR_FALSE_DESCRIPTION: 'Misleading or false description',
-    DUPLICATE_CONTENT: 'Duplicate content',
-    BROKEN_OR_INCOMPLETE_FILES: 'Broken or incomplete files',
-    LOW_QUALITY_OR_ERRORS: 'Low quality or errors',
-    UNAPPROVED_FORMATS: 'Unapproved formats',
-    VIOLATES_AUP: 'Violates AUP',
+    FRAUDULENT_ACTIVITY: 'Fraudulent activity',
+    IMPERSONATION: 'Impersonation',
+    INAPPROPRIATE_BEHAVIOR: 'Inappropriate behavior',
+    UNSOLICITED_PROMOTIONS_SPAM: 'Unsolicited promotions/spam',
+    SUSPICIOUS_ACTIVITY: 'Suspicious activity',
+    SELLING_PROHIBITED_CONTENT: 'Selling prohibited content',
+    MULTIPLE_VIOLATIONS: 'Multiple violations',
+    INCOMPLETE_PROFILE_OR_FAKE_INFORMATION: 'Incomplete profile or fake information',
+    VIOLATION_OF_AUP: 'Violation of AUP',
   };
 
   return displayTextMap[value] || 'Unknown value';
@@ -78,20 +78,20 @@ function getStatusDisplayText(value: string): {
   return displayTextMap[value] || 'Unknown value';
 }
 
-export function ProductReports() {
+export function UserReports() {
   const [filters, setFilters] = useState<FilterOptions>(initialFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
   const {
     fetch,
-    data: productReports,
+    data: userReports,
     hasPreviousPage,
     hasNextPage,
     pageSize,
     totalPages,
     reset,
-  } = useListProductReports({
+  } = useListUserReports({
     pageNumber: 1,
     pageSize: 5,
   });
@@ -101,7 +101,6 @@ export function ProductReports() {
       currentPage,
       pageSize,
       filters.orderDirection,
-      undefined,
       undefined,
       filters.status,
       filters.reasonType,
@@ -211,7 +210,7 @@ export function ProductReports() {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {productReports.map((report, index) => {
+        {userReports.map((report, index) => {
           const status = getStatusDisplayText(report.status);
           return (
             <Card key={index} className="w-full">
@@ -225,16 +224,6 @@ export function ProductReports() {
               </CardHeader>
               <CardContent className="pt-2">
                 <div className="text-sm space-y-1">
-                  <p>
-                    <strong>Product:</strong>{' '}
-                    <Link
-                      href={`/app/products/${report.product.id}`}
-                      target="_blank"
-                      className="text-blue-500 underline"
-                    >
-                      {report.product.title}
-                    </Link>
-                  </p>
                   <p>
                     <strong>Reporter:</strong>{' '}
                     <Link

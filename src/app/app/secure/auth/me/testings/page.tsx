@@ -1,5 +1,6 @@
 import React from 'react';
+import { TestingPageComponent } from '@/components/testing-page';
 
 export default function MyTestingsPage() {
-  return <>List testings here</>;
+  return <TestingPageComponent filter="customer" />;
 }

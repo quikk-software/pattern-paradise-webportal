@@ -1,37 +1,33 @@
 import { useState } from 'react';
 import { client, getApi } from '@/@types';
-import type { GetUserMetricsResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 
-export const useGetUserMetrics = () => {
-  const [data, setData] = useState<GetUserMetricsResponse | undefined>(undefined);
+export const useGetProductReportsCount = () => {
+  const [data, setData] = useState<number | undefined>(undefined);
 
   const dispatch = useDispatch();
-  const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async () => {
-    if (!userId) {
-      return;
-    }
+  const fetch = async (userId: string) => {
     const response = await handleFn(
       async () =>
-        await client.api.getUserMetrics(userId, {
+        await client.api.getProductReportsCount(userId, {
           ...(await getApi(accessToken, refreshToken, dispatch)),
         }),
     );
 
-    setData(response.data);
+    setData(response.data?.openIncidentsCount);
 
-    return response.data;
+    return response.data?.openIncidentsCount;
   };
 
   return {
     ...apiStates,
-    fetch,
     data,
+    fetch,
   };
 };

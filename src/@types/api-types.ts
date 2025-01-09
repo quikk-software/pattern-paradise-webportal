@@ -135,6 +135,7 @@ export interface GetUserResponse {
   galleryImages: string[];
   isActive: boolean;
   isMailConfirmed: boolean;
+  openIncidentsCount: number;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
@@ -215,6 +216,10 @@ export interface ListUserAccountsResponse {
 export interface PostProductReportRequest {
   reason: string;
   comment?: string;
+}
+
+export interface GetProductReportsCountResponse {
+  openIncidentsCount: number;
 }
 
 export interface GetProductReportResponse {
@@ -2299,6 +2304,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/reports/products`,
         method: 'GET',
         query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The total count is based on created or in progress reports on products of the authenticated user..
+     *
+     * @tags Reports
+     * @name GetProductReportsCount
+     * @summary Gets the total count of open reports for products of the authenticated user.
+     * @request GET:/api/v1/reports/products/users/{userId}/count
+     * @secure
+     */
+    getProductReportsCount: (userId: string, params: RequestParams = {}) =>
+      this.request<GetProductReportsCountResponse, any>({
+        path: `/api/v1/reports/products/users/${userId}/count`,
+        method: 'GET',
         secure: true,
         format: 'json',
         ...params,
