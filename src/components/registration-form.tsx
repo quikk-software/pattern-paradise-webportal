@@ -74,11 +74,11 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
     await mutate({
       email: data.email,
       password: data.password,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      username: data.username,
-      instagramRef: data.instagram,
-      tiktokRef: data.tiktok,
+      firstName: data.firstName?.trim(),
+      lastName: data.lastName?.trim(),
+      username: data.username?.trim(),
+      instagramRef: data.instagram?.trim(),
+      tiktokRef: data.tiktok?.trim(),
       roles,
     });
   };

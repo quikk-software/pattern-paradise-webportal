@@ -29,8 +29,8 @@ export default function QuickSignUp({ signupCallback }: QuickSignUpProps) {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     await mutate({
-      email: data.email,
-      password: data.password,
+      email: data.email?.trim(),
+      password: data.password?.trim(),
       roles: ['Buyer'],
     });
 

@@ -1,14 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import ProductCard from '@/lib/components/ProductCard';
 import { useAbortTesting, useListTestingsByUserId, useUpdateTesting } from '@/lib/api/testing';
@@ -183,7 +176,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col gap-2">
                       <ProductCard
                         id={testing.product.id}
                         name={testing.product.title}

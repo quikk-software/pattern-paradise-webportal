@@ -10,7 +10,7 @@ export default function UpdateProductPage({ params }: { params: { productId: str
   const { fetch, data: product, isLoading, isError } = useGetProduct();
 
   useEffect(() => {
-    fetch(params.productId);
+    fetch(params.productId, false);
   }, [params.productId]);
 
   if (isError) {

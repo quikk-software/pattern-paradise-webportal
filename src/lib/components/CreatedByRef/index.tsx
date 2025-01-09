@@ -13,7 +13,7 @@ export default function CreatedByRef({ creatorId }: CreatedByRefProps) {
   const { fetch, data, isLoading } = useGetUserById();
 
   useEffect(() => {
-    fetch(creatorId);
+    fetch(creatorId, false);
   }, [creatorId]);
 
   if (isLoading) {

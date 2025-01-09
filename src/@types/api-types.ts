@@ -17,6 +17,51 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface PostUserReportRequest {
+  reason: string;
+  comment?: string;
+}
+
+export interface GetUserReportResponse {
+  reason: string;
+  reporterComment?: string;
+  defendantComment?: string;
+  adminComment?: string;
+  status: string;
+  reporter: GetUserAccountResponse;
+  defendant: GetUserAccountResponse;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListUserReportsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  userReports: GetUserReportResponse[];
+}
+
+export interface GetUserMetricsResponse {
+  profileViews: number;
+}
+
 export interface PostUserPayPalReferralResponse {
   actionUrl: string;
 }
@@ -90,6 +135,7 @@ export interface GetUserResponse {
   galleryImages: string[];
   isActive: boolean;
   isMailConfirmed: boolean;
+  openIncidentsCount: number;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
@@ -167,6 +213,57 @@ export interface ListUserAccountsResponse {
   users: GetUserAccountResponse[];
 }
 
+export interface PostProductReportRequest {
+  reason: string;
+  comment?: string;
+}
+
+export interface GetProductReportsCountResponse {
+  openIncidentsCount: number;
+}
+
+export interface GetProductReportResponse {
+  reason: string;
+  reporterComment?: string;
+  defendantComment?: string;
+  adminComment?: string;
+  status: string;
+  reporter: GetUserAccountResponse;
+  defendant: GetUserAccountResponse;
+  product: GetProductResponse;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListProductReportsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  productReports: GetProductReportResponse[];
+}
+
+export interface GetProductMetricsResponse {
+  productViews: number;
+  productImpressions: number;
+}
+
 export interface PostProductResponse {
   productId: string;
 }
@@ -229,6 +326,11 @@ export interface ListProductsResponse {
   /** @example 3 */
   totalPages: number;
   products: GetProductResponse[];
+}
+
+export interface GetTestingMetricsResponse {
+  testingViews: number;
+  testingImpressions: number;
 }
 
 export interface PostTestingRequest {
@@ -391,12 +493,44 @@ export interface PostCaptureOrderResponse {
 
 export interface PostOrderRequest {
   productId: string;
+  customPrice?: number;
 }
 
 export interface PostOrderResponse {
   orderId: string;
   paypalOrderId: string;
   captureLink: string;
+}
+
+export interface GetOrderAnalyticsResponse {
+  totalSales: number;
+  totalRevenue: number;
+  averageSaleRevenue: number;
+  completionRate: string;
+  totalRevenuePerMonth: {
+    /** @example "03.2024" */
+    month: string;
+    revenue: number;
+  }[];
+  totalSalesOfCurrentMonth: number;
+  lastSales: {
+    userId: string;
+    fullName?: string;
+    imageUrl?: string;
+    username: string;
+    revenue: number;
+  }[];
+  feesComparisonPerMonth: {
+    /** @example "03.2024" */
+    month: string;
+    totalPayPalFee: number;
+    totalPlatformFee: number;
+  }[];
+  orderStatusDistribution: {
+    /** @example "PENDING" */
+    status: string;
+    count: number;
+  }[];
 }
 
 export interface GetOrderResponse {
@@ -421,6 +555,7 @@ export interface GetOrderResponse {
   productDescription: string;
   productImageUrls: string[];
   productPrice: number;
+  isCustomPrice: boolean;
   paypalCaptureLink: string;
   paypalOrderId: string;
   /**
@@ -1041,10 +1176,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/users/account/{userId}
      * @secure
      */
-    getUserById: (userId: string, params: RequestParams = {}) =>
+    getUserById: (
+      userId: string,
+      query?: {
+        /** If metrics should be tracked. */
+        trackMetrics?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetUserAccountResponse, NotFoundResponse>({
         path: `/api/v1/users/account/${userId}`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,
@@ -1313,10 +1456,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/products/{productId}
      * @secure
      */
-    getProductById: (productId: string, params: RequestParams = {}) =>
+    getProductById: (
+      productId: string,
+      query?: {
+        /** If metrics should be tracked. */
+        trackMetrics?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetProductResponse, NotFoundResponse>({
         path: `/api/v1/products/${productId}`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,
@@ -1661,10 +1812,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/testings/products/{productId}
      * @secure
      */
-    getTestingByProductId: (productId: string, params: RequestParams = {}) =>
+    getTestingByProductId: (
+      productId: string,
+      query?: {
+        /** If metrics should be tracked. */
+        trackMetrics?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetTestingResponse, any>({
         path: `/api/v1/testings/products/${productId}`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,
@@ -1743,6 +1902,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** @example "any" */
         productId?: any;
+        /** @example "any" */
+        customPrice?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1846,6 +2007,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/orders/products/${productId}`,
         method: 'GET',
         query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a set of analytics for the orders of the authenticated seller user.
+     *
+     * @tags Order
+     * @name GetOrderAnalytics
+     * @summary Gets the analytics for all orders of seller.
+     * @request GET:/api/v1/orders/{userId}/analytics
+     * @secure
+     */
+    getOrderAnalytics: (userId: string, params: RequestParams = {}) =>
+      this.request<GetOrderAnalyticsResponse, any>({
+        path: `/api/v1/orders/${userId}/analytics`,
+        method: 'GET',
         secure: true,
         format: 'json',
         ...params,
@@ -1967,6 +2146,240 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/subscriptions/${subscriptionId}/cancel`,
         method: 'POST',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The metrics contain profile views.
+     *
+     * @tags Metrics
+     * @name GetUserMetrics
+     * @summary Gets the metrics of the authenticated user.
+     * @request GET:/api/v1/metrics/users/{userId}
+     * @secure
+     */
+    getUserMetrics: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUserMetricsResponse, any>({
+        path: `/api/v1/metrics/users/${userId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The metrics contain product views and impressions.
+     *
+     * @tags Metrics
+     * @name GetProductMetrics
+     * @summary Gets the metrics of the product for the authenticated user.
+     * @request GET:/api/v1/metrics/products/{productId}
+     * @secure
+     */
+    getProductMetrics: (productId: string, params: RequestParams = {}) =>
+      this.request<GetProductMetricsResponse, any>({
+        path: `/api/v1/metrics/products/${productId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The metrics contain testing views and impressions.
+     *
+     * @tags Metrics
+     * @name GetTestingMetrics
+     * @summary Gets the metrics of the product for the authenticated user.
+     * @request GET:/api/v1/metrics/testings/{productId}
+     * @secure
+     */
+    getTestingMetrics: (productId: string, params: RequestParams = {}) =>
+      this.request<GetTestingMetricsResponse, any>({
+        path: `/api/v1/metrics/testings/${productId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The impression will be created based on the given product ID. If the product cannot be found, an exception will be thrown.
+     *
+     * @tags Metrics
+     * @name PostProductImpression
+     * @summary Creates a product impression.
+     * @request POST:/api/v1/metrics/products/{productId}/impressions
+     * @secure
+     */
+    postProductImpression: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/metrics/products/${productId}/impressions`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The impression will be created based on the given testing ID. If the testing cannot be found, an exception will be thrown.
+     *
+     * @tags Metrics
+     * @name PostTestingImpression
+     * @summary Creates a testing impression.
+     * @request POST:/api/v1/metrics/testings/products/{productId}/impressions
+     * @secure
+     */
+    postTestingImpression: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/metrics/testings/products/${productId}/impressions`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The reports can only be retrieved by the reporter, defendant or admin.
+     *
+     * @tags Reports
+     * @name ListUserReports
+     * @summary Lists user reports.
+     * @request GET:/api/v1/reports/users
+     * @secure
+     */
+    listUserReports: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The order direction. */
+        direction?: string;
+        /** The status of the report. */
+        status?: string;
+        /** The reason of the report. */
+        reason?: string;
+        /** The userId (reporter or defendant) of the report. */
+        userId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListUserReportsResponse, any>({
+        path: `/api/v1/reports/users`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The reports can only be retrieved by the reporter, defendant or admin.
+     *
+     * @tags Reports
+     * @name ListProductReports
+     * @summary Lists the reports for the given product.
+     * @request GET:/api/v1/reports/products
+     * @secure
+     */
+    listProductReports: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The order direction. */
+        direction?: string;
+        /** The status of the report. */
+        status?: string;
+        /** The reason of the report. */
+        reason?: string;
+        /** The user ID (reporter or defendant) of the report. */
+        userId?: string;
+        /** The product ID of the report. */
+        productId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListProductReportsResponse, any>({
+        path: `/api/v1/reports/products`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The total count is based on created or in progress reports on products of the authenticated user..
+     *
+     * @tags Reports
+     * @name GetProductReportsCount
+     * @summary Gets the total count of open reports for products of the authenticated user.
+     * @request GET:/api/v1/reports/products/users/{userId}/count
+     * @secure
+     */
+    getProductReportsCount: (userId: string, params: RequestParams = {}) =>
+      this.request<GetProductReportsCountResponse, any>({
+        path: `/api/v1/reports/products/users/${userId}/count`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The report will be created based on the given user ID. If the user cannot be found, an exception will be thrown.
+     *
+     * @tags Reports
+     * @name PostUserReport
+     * @summary Creates a report for a user.
+     * @request POST:/api/v1/reports/users/{userId}
+     * @secure
+     */
+    postUserReport: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        reason?: any;
+        /** @example "any" */
+        comment?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/reports/users/${userId}`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The report will be created based on the given product ID. If the product cannot be found, an exception will be thrown.
+     *
+     * @tags Reports
+     * @name PostProductReport
+     * @summary Creates a report for a product.
+     * @request POST:/api/v1/reports/products/{productId}
+     * @secure
+     */
+    postProductReport: (
+      productId: string,
+      data: {
+        /** @example "any" */
+        reason?: any;
+        /** @example "any" */
+        comment?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/reports/products/${productId}`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
   };

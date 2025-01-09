@@ -8,6 +8,7 @@ import TikTokIcon from '@/lib/icons/TikTokIcon';
 import { GetUserAccountResponse } from '@/@types/api-types';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
+import { ReportUser } from '@/lib/components/ReportUser';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart },
@@ -32,7 +33,7 @@ export default function UserDetailsCard({
   const showCardContent = hasSocialLinks || showRoles;
   return (
     <Card key={user.id} className={`relative cursor-pointer transition-all`}>
-      <CardHeader>
+      <CardHeader className="flex flex-row justify-between items-start gap-2">
         <Link href={`/users/${user.id}`}>
           <div className="flex items-center space-x-4">
             <Avatar className="w-12 h-12">
@@ -58,6 +59,7 @@ export default function UserDetailsCard({
             </div>
           </div>
         </Link>
+        <ReportUser userId={user.id} />
       </CardHeader>
       {showCardContent ? (
         <CardContent>

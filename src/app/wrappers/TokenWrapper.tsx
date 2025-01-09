@@ -3,23 +3,23 @@
 import { PropsWithChildren, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAccessToken, setRefreshToken } from '@/lib/features/auth/authSlice';
+import { setUserDataInReduxStore } from '@/lib/auth/auth.utils';
+import { useCookies } from 'next-client-cookies';
 
 export default function TokenWrapper({ children }: PropsWithChildren) {
   const dispatch = useDispatch();
+  const cookieStore = useCookies();
 
   useEffect(() => {
-    const accessToken = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('accessToken='))
-      ?.split('=')[1];
-    const refreshToken = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('refreshToken='))
-      ?.split('=')[1];
+    const accessToken = cookieStore.get('accessToken');
+    const refreshToken = cookieStore.get('refreshToken');
 
     dispatch(setAccessToken(accessToken || null));
     dispatch(setRefreshToken(refreshToken || null));
-  }, [dispatch]);
+    if (!!accessToken) {
+      setUserDataInReduxStore(accessToken, dispatch);
+    }
+  }, []);
 
   return <>{children}</>;
 }

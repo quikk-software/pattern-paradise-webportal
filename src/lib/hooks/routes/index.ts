@@ -89,6 +89,11 @@ const pages: Page[] = [
     description: '',
   },
   {
+    title: 'Open incidents',
+    pathname: '/app/secure/auth/me/reports',
+    description: '',
+  },
+  {
     title: 'My order',
     pathname: '/app/secure/auth/me/orders/[orderId]',
     description: '',

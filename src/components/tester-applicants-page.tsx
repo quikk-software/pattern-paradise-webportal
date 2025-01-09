@@ -228,7 +228,7 @@ export function TesterApplicantsPage({
                 setShowAddApplicantsDrawer(true);
               }}
             >
-              Complete selection
+              Complete Selection
             </Button>
           </div>
           {applications.length === 0 && !fetchTesterApplicationsIsLoading ? (
@@ -270,17 +270,20 @@ export function TesterApplicantsPage({
                         </AvatarFallback>
                       </Avatar>
                     </Link>
+
                     <div>
                       <Link href={`/users/${application.user.id}`}>
                         <h2 className="text-lg font-semibold underline text-blue-500">
                           {application.user.firstName} {application.user.lastName}
                         </h2>
                       </Link>
-                      <p
-                        className={`${application.user.firstName && application.user.lastName ? 'text-sm' : 'text-lg'} text-muted-foreground`}
-                      >
-                        @{application.user.username}
-                      </p>
+                      <Link href={`/users/${application.user.id}`}>
+                        <p
+                          className={`${application.user.firstName && application.user.lastName ? 'text-sm' : 'text-lg font-semibold underline'} text-muted-foreground`}
+                        >
+                          @{application.user.username}
+                        </p>
+                      </Link>
                     </div>
                   </div>
                 </CardHeader>

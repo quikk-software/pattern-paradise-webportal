@@ -4,8 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import axios from 'axios';
 import Cookie from 'js-cookie';
-import { getUserIdFromAccessToken, isTokenValid, saveTokensToCookies } from '@/lib/auth/auth.utils';
 import {
+  getAccessTokenUsingRefreshToken,
+  getUserIdFromAccessToken,
+  isTokenValid,
+  saveTokensToCookies,
+} from '@/lib/auth/auth.utils';
+import {
+  logout,
   reset,
   setAccessToken,
   setRefreshToken,
@@ -31,7 +37,11 @@ const useAuth = () => {
 
   const { fetch } = useGetUser();
 
-  const { accessToken: accessTokenFromStore, username } = useSelector((store: Store) => store.auth);
+  const {
+    accessToken: accessTokenFromStore,
+    refreshToken: refreshTokenFromStore,
+    username,
+  } = useSelector((store: Store) => store.auth);
 
   const handleLogin = async (username: string, password: string) => {
     if (username === '' || password === '') {
@@ -55,11 +65,8 @@ const useAuth = () => {
         }),
       );
       if (response.status === 200) {
-        // Success Snackbar o.ä. hier dispatchen?
-        // displaySuccess("Anmeldung erfolgreich");
         const accessToken = response.data.access_token;
         const refreshToken = response.data.refresh_token;
-
         await saveTokensToCookies(accessToken, refreshToken);
 
         dispatch(setAccessToken(accessToken));
@@ -84,17 +91,12 @@ const useAuth = () => {
     push('/auth/login');
   };
 
-  useEffect(() => {
-    const accessToken = accessTokenFromStore
-      ? accessTokenFromStore
-      : Cookie.get('accessToken') ?? null;
-
-    const isValid = isTokenValid(accessToken);
+  const handleAccessToken = (accessToken: string | null, isValid: boolean) => {
     setIsLoggedIn(isValid);
 
     if (isValid && accessToken !== null) {
       const fetchAndSetUserData = async () => {
-        const userId = getUserIdFromAccessToken(accessToken);
+        const userId = getUserIdFromAccessToken(accessToken!);
         const user = await fetch(userId);
         if (!user) {
           return;
@@ -103,6 +105,30 @@ const useAuth = () => {
         dispatch(setRoles(user.roles ?? []));
       };
       fetchAndSetUserData();
+    }
+  };
+
+  useEffect(() => {
+    const accessToken = accessTokenFromStore
+      ? accessTokenFromStore
+      : (Cookie.get('accessToken') ?? null);
+    const refreshToken = refreshTokenFromStore
+      ? refreshTokenFromStore
+      : (Cookie.get('refreshToken') ?? null);
+
+    if (!accessToken && !refreshToken) {
+      setIsLoggedIn(false);
+      dispatch(logout());
+      return;
+    }
+
+    const isValid = isTokenValid(accessToken);
+    if (!isValid) {
+      getAccessTokenUsingRefreshToken(refreshToken).then((newAccessToken) => {
+        handleAccessToken(newAccessToken ?? null, !!newAccessToken);
+      });
+    } else {
+      handleAccessToken(accessToken ?? null, isValid);
     }
   }, [accessTokenFromStore]);
 

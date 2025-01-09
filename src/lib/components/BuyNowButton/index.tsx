@@ -1,12 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { useCaptureOrder, useCreateOrder, useListOrdersByProductId } from '@/lib/api/order';
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
-import logger from '@/lib/core/logger';
-import RequestStatus from '@/lib/components/RequestStatus';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
@@ -23,147 +18,21 @@ import { Button } from '@/components/ui/button';
 import { isTokenValid } from '@/lib/auth/auth.utils';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
-import { useGetProduct } from '@/lib/api';
+import { PayPalButton } from '@/lib/components/PayPalButton';
+import { GetProductResponse } from '@/@types/api-types';
 
 interface BuyNowButtonProps {
-  price: number;
-  productId: string;
-  productName: string;
+  product: GetProductResponse;
   callback?: (orderId: string) => void;
 }
 
-interface PayPalButtonProps {
-  price: number;
-  productId: string;
-  userId: string;
-  disabled: boolean;
-  callback?: (orderId: string) => void;
-}
-
-function PayPalButton({ price, productId, userId, disabled, callback }: PayPalButtonProps) {
-  const router = useRouter();
-
-  const { mutate: createOrder, isError: createOrderIsError, data: orderData } = useCreateOrder();
-  const {
-    mutate: captureOrder,
-    isSuccess: captureOrderIsSuccess,
-    isError: captureOrderIsError,
-  } = useCaptureOrder();
-  const {
-    fetch: fetchOrdersByProductId,
-    isLoading: listOrdersByProductIdIsLoading,
-    isSuccess: listOrdersByProductIdIsSuccess,
-    data: orders,
-    setIsSuccess: setListOrdersByProductIdIsSuccess,
-  } = useListOrdersByProductId();
-
-  const errorReason = useMemo(() => {
-    if (captureOrderIsError) {
-      return "We couldn't authorize your payment. Please try again and consider using another PayPal account.";
-    } else if (createOrderIsError) {
-      return 'Something went wrong while creating your order. Please try again and consider reloading the page.';
-    }
-  }, [createOrderIsError, captureOrderIsError]);
-
-  useEffect(() => {
-    if (!captureOrderIsSuccess || !orderData?.orderId) {
-      return;
-    }
-    router.push(`/app/secure/auth/me/orders/${orderData.orderId}`);
-  }, [captureOrderIsSuccess, orderData]);
-
-  useEffect(() => {
-    fetchOrdersByProductId(productId);
-  }, [productId]);
-
-  useEffect(() => {
-    if (!listOrdersByProductIdIsSuccess || orders?.length === 0) {
-      return;
-    }
-    const customerOrder = orders.find((order) => order.customer.id === userId);
-    const sellerOrder = orders.find((order) => order.seller.id === userId);
-
-    if (!!customerOrder) {
-      router.push(`/app/secure/auth/me/orders/${customerOrder.id}?action=toggleBuyNow`);
-    } else if (!!sellerOrder) {
-      router.push(`/app/secure/sell/orders`);
-    }
-  }, [listOrdersByProductIdIsSuccess, orders]);
-
-  if (listOrdersByProductIdIsLoading) {
-    return <LoadingSpinnerComponent />;
-  }
-
-  return (
-    <PayPalScriptProvider
-      options={{
-        clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
-        currency: 'USD',
-      }}
-    >
-      <div className="flex flex-col flex-start mb-6 gap-4 w-full">
-        <span className="text-lg font-bold">${price.toFixed(2)}</span>
-        <div className="flex flex-col gap-2">
-          <PayPalButtons
-            disabled={disabled}
-            createOrder={async () => {
-              try {
-                const order = orders.find((order) => order.customer.id === userId);
-                if (order?.status === 'CREATED') {
-                  logger.info("Order with status 'CREATED' for user already exists");
-                  return order.paypalOrderId;
-                }
-                const response = await createOrder({
-                  productId,
-                });
-                return response.paypalOrderId;
-              } catch (error) {
-                logger.error('Error creating order:', error);
-                setListOrdersByProductIdIsSuccess(false);
-                fetchOrdersByProductId(productId);
-                return '';
-              }
-            }}
-            onApprove={async (data: { orderID: string }) => {
-              try {
-                const orderId = await captureOrder(data.orderID);
-                callback !== undefined ? callback(orderId) : location.reload();
-              } catch (error) {
-                logger.error('Error capturing order:', error);
-                setListOrdersByProductIdIsSuccess(false);
-                fetchOrdersByProductId(productId);
-              }
-            }}
-            onError={(err: any) => {
-              logger.error('PayPal Buttons Error:', err);
-              setListOrdersByProductIdIsSuccess(false);
-              fetchOrdersByProductId(productId);
-            }}
-          />
-        </div>
-      </div>
-      <RequestStatus
-        isSuccess={captureOrderIsSuccess}
-        isError={createOrderIsError || captureOrderIsError}
-        errorMessage={errorReason}
-      />
-    </PayPalScriptProvider>
-  );
-}
-
-export function BuyNowButton({ price, productId, productName, callback }: BuyNowButtonProps) {
+export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
   const { action } = useAction();
 
   const { accessToken, userId } = useSelector((s: Store) => s.auth);
-
-  const { fetch: fetchProduct, data: product, isLoading: fetchProductIsLoading } = useGetProduct();
-
-  useEffect(() => {
-    fetchProduct(productId);
-  }, [productId]);
 
   useEffect(() => {
     if (!action) {
@@ -176,10 +45,6 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
 
   const isLoggedIn = isTokenValid(accessToken);
 
-  if (fetchProductIsLoading) {
-    return <LoadingSpinnerComponent />;
-  }
-
   if (product?.status !== 'Released') {
     return (
       <InfoBoxComponent
@@ -190,7 +55,7 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
               <span>
                 {' '}
                 <Link
-                  href={`/app/secure/test/products/${productId}`}
+                  href={`/app/secure/test/products/${product.id}`}
                   className="text-blue-500 underline"
                 >
                   Apply as a Tester here!
@@ -208,13 +73,18 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-3xl font-bold">${price.toFixed(2)}</span>
+      <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
       <Button className="w-full" onClick={() => setIsOpen(true)}>
         <Lock />
         Buy Now
       </Button>
       <Drawer open={isOpen} onOpenChange={setIsOpen} dismissible={!isLoggedIn}>
-        <DrawerContent className="p-4">
+        <DrawerContent
+          className="p-4"
+          style={{
+            maxHeight: '90vh',
+          }}
+        >
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto">
             <DrawerClose className="flex justify-end" onClick={() => setIsOpen(false)}>
               <X className="text-muted-foreground p-2 w-10 h-10" />
@@ -222,8 +92,10 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <ShieldCheck className="w-20 h-20 text-green-500" />
               <div className="flex flex-col gap-2">
-                <DrawerTitle>Complete Your Order</DrawerTitle>
-                <DrawerTitle className="font-medium text-md">{productName}</DrawerTitle>
+                <DrawerTitle className="text-center">Your Order</DrawerTitle>
+                <DrawerTitle className="font-medium text-md text-center">
+                  {product.title}
+                </DrawerTitle>
               </div>
               {!isLoggedIn ? (
                 <div className="flex flex-col gap-4">
@@ -233,14 +105,14 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
                       <span>
                         You&apos;re not logged in. You can{' '}
                         <Link
-                          href={`/auth/login?redirect=/app/products/${productId}?action=toggleBuyNow`}
+                          href={`/auth/login?redirect=/app/products/${product.id}?action=toggleBuyNow`}
                           className="text-blue-500 underline"
                         >
                           log in
                         </Link>{' '}
                         or{' '}
                         <Link
-                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/app/products/${productId}?action=toggleBuyNow`}
+                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/app/products/${product.id}?action=toggleBuyNow`}
                           className="text-blue-500 underline"
                         >
                           register
@@ -261,7 +133,7 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
                     signupCallback={() =>
                       router.push(
                         `/auth/login?redirect=${encodeURIComponent(
-                          `/app/products/${productId}?action=toggleBuyNow`,
+                          `/app/products/${product.id}?action=toggleBuyNow`,
                         )}`,
                       )
                     }
@@ -270,8 +142,8 @@ export function BuyNowButton({ price, productId, productName, callback }: BuyNow
               ) : null}
               <PayPalButton
                 disabled={!isLoggedIn}
-                price={price}
-                productId={productId}
+                price={product.price}
+                productId={product.id}
                 userId={userId}
                 callback={callback}
               />

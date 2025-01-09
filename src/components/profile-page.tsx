@@ -29,6 +29,7 @@ import { Store } from '@/lib/redux/store';
 import { InfoBoxComponent } from '@/components/info-box';
 import Link from 'next/link';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
+import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -119,6 +120,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         ),
       ]);
     }
+
     mutateUser({
       email: data.email ? data.email.toLowerCase().trim() : undefined,
       firstName: data.firstName ? data.firstName.trim() : undefined,
@@ -174,6 +176,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const highlightPayPal = action === 'scrollToPayPal';
   const highlightRoles = action === 'scrollToRoles';
 
+  const hasOpenIncidents = user?.openIncidentsCount > 0;
+
   return (
     <div className="flex flex-col gap-4">
       <Card className="w-full max-w-2xl mx-auto border-none">
@@ -188,7 +192,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
             className="w-full"
             variant={'outline'}
           >
-            My orders
+            My Orders
+          </Button>
+          <Button
+            onClick={() => {
+              router.push('/app/secure/auth/me/reports');
+            }}
+            className={`w-full${hasOpenIncidents ? ' border-red-500 text-red-500' : ''}`}
+            variant={'outline'}
+          >
+            Open Incidents{hasOpenIncidents ? ` (${user.openIncidentsCount})` : ''}
           </Button>
           <Button
             variant={'secondary'}
@@ -309,18 +322,18 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 onChange={selectImage}
               />
             </div>
-            <div className="space-y-2">
-              <ProInfoBox user={user} />
-            </div>
+            <ProInfoBox user={user} />
+
+            {hasOpenIncidents ? (
+              <OpenIncidentsInfoBox type="user" count={user.openIncidentsCount} />
+            ) : null}
 
             {user.email && !user.isMailConfirmed ? (
-              <div className="space-y-2">
-                <ResendCodeInfoBox
-                  email={user.email}
-                  type={'email confirmation'}
-                  mailType={'UserConfirmEmail'}
-                />
-              </div>
+              <ResendCodeInfoBox
+                email={user.email}
+                type={'email confirmation'}
+                mailType={'UserConfirmEmail'}
+              />
             ) : null}
 
             {roles !== undefined && roles.includes('Seller') && !user.paypalMerchantIsActive ? (

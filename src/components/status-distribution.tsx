@@ -1,36 +1,56 @@
-"use client"
+'use client';
 
-import { Pie, PieChart, ResponsiveContainer, Tooltip, Cell } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Pie, PieChart, ResponsiveContainer, Cell } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { GetOrderAnalyticsResponse } from '@/@types/api-types';
+import { NoDataAvailable } from '@/components/no-data-available';
 
-const data = [
-  { name: "COMPLETED", value: 400 },
-  { name: "PENDING", value: 300 },
-  { name: "CREATED", value: 200 },
-  { name: "DECLINED", value: 100 },
-]
+const COLORS = [
+  '#0088FE',
+  '#00C49F',
+  '#FFBB28',
+  '#FF8042',
+  '#8A2BE2',
+  '#5F9EA0',
+  '#7FFF00',
+  '#DC143C',
+  '#FF7F50',
+  '#6A5ACD',
+  '#20B2AA',
+  '#FF6347',
+  '#FFD700',
+  '#4682B4',
+];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
+interface StatusDistributionProps {
+  orderStatusDistribution: GetOrderAnalyticsResponse['orderStatusDistribution'];
+}
 
-export function StatusDistribution() {
+export function StatusDistribution({ orderStatusDistribution }: StatusDistributionProps) {
+  if (orderStatusDistribution.length === 0) {
+    return <NoDataAvailable />;
+  }
+
   return (
     <ChartContainer
       config={{
         name: {
-          label: "Status",
-          color: "hsl(var(--chart-1))",
+          label: 'Status',
+          color: 'hsl(var(--chart-1))',
         },
         value: {
-          label: "Count",
-          color: "hsl(var(--chart-2))",
+          label: 'Count',
+          color: 'hsl(var(--chart-2))',
         },
       }}
-      className="h-[300px]"
     >
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
-            data={data}
+            data={orderStatusDistribution.map((osd) => ({
+              name: osd.status,
+              value: osd.count,
+            }))}
             cx="50%"
             cy="50%"
             labelLine={false}
@@ -38,7 +58,7 @@ export function StatusDistribution() {
             fill="#8884d8"
             dataKey="value"
           >
-            {data.map((entry, index) => (
+            {orderStatusDistribution.map((_entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
@@ -46,6 +66,5 @@ export function StatusDistribution() {
         </PieChart>
       </ResponsiveContainer>
     </ChartContainer>
-  )
+  );
 }
-

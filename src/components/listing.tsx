@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
@@ -18,6 +18,7 @@ import { CATEGORIES } from '@/lib/constants';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { updateSelectedFlags } from '@/lib/utils';
+import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -45,6 +46,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [triggerLoad, setTriggerLoad] = useState(false);
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
+  const { mutate: mutateProductImpression } = useCreateProductImpression();
+  const { mutate: mutateTestingImpression } = useCreateTestingImpression();
   const screenSize = useScreenSize();
 
   const status =
@@ -133,6 +136,19 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setHashtags([]);
   };
 
+  const handleImpression = async (productId: string) => {
+    switch (listingType) {
+      case 'sell':
+        await mutateProductImpression(productId);
+        break;
+      case 'test':
+        await mutateTestingImpression(productId);
+        break;
+      default:
+        break;
+    }
+  };
+
   const updatedCategories = updateSelectedFlags(
     CATEGORIES,
     selectedCategory.craft,
@@ -154,7 +170,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
               Filter
             </Button>
           </DrawerTrigger>
-          <DrawerContent>
+          <DrawerContent className="p-4">
             <div className="mx-auto w-full max-w-sm max-h-[100vh] overflow-y-auto">
               <div className="p-4">
                 <div className="space-y-6">
@@ -189,7 +205,6 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
                   <MultiSelect
                     initialCategories={updatedCategories}
                     onChange={(value) => {
-                      console.log(value);
                       setSelectedCategory(value);
                     }}
                     injectCategories={true}
@@ -246,6 +261,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           products={products}
           listingType={listingType}
           columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+          onImpression={(productId) => handleImpression(productId)}
         />
 
         {hasNextPage ? (
