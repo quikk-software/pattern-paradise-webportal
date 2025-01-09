@@ -6,35 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/@types/api-types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/api-types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/secure/auth/me/testings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/secure/auth/me/testings/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sell-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sell-page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/metric/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/metric/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/metric/useCreateProductImpression.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/metric/useCreateProductImpression.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/metric/useCreateTestingImpression.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/metric/useCreateTestingImpression.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/metric/useGetProductMetrics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/metric/useGetProductMetrics.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/metric/useGetTestingMetrics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/metric/useGetTestingMetrics.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/metric/useGetUserMetrics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/metric/useGetUserMetrics.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/report/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/report/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/report/useCreateProductReport.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/report/useCreateProductReport.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/report/useCreateUserReport.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/report/useCreateUserReport.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/report/useListProductReports.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/report/useListProductReports.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/report/useListUserReports.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/report/useListUserReports.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/api/usePagination.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/usePagination.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/PayPalButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/PayPalButton/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductMetrics/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductMetrics/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductReports/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/UserReports/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ReportProduct/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ReportProduct/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/ReportUser/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ReportUser/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/TestingMetrics/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/TestingMetrics/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/routes/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/hooks/usePayPalOrder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/hooks/usePayPalOrder.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +155,7 @@
       <workItem from="1735312812415" duration="3565000" />
       <workItem from="1735399704002" duration="69696000" />
       <workItem from="1736154315833" duration="27014000" />
-      <workItem from="1736331375041" duration="14841000" />
+      <workItem from="1736331375041" duration="15299000" />
     </task>
     <servers />
   </component>
