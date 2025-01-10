@@ -59,8 +59,8 @@ const getAccessTokenUsingRefreshToken = async (
       }),
     );
     if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
-      const newAccessToken: string = (res.data.access_token as string) ?? null;
-      const newRefreshToken: string = (res.data.refresh_token as string) ?? null;
+      const newAccessToken: string | null = res.data.access_token ?? null;
+      const newRefreshToken: string | null = res.data.refresh_token ?? null;
       dispatch?.(setAccessToken(newAccessToken));
       dispatch?.(setRefreshToken(newRefreshToken));
       await saveTokensToCookies(newAccessToken, newRefreshToken, cookieStore);
@@ -68,8 +68,8 @@ const getAccessTokenUsingRefreshToken = async (
       return newAccessToken;
     }
   } catch (err) {
-    logger.error({ err });
-    !!callback && callback();
+    logger.error('Error while refreshing access token', err);
+    callback?.();
     return null;
   }
 };
@@ -78,12 +78,24 @@ const isTokenValid = (token: string | null) =>
   token !== null && token !== '' && !isTokenExpired(token);
 
 const saveTokensToCookies = async (
-  accessToken: string,
-  refresh_token: string,
+  accessToken: string | null,
+  refreshToken: string | null,
   cookieStore: Cookies,
 ) => {
-  cookieStore.set('accessToken', accessToken);
-  cookieStore.set('refreshToken', refresh_token);
+  try {
+    if (!!accessToken) {
+      cookieStore.set('accessToken', accessToken);
+    } else {
+      cookieStore.remove('accessToken');
+    }
+    if (!!refreshToken) {
+      cookieStore.set('refreshToken', refreshToken);
+    } else {
+      cookieStore.remove('refreshToken');
+    }
+  } catch (error) {
+    logger.error('Caught error while saving token', error);
+  }
 };
 
 const setUserDataInReduxStore = (accessToken: string, dispatch: Dispatch<AnyAction>) => {

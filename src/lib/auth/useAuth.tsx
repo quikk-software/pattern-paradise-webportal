@@ -68,8 +68,8 @@ const useAuth = () => {
         }),
       );
       if (response.status === 200) {
-        const accessToken = response.data.access_token;
-        const refreshToken = response.data.refresh_token;
+        const accessToken = response.data.access_token ?? null;
+        const refreshToken = response.data.refresh_token ?? null;
         await saveTokensToCookies(accessToken, refreshToken, cookieStore);
 
         dispatch(setAccessToken(accessToken));
