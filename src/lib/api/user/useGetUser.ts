@@ -11,17 +11,14 @@ export const useGetUser = () => {
 
   const cookieStore = useCookies();
   const dispatch = useDispatch();
-  const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (userIdOverride?: string) => {
-    if (!userId && !userIdOverride) {
-      return;
-    }
+  const fetch = async (userId: string) => {
     const response = await handleFn(
       async () =>
-        await client.api.getUser(userIdOverride ?? userId, {
+        await client.api.getUser(userId, {
           ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
         }),
     );

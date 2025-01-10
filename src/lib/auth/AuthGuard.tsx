@@ -68,7 +68,11 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
 
         dispatch(setAccessToken(accessToken));
         dispatch(setRefreshToken(refreshToken));
+
         setUserDataInReduxStore(accessToken!, dispatch);
+
+        dispatch(setCheckAuthIsLoading(false));
+
         router.push(redirect);
       } else {
         logger.debug(`Access token from store is invalid. Get access token from refresh token.`);
@@ -90,7 +94,9 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     if (isTokenValid(accessTokenFromStore)) {
       return;
     }
-    checkAuth(accessTokenFromStore, refreshTokenFromStore, pathname);
+    checkAuth(accessTokenFromStore, refreshTokenFromStore, pathname).finally(() =>
+      dispatch(setCheckAuthIsLoading(false)),
+    );
   }, [accessTokenFromStore, refreshTokenFromStore, pathname]);
 
   if (checkAuthIsLoading) {

@@ -49,12 +49,9 @@ export function SellPageComponent() {
 
   useEffect(() => {
     fetch(userId);
+    fetchUser(userId);
     fetchProductReportsCount(userId);
   }, [userId]);
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
 
   useEffect(() => {
     if (!loadMore) {

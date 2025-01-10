@@ -56,6 +56,7 @@ const getAccessTokenUsingRefreshToken = async (
         grant_type: 'refresh_token',
         client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
         refresh_token: refreshToken,
+        scope: 'openid profile',
       }),
     );
     if (res?.data !== undefined && 'access_token' in res.data && 'refresh_token' in res.data) {
@@ -63,6 +64,10 @@ const getAccessTokenUsingRefreshToken = async (
       const newRefreshToken: string | null = res.data.refresh_token ?? null;
       dispatch?.(setAccessToken(newAccessToken));
       dispatch?.(setRefreshToken(newRefreshToken));
+      if (newAccessToken && dispatch) {
+        setUserDataInReduxStore(newAccessToken!, dispatch);
+      }
+
       await saveTokensToCookies(newAccessToken, newRefreshToken, cookieStore);
 
       return newAccessToken;
@@ -101,14 +106,14 @@ const saveTokensToCookies = async (
 const setUserDataInReduxStore = (accessToken: string, dispatch: Dispatch<AnyAction>) => {
   const decodedToken = jwtDecode(accessToken);
   const userId = getUserIdFromAccessToken(accessToken);
+  const roles =
+    (decodedToken as any)?.resource_access?.[process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'cbj']
+      ?.roles ?? [];
 
-  dispatch(setUserId(userId));
-  dispatch(
-    setRoles(
-      (decodedToken as any)?.resource_access?.[process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'cbj']
-        ?.roles ?? [],
-    ),
-  );
+  if (!!userId && roles?.length > 0) {
+    dispatch(setUserId(userId));
+    dispatch(setRoles(roles));
+  }
 };
 
 const refreshAccessToken = async (
