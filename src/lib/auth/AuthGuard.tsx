@@ -92,6 +92,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
 
   useEffect(() => {
     if (isTokenValid(accessTokenFromStore)) {
+      setUserDataInReduxStore(accessTokenFromStore!, dispatch);
       return;
     }
     checkAuth(accessTokenFromStore, refreshTokenFromStore, pathname).finally(() =>
