@@ -43,14 +43,11 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
       const accessTokenFromCookies = cookieStore.get('accessToken') ?? null;
       const refreshTokenFromCookies = cookieStore.get('refreshToken') ?? null;
 
-      console.log({ accessTokenFromCookies });
-
       let accessToken = null;
       let refreshToken = null;
 
       if (isTokenValid(accessTokenFromStore)) {
         accessToken = accessTokenFromStore;
-        console.log({ accessTokenFromStore });
       } else if (isTokenValid(accessTokenFromCookies)) {
         refreshToken = accessTokenFromCookies;
       }

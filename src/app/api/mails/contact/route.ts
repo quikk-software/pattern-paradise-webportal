@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import logger from '@/lib/core/logger';
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +12,7 @@ export async function POST(req: Request) {
     });
     return Response.json({});
   } catch (error) {
-    console.log({ error });
+    logger.error('Error while sending mail', error);
     return Response.error();
   }
 }
