@@ -20,6 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
+import ManageTesterDrawers from '@/lib/components/ManageTestersDrawer';
 
 const getStatusColor = (status: GetTestingResponse['status']) => {
   switch (status) {
@@ -42,6 +44,7 @@ interface TestingPageComponentProps {
 
 export function TestingPageComponent({ filter }: TestingPageComponentProps) {
   const [isUpdateTestingDrawerOpen, setIsUpdateTestingDrawerOpen] = useState(false);
+  const [isManageTestersDrawerOpen, setIsManageTestersDrawerOpen] = useState(false);
   const [isAbortTestingDrawerOpen, setIsAbortTestingDrawerOpen] = useState(false);
   const [refetch, setRefetch] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
@@ -83,6 +86,11 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     setSelectedTheme(null);
     setSelectedDurationInWeeks(undefined);
     setIsUpdateTestingDrawerOpen(true);
+    setSelectedTesting(testing);
+  };
+
+  const handleManageTestersDrawerClick = (testing: GetTestingResponse) => {
+    setIsManageTestersDrawerOpen(true);
     setSelectedTesting(testing);
   };
 
@@ -225,6 +233,19 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         </Button>
                       ) : null}
                       {isOwner &&
+                      testing.status === 'InProgress' &&
+                      testing?.testers &&
+                      testing.testers?.length > 0 ? (
+                        <Button
+                          onClick={() => {
+                            handleManageTestersDrawerClick(testing);
+                          }}
+                          variant="outline"
+                        >
+                          Manage testers
+                        </Button>
+                      ) : null}
+                      {isOwner &&
                       (testing.status === 'Created' || testing.status === 'InProgress') ? (
                         <Button
                           variant="destructive"
@@ -259,7 +280,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
         <DrawerContent className="p-4">
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
             <DrawerHeader>
-              <DrawerTitle>Testing duration</DrawerTitle>
+              <DrawerTitle>Testing Duration</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">
                 How much time do you want to give your testers to complete your pattern?
               </DrawerTitle>
@@ -327,37 +348,18 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
           </div>
         </DrawerContent>
       </Drawer>
-      <Drawer open={isAbortTestingDrawerOpen} onOpenChange={setIsAbortTestingDrawerOpen}>
-        <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
-            <DrawerHeader>
-              <DrawerTitle>Are you sure?</DrawerTitle>
-              <DrawerTitle className="text-sm font-medium">
-                If you abort this testing, you&apos;ll have to re-create the product in order to
-                start the testing process again.
-              </DrawerTitle>
-            </DrawerHeader>
-            <Button
-              onClick={() => {
-                setIsAbortTestingDrawerOpen(false);
-              }}
-              variant={'outline'}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                handleAbortTestingClick(selectedTesting);
-              }}
-              variant={'destructive'}
-              disabled={fetchAbortTestingIsLoading}
-            >
-              {fetchAbortTestingIsLoading ? <LoadingSpinnerComponent size="sm" /> : null}
-              Abort testing
-            </Button>
-          </div>
-        </DrawerContent>
-      </Drawer>
+      <ConfirmDrawer
+        isOpen={isAbortTestingDrawerOpen}
+        setIsOpen={setIsAbortTestingDrawerOpen}
+        callbackFn={() => handleAbortTestingClick(selectedTesting)}
+        isLoading={fetchAbortTestingIsLoading}
+        description="If you abort this testing, you'll have to re-create the product in order to  start the testing process again."
+      />
+      <ManageTesterDrawers
+        isOpen={isManageTestersDrawerOpen}
+        setIsOpen={setIsManageTestersDrawerOpen}
+        testing={selectedTesting}
+      />
     </>
   );
 }
