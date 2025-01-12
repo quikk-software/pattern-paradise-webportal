@@ -327,7 +327,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
             </div>
             <ProInfoBox user={user} />
 
-            {!user.isBlocked ? (
+            {user.isBlocked ? (
               <InfoBoxComponent
                 severity="error"
                 message={
