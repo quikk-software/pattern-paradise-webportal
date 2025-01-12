@@ -31,6 +31,7 @@ import Link from 'next/link';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
 import { useCookies } from 'next-client-cookies';
+import { SUPPORT_EMAIL } from '@/lib/constants';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -325,6 +326,29 @@ export function ProfilePage({ user }: ProfilePageProps) {
               />
             </div>
             <ProInfoBox user={user} />
+
+            {!user.isBlocked ? (
+              <InfoBoxComponent
+                severity="error"
+                message={
+                  <span>
+                    <strong>Attention:</strong> Due to several reports relating to your account, we
+                    have blocked you from creating/selling patterns and participating in tester
+                    calls until further notice. Our team will review your case as soon as possible.
+                    In the meantime, please take a look at the open incidents here:{' '}
+                    <Link href="/app/secure/auth/me/reports" className="text-blue-500 underline">
+                      Open Incidents ({user.openIncidentsCount})
+                    </Link>
+                    .<br />
+                    <br />
+                    If you have any questions, please do not hesitate to contact us by email:{' '}
+                    <Link href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-500 underline">
+                      {SUPPORT_EMAIL}
+                    </Link>
+                  </span>
+                }
+              />
+            ) : null}
 
             {hasOpenIncidents ? (
               <OpenIncidentsInfoBox type="user" count={user.openIncidentsCount} />

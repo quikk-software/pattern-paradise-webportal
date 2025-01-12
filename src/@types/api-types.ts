@@ -134,6 +134,7 @@ export interface GetUserResponse {
   description?: string;
   galleryImages: string[];
   isActive: boolean;
+  isBlocked: boolean;
   isMailConfirmed: boolean;
   openIncidentsCount: number;
   isSponsored: boolean;
@@ -185,6 +186,7 @@ export interface GetUserAccountResponse {
   id: string;
   username: string;
   isActive: boolean;
+  isBlocked: boolean;
   paypalMerchantIsActive: boolean;
   isSponsored: boolean;
   firstName?: string;
@@ -326,6 +328,10 @@ export interface ListProductsResponse {
   /** @example 3 */
   totalPages: number;
   products: GetProductResponse[];
+}
+
+export interface DeleteUsersFromTestingRequest {
+  testerIds: string[];
 }
 
 export interface GetTestingMetricsResponse {
@@ -1826,6 +1832,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query removes users from a testing by a given ID.
+     *
+     * @tags Testing
+     * @name RemoveUsersFromTesting
+     * @summary Removes users from testing.
+     * @request DELETE:/api/v1/testings/{testingId}/users
+     * @secure
+     */
+    removeUsersFromTesting: (
+      testingId: string,
+      data: {
+        /** @example "any" */
+        testerIds?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/${testingId}/users`,
+        method: 'DELETE',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
