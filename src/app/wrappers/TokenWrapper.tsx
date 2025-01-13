@@ -19,7 +19,7 @@ export default function TokenWrapper({ children }: PropsWithChildren) {
     if (!!accessToken) {
       setUserDataInReduxStore(accessToken, dispatch);
     }
-  }, [dispatch, cookieStore]);
+  }, [cookieStore]);
 
   return <>{children}</>;
 }
