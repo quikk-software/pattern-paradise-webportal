@@ -8,7 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/workbox-1bb06f5e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/api/useApiStates.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ManageTestersDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ManageTestersDrawer/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ReviewDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ReviewDrawer/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +160,7 @@
       <workItem from="1735312812415" duration="3565000" />
       <workItem from="1735399704002" duration="69696000" />
       <workItem from="1736154315833" duration="27014000" />
-      <workItem from="1736331375041" duration="59579000" />
+      <workItem from="1736331375041" duration="61881000" />
     </task>
     <servers />
   </component>

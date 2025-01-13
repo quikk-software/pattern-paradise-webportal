@@ -65,6 +65,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const {
     mutate: removePayPalReferral,
     isLoading: removePayPalReferralIsLoading,
+    isSuccess: removePayPalReferralIsSuccess,
     isError: removePayPalReferralIsError,
     errorDetail,
   } = useRemovePayPalReferral();
@@ -274,12 +275,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   ) : null}
                   Disconnect PayPal
                 </Button>
-                {removePayPalReferralIsError ? (
-                  <p className="text-red-500 text-sm">
-                    Something went wrong while disconnecting your PayPal account from Pattern
-                    Paradise{errorDetail ? `: ${errorDetail}` : ''}
-                  </p>
-                ) : null}
+                <RequestStatus
+                  isSuccess={removePayPalReferralIsSuccess}
+                  isError={removePayPalReferralIsError}
+                  errorMessage={
+                    <>
+                      Something went wrong while disconnecting your PayPal account from Pattern
+                      Paradise{errorDetail ? `: ${errorDetail}` : ''}
+                    </>
+                  }
+                />
                 <p className="text-xs text-muted-foreground">
                   ⚠️ Note: You can also disconnect your PayPal from your Pattern Paradise account
                   from your{' '}

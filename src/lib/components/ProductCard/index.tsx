@@ -2,18 +2,15 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { CldImage } from 'next-cloudinary';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { Trash } from 'lucide-react';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { useDeleteProduct, useReleaseProduct } from '@/lib/api';
-import RequestStatus from '@/lib/components/RequestStatus';
+import { useDeleteProduct } from '@/lib/api';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
+import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
 
 interface ProductCardProps {
   id: string;
@@ -23,6 +20,7 @@ interface ProductCardProps {
   isFree: boolean;
   creatorId: string;
   status?: string;
+  testingStatus?: string;
   unavailable?: boolean;
   isTesterCall?: boolean;
   isProductView?: boolean;
@@ -36,6 +34,7 @@ export default function ProductCard({
   isFree,
   creatorId,
   status,
+  testingStatus,
   unavailable = false,
   isTesterCall = false,
   isProductView = false,
@@ -45,25 +44,12 @@ export default function ProductCard({
 
   const { userId } = useSelector((s: Store) => s.auth);
   const { fetch: deleteProduct, isLoading: deleteProductIsLoading } = useDeleteProduct();
-  const {
-    mutate: releaseProduct,
-    isLoading: releaseProductIsLoading,
-    isSuccess: releaseProductIsSuccess,
-    isError: releaseProductIsError,
-    errorDetail: releaseProductErrorDetails,
-  } = useReleaseProduct();
 
   const isCreator = userId === creatorId;
 
   const handleDeleteProductClick = async (productId: string) => {
     await deleteProduct(productId);
     setIsDeleteProductDrawerOpen(false);
-    window.location.reload();
-  };
-
-  const handleReleaseProductClick = async (productId: string) => {
-    await releaseProduct(productId);
-    setIsReleaseProductDrawerOpen(false);
     window.location.reload();
   };
 
@@ -125,45 +111,12 @@ export default function ProductCard({
               </Button>
             ) : null}
           </CardFooter>
-          <Drawer open={isReleaseProductDrawerOpen} onOpenChange={setIsReleaseProductDrawerOpen}>
-            <DrawerContent className="p-4">
-              <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
-                <DrawerHeader>
-                  <DrawerTitle>Release pattern</DrawerTitle>
-                  <DrawerTitle className="text-sm font-medium">
-                    If you release your pattern yourself without testers approving it in a{' '}
-                    <Link href="/app/secure/sell/testings" className="text-blue-500 underline">
-                      testing
-                    </Link>
-                    , your pattern will be <strong>ranked the lowest</strong> in search results on
-                    Pattern Paradise.
-                  </DrawerTitle>
-                </DrawerHeader>
-                <Button
-                  onClick={() => {
-                    setIsReleaseProductDrawerOpen(false);
-                  }}
-                  variant={'outline'}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleReleaseProductClick(id);
-                  }}
-                  disabled={releaseProductIsLoading}
-                >
-                  {releaseProductIsLoading ? <LoadingSpinnerComponent size="sm" /> : null}
-                  Release pattern
-                </Button>
-                <RequestStatus
-                  isSuccess={releaseProductIsSuccess}
-                  isError={releaseProductIsError}
-                  errorMessage={releaseProductErrorDetails}
-                />
-              </div>
-            </DrawerContent>
-          </Drawer>
+          <ReleasePatternDrawer
+            isOpen={isReleaseProductDrawerOpen}
+            setIsOpen={setIsReleaseProductDrawerOpen}
+            productId={id}
+            testingStatus={testingStatus}
+          />
           <ConfirmDrawer
             isOpen={isDeleteProductDrawerOpen}
             setIsOpen={setIsDeleteProductDrawerOpen}

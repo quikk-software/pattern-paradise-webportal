@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Trash2 } from 'lucide-react';
 import { useRemoveUsersFromTesting } from '@/lib/api/testing';
+import RequestStatus from '@/lib/components/RequestStatus';
 
 interface ManageTestersDrawerProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ export default function ManageTesterDrawers({
 }: ManageTestersDrawerProps) {
   const [selectedTesterIds, setSelectedTesterIds] = useState<string[]>([]);
 
-  const { mutate, isLoading, isError, errorDetail } = useRemoveUsersFromTesting();
+  const { mutate, isLoading, isSuccess, isError, errorDetail } = useRemoveUsersFromTesting();
 
   if (!testing?.testers || testing.testers.length === 0) {
     return null;
@@ -93,12 +94,16 @@ export default function ManageTesterDrawers({
             ))}
           </div>
           <DrawerFooter className="flex flex-col gap-2">
-            {isError ? (
-              <p className="text-red-500">
-                Something went wrong while removing testers
-                {errorDetail ? `: ${errorDetail}` : ''}
-              </p>
-            ) : null}
+            <RequestStatus
+              isSuccess={isSuccess}
+              isError={isError}
+              errorMessage={
+                <>
+                  Something went wrong while removing testers
+                  {errorDetail ? `: ${errorDetail}` : ''}
+                </>
+              }
+            />
             <Button
               onClick={() => {
                 setIsOpen(false);

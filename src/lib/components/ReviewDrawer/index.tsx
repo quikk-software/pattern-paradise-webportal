@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useApproveTesting, useCreateTestingComment, useDeclineTesting } from '@/lib/api/testing';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import RequestStatus from '@/lib/components/RequestStatus';
 
 interface ReviewDrawerProps {
   drawerIsOpen: boolean;
@@ -28,12 +29,14 @@ export default function ReviewDrawer({
   const {
     fetch: approveTesting,
     isLoading: approveTestingIsLoading,
+    isSuccess: approveTestingIsSuccess,
     isError: approveTestingIsError,
     errorDetail: approveTestingErrorDetail,
   } = useApproveTesting();
   const {
     fetch: declineTesting,
     isLoading: declineTestingIsLoading,
+    isSuccess: declineTestingIsSuccess,
     isError: declineTestingIsError,
     errorDetail: declineTestingErrorDetail,
   } = useDeclineTesting();
@@ -41,6 +44,7 @@ export default function ReviewDrawer({
   const {
     mutate,
     isLoading: createTestingCommentIsLoading,
+    isSuccess,
     isError,
     errorDetail,
   } = useCreateTestingComment();
@@ -160,24 +164,37 @@ export default function ReviewDrawer({
               ⚠️ Note: Reviews will be publicly available to all users of Pattern Paradise. This
               includes your review images, message and like/dislike choice.
             </p>
-            {approveTestingIsError ? (
-              <p className="text-red-500">
-                Something went wrong while approving testing
-                {approveTestingErrorDetail ? `: ${approveTestingErrorDetail}` : ''}
-              </p>
-            ) : null}
-            {declineTestingIsError ? (
-              <p className="text-red-500">
-                Something went wrong while declining testing
-                {declineTestingErrorDetail ? `: ${declineTestingErrorDetail}` : ''}
-              </p>
-            ) : null}
-            {isError ? (
-              <p className="text-red-500">
-                Something went wrong while removing testers
-                {errorDetail ? `: ${errorDetail}` : ''}
-              </p>
-            ) : null}
+
+            <RequestStatus
+              isSuccess={approveTestingIsSuccess}
+              isError={approveTestingIsError}
+              errorMessage={
+                <>
+                  Something went wrong while approving testing
+                  {approveTestingErrorDetail ? `: ${approveTestingErrorDetail}` : ''}
+                </>
+              }
+            />
+            <RequestStatus
+              isSuccess={declineTestingIsSuccess}
+              isError={declineTestingIsError}
+              errorMessage={
+                <>
+                  Something went wrong while declining testing
+                  {declineTestingErrorDetail ? `: ${declineTestingErrorDetail}` : ''}
+                </>
+              }
+            />
+            <RequestStatus
+              isSuccess={isSuccess}
+              isError={isError}
+              errorMessage={
+                <>
+                  Something went wrong while removing testers
+                  {errorDetail ? `: ${errorDetail}` : ''}
+                </>
+              }
+            />
             <Button
               onClick={() => {
                 setDrawerIsOpen(false);
