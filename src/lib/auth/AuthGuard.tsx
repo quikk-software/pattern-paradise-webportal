@@ -101,7 +101,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     checkAuth(accessTokenFromStore, refreshTokenFromStore, pathname).finally(() =>
       dispatch(setCheckAuthIsLoading(false)),
     );
-  }, [dispatch, isTokenValid, checkAuth, accessTokenFromStore, refreshTokenFromStore, pathname]);
+  }, [dispatch, checkAuth, accessTokenFromStore, refreshTokenFromStore, pathname]);
 
   if (checkAuthIsLoading) {
     return (

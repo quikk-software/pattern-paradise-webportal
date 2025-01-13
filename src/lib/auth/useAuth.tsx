@@ -133,7 +133,7 @@ const useAuth = () => {
     } else {
       handleAccessToken(accessToken ?? null, isValid);
     }
-  }, [accessTokenFromStore]);
+  }, [accessTokenFromStore, refreshTokenFromStore, cookieStore]);
 
   return {
     handleLogin,

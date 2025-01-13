@@ -27,7 +27,7 @@ export default function TestingPage({ params }: { params: { testingId: string } 
       filter,
       status: ['Created'],
     });
-  }, [testingId, direction, filter]);
+  }, [testingId, direction, filter, sortKey]);
 
   useEffect(() => {
     fetchTesting(testingId);

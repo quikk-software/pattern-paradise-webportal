@@ -99,7 +99,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       return;
     }
     router.push(paypalReferralData.actionUrl);
-  }, [createPayPalReferralIsSuccess, paypalReferralData]);
+  }, [createPayPalReferralIsSuccess, paypalReferralData, router]);
 
   const onPersonalDataSubmit = async (data: any) => {
     setImageError(undefined);

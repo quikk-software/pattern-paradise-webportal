@@ -69,7 +69,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       setProducts(result?.products ?? []);
     };
     fetchProducts();
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     if (!loadMore) {

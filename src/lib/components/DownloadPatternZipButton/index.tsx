@@ -52,24 +52,27 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
     }, 1000);
 
     setLanguage(undefined);
-  }, [file, language]);
+  }, [file, language, productTitle]);
 
   const handleDownloadClick = async () => {
     await fetch(productId);
   };
 
-  const filesGroupedByLanguage = files.reduce((acc, file) => {
-    if (!acc[file.language]) {
-      acc[file.language] = [];
-    }
+  const filesGroupedByLanguage = files.reduce(
+    (acc, file) => {
+      if (!acc[file.language]) {
+        acc[file.language] = [];
+      }
 
-    const isDuplicate = acc[file.language].some((existingFile) => existingFile.id === file.id);
-    if (!isDuplicate) {
-      acc[file.language].push(file);
-    }
+      const isDuplicate = acc[file.language].some((existingFile) => existingFile.id === file.id);
+      if (!isDuplicate) {
+        acc[file.language].push(file);
+      }
 
-    return acc;
-  }, {} as { [language: string]: typeof files });
+      return acc;
+    },
+    {} as { [language: string]: typeof files },
+  );
 
   return (
     <div className="flex flex-col gap-2">

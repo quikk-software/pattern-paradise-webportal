@@ -27,6 +27,7 @@ import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { useRouter } from 'next/navigation';
 import useWebSocket from '@/lib/hooks/useWebSocket';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -169,7 +170,7 @@ export default function ChatHistory({
       setHasNewSocketMessage(false);
       setChangedChat(false);
     }
-  }, [messages, bottomRef.current, showChatList, hasNewSocketMessage, changedChat, initialLoad]);
+  }, [messages, setChangedChat, showChatList, hasNewSocketMessage, changedChat, initialLoad]);
 
   useEffect(() => {
     if (!selectedTestingId) {
@@ -189,7 +190,7 @@ export default function ChatHistory({
       status: ['InProgress', 'Approved', 'Declined'],
     });
     loadComments();
-  }, [selectedTestingId]);
+  }, [selectedTestingId, setMessages]);
 
   useEffect(() => {
     if (!selectedTestingId) {
@@ -629,7 +630,7 @@ export default function ChatHistory({
                 {files && (
                   <div className="flex gap-2">
                     {Array.from(files).map((file, index) => (
-                      <img
+                      <Image
                         key={`${index}-${file.name}`}
                         alt={file.name}
                         src={URL.createObjectURL(file)}
