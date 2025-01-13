@@ -46,6 +46,7 @@ export default function ProductCard({
   const { fetch: deleteProduct, isLoading: deleteProductIsLoading } = useDeleteProduct();
 
   const isCreator = userId === creatorId;
+  const isTestingApproved = testingStatus === 'Approved';
 
   const handleDeleteProductClick = async (productId: string) => {
     await deleteProduct(productId);
@@ -102,10 +103,10 @@ export default function ProductCard({
             </div>
             {status === 'Created' || status === 'InProgress' ? (
               <Button
-                className="w-full"
                 onClick={() => {
                   setIsReleaseProductDrawerOpen(true);
                 }}
+                className={`${isTestingApproved ? 'bg-green-500 hover:bg-green-600 ' : ''}w-full`}
               >
                 Release pattern
               </Button>
