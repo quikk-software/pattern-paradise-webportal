@@ -7,6 +7,7 @@
     <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ProductCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ReleasePatternDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ReleasePatternDrawer/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +156,7 @@
       <workItem from="1735312812415" duration="3565000" />
       <workItem from="1735399704002" duration="69696000" />
       <workItem from="1736154315833" duration="27014000" />
-      <workItem from="1736331375041" duration="62123000" />
+      <workItem from="1736331375041" duration="62905000" />
     </task>
     <servers />
   </component>

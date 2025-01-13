@@ -20,7 +20,6 @@ interface ProductCardProps {
   isFree: boolean;
   creatorId: string;
   status?: string;
-  testingStatus?: string;
   unavailable?: boolean;
   isTesterCall?: boolean;
   isProductView?: boolean;
@@ -34,7 +33,6 @@ export default function ProductCard({
   isFree,
   creatorId,
   status,
-  testingStatus,
   unavailable = false,
   isTesterCall = false,
   isProductView = false,
@@ -46,7 +44,6 @@ export default function ProductCard({
   const { fetch: deleteProduct, isLoading: deleteProductIsLoading } = useDeleteProduct();
 
   const isCreator = userId === creatorId;
-  const isTestingApproved = testingStatus === 'Approved';
 
   const handleDeleteProductClick = async (productId: string) => {
     await deleteProduct(productId);
@@ -106,7 +103,7 @@ export default function ProductCard({
                 onClick={() => {
                   setIsReleaseProductDrawerOpen(true);
                 }}
-                className={`${isTestingApproved ? 'bg-green-500 hover:bg-green-600 ' : ''}w-full`}
+                className="w-full"
               >
                 Release pattern
               </Button>
@@ -116,7 +113,6 @@ export default function ProductCard({
             isOpen={isReleaseProductDrawerOpen}
             setIsOpen={setIsReleaseProductDrawerOpen}
             productId={id}
-            testingStatus={testingStatus}
           />
           <ConfirmDrawer
             isOpen={isDeleteProductDrawerOpen}
