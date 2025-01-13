@@ -303,6 +303,7 @@ export default function ChatHistory({
   const isInactive = selectedTestingStatus !== 'InProgress';
   const isAborted = selectedTestingStatus === 'Aborted';
   const isDeclined = selectedTestingStatus === 'Declined';
+  const isApproved = selectedTestingStatus === 'Approved';
   const isTesterOrCreator =
     !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
     testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
@@ -344,11 +345,11 @@ export default function ChatHistory({
                   <h2 className="text-2xl font-bold">Chat History</h2>
                 </div>
                 <div className="flex items-center justify-end gap-2">
-                  {status === 'InProgress' ? (
+                  {status !== 'Created' ? (
                     <Button
                       variant="outline"
                       size="icon"
-                      disabled={!selectedTestingId || isInactive}
+                      disabled={!selectedTestingId}
                       onClick={() => {
                         handleReviewClick(selectedTestingId);
                       }}
@@ -370,17 +371,14 @@ export default function ChatHistory({
                   </Button>
                 </div>
               </div>
-              {isInactive && !isAborted && !isDeclined ? (
-                <InfoBoxComponent
-                  severity="info"
-                  message={`This testing is currently not active.`}
-                />
+              {isApproved ? (
+                <InfoBoxComponent severity="success" message={`This testing has been approved.`} />
               ) : null}
               {isAborted ? (
                 <InfoBoxComponent severity="warning" message={`This testing has been aborted.`} />
               ) : null}
               {isDeclined ? (
-                <InfoBoxComponent severity="warning" message={`This testing has been declined.`} />
+                <InfoBoxComponent severity="error" message={`This testing has been declined.`} />
               ) : null}
             </div>
           </CardContent>

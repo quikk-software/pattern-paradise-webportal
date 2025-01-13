@@ -8,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useApproveTesting, useCreateTestingComment, useDeclineTesting } from '@/lib/api/testing';
-import { useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface ReviewDrawerProps {
@@ -26,12 +25,25 @@ export default function ReviewDrawer({
   const [reviewMessage, setReviewMessage] = useState<string | null>(null);
   const [images, setImages] = useState<string[]>([]);
 
-  const router = useRouter();
+  const {
+    fetch: approveTesting,
+    isLoading: approveTestingIsLoading,
+    isError: approveTestingIsError,
+    errorDetail: approveTestingErrorDetail,
+  } = useApproveTesting();
+  const {
+    fetch: declineTesting,
+    isLoading: declineTestingIsLoading,
+    isError: declineTestingIsError,
+    errorDetail: declineTestingErrorDetail,
+  } = useDeclineTesting();
 
-  const { fetch: approveTesting, isLoading: approveTestingIsLoading } = useApproveTesting();
-  const { fetch: declineTesting, isLoading: declineTestingIsLoading } = useDeclineTesting();
-
-  const { mutate, isLoading: createTestingCommentIsLoading } = useCreateTestingComment();
+  const {
+    mutate,
+    isLoading: createTestingCommentIsLoading,
+    isError,
+    errorDetail,
+  } = useCreateTestingComment();
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -77,7 +89,7 @@ export default function ReviewDrawer({
       });
     } finally {
       setDrawerIsOpen(false);
-      router.push(`/app/secure/test/chats?testingId=${testingId}`);
+      window.location.reload();
     }
   };
 
@@ -148,6 +160,24 @@ export default function ReviewDrawer({
               ⚠️ Note: Reviews will be publicly available to all users of Pattern Paradise. This
               includes your review images, message and like/dislike choice.
             </p>
+            {approveTestingIsError ? (
+              <p className="text-red-500">
+                Something went wrong while approving testing
+                {approveTestingErrorDetail ? `: ${approveTestingErrorDetail}` : ''}
+              </p>
+            ) : null}
+            {declineTestingIsError ? (
+              <p className="text-red-500">
+                Something went wrong while declining testing
+                {declineTestingErrorDetail ? `: ${declineTestingErrorDetail}` : ''}
+              </p>
+            ) : null}
+            {isError ? (
+              <p className="text-red-500">
+                Something went wrong while removing testers
+                {errorDetail ? `: ${errorDetail}` : ''}
+              </p>
+            ) : null}
             <Button
               onClick={() => {
                 setDrawerIsOpen(false);
