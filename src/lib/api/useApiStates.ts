@@ -22,7 +22,9 @@ export const useApiStates = () => {
     } catch (err: any) {
       setIsSuccess(false);
       setIsError(true);
-      const errorPayload = await err.json();
+      const errorPayload = await err
+        .json()
+        .catch(() => logger.error("Couldn't load error response"));
       logger.error(errorPayload);
       if (
         errorPayload?.status !== undefined &&

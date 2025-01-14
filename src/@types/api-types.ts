@@ -101,6 +101,8 @@ export interface PostUserRequest {
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
+  hasAcceptedPrivacy: boolean;
+  hasAcceptedTerms: boolean;
 }
 
 export interface PostUserResponse {
@@ -116,6 +118,8 @@ export interface PutUserRequest {
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
+  hasAcceptedPrivacy?: boolean;
+  hasAcceptedTerms?: boolean;
   roles?: string[];
 }
 
@@ -136,6 +140,8 @@ export interface GetUserResponse {
   isActive: boolean;
   isBlocked: boolean;
   isMailConfirmed: boolean;
+  hasAcceptedPrivacy: boolean;
+  hasAcceptedTerms: boolean;
   openIncidentsCount: number;
   isSponsored: boolean;
   firstName?: string;
@@ -979,6 +985,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         instagramRef?: any;
         /** @example "any" */
         tiktokRef?: any;
+        /** @example "any" */
+        hasAcceptedTerms?: any;
+        /** @example "any" */
+        hasAcceptedPrivacy?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1047,6 +1057,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         tiktokRef?: any;
         /** @example "any" */
         imageUrl?: any;
+        /** @example "any" */
+        hasAcceptedTerms?: any;
+        /** @example "any" */
+        hasAcceptedPrivacy?: any;
         /** @example "any" */
         roles?: any;
       },
