@@ -125,6 +125,7 @@ export interface PutUserRequest {
 
 export interface PutUserPasswordRequest {
   password?: string;
+  oldPassword?: string;
 }
 
 export interface PutGalleryImagesRequest {
@@ -1089,6 +1090,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** @example "any" */
         password?: any;
+        /** @example "any" */
+        oldPassword?: any;
       },
       params: RequestParams = {},
     ) =>

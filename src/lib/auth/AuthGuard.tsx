@@ -73,6 +73,26 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    const accessTokenFromCookies = cookieStore.get('accessToken') ?? null;
+    const refreshTokenFromCookies = cookieStore.get('refreshToken') ?? null;
+
+    if (
+      isTokenValid(accessTokenFromStore) ||
+      isTokenValid(refreshTokenFromStore) ||
+      isTokenValid(accessTokenFromCookies) ||
+      isTokenValid(refreshTokenFromCookies)
+    ) {
+      return;
+    }
+
+    const query = allSearchParams ? buildQueryString(allSearchParams) : null;
+    const redirect = query ? `${pathname}?${query}` : pathname;
+    const encodedRedirect = encodeURIComponent(redirect);
+
+    router.push(`/auth/login?redirect=${encodedRedirect}`);
+  }, [accessTokenFromStore, refreshTokenFromStore, cookieStore, allSearchParams, pathname]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
