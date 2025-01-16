@@ -90,6 +90,8 @@ export default function ReviewDrawer({
         testingId,
         files: urls,
         comment: reviewMessage ?? '',
+        testerStatus:
+          likeState === 'Approved' ? 'Approved' : likeState === 'Declined' ? 'Declined' : undefined,
       });
     } finally {
       setDrawerIsOpen(false);

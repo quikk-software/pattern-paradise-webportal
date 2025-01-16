@@ -527,16 +527,7 @@ export default function ChatHistory({
                                 <span className="text-sm font-semibold">Review</span>
                               </div>
                             )}
-                            <div
-                              className="flex gap-2 justify-between items-baseline"
-                              style={
-                                isCreator
-                                  ? {
-                                      flexDirection: 'row-reverse',
-                                    }
-                                  : {}
-                              }
-                            >
+                            <div className="flex gap-2 justify-between items-baseline">
                               <span
                                 className={`font-semibold ${
                                   message.type === 'Review'
@@ -559,15 +550,9 @@ export default function ChatHistory({
 
                             <p
                               className="mt-1 break-words whitespace-normal overflow-hidden"
-                              style={
-                                isCreator
-                                  ? {
-                                      textAlign: 'right',
-                                    }
-                                  : {
-                                      textAlign: 'left',
-                                    }
-                              }
+                              style={{
+                                textAlign: 'left',
+                              }}
                             >
                               {message.message}
                             </p>

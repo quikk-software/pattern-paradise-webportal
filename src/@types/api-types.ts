@@ -415,6 +415,7 @@ export interface PostTestingCommentRequest {
   testingId: string;
   comment: string;
   type: string;
+  testerStatus?: string;
   files: {
     url: string;
     mimeType: string;
@@ -1897,6 +1898,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         files?: any;
         /** @example "any" */
         type?: any;
+        /** @example "any" */
+        testerStatus?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1931,6 +1934,34 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListTestingCommentsResponse, any>({
         path: `/api/v1/testing-comments/testings/${testingId}`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of testing review comment of a given testing ID.
+     *
+     * @tags Testing comment
+     * @name ListTestingReviewCommentsByTestingId
+     * @summary Gets the testing review comments by testing ID.
+     * @request GET:/api/v1/testing-comments/testings/{testingId}/reviews
+     * @secure
+     */
+    listTestingReviewCommentsByTestingId: (
+      testingId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListTestingCommentsResponse, any>({
+        path: `/api/v1/testing-comments/testings/${testingId}/reviews`,
         method: 'GET',
         query: query,
         secure: true,
