@@ -1413,6 +1413,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         subCategories?: string[];
         /** List of hashtags to filter products. */
         hashtags?: string[];
+        /** List of languages to filter products. */
+        languages?: string[];
         /** The minimum price of a product to filter. */
         minPrice?: number;
         /** The maximum price of a product to filter. */

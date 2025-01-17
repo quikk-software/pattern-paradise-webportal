@@ -1,42 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import ReactCountryFlag from 'react-country-flag';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Trash2, Upload } from 'lucide-react';
 import { PDFFile } from '@/components/product-form';
 import Link from 'next/link';
-
-const languages = [
-  { code: 'ar', name: 'Arabic', country: 'SA' },
-  { code: 'cs', name: 'Czech', country: 'CZ' },
-  { code: 'da', name: 'Danish', country: 'DK' },
-  { code: 'en', name: 'English', country: 'GB' },
-  { code: 'nl', name: 'Dutch', country: 'NL' },
-  { code: 'de', name: 'German', country: 'DE' },
-  { code: 'ru', name: 'Russian', country: 'RU' },
-  { code: 'fr', name: 'French', country: 'FR' },
-  { code: 'fi', name: 'Finnish', country: 'FI' },
-  { code: 'el', name: 'Greek', country: 'GR' },
-  { code: 'iw', name: 'Hebrew', country: 'IL' },
-  { code: 'it', name: 'Italian', country: 'IT' },
-  { code: 'jp', name: 'Japanese', country: 'JP' },
-  { code: 'ko', name: 'Korean', country: 'KR' },
-  { code: 'no', name: 'Norwegian', country: 'NO' },
-  { code: 'pl', name: 'Polish', country: 'PL' },
-  { code: 'es', name: 'Spanish', country: 'ES' },
-  { code: 'sv', name: 'Swedish', country: 'SE' },
-  { code: 'tr', name: 'Turkish', country: 'TR' },
-  { code: 'uk', name: 'Ukrainian', country: 'UA' },
-];
+import LanguageSelect from '@/lib/components/LanguageSelect';
 
 interface PdfSelectorProps {
   selectedFiles: PDFFile[];
@@ -86,7 +56,7 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
     event.target.value = '';
   };
 
-  const handleLanguageChange = (oldLanguage: string, newLanguage: string) => {
+  const handleLanguageChange = (newLanguage: string, oldLanguage?: string) => {
     setSelectedFiles((prevFiles) =>
       prevFiles.map((file) =>
         file.language === oldLanguage ? { ...file, language: newLanguage } : file,
@@ -155,26 +125,10 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
               {Object.entries(groupedFiles).map(([language, files]) => (
                 <Card key={language} className="p-4">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="flex-grow">
-                      <Select
-                        value={language}
-                        onValueChange={(value) => handleLanguageChange(language, value)}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {languages.map((lang) => (
-                            <SelectItem key={lang.code} value={lang.code}>
-                              <div className="flex items-center">
-                                <ReactCountryFlag countryCode={lang.country} svg className="mr-2" />
-                                {lang.name}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    <LanguageSelect
+                      language={language}
+                      handleLanguageChange={handleLanguageChange}
+                    />
                     <div className="flex-grow space-y-2">
                       {files.map((file, index) => (
                         <div key={index} className="flex items-center justify-between">
