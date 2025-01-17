@@ -62,7 +62,7 @@ export function PatternParadiseProComponent() {
   const isPro = roles.includes('Pro');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black">
+    <div className="min-h-screen">
       <header className="container mx-auto px-4 py-8 border-b border-gray-200">
         <motion.h1
           className="text-4xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-black"

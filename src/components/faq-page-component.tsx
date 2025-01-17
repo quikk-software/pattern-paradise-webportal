@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Accordion,
   AccordionContent,
@@ -6,8 +8,11 @@ import {
 } from '@/components/ui/accordion';
 import Link from 'next/link';
 import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
+import useAction from '@/lib/core/useAction';
 
 export default function FAQPageComponent() {
+  const { action } = useAction();
+
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
@@ -15,7 +20,7 @@ export default function FAQPageComponent() {
           Frequently Asked Questions
         </h1>
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full" value={action}>
             <AccordionItem value="item-1">
               <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 What is Pattern Paradise?
@@ -83,7 +88,7 @@ export default function FAQPageComponent() {
                 We also offer innovative collaboration tools for pattern testing and refinement.
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-7">
+            <AccordionItem value="collaborate">
               <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 How can I collaborate on pattern testing?
               </AccordionTrigger>

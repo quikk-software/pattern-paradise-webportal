@@ -1,6 +1,12 @@
 import React from 'react';
 import ContactForm from '@/components/contact-form';
+import { NavbarComponent } from '@/components/navbar';
 
 export default function HelpPage() {
-  return <ContactForm />;
+  return (
+    <div>
+      <NavbarComponent background="none" />
+      <ContactForm />
+    </div>
+  );
 }
