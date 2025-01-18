@@ -16,6 +16,7 @@ import { useGetProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import TestingMetrics from '@/lib/components/TestingMetrics';
+import ReviewCTA from '@/lib/components/ReviewCTA';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -122,6 +123,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             <ProductMetrics productId={order.productId} />
             <TestingMetrics productId={order.productId} />
           </div>
+          {isPayed && !isSeller ? <ReviewCTA productId={order.productId} /> : null}
         </div>
         <GoBackButton />
       </div>

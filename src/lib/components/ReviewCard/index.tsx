@@ -5,8 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
 import { GetTestingCommentResponse, GetTestingResponse } from '@/@types/api-types';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import ProductImageSlider from '@/lib/components/ProductImageSlider';
+import { cn } from '@/lib/utils';
 
 interface ReviewCardProps {
   comment: GetTestingCommentResponse;
@@ -36,8 +37,8 @@ export default function ReviewCard({ comment, testing }: ReviewCardProps) {
         )}
       >
         <CardContent className="p-4">
-          <div className="flex justify-between gap-4">
-            <div className="flex items-start space-x-4">
+          <div className="flex flex-col gap-4 justify-center items-center">
+            <div className="flex items-start space-x-2 w-full">
               <Avatar className="w-10 h-10">
                 <AvatarImage src={tester?.imageUrl} alt={tester?.username} />
                 <AvatarFallback>{initials ? initials : ''}</AvatarFallback>
@@ -49,14 +50,27 @@ export default function ReviewCard({ comment, testing }: ReviewCardProps) {
                 </p>
                 <p className={`mt-2 ${expanded ? '' : 'line-clamp-3'}`}>{comment.message}</p>
               </div>
+              <div>
+                {isApproved ? (
+                  <ThumbsUp size={20} className="text-green-500" />
+                ) : (
+                  <ThumbsDown size={20} className="text-red-500" />
+                )}
+              </div>
             </div>
-            <div>
-              {isApproved ? (
-                <ThumbsUp size={20} className="text-green-500" />
-              ) : (
-                <ThumbsDown size={20} className="text-red-500" />
-              )}
-            </div>
+            {comment.files.length > 0 ? (
+              <div
+                style={{
+                  width: comment.files.length > 1 ? '100%' : '50%',
+                }}
+              >
+                <ProductImageSlider
+                  imageUrls={comment.files.map((file) => file.url)}
+                  title={testing.product.title}
+                  grids={comment.files.length > 1 ? 2 : undefined}
+                />
+              </div>
+            ) : null}
           </div>
         </CardContent>
         {comment.message.length > 150 && (

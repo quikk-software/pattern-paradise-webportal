@@ -91,7 +91,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           ) : (
             <Download className="mr-2 h-4 w-4" />
           )}
-          Download pattern <CountryFlag languageCode={fileLanguage} />
+          Download Pattern <CountryFlag languageCode={fileLanguage} />
         </Button>
       ))}
       <RequestStatus
