@@ -4,23 +4,24 @@ import React, { useState } from 'react';
 import { useCreateSubscription } from '@/lib/api/subscription';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { reset } from '@/lib/features/auth/authSlice';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Store } from '@/lib/redux/store';
 import { PartyPopper } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 export default function SubscribeButton() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { status } = useSession();
+
   const { mutate } = useCreateSubscription();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { accessToken } = useSelector((s: Store) => s.auth);
 
-  const isLoggedIn = accessToken !== null;
+  const isLoggedIn = status === 'authenticated';
 
   if (process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE !== 'true') {
     return null;

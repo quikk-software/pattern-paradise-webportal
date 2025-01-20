@@ -67,20 +67,20 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
   const { fetch: fetchAbortTesting, isLoading: fetchAbortTestingIsLoading } = useAbortTesting();
 
   useEffect(() => {
-    if (!refetch) {
+    if (!refetch || !userId) {
       return;
     }
-    fetchTestings();
+    fetchTestings(userId);
     setRefetch(false);
-  }, [refetch]);
+  }, [refetch, userId]);
 
   useEffect(() => {
-    if (!loadMore) {
+    if (!loadMore || !userId) {
       return;
     }
-    fetchTestings();
+    fetchTestings(userId);
     setLoadMore((p) => !p);
-  }, [loadMore]);
+  }, [loadMore, userId]);
 
   const handleTesterCallDrawerClick = (testing: GetTestingResponse) => {
     setSelectedTheme(null);

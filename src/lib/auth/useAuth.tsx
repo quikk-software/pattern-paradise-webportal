@@ -1,50 +1,28 @@
 'use client';
 
-import { useDispatch, useSelector } from 'react-redux';
-import qs from 'qs';
-import axios from 'axios';
-import Cookie from 'js-cookie';
-import {
-  getAccessTokenUsingRefreshToken,
-  getUserIdFromAccessToken,
-  isTokenValid,
-  saveTokensToCookies,
-} from '@/lib/auth/auth.utils';
-import {
-  logout,
-  reset,
-  setAccessToken,
-  setRefreshToken,
-  setRoles,
-  setUserId,
-} from '@/lib/features/auth/authSlice';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import logger from '@/lib/core/logger';
 import useRedirect from '@/lib/core/useRedirect';
-import { useRouter } from 'next/navigation';
 import { Store } from '@/lib/redux/store';
-import { useEffect, useState } from 'react';
-import { useGetUser } from '@/lib/api';
-import { useCookies } from 'next-client-cookies';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { handleLogoutFlow } from '@/lib/auth/auth.utils';
 
 const useAuth = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [loginIsLoading, setLoginIsLoading] = useState(false);
+  const [loginIsSuccess, setLoginIsSuccess] = useState(false);
+  const [loginIsError, setLoginIsError] = useState(false);
+  const [logoutIsLoading, setLogoutIsLoading] = useState(false);
+  const [logoutIsSuccess, setLogoutIsSuccess] = useState(false);
+  const [logoutIsError, setLogoutIsError] = useState(false);
 
-  const cookieStore = useCookies();
-
-  const dispatch = useDispatch();
   const { redirectUrl } = useRedirect();
-  const { push } = useRouter();
 
-  const { fetch } = useGetUser();
+  const router = useRouter();
+  const { data: session } = useSession();
 
-  const {
-    accessToken: accessTokenFromStore,
-    refreshToken: refreshTokenFromStore,
-    username,
-  } = useSelector((store: Store) => store.auth);
+  const { username } = useSelector((store: Store) => store.auth);
 
   const handleLogin = async (username: string, password: string) => {
     if (username === '' || password === '') {
@@ -52,96 +30,62 @@ const useAuth = () => {
       return;
     }
 
-    setIsLoading(true);
-    setIsSuccess(false);
-    setIsError(false);
+    setLoginIsLoading(true);
+    setLoginIsSuccess(false);
+    setLoginIsError(false);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID}/protocol/openid-connect/token`,
-        qs.stringify({
-          grant_type: 'password',
-          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
-          username: username,
-          password: password,
-          scope: 'openid profile',
-        }),
-      );
-      if (response.status === 200) {
-        const accessToken = response.data.access_token ?? null;
-        const refreshToken = response.data.refresh_token ?? null;
-        await saveTokensToCookies(accessToken, refreshToken, cookieStore);
+      const result = await signIn('credentials', {
+        username: username,
+        password: password,
+        redirect: false,
+      });
 
-        dispatch(setAccessToken(accessToken));
-        dispatch(setRefreshToken(refreshToken));
-
-        setIsSuccess(true);
-
-        push(redirectUrl);
+      if (result?.error) {
+        logger.error(`Login failed: ${result.error}`);
+        setLoginIsError(true);
+      } else {
+        setLoginIsSuccess(true);
+        router.push(redirectUrl);
       }
     } catch (err) {
       logger.error(err);
-      setIsError(true);
-      // Error Snackbar o.ä. hier dispatchen?
-      // displaySuccess("Anmeldung fehlgeschlagen");
+      setLoginIsError(true);
     } finally {
-      setIsLoading(false);
+      setLoginIsLoading(false);
     }
   };
 
-  const handleLogout = async () => {
-    dispatch(reset());
-    push('/auth/login');
-  };
-
-  const handleAccessToken = (accessToken: string | null, isValid: boolean) => {
-    setIsLoggedIn(isValid);
-
-    if (isValid && accessToken !== null) {
-      const fetchAndSetUserData = async () => {
-        const userId = getUserIdFromAccessToken(accessToken!);
-        const user = await fetch(userId);
-        if (!user) {
-          return;
-        }
-        dispatch(setUserId(user.id));
-        dispatch(setRoles(user.roles ?? []));
-      };
-      fetchAndSetUserData();
+  const handleLogout = () => {
+    const refreshToken = session?.user?.refreshToken;
+    if (refreshToken) {
+      setLoginIsLoading(true);
+      handleLogoutFlow(refreshToken)
+        .then(() => {
+          setLogoutIsError(false);
+          setLogoutIsSuccess(true);
+        })
+        .catch(() => {
+          setLogoutIsSuccess(false);
+          setLogoutIsError(true);
+        })
+        .finally(() => setLoginIsLoading(false));
     }
   };
-
-  useEffect(() => {
-    const accessToken = accessTokenFromStore
-      ? accessTokenFromStore
-      : (Cookie.get('accessToken') ?? null);
-    const refreshToken = refreshTokenFromStore
-      ? refreshTokenFromStore
-      : (Cookie.get('refreshToken') ?? null);
-
-    if (!accessToken && !refreshToken) {
-      setIsLoggedIn(false);
-      dispatch(logout());
-      return;
-    }
-
-    const isValid = isTokenValid(accessToken);
-    if (!isValid) {
-      getAccessTokenUsingRefreshToken(refreshToken, cookieStore).then((newAccessToken) => {
-        handleAccessToken(newAccessToken ?? null, !!newAccessToken);
-      });
-    } else {
-      handleAccessToken(accessToken ?? null, isValid);
-    }
-  }, [accessTokenFromStore, refreshTokenFromStore, cookieStore]);
 
   return {
     handleLogin,
     handleLogout,
-    isLoggedIn,
-    isLoading,
-    isSuccess,
-    isError,
+    loginStates: {
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+      isError: loginIsError,
+    },
+    logoutStates: {
+      isLoading: logoutIsLoading,
+      isSuccess: logoutIsSuccess,
+      isError: logoutIsError,
+    },
     username,
   };
 };

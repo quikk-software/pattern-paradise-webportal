@@ -22,9 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ReportProductReason, reportProductReasons } from '@/lib/constants';
 import { useCreateProductReport } from '@/lib/api/report';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
-import { isTokenExpired } from '@/lib/auth/auth.utils';
+import { useSession } from 'next-auth/react';
 
 interface ReportProductProps {
   productId: string;
@@ -36,7 +34,7 @@ export function ReportProduct({ productId }: ReportProductProps) {
   const [reasonError, setReasonError] = useState<string | undefined>();
   const [comment, setComment] = useState<string | undefined>(undefined);
 
-  const { accessToken } = useSelector((s: Store) => s.auth);
+  const { status } = useSession();
 
   const { mutate, isLoading, isError, errorDetail } = useCreateProductReport();
 
@@ -56,7 +54,7 @@ export function ReportProduct({ productId }: ReportProductProps) {
     setOpen(false);
   };
 
-  const isLoggedIn = !!accessToken && !isTokenExpired(accessToken);
+  const isLoggedIn = status === 'authenticated';
 
   if (!isLoggedIn) {
     return null;

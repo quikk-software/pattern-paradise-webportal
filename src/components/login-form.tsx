@@ -23,7 +23,10 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [isRequestPasswordDrawerOpen, setIsRequestPasswordDrawerOpen] = useState(false);
 
-  const { handleLogin, isLoading, isSuccess, isError } = useAuth();
+  const {
+    handleLogin,
+    loginStates: { isLoading, isSuccess, isError },
+  } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

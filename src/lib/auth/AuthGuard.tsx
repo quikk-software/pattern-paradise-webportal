@@ -1,97 +1,37 @@
 'use client';
 
-import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
-import { isTokenValid, refreshAccessToken, setUserDataInReduxStore } from '@/lib/auth/auth.utils';
-import { setAccessToken, setRefreshToken } from '@/lib/features/auth/authSlice';
-import logger from '@/lib/core/logger';
-import { useCookies } from 'next-client-cookies';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { buildQueryString } from '@/lib/utils';
 import useGetAllSearchParams from '@/lib/core/useGetAllSearchParams';
+import { useSession } from 'next-auth/react';
+import { useDispatch } from 'react-redux';
+import { setRoles, setUserId } from '@/lib/features/auth/authSlice';
 
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
 }) => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const dispatch = useDispatch();
   const pathname = usePathname();
-  const router = useRouter();
-  const cookieStore = useCookies();
   const allSearchParams = useGetAllSearchParams();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const query = allSearchParams ? buildQueryString(allSearchParams) : null;
+  const redirect = query ? `${pathname}?${query}` : pathname;
+  const encodedRedirect = encodeURIComponent(redirect);
 
-  const { accessToken: accessTokenFromStore, refreshToken: refreshTokenFromStore } = useSelector(
-    (store: Store) => store.auth,
-  );
-
-  const checkAuth = useCallback(async () => {
-    try {
-      logger.debug(`Token check not running`);
-
-      logger.debug(`Checking Access for <${pathname}>.`);
-
-      const accessTokenFromCookies = cookieStore.get('accessToken') ?? null;
-      const refreshTokenFromCookies = cookieStore.get('refreshToken') ?? null;
-
-      let accessToken = accessTokenFromStore || accessTokenFromCookies;
-      let refreshToken = refreshTokenFromStore || refreshTokenFromCookies;
-
-      const query = allSearchParams ? buildQueryString(allSearchParams) : null;
-      const redirect = query ? `${pathname}?${query}` : pathname;
-      const encodedRedirect = encodeURIComponent(redirect);
-
-      if (isTokenValid(accessToken)) {
-        logger.debug('Access token is valid.');
-        dispatch(setAccessToken(accessToken));
-        dispatch(setRefreshToken(refreshToken));
-        setUserDataInReduxStore(accessToken!, dispatch);
-        router.push(redirect);
-      } else if (isTokenValid(refreshToken)) {
-        logger.debug('Access token is invalid. Attempting to refresh.');
-        await refreshAccessToken(refreshToken, dispatch, cookieStore);
-      } else {
-        logger.debug('Both tokens are invalid. Redirecting to login.');
-        router.push(`/auth/login?redirect=${encodedRedirect}`);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }, [
-    pathname,
-    allSearchParams,
-    dispatch,
-    router,
-    cookieStore,
-    accessTokenFromStore,
-    refreshTokenFromStore,
-  ]);
+  const isLoading = status === 'loading';
 
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  useEffect(() => {
-    const accessTokenFromCookies = cookieStore.get('accessToken') ?? null;
-    const refreshTokenFromCookies = cookieStore.get('refreshToken') ?? null;
-
-    if (
-      isTokenValid(accessTokenFromStore) ||
-      isTokenValid(refreshTokenFromStore) ||
-      isTokenValid(accessTokenFromCookies) ||
-      isTokenValid(refreshTokenFromCookies)
-    ) {
-      return;
+    if (status === 'unauthenticated' || (session as any)?.error === 'RefreshAccessTokenError') {
+      router.push(`/auth/login?redirect=${encodedRedirect}`);
     }
-
-    const query = allSearchParams ? buildQueryString(allSearchParams) : null;
-    const redirect = query ? `${pathname}?${query}` : pathname;
-    const encodedRedirect = encodeURIComponent(redirect);
-
-    router.push(`/auth/login?redirect=${encodedRedirect}`);
-  }, [accessTokenFromStore, refreshTokenFromStore, cookieStore, allSearchParams, pathname]);
+    dispatch(setUserId(session?.user.id || ''));
+    dispatch(setRoles(session?.user.roles || []));
+  }, [status, session, router]);
 
   if (isLoading) {
     return (

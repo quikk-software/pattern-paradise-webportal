@@ -6,7 +6,7 @@ import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/consta
 import StoreProvider from '@/app/providers/StoreProvider';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { CookiesProvider } from 'next-client-cookies/server';
-import CookieWrapper from '@/app/wrappers/CookieWrapper';
+import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -78,7 +78,7 @@ export default async function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <CookiesProvider>
-          <CookieWrapper>
+          <AuthSessionProvider>
             <div className="flex flex-col h-dvh">
               <div className="flex-1 overflow-auto">
                 <StoreProvider>{children}</StoreProvider>
@@ -88,7 +88,7 @@ export default async function RootLayout({
                 <BottomNavigation />
               </div>
             </div>
-          </CookieWrapper>
+          </AuthSessionProvider>
         </CookiesProvider>
       </body>
     </html>

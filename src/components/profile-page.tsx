@@ -14,7 +14,6 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset } from '@/lib/features/auth/authSlice';
 import RequestStatus from '@/lib/components/RequestStatus';
 import EditPassword from '@/lib/components/EditPassword';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
@@ -24,14 +23,14 @@ import ProInfoBox from '@/lib/components/ProInfoBox';
 import ResendCodeInfoBox from '@/lib/components/ResendCodeInfoBox';
 import useAction from '@/lib/core/useAction';
 import { Badge } from '@/components/ui/badge';
-import { refreshAccessToken } from '@/lib/auth/auth.utils';
 import { Store } from '@/lib/redux/store';
 import { InfoBoxComponent } from '@/components/info-box';
 import Link from 'next/link';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
-import { useCookies } from 'next-client-cookies';
 import { SUPPORT_EMAIL } from '@/lib/constants';
+import useAuth from '@/lib/auth/useAuth';
+import { setRoles } from '@/lib/features/auth/authSlice';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -45,10 +44,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
 
   const { action } = useAction();
+  const {
+    handleLogout,
+    logoutStates: { isLoading, isSuccess, isError },
+  } = useAuth();
 
-  const cookieStore = useCookies();
   const dispatch = useDispatch();
-  const { refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { userId } = useSelector((s: Store) => s.auth);
 
   const router = useRouter();
   const {
@@ -125,7 +127,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       ]);
     }
 
-    mutateUser({
+    mutateUser(userId, {
       email: data.email ? data.email.toLowerCase().trim() : undefined,
       firstName: data.firstName ? data.firstName.trim() : undefined,
       lastName: data.lastName ? data.lastName.trim() : undefined,
@@ -137,7 +139,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
       roles: data.roles ?? undefined,
     })
       .then(() => {
-        refreshAccessToken(refreshToken, dispatch, cookieStore);
+        // TODO: Improve by refreshing access token and access roles from useSession where necessary
+        if (Array.isArray(data.roles)) {
+          dispatch(setRoles(data.roles));
+        }
       })
       .catch(() => {
         setUpdateUserIsError(true);
@@ -154,8 +159,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
   };
 
-  const handleCreatePayPalReferralClick = async () => {
-    const result = await createPayPalReferral();
+  const handleCreatePayPalReferralClick = async (userId: string) => {
+    const result = await createPayPalReferral(userId);
 
     router.push(result.actionUrl);
   };
@@ -207,14 +212,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
           >
             Open Incidents{hasOpenIncidents ? ` (${user.openIncidentsCount})` : ''}
           </Button>
-          <Button
-            variant={'secondary'}
-            onClick={() => {
-              dispatch(reset());
-            }}
-          >
+          <Button variant={'secondary'} onClick={() => handleLogout()} disabled={isLoading}>
+            {isLoading ? <LoadingSpinnerComponent size="sm" className="text-black" /> : null}
             Logout
           </Button>
+          <RequestStatus
+            isSuccess={isSuccess}
+            isError={isError}
+            errorMessage="Failed to log out. Please consider reloading the page and try again."
+          />
         </CardContent>
       </Card>
       {user.roles?.includes('Seller') ? (
@@ -379,7 +385,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   <Button
                     variant="default"
                     onClick={() => {
-                      handleCreatePayPalReferralClick();
+                      handleCreatePayPalReferralClick(userId);
                     }}
                     disabled={createPayPalReferralIsLoading || createPayPalReferralIsSuccess}
                   >

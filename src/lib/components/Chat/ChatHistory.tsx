@@ -137,7 +137,7 @@ export default function ChatHistory({
   const [initialLoad, setInitialLoad] = useState(true);
   const [hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
 
-  const { userId, accessToken } = useSelector((s: Store) => s.auth);
+  const { userId } = useSelector((s: Store) => s.auth);
 
   const router = useRouter();
 
@@ -145,7 +145,6 @@ export default function ChatHistory({
 
   const { sendMessage, messages: socketMessages } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/testing-comments/subscribe`,
-    accessToken,
   );
 
   const { mutate: createTestingComment } = useCreateTestingComment();

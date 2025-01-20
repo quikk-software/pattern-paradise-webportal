@@ -3,10 +3,8 @@ import { client, getApi } from '@/@types';
 import type { GetTestingCommentResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 import { combineArraysById } from '@/lib/core/utils';
-import { useCookies } from 'next-client-cookies';
+import { useSession } from 'next-auth/react';
 
 export const useListTestingComments = ({
   pageNumber = 1,
@@ -17,9 +15,7 @@ export const useListTestingComments = ({
 }) => {
   const [data, setData] = useState<GetTestingCommentResponse[]>([]);
 
-  const cookieStore = useCookies();
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -39,7 +35,7 @@ export const useListTestingComments = ({
             pageNumber: overridePageNumber ?? pagination.pageNumber,
             pageSize: overridePageSize ?? pagination.pageSize,
           },
-          { ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)) },
+          { ...(await getApi(session?.user.accessToken)) },
         ),
     );
 

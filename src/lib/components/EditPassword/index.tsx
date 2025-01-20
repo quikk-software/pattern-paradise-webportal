@@ -8,6 +8,8 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { useForm } from 'react-hook-form';
 import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 const passwordProps: {
   oldPassword?: string;
@@ -22,6 +24,8 @@ const passwordProps: {
 export default function EditPassword() {
   const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
   const [updateUserPasswordIsError, setUpdateUserPasswordIsError] = useState(false);
+
+  const { userId } = useSelector((s: Store) => s.auth);
 
   const {
     register,
@@ -43,7 +47,7 @@ export default function EditPassword() {
       setPasswordError('Passwords do not match');
       return;
     }
-    mutateUserPassword({
+    mutateUserPassword(userId, {
       password: data.newPassword,
       oldPassword: data.oldPassword,
     }).catch(() => {

@@ -1,15 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
 
 export type AuthState = {
   userId: string;
   username: string;
   password: string;
   roles: string[];
-  accessToken: string | null;
-  refreshToken: string | null;
-  checkAuthIsLoading: boolean;
 };
 
 export const initialState: AuthState = {
@@ -17,9 +13,6 @@ export const initialState: AuthState = {
   username: '',
   password: '',
   roles: [],
-  accessToken: null,
-  refreshToken: null,
-  checkAuthIsLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -42,40 +35,12 @@ export const authSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload;
     },
-    setAccessToken: (state, action: PayloadAction<string | null>) => {
-      state.accessToken = action.payload;
-    },
-    setRefreshToken: (state, action: PayloadAction<string | null>) => {
-      state.refreshToken = action.payload;
-    },
-    setCheckAuthIsLoading: (state, action: PayloadAction<boolean>) => {
-      state.checkAuthIsLoading = action.payload;
-    },
     reset: (state) => {
       state = initialState;
-      Cookies.remove('accessToken');
-      Cookies.remove('refreshToken');
       return state;
-    },
-    logout: (state) => {
-      state.password = '';
-      state.userId = '';
-      state.username = '';
-      state.accessToken = null;
-      state.refreshToken = null;
     },
   },
 });
 
-export const {
-  setUserId,
-  setUsername,
-  setRoles,
-  setPassword,
-  setAccessToken,
-  setRefreshToken,
-  setCheckAuthIsLoading,
-  reset,
-  logout,
-} = authSlice.actions;
+export const { setUserId, setUsername, setRoles, setPassword, reset } = authSlice.actions;
 export default authSlice.reducer;

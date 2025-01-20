@@ -2,24 +2,20 @@ import { useState } from 'react';
 import { client, getApi } from '@/@types';
 import type { PostUserPayPalReferralResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
-import { useCookies } from 'next-client-cookies';
+import { useSession } from 'next-auth/react';
 
 export const useCreatePayPalReferral = () => {
   const [data, setData] = useState<PostUserPayPalReferralResponse | undefined>(undefined);
 
-  const cookieStore = useCookies();
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const mutate = async () => {
+  const mutate = async (userId: string) => {
     const response = await handleFn(
       async () =>
         await client.api.postUserPayPalReferral(userId, {
-          ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)),
+          ...(await getApi(session?.user.accessToken)),
         }),
     );
 

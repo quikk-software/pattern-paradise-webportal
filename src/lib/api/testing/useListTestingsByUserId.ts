@@ -3,10 +3,8 @@ import { client, getApi } from '@/@types';
 import type { GetTestingResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 import { combineArraysById } from '@/lib/core/utils';
-import { useCookies } from 'next-client-cookies';
+import { useSession } from 'next-auth/react';
 
 export const useListTestingsByUserId = ({
   pageNumber = 1,
@@ -19,14 +17,12 @@ export const useListTestingsByUserId = ({
 }) => {
   const [data, setData] = useState<GetTestingResponse[]>([]);
 
-  const cookieStore = useCookies();
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async () => {
+  const fetch = async (userId: string) => {
     const response = await handleFn(
       async () =>
         await client.api.listTestingsByUserId(
@@ -36,7 +32,7 @@ export const useListTestingsByUserId = ({
             pageSize: pagination.pageSize,
             filter,
           },
-          { ...(await getApi(accessToken, refreshToken, dispatch, cookieStore)) },
+          { ...(await getApi(session?.user.accessToken)) },
         ),
     );
 
