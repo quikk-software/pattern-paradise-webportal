@@ -102,6 +102,7 @@ async function refreshAccessToken(token: any) {
         },
         body: new URLSearchParams({
           client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID!,
+          client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
           grant_type: 'refresh_token',
           refresh_token: token.refreshToken,
         }),
@@ -114,7 +115,6 @@ async function refreshAccessToken(token: any) {
       throw new Error('Failed to refresh access token');
     }
 
-    // Return the refreshed token with new access token, refresh token, and expiry
     return {
       ...token,
       accessToken: refreshedTokens.access_token,
