@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtDecode } from 'jwt-decode';
+import logger from '@/lib/core/logger';
 
 const handler = NextAuth({
   providers: [
@@ -72,7 +73,8 @@ const handler = NextAuth({
       }
 
       if (Date.now() >= (token.expiresAt as number)) {
-        return refreshAccessToken(token);
+        logger.info('Use refresh token to get fresh access token');
+        return await refreshAccessToken(token);
       }
 
       return token;
@@ -112,8 +114,11 @@ async function refreshAccessToken(token: any) {
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
+      logger.error("Couldn't get access token with refresh token");
       throw new Error('Failed to refresh access token');
     }
+
+    logger.info('Got fresh access token');
 
     return {
       ...token,
@@ -122,7 +127,7 @@ async function refreshAccessToken(token: any) {
       expiresAt: Date.now() + refreshedTokens.expires_in * 1000,
     };
   } catch (error) {
-    console.error('Error refreshing access token:', error);
+    logger.error('Error refreshing access token:', error);
     return { ...token, error: 'RefreshAccessTokenError' };
   }
 }
