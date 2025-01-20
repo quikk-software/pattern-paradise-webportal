@@ -91,21 +91,22 @@ const handler = NextAuth({
 
 export { handler as GET, handler as POST };
 
-// Function to handle refreshing the access token
 async function refreshAccessToken(token: any) {
   try {
-    // Call Keycloak to refresh the access token using the refresh token
-    const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID!,
+          grant_type: 'refresh_token',
+          refresh_token: token.refreshToken,
+        }),
       },
-      body: new URLSearchParams({
-        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID!,
-        grant_type: 'refresh_token',
-        refresh_token: token.refreshToken,
-      }),
-    });
+    );
 
     const refreshedTokens = await response.json();
 
