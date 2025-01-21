@@ -16,7 +16,7 @@ export const useGetUser = () => {
     const response = await handleFn(
       async () =>
         await client.api.getUser(userId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

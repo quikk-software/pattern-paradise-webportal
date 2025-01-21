@@ -11,7 +11,7 @@ export const useDeleteProduct = () => {
     await handleFn(
       async () =>
         await client.api.deleteProduct(productId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

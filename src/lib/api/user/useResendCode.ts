@@ -12,7 +12,7 @@ export const useResendCode = () => {
     await handleFn(
       async () =>
         await client.api.resendCode(data, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

@@ -15,7 +15,7 @@ export const useCreateTestingComment = () => {
     const response = await handleFn(
       async () =>
         await client.api.postTestingComment(testingComment, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

@@ -15,7 +15,7 @@ export const useCreateOrder = () => {
     const response = await handleFn(
       async () =>
         await client.api.postOrder(order, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

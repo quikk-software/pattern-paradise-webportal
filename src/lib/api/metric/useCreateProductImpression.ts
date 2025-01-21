@@ -11,7 +11,7 @@ export const useCreateProductImpression = () => {
     await handleFn(
       async () =>
         await client.api.postProductImpression(productId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

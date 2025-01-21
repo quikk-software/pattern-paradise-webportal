@@ -11,7 +11,7 @@ export const useApplyTesting = () => {
     await handleFn(
       async () =>
         await client.api.applyTesting(testingId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

@@ -15,7 +15,7 @@ export const useGetUserMetrics = () => {
     const response = await handleFn(
       async () =>
         await client.api.getUserMetrics(userId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

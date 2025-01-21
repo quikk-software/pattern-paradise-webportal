@@ -15,7 +15,7 @@ export const useCreateTesting = () => {
     const response = await handleFn(
       async () =>
         await client.api.postTesting(testing, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

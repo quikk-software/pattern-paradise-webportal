@@ -12,7 +12,7 @@ export const useUpdateProduct = () => {
     await handleFn(
       async () =>
         await client.api.putProduct(productId, product, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

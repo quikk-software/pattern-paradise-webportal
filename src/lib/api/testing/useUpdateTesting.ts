@@ -12,7 +12,7 @@ export const useUpdateTesting = () => {
     await handleFn(
       async () =>
         await client.api.putTesting(testingId, testing, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

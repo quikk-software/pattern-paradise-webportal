@@ -14,7 +14,7 @@ export const useDeleteGalleryImage = () => {
           userId,
           { imageUrl },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

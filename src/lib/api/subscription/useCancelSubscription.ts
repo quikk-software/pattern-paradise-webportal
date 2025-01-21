@@ -11,7 +11,7 @@ export const useCancelSubscription = () => {
     await handleFn(
       async () =>
         await client.api.cancelSubscription(subscriptionId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

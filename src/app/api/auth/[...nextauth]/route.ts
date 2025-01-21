@@ -2,6 +2,8 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtDecode } from 'jwt-decode';
 import logger from '@/lib/core/logger';
+import axios from 'axios';
+import qs from 'qs';
 
 const handler = NextAuth({
   providers: [
@@ -72,7 +74,7 @@ const handler = NextAuth({
         token.roles = user.roles;
       }
 
-      if (Date.now() >= (token.expiresAt as number)) {
+      if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
         logger.info('Use refresh token to get fresh access token');
         return await refreshAccessToken(token);
       }
@@ -95,25 +97,19 @@ export { handler as GET, handler as POST };
 
 async function refreshAccessToken(token: any) {
   try {
-    const response = await fetch(
+    const response = await axios.post(
       `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID!,
-          client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
-          grant_type: 'refresh_token',
-          refresh_token: token.refreshToken,
-        }),
-      },
+      qs.stringify({
+        grant_type: 'refresh_token',
+        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
+        client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
+        refresh_token: token.refreshToken,
+      }),
     );
 
-    const refreshedTokens = await response.json();
+    const refreshedTokens = response.data;
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       logger.error("Couldn't get access token with refresh token");
       throw new Error('Failed to refresh access token');
     }

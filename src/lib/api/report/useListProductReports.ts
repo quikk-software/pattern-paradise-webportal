@@ -41,7 +41,7 @@ export const useListProductReports = ({
             reason,
           },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

@@ -15,7 +15,7 @@ export const useCaptureOrder = () => {
     const response = await handleFn(
       async () =>
         await client.api.captureOrder(paypalOrderId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

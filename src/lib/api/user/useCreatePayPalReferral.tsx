@@ -15,7 +15,7 @@ export const useCreatePayPalReferral = () => {
     const response = await handleFn(
       async () =>
         await client.api.postUserPayPalReferral(userId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

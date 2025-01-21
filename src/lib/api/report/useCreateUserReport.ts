@@ -17,7 +17,7 @@ export const useCreateUserReport = () => {
             comment,
           },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

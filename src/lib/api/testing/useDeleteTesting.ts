@@ -11,7 +11,7 @@ export const useDeleteTesting = () => {
     await handleFn(
       async () =>
         await client.api.deleteTesting(testingId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

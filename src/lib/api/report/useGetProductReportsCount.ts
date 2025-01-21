@@ -14,7 +14,7 @@ export const useGetProductReportsCount = () => {
     const response = await handleFn(
       async () =>
         await client.api.getProductReportsCount(userId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

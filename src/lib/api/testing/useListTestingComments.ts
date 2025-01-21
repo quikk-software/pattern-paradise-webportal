@@ -35,7 +35,7 @@ export const useListTestingComments = ({
             pageNumber: overridePageNumber ?? pagination.pageNumber,
             pageSize: overridePageSize ?? pagination.pageSize,
           },
-          { ...(await getApi(session?.user.accessToken)) },
+          { ...(await getApi(session)) },
         ),
     );
 

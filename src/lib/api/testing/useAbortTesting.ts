@@ -11,7 +11,7 @@ export const useAbortTesting = () => {
     await handleFn(
       async () =>
         await client.api.abortTesting(testingId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

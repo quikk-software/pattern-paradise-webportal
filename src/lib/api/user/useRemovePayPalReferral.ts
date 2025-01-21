@@ -10,7 +10,7 @@ export const useRemovePayPalReferral = () => {
     await handleFn(
       async () =>
         await client.api.deleteUserPayPalReferral(userId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

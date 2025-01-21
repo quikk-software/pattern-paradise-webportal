@@ -19,7 +19,7 @@ export const useDownloadPatternsByProductId = () => {
             language,
           },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

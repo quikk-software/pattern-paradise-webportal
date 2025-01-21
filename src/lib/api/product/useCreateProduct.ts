@@ -18,7 +18,7 @@ export const useCreateProduct = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`,
         product,
         {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         },
       );
     });

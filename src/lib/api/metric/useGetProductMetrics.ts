@@ -15,7 +15,7 @@ export const useGetProductMetrics = () => {
     const response = await handleFn(
       async () =>
         await client.api.getProductMetrics(productId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

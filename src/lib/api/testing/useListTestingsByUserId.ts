@@ -32,7 +32,7 @@ export const useListTestingsByUserId = ({
             pageSize: pagination.pageSize,
             filter,
           },
-          { ...(await getApi(session?.user.accessToken)) },
+          { ...(await getApi(session)) },
         ),
     );
 

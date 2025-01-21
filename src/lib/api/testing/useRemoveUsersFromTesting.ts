@@ -14,7 +14,7 @@ export const useRemoveUsersFromTesting = () => {
           testingId,
           { testerIds },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

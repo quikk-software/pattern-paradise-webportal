@@ -29,7 +29,7 @@ export const useListTestings = ({
             pageSize: pagination.pageSize,
             status,
           },
-          { ...(await getApi(session?.user.accessToken)) },
+          { ...(await getApi(session)) },
         ),
     );
 

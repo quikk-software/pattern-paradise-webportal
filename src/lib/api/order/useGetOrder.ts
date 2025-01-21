@@ -15,7 +15,7 @@ export const useGetOrder = () => {
     const response = await handleFn(
       async () =>
         await client.api.getOrderById(orderId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

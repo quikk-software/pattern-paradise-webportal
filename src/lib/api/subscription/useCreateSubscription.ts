@@ -12,7 +12,7 @@ export const useCreateSubscription = () => {
     await handleFn(
       async () =>
         await client.api.postSubscription(subscription, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

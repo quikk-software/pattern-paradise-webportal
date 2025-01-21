@@ -35,7 +35,7 @@ export const useListOrders = ({
             filter,
           },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

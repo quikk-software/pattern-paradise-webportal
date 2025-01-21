@@ -39,7 +39,7 @@ export const useListUserReports = ({
             reason,
           },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

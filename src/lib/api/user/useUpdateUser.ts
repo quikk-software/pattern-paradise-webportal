@@ -12,7 +12,7 @@ export const useUpdateUser = () => {
     await handleFn(
       async () =>
         await client.api.putUser(userId, data, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

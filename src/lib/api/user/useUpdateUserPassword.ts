@@ -12,7 +12,7 @@ export const useUpdateUserPassword = () => {
     await handleFn(
       async () =>
         await client.api.putUserPassword(userId, data, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

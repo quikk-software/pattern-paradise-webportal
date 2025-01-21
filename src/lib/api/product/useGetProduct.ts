@@ -18,7 +18,7 @@ export const useGetProduct = () => {
           productId,
           { trackMetrics },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

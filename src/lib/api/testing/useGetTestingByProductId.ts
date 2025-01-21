@@ -20,7 +20,7 @@ export const useGetTestingByProductId = () => {
             trackMetrics,
           },
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

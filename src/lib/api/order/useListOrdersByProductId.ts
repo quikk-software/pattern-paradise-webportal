@@ -18,7 +18,7 @@ export const useListOrdersByProductId = () => {
           productId,
           {},
           {
-            ...(await getApi(session?.user.accessToken)),
+            ...(await getApi(session)),
           },
         ),
     );

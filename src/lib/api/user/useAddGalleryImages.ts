@@ -12,7 +12,7 @@ export const useAddGalleryImages = () => {
     await handleFn(
       async () =>
         await client.api.putGalleryImages(userId, data, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

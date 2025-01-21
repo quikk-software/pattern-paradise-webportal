@@ -15,7 +15,7 @@ export const useGetTestingMetrics = () => {
     const response = await handleFn(
       async () =>
         await client.api.getTestingMetrics(productId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

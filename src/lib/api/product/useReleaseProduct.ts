@@ -11,7 +11,7 @@ export const useReleaseProduct = () => {
     await handleFn(
       async () =>
         await client.api.releaseProduct(productId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
   };

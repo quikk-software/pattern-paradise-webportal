@@ -15,7 +15,7 @@ export const useGetOrderAnalytics = () => {
     const response = await handleFn(
       async () =>
         await client.api.getOrderAnalytics(userId, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 

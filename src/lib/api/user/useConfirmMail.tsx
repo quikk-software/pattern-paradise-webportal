@@ -15,7 +15,7 @@ export const useConfirmMail = () => {
     const response = await handleFn(
       async () =>
         await client.api.confirmMail(data, {
-          ...(await getApi(session?.user.accessToken)),
+          ...(await getApi(session)),
         }),
     );
 
