@@ -17,7 +17,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import dayjs, { TIME_FORMAT } from '@/lib/core/dayjs';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { Input } from '@/components/ui/input';
 import { GetTestingCommentResponse, GetTestingResponse } from '@/@types/api-types';
 import { Store } from '@/lib/redux/store';
 import { useSelector } from 'react-redux';
@@ -28,6 +27,7 @@ import { useRouter } from 'next/navigation';
 import useWebSocket from '@/lib/hooks/useWebSocket';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { DynamicTextarea } from '@/components/dynamic-textarea';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -257,7 +257,7 @@ export default function ChatHistory({
 
         const result = await createTestingComment({
           type: 'Standard',
-          comment: newMessage,
+          comment: newMessage.trim(),
           files: urls.map((fu) => ({
             url: fu.url,
             mimeType: fu.mimeType,
@@ -548,9 +548,10 @@ export default function ChatHistory({
                             </div>
 
                             <p
-                              className="mt-1 break-words whitespace-normal overflow-hidden"
+                              className="mt-1 break-words overflow-hidden"
                               style={{
                                 textAlign: 'left',
+                                whiteSpace: 'pre-line',
                               }}
                             >
                               {message.message}
@@ -624,39 +625,38 @@ export default function ChatHistory({
                     ))}
                   </div>
                 )}
-                <div className="flex items-center gap-4">
-                  <Input
-                    type="text"
+                <div className="flex items-end gap-4">
+                  <DynamicTextarea
                     placeholder="Type a message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        handleSendMessage();
-                      }
-                    }}
                     className="flex-1"
                   />
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    <PaperclipIcon className="w-6 h-6 text-gray-500 hover:text-gray-700" />
-                    <input
-                      id="file-upload"
-                      type="file"
-                      className="hidden"
-                      multiple
-                      accept="image/*"
-                      onChange={(e) => setFiles(e.target.files)}
+                  <div className="flex items-center gap-4">
+                    <label htmlFor="file-upload" className="cursor-pointer">
+                      <PaperclipIcon className="w-6 h-6 text-gray-500 hover:text-gray-700" />
+                      <input
+                        id="file-upload"
+                        type="file"
+                        className="hidden"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => setFiles(e.target.files)}
+                        disabled={isInactive || sendMessageIsLoading}
+                      />
+                    </label>
+                    <Button
+                      onClick={handleSendMessage}
                       disabled={isInactive || sendMessageIsLoading}
-                    />
-                  </label>
-                  <Button onClick={handleSendMessage} disabled={isInactive || sendMessageIsLoading}>
-                    Send
-                    {sendMessageIsLoading ? (
-                      <LoadingSpinnerComponent size="sm" className="text-white" />
-                    ) : (
-                      <SendIcon className="w-4 h-4 mr-2" />
-                    )}
-                  </Button>
+                    >
+                      Send
+                      {sendMessageIsLoading ? (
+                        <LoadingSpinnerComponent size="sm" className="text-white" />
+                      ) : (
+                        <SendIcon className="w-4 h-4 mr-2" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
