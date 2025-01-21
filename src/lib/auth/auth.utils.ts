@@ -20,12 +20,18 @@ async function getAccessToken(session: Session | null) {
     throw new Error('No session or access token available');
   }
 
-  const isExpired = session.expires && Date.now() > new Date(session.expires).getTime();
+  logger.log('Check if session is expired: ', session.user.expiresAt);
+  const isExpired =
+    session.user.expiresAt && Date.now() > new Date(session.user.expiresAt).getTime();
+  logger.log('Session is expired: ', isExpired);
 
   if (isExpired) {
+    logger.log('Try to sign in');
     await signIn('credentials', { redirect: false });
 
     const updatedSession = await getSession();
+
+    logger.log('Got updated session data');
 
     if (!updatedSession || !updatedSession.user.accessToken) {
       throw new Error('Failed to refresh access token');
