@@ -32,7 +32,7 @@ const handler = NextAuth({
                 grant_type: 'password',
                 username: credentials.username!,
                 password: credentials.password!,
-                scope: 'openid profile email',
+                scope: 'openid profile email offline_access',
               }),
             },
           );
