@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useApiStates } from '@/lib/api/useApiStates';
 
 export const useAddGalleryImages = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -12,7 +12,7 @@ export const useAddGalleryImages = () => {
     await handleFn(
       async () =>
         await client.api.putGalleryImages(userId, data, {
-          ...(await getApi(session)),
+          ...(await getApi(session, update)),
         }),
     );
   };

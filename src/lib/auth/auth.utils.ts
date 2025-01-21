@@ -1,6 +1,6 @@
 import axios from 'axios';
 import logger from '@/lib/core/logger';
-import { getSession, signIn, signOut } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 import { Session } from 'next-auth';
 
 const handleLogoutFlow = async (refreshToken: string) => {
@@ -15,7 +15,10 @@ const handleLogoutFlow = async (refreshToken: string) => {
   logger.log('User logged out successfully');
 };
 
-async function getAccessToken(session: Session | null) {
+async function getAccessToken(
+  session: Session | null,
+  update: (data?: any) => Promise<Session | null>,
+) {
   if (!session || !session.user.accessToken) {
     throw new Error('No session or access token available');
   }
@@ -26,8 +29,8 @@ async function getAccessToken(session: Session | null) {
   logger.log('Session is expired: ', isExpired);
 
   if (isExpired) {
-    logger.log('Try to sign in');
-    await signIn('credentials', { redirect: false });
+    logger.log('Update session');
+    await update();
 
     const updatedSession = await getSession();
 

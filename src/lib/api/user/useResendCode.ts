@@ -4,7 +4,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useResendCode = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -12,7 +12,7 @@ export const useResendCode = () => {
     await handleFn(
       async () =>
         await client.api.resendCode(data, {
-          ...(await getApi(session)),
+          ...(await getApi(session, update)),
         }),
     );
   };

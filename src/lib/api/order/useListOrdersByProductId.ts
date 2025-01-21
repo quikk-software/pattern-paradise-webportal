@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 export const useListOrdersByProductId = () => {
   const [data, setData] = useState<GetOrderResponse[]>([]);
 
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -18,7 +18,7 @@ export const useListOrdersByProductId = () => {
           productId,
           {},
           {
-            ...(await getApi(session)),
+            ...(await getApi(session, update)),
           },
         ),
     );

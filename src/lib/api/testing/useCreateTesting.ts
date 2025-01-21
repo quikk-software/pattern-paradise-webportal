@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 export const useCreateTesting = () => {
   const [data, setData] = useState<PostTestingResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -15,7 +15,7 @@ export const useCreateTesting = () => {
     const response = await handleFn(
       async () =>
         await client.api.postTesting(testing, {
-          ...(await getApi(session)),
+          ...(await getApi(session, update)),
         }),
     );
 

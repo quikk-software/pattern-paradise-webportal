@@ -9,8 +9,8 @@ const client = new Api({
   },
 });
 
-const getApi = async (session: Session | null) => {
-  const accessToken = await getAccessToken(session);
+const getApi = async (session: Session | null, update: (data?: any) => Promise<Session | null>) => {
+  const accessToken = await getAccessToken(session, update);
 
   const headers: Record<any, any> = {};
   headers.Authorization = !!accessToken ? `Bearer ${accessToken}` : undefined;

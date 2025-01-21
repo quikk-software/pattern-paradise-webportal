@@ -14,7 +14,7 @@ export const useListProductReports = ({
 }) => {
   const [data, setData] = useState<GetProductReportResponse[]>([]);
 
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -41,7 +41,7 @@ export const useListProductReports = ({
             reason,
           },
           {
-            ...(await getApi(session)),
+            ...(await getApi(session, update)),
           },
         ),
     );

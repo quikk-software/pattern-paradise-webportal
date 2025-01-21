@@ -4,7 +4,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useUpdateUser = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -12,7 +12,7 @@ export const useUpdateUser = () => {
     await handleFn(
       async () =>
         await client.api.putUser(userId, data, {
-          ...(await getApi(session)),
+          ...(await getApi(session, update)),
         }),
     );
   };

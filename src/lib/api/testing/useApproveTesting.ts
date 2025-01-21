@@ -3,7 +3,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useApproveTesting = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -11,7 +11,7 @@ export const useApproveTesting = () => {
     await handleFn(
       async () =>
         await client.api.approveTesting(testingId, {
-          ...(await getApi(session)),
+          ...(await getApi(session, update)),
         }),
     );
   };

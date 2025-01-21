@@ -3,7 +3,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useDeleteProduct = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -11,7 +11,7 @@ export const useDeleteProduct = () => {
     await handleFn(
       async () =>
         await client.api.deleteProduct(productId, {
-          ...(await getApi(session)),
+          ...(await getApi(session, update)),
         }),
     );
   };

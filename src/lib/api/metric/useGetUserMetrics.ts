@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 export const useGetUserMetrics = () => {
   const [data, setData] = useState<GetUserMetricsResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -15,7 +15,7 @@ export const useGetUserMetrics = () => {
     const response = await handleFn(
       async () =>
         await client.api.getUserMetrics(userId, {
-          ...(await getApi(session)),
+          ...(await getApi(session, update)),
         }),
     );
 
