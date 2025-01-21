@@ -10,14 +10,14 @@ export async function POST(req: Request) {
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/protocol/openid-connect/revoke`,
+      `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/revoke`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID!,
+          client_id: process.env.KEYCLOAK_CLIENT_ID!,
           client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
           token: refreshToken,
         }),

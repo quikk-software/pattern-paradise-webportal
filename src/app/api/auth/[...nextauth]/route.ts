@@ -20,14 +20,14 @@ const handler = NextAuth({
 
         try {
           const tokenResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
+            `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
             {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
               body: new URLSearchParams({
-                client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID!,
+                client_id: process.env.KEYCLOAK_CLIENT_ID!,
                 client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
                 grant_type: 'password',
                 username: credentials.username!,
@@ -98,10 +98,10 @@ export { handler as GET, handler as POST };
 async function refreshAccessToken(token: any) {
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
+      `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
       qs.stringify({
         grant_type: 'refresh_token',
-        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
+        client_id: process.env.KEYCLOAK_CLIENT_ID,
         client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
         refresh_token: token.refreshToken,
       }),
