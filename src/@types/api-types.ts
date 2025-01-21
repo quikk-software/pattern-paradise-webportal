@@ -101,6 +101,8 @@ export interface PostUserRequest {
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
+  hasAcceptedPrivacy: boolean;
+  hasAcceptedTerms: boolean;
 }
 
 export interface PostUserResponse {
@@ -116,11 +118,14 @@ export interface PutUserRequest {
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
+  hasAcceptedPrivacy?: boolean;
+  hasAcceptedTerms?: boolean;
   roles?: string[];
 }
 
 export interface PutUserPasswordRequest {
   password?: string;
+  oldPassword?: string;
 }
 
 export interface PutGalleryImagesRequest {
@@ -134,7 +139,10 @@ export interface GetUserResponse {
   description?: string;
   galleryImages: string[];
   isActive: boolean;
+  isBlocked: boolean;
   isMailConfirmed: boolean;
+  hasAcceptedPrivacy: boolean;
+  hasAcceptedTerms: boolean;
   openIncidentsCount: number;
   isSponsored: boolean;
   firstName?: string;
@@ -185,6 +193,7 @@ export interface GetUserAccountResponse {
   id: string;
   username: string;
   isActive: boolean;
+  isBlocked: boolean;
   paypalMerchantIsActive: boolean;
   isSponsored: boolean;
   firstName?: string;
@@ -328,6 +337,10 @@ export interface ListProductsResponse {
   products: GetProductResponse[];
 }
 
+export interface DeleteUsersFromTestingRequest {
+  testerIds: string[];
+}
+
 export interface GetTestingMetricsResponse {
   testingViews: number;
   testingImpressions: number;
@@ -402,6 +415,7 @@ export interface PostTestingCommentRequest {
   testingId: string;
   comment: string;
   type: string;
+  testerStatus?: string;
   files: {
     url: string;
     mimeType: string;
@@ -973,6 +987,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         instagramRef?: any;
         /** @example "any" */
         tiktokRef?: any;
+        /** @example "any" */
+        hasAcceptedTerms?: any;
+        /** @example "any" */
+        hasAcceptedPrivacy?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1042,6 +1060,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @example "any" */
         imageUrl?: any;
         /** @example "any" */
+        hasAcceptedTerms?: any;
+        /** @example "any" */
+        hasAcceptedPrivacy?: any;
+        /** @example "any" */
         roles?: any;
       },
       params: RequestParams = {},
@@ -1069,6 +1091,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** @example "any" */
         password?: any;
+        /** @example "any" */
+        oldPassword?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1389,6 +1413,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         subCategories?: string[];
         /** List of hashtags to filter products. */
         hashtags?: string[];
+        /** List of languages to filter products. */
+        languages?: string[];
         /** The minimum price of a product to filter. */
         minPrice?: number;
         /** The maximum price of a product to filter. */
@@ -1830,6 +1856,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The query removes users from a testing by a given ID.
+     *
+     * @tags Testing
+     * @name RemoveUsersFromTesting
+     * @summary Removes users from testing.
+     * @request DELETE:/api/v1/testings/{testingId}/users
+     * @secure
+     */
+    removeUsersFromTesting: (
+      testingId: string,
+      data: {
+        /** @example "any" */
+        testerIds?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/${testingId}/users`,
+        method: 'DELETE',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
      * @description Creates a testing comment by the given request body data.
      *
      * @tags Testing comment
@@ -1848,6 +1900,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         files?: any;
         /** @example "any" */
         type?: any;
+        /** @example "any" */
+        testerStatus?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1882,6 +1936,34 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListTestingCommentsResponse, any>({
         path: `/api/v1/testing-comments/testings/${testingId}`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of testing review comment of a given testing ID.
+     *
+     * @tags Testing comment
+     * @name ListTestingReviewCommentsByTestingId
+     * @summary Gets the testing review comments by testing ID.
+     * @request GET:/api/v1/testing-comments/testings/{testingId}/reviews
+     * @secure
+     */
+    listTestingReviewCommentsByTestingId: (
+      testingId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListTestingCommentsResponse, any>({
+        path: `/api/v1/testing-comments/testings/${testingId}/reviews`,
         method: 'GET',
         query: query,
         secure: true,

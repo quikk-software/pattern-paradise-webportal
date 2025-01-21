@@ -1,11 +1,9 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
+import { useSession } from 'next-auth/react';
 
 export const useDeleteTesting = () => {
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -13,7 +11,7 @@ export const useDeleteTesting = () => {
     await handleFn(
       async () =>
         await client.api.deleteTesting(testingId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(session)),
         }),
     );
   };

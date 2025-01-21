@@ -7,13 +7,17 @@ import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import { InfoBoxComponent } from '@/components/info-box';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 export default function SellSubmitPage() {
+  const { userId } = useSelector((s: Store) => s.auth);
+
   const { fetch, data: user, isLoading, isError } = useGetUser();
 
   useEffect(() => {
-    fetch();
-  }, []);
+    fetch(userId);
+  }, [userId]);
 
   if (isError) {
     return <NotFoundPage />;

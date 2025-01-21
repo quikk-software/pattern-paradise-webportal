@@ -4,11 +4,9 @@ import './globals.css';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
 import StoreProvider from '@/app/providers/StoreProvider';
-import { cookies } from 'next/headers';
-import { getAccessTokenUsingRefreshToken, isTokenValid } from '@/lib/auth/auth.utils';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
-import logger from '@/lib/core/logger';
 import { CookiesProvider } from 'next-client-cookies/server';
+import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -32,29 +30,11 @@ export const metadata: Metadata = {
   },
 };
 
-async function refreshAccessToken(refreshToken: string) {
-  try {
-    await getAccessTokenUsingRefreshToken(refreshToken);
-  } catch (error) {
-    logger.error('Error during token refresh:', error);
-  }
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get('accessToken')?.value;
-  const refreshToken = cookieStore.get('refreshToken')?.value;
-
-  if (!accessToken || !isTokenValid(accessToken)) {
-    if (refreshToken && isTokenValid(refreshToken)) {
-      await refreshAccessToken(refreshToken);
-    }
-  }
-
   return (
     <html lang="en">
       <head>
@@ -98,15 +78,17 @@ export default async function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <CookiesProvider>
-          <div className="flex flex-col h-dvh">
-            <div className="flex-1 overflow-auto">
-              <StoreProvider>{children}</StoreProvider>
+          <AuthSessionProvider>
+            <div className="flex flex-col h-dvh">
+              <div className="flex-1 overflow-auto">
+                <StoreProvider>{children}</StoreProvider>
+              </div>
+              <CookieConsentBanner />
+              <div className="flex-0">
+                <BottomNavigation />
+              </div>
             </div>
-            <CookieConsentBanner />
-            <div className="flex-0">
-              <BottomNavigation />
-            </div>
-          </div>
+          </AuthSessionProvider>
         </CookiesProvider>
       </body>
     </html>

@@ -2,14 +2,12 @@ import { useState } from 'react';
 import { client, getApi } from '@/@types';
 import type { VerifyCodeRequest, VerifyCodeResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
+import { useSession } from 'next-auth/react';
 
 export const useConfirmMail = () => {
   const [data, setData] = useState<VerifyCodeResponse | undefined>(undefined);
 
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -17,7 +15,7 @@ export const useConfirmMail = () => {
     const response = await handleFn(
       async () =>
         await client.api.confirmMail(data, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(session)),
         }),
     );
 

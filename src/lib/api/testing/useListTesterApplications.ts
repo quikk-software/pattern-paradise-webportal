@@ -3,10 +3,9 @@ import { client, getApi } from '@/@types';
 import type { GetTesterApplicationResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 import { combineArraysById } from '@/lib/core/utils';
 import { TesterApplicationFilterObject } from '@/lib/constants';
+import { useSession } from 'next-auth/react';
 
 export const useListTesterApplications = ({
   pageNumber = 1,
@@ -18,8 +17,7 @@ export const useListTesterApplications = ({
   const [data, setData] = useState<GetTesterApplicationResponse[]>([]);
   const [totalCount, setTotalCount] = useState(0);
 
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -34,7 +32,7 @@ export const useListTesterApplications = ({
             pageSize: pagination.pageSize,
             ...filter,
           },
-          { ...(await getApi(accessToken, refreshToken, dispatch)) },
+          { ...(await getApi(session)) },
         ),
     );
 

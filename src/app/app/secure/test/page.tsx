@@ -13,11 +13,11 @@ export default function TestPage() {
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Link href={'/app/secure/test/chats'}>
-            <Button className="w-full">My chats</Button>
+            <Button className="w-full">My Chats</Button>
           </Link>
           <Link href={'/app/secure/test/testings'}>
             <Button className="w-full" variant="outline">
-              My testings
+              My Testings
             </Button>
           </Link>
         </CardContent>

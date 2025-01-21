@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
+import { cn } from '@/lib/utils';
 
 const NAV_LINKS = [
   {
@@ -63,11 +64,14 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
           <div className="flex-shrink-0 flex items-center">
             <Link
               href="/"
-              className={`text-lg font-bold text-${
-                background === 'primary' ? 'white' : 'black'
-              } flex gap-1 items-center`}
+              className={cn(
+                'text-lg font-bold flex gap-1 items-center',
+                background === 'primary' ? 'text-white' : 'text-black',
+              )}
             >
-              <PatternParadiseIcon className="w-8 h-8 fill-white" />
+              <PatternParadiseIcon
+                className={cn('w-8 h-8', background === 'primary' ? 'fill-white' : 'fill-black')}
+              />
               <span>Pattern Paradise</span>
             </Link>
           </div>

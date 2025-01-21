@@ -8,6 +8,9 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Download } from 'lucide-react';
 import CountryFlag from '@/lib/components/CountryFlag';
 import { GetOrderResponse, GetProductResponse } from '@/@types/api-types';
+import { useSession } from 'next-auth/react';
+import QuickSignUpDrawer from '@/lib/components/QuickSignUpDrawer';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface DownloadPatternButtonProps {
   productId: string;
@@ -21,6 +24,12 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
   files,
 }) => {
   const [language, setLanguage] = useState<string | undefined>(undefined);
+  const [isQuickSignupDrawerOpen, setIsQuickSignupDrawerOpen] = useState(false);
+  const [isQuickSignupSuccess, setIsQuickSignupSuccess] = useState(false);
+
+  const { status } = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const {
     fetch: downloadPattern,
@@ -52,24 +61,41 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
     }, 1000);
 
     setLanguage(undefined);
-  }, [file, language]);
+  }, [file, language, productTitle]);
 
-  const handleDownloadClick = async () => {
-    await fetch(productId);
+  useEffect(() => {
+    if (!isQuickSignupSuccess || !pathname) {
+      return;
+    }
+    router.push(`/auth/login?redirect=${pathname}`);
+  }, [isQuickSignupSuccess, router, pathname]);
+
+  const filesGroupedByLanguage = files.reduce(
+    (acc, file) => {
+      if (!acc[file.language]) {
+        acc[file.language] = [];
+      }
+
+      const isDuplicate = acc[file.language].some((existingFile) => existingFile.id === file.id);
+      if (!isDuplicate) {
+        acc[file.language].push(file);
+      }
+
+      return acc;
+    },
+    {} as { [language: string]: typeof files },
+  );
+
+  const handleDownloadClick = (productId: string, fileLanguage: string, isLoggedIn: boolean) => {
+    setLanguage(fileLanguage);
+    if (isLoggedIn) {
+      downloadPattern(productId, fileLanguage);
+    } else {
+      setIsQuickSignupDrawerOpen(true);
+    }
   };
 
-  const filesGroupedByLanguage = files.reduce((acc, file) => {
-    if (!acc[file.language]) {
-      acc[file.language] = [];
-    }
-
-    const isDuplicate = acc[file.language].some((existingFile) => existingFile.id === file.id);
-    if (!isDuplicate) {
-      acc[file.language].push(file);
-    }
-
-    return acc;
-  }, {} as { [language: string]: typeof files });
+  const isLoggedIn = status === 'authenticated';
 
   return (
     <div className="flex flex-col gap-2">
@@ -77,10 +103,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
         <Button
           key={fileLanguage}
           className="w-full sm:w-auto"
-          onClick={() => {
-            setLanguage(fileLanguage);
-            downloadPattern(productId, fileLanguage);
-          }}
+          onClick={() => handleDownloadClick(productId, fileLanguage, isLoggedIn)}
           disabled={downloadPatternIsLoading}
         >
           {downloadPatternIsLoading && fileLanguage === language ? (
@@ -88,13 +111,22 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           ) : (
             <Download className="mr-2 h-4 w-4" />
           )}
-          Download pattern <CountryFlag languageCode={fileLanguage} />
+          Download Pattern <CountryFlag languageCode={fileLanguage} />
         </Button>
       ))}
       <RequestStatus
         isSuccess={downloadPatternIsSuccess}
         isError={downloadPatternIsError}
         successMessage={''}
+      />
+      <QuickSignUpDrawer
+        isOpen={isQuickSignupDrawerOpen}
+        setIsOpen={setIsQuickSignupDrawerOpen}
+        reason={
+          'Quickly and easily create an account to download this pattern. After registering, you will be automatically redirected to the login page and will be returned to this page immediately upon successful login.'
+        }
+        signupCallback={setIsQuickSignupSuccess}
+        redirect={pathname}
       />
     </div>
   );

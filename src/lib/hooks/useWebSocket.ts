@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { GetTestingCommentResponse } from '@/@types/api-types';
 import logger from '@/lib/core/logger';
+import { useSession } from 'next-auth/react';
 
 interface WebSocketMessage {
   event: string;
@@ -13,11 +14,16 @@ interface UseWebSocketReturn {
   isConnected: boolean;
 }
 
-const useWebSocket = (url: string, token: string | null): UseWebSocketReturn => {
+const useWebSocket = (url: string): UseWebSocketReturn => {
   const [messages, setMessages] = useState<WebSocketMessage[]>([]);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  const { data: session } = useSession();
+
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const token = session?.user.accessToken;
 
   const connectWebSocket = () => {
     if (!token) {

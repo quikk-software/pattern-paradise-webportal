@@ -67,7 +67,7 @@ export default function HashtagInput({ hashtags, setHashtags, limit }: HashtagIn
           onClick={clearAllHashtags}
           disabled={hashtagCount === 0}
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 />
         </Button>
       </div>
       {!!inputValue && hasError ? (

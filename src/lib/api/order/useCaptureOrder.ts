@@ -1,14 +1,13 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 import { useState } from 'react';
 import { PostCaptureOrderResponse } from '@/@types/api-types';
+import { useSession } from 'next-auth/react';
 
 export const useCaptureOrder = () => {
   const [data, setData] = useState<PostCaptureOrderResponse | undefined>(undefined);
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -16,7 +15,7 @@ export const useCaptureOrder = () => {
     const response = await handleFn(
       async () =>
         await client.api.captureOrder(paypalOrderId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(session)),
         }),
     );
 

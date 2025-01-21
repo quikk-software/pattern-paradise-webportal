@@ -3,9 +3,8 @@ import { client, getApi } from '@/@types';
 import type { GetOrderResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 import { combineArraysById } from '@/lib/core/utils';
+import { useSession } from 'next-auth/react';
 
 export const useListOrders = ({
   pageNumber = 1,
@@ -20,8 +19,7 @@ export const useListOrders = ({
 }) => {
   const [data, setData] = useState<GetOrderResponse[]>([]);
 
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -37,7 +35,7 @@ export const useListOrders = ({
             filter,
           },
           {
-            ...(await getApi(accessToken, refreshToken, dispatch)),
+            ...(await getApi(session)),
           },
         ),
     );

@@ -8,30 +8,52 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useApproveTesting, useCreateTestingComment, useDeclineTesting } from '@/lib/api/testing';
-import { useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import RequestStatus from '@/lib/components/RequestStatus';
+import { Progress } from '@/components/ui/progress';
 
 interface ReviewDrawerProps {
   drawerIsOpen: boolean;
   setDrawerIsOpen: (isOpen: boolean) => void;
   testingId: string;
+  skipRating?: boolean;
 }
 
 export default function ReviewDrawer({
   drawerIsOpen,
   setDrawerIsOpen,
   testingId,
+  skipRating = false,
 }: ReviewDrawerProps) {
   const [likeState, setLikeState] = useState<'Approved' | 'Declined' | null>(null);
   const [reviewMessage, setReviewMessage] = useState<string | null>(null);
   const [images, setImages] = useState<string[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
+    [],
+  );
 
-  const router = useRouter();
+  const {
+    fetch: approveTesting,
+    isLoading: approveTestingIsLoading,
+    isSuccess: approveTestingIsSuccess,
+    isError: approveTestingIsError,
+    errorDetail: approveTestingErrorDetail,
+  } = useApproveTesting();
+  const {
+    fetch: declineTesting,
+    isLoading: declineTestingIsLoading,
+    isSuccess: declineTestingIsSuccess,
+    isError: declineTestingIsError,
+    errorDetail: declineTestingErrorDetail,
+  } = useDeclineTesting();
 
-  const { fetch: approveTesting, isLoading: approveTestingIsLoading } = useApproveTesting();
-  const { fetch: declineTesting, isLoading: declineTestingIsLoading } = useDeclineTesting();
-
-  const { mutate, isLoading: createTestingCommentIsLoading } = useCreateTestingComment();
+  const {
+    mutate,
+    isLoading: createTestingCommentIsLoading,
+    isSuccess,
+    isError,
+    errorDetail,
+  } = useCreateTestingComment();
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -51,12 +73,14 @@ export default function ReviewDrawer({
     images: string[],
     testingId: string,
   ) => {
-    if (likeState === 'Approved') {
-      await approveTesting(testingId);
-    } else if (likeState === 'Declined') {
-      await declineTesting(testingId);
-    } else {
-      return;
+    if (!skipRating) {
+      if (likeState === 'Approved') {
+        await approveTesting(testingId);
+      } else if (likeState === 'Declined') {
+        await declineTesting(testingId);
+      } else {
+        return;
+      }
     }
 
     try {
@@ -65,8 +89,15 @@ export default function ReviewDrawer({
         () => {},
         () => {},
         () => {},
-        // TODO: Add progress handler
-        () => {},
+        (fileIndex, progress) => {
+          const currentProgress = {
+            fileIndex,
+            progress,
+          };
+          const uploadProgressCopy = [...uploadProgress];
+          uploadProgressCopy.push(currentProgress);
+          setUploadProgress(uploadProgressCopy);
+        },
       );
 
       await mutate({
@@ -74,10 +105,12 @@ export default function ReviewDrawer({
         testingId,
         files: urls,
         comment: reviewMessage ?? '',
+        testerStatus:
+          likeState === 'Approved' ? 'Approved' : likeState === 'Declined' ? 'Declined' : undefined,
       });
     } finally {
       setDrawerIsOpen(false);
-      router.push(`/app/secure/test/chats?testingId=${testingId}`);
+      window.location.reload();
     }
   };
 
@@ -148,6 +181,52 @@ export default function ReviewDrawer({
               ⚠️ Note: Reviews will be publicly available to all users of Pattern Paradise. This
               includes your review images, message and like/dislike choice.
             </p>
+
+            {uploadProgress.map((up) => (
+              <Progress
+                key={up.fileIndex}
+                value={up.progress}
+                className="h-2 transition-all duration-300 ease-in-out"
+                style={{
+                  background: `linear-gradient(90deg, 
+                                var(--primary) 0%, 
+                                var(--primary) ${up.progress}%, 
+                                var(--muted) ${up.progress}%, 
+                                var(--muted) 100%)`,
+                }}
+              />
+            ))}
+
+            <RequestStatus
+              isSuccess={approveTestingIsSuccess}
+              isError={approveTestingIsError}
+              errorMessage={
+                <>
+                  Something went wrong while approving testing
+                  {approveTestingErrorDetail ? `: ${approveTestingErrorDetail}` : ''}
+                </>
+              }
+            />
+            <RequestStatus
+              isSuccess={declineTestingIsSuccess}
+              isError={declineTestingIsError}
+              errorMessage={
+                <>
+                  Something went wrong while declining testing
+                  {declineTestingErrorDetail ? `: ${declineTestingErrorDetail}` : ''}
+                </>
+              }
+            />
+            <RequestStatus
+              isSuccess={isSuccess}
+              isError={isError}
+              errorMessage={
+                <>
+                  Something went wrong while removing testers
+                  {errorDetail ? `: ${errorDetail}` : ''}
+                </>
+              }
+            />
             <Button
               onClick={() => {
                 setDrawerIsOpen(false);

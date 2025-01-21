@@ -1,14 +1,12 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 export const useDownloadPatternsByProductId = () => {
   const [data, setData] = useState<any>(undefined);
 
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -21,7 +19,7 @@ export const useDownloadPatternsByProductId = () => {
             language,
           },
           {
-            ...(await getApi(accessToken, refreshToken, dispatch)),
+            ...(await getApi(session)),
           },
         ),
     );

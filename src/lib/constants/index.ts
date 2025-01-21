@@ -15,6 +15,29 @@ export enum ExperienceLevels {
   Professional = 'Professional',
 }
 
+export const LANGUAGES = [
+  { code: 'ar', name: 'Arabic', country: 'SA' },
+  { code: 'cs', name: 'Czech', country: 'CZ' },
+  { code: 'da', name: 'Danish', country: 'DK' },
+  { code: 'en', name: 'English', country: 'GB' },
+  { code: 'nl', name: 'Dutch', country: 'NL' },
+  { code: 'de', name: 'German', country: 'DE' },
+  { code: 'ru', name: 'Russian', country: 'RU' },
+  { code: 'fr', name: 'French', country: 'FR' },
+  { code: 'fi', name: 'Finnish', country: 'FI' },
+  { code: 'el', name: 'Greek', country: 'GR' },
+  { code: 'iw', name: 'Hebrew', country: 'IL' },
+  { code: 'it', name: 'Italian', country: 'IT' },
+  { code: 'jp', name: 'Japanese', country: 'JP' },
+  { code: 'ko', name: 'Korean', country: 'KR' },
+  { code: 'no', name: 'Norwegian', country: 'NO' },
+  { code: 'pl', name: 'Polish', country: 'PL' },
+  { code: 'es', name: 'Spanish', country: 'ES' },
+  { code: 'sv', name: 'Swedish', country: 'SE' },
+  { code: 'tr', name: 'Turkish', country: 'TR' },
+  { code: 'uk', name: 'Ukrainian', country: 'UA' },
+];
+
 export const CATEGORIES = [
   {
     name: 'Crocheting',
@@ -139,6 +162,7 @@ export type ProductFilterObject = {
   categories?: string[];
   subCategories?: string[];
   hashtags?: string[];
+  languages?: string[];
   minPrice?: number;
   maxPrice?: number;
   pageNumber?: number;

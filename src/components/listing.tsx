@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { Search, SlidersHorizontal, Trash } from 'lucide-react';
+import { Search, SlidersHorizontal, Trash, Trash2 } from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
 import { combineArraysById } from '@/lib/core/utils';
@@ -19,6 +19,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { updateSelectedFlags } from '@/lib/utils';
 import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
+import LanguageSelect from '@/lib/components/LanguageSelect';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -41,6 +42,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [priceRange, setPriceRange] = useState([3, 100]);
   const [isFree, setIsFree] = useState(true);
   const [hashtags, setHashtags] = useState<string[]>([]);
+  const [language, setLanguage] = useState<string | undefined>(undefined);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [triggerLoad, setTriggerLoad] = useState(false);
@@ -69,7 +71,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       setProducts(result?.products ?? []);
     };
     fetchProducts();
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     if (!loadMore) {
@@ -115,6 +117,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       minPrice: isFree ? 0 : priceRange[0],
       maxPrice: priceRange[1],
       hashtags,
+      languages: language ? [language] : [],
       pageNumber: 1,
       pageSize: 20,
     });
@@ -134,6 +137,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setTriggerLoad(true);
     setIsFree(true);
     setHashtags([]);
+    setLanguage(undefined);
   };
 
   const handleImpression = async (productId: string) => {
@@ -157,6 +161,10 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       .map((option) => ({ name: option.name, selected: option.selected })),
   );
 
+  const handleLanguageChange = (language: string) => {
+    setLanguage(language);
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -177,6 +185,27 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
                   <div>
                     <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
                     <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold mb-2">Language</h2>
+                    <div className="flex gap-2">
+                      <LanguageSelect
+                        language={language}
+                        handleLanguageChange={handleLanguageChange}
+                        fullWidth
+                      />
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setLanguage(undefined);
+                        }}
+                        disabled={language === undefined}
+                      >
+                        <Trash2 />
+                      </Button>
+                    </div>
                   </div>
 
                   <div>

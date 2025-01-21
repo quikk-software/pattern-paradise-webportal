@@ -1,20 +1,18 @@
 import { client, getApi } from '@/@types';
 import type { PutUserPasswordRequest } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
+import { useSession } from 'next-auth/react';
 
 export const useUpdateUserPassword = () => {
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const mutate = async (data: PutUserPasswordRequest) => {
+  const mutate = async (userId: string, data: PutUserPasswordRequest) => {
     await handleFn(
       async () =>
         await client.api.putUserPassword(userId, data, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+          ...(await getApi(session)),
         }),
     );
   };

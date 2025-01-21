@@ -18,7 +18,7 @@ export default function CookieConsentBanner() {
     if (consentGiven === undefined) {
       setVisible(true);
     }
-  }, []);
+  }, [cookieStore]);
 
   if (!visible) {
     return null;

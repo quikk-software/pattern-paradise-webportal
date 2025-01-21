@@ -4,11 +4,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { APP_NAME } from '@/lib/constants';
-import { useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
+import { useSession } from 'next-auth/react';
 
 export default function AnimatedLanding() {
-  const { accessToken } = useSelector((s: Store) => s.auth);
+  const { status } = useSession();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -34,7 +33,7 @@ export default function AnimatedLanding() {
     },
   };
 
-  const isLoggedIn = !!accessToken;
+  const isLoggedIn = status === 'authenticated';
 
   return (
     <section

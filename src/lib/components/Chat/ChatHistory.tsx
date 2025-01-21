@@ -27,6 +27,7 @@ import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { useRouter } from 'next/navigation';
 import useWebSocket from '@/lib/hooks/useWebSocket';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -136,7 +137,7 @@ export default function ChatHistory({
   const [initialLoad, setInitialLoad] = useState(true);
   const [hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
 
-  const { userId, accessToken } = useSelector((s: Store) => s.auth);
+  const { userId } = useSelector((s: Store) => s.auth);
 
   const router = useRouter();
 
@@ -144,7 +145,6 @@ export default function ChatHistory({
 
   const { sendMessage, messages: socketMessages } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/testing-comments/subscribe`,
-    accessToken,
   );
 
   const { mutate: createTestingComment } = useCreateTestingComment();
@@ -169,7 +169,7 @@ export default function ChatHistory({
       setHasNewSocketMessage(false);
       setChangedChat(false);
     }
-  }, [messages, bottomRef.current, showChatList, hasNewSocketMessage, changedChat, initialLoad]);
+  }, [messages, setChangedChat, showChatList, hasNewSocketMessage, changedChat, initialLoad]);
 
   useEffect(() => {
     if (!selectedTestingId) {
@@ -189,7 +189,7 @@ export default function ChatHistory({
       status: ['InProgress', 'Approved', 'Declined'],
     });
     loadComments();
-  }, [selectedTestingId]);
+  }, [selectedTestingId, setMessages]);
 
   useEffect(() => {
     if (!selectedTestingId) {
@@ -303,6 +303,7 @@ export default function ChatHistory({
   const isInactive = selectedTestingStatus !== 'InProgress';
   const isAborted = selectedTestingStatus === 'Aborted';
   const isDeclined = selectedTestingStatus === 'Declined';
+  const isApproved = selectedTestingStatus === 'Approved';
   const isTesterOrCreator =
     !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
     testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
@@ -344,11 +345,11 @@ export default function ChatHistory({
                   <h2 className="text-2xl font-bold">Chat History</h2>
                 </div>
                 <div className="flex items-center justify-end gap-2">
-                  {status === 'InProgress' ? (
+                  {status !== 'Created' ? (
                     <Button
                       variant="outline"
                       size="icon"
-                      disabled={!selectedTestingId || isInactive}
+                      disabled={!selectedTestingId}
                       onClick={() => {
                         handleReviewClick(selectedTestingId);
                       }}
@@ -370,17 +371,14 @@ export default function ChatHistory({
                   </Button>
                 </div>
               </div>
-              {isInactive && !isAborted && !isDeclined ? (
-                <InfoBoxComponent
-                  severity="info"
-                  message={`This testing is currently not active.`}
-                />
+              {isApproved ? (
+                <InfoBoxComponent severity="success" message={`This testing has been approved.`} />
               ) : null}
               {isAborted ? (
                 <InfoBoxComponent severity="warning" message={`This testing has been aborted.`} />
               ) : null}
               {isDeclined ? (
-                <InfoBoxComponent severity="warning" message={`This testing has been declined.`} />
+                <InfoBoxComponent severity="error" message={`This testing has been declined.`} />
               ) : null}
             </div>
           </CardContent>
@@ -528,16 +526,7 @@ export default function ChatHistory({
                                 <span className="text-sm font-semibold">Review</span>
                               </div>
                             )}
-                            <div
-                              className="flex gap-2 justify-between items-baseline"
-                              style={
-                                isCreator
-                                  ? {
-                                      flexDirection: 'row-reverse',
-                                    }
-                                  : {}
-                              }
-                            >
+                            <div className="flex gap-2 justify-between items-baseline">
                               <span
                                 className={`font-semibold ${
                                   message.type === 'Review'
@@ -560,15 +549,9 @@ export default function ChatHistory({
 
                             <p
                               className="mt-1 break-words whitespace-normal overflow-hidden"
-                              style={
-                                isCreator
-                                  ? {
-                                      textAlign: 'right',
-                                    }
-                                  : {
-                                      textAlign: 'left',
-                                    }
-                              }
+                              style={{
+                                textAlign: 'left',
+                              }}
                             >
                               {message.message}
                             </p>
@@ -631,7 +614,7 @@ export default function ChatHistory({
                 {files && (
                   <div className="flex gap-2">
                     {Array.from(files).map((file, index) => (
-                      <img
+                      <Image
                         key={`${index}-${file.name}`}
                         alt={file.name}
                         src={URL.createObjectURL(file)}

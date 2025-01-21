@@ -335,7 +335,7 @@ export function TesterApplicantsPage({
         >
           <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
             <DrawerHeader>
-              <DrawerTitle>Start testing process</DrawerTitle>
+              <DrawerTitle>Start Testing Process</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">
                 You are about to start the testing process for your pattern &apos;
                 {testing?.product.title}&apos;. Are you ready to go with the following testers?
@@ -381,7 +381,7 @@ export function TesterApplicantsPage({
               variant={'default'}
             >
               {isLoading ? <LoadingSpinnerComponent size="sm" /> : null}
-              Start testing process
+              Start Testing Process
             </Button>
             <RequestStatus isSuccess={isSuccess} isError={isError} />
           </DrawerFooter>

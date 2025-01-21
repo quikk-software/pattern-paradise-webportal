@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import logger from '@/lib/core/logger';
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +12,7 @@ export async function POST(req: Request) {
     });
     return Response.json({});
   } catch (error) {
-    console.log({ error });
+    logger.error('Error while sending mail', error);
     return Response.error();
   }
 }
@@ -43,7 +44,7 @@ const sendMail = async ({
     from: `"Pattern Paradise" <${process.env.MAIL_REPLY}>`,
     to: email,
     subject: `Your inquiry | Pattern Paradise`,
-    // bcc: process.env.MAIL_CC,
+    bcc: process.env.MAIL_CC,
     html: `Hi ${name}, we've received your inquiry and will get back to you as soon as possible!<br /><br />Selected reason: ${
       reason ? reason : 'Nothing selected'
     }<br /><br />Your message: ${message}<br /><br /><br />The email to which we will reply is: <a href='mailto:${email}'>${email}</a>`,

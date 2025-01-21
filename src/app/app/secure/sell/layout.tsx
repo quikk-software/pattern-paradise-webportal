@@ -5,15 +5,17 @@ import { useSelector } from 'react-redux';
 import InsufficientRoles from '@/components/insufficient-roles';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import React from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { roles, checkAuthIsLoading } = useSelector((s: Store) => s.auth);
+  const { status } = useSession();
+  const { roles } = useSelector((s: Store) => s.auth);
 
-  if (checkAuthIsLoading) {
+  if (status === 'loading') {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <LoadingSpinnerComponent />

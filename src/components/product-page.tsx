@@ -20,6 +20,7 @@ import ProductCategories from '@/lib/components/ProductCategories';
 import ProductMetrics from '@/lib/components/ProductMetrics';
 import TestingMetrics from '@/lib/components/TestingMetrics';
 import { ReportProduct } from '@/lib/components/ReportProduct';
+import ReviewMessages from '@/lib/components/ReviewMessages';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -102,6 +103,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
           </div>
         </CardContent>
       </Card>
+      <ReviewMessages productId={product.id} />
       <GoBackButton />
     </div>
   );

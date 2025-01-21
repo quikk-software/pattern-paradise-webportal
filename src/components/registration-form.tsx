@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/card';
 import { User, ShoppingCart } from 'lucide-react';
 import { useCreateUser } from '@/lib/api';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
@@ -23,6 +23,7 @@ import TikTokIcon from '@/lib/icons/TikTokIcon';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const ALLOWED_ROLES = ['Buyer', 'Seller', 'Tester'];
 
@@ -52,6 +53,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm();
 
@@ -79,6 +81,8 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
       username: data.username?.trim(),
       instagramRef: data.instagram?.trim(),
       tiktokRef: data.tiktok?.trim(),
+      hasAcceptedTerms: data.hasAcceptedTerms,
+      hasAcceptedPrivacy: data.hasAcceptedPrivacy,
       roles,
     });
   };
@@ -269,6 +273,77 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
               onKeyDown={handleKeyDown}
             />
           </div>
+
+          <div className="space-y-2">
+            <div className="flex gap-4 items-center">
+              <Controller
+                name="hasAcceptedTerms"
+                control={control}
+                rules={{
+                  required: 'You must accept the Terms and Conditions to proceed',
+                }}
+                render={({ field }) => (
+                  <Checkbox
+                    id="hasAcceptedTerms"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
+              <Label htmlFor="hasAcceptedTerms" className="block text-sm">
+                I confirm that I have read and agree to the{' '}
+                <Link
+                  href="/terms-and-privacy?action=scrollToTermsAndConditions"
+                  target="_blank"
+                  className="text-blue-500 underline"
+                >
+                  Terms and Conditions
+                </Link>
+                .
+              </Label>
+            </div>
+            {errors.hasAcceptedTerms ? (
+              <p className="text-sm text-red-500 mb-2">
+                {errors.hasAcceptedTerms.message as string}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex gap-4 items-center">
+              <Controller
+                name="hasAcceptedPrivacy"
+                control={control}
+                rules={{
+                  required: 'You must accept the Privacy Policy to proceed',
+                }}
+                render={({ field }) => (
+                  <Checkbox
+                    id="hasAcceptedPrivacy"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
+              <Label htmlFor="hasAcceptedPrivacy" className="block text-sm">
+                I confirm that I have read and agree to the{' '}
+                <Link
+                  href="/terms-and-privacy?action=scrollToPrivacyPolicy"
+                  target="_blank"
+                  className="text-blue-500 underline"
+                >
+                  Privacy Policy
+                </Link>
+                .
+              </Label>
+            </div>
+            {errors.hasAcceptedPrivacy ? (
+              <p className="text-sm text-red-500 mb-2">
+                {errors.hasAcceptedPrivacy.message as string}
+              </p>
+            ) : null}
+          </div>
+
           <Button className="w-full" type="submit" disabled={isLoading || isSuccess}>
             {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
             Register

@@ -2,25 +2,21 @@ import { useState } from 'react';
 import { client, getApi } from '@/@types';
 import type { GetUserResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useDispatch, useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
+import { useSession } from 'next-auth/react';
 
 export const useGetUser = () => {
   const [data, setData] = useState<GetUserResponse | undefined>(undefined);
 
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (userIdOverride?: string) => {
-    if (!userId && !userIdOverride) {
-      return;
-    }
+  const fetch = async (userId: string) => {
+    if (!userId) return;
     const response = await handleFn(
       async () =>
-        await client.api.getUser(userIdOverride ?? userId, {
-          ...(await getApi(accessToken, refreshToken, dispatch)),
+        await client.api.getUser(userId, {
+          ...(await getApi(session)),
         }),
     );
 

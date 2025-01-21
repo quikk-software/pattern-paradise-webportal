@@ -54,7 +54,7 @@ export default function ConfirmCodeComponent({
       default:
         return 'code';
     }
-  }, [verificationCode]);
+  }, [verificationType]);
 
   const isLoading = confirmMailIsLoading;
   const isSuccess = confirmMailsSuccess;

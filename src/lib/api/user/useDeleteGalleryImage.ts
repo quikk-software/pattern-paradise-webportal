@@ -1,22 +1,20 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { Store } from '@/lib/redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSession } from 'next-auth/react';
 
 export const useDeleteGalleryImage = () => {
-  const dispatch = useDispatch();
-  const { accessToken, refreshToken, userId } = useSelector((s: Store) => s.auth);
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const mutate = async (imageUrl: string) => {
+  const mutate = async (imageUrl: string, userId: string) => {
     await handleFn(
       async () =>
         await client.api.deleteGalleryImage(
           userId,
           { imageUrl },
           {
-            ...(await getApi(accessToken, refreshToken, dispatch)),
+            ...(await getApi(session)),
           },
         ),
     );

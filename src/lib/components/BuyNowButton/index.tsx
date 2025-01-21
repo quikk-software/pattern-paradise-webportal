@@ -15,11 +15,11 @@ import {
 } from '@/components/ui/drawer';
 import { ShieldCheck, Lock, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { isTokenValid } from '@/lib/auth/auth.utils';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
 import { PayPalButton } from '@/lib/components/PayPalButton';
 import { GetProductResponse } from '@/@types/api-types';
+import { useSession } from 'next-auth/react';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -32,7 +32,8 @@ export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
   const router = useRouter();
   const { action } = useAction();
 
-  const { accessToken, userId } = useSelector((s: Store) => s.auth);
+  const { status } = useSession();
+  const { userId } = useSelector((s: Store) => s.auth);
 
   useEffect(() => {
     if (!action) {
@@ -43,7 +44,7 @@ export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
     }
   }, [action]);
 
-  const isLoggedIn = isTokenValid(accessToken);
+  const isLoggedIn = status === 'authenticated';
 
   if (product?.status !== 'Released') {
     return (
@@ -99,37 +100,10 @@ export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
               </div>
               {!isLoggedIn ? (
                 <div className="flex flex-col gap-4">
-                  <InfoBoxComponent
-                    severity="info"
-                    message={
-                      <span>
-                        You&apos;re not logged in. You can{' '}
-                        <Link
-                          href={`/auth/login?redirect=/app/products/${product.id}?action=toggleBuyNow`}
-                          className="text-blue-500 underline"
-                        >
-                          log in
-                        </Link>{' '}
-                        or{' '}
-                        <Link
-                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/app/products/${product.id}?action=toggleBuyNow`}
-                          className="text-blue-500 underline"
-                        >
-                          register
-                        </Link>
-                        . Otherwise you can use our{' '}
-                        <Link
-                          href="/faq?anchor=quickregistration"
-                          className="text-blue-500 underline"
-                          target="_blank"
-                        >
-                          Quick Sign Up
-                        </Link>{' '}
-                        below.
-                      </span>
-                    }
-                  />
                   <QuickSignUp
+                    redirect={`${encodeURIComponent(
+                      `/app/products/${product.id}?action=toggleBuyNow`,
+                    )}`}
                     signupCallback={() =>
                       router.push(
                         `/auth/login?redirect=${encodeURIComponent(
