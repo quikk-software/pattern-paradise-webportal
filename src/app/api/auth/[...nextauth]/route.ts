@@ -83,11 +83,17 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      session.user.accessToken = token.accessToken as string;
-      session.user.refreshToken = token.refreshToken as string;
-      session.user.expiresAt = token.expiresAt as number;
-      session.user.id = token.id as string;
-      session.user.roles = token.roles as string[];
+      let sessionToken = token;
+      if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
+        logger.info('Use refresh token to get fresh access token');
+        sessionToken = await refreshAccessToken(token);
+      }
+
+      session.user.accessToken = sessionToken.accessToken as string;
+      session.user.refreshToken = sessionToken.refreshToken as string;
+      session.user.expiresAt = sessionToken.expiresAt as number;
+      session.user.id = sessionToken.id as string;
+      session.user.roles = sessionToken.roles as string[];
       return session;
     },
   },

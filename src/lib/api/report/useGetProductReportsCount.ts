@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 export const useGetProductReportsCount = () => {
   const [data, setData] = useState<number | undefined>(undefined);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -14,7 +14,7 @@ export const useGetProductReportsCount = () => {
     const response = await handleFn(
       async () =>
         await client.api.getProductReportsCount(userId, {
-          ...(await getApi(session, update)),
+          ...(await getApi(session)),
         }),
     );
 

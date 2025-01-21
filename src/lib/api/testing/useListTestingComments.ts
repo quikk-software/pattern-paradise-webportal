@@ -15,7 +15,7 @@ export const useListTestingComments = ({
 }) => {
   const [data, setData] = useState<GetTestingCommentResponse[]>([]);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -35,7 +35,7 @@ export const useListTestingComments = ({
             pageNumber: overridePageNumber ?? pagination.pageNumber,
             pageSize: overridePageSize ?? pagination.pageSize,
           },
-          { ...(await getApi(session, update)) },
+          { ...(await getApi(session)) },
         ),
     );
 

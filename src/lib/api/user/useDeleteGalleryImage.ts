@@ -3,7 +3,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useDeleteGalleryImage = () => {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -14,7 +14,7 @@ export const useDeleteGalleryImage = () => {
           userId,
           { imageUrl },
           {
-            ...(await getApi(session, update)),
+            ...(await getApi(session)),
           },
         ),
     );

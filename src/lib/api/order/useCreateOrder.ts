@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 export const useCreateOrder = () => {
   const [data, setData] = useState<PostOrderResponse | undefined>(undefined);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -15,7 +15,7 @@ export const useCreateOrder = () => {
     const response = await handleFn(
       async () =>
         await client.api.postOrder(order, {
-          ...(await getApi(session, update)),
+          ...(await getApi(session)),
         }),
     );
 

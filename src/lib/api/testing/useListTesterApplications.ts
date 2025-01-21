@@ -17,7 +17,7 @@ export const useListTesterApplications = ({
   const [data, setData] = useState<GetTesterApplicationResponse[]>([]);
   const [totalCount, setTotalCount] = useState(0);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -32,7 +32,7 @@ export const useListTesterApplications = ({
             pageSize: pagination.pageSize,
             ...filter,
           },
-          { ...(await getApi(session, update)) },
+          { ...(await getApi(session)) },
         ),
     );
 

@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 export const useCreateProduct = () => {
   const [data, setData] = useState<PostProductResponse | undefined>(undefined);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -18,7 +18,7 @@ export const useCreateProduct = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`,
         product,
         {
-          ...(await getApi(session, update)),
+          ...(await getApi(session)),
         },
       );
     });

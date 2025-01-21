@@ -19,7 +19,7 @@ export const useListOrders = ({
 }) => {
   const [data, setData] = useState<GetOrderResponse[]>([]);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -35,7 +35,7 @@ export const useListOrders = ({
             filter,
           },
           {
-            ...(await getApi(session, update)),
+            ...(await getApi(session)),
           },
         ),
     );

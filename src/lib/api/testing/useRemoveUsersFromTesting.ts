@@ -3,7 +3,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useRemoveUsersFromTesting = () => {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -14,7 +14,7 @@ export const useRemoveUsersFromTesting = () => {
           testingId,
           { testerIds },
           {
-            ...(await getApi(session, update)),
+            ...(await getApi(session)),
           },
         ),
     );

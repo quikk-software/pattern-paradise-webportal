@@ -3,7 +3,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useCreateProductReport = () => {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -17,7 +17,7 @@ export const useCreateProductReport = () => {
             comment,
           },
           {
-            ...(await getApi(session, update)),
+            ...(await getApi(session)),
           },
         ),
     );

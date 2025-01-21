@@ -14,7 +14,7 @@ export const useListUserReports = ({
 }) => {
   const [data, setData] = useState<GetUserReportResponse[]>([]);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize, false);
@@ -39,7 +39,7 @@ export const useListUserReports = ({
             reason,
           },
           {
-            ...(await getApi(session, update)),
+            ...(await getApi(session)),
           },
         ),
     );

@@ -9,7 +9,7 @@ export const useGetProduct = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const fetch = async (productId: string, trackMetrics: boolean = true) => {
     const response = await handleFn(
@@ -18,7 +18,7 @@ export const useGetProduct = () => {
           productId,
           { trackMetrics },
           {
-            ...(await getApi(session, update)),
+            ...(await getApi(session)),
           },
         ),
     );

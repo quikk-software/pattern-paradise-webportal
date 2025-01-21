@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 export const useDownloadPatternsByProductId = () => {
   const [data, setData] = useState<any>(undefined);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -19,7 +19,7 @@ export const useDownloadPatternsByProductId = () => {
             language,
           },
           {
-            ...(await getApi(session, update)),
+            ...(await getApi(session)),
           },
         ),
     );

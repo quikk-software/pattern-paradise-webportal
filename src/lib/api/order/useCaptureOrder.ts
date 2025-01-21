@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 export const useCaptureOrder = () => {
   const [data, setData] = useState<PostCaptureOrderResponse | undefined>(undefined);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -15,7 +15,7 @@ export const useCaptureOrder = () => {
     const response = await handleFn(
       async () =>
         await client.api.captureOrder(paypalOrderId, {
-          ...(await getApi(session, update)),
+          ...(await getApi(session)),
         }),
     );
 

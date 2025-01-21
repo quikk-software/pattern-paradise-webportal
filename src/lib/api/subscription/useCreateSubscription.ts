@@ -4,7 +4,7 @@ import { useApiStates } from '../useApiStates';
 import { useSession } from 'next-auth/react';
 
 export const useCreateSubscription = () => {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
@@ -12,7 +12,7 @@ export const useCreateSubscription = () => {
     await handleFn(
       async () =>
         await client.api.postSubscription(subscription, {
-          ...(await getApi(session, update)),
+          ...(await getApi(session)),
         }),
     );
   };

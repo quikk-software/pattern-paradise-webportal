@@ -15,7 +15,7 @@ export const useListTestings = ({
 }) => {
   const [data, setData] = useState<GetTestingResponse[]>([]);
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
@@ -29,7 +29,7 @@ export const useListTestings = ({
             pageSize: pagination.pageSize,
             status,
           },
-          { ...(await getApi(session, update)) },
+          { ...(await getApi(session)) },
         ),
     );
 
