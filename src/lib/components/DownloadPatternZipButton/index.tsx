@@ -126,6 +126,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           'Quickly and easily create an account to download this pattern. After registering, you will be automatically redirected to the login page and will be returned to this page immediately upon successful login.'
         }
         signupCallback={setIsQuickSignupSuccess}
+        redirect={pathname}
       />
     </div>
   );

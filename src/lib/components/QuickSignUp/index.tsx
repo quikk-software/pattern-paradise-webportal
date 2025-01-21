@@ -21,9 +21,10 @@ type FormValues = {
 
 interface QuickSignUpProps {
   signupCallback: (isSuccess: boolean) => void;
+  redirect?: string;
 }
 
-export default function QuickSignUp({ signupCallback }: QuickSignUpProps) {
+export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpProps) {
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useCreateUser();
 
   const {
@@ -56,8 +57,18 @@ export default function QuickSignUp({ signupCallback }: QuickSignUpProps) {
   return (
     <Card>
       <CardHeader>
-        <span className="flex gap-2 items-center">
-          <Rabbit /> Quick Sign Up
+        <span className="flex gap-2 items-start text-left">
+          <Rabbit />{' '}
+          <span className="text-md">
+            Quick Sign Up
+            <br />
+            <span className="text-sm">
+              or{' '}
+              <Link href={`/auth/login?redirect=${redirect}`} className="text-blue-500 underline">
+                login
+              </Link>
+            </span>
+          </span>
         </span>
       </CardHeader>
       <CardContent>

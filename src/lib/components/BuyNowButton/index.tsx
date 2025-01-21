@@ -100,37 +100,10 @@ export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
               </div>
               {!isLoggedIn ? (
                 <div className="flex flex-col gap-4">
-                  <InfoBoxComponent
-                    severity="info"
-                    message={
-                      <span>
-                        You&apos;re not logged in. You can{' '}
-                        <Link
-                          href={`/auth/login?redirect=/app/products/${product.id}?action=toggleBuyNow`}
-                          className="text-blue-500 underline"
-                        >
-                          log in
-                        </Link>{' '}
-                        or{' '}
-                        <Link
-                          href={`/auth/registration?preselectedRoles=Buyer&redirect=/app/products/${product.id}?action=toggleBuyNow`}
-                          className="text-blue-500 underline"
-                        >
-                          register
-                        </Link>
-                        . Otherwise you can use our{' '}
-                        <Link
-                          href="/faq?anchor=quickregistration"
-                          className="text-blue-500 underline"
-                          target="_blank"
-                        >
-                          Quick Sign Up
-                        </Link>{' '}
-                        below.
-                      </span>
-                    }
-                  />
                   <QuickSignUp
+                    redirect={`${encodeURIComponent(
+                      `/app/products/${product.id}?action=toggleBuyNow`,
+                    )}`}
                     signupCallback={() =>
                       router.push(
                         `/auth/login?redirect=${encodeURIComponent(

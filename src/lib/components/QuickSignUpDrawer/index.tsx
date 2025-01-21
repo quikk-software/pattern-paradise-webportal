@@ -10,6 +10,7 @@ interface QuickSignUpDrawerProps {
   setIsOpen: (isOpen: boolean) => void;
   reason: string;
   signupCallback: (success: boolean) => void;
+  redirect?: string;
 }
 
 export default function QuickSignUpDrawer({
@@ -17,16 +18,17 @@ export default function QuickSignUpDrawer({
   setIsOpen,
   reason,
   signupCallback,
+  redirect,
 }: QuickSignUpDrawerProps) {
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent className="p-4">
         <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
           <DrawerHeader>
-            <DrawerTitle>Quick Signup</DrawerTitle>
+            <DrawerTitle>Quick Sign Up</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">{reason}</DrawerTitle>
           </DrawerHeader>
-          <QuickSignUp signupCallback={signupCallback} />
+          <QuickSignUp signupCallback={signupCallback} redirect={redirect} />
           <Button
             onClick={() => {
               setIsOpen(false);
