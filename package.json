@@ -1,6 +1,7 @@
 {
-  "name": "cbj",
-  "version": "0.1.0",
+  "name": "pattern-paradise-webportal",
+  "author": "Joyce Marvin Rafflenbeul",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
