@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import logger from '@/lib/core/logger';
 import axios from 'axios';
 import qs from 'qs';
+import { getUser } from '@/lib/api/static/user/getUser';
 
 const handler = NextAuth({
   providers: [
@@ -45,9 +46,13 @@ const handler = NextAuth({
 
           const decodedToken = jwtDecode(data.access_token);
 
+          // @ts-ignore
+          const id = decodedToken?.refId;
+
+          const user = await getUser(id, data.access_token);
+
           return {
-            // @ts-ignore
-            id: decodedToken?.refId,
+            id,
             accessToken: data.access_token,
             refreshToken: data.refresh_token,
             expiresAt: Date.now() + data.expires_in * 1000,
@@ -57,6 +62,8 @@ const handler = NextAuth({
             email: decodedToken?.email,
             // @ts-ignore
             roles: decodedToken?.resource_access?.cbj?.roles || [],
+            // @ts-ignore
+            subscriptionStatus: user.paypalSubscriptionStatus,
           };
         } catch (error: any) {
           throw new Error(`Keycloak authentication failed: ${error?.message}`);
@@ -72,6 +79,7 @@ const handler = NextAuth({
         token.expiresAt = user.expiresAt;
         token.id = user.id;
         token.roles = user.roles;
+        token.subscriptionStatus = user?.subscriptionStatus;
       }
 
       if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
@@ -94,6 +102,7 @@ const handler = NextAuth({
       session.user.expiresAt = sessionToken.expiresAt as number;
       session.user.id = sessionToken.id as string;
       session.user.roles = sessionToken.roles as string[];
+      session.user.subscriptionStatus = sessionToken.subscriptionStatus as string;
       return session;
     },
   },
@@ -122,8 +131,16 @@ async function refreshAccessToken(token: any) {
 
     logger.info('Got fresh access token');
 
+    const decodedToken = jwtDecode(refreshedTokens.access_token);
+
+    // @ts-ignore
+    const id = decodedToken?.refId;
+
+    const user = await getUser(id, refreshedTokens.access_token);
+
     return {
       ...token,
+      subscriptionStatus: user?.paypalSubscriptionStatus,
       accessToken: refreshedTokens.access_token,
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
       expiresAt: Date.now() + refreshedTokens.expires_in * 1000,

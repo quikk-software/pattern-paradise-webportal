@@ -34,7 +34,6 @@ export function PatternParadiseProComponent() {
     'Featured tester calls marked and displayed at the top',
     "Appear at the top of tester applicant's lists",
     'Share documents and videos in tester call chats',
-    'Share your profile with a personalized Pattern Paradise link',
   ];
 
   const faqs = [
@@ -45,7 +44,7 @@ export function PatternParadiseProComponent() {
     },
     {
       question: 'How much does Pattern Paradise Pro cost?',
-      answer: `\`The Pattern Paradise Pro subscription is available for just ${PRO_MEMBERSHIP_PRICE} per month.\`,`,
+      answer: `The Pattern Paradise Pro subscription is available for just ${PRO_MEMBERSHIP_PRICE} per month.`,
     },
     {
       question: 'Can I cancel my subscription at any time?',

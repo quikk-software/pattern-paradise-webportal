@@ -33,6 +33,7 @@ import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
+import { checkProStatus } from '@/lib/core/utils';
 
 export interface PDFFile {
   file: File;
@@ -69,7 +70,7 @@ export function ProductFormComponent() {
     [],
   );
 
-  const { roles } = useSelector((s: Store) => s.auth);
+  const { subscriptionStatus } = useSelector((s: Store) => s.auth);
 
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useCreateProduct();
 
@@ -212,6 +213,8 @@ export function ProductFormComponent() {
   };
 
   const titleWatch = watch('title');
+
+  const isPro = checkProStatus(subscriptionStatus);
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
@@ -362,11 +365,7 @@ export function ProductFormComponent() {
         </div>
 
         <div className="w-full">
-          <FileSelector
-            selectedFiles={patterns}
-            setSelectedFiles={setPatterns}
-            isPro={roles.includes('Pro')}
-          />
+          <FileSelector selectedFiles={patterns} setSelectedFiles={setPatterns} isPro={isPro} />
         </div>
 
         <div className="flex flex-col gap-2">

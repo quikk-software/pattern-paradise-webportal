@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -11,7 +12,13 @@ import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
 import useAction from '@/lib/core/useAction';
 
 export default function FAQPageComponent() {
+  const [selectedAccordionItem, setSelectedAccordionItem] = useState<string | undefined>(undefined);
+
   const { action } = useAction();
+
+  useEffect(() => {
+    setSelectedAccordionItem(action);
+  }, [action]);
 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8">
@@ -20,7 +27,13 @@ export default function FAQPageComponent() {
           Frequently Asked Questions
         </h1>
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <Accordion type="single" collapsible className="w-full" value={action}>
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            value={selectedAccordionItem}
+            onValueChange={(value) => setSelectedAccordionItem(value)}
+          >
             <AccordionItem value="item-1">
               <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
                 What is Pattern Paradise?

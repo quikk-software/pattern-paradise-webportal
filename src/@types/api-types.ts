@@ -158,6 +158,7 @@ export interface GetUserResponse {
    * @example "2024-01-01T00:00:00Z"
    */
   paypalSubscriptionValidUntil?: string;
+  paypalSubscriptionStatus: string;
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
@@ -195,6 +196,7 @@ export interface GetUserAccountResponse {
   isActive: boolean;
   isBlocked: boolean;
   paypalMerchantIsActive: boolean;
+  paypalSubscriptionStatus: string;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
@@ -1398,7 +1400,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     listProducts: (
       query?: {
-        subcategories?: string;
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
