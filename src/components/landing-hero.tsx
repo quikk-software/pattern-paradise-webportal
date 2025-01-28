@@ -108,7 +108,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
                   }}
                   onClick={() => {
                     setSelectedIndex(index);
-                    if (selectedIndex === index || hoveredIndex === index) {
+                    if (selectedIndex === index && hoveredIndex === index) {
                       router.push(`/app/products/${product.id}`);
                     }
                   }}
