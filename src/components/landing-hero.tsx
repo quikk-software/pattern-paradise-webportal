@@ -115,9 +115,6 @@ export default function LandingHero({ products }: LandingHeroProps) {
                     />
                     <div className="p-4">
                       <h3 className="font-semibold text-lg">{product.title}</h3>
-                      {product.subCategories.length > 0 ? (
-                        <p className="text-sm text-zinc-500">{product.subCategories.join(', ')}</p>
-                      ) : null}
                       <div className="mt-2 flex items-center justify-between">
                         <span className="font-bold text-primary">${product.price.toFixed(2)}</span>
                         <Button size="sm">Buy Now</Button>
