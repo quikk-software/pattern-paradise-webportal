@@ -45,7 +45,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
               crocheters today!
             </p>
           </div>
-          <div className="flex flex-col gap-2 min-[400px]:flex-row">
+          <div className="flex flex-row gap-2">
             {isLoggedIn ? (
               <Link href="/app/secure/sell">
                 <Button variant={'default'}>Start Selling</Button>
