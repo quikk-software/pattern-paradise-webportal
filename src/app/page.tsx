@@ -9,10 +9,12 @@ export default async function Home() {
   const products = await listProducts();
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto">
       <NavbarComponent background={'none'} />
-      <LandingHero products={products.slice(0, MAX_FEATURED_PRODUCTS)} />
-      <ListingComponent listingType={'sell'} defaultProducts={products} />
+      <div className="px4">
+        <LandingHero products={products.slice(0, MAX_FEATURED_PRODUCTS)} />
+        <ListingComponent listingType={'sell'} defaultProducts={products} />
+      </div>
     </div>
   );
 }

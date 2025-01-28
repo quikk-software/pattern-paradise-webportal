@@ -59,7 +59,7 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
 
   return (
     <nav ref={navRef} className={`bg-${background}`}>
-      <div className="flex justify-between h-16">
+      <div className="flex justify-between h-16 px-4">
         <div className="flex-shrink-0 flex items-center">
           <Link
             href="/"
