@@ -20,6 +20,7 @@ interface LandingHeroProps {
 
 export default function LandingHero({ products }: LandingHeroProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const { status } = useSession();
   const router = useRouter();
@@ -102,7 +103,12 @@ export default function LandingHero({ products }: LandingHeroProps) {
                   }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  onClick={() => router.push(`/app/products/${product.id}`)}
+                  onClick={() => {
+                    setSelectedIndex(index);
+                    if (selectedIndex === index) {
+                      router.push(`/app/products/${product.id}`);
+                    }
+                  }}
                 >
                   <div className="bg-white rounded-xl shadow-xl overflow-hidden cursor-pointer">
                     <CldImage
