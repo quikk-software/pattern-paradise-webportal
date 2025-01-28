@@ -30,7 +30,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
   const smallScreen = screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md';
 
   return (
-    <section className="py-8 md:py-12 lg:py-16 px-4">
+    <section className="py-8 md:py-12 lg:py-16">
       <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_600px]">
         <div className="flex flex-col justify-center space-y-4">
           <div className="space-y-4">
