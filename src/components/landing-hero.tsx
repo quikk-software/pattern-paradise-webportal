@@ -126,7 +126,9 @@ export default function LandingHero({ products }: LandingHeroProps) {
                       <h3 className="font-semibold text-lg">{product.title}</h3>
                       <div className="mt-2 flex items-center justify-between">
                         <span className="font-bold text-primary">${product.price.toFixed(2)}</span>
-                        <Button size="sm">Buy Now</Button>
+                        <Link href={`/app/products/${product.id}`}>
+                          <Button size="sm">Buy Now</Button>
+                        </Link>
                       </div>
                     </div>
                   </div>
