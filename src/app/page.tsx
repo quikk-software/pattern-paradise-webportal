@@ -11,7 +11,7 @@ export default async function Home() {
   return (
     <div>
       <NavbarComponent background={'none'} />
-      <div className="px4 max-w-7xl mx-auto">
+      <div className="px-4 max-w-7xl mx-auto">
         <LandingHero products={products.slice(0, MAX_FEATURED_PRODUCTS)} />
         <ListingComponent listingType={'sell'} defaultProducts={products} />
       </div>
