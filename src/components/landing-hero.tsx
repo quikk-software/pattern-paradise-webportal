@@ -102,7 +102,10 @@ export default function LandingHero({ products }: LandingHeroProps) {
                     zIndex: hoveredIndex === index ? 10 : products.length - index,
                   }}
                   onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  onMouseLeave={() => {
+                    setHoveredIndex(null);
+                    setSelectedIndex(null);
+                  }}
                   onClick={() => {
                     setSelectedIndex(index);
                     if (selectedIndex === index) {
