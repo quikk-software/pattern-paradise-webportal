@@ -1,18 +1,18 @@
 import { ListingComponent } from '@/components/listing';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 import { NavbarComponent } from '@/components/navbar';
-import AnimatedLanding from '@/components/animated-landing';
+import LandingHero from '@/components/landing-hero';
+
+const MAX_FEATURED_PRODUCTS = 3;
 
 export default async function Home() {
   const products = await listProducts();
 
   return (
-    <div>
-      <NavbarComponent background="primary" />
-      <AnimatedLanding />
-      <section className="container mx-auto py-12 md:py-24 lg:py-32">
-        <ListingComponent listingType={'sell'} defaultProducts={products} />
-      </section>
+    <div className="max-w-7xl mx-auto px-4">
+      <NavbarComponent background={'none'} />
+      <LandingHero products={products.slice(0, MAX_FEATURED_PRODUCTS)} />
+      <ListingComponent listingType={'sell'} defaultProducts={products} />
     </div>
   );
 }

@@ -59,51 +59,49 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
 
   return (
     <nav ref={navRef} className={`bg-${background}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex-shrink-0 flex items-center">
-            <Link
-              href="/"
-              className={cn(
-                'text-lg font-bold flex gap-1 items-center',
-                background === 'primary' ? 'text-white' : 'text-black',
-              )}
-            >
-              <PatternParadiseIcon
-                className={cn('w-8 h-8', background === 'primary' ? 'fill-white' : 'fill-black')}
-              />
-              <span>Pattern Paradise</span>
-            </Link>
+      <div className="flex justify-between h-16">
+        <div className="flex-shrink-0 flex items-center">
+          <Link
+            href="/"
+            className={cn(
+              'text-lg font-bold flex gap-1 items-center',
+              background === 'primary' ? 'text-white' : 'text-black',
+            )}
+          >
+            <PatternParadiseIcon
+              className={cn('w-8 h-8', background === 'primary' ? 'fill-white' : 'fill-black')}
+            />
+            <span>Pattern Paradise</span>
+          </Link>
+        </div>
+        <div className="hidden sm:ml-6 sm:flex sm:items-center flex flex-row gap-4">
+          <div className="flex space-x-4">
+            {filteredNavLinks.map(({ href, name }) => (
+              <NavLink key={name} href={href} background={background}>
+                {name}
+              </NavLink>
+            ))}
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center flex flex-row gap-4">
-            <div className="flex space-x-4">
-              {filteredNavLinks.map(({ href, name }) => (
-                <NavLink key={name} href={href} background={background}>
-                  {name}
-                </NavLink>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center sm:hidden">
-            <button
-              onClick={toggleMenu}
-              className={`inline-flex items-center justify-center p-2 rounded-md text-${
-                background === 'primary' ? 'white' : 'black'
-              } hover:text-${background === 'primary' ? 'white' : 'black'} hover:bg-${
-                background === 'primary' ? 'white' : 'black'
-              } focus:outline-none focus:ring-2 focus:ring-inset focus:ring-${
-                background === 'primary' ? 'white' : 'black'
-              }`}
-              aria-expanded={isOpen}
-            >
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
-          </div>
+        </div>
+        <div className="flex items-center sm:hidden">
+          <button
+            onClick={toggleMenu}
+            className={`inline-flex items-center justify-center p-2 rounded-md text-${
+              background === 'primary' ? 'white' : 'black'
+            } hover:text-${background === 'primary' ? 'white' : 'black'} hover:bg-${
+              background === 'primary' ? 'white' : 'black'
+            } focus:outline-none focus:ring-2 focus:ring-inset focus:ring-${
+              background === 'primary' ? 'white' : 'black'
+            }`}
+            aria-expanded={isOpen}
+          >
+            <span className="sr-only">Open main menu</span>
+            {isOpen ? (
+              <X className="block h-6 w-6" aria-hidden="true" />
+            ) : (
+              <Menu className="block h-6 w-6" aria-hidden="true" />
+            )}
+          </button>
         </div>
       </div>
 
