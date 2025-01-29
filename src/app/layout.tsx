@@ -5,6 +5,7 @@ import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/consta
 import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
+import ComingSoon from '@/components/coming-soon';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -76,9 +77,13 @@ export default async function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <CookiesProvider>
-          <AuthSessionProvider>
-            <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
-          </AuthSessionProvider>
+          {process.env.MAINTENANCE_MODE === 'true' ? (
+            <ComingSoon />
+          ) : (
+            <AuthSessionProvider>
+              <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+            </AuthSessionProvider>
+          )}
         </CookiesProvider>
       </body>
     </html>
