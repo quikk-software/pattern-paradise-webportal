@@ -31,7 +31,8 @@ export default function ProInfoBox({ user }: ProInfoBoxProps) {
     });
   };
 
-  const isCancelled = !!user.paypalSubscriptionValidUntil;
+  const isCancelled = user.paypalSubscriptionStatus === 'Cancelled';
+  const isActive = user.paypalSubscriptionStatus !== 'Inactive';
 
   if (process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE !== 'true') {
     return null;
@@ -39,7 +40,7 @@ export default function ProInfoBox({ user }: ProInfoBoxProps) {
 
   return (
     <>
-      {user.roles?.includes('Pro') ? (
+      {isActive ? (
         <InfoBoxComponent
           severity={isCancelled ? 'warning' : 'success'}
           message={

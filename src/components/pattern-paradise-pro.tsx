@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
 
 export function PatternParadiseProComponent() {
-  const { roles } = useSelector((s: Store) => s.auth);
+  const { subscriptionStatus } = useSelector((s: Store) => s.auth);
 
   const controls = useAnimation();
 
@@ -58,7 +58,7 @@ export function PatternParadiseProComponent() {
     },
   ];
 
-  const isPro = roles.includes('Pro');
+  const isPro = subscriptionStatus !== 'Inactive';
 
   return (
     <div>
@@ -178,14 +178,9 @@ export function PatternParadiseProComponent() {
             !
           </span>
         ) : (
-          <motion.div
-            className="flex justify-center w-full"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={controls}
-            custom={12}
-          >
+          <div className="flex justify-center w-full">
             <SubscribeButton />
-          </motion.div>
+          </div>
         )}
       </section>
 
