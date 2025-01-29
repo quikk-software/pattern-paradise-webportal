@@ -143,7 +143,7 @@ async function refreshAccessToken(token: any) {
       subscriptionStatus: user?.paypalSubscriptionStatus,
       accessToken: refreshedTokens.access_token,
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
-      expiresAt: Date.now() + decodedToken.exp! * 1000,
+      expiresAt: decodedToken.exp! * 1000,
     };
   } catch (error) {
     logger.error('Error refreshing access token:', error);
