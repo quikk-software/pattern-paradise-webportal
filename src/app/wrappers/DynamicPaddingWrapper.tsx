@@ -14,13 +14,13 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
   const shouldRemovePadding = noPaddingPages.includes(pathname);
 
   return (
-    <div
-      className={`flex flex-col h-dvh mx-auto container ${shouldRemovePadding ? 'px-0' : 'px-4'}`}
-    >
-      <div className={shouldRemovePadding ? 'px-4' : 'px-0'}>
+    <div className={`flex flex-col h-dvh`}>
+      <div className={`mx-auto container px-4`}>
         <NavbarComponent background={'none'} />
       </div>
-      <div className={`${shouldRemovePadding ? 'py-0' : 'py-8'} flex-1 overflow-auto no-scrollbar`}>
+      <div
+        className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto no-scrollbar mx-auto container`}
+      >
         <StoreProvider>{children}</StoreProvider>
       </div>
       <CookieConsentBanner />

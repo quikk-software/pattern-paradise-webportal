@@ -46,7 +46,7 @@ export default function SellSubmitPage() {
 
   if (isLoading || !user) {
     return (
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center h-svh">
         <LoadingSpinnerComponent />
       </div>
     );
