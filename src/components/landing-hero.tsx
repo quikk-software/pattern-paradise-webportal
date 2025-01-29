@@ -6,7 +6,7 @@ import PayPalLogo from '@/assets/logos/paypal-logo.png';
 import { ShoppingBag, CloudDownload } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { APP_NAME } from '@/lib/constants';
+import { APP_NAME, FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
 import { GetProductResponse } from '@/@types/api-types';
 import { CldImage } from 'next-cloudinary';
@@ -81,7 +81,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
             </div>
           </div>
         </div>
-        {products.length > 2 ? (
+        {products.length === FEATURED_PRODUCTS_LENGTH ? (
           <div className="relative h-[400px] lg:h-[600px] flex items-center justify-center mt-8 mb-4">
             <div className="absolute w-[300px] h-[300px] lg:w-[500px] lg:h-[500px]">
               {products.map((product, index) => (
@@ -99,7 +99,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
                       translateY(-180px)
                       ${hoveredIndex === index ? 'scale(1.1)' : 'scale(1)'}
                     `,
-                    zIndex: hoveredIndex === index ? 10 : products.length - index,
+                    zIndex: hoveredIndex === index ? 10 : products.length + index,
                   }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => {
