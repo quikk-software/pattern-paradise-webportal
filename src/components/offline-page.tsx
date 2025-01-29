@@ -11,7 +11,7 @@ export function OfflinePageComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full">
         <CardHeader className="text-center">
           <div className="mx-auto bg-yellow-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
             <WifiOff className="h-8 w-8 text-yellow-600" />

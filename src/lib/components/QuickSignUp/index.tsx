@@ -72,7 +72,7 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
         </span>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-md">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
           <div className="space-y-2">
             <div className="space-y-1">
               <Input
