@@ -24,9 +24,7 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
         className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto no-scrollbar mx-auto container`}
       >
         <StoreProvider>
-          <TokenDataWrapper>
-            <AuthGuard>{children}</AuthGuard>
-          </TokenDataWrapper>
+          <TokenDataWrapper>{children}</TokenDataWrapper>
         </StoreProvider>
       </div>
       <CookieConsentBanner />
