@@ -22,6 +22,7 @@ export function ChatAppComponent({}: ChatAppComponentProps) {
   const [testingsLoaded, setTestingsLoaded] = useState(false);
 
   const bottomNavHeight = useElementHeight('bottom-navigation');
+  const navbarHeight = useElementHeight('navbar');
 
   const searchParams = useSearchParams();
 
@@ -69,6 +70,7 @@ export function ChatAppComponent({}: ChatAppComponentProps) {
         fetchTestingsIsLoading={fetchTestingsIsLoading}
         testings={testings}
         bottomNavHeight={bottomNavHeight}
+        navbarHeight={navbarHeight}
         handleChatSelect={handleChatSelect}
       />
 
@@ -78,6 +80,7 @@ export function ChatAppComponent({}: ChatAppComponentProps) {
         selectedProductIdByTesting={selectedProductIdByTesting}
         showChatList={showChatList}
         bottomNavHeight={bottomNavHeight}
+        navbarHeight={navbarHeight}
         changedChat={changedChat}
         selectedTestingStatus={selectedTestingStatus}
         messages={messages}

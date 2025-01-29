@@ -25,7 +25,7 @@ export default function SellSubmitPage() {
 
   if (!user?.paypalMerchantIsActive) {
     return (
-      <div className="container mx-auto p-6 space-y-8">
+      <div className="space-y-8">
         <InfoBoxComponent
           message={
             <>
@@ -46,7 +46,7 @@ export default function SellSubmitPage() {
 
   if (isLoading || !user) {
     return (
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center h-svh">
         <LoadingSpinnerComponent />
       </div>
     );

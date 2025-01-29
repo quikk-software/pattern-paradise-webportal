@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Users } from 'lucide-react';
 import Link from 'next/link';
@@ -13,6 +13,7 @@ interface ChatListProps {
   fetchTestingsIsLoading: boolean;
   testings: GetTestingResponse[];
   bottomNavHeight: number;
+  navbarHeight: number;
   handleChatSelect: (testing: GetTestingResponse) => void;
 }
 
@@ -21,6 +22,7 @@ export default function ChatList({
   fetchTestingsIsLoading,
   testings,
   bottomNavHeight,
+  navbarHeight,
   handleChatSelect,
 }: ChatListProps) {
   return (
@@ -30,12 +32,19 @@ export default function ChatList({
         'hidden md:block': !showChatList,
       })}
       style={{
-        height: `calc(100svh - ${bottomNavHeight}px)`,
+        height: `calc(100svh - ${bottomNavHeight}px - ${navbarHeight})`,
       }}
     >
-      <Card className="h-full overflow-y-auto">
-        <CardContent className="p-4 flex flex-col gap-4">
-          <h2 className="text-2xl font-bold">Chats</h2>
+      <Card
+        style={{
+          border: 'none',
+          boxShadow: 'none',
+        }}
+      >
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Chats</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
           {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
           {testings.length === 0 && !fetchTestingsIsLoading ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-4">

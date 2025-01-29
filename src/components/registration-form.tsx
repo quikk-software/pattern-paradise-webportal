@@ -101,7 +101,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
 
   return (
     <form id="registrationForm" onSubmit={handleSubmit(onSubmit)}>
-      <Card className="w-full max-w-2xl mx-auto border-none">
+      <Card>
         <CardHeader>
           <Link href={`/auth/login?redirect=${redirectUrl}`} className="w-full mb-4">
             <Button variant="secondary" className="w-full">

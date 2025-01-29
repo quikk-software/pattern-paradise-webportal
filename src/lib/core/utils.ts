@@ -13,3 +13,6 @@ export const isPathnameInPages = (pathname: string, pages: string[]) => {
     return regex.test(pathname);
   });
 };
+
+export const checkProStatus = (subscriptionStatus: string) =>
+  subscriptionStatus !== 'Inactive' && subscriptionStatus !== '';

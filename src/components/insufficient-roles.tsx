@@ -10,8 +10,8 @@ interface InsufficientRolesProps {
 
 export default function InsufficientRoles({ roleType }: InsufficientRolesProps) {
   return (
-    <div className="flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center">
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Insufficient Roles</CardTitle>
         </CardHeader>

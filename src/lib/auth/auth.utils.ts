@@ -17,7 +17,7 @@ const handleLogoutFlow = async (refreshToken: string) => {
 
 async function getAccessToken(session: Session | null) {
   if (!session || !session.user.accessToken) {
-    throw new Error('No session or access token available');
+    return;
   }
 
   logger.log('Check if session is expired: ', session.user.expiresAt);
@@ -33,7 +33,7 @@ async function getAccessToken(session: Session | null) {
     logger.log('Got updated session data');
 
     if (!updatedSession || !updatedSession.user.accessToken) {
-      throw new Error('Failed to refresh access token');
+      return;
     }
 
     return updatedSession.user.accessToken;

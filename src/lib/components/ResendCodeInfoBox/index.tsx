@@ -46,7 +46,7 @@ export default function ResendCodeInfoBox({ email, mailType, type }: ResendCodeI
       />
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             <DrawerHeader>
               <DrawerTitle>Resend {type}</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">

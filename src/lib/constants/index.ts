@@ -283,3 +283,5 @@ export const reportUserReasons = [
 ] as const;
 
 export type ReportUserReason = (typeof reportUserReasons)[number]['value'];
+
+export const FEATURED_PRODUCTS_LENGTH = 3;

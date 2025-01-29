@@ -7,10 +7,10 @@ import GoBackButton from '@/lib/components/GoBackButton';
 
 export function NotFoundComponent() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 px-4 text-center">
+    <div className="flex flex-col items-center justify-center text-center">
       <CloudOff className="w-24 h-24 text-gray-400 mb-8" />
       <h1 className="text-4xl font-bold text-gray-800 mb-4">404 - Page Not Found</h1>
-      <p className="text-xl text-gray-600 mb-8 max-w-md">
+      <p className="text-xl text-gray-600 mb-8">
         Oops! It seems like you&apos;ve ventured into uncharted territory. The page you&apos;re
         looking for has gone on an adventure.
       </p>

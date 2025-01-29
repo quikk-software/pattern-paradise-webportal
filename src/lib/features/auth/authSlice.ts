@@ -6,6 +6,7 @@ export type AuthState = {
   username: string;
   password: string;
   roles: string[];
+  subscriptionStatus: string;
 };
 
 export const initialState: AuthState = {
@@ -13,6 +14,7 @@ export const initialState: AuthState = {
   username: '',
   password: '',
   roles: [],
+  subscriptionStatus: '',
 };
 
 export const authSlice = createSlice({
@@ -32,6 +34,9 @@ export const authSlice = createSlice({
     setRoles: (state, action: PayloadAction<string[]>) => {
       state.roles = action.payload;
     },
+    setSubscriptionStatus: (state, action: PayloadAction<string>) => {
+      state.subscriptionStatus = action.payload;
+    },
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload;
     },
@@ -42,5 +47,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setUserId, setUsername, setRoles, setPassword, reset } = authSlice.actions;
+export const { setUserId, setUsername, setRoles, setSubscriptionStatus, setPassword, reset } =
+  authSlice.actions;
 export default authSlice.reducer;

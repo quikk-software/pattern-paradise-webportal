@@ -5,7 +5,7 @@ import { GetProductResponse } from '@/@types/api-types';
 
 export default function ProductListing({ products }: { products: GetProductResponse[] }) {
   return (
-    <div className="container px-4 md:px-6 mx-auto">
+    <div>
       <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">
         Our Popular Patterns
       </h2>

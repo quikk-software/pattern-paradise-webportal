@@ -120,7 +120,7 @@ export default function ReviewDrawer({
   return (
     <Drawer open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
       <DrawerContent className="p-4">
-        <div className="mx-auto w-full max-w-sm flex flex-col gap-8 max-h-[60vh] overflow-y-auto">
+        <div className="flex flex-col gap-8 max-h-[60vh] overflow-y-auto">
           <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
             <MessageCircleHeartIcon className="w-20 h-20" />
             <DrawerTitle>Leave a Review</DrawerTitle>

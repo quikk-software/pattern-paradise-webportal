@@ -60,7 +60,7 @@ export default function ContactForm() {
   const onSelectChange = (value: string) => setSelectValue(value);
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6">
+    <div>
       <h2 className="text-2xl font-bold text-center mb-6">Contact Us</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>

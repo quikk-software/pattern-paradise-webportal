@@ -55,7 +55,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
   const isOwner = product.creatorId === userId;
 
   return (
-    <div className="container mx-auto max-w-lg px-4 py-8 flex flex-col gap-8">
+    <div className="flex flex-col gap-8">
       <Card className="overflow-hidden">
         <CardContent className="p-6">
           <div className="grid gap-8">

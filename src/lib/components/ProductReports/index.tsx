@@ -135,7 +135,7 @@ export function ProductReports() {
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-4">
       <Card>
         <CardHeader>
           <CardTitle>Filters</CardTitle>

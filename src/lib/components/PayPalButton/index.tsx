@@ -56,7 +56,7 @@ export function PayPalButton({
         currency: 'USD',
       }}
     >
-      <Card className="w-full max-w-md mx-auto">
+      <Card className="mx-auto">
         <CardHeader>
           <CardTitle>Complete Your Purchase</CardTitle>
           <CardDescription>Secure payment via PayPal</CardDescription>

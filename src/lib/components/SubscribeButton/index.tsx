@@ -79,7 +79,7 @@ export default function SubscribeButton() {
 
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <PartyPopper className="w-20 h-20" />
               <DrawerTitle>Congratulations, you are now a Pro!</DrawerTitle>

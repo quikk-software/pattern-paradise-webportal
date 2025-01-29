@@ -110,7 +110,7 @@ export function MultiSelect({
   }
 
   return (
-    <div className="w-full mx-auto space-y-4">
+    <div className="space-y-4">
       {!overrideCraft ? (
         <CraftSelector selectedCraft={selectedCraft} onCraftChange={handleCraftChange} />
       ) : null}

@@ -9,12 +9,16 @@ const client = new Api({
   },
 });
 
-const getApi = async (session: Session | null) => {
-  const accessToken = await getAccessToken(session);
-
+const getBearerToken = (accessToken?: string) => {
   const headers: Record<any, any> = {};
   headers.Authorization = !!accessToken ? `Bearer ${accessToken}` : undefined;
   return { headers };
 };
 
-export { client, getApi };
+const getApi = async (session: Session | null) => {
+  const accessToken = await getAccessToken(session);
+
+  return getBearerToken(accessToken);
+};
+
+export { client, getApi, getBearerToken };

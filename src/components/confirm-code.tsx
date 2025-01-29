@@ -63,7 +63,7 @@ export default function ConfirmCodeComponent({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center">
-        <Card className="w-full max-w-md">
+        <Card>
           <CardHeader>
             <div className="flex justify-center mb-4">
               <ShieldEllipsis className="w-16 h-16 text-primary" aria-hidden="true" />
@@ -83,7 +83,7 @@ export default function ConfirmCodeComponent({
   if (!verificationType) {
     return (
       <div className="flex items-center justify-center">
-        <Card className="w-full max-w-md">
+        <Card className="w-full">
           <CardHeader>
             <div className="flex justify-center mb-4">
               <ShieldQuestion className="w-16 h-16 text-primary" aria-hidden="true" />
@@ -108,7 +108,7 @@ export default function ConfirmCodeComponent({
 
   return (
     <div className="flex items-center justify-center">
-      <Card className="w-full max-w-md">
+      <Card className="w-full">
         <CardHeader>
           <div className="flex justify-center mb-4">
             {isSuccess ? (

@@ -13,8 +13,8 @@ import {
 
 export default function PayPalRevokedPage() {
   return (
-    <div className="flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
+    <div className="flex flex-col items-center justify-center">
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
             PayPal Merchant Status Revoked

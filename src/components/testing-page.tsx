@@ -149,7 +149,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
 
   return (
     <>
-      <div className="p-8">
+      <div>
         <header className="mb-8">
           <h1 className="text-3xl font-bold">{isCustomer ? 'My Testings' : 'My Tester Calls'}</h1>
         </header>
@@ -278,7 +278,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
       </div>
       <Drawer open={isUpdateTestingDrawerOpen} onOpenChange={setIsUpdateTestingDrawerOpen}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
+          <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
             <DrawerHeader>
               <DrawerTitle>Testing Duration</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">

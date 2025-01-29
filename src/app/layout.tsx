@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { BottomNavigation } from '@/components/bottom-navigation';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
-import StoreProvider from '@/app/providers/StoreProvider';
-import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
+import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
+import ComingSoon from '@/components/coming-soon';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -78,17 +77,13 @@ export default async function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <CookiesProvider>
-          <AuthSessionProvider>
-            <div className="flex flex-col h-dvh">
-              <div className="flex-1 overflow-auto">
-                <StoreProvider>{children}</StoreProvider>
-              </div>
-              <CookieConsentBanner />
-              <div className="flex-0">
-                <BottomNavigation />
-              </div>
-            </div>
-          </AuthSessionProvider>
+          {process.env.MAINTENANCE_MODE === 'true' ? (
+            <ComingSoon />
+          ) : (
+            <AuthSessionProvider>
+              <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+            </AuthSessionProvider>
+          )}
         </CookiesProvider>
       </body>
     </html>

@@ -176,11 +176,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   const titleWatch = watch('title');
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="p-6 space-y-8 bg-white rounded-lg shadow-lg"
-      >
+    <div className="flex flex-col gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white rounded-lg shadow-lg">
         <div>
           <Label htmlFor="title" className="block text-lg font-semibold mb-2">
             Title <span className="text-red-500">*</span>

@@ -158,6 +158,7 @@ export interface GetUserResponse {
    * @example "2024-01-01T00:00:00Z"
    */
   paypalSubscriptionValidUntil?: string;
+  paypalSubscriptionStatus: string;
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
@@ -195,6 +196,7 @@ export interface GetUserAccountResponse {
   isActive: boolean;
   isBlocked: boolean;
   paypalMerchantIsActive: boolean;
+  paypalSubscriptionStatus: string;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
@@ -659,6 +661,10 @@ export interface GetApplicationErrorResponse {
    * @example "2024-01-01T00:00:00Z"
    */
   updatedAt: string;
+}
+
+export interface PostNewsletterSubscriptionRequest {
+  email: string;
 }
 
 export interface ExceptionResponse {
@@ -1398,7 +1404,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     listProducts: (
       query?: {
-        subcategories?: string;
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
@@ -2458,6 +2463,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/reports/products/${productId}`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The newsletter subscription will be created based on the given email. If the newsletter subscription for the given email already exists, an exception will be thrown.
+     *
+     * @tags Newsletter subscription
+     * @name PostNewsletterSubscription
+     * @summary Creates a newsletter subscription.
+     * @request POST:/api/v1/newsletter-subscriptions
+     * @secure
+     */
+    postNewsletterSubscription: (
+      data: {
+        /** @example "any" */
+        email?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/newsletter-subscriptions`,
         method: 'POST',
         body: data,
         secure: true,

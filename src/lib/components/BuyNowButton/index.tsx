@@ -86,7 +86,7 @@ export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
             maxHeight: '90vh',
           }}
         >
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto">
+          <div className="flex flex-col gap-4 overflow-y-auto">
             <DrawerClose className="flex justify-end" onClick={() => setIsOpen(false)}>
               <X className="text-muted-foreground p-2 w-10 h-10" />
             </DrawerClose>

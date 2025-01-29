@@ -33,6 +33,7 @@ import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
+import { checkProStatus } from '@/lib/core/utils';
 
 export interface PDFFile {
   file: File;
@@ -69,7 +70,7 @@ export function ProductFormComponent() {
     [],
   );
 
-  const { roles } = useSelector((s: Store) => s.auth);
+  const { subscriptionStatus } = useSelector((s: Store) => s.auth);
 
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useCreateProduct();
 
@@ -213,12 +214,11 @@ export function ProductFormComponent() {
 
   const titleWatch = watch('title');
 
+  const isPro = checkProStatus(subscriptionStatus);
+
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="p-6 space-y-8 bg-white rounded-lg shadow-lg"
-      >
+    <div className="flex flex-col gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white rounded-lg shadow-lg">
         <div>
           <Label htmlFor="title" className="block text-lg font-semibold mb-2">
             Title <span className="text-red-500">*</span>
@@ -362,11 +362,7 @@ export function ProductFormComponent() {
         </div>
 
         <div className="w-full">
-          <FileSelector
-            selectedFiles={patterns}
-            setSelectedFiles={setPatterns}
-            isPro={roles.includes('Pro')}
-          />
+          <FileSelector selectedFiles={patterns} setSelectedFiles={setPatterns} isPro={isPro} />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -463,7 +459,7 @@ export function ProductFormComponent() {
       <GoBackButton />
       <Drawer open={showResetDrawer} onOpenChange={setShowResetDrawer}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+          <div className="mx-auto flex flex-col gap-4">
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <DrawerTitle>Reset form</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">

@@ -37,7 +37,7 @@ export function LoginForm() {
   const disabled = !email || !password;
 
   return (
-    <Card className="w-full max-w-md mx-auto border-none">
+    <Card>
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Enter your credentials to access your account.</CardDescription>

@@ -31,7 +31,7 @@ export default function ReviewCTA({ productId }: ReviewCTAProps) {
 
   return (
     <>
-      <Card className="w-full max-w-4xl mx-auto">
+      <Card>
         <CardContent className="p-6 flex flex-col gap-4">
           <h2 className="text-2xl font-bold">Leave a Review</h2>
           <p className="text-sm text-gray-500">Thanks for purchasing this pattern🧡</p>

@@ -145,187 +145,185 @@ export function TesterApplicantsPage({
 
   return (
     <>
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">Tester Applicants</h1>
-            <Card>
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
+          <h1 className="text-2xl font-bold">Tester Applicants</h1>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-md">Filter</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2">
+              <div className="flex flex-start space-x-4 mb-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    requestSort('updatedAt', directionFn);
+                    sortKeyFn('updatedAt');
+                  }}
+                >
+                  Recently updated {renderSortIcon('updatedAt')}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    requestSort('assignedAt', directionFn);
+                    sortKeyFn('assignedAt');
+                  }}
+                >
+                  Recently applied {renderSortIcon('assignedAt')}
+                </Button>
+              </div>
+              <div className="flex gap-2 items-center">
+                <Checkbox
+                  id={'user.instagramRef'}
+                  checked={!!filter.find((f) => f === 'user.instagramRef')}
+                  onCheckedChange={() =>
+                    !!filter.find((f) => f === 'user.instagramRef')
+                      ? filterFn(filter.filter((f) => f !== 'user.instagramRef'))
+                      : filterFn([...filter, 'user.instagramRef'])
+                  }
+                />
+                <label
+                  htmlFor={'user.instagramRef'}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Instagram available
+                </label>
+              </div>
+              <div className="flex gap-2 items-center">
+                <Checkbox
+                  id={'user.tiktokRef'}
+                  checked={!!filter.find((f) => f === 'user.tiktokRef')}
+                  onCheckedChange={() =>
+                    !!filter.find((f) => f === 'user.tiktokRef')
+                      ? filterFn(filter.filter((f) => f !== 'user.tiktokRef'))
+                      : filterFn([...filter, 'user.tiktokRef'])
+                  }
+                />
+                <label
+                  htmlFor={'user.tiktokRef'}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  TikTok available
+                </label>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        {totalApplicantsCount < MIN_TESTER_COUNT && !fetchTesterApplicationsIsLoading ? (
+          <InfoBoxComponent
+            severity="warning"
+            message={`There are currently not enough applications for your tester call. Testers available: ${totalApplicantsCount} / Testers needed: ${MIN_TESTER_COUNT}.`}
+          />
+        ) : null}
+        {totalApplicantsCount >= MIN_TESTER_COUNT ? (
+          <InfoBoxComponent message="Select at least 3 of your preferred testers by clicking on the user's card." />
+        ) : null}
+        <div className="w-full sticky top-4 z-50">
+          <Button
+            className="w-full"
+            disabled={selectedApplicants.length < MIN_TESTER_COUNT}
+            onClick={() => {
+              setShowAddApplicantsDrawer(true);
+            }}
+          >
+            Complete Selection
+          </Button>
+        </div>
+        {applications.length === 0 && !fetchTesterApplicationsIsLoading ? (
+          <NoDataInfoBox
+            title={'No applications yet'}
+            description={
+              "It looks like there are no applications yet. You'll receive email notifications if someone applied to your tester call."
+            }
+          />
+        ) : null}
+        {fetchTesterApplicationsIsLoading ? <LoadingSpinnerComponent /> : null}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {applications.map((application) => (
+            <Card
+              key={application.user.id}
+              className={`relative cursor-pointer transition-all ${
+                !!selectedApplicants.find((sa) => sa.id === application.user.id)
+                  ? 'ring-2 ring-green-500'
+                  : ''
+              }`}
+              onClick={() => toggleApplicant(application.user)}
+            >
+              {!!selectedApplicants.find((sa) => sa.id === application.user.id) && (
+                <div className="absolute top-2 right-2 bg-green-500 rounded-full p-1">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+              )}
               <CardHeader>
-                <CardTitle className="text-md">Filter</CardTitle>
+                <div className="flex items-center space-x-4">
+                  <Link href={`/users/${application.user.id}`} passHref>
+                    <Avatar className="w-12 h-12">
+                      <AvatarImage
+                        src={application.user.imageUrl}
+                        alt={`${application.user.firstName} ${application.user.lastName}`}
+                      />
+                      <AvatarFallback>
+                        {application.user.firstName?.[0]}
+                        {application.user.lastName?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+
+                  <div>
+                    <Link href={`/users/${application.user.id}`}>
+                      <h2 className="text-lg font-semibold underline text-blue-500">
+                        {application.user.firstName} {application.user.lastName}
+                      </h2>
+                    </Link>
+                    <Link href={`/users/${application.user.id}`}>
+                      <p
+                        className={`${application.user.firstName && application.user.lastName ? 'text-sm' : 'text-lg font-semibold underline'} text-muted-foreground`}
+                      >
+                        @{application.user.username}
+                      </p>
+                    </Link>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent className="flex flex-col gap-2">
-                <div className="flex flex-start space-x-4 mb-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      requestSort('updatedAt', directionFn);
-                      sortKeyFn('updatedAt');
-                    }}
-                  >
-                    Recently updated {renderSortIcon('updatedAt')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      requestSort('assignedAt', directionFn);
-                      sortKeyFn('assignedAt');
-                    }}
-                  >
-                    Recently applied {renderSortIcon('assignedAt')}
-                  </Button>
+              <CardContent>
+                <div className="flex space-x-2 mb-2">
+                  {application.user.instagramRef && (
+                    <a
+                      href={`https://instagram.com/${application.user.instagramRef}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Badge variant="secondary">
+                        <InstagramIcon className="w-4 h-4 mr-1" />
+                        Instagram
+                      </Badge>
+                    </a>
+                  )}
+                  {application.user.tiktokRef && (
+                    <a
+                      href={`https://tiktok.com/@${application.user.tiktokRef}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Badge variant="secondary">
+                        <TikTokIcon className="w-4 h-4 mr-1" />
+                        TikTok
+                      </Badge>
+                    </a>
+                  )}
                 </div>
-                <div className="flex gap-2 items-center">
-                  <Checkbox
-                    id={'user.instagramRef'}
-                    checked={!!filter.find((f) => f === 'user.instagramRef')}
-                    onCheckedChange={() =>
-                      !!filter.find((f) => f === 'user.instagramRef')
-                        ? filterFn(filter.filter((f) => f !== 'user.instagramRef'))
-                        : filterFn([...filter, 'user.instagramRef'])
-                    }
-                  />
-                  <label
-                    htmlFor={'user.instagramRef'}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Instagram available
-                  </label>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <Checkbox
-                    id={'user.tiktokRef'}
-                    checked={!!filter.find((f) => f === 'user.tiktokRef')}
-                    onCheckedChange={() =>
-                      !!filter.find((f) => f === 'user.tiktokRef')
-                        ? filterFn(filter.filter((f) => f !== 'user.tiktokRef'))
-                        : filterFn([...filter, 'user.tiktokRef'])
-                    }
-                  />
-                  <label
-                    htmlFor={'user.tiktokRef'}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    TikTok available
-                  </label>
-                </div>
+                <p className="text-sm">
+                  Applied on: {new Date(application.assignedAt).toLocaleDateString()}
+                </p>
+                <p className="text-sm">
+                  Last Updated: {new Date(application.updatedAt).toLocaleDateString()}
+                </p>
               </CardContent>
             </Card>
-          </div>
-          {totalApplicantsCount < MIN_TESTER_COUNT && !fetchTesterApplicationsIsLoading ? (
-            <InfoBoxComponent
-              severity="warning"
-              message={`There are currently not enough applications for your tester call. Testers available: ${totalApplicantsCount} / Testers needed: ${MIN_TESTER_COUNT}.`}
-            />
-          ) : null}
-          {totalApplicantsCount >= MIN_TESTER_COUNT ? (
-            <InfoBoxComponent message="Select at least 3 of your preferred testers by clicking on the user's card." />
-          ) : null}
-          <div className="w-full sticky top-4 z-50">
-            <Button
-              className="w-full"
-              disabled={selectedApplicants.length < MIN_TESTER_COUNT}
-              onClick={() => {
-                setShowAddApplicantsDrawer(true);
-              }}
-            >
-              Complete Selection
-            </Button>
-          </div>
-          {applications.length === 0 && !fetchTesterApplicationsIsLoading ? (
-            <NoDataInfoBox
-              title={'No applications yet'}
-              description={
-                "It looks like there are no applications yet. You'll receive email notifications if someone applied to your tester call."
-              }
-            />
-          ) : null}
-          {fetchTesterApplicationsIsLoading ? <LoadingSpinnerComponent /> : null}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {applications.map((application) => (
-              <Card
-                key={application.user.id}
-                className={`relative cursor-pointer transition-all ${
-                  !!selectedApplicants.find((sa) => sa.id === application.user.id)
-                    ? 'ring-2 ring-green-500'
-                    : ''
-                }`}
-                onClick={() => toggleApplicant(application.user)}
-              >
-                {!!selectedApplicants.find((sa) => sa.id === application.user.id) && (
-                  <div className="absolute top-2 right-2 bg-green-500 rounded-full p-1">
-                    <Check className="w-4 h-4 text-white" />
-                  </div>
-                )}
-                <CardHeader>
-                  <div className="flex items-center space-x-4">
-                    <Link href={`/users/${application.user.id}`} passHref>
-                      <Avatar className="w-12 h-12">
-                        <AvatarImage
-                          src={application.user.imageUrl}
-                          alt={`${application.user.firstName} ${application.user.lastName}`}
-                        />
-                        <AvatarFallback>
-                          {application.user.firstName?.[0]}
-                          {application.user.lastName?.[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Link>
-
-                    <div>
-                      <Link href={`/users/${application.user.id}`}>
-                        <h2 className="text-lg font-semibold underline text-blue-500">
-                          {application.user.firstName} {application.user.lastName}
-                        </h2>
-                      </Link>
-                      <Link href={`/users/${application.user.id}`}>
-                        <p
-                          className={`${application.user.firstName && application.user.lastName ? 'text-sm' : 'text-lg font-semibold underline'} text-muted-foreground`}
-                        >
-                          @{application.user.username}
-                        </p>
-                      </Link>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex space-x-2 mb-2">
-                    {application.user.instagramRef && (
-                      <a
-                        href={`https://instagram.com/${application.user.instagramRef}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Badge variant="secondary">
-                          <InstagramIcon className="w-4 h-4 mr-1" />
-                          Instagram
-                        </Badge>
-                      </a>
-                    )}
-                    {application.user.tiktokRef && (
-                      <a
-                        href={`https://tiktok.com/@${application.user.tiktokRef}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Badge variant="secondary">
-                          <TikTokIcon className="w-4 h-4 mr-1" />
-                          TikTok
-                        </Badge>
-                      </a>
-                    )}
-                  </div>
-                  <p className="text-sm">
-                    Applied on: {new Date(application.assignedAt).toLocaleDateString()}
-                  </p>
-                  <p className="text-sm">
-                    Last Updated: {new Date(application.updatedAt).toLocaleDateString()}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
       <Drawer open={showAddApplicantsDrawer} onOpenChange={setShowAddApplicantsDrawer}>
@@ -333,7 +331,7 @@ export function TesterApplicantsPage({
           className="p-4 flex flex-col gap-8"
           aria-describedby="Tester selection confirmation"
         >
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             <DrawerHeader>
               <DrawerTitle>Start Testing Process</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">
