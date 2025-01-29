@@ -58,8 +58,8 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
   const filteredNavLinks = NAV_LINKS.filter((link) => link.enabled);
 
   return (
-    <nav ref={navRef} className={`bg-${background}`}>
-      <div className="flex justify-between h-16 px-4 max-w-7xl mx-auto">
+    <nav ref={navRef} className={`bg-${background}`} id="navbar">
+      <div className="flex justify-between h-16 mx-auto">
         <div className="flex-shrink-0 flex items-center">
           <Link
             href="/"

@@ -179,7 +179,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             </Button>
           </DrawerTrigger>
           <DrawerContent className="p-4">
-            <div className="mx-auto w-full max-w-sm max-h-[100vh] overflow-y-auto">
+            <div className="max-h-[100vh] overflow-y-auto">
               <div className="p-4">
                 <div className="space-y-6">
                   <div>

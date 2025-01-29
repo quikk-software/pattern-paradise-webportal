@@ -62,7 +62,7 @@ export default function EditPassword() {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto border-none">
+    <Card>
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Update Password</CardTitle>
       </CardHeader>

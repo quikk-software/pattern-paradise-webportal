@@ -22,7 +22,7 @@ export default function ConfirmDrawer({
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent className="p-4">
-        <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <DrawerHeader>
             <DrawerTitle>Are you sure?</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">{description}</DrawerTitle>

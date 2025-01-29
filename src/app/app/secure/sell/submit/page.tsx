@@ -25,7 +25,7 @@ export default function SellSubmitPage() {
 
   if (!user?.paypalMerchantIsActive) {
     return (
-      <div className="container mx-auto p-6 space-y-8">
+      <div className="space-y-8">
         <InfoBoxComponent
           message={
             <>

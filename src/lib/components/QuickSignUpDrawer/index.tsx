@@ -23,7 +23,7 @@ export default function QuickSignUpDrawer({
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent className="p-4">
-        <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <DrawerHeader>
             <DrawerTitle>Quick Sign Up</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">{reason}</DrawerTitle>

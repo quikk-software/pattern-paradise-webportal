@@ -189,7 +189,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Card className="w-full max-w-2xl mx-auto border-none">
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Quick Links</CardTitle>
         </CardHeader>
@@ -224,7 +224,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardContent>
       </Card>
       {user.roles?.includes('Seller') ? (
-        <Card className="w-full max-w-2xl mx-auto border-none">
+        <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Manage PayPal</CardTitle>
           </CardHeader>
@@ -311,7 +311,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </Card>
       ) : null}
 
-      <Card className="w-full max-w-2xl mx-auto border-none">
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>
         </CardHeader>

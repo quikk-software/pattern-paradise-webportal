@@ -72,7 +72,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
+    <div>
       <h1 className="text-2xl font-bold mb-6">My Orders</h1>
       {isLoading ? <LoadingSpinnerComponent /> : null}
       {orders.length === 0 && !isLoading ? (

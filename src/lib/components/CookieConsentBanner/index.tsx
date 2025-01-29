@@ -45,7 +45,7 @@ export default function CookieConsentBanner() {
       }}
     >
       <div className="fixed bottom-0 left-0 w-full z-50 bg-background border-t border-border shadow-lg">
-        <div className="container mx-auto items-center justify-between gap-4 p-4">
+        <div className="items-center justify-between gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <h2 className="text-lg font-semibold mb-2 text-primary">We value your privacy 🍪</h2>

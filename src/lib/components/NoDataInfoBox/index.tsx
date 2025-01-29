@@ -8,7 +8,7 @@ interface NoDataInfoBoxProps {
 
 export default function NoDataInfoBox({ title, description }: NoDataInfoBoxProps) {
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="mx-auto">
       <CardHeader className="text-center">
         <div className="mx-auto mb-4 w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
           <InboxIcon className="w-8 h-8 text-primary" />

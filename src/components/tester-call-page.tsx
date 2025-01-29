@@ -186,169 +186,167 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
         themeBgClasses[theme] || 'from-neutral-100',
       )}
     >
-      <main className={`container mx-auto px-4 py-8`}>
-        <div className="flex justify-start items-start">
-          <GoBackButton className="mb-8 w-fit" />
-        </div>
-        {/* Hero Section */}
-        <section className="text-center mb-8">
-          <h1
-            className={classNames(
-              'text-3xl md:text-5xl font-bold mb-2',
-              themeTextClasses[theme] || 'text-neutral-600',
-            )}
-          >
-            Tester Call for
-          </h1>
-          <h3
-            className={classNames(
-              'text-4xl md:text-6xl font-bold mb-2',
-              themeTextClasses[theme] || 'text-neutral-800',
-            )}
-          >
-            {product.title}!
-          </h3>
-          <h3
-            className={classNames(
-              'text-md md:text-lg font-bold mb-4 italic underline',
-              themeTextClasses[theme] || 'text-neutral-800',
-            )}
-          >
-            <Link href={`/users/${testing.creator.username}`}>by @{testing.creator.username}</Link>
-          </h3>
-          <p className="text-xl text-gray-700 mb-6">
-            Help us perfect our patterns and shape the future of crocheting and knitting!
-          </p>
-          <ApplyButton
-            testingId={testing.id}
-            theme={theme}
-            status={testing.status}
-            creatorId={testing.creatorId}
-            testerIds={testing.testerIds ?? []}
-            hasApplied={hasApplied}
-            setHasApplied={setHasApplied}
-          />
-        </section>
+      <div className="flex justify-start items-start">
+        <GoBackButton className="mb-8 w-fit" />
+      </div>
+      {/* Hero Section */}
+      <section className="text-center mb-8">
+        <h1
+          className={classNames(
+            'text-3xl md:text-5xl font-bold mb-2',
+            themeTextClasses[theme] || 'text-neutral-600',
+          )}
+        >
+          Tester Call for
+        </h1>
+        <h3
+          className={classNames(
+            'text-4xl md:text-6xl font-bold mb-2',
+            themeTextClasses[theme] || 'text-neutral-800',
+          )}
+        >
+          {product.title}!
+        </h3>
+        <h3
+          className={classNames(
+            'text-md md:text-lg font-bold mb-4 italic underline',
+            themeTextClasses[theme] || 'text-neutral-800',
+          )}
+        >
+          <Link href={`/users/${testing.creator.username}`}>by @{testing.creator.username}</Link>
+        </h3>
+        <p className="text-xl text-gray-700 mb-6">
+          Help us perfect our patterns and shape the future of crocheting and knitting!
+        </p>
+        <ApplyButton
+          testingId={testing.id}
+          theme={theme}
+          status={testing.status}
+          creatorId={testing.creatorId}
+          testerIds={testing.testerIds ?? []}
+          hasApplied={hasApplied}
+          setHasApplied={setHasApplied}
+        />
+      </section>
 
-        {/* Pattern Information */}
-        <section className={`mb-12`}>
-          <Card>
-            <CardContent className={`p-6`}>
-              <h2
-                className={classNames(
-                  'text-3xl font-semibold mb-4',
-                  themeTextClasses[theme] || 'text-neutral-700',
-                )}
-              >
-                {product.title}
-              </h2>
-              <p className={`text-gray-700 mb-4`}>{product.description}</p>
-            </CardContent>
-          </Card>
-        </section>
+      {/* Pattern Information */}
+      <section className={`mb-12`}>
+        <Card>
+          <CardContent className={`p-6`}>
+            <h2
+              className={classNames(
+                'text-3xl font-semibold mb-4',
+                themeTextClasses[theme] || 'text-neutral-700',
+              )}
+            >
+              {product.title}
+            </h2>
+            <p className={`text-gray-700 mb-4`}>{product.description}</p>
+          </CardContent>
+        </Card>
+      </section>
 
-        {/* Image Slider */}
-        <section className={`mb-12 flex flex-col gap-2 items-center`}>
-          <Carousel
-            className={`w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto`}
-          >
-            <CarouselContent>
-              {product.imageUrls.map((src, index) => (
-                <CarouselItem key={index}>
-                  <div className={`flex flex-col items-center`}>
-                    <CldImage
-                      key={src}
-                      alt={`${product.title} view ${index + 1}`}
-                      src={src}
-                      width={`200`}
-                      height={`300`}
-                      crop={{
-                        type: 'auto',
-                        source: true,
-                      }}
-                      className={`rounded-lg shadow-md`}
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-          <ArrowLeftRight className={classNames(themeTextClasses[theme] || 'text-neutral-800')} />
-        </section>
+      {/* Image Slider */}
+      <section className={`mb-12 flex flex-col gap-2 items-center`}>
+        <Carousel
+          className={`w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto`}
+        >
+          <CarouselContent>
+            {product.imageUrls.map((src, index) => (
+              <CarouselItem key={index}>
+                <div className={`flex flex-col items-center`}>
+                  <CldImage
+                    key={src}
+                    alt={`${product.title} view ${index + 1}`}
+                    src={src}
+                    width={`200`}
+                    height={`300`}
+                    crop={{
+                      type: 'auto',
+                      source: true,
+                    }}
+                    className={`rounded-lg shadow-md`}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        <ArrowLeftRight className={classNames(themeTextClasses[theme] || 'text-neutral-800')} />
+      </section>
 
-        {/* Tester Requirements */}
-        <section className={`mb-12`}>
-          <Card>
-            <CardContent className={`p-6`}>
-              <h2
-                className={classNames(
-                  'text-2xl font-semibold mb-4',
-                  themeTextClasses[theme] || 'text-neutral-800',
-                )}
-              >
-                Tester Requirements
-              </h2>
-              <ul className={`list-disc list-inside text-gray-700`}>
-                <li>
-                  <strong>
-                    {testing.product.experience} {testing.product.category.toLowerCase()}
-                  </strong>{' '}
-                  skills
-                </li>
-                <li>Ability to follow written patterns</li>
-                <li>Provide detailed feedback on pattern clarity and accuracy</li>
-                <li>
-                  Complete the project <strong>within {testing.durationInWeeks} weeks</strong>
-                </li>
-                <li>Share progress photos and final project images</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </section>
+      {/* Tester Requirements */}
+      <section className={`mb-12`}>
+        <Card>
+          <CardContent className={`p-6`}>
+            <h2
+              className={classNames(
+                'text-2xl font-semibold mb-4',
+                themeTextClasses[theme] || 'text-neutral-800',
+              )}
+            >
+              Tester Requirements
+            </h2>
+            <ul className={`list-disc list-inside text-gray-700`}>
+              <li>
+                <strong>
+                  {testing.product.experience} {testing.product.category.toLowerCase()}
+                </strong>{' '}
+                skills
+              </li>
+              <li>Ability to follow written patterns</li>
+              <li>Provide detailed feedback on pattern clarity and accuracy</li>
+              <li>
+                Complete the project <strong>within {testing.durationInWeeks} weeks</strong>
+              </li>
+              <li>Share progress photos and final project images</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </section>
 
-        {/* Benefits */}
-        <section className={`mb-12`}>
-          <Card>
-            <CardContent className={`p-6`}>
-              <h2
-                className={classNames(
-                  'text-2xl font-semibold mb-4',
-                  themeTextClasses[theme] || 'text-neutral-800',
-                )}
-              >
-                Benefits of Participating
-              </h2>
-              <ul className={`list-disc list-inside text-gray-700`}>
-                <li>Receive the pattern for free</li>
-                <li>Your name credited in the final pattern release</li>
-                <li>Opportunity to influence the design process</li>
-                <li>Connect with a community of fellow crafters</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </section>
+      {/* Benefits */}
+      <section className={`mb-12`}>
+        <Card>
+          <CardContent className={`p-6`}>
+            <h2
+              className={classNames(
+                'text-2xl font-semibold mb-4',
+                themeTextClasses[theme] || 'text-neutral-800',
+              )}
+            >
+              Benefits of Participating
+            </h2>
+            <ul className={`list-disc list-inside text-gray-700`}>
+              <li>Receive the pattern for free</li>
+              <li>Your name credited in the final pattern release</li>
+              <li>Opportunity to influence the design process</li>
+              <li>Connect with a community of fellow crafters</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </section>
 
-        {/* Call to Action (Bottom) */}
-        <section className={`text-center`}>
-          <h2
-            className={classNames(
-              'text-2xl md:text-3xl font-bold  mb-4',
-              themeTextClasses[theme] || 'text-neutral-800',
-            )}
-          >
-            Ready to stitch with us?
-          </h2>
-          <ApplyButton
-            testingId={testing.id}
-            theme={theme}
-            status={testing.status}
-            creatorId={testing.creatorId}
-            testerIds={testing.testerIds ?? []}
-            hasApplied={hasApplied}
-            setHasApplied={setHasApplied}
-          />
-        </section>
-      </main>
+      {/* Call to Action (Bottom) */}
+      <section className={`text-center`}>
+        <h2
+          className={classNames(
+            'text-2xl md:text-3xl font-bold  mb-4',
+            themeTextClasses[theme] || 'text-neutral-800',
+          )}
+        >
+          Ready to stitch with us?
+        </h2>
+        <ApplyButton
+          testingId={testing.id}
+          theme={theme}
+          status={testing.status}
+          creatorId={testing.creatorId}
+          testerIds={testing.testerIds ?? []}
+          hasApplied={hasApplied}
+          setHasApplied={setHasApplied}
+        />
+      </section>
     </div>
   );
 }

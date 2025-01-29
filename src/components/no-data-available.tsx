@@ -18,7 +18,7 @@ export function NoDataAvailable({
   };
 
   return (
-    <Card className="w-full border-0 shadow-none">
+    <Card className="border-0">
       <CardHeader className="text-center">
         <div className="mx-auto mb-4 bg-muted rounded-full w-16 h-16 flex items-center justify-center">
           <FileQuestion className="h-8 w-8 text-muted-foreground" />

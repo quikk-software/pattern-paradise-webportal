@@ -217,11 +217,8 @@ export function ProductFormComponent() {
   const isPro = checkProStatus(subscriptionStatus);
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="p-6 space-y-8 bg-white rounded-lg shadow-lg"
-      >
+    <div className="flex flex-col gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white rounded-lg shadow-lg">
         <div>
           <Label htmlFor="title" className="block text-lg font-semibold mb-2">
             Title <span className="text-red-500">*</span>
@@ -462,7 +459,7 @@ export function ProductFormComponent() {
       <GoBackButton />
       <Drawer open={showResetDrawer} onOpenChange={setShowResetDrawer}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+          <div className="mx-auto flex flex-col gap-4">
             <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
               <DrawerTitle>Reset form</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">

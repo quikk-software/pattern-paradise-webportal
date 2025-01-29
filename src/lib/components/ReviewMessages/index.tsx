@@ -47,7 +47,7 @@ export default function ReviewMessages({ productId }: ReviewMessagesProps) {
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card>
       <CardContent className="p-6 flex flex-col gap-4">
         <h2 className="text-2xl font-bold">Pattern Reviews</h2>
         {comments.length === 0 ? (

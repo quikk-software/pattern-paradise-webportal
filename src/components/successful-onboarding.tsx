@@ -31,7 +31,7 @@ export default function SuccessfulOnboarding() {
 
   return (
     <div className="bg-gradient-to-b from-orange-100 to-white flex flex-col justify-between">
-      <main className="flex-grow flex justify-center items-center p-4">
+      <main className="flex-grow flex justify-center items-center">
         <Card className="w-full max-w-2xl">
           <CardHeader>
             <div className="flex items-center space-x-2">

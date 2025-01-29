@@ -98,6 +98,7 @@ interface ChatHistoryProps {
   selectedProductIdByTesting: string | null;
   showChatList: boolean;
   bottomNavHeight: number;
+  navbarHeight: number;
   changedChat: boolean;
   selectedTestingStatus: string | null;
   messages: GetTestingCommentResponse[];
@@ -121,6 +122,7 @@ export default function ChatHistory({
   selectedProductIdByTesting,
   showChatList,
   bottomNavHeight,
+  navbarHeight,
   messages,
   testingCommentsHasNextPage,
   testingCommentsIsLoading,
@@ -328,7 +330,14 @@ export default function ChatHistory({
           </p>
         </div>
       ) : (
-        <Card className="flex flex-col" style={{ height: `calc(100svh - ${bottomNavHeight}px)` }}>
+        <Card
+          className="flex flex-col"
+          style={{
+            height: `calc(100svh - ${bottomNavHeight}px - ${navbarHeight}px)`,
+            border: 'none',
+            boxShadow: 'none',
+          }}
+        >
           {/* Top navigation */}
           <CardContent className="p-4 flex-none">
             <div className="space-y-2 w-full">

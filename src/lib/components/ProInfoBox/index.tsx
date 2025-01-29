@@ -77,7 +77,7 @@ export default function ProInfoBox({ user }: ProInfoBoxProps) {
       )}
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerContent className="p-4">
-          <div className="mx-auto w-full max-w-sm flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             <DrawerHeader>
               <DrawerTitle>Cancel Pattern Paradise Pro</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">

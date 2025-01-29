@@ -56,8 +56,8 @@ export default function ResetPasswordComponent() {
     isLoading || isSuccess || !password || !confirmPassword || password !== confirmPassword;
 
   return (
-    <div className="min-h-screen flex justify-center">
-      <Card className="w-full max-w-md">
+    <div className="flex justify-center">
+      <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Reset Password</CardTitle>
           <CardDescription className="text-center">Enter your new password below</CardDescription>

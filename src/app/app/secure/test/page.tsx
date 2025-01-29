@@ -6,8 +6,8 @@ import Link from 'next/link';
 
 export default function TestPage() {
   return (
-    <div className="container mx-auto flex flex-col gap-4">
-      <Card className="w-full border-none">
+    <div className="flex flex-col gap-4">
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Quick Links</CardTitle>
         </CardHeader>

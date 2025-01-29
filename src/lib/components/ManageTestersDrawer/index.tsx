@@ -55,7 +55,7 @@ export default function ManageTesterDrawers({
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent className="p-4">
-        <div className="mx-auto w-full max-w-sm flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
+        <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
           <DrawerHeader>
             <DrawerTitle>Manage Testers</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">

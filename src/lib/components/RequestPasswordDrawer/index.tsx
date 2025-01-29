@@ -34,7 +34,7 @@ export default function RequestPasswordDrawer({
   return (
     <Drawer open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
       <DrawerContent className="p-4">
-        <div className="mx-auto w-full max-w-sm flex flex-col gap-8">
+        <div className="flex flex-col gap-8">
           <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
             <DrawerTitle>Request a password mail</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">

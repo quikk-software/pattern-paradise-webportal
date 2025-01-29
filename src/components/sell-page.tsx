@@ -62,7 +62,7 @@ export function SellPageComponent() {
   }, [loadMore, userId]);
 
   return (
-    <div className="p-8">
+    <div>
       <header className="flex flex-col gap-4 mb-8">
         <h1 className="text-3xl font-bold">Actions</h1>
         {productReportsCount && productReportsCount > 0 ? (

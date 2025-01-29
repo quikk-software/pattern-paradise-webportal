@@ -61,8 +61,8 @@ export function PatternParadiseProComponent() {
   const isPro = roles.includes('Pro');
 
   return (
-    <div className="min-h-screen">
-      <header className="container mx-auto px-4 py-8 border-b border-gray-200">
+    <div>
+      <header className="border-b border-gray-200">
         <motion.h1
           className="text-4xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-black"
           initial={{ opacity: 0, y: -20 }}
@@ -72,7 +72,7 @@ export function PatternParadiseProComponent() {
           Pattern Paradise Pro
         </motion.h1>
         <motion.p
-          className="mt-4 text-xl text-center text-gray-600"
+          className="my-4 text-xl text-center text-gray-600"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -81,143 +81,141 @@ export function PatternParadiseProComponent() {
         </motion.p>
       </header>
 
-      <main className="container mx-auto px-4 py-12">
-        <section className="text-center mb-16">
-          <motion.h2
-            className="text-3xl font-bold mb-4"
-            initial={{ opacity: 0, y: 20 }}
+      <section className="text-center mt-4 mb-16">
+        <motion.h2
+          className="text-3xl font-bold mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+          custom={0}
+        >
+          Unlock Premium Features
+        </motion.h2>
+        <motion.p
+          className="text-xl mb-8 text-gray-600"
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+          custom={1}
+        >
+          Take your pattern business to the next level with our Pro plan for just{' '}
+          <strong>{PRO_MEMBERSHIP_PRICE}</strong> per month
+        </motion.p>
+        {isPro ? (
+          <span>
+            You already have a Pattern Paradise Pro subscription. Start using it by{' '}
+            <Link href="/app/secure/sell/submit" className="text-blue-500 underline">
+              creating patterns
+            </Link>{' '}
+            or{' '}
+            <Link href="/app/secure/test" className="text-blue-500 underline">
+              apply for tester calls
+            </Link>
+            !
+          </span>
+        ) : (
+          <motion.div
+            className="flex justify-center w-full"
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={controls}
-            custom={0}
+            custom={2}
           >
-            Unlock Premium Features
-          </motion.h2>
-          <motion.p
-            className="text-xl mb-8 text-gray-600"
-            initial={{ opacity: 0, y: 20 }}
-            animate={controls}
-            custom={1}
-          >
-            Take your pattern business to the next level with our Pro plan for just{' '}
-            <strong>{PRO_MEMBERSHIP_PRICE}</strong> per month
-          </motion.p>
-          {isPro ? (
-            <span>
-              You already have a Pattern Paradise Pro subscription. Start using it by{' '}
-              <Link href="/app/secure/sell/submit" className="text-blue-500 underline">
-                creating patterns
-              </Link>{' '}
-              or{' '}
-              <Link href="/app/secure/test" className="text-blue-500 underline">
-                apply for tester calls
-              </Link>
-              !
-            </span>
-          ) : (
+            <SubscribeButton />
+          </motion.div>
+        )}
+      </section>
+
+      <section className="mb-16">
+        <motion.h2
+          className="text-3xl font-bold mb-8 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+          custom={3}
+        >
+          Pro Features
+        </motion.h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
             <motion.div
-              className="flex justify-center w-full"
-              initial={{ opacity: 0, scale: 0.9 }}
+              key={index}
+              className="bg-gradient-to-br from-white to-gray-100 p-6 rounded-lg shadow-md"
+              initial={{ opacity: 0, y: 20 }}
               animate={controls}
-              custom={2}
+              custom={index + 4}
             >
-              <SubscribeButton />
+              <Check className="text-black mb-4" size={24} />
+              <p className="text-gray-800">{feature}</p>
             </motion.div>
-          )}
-        </section>
+          ))}
+        </div>
+      </section>
 
-        <section className="mb-16">
-          <motion.h2
-            className="text-3xl font-bold mb-8 text-center"
-            initial={{ opacity: 0, y: 20 }}
+      <section className="mb-16 text-center">
+        <motion.h2
+          className="text-3xl font-bold mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+          custom={9}
+        >
+          Pricing
+        </motion.h2>
+        <motion.p
+          className="text-2xl font-bold mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+          custom={10}
+        >
+          {PRO_MEMBERSHIP_PRICE}/month
+        </motion.p>
+        {isPro ? (
+          <span>
+            You already have a Pattern Paradise Pro subscription. Start using it by{' '}
+            <Link href="/app/secure/sell/submit" className="text-blue-500 underline">
+              creating patterns
+            </Link>{' '}
+            or{' '}
+            <Link href="/app/secure/test" className="text-blue-500 underline">
+              apply for tester calls
+            </Link>
+            !
+          </span>
+        ) : (
+          <motion.div
+            className="flex justify-center w-full"
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={controls}
-            custom={3}
+            custom={12}
           >
-            Pro Features
-          </motion.h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                className="bg-gradient-to-br from-white to-gray-100 p-6 rounded-lg shadow-md"
-                initial={{ opacity: 0, y: 20 }}
-                animate={controls}
-                custom={index + 4}
-              >
-                <Check className="text-black mb-4" size={24} />
-                <p className="text-gray-800">{feature}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+            <SubscribeButton />
+          </motion.div>
+        )}
+      </section>
 
-        <section className="mb-16 text-center">
-          <motion.h2
-            className="text-3xl font-bold mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={controls}
-            custom={9}
-          >
-            Pricing
-          </motion.h2>
-          <motion.p
-            className="text-2xl font-bold mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={controls}
-            custom={10}
-          >
-            {PRO_MEMBERSHIP_PRICE}/month
-          </motion.p>
-          {isPro ? (
-            <span>
-              You already have a Pattern Paradise Pro subscription. Start using it by{' '}
-              <Link href="/app/secure/sell/submit" className="text-blue-500 underline">
-                creating patterns
-              </Link>{' '}
-              or{' '}
-              <Link href="/app/secure/test" className="text-blue-500 underline">
-                apply for tester calls
-              </Link>
-              !
-            </span>
-          ) : (
+      <section>
+        <motion.h2
+          className="text-3xl font-bold mb-8 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+          custom={13}
+        >
+          Frequently Asked Questions
+        </motion.h2>
+        <Accordion type="single" collapsible className="mx-auto">
+          {faqs.map((faq, index) => (
             <motion.div
-              className="flex justify-center w-full"
-              initial={{ opacity: 0, scale: 0.9 }}
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
               animate={controls}
-              custom={12}
+              custom={index + 14}
             >
-              <SubscribeButton />
+              <AccordionItem value={`item-${index}`}>
+                <AccordionTrigger className="text-black hover:text-gray-600 text-left">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
+              </AccordionItem>
             </motion.div>
-          )}
-        </section>
-
-        <section>
-          <motion.h2
-            className="text-3xl font-bold mb-8 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={controls}
-            custom={13}
-          >
-            Frequently Asked Questions
-          </motion.h2>
-          <Accordion type="single" collapsible className="w-full max-w-2xl mx-auto">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={controls}
-                custom={index + 14}
-              >
-                <AccordionItem value={`item-${index}`}>
-                  <AccordionTrigger className="text-black hover:text-gray-600 text-left">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
-                </AccordionItem>
-              </motion.div>
-            ))}
-          </Accordion>
-        </section>
-      </main>
+          ))}
+        </Accordion>
+      </section>
     </div>
   );
 }

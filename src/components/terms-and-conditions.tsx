@@ -41,7 +41,7 @@ export default function TermsAndConditions() {
   }, [action]);
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl space-y-4">
+    <div className="space-y-4">
       <Imprint />
       <PrivacyPolicy privacyPolicyRef={privacyPolicyRef} />
       <Card>
