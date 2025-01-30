@@ -76,15 +76,15 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        <CookiesProvider>
-          {process.env.MAINTENANCE_MODE === 'true' ? (
-            <ComingSoon />
-          ) : (
+        {process.env.MAINTENANCE_MODE === 'true' ? (
+          <ComingSoon />
+        ) : (
+          <CookiesProvider>
             <AuthSessionProvider>
               <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
             </AuthSessionProvider>
-          )}
-        </CookiesProvider>
+          </CookiesProvider>
+        )}
       </body>
     </html>
   );

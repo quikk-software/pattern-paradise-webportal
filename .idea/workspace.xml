@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="" />
+    <list default="true" id="2459c244-11fc-4159-8c6b-6677f95321c5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,7 +61,7 @@
     "npm.generate-types.executor": "Run",
     "npm.lint.executor": "Run",
     "prettierjs.PrettierConfiguration.Package": "/Users/mac/Desktop/Repos/cbj/node_modules/prettier",
-    "ts.external.directory.path": "/Users/mac/Desktop/Repos/cbj/node_modules/typescript/lib",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -157,6 +159,7 @@
       <workItem from="1737295743592" duration="16323000" />
       <workItem from="1737448054785" duration="16930000" />
       <workItem from="1737987461687" duration="48000" />
+      <workItem from="1738238193961" duration="59000" />
     </task>
     <servers />
   </component>
