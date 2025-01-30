@@ -103,8 +103,8 @@ export default function ComingSoon() {
                 participate in pattern testing, offer suggestions for improvements, and help refine
                 designs before they&apos;re finalized. This collaborative approach ensures
                 high-quality patterns and fosters community engagement. Register as a Tester or
-                update your selected roles in your Profile Settings . Once you have everything set
-                up, you can browse Tester Calls .
+                update your selected roles in your Profile Settings. Once you have everything set
+                up, you can browse Tester Calls.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-8">
@@ -115,8 +115,7 @@ export default function ComingSoon() {
                 No, there&apos;s no membership fee to join Pattern Paradise. Our platform is free to
                 use for both designers and buyers. We only charge a 5% fee on successful pattern
                 sales. If you are interested in a Pro membership for advanced features, you can
-                purchase this in a separate subscription for {PRO_MEMBERSHIP_PRICE}
-                per month.
+                purchase this in a separate subscription for {PRO_MEMBERSHIP_PRICE} per month.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
