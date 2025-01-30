@@ -11,11 +11,7 @@ import Link from 'next/link';
 import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
 import useAction from '@/lib/core/useAction';
 
-interface FAQPageComponentProps {
-  showTitle?: boolean;
-}
-
-export default function FAQPageComponent({ showTitle = true }: FAQPageComponentProps) {
+export default function FAQPageComponent() {
   const [selectedAccordionItem, setSelectedAccordionItem] = useState<string | undefined>(undefined);
 
   const { action } = useAction();
@@ -26,11 +22,9 @@ export default function FAQPageComponent({ showTitle = true }: FAQPageComponentP
 
   return (
     <div>
-      {showTitle ? (
-        <h1 className="text-4xl font-bold text-center text-primary mb-8">
-          Frequently Asked Questions
-        </h1>
-      ) : null}
+      <h1 className="text-4xl font-bold text-center text-primary mb-8">
+        Frequently Asked Questions
+      </h1>
       <div className="bg-white rounded-lg shadow-lg p-6">
         <Accordion
           type="single"
