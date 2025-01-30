@@ -7,6 +7,7 @@ import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
 import ComingSoon from '@/components/coming-soon';
+import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -78,15 +79,16 @@ export default async function RootLayout({
         <Analytics />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        {process.env.MAINTENANCE_MODE === 'true' ? (
-          <ComingSoon />
-        ) : (
-          <CookiesProvider>
+        <CookiesProvider>
+          {process.env.MAINTENANCE_MODE === 'true' ? (
+            <ComingSoon />
+          ) : (
             <AuthSessionProvider>
               <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
             </AuthSessionProvider>
-          </CookiesProvider>
-        )}
+          )}
+          <CookieConsentBanner />
+        </CookiesProvider>
       </body>
     </html>
   );

@@ -4,9 +4,7 @@ import { PropsWithChildren } from 'react';
 import { usePathname } from 'next/navigation';
 import { NavbarComponent } from '@/components/navbar';
 import StoreProvider from '@/app/providers/StoreProvider';
-import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { BottomNavigation } from '@/components/bottom-navigation';
-import AuthGuard from '@/lib/auth/AuthGuard';
 import TokenDataWrapper from '@/app/wrappers/TokenDataWrapper';
 
 const noPaddingPages = ['/app/secure/test/chats'];
@@ -27,7 +25,6 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
           <TokenDataWrapper>{children}</TokenDataWrapper>
         </StoreProvider>
       </div>
-      <CookieConsentBanner />
       <BottomNavigation />
     </div>
   );

@@ -284,4 +284,6 @@ export const reportUserReasons = [
 
 export type ReportUserReason = (typeof reportUserReasons)[number]['value'];
 
+export const COOKIE_CONSENT_NAME = 'pp-cookie-consent';
+
 export const FEATURED_PRODUCTS_LENGTH = 3;
