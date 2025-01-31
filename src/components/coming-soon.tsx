@@ -7,6 +7,7 @@ import {
 import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import Countdown from '@/components/countdown';
+import NewsletterSignup from '@/components/newsletter-signup';
 
 export default function ComingSoon() {
   return (
@@ -22,12 +23,12 @@ export default function ComingSoon() {
           We&apos;re working hard to bring you something amazing. Stay tuned!
         </p>
         <Countdown />
-        {/*<div className="mt-12 animate-fade-in">*/}
-        {/*  <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white  text-center">*/}
-        {/*    Get notified when we launch*/}
-        {/*  </h2>*/}
-        {/*  <NewsletterSignup />*/}
-        {/*</div>*/}
+        <div className="mt-12 animate-fade-in">
+          <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white  text-center">
+            Get notified when we launch
+          </h2>
+          <NewsletterSignup />
+        </div>
         <div className="bg-white rounded-lg shadow-lg p-6">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
