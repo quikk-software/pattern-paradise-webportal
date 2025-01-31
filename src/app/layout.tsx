@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
-import { Analytics } from '@vercel/analytics/react';
 import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
@@ -76,7 +75,6 @@ export default async function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0"
         />
-        <Analytics />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <CookiesProvider>
