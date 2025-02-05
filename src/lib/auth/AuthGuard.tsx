@@ -26,9 +26,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const isLoading = status === 'loading';
 
   useEffect(() => {
-    console.log('OUTSIDE', { session, status });
     if (status === 'unauthenticated' || (session as any)?.error === 'RefreshAccessTokenError') {
-      console.log('INSIDE', { session, status });
       router.push(`/auth/login?redirect=${encodedRedirect}`);
     }
     dispatch(setUserId(session?.user.id || ''));

@@ -12,7 +12,6 @@ export const useGetUser = () => {
   const { handleFn, ...apiStates } = useApiStates();
 
   const fetch = async (userId: string) => {
-    if (!userId) return;
     const response = await handleFn(
       async () =>
         await client.api.getUser(userId, {
