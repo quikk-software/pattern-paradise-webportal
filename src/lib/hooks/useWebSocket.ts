@@ -47,6 +47,8 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
         event: parsedEvent.event,
         payload: JSON.parse(parsedEvent.payload),
       };
+      logger.info('Received message', data);
+      console.log('Received message', { data });
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 

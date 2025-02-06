@@ -103,6 +103,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
     router.push(paypalReferralData.actionUrl);
   }, [createPayPalReferralIsSuccess, paypalReferralData, router]);
 
+  useEffect(() => {
+    if (!profileImage || profileImage === user.imageUrl) {
+      return;
+    }
+    onPersonalDataSubmit({});
+  }, [profileImage]);
+
   const onPersonalDataSubmit = async (data: any) => {
     setImageError(undefined);
     setUpdateUserIsError(false);
@@ -270,7 +277,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
             {user.paypalMerchantIsActive ? (
               <div className="flex flex-col gap-2">
-                <InfoBoxComponent message="Your PayPal is connected to your Pattern Paradise account." />
+                <InfoBoxComponent
+                  message="Your PayPal is connected to your Pattern Paradise account."
+                  severity={'success'}
+                />
                 <Button
                   variant="secondary"
                   className="w-full"
@@ -493,7 +503,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input id="firstName" {...register('firstName')} onKeyDown={handleKeyDown} />
@@ -510,40 +520,44 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">
-                Email <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email', {
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
-                    message: 'Invalid email address',
-                  },
-                })}
-                onKeyDown={handleKeyDown}
-              />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <Label htmlFor="email">
+                  Email <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                      message: 'Invalid email address',
+                    },
+                  })}
+                  onKeyDown={handleKeyDown}
+                />
+                {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="username">
+                  Username <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="username"
+                  {...register('username', {
+                    required: 'Username is required',
+                  })}
+                  onKeyDown={handleKeyDown}
+                />
+                {errors.username && (
+                  <p className="text-red-500 text-sm">{errors.username.message}</p>
+                )}
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="username">
-                Username <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="username"
-                {...register('username', {
-                  required: 'Username is required',
-                })}
-                onKeyDown={handleKeyDown}
-              />
-              {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <Label htmlFor="instagramRef" className="flex gap-1 items-center">
                   <InstagramIcon className="w-4 h-4" />
