@@ -36,6 +36,8 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
 
     const ws = new WebSocket(url, [token]);
 
+    ws.binaryType = 'arraybuffer';
+
     ws.onopen = () => {
       setIsConnected(true);
       logger.info('WebSocket connection established');
@@ -49,7 +51,6 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
         payload: JSON.parse(parsedEvent.payload),
       };
       logger.info('Received message', data);
-      console.log('Received message', { data });
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
@@ -72,10 +73,6 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
       socketRef.current.send(JSON.stringify(message));
     }
   };
-
-  useEffect(() => {
-    console.log('WebSocket instance created:', socketRef.current);
-  }, [socketRef.current]);
 
   useEffect(() => {
     connectWebSocket();
