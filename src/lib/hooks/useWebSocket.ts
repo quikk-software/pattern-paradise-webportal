@@ -41,6 +41,7 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
       logger.info('WebSocket connection established');
     };
 
+    ws.onmessage = null;
     ws.onmessage = (event: MessageEvent) => {
       const parsedEvent = JSON.parse(event.data);
       const data: WebSocketMessage = {
@@ -52,6 +53,7 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
+    ws.onerror = null;
     ws.onerror = (error) => {
       logger.error('WebSocket error:', error);
     };
@@ -70,6 +72,10 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
       socketRef.current.send(JSON.stringify(message));
     }
   };
+
+  useEffect(() => {
+    console.log('WebSocket instance created:', socketRef.current);
+  }, [socketRef.current]);
 
   useEffect(() => {
     connectWebSocket();
