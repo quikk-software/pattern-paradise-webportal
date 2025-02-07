@@ -31,6 +31,7 @@ import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
 import { SUPPORT_EMAIL } from '@/lib/constants';
 import useAuth from '@/lib/auth/useAuth';
 import { setRoles } from '@/lib/features/auth/authSlice';
+import ConnectPayPalDrawer from '@/lib/components/ConnectPayPalDrawer';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -41,6 +42,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
+  const [isConnectPayPalDrawerOpen, setIsConnectPayPalDrawerOpen] = useState(false);
   const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
 
   const { action } = useAction();
@@ -62,6 +64,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     mutate: createPayPalReferral,
     isLoading: createPayPalReferralIsLoading,
     isSuccess: createPayPalReferralIsSuccess,
+    isError: createPayPalReferralIsError,
     data: paypalReferralData,
   } = useCreatePayPalReferral();
   const {
@@ -166,8 +169,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
     }
   };
 
-  const handleCreatePayPalReferralClick = async (userId: string) => {
-    const result = await createPayPalReferral(userId);
+  const handleCreatePayPalReferralClick = async (
+    userId: string,
+    selectedType: 'business' | 'personal',
+    shareDataToPayPalGranted: boolean,
+  ) => {
+    const hasPayPalBusinessAccount = selectedType === 'business';
+    const result = await createPayPalReferral(userId, {
+      hasPayPalBusinessAccount,
+      shareDataToPayPalGranted,
+    });
 
     router.push(result.actionUrl);
   };
@@ -273,6 +284,35 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   </span>
                 }
               />
+            ) : null}
+
+            {roles?.includes('Seller') && !user.paypalMerchantIsActive ? (
+              <div className="space-y-2">
+                {highlightPayPal ? (
+                  <Badge variant="secondary" className="text-md">
+                    {'❗️'} Connect PayPal
+                  </Badge>
+                ) : null}
+                <div className="flex flex-col gap-2">
+                  {!highlightPayPal ? <Label>Connect PayPal</Label> : null}
+                  <Button
+                    variant="default"
+                    onClick={() => setIsConnectPayPalDrawerOpen(true)}
+                    disabled={createPayPalReferralIsLoading || createPayPalReferralIsSuccess}
+                  >
+                    {createPayPalReferralIsLoading ? (
+                      <LoadingSpinnerComponent size="sm" className="text-white" />
+                    ) : null}
+                    Connect PayPal account
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    ⚠️ Note: You can disconnect your PayPal from Pattern Paradise after connection
+                    anytime. Please be aware that all your released products will be set to{' '}
+                    <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
+                    Pattern Paradise users after disconnecting.
+                  </p>
+                </div>
+              </div>
             ) : null}
 
             {user.paypalMerchantIsActive ? (
@@ -381,37 +421,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 type={'email confirmation'}
                 mailType={'UserConfirmEmail'}
               />
-            ) : null}
-
-            {roles !== undefined && roles.includes('Seller') && !user.paypalMerchantIsActive ? (
-              <div className="space-y-2">
-                {highlightPayPal ? (
-                  <Badge variant="secondary" className="text-md">
-                    {'❗️'} Connect PayPal
-                  </Badge>
-                ) : null}
-                <div className="flex flex-col gap-2">
-                  {!highlightPayPal ? <Label>Connect PayPal</Label> : null}
-                  <Button
-                    variant="default"
-                    onClick={() => {
-                      handleCreatePayPalReferralClick(userId);
-                    }}
-                    disabled={createPayPalReferralIsLoading || createPayPalReferralIsSuccess}
-                  >
-                    {createPayPalReferralIsLoading ? (
-                      <LoadingSpinnerComponent size="sm" className="text-white" />
-                    ) : null}
-                    Connect PayPal account
-                  </Button>
-                  <p className="text-xs text-muted-foreground">
-                    ⚠️ Note: You can disconnect your PayPal from Pattern Paradise after connection
-                    anytime. Please be aware that all your released products will be set to{' '}
-                    <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
-                    Pattern Paradise users after disconnecting.
-                  </p>
-                </div>
-              </div>
             ) : null}
 
             <div className="space-y-2" ref={rolesRef}>
@@ -602,6 +611,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardContent>
       </Card>
       <EditPassword />
+      <ConnectPayPalDrawer
+        isOpen={isConnectPayPalDrawerOpen}
+        setIsOpen={setIsConnectPayPalDrawerOpen}
+        callbackFn={(selectedType, shareDataToPayPalGranted) => {
+          handleCreatePayPalReferralClick(userId, selectedType, shareDataToPayPalGranted);
+        }}
+        isLoading={createPayPalReferralIsLoading}
+        isSuccess={createPayPalReferralIsSuccess}
+        isError={createPayPalReferralIsError}
+      />
       <ConfirmDrawer
         isOpen={isDisconnectPayPalDrawerOpen}
         setIsOpen={setIsDisconnectPayPalDrawerOpen}

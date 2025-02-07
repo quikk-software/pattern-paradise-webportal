@@ -62,6 +62,11 @@ export interface GetUserMetricsResponse {
   profileViews: number;
 }
 
+export interface PostUserPayPalReferralRequest {
+  hasPayPalBusinessAccount: boolean;
+  shareDataToPayPalGranted: boolean;
+}
+
 export interface PostUserPayPalReferralResponse {
   actionUrl: string;
 }
@@ -309,6 +314,7 @@ export interface GetProductResponse {
   isFree: boolean;
   experience: string;
   isSponsored: boolean;
+  hasPayPalBusinessAccount: boolean;
   status: string;
   creatorId: string;
   /**
@@ -1171,11 +1177,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/v1/users/{userId}/paypal-referral
      * @secure
      */
-    postUserPayPalReferral: (userId: string, params: RequestParams = {}) =>
+    postUserPayPalReferral: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        hasPayPalBusinessAccount?: any;
+        /** @example "any" */
+        shareDataToPayPalGranted?: any;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<PostUserPayPalReferralResponse, any>({
         path: `/api/v1/users/${userId}/paypal-referral`,
         method: 'POST',
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: 'json',
         ...params,
       }),
