@@ -94,9 +94,8 @@ export default function LandingHero({ products }: LandingHeroProps) {
                     top: '50%',
                     left: '50%',
                     transform: `
-                      translate(0%, ${smallScreen ? '0%' : '-25%'}) 
-                      rotate(${(index - 2) * 20}deg) 
-                      translateY(-180px)
+                      translate(-${index * (smallScreen ? 50 : 40)}%, -${index * 20}%) 
+                      ${smallScreen ? 'translateY(-90px)' : 'translateY(-180px)'}
                       ${hoveredIndex === index ? 'scale(1.1)' : 'scale(1)'}
                     `,
                     zIndex: hoveredIndex === index ? 10 : products.length + index,

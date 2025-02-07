@@ -103,7 +103,7 @@ const handler = NextAuth({
       session.user.id = sessionToken.id as string;
       session.user.roles = sessionToken.roles as string[];
       session.user.subscriptionStatus = sessionToken.subscriptionStatus as string;
-      return session;
+      return { ...session, error: sessionToken?.error };
     },
   },
 });

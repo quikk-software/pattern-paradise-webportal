@@ -36,20 +36,25 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
 
     const ws = new WebSocket(url, [token]);
 
+    ws.binaryType = 'arraybuffer';
+
     ws.onopen = () => {
       setIsConnected(true);
       logger.info('WebSocket connection established');
     };
 
+    ws.onmessage = null;
     ws.onmessage = (event: MessageEvent) => {
       const parsedEvent = JSON.parse(event.data);
       const data: WebSocketMessage = {
         event: parsedEvent.event,
         payload: JSON.parse(parsedEvent.payload),
       };
+      logger.info('Received message:', data);
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
+    ws.onerror = null;
     ws.onerror = (error) => {
       logger.error('WebSocket error:', error);
     };
