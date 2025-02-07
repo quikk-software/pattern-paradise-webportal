@@ -50,20 +50,17 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
         event: parsedEvent.event,
         payload: JSON.parse(parsedEvent.payload),
       };
-      logger.info('Received message', data);
-      console.log('Received message', data);
+      logger.info('Received message:', data);
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
     ws.onerror = null;
     ws.onerror = (error) => {
       logger.error('WebSocket error:', error);
-      console.error('WebSocket error:', error);
     };
 
     ws.onclose = () => {
       logger.info('WebSocket connection closed, attempting to reconnect...');
-      console.log('WebSocket connection closed, attempting to reconnect...');
       setIsConnected(false);
       reconnectIntervalRef.current = setTimeout(connectWebSocket, 3000); // Attempt reconnection every 3 seconds
     };
