@@ -9,7 +9,12 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import { useCreatePayPalReferral, useRemovePayPalReferral, useUpdateUser } from '@/lib/api';
+import {
+  useCreatePayPalReferral,
+  useGetPayPalMerchantStatus,
+  useRemovePayPalReferral,
+  useUpdateUser,
+} from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -32,6 +37,7 @@ import { SUPPORT_EMAIL } from '@/lib/constants';
 import useAuth from '@/lib/auth/useAuth';
 import { setRoles } from '@/lib/features/auth/authSlice';
 import ConnectPayPalDrawer from '@/lib/components/ConnectPayPalDrawer';
+import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -74,6 +80,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isError: removePayPalReferralIsError,
     errorDetail,
   } = useRemovePayPalReferral();
+  const {
+    fetch: getPayPalMerchantStatus,
+    data: paypalMerchantStatus,
+    isLoading: checkPayPalMerchantStatusIsLoading,
+    isError: checkPayPalMerchantStatusIsError,
+  } = useGetPayPalMerchantStatus();
 
   const {
     register,
@@ -194,6 +206,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
       setIsDisconnectPayPalDrawerOpen(false);
       router.push('/app/secure/auth/confirm/paypal/referral-removed');
     });
+  };
+
+  const handleCheckPayPalMerchantStatus = (userId: string) => {
+    getPayPalMerchantStatus(userId);
   };
 
   const initials =
@@ -357,10 +373,31 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 </p>
               </div>
             ) : null}
+            <Button
+              variant={'outline'}
+              disabled={checkPayPalMerchantStatusIsLoading}
+              onClick={() => handleCheckPayPalMerchantStatus(userId)}
+            >
+              {checkPayPalMerchantStatusIsLoading ? (
+                <LoadingSpinnerComponent size="sm" className="text-black" />
+              ) : null}
+              Check PayPal merchant status
+            </Button>
+            {paypalMerchantStatus ? <PayPalMerchantStatus {...paypalMerchantStatus} /> : null}
+            {checkPayPalMerchantStatusIsError ? (
+              <p className="text-sm">
+                There is currently no information available regarding your PayPal merchant status.
+                Please connect to your PayPal profile above and try again. If you need assistance,
+                you can also contact us using our{' '}
+                <Link href="/help" className="text-blue-500 underline">
+                  contact form
+                </Link>
+                .
+              </p>
+            ) : null}
           </CardContent>
         </Card>
       ) : null}
-
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>

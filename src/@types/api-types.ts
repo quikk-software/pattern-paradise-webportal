@@ -137,6 +137,14 @@ export interface PutGalleryImagesRequest {
   galleryImages: string[];
 }
 
+export interface GetUserPayPalMerchantStatusResponse {
+  paypalPaymentsReceivable: boolean;
+  paypalLegalName: string;
+  paypalPrimaryEmail: string;
+  paypalPrimaryEmailConfirmed: boolean;
+  hasOauthThirdParty: boolean;
+}
+
 export interface GetUserResponse {
   id: string;
   email: string;
@@ -1252,6 +1260,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getUser: (userId: string, params: RequestParams = {}) =>
       this.request<GetUserResponse, NotFoundResponse>({
         path: `/api/v1/users/${userId}/me`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The user will be queried by a given ID or username. If the user cannot be found or the user ID is not related to the authenticated user, an exception will be thrown.
+     *
+     * @tags User
+     * @name GetPayPalMerchantStatus
+     * @summary Gets the PayPal merchant status for the user.
+     * @request GET:/api/v1/users/{userId}/paypal-merchant-status
+     * @secure
+     */
+    getPayPalMerchantStatus: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUserPayPalMerchantStatusResponse, NotFoundResponse>({
+        path: `/api/v1/users/${userId}/paypal-merchant-status`,
         method: 'GET',
         secure: true,
         format: 'json',
