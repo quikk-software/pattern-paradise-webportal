@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCaptureOrder, useCreateOrder, useListOrdersByProductId } from '@/lib/api/order';
+import {
+  useCaptureOrder,
+  useCreateOrder,
+  useDeleteOrder,
+  useListOrdersByProductId,
+} from '@/lib/api/order';
 import logger from '@/lib/core/logger';
 
 export function usePayPalOrder(
@@ -19,6 +24,11 @@ export function usePayPalOrder(
     isSuccess: captureOrderIsSuccess,
     isError: captureOrderIsError,
   } = useCaptureOrder();
+  const {
+    mutate: deleteOrder,
+    isSuccess: deleteOrderIsSuccess,
+    isError: deleteOrderIsError,
+  } = useDeleteOrder();
   const {
     fetch: fetchOrdersByProductId,
     isLoading: listOrdersByProductIdIsLoading,
@@ -90,6 +100,17 @@ export function usePayPalOrder(
     }
   };
 
+  const handleDeleteOrder = async (orderID: string) => {
+    try {
+      await deleteOrder(orderID);
+      router.push(`/app/products/${productId}`);
+    } catch (error) {
+      logger.error('Error deleting order:', error);
+      setListOrdersByProductIdIsSuccess(false);
+      fetchOrdersByProductId(productId);
+    }
+  };
+
   const handleCustomPriceChange = (price: number, minPrice: number) => {
     if (price < minPrice) {
       setPriceError(`Price must be at least $${minPrice.toFixed(2)}`);
@@ -106,9 +127,12 @@ export function usePayPalOrder(
     handleCustomPriceChange,
     handleCreateOrder,
     handleCaptureOrder,
+    handleDeleteOrder,
     createOrderIsError,
     captureOrderIsError,
+    deleteOrderIsError,
     captureOrderIsSuccess,
+    deleteOrderIsSuccess,
     listOrdersByProductIdIsLoading,
   };
 }

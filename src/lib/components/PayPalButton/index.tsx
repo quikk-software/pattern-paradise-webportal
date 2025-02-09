@@ -35,6 +35,7 @@ export function PayPalButton({
     handleCustomPriceChange,
     handleCreateOrder,
     handleCaptureOrder,
+    handleDeleteOrder,
     createOrderIsError,
     captureOrderIsError,
     captureOrderIsSuccess,
@@ -102,6 +103,7 @@ export function PayPalButton({
             onError={(err: any) => {
               logger.error('PayPal Buttons Error:', err);
             }}
+            onCancel={(data) => handleDeleteOrder(data.orderID as string)}
             className="w-full"
           />
         </CardContent>

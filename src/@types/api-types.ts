@@ -2115,6 +2115,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The order will be queried by a given ID. If the order cannot be found, an exception will be thrown.
+     *
+     * @tags Order
+     * @name DeleteOrder
+     * @summary Deletes an order by ID.
+     * @request DELETE:/api/v1/orders/{orderId}
+     * @secure
+     */
+    deleteOrder: (orderId: string, params: RequestParams = {}) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/orders/${orderId}`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The orders will be queried by a given product ID and the authenticated user ID.
      *
      * @tags Order
