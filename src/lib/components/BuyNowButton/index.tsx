@@ -116,6 +116,7 @@ export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
               ) : null}
               <PayPalButton
                 disabled={!isLoggedIn}
+                hasPayPalBusinessAccount={product.hasPayPalBusinessAccount}
                 price={product.price}
                 productId={product.id}
                 userId={userId}
