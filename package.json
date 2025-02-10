@@ -12,6 +12,8 @@
     "generate-types": "npx swagger-typescript-api -p http://localhost:3001/api-docs/swagger.json -o ./src/@types -n api-types.ts"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@hookform/resolvers": "^3.9.1",
     "@paypal/react-paypal-js": "^8.7.0",
     "@radix-ui/react-accordion": "^1.2.2",
@@ -70,6 +72,7 @@
     "recharts": "^2.15.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.0.5",
     "vaul": "^1.1.1",
     "zod": "^3.23.8"
   },

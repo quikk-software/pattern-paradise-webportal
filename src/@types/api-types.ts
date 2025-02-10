@@ -296,6 +296,10 @@ export interface PutProductRequest {
   imageUrls: any[];
   hashtags: any[];
   subCategories: any[];
+  fileOrder: {
+    language?: string;
+    fileId?: string;
+  }[];
   title: string;
   description: string;
   category: string;
@@ -307,6 +311,10 @@ export interface PutProductRequest {
 export interface GetProductResponse {
   id: string;
   imageUrls: string[];
+  fileOrder: {
+    fileId: string;
+    language: string;
+  }[];
   subCategories: string[];
   hashtags: string[];
   files: {
@@ -1411,6 +1419,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           language?: string;
           fileName?: string;
         }[];
+        /** Array of files order. */
+        fileOrder: {
+          language?: string;
+          fileId?: string;
+        }[];
         /** The title of the product. */
         title: string;
         /** A description of the product. */
@@ -1495,6 +1508,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         imageUrls?: any;
         /** @example "any" */
         hashtags?: any;
+        /** @example "any" */
+        fileOrder?: any;
         /** @example "any" */
         subCategories?: any;
         /** @example "any" */

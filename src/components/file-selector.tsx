@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { v4 as uuid } from 'uuid';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Trash2, Upload } from 'lucide-react';
@@ -36,14 +37,19 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
     event.preventDefault();
     const files = event.target.files;
     if (files) {
-      const newFiles = Array.from(files).map((file) => ({
-        file,
-        language: 'en',
-      }));
+      const newFiles = Array.from(files).map((file) => {
+        const id = uuid();
+        const splittedFileName = file.name.split('.');
+        const fileSuffix = splittedFileName?.[splittedFileName.length - 1];
+        return {
+          file: new File([file], `${id}${fileSuffix ? `.${fileSuffix}` : ''}`, { type: file.type }),
+          language: 'en',
+          id,
+        };
+      });
       if (isPro) {
         setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
       } else {
-        // set language to other files language or default to english
         setSelectedFiles((prevFiles) => [
           ...prevFiles,
           ...newFiles.map((file) => ({

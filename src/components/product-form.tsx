@@ -34,10 +34,12 @@ import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
 import { checkProStatus } from '@/lib/core/utils';
+import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
 
 export interface PDFFile {
   file: File;
   language: string;
+  id: string;
 }
 
 export function ProductFormComponent() {
@@ -69,6 +71,7 @@ export function ProductFormComponent() {
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
+  const [fileOrder, setFileOrder] = useState<{ [key: string]: string[] }>({});
 
   const { subscriptionStatus } = useSelector((s: Store) => s.auth);
 
@@ -173,6 +176,19 @@ export function ProductFormComponent() {
     );
     formData.append('imageUrls', JSON.stringify(urls.map(({ url }) => url)));
     formData.append('hashtags', JSON.stringify(hashtags));
+    formData.append(
+      'fileOrder',
+      JSON.stringify(
+        Object.entries(fileOrder)
+          .map(([language, fileIds]) =>
+            fileIds.map((fileId) => ({
+              language,
+              fileId,
+            })),
+          )
+          .flat(1),
+      ),
+    );
     formData.append(
       'languages',
       JSON.stringify(patterns.map(({ language, file }) => ({ language, fileName: file.name }))),
@@ -364,6 +380,12 @@ export function ProductFormComponent() {
         <div className="w-full">
           <FileSelector selectedFiles={patterns} setSelectedFiles={setPatterns} isPro={isPro} />
         </div>
+
+        {patterns.length > 0 ? (
+          <div className="w-full">
+            <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
+          </div>
+        ) : null}
 
         <div className="flex flex-col gap-2">
           <Button
