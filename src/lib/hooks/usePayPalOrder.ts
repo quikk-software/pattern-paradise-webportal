@@ -7,6 +7,8 @@ import {
   useListOrdersByProductId,
 } from '@/lib/api/order';
 import logger from '@/lib/core/logger';
+import { MAX_PRICE } from '@/lib/constants';
+import { GetOrderResponse } from '@/@types/api-types';
 
 export function usePayPalOrder(
   productId: string,
@@ -68,10 +70,9 @@ export function usePayPalOrder(
     customPriceRef.current = customPrice;
   }, [customPrice]);
 
-  const handleCreateOrder = async () => {
+  const handleCreateOrder = async (order?: GetOrderResponse) => {
     try {
       const priceToUse = customPriceRef.current ?? price;
-      const order = orders?.find((order) => order.customer.id === userId);
       if (order?.status === 'CREATED') {
         logger.info("Order with status 'CREATED' for user already exists");
         return order.paypalOrderId;
@@ -115,11 +116,16 @@ export function usePayPalOrder(
     if (price < minPrice) {
       setPriceError(`Price must be at least $${minPrice.toFixed(2)}`);
       setCustomPrice(undefined);
+    } else if (price > MAX_PRICE) {
+      setPriceError(`Price cannot be greater than $${MAX_PRICE.toFixed(2)}`);
+      setCustomPrice(undefined);
     } else {
       setPriceError(null);
       setCustomPrice(price);
     }
   };
+
+  const order = orders?.find((order) => order.customer.id === userId);
 
   return {
     customPrice,
@@ -134,5 +140,6 @@ export function usePayPalOrder(
     captureOrderIsSuccess,
     deleteOrderIsSuccess,
     listOrdersByProductIdIsLoading,
+    order,
   };
 }

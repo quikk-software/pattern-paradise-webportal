@@ -23,10 +23,12 @@ import { useSession } from 'next-auth/react';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
+  price: number;
+  isCustomPrice: boolean;
   callback?: (orderId: string) => void;
 }
 
-export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
+export function BuyNowButton({ product, price, isCustomPrice, callback }: BuyNowButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
@@ -73,8 +75,14 @@ export function BuyNowButton({ product, callback }: BuyNowButtonProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
+    <div className="flex flex-col gap-4">
+      <span className="text-3xl font-bold">${price?.toFixed(2)}</span>
+      {isCustomPrice ? (
+        <InfoBoxComponent
+          severity={'info'}
+          message={`You have entered a custom price. The original price is ${product.price.toFixed(2)}$. If you prefer the original price, please cancel this order by clicking on the cancel button below and place a new order.`}
+        />
+      ) : null}
       <Button className="w-full" onClick={() => setIsOpen(true)}>
         <Lock />
         Buy Now

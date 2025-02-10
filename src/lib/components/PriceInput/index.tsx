@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import CurrencyInput from 'react-currency-input-field';
+import { MAX_PRICE, MIN_PRICE } from '@/lib/constants';
 
 interface PriceInputProps {
   isFree: boolean;
@@ -23,8 +24,6 @@ export default function PriceInput({
       placeholder="Enter price (e.g. 9,999.99)"
       decimalsLimit={2}
       decimalScale={2}
-      decimalSeparator={'.'}
-      groupSeparator={','}
       allowNegativeValue={false}
       allowDecimals={true}
       disabled={isFree}
@@ -39,12 +38,15 @@ export default function PriceInput({
           if (isFree) {
             return true;
           }
-          const normalizedValue = parseFloat(value);
+          const normalizedValue = parseFloat(value?.replace(',', '.'));
           if (isNaN(normalizedValue)) {
             return 'Please enter a valid number';
           }
-          if (normalizedValue < 3.0) {
-            return 'Price has to be greater than or equal to 3.00$';
+          if (normalizedValue < MIN_PRICE) {
+            return `Price has to be greater than or equal to ${MIN_PRICE.toFixed(2)}$`;
+          }
+          if (normalizedValue > MAX_PRICE) {
+            return `Price has to be smaller than or equal ${MAX_PRICE.toFixed(2)}$`;
           }
           return true;
         },
