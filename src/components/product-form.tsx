@@ -218,7 +218,7 @@ export function ProductFormComponent() {
 
   return (
     <div className="flex flex-col gap-8">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white rounded-lg shadow-lg">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div>
           <Label htmlFor="title" className="block text-lg font-semibold mb-2">
             Title <span className="text-red-500">*</span>

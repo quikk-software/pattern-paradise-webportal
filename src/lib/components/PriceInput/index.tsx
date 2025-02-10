@@ -18,7 +18,8 @@ export default function PriceInput({
   return (
     <CurrencyInput
       id="price"
-      type="text"
+      type="tel"
+      inputMode="decimal"
       placeholder="Enter price (e.g. 9,999.99)"
       decimalsLimit={2}
       decimalScale={2}
