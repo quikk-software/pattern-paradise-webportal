@@ -2188,10 +2188,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/orders/{userId}/analytics
      * @secure
      */
-    getOrderAnalytics: (userId: string, params: RequestParams = {}) =>
+    getOrderAnalytics: (
+      userId: string,
+      query?: {
+        /** The start date. */
+        startDate?: string;
+        /** The end date. */
+        endDate?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetOrderAnalyticsResponse, any>({
         path: `/api/v1/orders/${userId}/analytics`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,

@@ -11,12 +11,19 @@ export const useGetOrderAnalytics = () => {
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (userId: string) => {
+  const fetch = async (userId: string, startDate?: Date, endDate?: Date) => {
     const response = await handleFn(
       async () =>
-        await client.api.getOrderAnalytics(userId, {
-          ...(await getApi(session)),
-        }),
+        await client.api.getOrderAnalytics(
+          userId,
+          {
+            startDate: startDate ? startDate.toISOString() : undefined,
+            endDate: endDate ? endDate.toISOString() : undefined,
+          },
+          {
+            ...(await getApi(session)),
+          },
+        ),
     );
 
     setData(response?.data);
