@@ -76,6 +76,14 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
     );
   };
 
+  const handleRemoveFile = (language: string, index: number) => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.filter(
+        (file) => !(file.language === language && groupedFiles[language].indexOf(file) === index),
+      ),
+    );
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -121,7 +129,7 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
                   <div className="flex flex-col gap-4">
                     <LanguageSelect language={language} handleLanguageChange={() => {}} />
                     <div className="flex-grow space-y-2">
-                      {files.map((fileData) => {
+                      {files.map((fileData, index) => {
                         const splittedFilename = fileData.originalFilename.split('.');
                         if (splittedFilename.length > 1) {
                           splittedFilename.pop();
@@ -135,7 +143,7 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
                             <div className="flex items-center space-x-3 min-w-0 w-full">
                               {fileData.file.type.startsWith('image') ? (
                                 <img
-                                  className="w-6 h-6 object-cover rounded"
+                                  className="w-12 h-12 object-cover rounded"
                                   alt={fileData.file.name}
                                   src={URL.createObjectURL(fileData.file)}
                                 />
@@ -160,7 +168,14 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
                                 }}
                               />
                             </div>
-                            <Button variant="ghost" size="icon" className="flex-shrink-0">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                handleRemoveFile(language, index);
+                              }}
+                            >
                               <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>
