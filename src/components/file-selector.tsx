@@ -121,29 +121,37 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
                   <div className="flex flex-col gap-4">
                     <LanguageSelect language={language} handleLanguageChange={() => {}} />
                     <div className="flex-grow space-y-2">
-                      {files.map((file) => {
-                        const splittedFilename = file.originalFilename.split('.');
+                      {files.map((fileData) => {
+                        const splittedFilename = fileData.originalFilename.split('.');
                         if (splittedFilename.length > 1) {
                           splittedFilename.pop();
                         }
                         const filenameWithoutSuffix = splittedFilename.join('');
                         return (
                           <div
-                            key={file.id}
+                            key={fileData.id}
                             className="flex items-center justify-between space-x-3 overflow-hidden"
                           >
                             <div className="flex items-center space-x-3 min-w-0 w-full">
-                              <FileText className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                              {fileData.file.type.startsWith('image') ? (
+                                <img
+                                  className="w-6 h-6 object-cover rounded"
+                                  alt={fileData.file.name}
+                                  src={URL.createObjectURL(fileData.file)}
+                                />
+                              ) : (
+                                <FileText className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                              )}
                               <Input
                                 className="w-full"
                                 ref={(el) => {
-                                  inputRefs.current[file.id] = el;
+                                  inputRefs.current[fileData.id] = el;
                                 }}
                                 value={filenameWithoutSuffix}
                                 onChange={(e) => {
-                                  const input = inputRefs.current[file.id];
+                                  const input = inputRefs.current[fileData.id];
                                   const start = input?.selectionStart;
-                                  handleFilenameChange(file.id, e.target.value);
+                                  handleFilenameChange(fileData.id, e.target.value);
                                   if (input && start !== null) {
                                     requestAnimationFrame(() =>
                                       input.setSelectionRange(start ?? null, start ?? null),
