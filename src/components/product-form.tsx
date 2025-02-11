@@ -185,7 +185,7 @@ export function ProductFormComponent() {
     formData.append('description', data.description);
     formData.append('experience', selectedExperienceLevel);
     formData.append('category', category.craft);
-    formData.append('price', String(!isFree ? data.price : 0));
+    formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
     formData.append('isFree', isFree ? 'true' : 'false');
 
     formData.append(
