@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
+import { DndContext, closestCenter, useSensors, PointerSensor, useSensor } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { arrayMove } from '@dnd-kit/sortable';
 import DragAndDropItem from '@/lib/components/DragAndDropItem';
@@ -23,6 +23,15 @@ export default function DragAndDropContainer({
   setFileOrder,
 }: DragAndDropContainerProps) {
   const [groupedFiles, setGroupedFiles] = useState<GroupedFiles>({});
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5,
+      },
+    }),
+  );
 
   useEffect(() => {
     const grouped = selectedFiles.reduce((acc: GroupedFiles, file) => {
@@ -62,30 +71,34 @@ export default function DragAndDropContainer({
         <p>Press and hold files to update the order.</p>
       </div>
 
-      {Object.entries(groupedFiles).map(([language, files]) => (
-        <div className="flex flex-col gap-2" key={language}>
-          <div className="flex items-center">
-            <ReactCountryFlag
-              countryCode={LANGUAGES.find((lang) => lang.code === language)?.country ?? ''}
-              svg
-              className="mr-2"
-            />
-            {LANGUAGES.find((lang) => lang.code === language)?.name ?? ''}
+      {Object.entries(groupedFiles).map(([language, files]) => {
+        const matchingLanguage = LANGUAGES.find((lang) => lang.code === language);
+        return (
+          <div className="flex flex-col gap-2" key={language}>
+            <div className="flex items-center">
+              <ReactCountryFlag
+                countryCode={matchingLanguage?.country ?? ''}
+                svg
+                className="mr-2"
+              />
+              {matchingLanguage?.name ?? ''}
+            </div>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(event) => handleDragEnd(event, language)}
+            >
+              <SortableContext items={files} strategy={verticalListSortingStrategy}>
+                <ul className="space-y-2">
+                  {files.map((file) => (
+                    <DragAndDropItem file={file} key={file.id} />
+                  ))}
+                </ul>
+              </SortableContext>
+            </DndContext>
           </div>
-          <DndContext
-            collisionDetection={closestCenter}
-            onDragEnd={(event) => handleDragEnd(event, language)}
-          >
-            <SortableContext items={files} strategy={verticalListSortingStrategy}>
-              <ul className="space-y-2">
-                {files.map((file) => (
-                  <DragAndDropItem file={file} key={file.id} />
-                ))}
-              </ul>
-            </SortableContext>
-          </DndContext>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
