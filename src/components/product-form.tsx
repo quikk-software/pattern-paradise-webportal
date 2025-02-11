@@ -35,6 +35,7 @@ import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
 import { checkProStatus } from '@/lib/core/utils';
 import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
+import { InfoBoxComponent } from '@/components/info-box';
 
 export interface PDFFile {
   file: File;
@@ -162,11 +163,21 @@ export function ProductFormComponent() {
     formData.append(
       'fileNames',
       JSON.stringify(
-        patterns.map((pattern) => ({
-          filename: pattern.file.name,
-          originalFilename: pattern.originalFilename,
-          fileId: pattern.id,
-        })),
+        patterns.map((pattern, index) => {
+          const splittedFilename = pattern.originalFilename.split('.');
+          let suffix;
+          if (splittedFilename.length > 1) {
+            suffix = splittedFilename.pop();
+          }
+          const filenameWithoutSuffix = splittedFilename.join('');
+          return {
+            filename: pattern.file.name,
+            originalFilename: filenameWithoutSuffix.trim()
+              ? pattern.originalFilename
+              : `Page ${index + 1}${suffix ? `.${suffix}` : ''}`,
+            fileId: pattern.id,
+          };
+        }),
       ),
     );
 
@@ -211,6 +222,8 @@ export function ProductFormComponent() {
       type: 'success',
       status: 'Upload successful',
     });
+
+    handleResetFormClick();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -397,6 +410,13 @@ export function ProductFormComponent() {
             <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
           </div>
         ) : null}
+
+        <InfoBoxComponent
+          message={
+            'You can only change the file order after uploading this pattern. Files and their names cannot be changed after uploading.'
+          }
+          severity={'info'}
+        />
 
         <div className="flex flex-col gap-2">
           <Button

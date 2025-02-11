@@ -90,8 +90,8 @@ export default function DragAndDropContainer({
             >
               <SortableContext items={files} strategy={verticalListSortingStrategy}>
                 <ul className="space-y-2">
-                  {files.map((file) => (
-                    <DragAndDropItem file={file} key={file.id} />
+                  {files.map((file, index) => (
+                    <DragAndDropItem file={file} index={index} key={file.id} />
                   ))}
                 </ul>
               </SortableContext>
