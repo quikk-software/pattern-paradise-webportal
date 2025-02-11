@@ -44,6 +44,7 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
         return {
           file: new File([file], `${id}${fileSuffix ? `.${fileSuffix}` : ''}`, { type: file.type }),
           language: 'en',
+          originalFilename: file.name,
           id,
         };
       });
@@ -130,23 +131,27 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
               <h3 className="text-md font-semibold">Selected Files</h3>
               {Object.entries(groupedFiles).map(([language, files]) => (
                 <Card key={language} className="p-4">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex flex-col gap-4">
                     <LanguageSelect
                       language={language}
                       handleLanguageChange={handleLanguageChange}
                     />
                     <div className="flex-grow space-y-2">
                       {files.map((file, index) => (
-                        <div key={index} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <FileText className="w-6 h-6 text-blue-500" />
-                            <span className="font-medium truncate max-w-[200px]">
-                              {file.file.name}
+                        <div
+                          key={index}
+                          className="flex items-center justify-between space-x-3 overflow-hidden"
+                        >
+                          <div className="flex items-center space-x-3 min-w-0">
+                            <FileText className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                            <span className="font-medium truncate whitespace-nowrap overflow-hidden">
+                              {file.originalFilename}
                             </span>
                           </div>
                           <Button
                             variant="ghost"
                             size="icon"
+                            className="flex-shrink-0"
                             onClick={(event) => {
                               event.preventDefault();
                               handleRemoveFile(language, index);

@@ -190,6 +190,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       file: new File([], file.fileId),
       id: file.fileId,
       language: file.language,
+      originalFilename:
+        initialData.files.find((f) => f.id === file.fileId)?.objectName ?? file.fileId,
     }));
   }, [initialData.fileOrder]);
 

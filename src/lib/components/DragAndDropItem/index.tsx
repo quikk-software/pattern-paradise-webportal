@@ -40,7 +40,7 @@ export default function DragAndDropItem({ file }: { file: PDFFile }) {
           transition: 'transform 0.2s ease',
         }}
       >
-        <CardContent className="p-4 flex items-center space-x-4">
+        <CardContent className="p-4 flex items-center space-x-4 overflow-hidden">
           {fileData.type === 'image' && (
             <img alt={fileData.name} className="w-12 h-12 object-cover rounded" />
           )}
@@ -54,11 +54,13 @@ export default function DragAndDropItem({ file }: { file: PDFFile }) {
               <VideoIcon className="text-blue-500" />
             </div>
           )}
-          <div className="flex-grow">
-            <p className="font-medium truncate max-w-[200px]">{fileData.name}</p>
+          <div className="flex-grow min-w-0 overflow-hidden">
+            <p className="font-medium truncate whitespace-nowrap overflow-hidden">
+              {file.originalFilename}
+            </p>
             <p className="text-sm text-muted-foreground capitalize">{fileData.type}</p>
           </div>
-          <div className="cursor-move" {...listeners}>
+          <div className="cursor-move flex-shrink-0" {...listeners}>
             <GripVertical className="text-muted-foreground" />
           </div>
         </CardContent>

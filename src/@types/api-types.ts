@@ -1408,6 +1408,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** Array of files to upload. */
         files: File[];
+        /** Array of file names. */
+        fileNames: {
+          filename?: string;
+          originalFilename?: string;
+        }[];
         /** Array of product image URLs. */
         imageUrls: string[];
         /** Array of hashtags. */

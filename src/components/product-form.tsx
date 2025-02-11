@@ -40,6 +40,7 @@ export interface PDFFile {
   file: File;
   language: string;
   id: string;
+  originalFilename: string;
 }
 
 export function ProductFormComponent() {
@@ -158,6 +159,16 @@ export function ProductFormComponent() {
     const formData = new FormData();
 
     patterns.forEach((pattern) => formData.append('files', pattern.file));
+    formData.append(
+      'fileNames',
+      JSON.stringify(
+        patterns.map((pattern) => ({
+          filename: pattern.file.name,
+          originalFilename: pattern.originalFilename,
+          fileId: pattern.id,
+        })),
+      ),
+    );
 
     formData.append('title', data.title);
     formData.append('description', data.description);
