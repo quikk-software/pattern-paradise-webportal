@@ -12,7 +12,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productId = (await params).productId;
 
   const product = await getProduct(productId);
-  console.log({ product, productId });
 
   const title = product?.title
     ? `Buy ${product.title} ${product.category} Pattern on Pattern Paradise`
