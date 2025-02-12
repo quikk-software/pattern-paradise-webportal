@@ -24,11 +24,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      images: product?.imageUrls,
+      images: product?.imageUrls ?? [],
       url: `${APP_DOMAIN}/app/products/${productId}`,
       tags: (product?.category ? [product.category] : []).concat([
         ...(product?.subCategories ?? []),
       ]),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: product?.imageUrls ?? [],
     },
   };
 }
