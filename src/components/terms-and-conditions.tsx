@@ -370,6 +370,7 @@ export default function TermsAndConditions() {
                   All payments on Pattern Paradise are processed securely through our payment
                   gateway partner{' '}
                   <Link
+                    rel={'nofollow'}
                     href="https://paypal.com"
                     target="_blank"
                     className="text-blue-500 underline"
@@ -397,6 +398,7 @@ export default function TermsAndConditions() {
                   Regarding fees of our payment gateway partner PayPal, please refer to{' '}
                   <Link
                     href="https://www.paypal.com/al/webapps/mpp/merchant-fees"
+                    rel={'nofollow'}
                     target="_blank"
                     className="text-blue-500 underline"
                   >
@@ -426,6 +428,7 @@ export default function TermsAndConditions() {
                   buyer encounters issues with accessing a purchased pattern, they should contact
                   our support team at{' '}
                   <Link
+                    rel={'nofollow'}
                     href="mailto:help@pattern-paradise.shop"
                     className="text-blue-500 underline"
                   >

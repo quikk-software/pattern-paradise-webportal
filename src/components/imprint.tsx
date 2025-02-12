@@ -44,6 +44,7 @@ export default function Imprint() {
               href="https://ec.europa.eu/consumers/odr"
               target="_blank"
               className="text-blue-500 underline"
+              rel={'nofollow'}
             >
               https://ec.europa.eu/consumers/odr
             </Link>
@@ -114,7 +115,12 @@ export default function Imprint() {
         <section>
           <p className="text-right text-xs">
             Source:{' '}
-            <Link href="https://e-recht24.de" className="text-blue-500 underline">
+            <Link
+              href="https://e-recht24.de"
+              target={'_blank'}
+              className="text-blue-500 underline"
+              rel={'nofollow'}
+            >
               e-recht24.de
             </Link>
           </p>
@@ -124,11 +130,21 @@ export default function Imprint() {
           <h3 className="font-semibold text-lg mb-2">Image Credits</h3>
           <p>
             We use illustrations from{' '}
-            <Link href="https://undraw.co" target="_blank" className="text-blue-500 underline">
+            <Link
+              rel={'nofollow'}
+              href="https://undraw.co"
+              target="_blank"
+              className="text-blue-500 underline"
+            >
               undraw.co
             </Link>{' '}
             and technology icons provided by{' '}
-            <Link href="https://lucide.dev/" target="_blank" className="text-blue-500 underline">
+            <Link
+              rel={'nofollow'}
+              href="https://lucide.dev/"
+              target="_blank"
+              className="text-blue-500 underline"
+            >
               lucide.dev
             </Link>
             .

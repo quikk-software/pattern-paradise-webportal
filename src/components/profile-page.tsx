@@ -272,6 +272,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     restriction on your PayPal account. Please reach out to PayPal Customer Support
                     or connect to{' '}
                     <Link
+                      rel={'nofollow'}
                       href="https://www.paypal.com"
                       target="_blank"
                       className="text-blue-500 underline"
@@ -291,6 +292,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     <strong>Attention:</strong> Please confirm your email address on{' '}
                     <Link
                       href="https://www.paypal.com/businessprofile/settings"
+                      rel={'nofollow'}
                       target="_blank"
                       className="text-blue-500 underline"
                     >
@@ -362,6 +364,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   from your{' '}
                   <Link
                     href="https://paypal.com"
+                    rel={'nofollow'}
                     target="_blank"
                     className="text-blue-500 underline"
                   >
@@ -434,13 +437,21 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     have blocked you from creating/selling patterns and participating in tester
                     calls until further notice. Our team will review your case as soon as possible.
                     In the meantime, please take a look at the open incidents here:{' '}
-                    <Link href="/app/secure/auth/me/reports" className="text-blue-500 underline">
+                    <Link
+                      rel={'nofollow'}
+                      href="/app/secure/auth/me/reports"
+                      className="text-blue-500 underline"
+                    >
                       Open Incidents ({user.openIncidentsCount})
                     </Link>
                     .<br />
                     <br />
                     If you have any questions, please do not hesitate to contact us by email:{' '}
-                    <Link href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-500 underline">
+                    <Link
+                      rel={'nofollow'}
+                      href={`mailto:${SUPPORT_EMAIL}`}
+                      className="text-blue-500 underline"
+                    >
                       {SUPPORT_EMAIL}
                     </Link>
                   </span>

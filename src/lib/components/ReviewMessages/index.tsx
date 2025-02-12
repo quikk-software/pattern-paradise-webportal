@@ -55,7 +55,11 @@ export default function ReviewMessages({ productId }: ReviewMessagesProps) {
             message={
               <>
                 This pattern has not yet received any reviews and has not been subjected to a{' '}
-                <Link href="/faq?action=collaborate" className="text-blue-500 underline">
+                <Link
+                  rel={'nofollow'}
+                  href="/faq?action=collaborate"
+                  className="text-blue-500 underline"
+                >
                   Pattern Paradise Test Process
                 </Link>
                 . The quality of the pattern offered can therefore not be guaranteed and caution is

@@ -58,6 +58,7 @@ export function BuyNowButton({ product, price, isCustomPrice, callback }: BuyNow
               <span>
                 {' '}
                 <Link
+                  rel={'nofollow'}
                   href={`/app/secure/test/products/${product.id}`}
                   className="text-blue-500 underline"
                 >

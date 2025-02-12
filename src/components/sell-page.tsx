@@ -75,6 +75,7 @@ export function SellPageComponent() {
                 In order to create and sell patterns, you must{' '}
                 <Link
                   href="/app/secure/auth/me?action=scrollToPayPal"
+                  rel={'nofollow'}
                   className="text-blue-500 underline"
                 >
                   connect PayPal
@@ -98,7 +99,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Create Pattern</span>
           </Button>
         </div>
-        <Link href="/app/secure/sell/dashboard" className="block">
+        <Link rel={'nofollow'} href="/app/secure/sell/dashboard" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -107,7 +108,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Show Analytics</span>
           </Button>
         </Link>
-        <Link href="/app/secure/sell/orders" className="block">
+        <Link rel={'nofollow'} href="/app/secure/sell/orders" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -116,7 +117,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Show My Orders</span>
           </Button>
         </Link>
-        <Link href="/app/secure/sell/testings" className="block">
+        <Link rel={'nofollow'} href="/app/secure/sell/testings" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -187,7 +188,7 @@ export function SellPageComponent() {
       {products.length === 0 && !isLoading ? (
         <p>
           No patterns available.
-          <Link href="/app/secure/sell/submit" className="text-blue-500 underline">
+          <Link rel={'nofollow'} href="/app/secure/sell/submit" className="text-blue-500 underline">
             Create a pattern here!
           </Link>
         </p>

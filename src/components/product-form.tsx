@@ -500,7 +500,11 @@ export function ProductFormComponent() {
               Your listing has been created successfully!
               <br />
               You can now{' '}
-              <Link href="/app/secure/sell/testings" className="text-blue-500 underline">
+              <Link
+                rel={'nofollow'}
+                href="/app/secure/sell/testings"
+                className="text-blue-500 underline"
+              >
                 start a tester call
               </Link>
               .

@@ -15,6 +15,7 @@ export default function ColumnListing({ products, listingType }: ColumnListingPr
       {products.map((product) => (
         <Link
           key={product.id}
+          rel={'nofollow'}
           href={`/app/secure${
             listingType === 'sell' ? '/products' : listingType === 'test' && '/test/products'
           }/${product.id}`}

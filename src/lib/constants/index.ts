@@ -1,5 +1,7 @@
-﻿export const APP_NAME = 'Pattern Paradise';
-export const APP_DESCRIPTION = 'Find, sell and test patterns from creatives around the world!';
+﻿export const APP_TITLE = 'Pattern Paradise';
+export const APP_NAME = 'Pattern Paradise – The Ultimate Crochet & Knitting Pattern Hub';
+export const APP_DESCRIPTION =
+  'Find, sell, and test crochet & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern business effortlessly.';
 export const APP_DOMAIN = 'https://pattern-paradise.shop';
 export const THEME_COLOR = '#ed8332';
 

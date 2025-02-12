@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
+import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
 import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
@@ -38,10 +38,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="application-name" content={APP_NAME} />
+        <meta name="application-name" content={APP_TITLE} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-title" content={APP_NAME} />
-        <meta name="description" content={APP_DESCRIPTION} />
+        <meta name="apple-mobile-web-app-title" content={APP_TITLE} />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-config" content="/favicons/browserconfig.xml" />
@@ -61,12 +60,12 @@ export default async function RootLayout({
 
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content={APP_DOMAIN} />
-        <meta name="twitter:title" content={APP_NAME} />
+        <meta name="twitter:title" content={APP_TITLE} />
         <meta name="twitter:description" content={APP_DESCRIPTION} />
         <meta name="twitter:image" content={`${APP_DOMAIN}/favicons/android-icon-192x192.png`} />
         <meta name="twitter:creator" content="@PatternParadise" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={APP_NAME} />
+        <meta property="og:title" content={APP_TITLE} />
         <meta property="og:description" content={APP_DESCRIPTION} />
         <meta property="og:site_name" content={APP_NAME} />
         <meta property="og:url" content={APP_DOMAIN} />

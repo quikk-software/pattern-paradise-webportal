@@ -168,9 +168,9 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">
+        <h2 className="text-2xl font-bold">
           {listingType === 'sell' ? 'Find Patterns' : listingType === 'test' && 'Find Tester Calls'}
-        </h1>
+        </h2>
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <DrawerTrigger asChild>
             <Button variant={'outline'}>
