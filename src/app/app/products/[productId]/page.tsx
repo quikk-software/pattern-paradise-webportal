@@ -5,15 +5,18 @@ import { Metadata } from 'next';
 import { APP_DOMAIN } from '@/lib/constants';
 
 type Props = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ productId: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const productId = (await params).id;
+  const productId = (await params).productId;
 
   const product = await getProduct(productId);
+  console.log({ product, productId });
 
-  const title = product?.title ?? 'Shop Crochet Pattern on Pattern Paradise';
+  const title = product?.title
+    ? `Buy ${product.title} ${product.category} Pattern on Pattern Paradise`
+    : 'Shop Crochet Pattern on Pattern Paradise';
   const description = `Check out this ${product?.category ? `${product?.category.toLowerCase()} pattern ` : 'pattern '}${product?.title ? ` '${product?.title}'` : ''}.`;
 
   return {
