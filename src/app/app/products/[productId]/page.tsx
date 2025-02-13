@@ -24,11 +24,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      type: "website",
+      type: 'website',
       images: [
         {
           url: imageUrl,
-          alt: product?.title || 'Pattern Paradise Product',
+          width: 1200,
+          height: 628,
+          alt: product?.description
+            ? product.description
+            : product?.title
+              ? product.title
+              : 'Pattern Paradise Product',
         },
       ],
       url: `${APP_DOMAIN}/app/products/${productId}`,
@@ -37,7 +43,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title,
       description,
-      images: [imageUrl],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 628,
+          alt: product?.description
+            ? product.description
+            : product?.title
+              ? product.title
+              : 'Pattern Paradise Product',
+        },
+      ],
     },
   };
 }
