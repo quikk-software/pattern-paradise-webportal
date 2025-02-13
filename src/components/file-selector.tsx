@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { v4 as uuid } from 'uuid';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Trash2, Upload } from 'lucide-react';
 import { PDFFile } from '@/components/product-form';
-import Link from 'next/link';
 import LanguageSelect from '@/lib/components/LanguageSelect';
+import { Input } from '@/components/ui/input';
 
 interface PdfSelectorProps {
   selectedFiles: PDFFile[];
@@ -20,6 +21,7 @@ interface GroupedFiles {
 
 export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }: PdfSelectorProps) {
   const [groupedFiles, setGroupedFiles] = useState<GroupedFiles>({});
+  const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
   useEffect(() => {
     const grouped = selectedFiles.reduce((acc: GroupedFiles, file) => {
@@ -36,14 +38,20 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
     event.preventDefault();
     const files = event.target.files;
     if (files) {
-      const newFiles = Array.from(files).map((file) => ({
-        file,
-        language: 'en',
-      }));
+      const newFiles = Array.from(files).map((file) => {
+        const id = uuid();
+        const splittedFileName = file.name.split('.');
+        const fileSuffix = splittedFileName?.[splittedFileName.length - 1];
+        return {
+          file: new File([file], `${id}${fileSuffix ? `.${fileSuffix}` : ''}`, { type: file.type }),
+          language: 'en',
+          originalFilename: file.name,
+          id,
+        };
+      });
       if (isPro) {
         setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
       } else {
-        // set language to other files language or default to english
         setSelectedFiles((prevFiles) => [
           ...prevFiles,
           ...newFiles.map((file) => ({
@@ -56,11 +64,15 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
     event.target.value = '';
   };
 
-  const handleLanguageChange = (newLanguage: string, oldLanguage?: string) => {
+  const handleFilenameChange = (id: string, newFilename: string) => {
     setSelectedFiles((prevFiles) =>
-      prevFiles.map((file) =>
-        file.language === oldLanguage ? { ...file, language: newLanguage } : file,
-      ),
+      prevFiles.map((file) => {
+        if (file.id === id) {
+          const suffix = file.originalFilename.split('.').pop();
+          return { ...file, originalFilename: `${newFilename}${suffix ? `.${suffix}` : ''}` };
+        }
+        return file;
+      }),
     );
   };
 
@@ -78,22 +90,6 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
         <CardTitle className="text-lg font-semibold">
           {isPro ? 'Select patterns' : 'Select pattern'} <span className="text-red-500">*</span>
         </CardTitle>
-        {isPro ? (
-          <CardTitle className="text-md font-medium">
-            You can add multiple files at once. By default, all files will be automatically assigned
-            to the &apos;English&apos; language group. However, you can select a different language
-            for the entire group of files. After changing the language for that group, any new files
-            you add will again be automatically assigned to the &apos;English&apos; language group.
-          </CardTitle>
-        ) : process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true' ? (
-          <CardTitle className="text-md font-medium">
-            Upgrade to{' '}
-            <Link href={'/pro'} className="text-blue-500 underline">
-              Pattern Paradise Pro
-            </Link>{' '}
-            in order to upload multiple patterns in different languages.
-          </CardTitle>
-        ) : null}
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -121,35 +117,70 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
 
           {Object.keys(groupedFiles).length > 0 && (
             <div className="space-y-4">
-              <h3 className="text-md font-semibold">Selected Files</h3>
+              <div className="space-y-2">
+                <h3 className="text-md font-semibold">Selected Files</h3>
+                <p className="text-xs text-muted-foreground">
+                  ⚠️ Note: Leave the text field for a file empty if you want to use default document
+                  names.
+                </p>
+              </div>
               {Object.entries(groupedFiles).map(([language, files]) => (
                 <Card key={language} className="p-4">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <LanguageSelect
-                      language={language}
-                      handleLanguageChange={handleLanguageChange}
-                    />
+                  <div className="flex flex-col gap-4">
+                    <LanguageSelect language={language} handleLanguageChange={() => {}} />
                     <div className="flex-grow space-y-2">
-                      {files.map((file, index) => (
-                        <div key={index} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <FileText className="w-6 h-6 text-blue-500" />
-                            <span className="font-medium truncate max-w-[200px]">
-                              {file.file.name}
-                            </span>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={(event) => {
-                              event.preventDefault();
-                              handleRemoveFile(language, index);
-                            }}
+                      {files.map((fileData, index) => {
+                        const splittedFilename = fileData.originalFilename.split('.');
+                        if (splittedFilename.length > 1) {
+                          splittedFilename.pop();
+                        }
+                        const filenameWithoutSuffix = splittedFilename.join('');
+                        return (
+                          <div
+                            key={fileData.id}
+                            className="flex items-center justify-between space-x-3 overflow-hidden"
                           >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ))}
+                            <div className="flex items-center space-x-3 min-w-0 w-full">
+                              {fileData.file.type.startsWith('image') ? (
+                                <img
+                                  className="w-12 h-12 object-cover rounded"
+                                  alt={fileData.file.name}
+                                  src={URL.createObjectURL(fileData.file)}
+                                />
+                              ) : (
+                                <FileText className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                              )}
+                              <Input
+                                className="w-full"
+                                ref={(el) => {
+                                  inputRefs.current[fileData.id] = el;
+                                }}
+                                value={filenameWithoutSuffix}
+                                onChange={(e) => {
+                                  const input = inputRefs.current[fileData.id];
+                                  const start = input?.selectionStart;
+                                  handleFilenameChange(fileData.id, e.target.value);
+                                  if (input && start !== null) {
+                                    requestAnimationFrame(() =>
+                                      input.setSelectionRange(start ?? null, start ?? null),
+                                    );
+                                  }
+                                }}
+                              />
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                handleRemoveFile(language, index);
+                              }}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </Card>

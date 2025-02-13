@@ -3,14 +3,12 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PayPalLogo from '@/assets/logos/paypal-logo.png';
-import { ShoppingBag, CloudDownload } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { APP_NAME, FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
+import { APP_TITLE, FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
 import { GetProductResponse } from '@/@types/api-types';
 import { CldImage } from 'next-cloudinary';
-import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { useRouter } from 'next/navigation';
 import useScreenSize from '@/lib/core/useScreenSize';
 
@@ -31,14 +29,14 @@ export default function LandingHero({ products }: LandingHeroProps) {
   const smallScreen = screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md';
 
   return (
-    <section className="py-8 md:py-12 lg:py-16">
+    <section className="pb-8 lg:pb-0 lg:py-16">
       <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_600px]">
         <div className="flex flex-col justify-center space-y-4">
           <div className="space-y-4">
             <div>
               <span className="text-xl text-zinc-500">Welcome to</span>
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                {APP_NAME}
+                {APP_TITLE}
               </h1>
             </div>
             <p className="max-w-[600px] text-zinc-500 md:text-xl dark:text-zinc-400">
@@ -48,11 +46,14 @@ export default function LandingHero({ products }: LandingHeroProps) {
           </div>
           <div className="flex flex-row gap-2">
             {isLoggedIn ? (
-              <Link href="/app/secure/sell">
+              <Link rel={'nofollow'} href="/app/secure/sell">
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             ) : (
-              <Link href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell">
+              <Link
+                rel={'nofollow'}
+                href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
+              >
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             )}
@@ -66,22 +67,8 @@ export default function LandingHero({ products }: LandingHeroProps) {
               </Link>
             )}
           </div>
-          <div className="flex items-center space-x-4 text-sm text-zinc-500 dark:text-zinc-400">
-            <div className="flex items-center space-x-2">
-              <CloudDownload className="w-4 h-4" />
-              <span>Instant Downloads</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <ShoppingBag className="w-4 h-4" />
-              <span>Secure Shopping</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <PatternParadiseIcon className="w-4 h-4" />
-              <span>Pattern Testing</span>
-            </div>
-          </div>
         </div>
-        {products.length === FEATURED_PRODUCTS_LENGTH ? (
+        {!smallScreen && products.length === FEATURED_PRODUCTS_LENGTH ? (
           <div className="relative h-[400px] lg:h-[600px] flex items-center justify-center mt-8 mb-4">
             <div className="absolute w-[300px] h-[300px] lg:w-[500px] lg:h-[500px]">
               {products.map((product, index) => (
@@ -141,10 +128,16 @@ export default function LandingHero({ products }: LandingHeroProps) {
         <div className="inline-block rounded-lg bg-orange-50 px-3 py-1 text-sm text-primary">
           Official PayPal Platform Partner
         </div>
-        <p className="max-w-[900px] text-zinc-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
+        <p className="text-zinc-500 text-md/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
           Secure transactions powered by PayPal. Buy and sell with confidence on our platform.
         </p>
-        <Image alt="PayPal Logo" className="h-12 w-auto" height="51" src={PayPalLogo} width="200" />
+        <Image
+          alt="PayPal Logo"
+          className="h-8 lg:h-12 w-auto"
+          height="51"
+          src={PayPalLogo}
+          width="200"
+        />
       </div>
     </section>
   );

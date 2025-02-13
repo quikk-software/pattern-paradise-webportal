@@ -34,7 +34,7 @@ export default function PayPalRevokedPage() {
           <p className="text-gray-600">
             This means that you can no longer receive payments through PayPal on our platform. If
             you want to reactivate your PayPal merchant status,{' '}
-            <Link href="/app/secure/auth/me" className="text-blue-500 underline">
+            <Link href="/app/secure/auth/me" className="text-blue-500 underline" rel={'nofollow'}>
               go to your profile
             </Link>
             .

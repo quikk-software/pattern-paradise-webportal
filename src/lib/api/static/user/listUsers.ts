@@ -1,7 +1,7 @@
 import { client } from '@/@types';
 import logger from '@/lib/core/logger';
 
-export const listProducts = async ({
+export const listUsers = async ({
   overridePageNumber,
   overridePageSize,
 }: {
@@ -9,18 +9,17 @@ export const listProducts = async ({
   overridePageSize?: number;
 }) => {
   try {
-    const response = await client.api.listProducts(
+    const response = await client.api.listUsers(
       {
         pageNumber: overridePageNumber ?? 1,
         pageSize: overridePageSize ?? 20,
-        status: 'Released',
       },
       {
         next: { revalidate: 1 },
       },
     );
 
-    return response.data.products ?? [];
+    return response.data.users ?? [];
   } catch (error) {
     logger.error(error);
     return [];

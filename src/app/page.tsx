@@ -4,7 +4,7 @@ import LandingHero from '@/components/landing-hero';
 import { FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
 
 export default async function Home() {
-  const products = await listProducts();
+  const products = await listProducts({});
 
   return (
     <div>

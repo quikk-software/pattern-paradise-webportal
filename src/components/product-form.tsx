@@ -34,10 +34,14 @@ import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
 import { checkProStatus } from '@/lib/core/utils';
+import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
+import { InfoBoxComponent } from '@/components/info-box';
 
 export interface PDFFile {
   file: File;
   language: string;
+  id: string;
+  originalFilename: string;
 }
 
 export function ProductFormComponent() {
@@ -69,6 +73,7 @@ export function ProductFormComponent() {
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
+  const [fileOrder, setFileOrder] = useState<{ [key: string]: string[] }>({});
 
   const { subscriptionStatus } = useSelector((s: Store) => s.auth);
 
@@ -155,12 +160,32 @@ export function ProductFormComponent() {
     const formData = new FormData();
 
     patterns.forEach((pattern) => formData.append('files', pattern.file));
+    formData.append(
+      'fileNames',
+      JSON.stringify(
+        patterns.map((pattern, index) => {
+          const splittedFilename = pattern.originalFilename.split('.');
+          let suffix;
+          if (splittedFilename.length > 1) {
+            suffix = splittedFilename.pop();
+          }
+          const filenameWithoutSuffix = splittedFilename.join('');
+          return {
+            filename: pattern.file.name,
+            originalFilename: filenameWithoutSuffix.trim()
+              ? pattern.originalFilename
+              : `Page ${index + 1}${suffix ? `.${suffix}` : ''}`,
+            fileId: pattern.id,
+          };
+        }),
+      ),
+    );
 
     formData.append('title', data.title);
     formData.append('description', data.description);
     formData.append('experience', selectedExperienceLevel);
     formData.append('category', category.craft);
-    formData.append('price', String(!isFree ? data.price : 0));
+    formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
     formData.append('isFree', isFree ? 'true' : 'false');
 
     formData.append(
@@ -174,6 +199,19 @@ export function ProductFormComponent() {
     formData.append('imageUrls', JSON.stringify(urls.map(({ url }) => url)));
     formData.append('hashtags', JSON.stringify(hashtags));
     formData.append(
+      'fileOrder',
+      JSON.stringify(
+        Object.entries(fileOrder)
+          .map(([language, fileIds]) =>
+            fileIds.map((fileId) => ({
+              language,
+              fileId,
+            })),
+          )
+          .flat(1),
+      ),
+    );
+    formData.append(
       'languages',
       JSON.stringify(patterns.map(({ language, file }) => ({ language, fileName: file.name }))),
     );
@@ -184,6 +222,8 @@ export function ProductFormComponent() {
       type: 'success',
       status: 'Upload successful',
     });
+
+    handleResetFormClick();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -218,7 +258,7 @@ export function ProductFormComponent() {
 
   return (
     <div className="flex flex-col gap-8">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white rounded-lg shadow-lg">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div>
           <Label htmlFor="title" className="block text-lg font-semibold mb-2">
             Title <span className="text-red-500">*</span>
@@ -365,6 +405,19 @@ export function ProductFormComponent() {
           <FileSelector selectedFiles={patterns} setSelectedFiles={setPatterns} isPro={isPro} />
         </div>
 
+        {patterns.length > 0 ? (
+          <div className="w-full">
+            <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
+          </div>
+        ) : null}
+
+        <InfoBoxComponent
+          message={
+            'You can only change the file order after uploading this pattern. Files and their names cannot be changed after uploading.'
+          }
+          severity={'info'}
+        />
+
         <div className="flex flex-col gap-2">
           <Button
             className="w-full"
@@ -447,7 +500,11 @@ export function ProductFormComponent() {
               Your listing has been created successfully!
               <br />
               You can now{' '}
-              <Link href="/app/secure/sell/testings" className="text-blue-500 underline">
+              <Link
+                rel={'nofollow'}
+                href="/app/secure/sell/testings"
+                className="text-blue-500 underline"
+              >
                 start a tester call
               </Link>
               .

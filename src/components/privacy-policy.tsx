@@ -136,6 +136,7 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
                     <br />
                     <Link
                       href="https://vercel.com"
+                      rel={'nofollow'}
                       target="_blank"
                       className="text-blue-500 underline"
                     >
@@ -156,7 +157,12 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
                     <br />
                     support@fly.io
                     <br />
-                    <Link href="https://fly.io" target="_blank" className="text-blue-500 underline">
+                    <Link
+                      rel={'nofollow'}
+                      href="https://fly.io"
+                      target="_blank"
+                      className="text-blue-500 underline"
+                    >
                       fly.io
                     </Link>
                   </p>
@@ -507,6 +513,7 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
           Source:{' '}
           <Link
             className="text-blue-500 underline"
+            rel={'nofollow'}
             href="https://datenschutzerklaerung.de"
             target="_blank"
           >

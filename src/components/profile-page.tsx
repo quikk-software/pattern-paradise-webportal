@@ -9,7 +9,12 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import { useCreatePayPalReferral, useRemovePayPalReferral, useUpdateUser } from '@/lib/api';
+import {
+  useCreatePayPalReferral,
+  useGetPayPalMerchantStatus,
+  useRemovePayPalReferral,
+  useUpdateUser,
+} from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -32,6 +37,7 @@ import { SUPPORT_EMAIL } from '@/lib/constants';
 import useAuth from '@/lib/auth/useAuth';
 import { setRoles } from '@/lib/features/auth/authSlice';
 import ConnectPayPalDrawer from '@/lib/components/ConnectPayPalDrawer';
+import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -65,6 +71,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isLoading: createPayPalReferralIsLoading,
     isSuccess: createPayPalReferralIsSuccess,
     isError: createPayPalReferralIsError,
+    errorDetail: createPayPalReferralErrorDetail,
     data: paypalReferralData,
   } = useCreatePayPalReferral();
   const {
@@ -74,6 +81,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isError: removePayPalReferralIsError,
     errorDetail,
   } = useRemovePayPalReferral();
+  const {
+    fetch: getPayPalMerchantStatus,
+    data: paypalMerchantStatus,
+    isLoading: checkPayPalMerchantStatusIsLoading,
+    isError: checkPayPalMerchantStatusIsError,
+  } = useGetPayPalMerchantStatus();
 
   const {
     register,
@@ -173,11 +186,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
     userId: string,
     selectedType: 'business' | 'personal',
     shareDataToPayPalGranted: boolean,
+    paypalEmail: string,
   ) => {
     const hasPayPalBusinessAccount = selectedType === 'business';
     const result = await createPayPalReferral(userId, {
       hasPayPalBusinessAccount,
       shareDataToPayPalGranted,
+      paypalEmail,
     });
 
     router.push(result.actionUrl);
@@ -194,6 +209,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
       setIsDisconnectPayPalDrawerOpen(false);
       router.push('/app/secure/auth/confirm/paypal/referral-removed');
     });
+  };
+
+  const handleCheckPayPalMerchantStatus = (userId: string) => {
+    getPayPalMerchantStatus(userId);
   };
 
   const initials =
@@ -256,6 +275,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     restriction on your PayPal account. Please reach out to PayPal Customer Support
                     or connect to{' '}
                     <Link
+                      rel={'nofollow'}
                       href="https://www.paypal.com"
                       target="_blank"
                       className="text-blue-500 underline"
@@ -275,6 +295,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     <strong>Attention:</strong> Please confirm your email address on{' '}
                     <Link
                       href="https://www.paypal.com/businessprofile/settings"
+                      rel={'nofollow'}
                       target="_blank"
                       className="text-blue-500 underline"
                     >
@@ -346,6 +367,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   from your{' '}
                   <Link
                     href="https://paypal.com"
+                    rel={'nofollow'}
                     target="_blank"
                     className="text-blue-500 underline"
                   >
@@ -357,10 +379,31 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 </p>
               </div>
             ) : null}
+            <Button
+              variant={'outline'}
+              disabled={checkPayPalMerchantStatusIsLoading}
+              onClick={() => handleCheckPayPalMerchantStatus(userId)}
+            >
+              {checkPayPalMerchantStatusIsLoading ? (
+                <LoadingSpinnerComponent size="sm" className="text-black" />
+              ) : null}
+              Check PayPal merchant status
+            </Button>
+            {paypalMerchantStatus ? <PayPalMerchantStatus {...paypalMerchantStatus} /> : null}
+            {checkPayPalMerchantStatusIsError ? (
+              <p className="text-sm">
+                There is currently no information available regarding your PayPal merchant status.
+                Please connect to your PayPal profile above and try again. If you need assistance,
+                you can also contact us using our{' '}
+                <Link href="/help" className="text-blue-500 underline">
+                  contact form
+                </Link>
+                .
+              </p>
+            ) : null}
           </CardContent>
         </Card>
       ) : null}
-
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>
@@ -397,13 +440,21 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     have blocked you from creating/selling patterns and participating in tester
                     calls until further notice. Our team will review your case as soon as possible.
                     In the meantime, please take a look at the open incidents here:{' '}
-                    <Link href="/app/secure/auth/me/reports" className="text-blue-500 underline">
+                    <Link
+                      rel={'nofollow'}
+                      href="/app/secure/auth/me/reports"
+                      className="text-blue-500 underline"
+                    >
                       Open Incidents ({user.openIncidentsCount})
                     </Link>
                     .<br />
                     <br />
                     If you have any questions, please do not hesitate to contact us by email:{' '}
-                    <Link href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-500 underline">
+                    <Link
+                      rel={'nofollow'}
+                      href={`mailto:${SUPPORT_EMAIL}`}
+                      className="text-blue-500 underline"
+                    >
                       {SUPPORT_EMAIL}
                     </Link>
                   </span>
@@ -614,12 +665,18 @@ export function ProfilePage({ user }: ProfilePageProps) {
       <ConnectPayPalDrawer
         isOpen={isConnectPayPalDrawerOpen}
         setIsOpen={setIsConnectPayPalDrawerOpen}
-        callbackFn={(selectedType, shareDataToPayPalGranted) => {
-          handleCreatePayPalReferralClick(userId, selectedType, shareDataToPayPalGranted);
+        callbackFn={(selectedType, shareDataToPayPalGranted, paypalEmail) => {
+          handleCreatePayPalReferralClick(
+            userId,
+            selectedType,
+            shareDataToPayPalGranted,
+            paypalEmail,
+          );
         }}
         isLoading={createPayPalReferralIsLoading}
         isSuccess={createPayPalReferralIsSuccess}
         isError={createPayPalReferralIsError}
+        errorDetail={createPayPalReferralErrorDetail}
       />
       <ConfirmDrawer
         isOpen={isDisconnectPayPalDrawerOpen}

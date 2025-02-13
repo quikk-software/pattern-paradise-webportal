@@ -89,6 +89,8 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                 ) : (
                   <BuyNowButton
                     product={product}
+                    price={product.price}
+                    isCustomPrice={false}
                     callback={(orderId: string) =>
                       router.push(`/app/secure/auth/me/orders/${orderId}`)
                     }

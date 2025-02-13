@@ -112,15 +112,16 @@ export default function FAQPageComponent() {
               <Link
                 href="/auth/registration?preselectedRoles=Tester&redirect=/app/test"
                 className="text-blue-500 underline"
+                rel={'nofollow'}
               >
                 Register as a Tester
               </Link>{' '}
               or update your selected roles in your{' '}
-              <Link href="/app/secure/auth/me" className="text-blue-500 underline">
+              <Link href="/app/secure/auth/me" className="text-blue-500 underline" rel={'nofollow'}>
                 Profile Settings
               </Link>
               . Once you have everything set up, you can{' '}
-              <Link href="/app/secure/test" className="text-blue-500 underline">
+              <Link href="/app/secure/test" className="text-blue-500 underline" rel={'nofollow'}>
                 browse Tester Calls
               </Link>
               .

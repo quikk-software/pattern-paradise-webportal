@@ -47,7 +47,7 @@ export default function SuccessfulOnboarding() {
               Congratulations! Your onboarding was successful. You&apos;ll receive an Email once
               you&apos;re set to receive Payments. You can also check your current PayPal Merchant
               status{' '}
-              <Link href="/app/secure/auth/me" className="text-blue-500 underline">
+              <Link rel={'nofollow'} href="/app/secure/auth/me" className="text-blue-500 underline">
                 in your Profile
               </Link>
               .
@@ -66,26 +66,42 @@ export default function SuccessfulOnboarding() {
               <ol className="list-decimal list-inside space-y-2">
                 <li>
                   Start by{' '}
-                  <Link className="text-blue-500 underline" href="/app/secure/sell/submit">
+                  <Link
+                    rel={'nofollow'}
+                    className="text-blue-500 underline"
+                    href="/app/secure/sell/submit"
+                  >
                     Creating a new Pattern
                   </Link>
                 </li>
                 <li>
                   After Creating a Pattern, you can{' '}
-                  <Link className="text-blue-500 underline" href="/app/secure/test/testings">
+                  <Link
+                    rel={'nofollow'}
+                    className="text-blue-500 underline"
+                    href="/app/secure/test/testings"
+                  >
                     Individualize your Tester Call
                   </Link>
                 </li>
                 <li>Post your Tester Call on Social Media and gather Tester Applications</li>
                 <li>
                   Choose your Testers and{' '}
-                  <Link className="text-blue-500 underline" href="/app/secure/test/chats">
+                  <Link
+                    rel={'nofollow'}
+                    className="text-blue-500 underline"
+                    href="/app/secure/test/chats"
+                  >
                     Chat with them
                   </Link>
                 </li>
                 <li>
                   After your Testers approved your Pattern, you can{' '}
-                  <Link className="text-blue-500 underline" href="/app/secure/sell">
+                  <Link
+                    rel={'nofollow'}
+                    className="text-blue-500 underline"
+                    href="/app/secure/sell"
+                  >
                     Release your Pattern
                   </Link>{' '}
                   to the public
@@ -94,10 +110,10 @@ export default function SuccessfulOnboarding() {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between items-center">
-            <Link href="/app/secure/auth/me">
+            <Link rel={'nofollow'} href="/app/secure/auth/me">
               <Button variant="outline">Go to Profile</Button>
             </Link>
-            <Link href="/app/secure/sell/submit">
+            <Link rel={'nofollow'} href="/app/secure/sell/submit">
               <Button variant="default">
                 Create a Pattern
                 <ArrowRight className="ml-2 h-4 w-4" />

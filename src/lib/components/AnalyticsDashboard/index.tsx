@@ -13,9 +13,6 @@ interface AnalyticsDashboardProps {
 export default function AnalyticsDashboard({ analytics }: AnalyticsDashboardProps) {
   return (
     <div className="flex-1 space-y-4">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-2xl font-bold">Dashboard</h2>
-      </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -31,7 +28,7 @@ export default function AnalyticsDashboard({ analytics }: AnalyticsDashboardProp
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${analytics.totalRevenue.toLocaleString('en-US')}
+              ${Number((analytics.totalRevenue ?? 0).toFixed(2)).toLocaleString('en-US')}
             </div>
           </CardContent>
         </Card>
@@ -41,7 +38,7 @@ export default function AnalyticsDashboard({ analytics }: AnalyticsDashboardProp
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${analytics.averageSaleRevenue.toLocaleString('en-US')}
+              ${Number((analytics.averageSaleRevenue ?? 0).toFixed(2)).toLocaleString('en-US')}
             </div>
           </CardContent>
         </Card>
@@ -50,7 +47,9 @@ export default function AnalyticsDashboard({ analytics }: AnalyticsDashboardProp
             <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.completionRate}%</div>
+            <div className="text-2xl font-bold">
+              {Number(analytics.completionRate ?? 0).toFixed(2)}%
+            </div>
           </CardContent>
         </Card>
       </div>

@@ -6,17 +6,23 @@ import {
   TestingState,
   initialState as testingInitialState,
 } from '@/lib/features/testing/testingSlice';
+import {
+  AnalyticsState,
+  initialState as analyticsInitialState,
+} from '@/lib/features/analytics/analyticsSlice';
 
 export type Store = {
   common: CommonState;
   auth: AuthState;
   testing: TestingState;
+  analytics: AnalyticsState;
 };
 
 const initialStore: Store = {
   common: commonInitialState,
   auth: authInitialState,
   testing: testingInitialState,
+  analytics: analyticsInitialState,
 };
 
 export const makeStore = () => {

@@ -65,6 +65,7 @@ export interface GetUserMetricsResponse {
 export interface PostUserPayPalReferralRequest {
   hasPayPalBusinessAccount: boolean;
   shareDataToPayPalGranted: boolean;
+  paypalEmail: string;
 }
 
 export interface PostUserPayPalReferralResponse {
@@ -135,6 +136,14 @@ export interface PutUserPasswordRequest {
 
 export interface PutGalleryImagesRequest {
   galleryImages: string[];
+}
+
+export interface GetUserPayPalMerchantStatusResponse {
+  paypalPaymentsReceivable: boolean;
+  paypalLegalName: string;
+  paypalPrimaryEmail: string;
+  paypalPrimaryEmailConfirmed: boolean;
+  hasOauthThirdParty: boolean;
 }
 
 export interface GetUserResponse {
@@ -288,6 +297,10 @@ export interface PutProductRequest {
   imageUrls: any[];
   hashtags: any[];
   subCategories: any[];
+  fileOrder: {
+    language?: string;
+    fileId?: string;
+  }[];
   title: string;
   description: string;
   category: string;
@@ -299,6 +312,10 @@ export interface PutProductRequest {
 export interface GetProductResponse {
   id: string;
   imageUrls: string[];
+  fileOrder: {
+    fileId: string;
+    language: string;
+  }[];
   subCategories: string[];
   hashtags: string[];
   files: {
@@ -1184,6 +1201,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         hasPayPalBusinessAccount?: any;
         /** @example "any" */
         shareDataToPayPalGranted?: any;
+        /** @example "any" */
+        paypalEmail?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -1252,6 +1271,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getUser: (userId: string, params: RequestParams = {}) =>
       this.request<GetUserResponse, NotFoundResponse>({
         path: `/api/v1/users/${userId}/me`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The user will be queried by a given ID or username. If the user cannot be found or the user ID is not related to the authenticated user, an exception will be thrown.
+     *
+     * @tags User
+     * @name GetPayPalMerchantStatus
+     * @summary Gets the PayPal merchant status for the user.
+     * @request GET:/api/v1/users/{userId}/paypal-merchant-status
+     * @secure
+     */
+    getPayPalMerchantStatus: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUserPayPalMerchantStatusResponse, NotFoundResponse>({
+        path: `/api/v1/users/${userId}/paypal-merchant-status`,
         method: 'GET',
         secure: true,
         format: 'json',
@@ -1374,6 +1411,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** Array of files to upload. */
         files: File[];
+        /** Array of file names. */
+        fileNames: {
+          filename?: string;
+          originalFilename?: string;
+        }[];
         /** Array of product image URLs. */
         imageUrls: string[];
         /** Array of hashtags. */
@@ -1384,6 +1426,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         languages: {
           language?: string;
           fileName?: string;
+        }[];
+        /** Array of files order. */
+        fileOrder: {
+          language?: string;
+          fileId?: string;
         }[];
         /** The title of the product. */
         title: string;
@@ -1469,6 +1516,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         imageUrls?: any;
         /** @example "any" */
         hashtags?: any;
+        /** @example "any" */
+        fileOrder?: any;
         /** @example "any" */
         subCategories?: any;
         /** @example "any" */
@@ -2089,6 +2138,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The order will be queried by a given ID. If the order cannot be found, an exception will be thrown.
+     *
+     * @tags Order
+     * @name DeleteOrder
+     * @summary Deletes an order by ID.
+     * @request DELETE:/api/v1/orders/{orderId}
+     * @secure
+     */
+    deleteOrder: (orderId: string, params: RequestParams = {}) =>
+      this.request<void, NotFoundResponse>({
+        path: `/api/v1/orders/${orderId}`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The orders will be queried by a given product ID and the authenticated user ID.
      *
      * @tags Order
@@ -2125,10 +2191,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/orders/{userId}/analytics
      * @secure
      */
-    getOrderAnalytics: (userId: string, params: RequestParams = {}) =>
+    getOrderAnalytics: (
+      userId: string,
+      query?: {
+        /** The start date. */
+        startDate?: string;
+        /** The end date. */
+        endDate?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetOrderAnalyticsResponse, any>({
         path: `/api/v1/orders/${userId}/analytics`,
         method: 'GET',
+        query: query,
         secure: true,
         format: 'json',
         ...params,

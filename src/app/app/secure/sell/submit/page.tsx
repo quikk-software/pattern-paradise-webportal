@@ -31,6 +31,7 @@ export default function SellSubmitPage() {
             <>
               In order to create and sell patterns, you must{' '}
               <Link
+                rel={'nofollow'}
                 href="/app/secure/auth/me?action=scrollToPayPal"
                 className="text-blue-500 underline"
               >

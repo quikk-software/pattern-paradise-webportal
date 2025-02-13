@@ -29,7 +29,7 @@ export default function PayPalAccountSelector({
         />
       </h2>
       <p className="text-xs text-muted-foreground mb-2">
-        ⚠️ Note: Selecting 'Business' when you don't have access to a{' '}
+        ⚠️ Note: Selecting &apos;Business&apos; when you don&apos;t have access to a{' '}
         <Link
           href="https://www.paypal.com/business"
           target="_blank"
@@ -37,7 +37,7 @@ export default function PayPalAccountSelector({
         >
           PayPal Business
         </Link>{' '}
-        account may cause errors when processing your customers' payments.
+        account may cause errors when processing your customers&apos; payments.
       </p>
       <div className="grid grid-cols-2 gap-2">
         <Card

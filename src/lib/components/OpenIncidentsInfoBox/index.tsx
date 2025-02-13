@@ -16,11 +16,19 @@ export default function OpenIncidentsInfoBox({ type, count }: OpenIncidentsInfoB
           You have {count} open incidents related to{' '}
           {type === 'user' ? 'your user profile' : 'one or more of your patterns'}.{' '}
           {type === 'user' ? (
-            <Link href="/app/secure/auth/me/reports" className="text-blue-500 underline">
+            <Link
+              rel={'nofollow'}
+              href="/app/secure/auth/me/reports"
+              className="text-blue-500 underline"
+            >
               Check your profile incidents here.
             </Link>
           ) : (
-            <Link href="/app/secure/sell/reports" className="text-blue-500 underline">
+            <Link
+              rel={'nofollow'}
+              href="/app/secure/sell/reports"
+              className="text-blue-500 underline"
+            >
               Check your pattern incidents here.
             </Link>
           )}
