@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
+      type: "website",
       images: [
         {
           url: imageUrl,
@@ -31,9 +32,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
       ],
       url: `${APP_DOMAIN}/app/products/${productId}`,
-      tags: (product?.category ? [product.category] : []).concat([
-        ...(product?.subCategories ?? []),
-      ]),
     },
     twitter: {
       card: 'summary_large_image',
