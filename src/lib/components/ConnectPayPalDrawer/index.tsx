@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import RequestStatus from '@/lib/components/RequestStatus';
+import { Input } from '@/components/ui/input';
 
 interface ConfirmDrawerProps {
   isOpen: boolean;
@@ -15,7 +16,12 @@ interface ConfirmDrawerProps {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
-  callbackFn?: (selectedType: 'business' | 'personal', shareDataToPayPalGranted: boolean) => void;
+  errorDetail?: string;
+  callbackFn?: (
+    selectedType: 'business' | 'personal',
+    shareDataToPayPalGranted: boolean,
+    paypalEmail: string,
+  ) => void;
 }
 
 export default function ConnectPayPalDrawer({
@@ -24,10 +30,12 @@ export default function ConnectPayPalDrawer({
   isLoading,
   isSuccess,
   isError,
+  errorDetail,
   callbackFn,
 }: ConfirmDrawerProps) {
   const [selectedType, setSelectedType] = useState<'business' | 'personal' | null>(null);
   const [shareDataToPayPalGranted, setShareDataToPayPalGranted] = useState(false);
+  const [paypalEmail, setPaypalEmail] = useState<string | null>(null);
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -41,6 +49,11 @@ export default function ConnectPayPalDrawer({
             </DrawerTitle>
           </DrawerHeader>
           <PayPalAccountSelector selectedType={selectedType} setSelectedType={setSelectedType} />
+          <Input
+            placeholder={'Your PayPal email'}
+            value={paypalEmail ?? ''}
+            onChange={(e) => setPaypalEmail(e.target.value?.toLowerCase().trim())}
+          />
           <div className="flex gap-2">
             <Checkbox
               id="share-data-to-paypal-checkbox"
@@ -68,13 +81,13 @@ export default function ConnectPayPalDrawer({
           </Button>
           <Button
             onClick={() => {
-              if (!selectedType || !shareDataToPayPalGranted) {
+              if (!selectedType || !shareDataToPayPalGranted || !paypalEmail) {
                 return;
               }
-              callbackFn?.(selectedType, shareDataToPayPalGranted);
+              callbackFn?.(selectedType, shareDataToPayPalGranted, paypalEmail);
             }}
             variant={'default'}
-            disabled={isLoading || !selectedType || !shareDataToPayPalGranted}
+            disabled={isLoading || !selectedType || !shareDataToPayPalGranted || !paypalEmail}
           >
             {isLoading ? <LoadingSpinnerComponent size="sm" /> : null}
             Connect PayPal
@@ -84,7 +97,15 @@ export default function ConnectPayPalDrawer({
             isError={isError}
             errorMessage={
               <span>
-                Connecting your PayPal account failed. If this error persists,{' '}
+                Error details: {errorDetail || 'No details found'}
+                <br />
+                <br />
+                Connecting your PayPal account failed. Please ensure that your provided email is
+                connected to an existing{' '}
+                <strong>
+                  {selectedType === 'business' ? 'Business' : 'Personal'} PayPal account
+                </strong>
+                . If this error persists,{' '}
                 <Link href="/help" className="text-blue-500 underline">
                   please contact us
                 </Link>

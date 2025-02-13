@@ -65,6 +65,7 @@ export interface GetUserMetricsResponse {
 export interface PostUserPayPalReferralRequest {
   hasPayPalBusinessAccount: boolean;
   shareDataToPayPalGranted: boolean;
+  paypalEmail: string;
 }
 
 export interface PostUserPayPalReferralResponse {
@@ -1200,6 +1201,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         hasPayPalBusinessAccount?: any;
         /** @example "any" */
         shareDataToPayPalGranted?: any;
+        /** @example "any" */
+        paypalEmail?: any;
       },
       params: RequestParams = {},
     ) =>

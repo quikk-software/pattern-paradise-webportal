@@ -71,6 +71,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isLoading: createPayPalReferralIsLoading,
     isSuccess: createPayPalReferralIsSuccess,
     isError: createPayPalReferralIsError,
+    errorDetail: createPayPalReferralErrorDetail,
     data: paypalReferralData,
   } = useCreatePayPalReferral();
   const {
@@ -185,11 +186,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
     userId: string,
     selectedType: 'business' | 'personal',
     shareDataToPayPalGranted: boolean,
+    paypalEmail: string,
   ) => {
     const hasPayPalBusinessAccount = selectedType === 'business';
     const result = await createPayPalReferral(userId, {
       hasPayPalBusinessAccount,
       shareDataToPayPalGranted,
+      paypalEmail,
     });
 
     router.push(result.actionUrl);
@@ -662,12 +665,18 @@ export function ProfilePage({ user }: ProfilePageProps) {
       <ConnectPayPalDrawer
         isOpen={isConnectPayPalDrawerOpen}
         setIsOpen={setIsConnectPayPalDrawerOpen}
-        callbackFn={(selectedType, shareDataToPayPalGranted) => {
-          handleCreatePayPalReferralClick(userId, selectedType, shareDataToPayPalGranted);
+        callbackFn={(selectedType, shareDataToPayPalGranted, paypalEmail) => {
+          handleCreatePayPalReferralClick(
+            userId,
+            selectedType,
+            shareDataToPayPalGranted,
+            paypalEmail,
+          );
         }}
         isLoading={createPayPalReferralIsLoading}
         isSuccess={createPayPalReferralIsSuccess}
         isError={createPayPalReferralIsError}
+        errorDetail={createPayPalReferralErrorDetail}
       />
       <ConfirmDrawer
         isOpen={isDisconnectPayPalDrawerOpen}
