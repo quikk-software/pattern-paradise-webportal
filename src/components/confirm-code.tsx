@@ -98,7 +98,9 @@ export default function ConfirmCodeComponent({
           </CardHeader>
           <CardContent className="flex justify-center">
             <Button asChild>
-              <Link href={'/app/secure/auth/me'}>Go to profile</Link>
+              <Link href={'/app/secure/auth/me'} rel={'nofollow'}>
+                Go to profile
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -142,7 +144,9 @@ export default function ConfirmCodeComponent({
         </CardContent>
         <CardFooter className="flex justify-center">
           <Button asChild>
-            <Link href={'/app/secure/auth/me'}>Go to profile</Link>
+            <Link href={'/app/secure/auth/me'} rel={'nofollow'}>
+              Go to profile
+            </Link>
           </Button>
         </CardFooter>
       </Card>

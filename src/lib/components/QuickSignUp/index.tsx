@@ -64,7 +64,11 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
             <br />
             <span className="text-sm">
               or{' '}
-              <Link href={`/auth/login?redirect=${redirect}`} className="text-blue-500 underline">
+              <Link
+                rel={'nofollow'}
+                href={`/auth/login?redirect=${redirect}`}
+                className="text-blue-500 underline"
+              >
                 login
               </Link>
             </span>
@@ -137,6 +141,7 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
               <Label htmlFor="hasAcceptedTermsAndPrivacy" className="block text-sm text-left">
                 I confirm that I have read and agree to the{' '}
                 <Link
+                  rel={'nofollow'}
                   href="/terms-and-privacy?action=scrollToPrivacyPolicy"
                   target="_blank"
                   className="text-blue-500 underline"

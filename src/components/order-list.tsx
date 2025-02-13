@@ -83,7 +83,11 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
               Start shopping patterns!
             </Link>
           ) : (
-            <Link href="/app/secure/sell/submit" className="text-blue-500 underline">
+            <Link
+              rel={'nofollow'}
+              href="/app/secure/sell/submit"
+              className="text-blue-500 underline"
+            >
               Create a pattern here!
             </Link>
           )}

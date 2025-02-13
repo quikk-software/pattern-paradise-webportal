@@ -74,6 +74,7 @@ export default function WaterfallListing({
           {group.map((product, index) => (
             <Link
               key={product.id}
+              rel={'nofollow'}
               href={`${
                 listingType === 'sell'
                   ? '/app/products'

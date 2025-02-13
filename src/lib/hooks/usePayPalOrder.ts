@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCaptureOrder, useCreateOrder, useListOrdersByProductId } from '@/lib/api/order';
+import {
+  useCaptureOrder,
+  useCreateOrder,
+  useDeleteOrder,
+  useListOrdersByProductId,
+} from '@/lib/api/order';
 import logger from '@/lib/core/logger';
+import { MAX_PRICE } from '@/lib/constants';
+import { GetOrderResponse } from '@/@types/api-types';
 
 export function usePayPalOrder(
   productId: string,
@@ -19,6 +26,11 @@ export function usePayPalOrder(
     isSuccess: captureOrderIsSuccess,
     isError: captureOrderIsError,
   } = useCaptureOrder();
+  const {
+    mutate: deleteOrder,
+    isSuccess: deleteOrderIsSuccess,
+    isError: deleteOrderIsError,
+  } = useDeleteOrder();
   const {
     fetch: fetchOrdersByProductId,
     isLoading: listOrdersByProductIdIsLoading,
@@ -58,10 +70,9 @@ export function usePayPalOrder(
     customPriceRef.current = customPrice;
   }, [customPrice]);
 
-  const handleCreateOrder = async () => {
+  const handleCreateOrder = async (order?: GetOrderResponse) => {
     try {
       const priceToUse = customPriceRef.current ?? price;
-      const order = orders?.find((order) => order.customer.id === userId);
       if (order?.status === 'CREATED') {
         logger.info("Order with status 'CREATED' for user already exists");
         return order.paypalOrderId;
@@ -90,9 +101,23 @@ export function usePayPalOrder(
     }
   };
 
+  const handleDeleteOrder = async (orderID: string) => {
+    try {
+      await deleteOrder(orderID);
+      router.push(`/app/products/${productId}`);
+    } catch (error) {
+      logger.error('Error deleting order:', error);
+      setListOrdersByProductIdIsSuccess(false);
+      fetchOrdersByProductId(productId);
+    }
+  };
+
   const handleCustomPriceChange = (price: number, minPrice: number) => {
     if (price < minPrice) {
       setPriceError(`Price must be at least $${minPrice.toFixed(2)}`);
+      setCustomPrice(undefined);
+    } else if (price > MAX_PRICE) {
+      setPriceError(`Price cannot be greater than $${MAX_PRICE.toFixed(2)}`);
       setCustomPrice(undefined);
     } else {
       setPriceError(null);
@@ -100,15 +125,21 @@ export function usePayPalOrder(
     }
   };
 
+  const order = orders?.find((order) => order.customer.id === userId);
+
   return {
     customPrice,
     priceError,
     handleCustomPriceChange,
     handleCreateOrder,
     handleCaptureOrder,
+    handleDeleteOrder,
     createOrderIsError,
     captureOrderIsError,
+    deleteOrderIsError,
     captureOrderIsSuccess,
+    deleteOrderIsSuccess,
     listOrdersByProductIdIsLoading,
+    order,
   };
 }

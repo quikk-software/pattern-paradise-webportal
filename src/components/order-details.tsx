@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -17,19 +17,35 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import Link from 'next/link';
 import TestingMetrics from '@/lib/components/TestingMetrics';
 import ReviewCTA from '@/lib/components/ReviewCTA';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
+import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
+import { useDeleteOrder } from '@/lib/api/order';
+import { useRouter } from 'next/navigation';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
+  const [isCancelOrderDialogOpen, setIsCancelOrderDialogOpen] = useState(false);
+
   const { userId } = useSelector((s: Store) => s.auth);
 
+  const router = useRouter();
+
   const { fetch: fetchProduct, data: product, isLoading: fetchProductIsLoading } = useGetProduct();
+  const { mutate: deleteOrder, isLoading: deleteOrderIsLoading } = useDeleteOrder();
 
   useEffect(() => {
     fetchProduct(order.productId, false);
   }, [order.productId]);
+
+  const handleDeleteOrder = () => {
+    deleteOrder(order.paypalOrderId).then(() => {
+      router.push(`/app/products/${order.productId}`);
+    });
+  };
 
   if (fetchProductIsLoading) {
     return <LoadingSpinnerComponent />;
@@ -68,14 +84,18 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           </Badge>
 
           {isCreated && !isSeller ? (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <InfoBoxComponent
                 severity="warning"
                 title="One last step"
                 message="Please complete your payment with PayPal by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
               />
               {!!product ? (
-                <BuyNowButton product={product} />
+                <BuyNowButton
+                  product={product}
+                  price={order.productPrice}
+                  isCustomPrice={order.isCustomPrice}
+                />
               ) : (
                 <p className="text-sm text-red-500 mb-2">
                   Couldn&apos;t load pattern details. Please reload or try again later. If this
@@ -86,6 +106,10 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                   .
                 </p>
               )}
+              <Button variant={'destructive'} onClick={() => setIsCancelOrderDialogOpen(true)}>
+                <X />
+                Cancel Order
+              </Button>
             </div>
           ) : null}
         </div>
@@ -123,6 +147,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         {isPayed && !isSeller ? <ReviewCTA productId={order.productId} /> : null}
       </div>
       <GoBackButton />
+      <ConfirmDrawer
+        isOpen={isCancelOrderDialogOpen}
+        setIsOpen={setIsCancelOrderDialogOpen}
+        description={'If you cancel this order, you can still create a new order later.'}
+        callbackFn={handleDeleteOrder}
+        isLoading={deleteOrderIsLoading}
+      />
     </div>
   );
 }

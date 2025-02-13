@@ -72,7 +72,7 @@ export default function ProductCard({
           <span className="text-lg font-bold">${price.toFixed(2)}</span>
         )}
         {isTesterCall ? (
-          <Link href={`/app/secure/test/products/${id}`}>
+          <Link rel={'nofollow'} href={`/app/secure/test/products/${id}`}>
             <Button>Show tester call</Button>
           </Link>
         ) : (
@@ -86,7 +86,7 @@ export default function ProductCard({
           <CardFooter className="w-full flex flex-col gap-6">
             <hr className="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10 w-full" />
             <div className="flex justify-end items-center gap-2 w-full">
-              <Link href={`/app/secure/sell/products/${id}`}>
+              <Link rel={'nofollow'} href={`/app/secure/sell/products/${id}`}>
                 <Button variant="secondary">Update product</Button>
               </Link>
               <Button

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect, useMemo } from 'react';
 import { CheckCircle2, FileIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +23,7 @@ import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
 import { updateSelectedFlags } from '@/lib/utils';
+import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
@@ -52,6 +53,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
+  const [fileOrder, setFileOrder] = useState<{ [key: string]: string[] }>({});
 
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useUpdateProduct();
 
@@ -152,6 +154,14 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       experience: selectedExperienceLevel,
       isFree,
       hashtags,
+      fileOrder: Object.entries(fileOrder)
+        .map(([language, fileIds]) =>
+          fileIds.map((fileId) => ({
+            language,
+            fileId,
+          })),
+        )
+        .flat(1),
       subCategories: Object.values(category.options)
         .map((options) => options.map((option) => option.name))
         .flat(),
@@ -175,9 +185,19 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
 
   const titleWatch = watch('title');
 
+  const files = useMemo(() => {
+    return initialData.fileOrder.map((file) => ({
+      file: new File([], file.fileId),
+      id: file.fileId,
+      language: file.language,
+      originalFilename:
+        initialData.files.find((f) => f.id === file.fileId)?.objectName ?? file.fileId,
+    }));
+  }, [initialData.fileOrder]);
+
   return (
     <div className="flex flex-col gap-8">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white rounded-lg shadow-lg">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div>
           <Label htmlFor="title" className="block text-lg font-semibold mb-2">
             Title <span className="text-red-500">*</span>
@@ -325,11 +345,15 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           {imageError ? <p className="text-yellow-600 text-sm mt-2">{imageError}</p> : null}
         </div>
 
+        <div className="w-full">
+          <DragAndDropContainer selectedFiles={files} setFileOrder={setFileOrder} />
+        </div>
+
         <Button type="submit" className="w-full" disabled={imageUploadIsLoading || isLoading}>
           {imageUploadIsLoading || isLoading ? (
             <LoadingSpinnerComponent size="sm" className="text-white" />
           ) : null}
-          Update pattern
+          Update Pattern
         </Button>
 
         {uploadProgress.map((up) => (

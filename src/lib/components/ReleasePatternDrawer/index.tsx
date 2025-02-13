@@ -54,7 +54,11 @@ export default function ReleasePatternDrawer({
             {!isTestingApproved ? (
               <DrawerTitle className="text-sm font-medium">
                 If you release your pattern yourself without testers approving it in a{' '}
-                <Link href="/app/secure/sell/testings" className="text-blue-500 underline">
+                <Link
+                  rel={'nofollow'}
+                  href="/app/secure/sell/testings"
+                  className="text-blue-500 underline"
+                >
                   testing
                 </Link>
                 , your pattern will be <strong>ranked the lowest</strong> in search results on

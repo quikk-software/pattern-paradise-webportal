@@ -64,7 +64,7 @@ export default function CookieConsentBanner() {
                   </p>
                 </div>
                 <div className="flex gap-2 justify-end">
-                  <Link href="/terms-and-privacy?action=scrollToPrivacyPolicy">
+                  <Link rel={'nofollow'} href="/terms-and-privacy?action=scrollToPrivacyPolicy">
                     <Button variant="link">Privacy Policy</Button>
                   </Link>
                   <Button variant="secondary" onClick={handleDecline}>

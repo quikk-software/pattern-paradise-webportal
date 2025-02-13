@@ -103,7 +103,11 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
     <form id="registrationForm" onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardHeader>
-          <Link href={`/auth/login?redirect=${redirectUrl}`} className="w-full mb-4">
+          <Link
+            rel={'nofollow'}
+            href={`/auth/login?redirect=${redirectUrl}`}
+            className="w-full mb-4"
+          >
             <Button variant="secondary" className="w-full">
               Go to login
             </Button>
@@ -293,6 +297,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
               <Label htmlFor="hasAcceptedTerms" className="block text-sm">
                 I confirm that I have read and agree to the{' '}
                 <Link
+                  rel={'nofollow'}
                   href="/terms-and-privacy?action=scrollToTermsAndConditions"
                   target="_blank"
                   className="text-blue-500 underline"
@@ -328,6 +333,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
               <Label htmlFor="hasAcceptedPrivacy" className="block text-sm">
                 I confirm that I have read and agree to the{' '}
                 <Link
+                  rel={'nofollow'}
                   href="/terms-and-privacy?action=scrollToPrivacyPolicy"
                   target="_blank"
                   className="text-blue-500 underline"
@@ -362,6 +368,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
           <p className="text-sm text-muted-foreground">
             Already have an account?{' '}
             <Link
+              rel={'nofollow'}
               href={`/auth/login?redirect=${redirectUrl}`}
               className="text-primary hover:underline"
             >

@@ -6,7 +6,7 @@ import PayPalLogo from '@/assets/logos/paypal-logo.png';
 import { ShoppingBag, CloudDownload } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { APP_NAME, FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
+import { APP_TITLE, FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
 import { GetProductResponse } from '@/@types/api-types';
 import { CldImage } from 'next-cloudinary';
@@ -38,7 +38,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
             <div>
               <span className="text-xl text-zinc-500">Welcome to</span>
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                {APP_NAME}
+                {APP_TITLE}
               </h1>
             </div>
             <p className="max-w-[600px] text-zinc-500 md:text-xl dark:text-zinc-400">
@@ -48,11 +48,14 @@ export default function LandingHero({ products }: LandingHeroProps) {
           </div>
           <div className="flex flex-row gap-2">
             {isLoggedIn ? (
-              <Link href="/app/secure/sell">
+              <Link rel={'nofollow'} href="/app/secure/sell">
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             ) : (
-              <Link href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell">
+              <Link
+                rel={'nofollow'}
+                href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
+              >
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             )}
