@@ -83,6 +83,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
   return (
     <html lang="en">
       <head>
@@ -97,14 +98,14 @@ export default async function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <CookiesProvider>
-          {process.env.MAINTENANCE_MODE === 'true' ? (
+          {maintenanceMode ? (
             <ComingSoon />
           ) : (
             <AuthSessionProvider>
               <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
             </AuthSessionProvider>
           )}
-          <CookieConsentBanner />
+          <CookieConsentBanner maintenanceMode={maintenanceMode} />
         </CookiesProvider>
       </body>
     </html>
