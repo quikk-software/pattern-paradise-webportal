@@ -8,7 +8,11 @@ import { useCookies } from 'next-client-cookies';
 import { COOKIE_CONSENT_NAME } from '@/lib/constants';
 import { Analytics } from '@vercel/analytics/react';
 
-export default function CookieConsentBanner() {
+interface CookieConsentBannerProps {
+  maintenanceMode: boolean;
+}
+
+export default function CookieConsentBanner({ maintenanceMode }: CookieConsentBannerProps) {
   const [visible, setVisible] = useState(false);
   const [consentGiven, setConsentGiven] = useState(false);
   const cookieStore = useCookies();
@@ -64,7 +68,7 @@ export default function CookieConsentBanner() {
                   </p>
                 </div>
                 <div className="flex gap-2 justify-end">
-                  {process.env.MAINTENANCE_MODE === 'true' ? null : (
+                  {maintenanceMode ? null : (
                     <Link rel={'nofollow'} href="/terms-and-privacy?action=scrollToPrivacyPolicy">
                       <Button variant="link">Privacy Policy</Button>
                     </Link>
