@@ -648,6 +648,40 @@ export interface ListFilesResponse {
   orders: GetFileResponse[];
 }
 
+export interface DownloadPatternResponse {
+  objectName: string;
+}
+
+export interface GetPatternResponse {
+  orderId: string;
+  productId: string;
+  productTitle: string;
+  productDescription: string;
+  productImageUrls: string[];
+  productFileOrder: {
+    fileId: string;
+    language: string;
+  }[];
+  patterns: any[];
+  seller: GetUserAccountResponse;
+}
+
+export interface ListPatternsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  patterns: GetPatternResponse[];
+}
+
 export interface ListApplicationErrorsResponse {
   /** @example "3" */
   count: number;
@@ -2211,12 +2245,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The patterns will be queried by a given product ID and optionally by language. If the pattern cannot be found, an exception will be thrown.
+     * @description The patterns will be queried by a given product ID and optionally by language.
      *
      * @tags Pattern
      * @name DownloadPatterns
      * @summary Downloads patterns by product ID.
-     * @request GET:/api/v1/patterns/{productId}/download
+     * @request GET:/api/v1/patterns/products/{productId}/download
      * @secure
      */
     downloadPatterns: (
@@ -2227,11 +2261,58 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, NotFoundResponse>({
-        path: `/api/v1/patterns/${productId}/download`,
+      this.request<void, any>({
+        path: `/api/v1/patterns/products/${productId}/download`,
         method: 'GET',
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The pattern will be queried by a given ID. If the pattern cannot be found, an exception will be thrown.
+     *
+     * @tags Pattern
+     * @name DownloadPattern
+     * @summary Downloads a pattern by a given ID.
+     * @request GET:/api/v1/patterns/{patternId}/download
+     * @secure
+     */
+    downloadPattern: (patternId: string, params: RequestParams = {}) =>
+      this.request<DownloadPatternResponse, NotFoundResponse>({
+        path: `/api/v1/patterns/${patternId}/download`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of patterns of the authenticated user.
+     *
+     * @tags Pattern
+     * @name ListPatterns
+     * @summary Gets the patterns.
+     * @request GET:/api/v1/patterns
+     * @secure
+     */
+    listPatterns: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The query. */
+        q?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListPatternsResponse, any>({
+        path: `/api/v1/patterns`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
         ...params,
       }),
 

@@ -406,17 +406,18 @@ export function ProductFormComponent() {
         </div>
 
         {patterns.length > 0 ? (
-          <div className="w-full">
-            <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
-          </div>
+          <>
+            <div className="w-full">
+              <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
+            </div>
+            <InfoBoxComponent
+              message={
+                'You can only change the file order after uploading this pattern. Files and their names cannot be changed after uploading.'
+              }
+              severity={'info'}
+            />
+          </>
         ) : null}
-
-        <InfoBoxComponent
-          message={
-            'You can only change the file order after uploading this pattern. Files and their names cannot be changed after uploading.'
-          }
-          severity={'info'}
-        />
 
         <div className="flex flex-col gap-2">
           <Button

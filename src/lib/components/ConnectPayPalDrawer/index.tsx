@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import PayPalAccountSelector from '../../../../paypal-account-selector';
+import PayPalAccountSelector from '../../../components/paypal-account-selector';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';

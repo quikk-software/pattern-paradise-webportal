@@ -16,7 +16,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `Buy ${product.title} ${product.category} Pattern on Pattern Paradise`
     : 'Shop Crochet Pattern on Pattern Paradise';
   const description = `Check out this ${product?.category ? `${product?.category.toLowerCase()} pattern ` : 'pattern '}${product?.title ? ` '${product?.title}'` : ''}.`;
-  const imageUrl = product?.imageUrls?.[0] ?? `${APP_DOMAIN}/favicons/ms-icon-310x310.png`;
+  const imageUrl =
+    product?.imageUrls?.[0] ??
+    `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
 
   return {
     title,
@@ -24,22 +26,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
+      type: 'website',
       images: [
         {
           url: imageUrl,
-          alt: product?.title || 'Pattern Paradise Product',
+          width: 1200,
+          height: 630,
+          alt: product?.description
+            ? product.description
+            : product?.title
+              ? product.title
+              : 'Pattern Paradise Product',
         },
       ],
-      url: `${APP_DOMAIN}/app/products/${productId}`,
-      tags: (product?.category ? [product.category] : []).concat([
-        ...(product?.subCategories ?? []),
-      ]),
+      url: `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/products/${productId}`,
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [imageUrl],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: product?.description
+            ? product.description
+            : product?.title
+              ? product.title
+              : 'Pattern Paradise Product',
+        },
+      ],
     },
   };
 }
