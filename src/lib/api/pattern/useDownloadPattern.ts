@@ -19,9 +19,7 @@ export const useDownloadPattern = () => {
     );
 
     const disposition = response.headers.get('Content-Disposition');
-    const objectName = disposition
-      ? disposition.split('filename=')[1].replace(/"/g, '')
-      : 'default-filename';
+    const objectName = disposition ? disposition.split('filename=')[1].replace(/"/g, '') : 'error';
 
     const file = await response.blob();
 
