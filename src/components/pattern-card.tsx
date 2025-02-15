@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Download, ChevronDown, ChevronUp } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { GetFileResponse, GetPatternResponse } from '@/@types/api-types';
-import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import CountryFlag from '@/lib/components/CountryFlag';
 import { LANGUAGES } from '@/lib/constants';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { useDownloadPattern } from '@/lib/api/pattern';
+import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 
 interface Pattern {
   language: string;
@@ -102,17 +102,27 @@ export default function PatternCard({ pattern }: PatternCardProps) {
         </div>
       </div>
       {expanded ? (
-        <div className="mt-4">
+        <div className="mt-8">
           {Object.entries(groupedPatterns).map(([language, files]) => {
             const fileOrder = pattern.productFileOrder
               .filter((fo) => fo.language === language)
               .map((fo) => fo.fileId);
             return (
-              <div key={language} className="mb-4">
-                <h3 className="font-semibold mb-2">
+              <div key={language} className="mb-4 border-t-2 border-dashed border-muted">
+                <h3 className="font-semibold mt-4 mb-2">
                   <CountryFlag languageCode={language} />{' '}
                   {LANGUAGES.find((lang) => lang.code === language)?.name ?? language}
                 </h3>
+                <h5 className="mb-1 text-muted-foreground">Download as ZIP file</h5>
+                <div className="mb-2">
+                  <DownloadPatternZipButton
+                    productId={pattern.productId}
+                    productTitle={pattern.productTitle}
+                    files={pattern.patterns.filter((p) => p.language === language)}
+                    buttonLabel={'Download all files'}
+                  />
+                </div>
+                <h5 className="mb-1 text-muted-foreground">Download single files</h5>
                 {(files as GetFileResponse[])
                   .sort((a, b) => fileOrder.indexOf(a.id) - fileOrder.indexOf(b.id))
                   .map((file) => {

@@ -16,12 +16,14 @@ interface DownloadPatternButtonProps {
   productId: string;
   productTitle: string;
   files: GetOrderResponse['files'] | GetProductResponse['files'];
+  buttonLabel?: string;
 }
 
 const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonProps> = ({
   productId,
   productTitle,
   files,
+  buttonLabel,
 }) => {
   const [language, setLanguage] = useState<string | undefined>(undefined);
   const [isQuickSignupDrawerOpen, setIsQuickSignupDrawerOpen] = useState(false);
@@ -111,7 +113,8 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           ) : (
             <Download className="mr-2 h-4 w-4" />
           )}
-          Download Pattern <CountryFlag languageCode={fileLanguage} />
+          {buttonLabel ? buttonLabel : 'Download Patterns'}{' '}
+          <CountryFlag languageCode={fileLanguage} />
         </Button>
       ))}
       <RequestStatus
