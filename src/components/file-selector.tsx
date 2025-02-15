@@ -21,7 +21,10 @@ interface GroupedFiles {
 
 export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }: PdfSelectorProps) {
   const [groupedFiles, setGroupedFiles] = useState<GroupedFiles>({});
+  const [uploadLanguage, setUploadLanguage] = useState('en');
+
   const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const grouped = selectedFiles.reduce((acc: GroupedFiles, file) => {
@@ -34,7 +37,7 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
     setGroupedFiles(grouped);
   }, [selectedFiles]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, language: string) => {
     event.preventDefault();
     const files = event.target.files;
     if (files) {
@@ -44,8 +47,8 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
         const fileSuffix = splittedFileName?.[splittedFileName.length - 1];
         return {
           file: new File([file], `${id}${fileSuffix ? `.${fileSuffix}` : ''}`, { type: file.type }),
-          language: 'en',
           originalFilename: file.name,
+          language,
           id,
         };
       });
@@ -76,12 +79,25 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
     );
   };
 
+  const handleLanguageChange = (newLanguage: string, oldLanguage?: string) => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.map((file) =>
+        file.language === oldLanguage ? { ...file, language: newLanguage } : file,
+      ),
+    );
+  };
+
   const handleRemoveFile = (language: string, index: number) => {
     setSelectedFiles((prevFiles) =>
       prevFiles.filter(
         (file) => !(file.language === language && groupedFiles[language].indexOf(file) === index),
       ),
     );
+  };
+
+  const handleUploadFilesButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    fileInputRef.current?.click();
   };
 
   return (
@@ -93,26 +109,33 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex items-center justify-center w-full">
-            <label
-              htmlFor="pdf-upload"
-              className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-            >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <Upload className="w-8 h-8 mb-3 text-gray-400" />
-                <p className="mb-2 text-sm text-gray-500">
-                  <span className="font-semibold">Click to upload</span>
-                </p>
-              </div>
+          <div className="">
+            <div className="flex flex-row gap-2">
+              {isPro ? (
+                <LanguageSelect
+                  language={uploadLanguage}
+                  handleLanguageChange={(language) => setUploadLanguage(language)}
+                />
+              ) : null}
+              <Button
+                onClick={(e) => {
+                  handleUploadFilesButtonClick(e);
+                }}
+                className="flex items-center gap-2"
+              >
+                <Upload className="w-4 h-4" />
+                Upload PDFs and Images
+              </Button>
               <input
+                ref={fileInputRef}
                 id="pdf-upload"
                 type="file"
                 accept=".pdf,image/*"
-                onChange={handleFileChange}
+                onChange={(event) => handleFileChange(event, uploadLanguage)}
                 className="hidden"
                 multiple
               />
-            </label>
+            </div>
           </div>
 
           {Object.keys(groupedFiles).length > 0 && (
@@ -127,7 +150,10 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
               {Object.entries(groupedFiles).map(([language, files]) => (
                 <Card key={language} className="p-4">
                   <div className="flex flex-col gap-4">
-                    <LanguageSelect language={language} handleLanguageChange={() => {}} />
+                    <LanguageSelect
+                      language={language}
+                      handleLanguageChange={handleLanguageChange}
+                    />
                     <div className="flex-grow space-y-2">
                       {files.map((fileData, index) => {
                         const splittedFilename = fileData.originalFilename.split('.');

@@ -242,6 +242,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
           </Button>
           <Button
             onClick={() => {
+              router.push('/app/secure/auth/me/patterns');
+            }}
+            className="w-full"
+            variant={'outline'}
+          >
+            My Patterns
+          </Button>
+          <Button
+            onClick={() => {
               router.push('/app/secure/auth/me/reports');
             }}
             className={`w-full${hasOpenIncidents ? ' border-red-500 text-red-500' : ''}`}

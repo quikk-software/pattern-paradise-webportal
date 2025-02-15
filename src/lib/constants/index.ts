@@ -171,6 +171,12 @@ export type ProductFilterObject = {
   pageSize?: number;
 };
 
+export type PatternFilterObject = {
+  q?: string;
+  pageNumber?: number;
+  pageSize?: number;
+};
+
 export type TesterApplicationFilterObject = {
   direction: 'asc' | 'desc';
   sortKey: 'updatedAt' | 'assignedAt';
