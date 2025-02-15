@@ -64,9 +64,11 @@ export default function CookieConsentBanner() {
                   </p>
                 </div>
                 <div className="flex gap-2 justify-end">
-                  <Link rel={'nofollow'} href="/terms-and-privacy?action=scrollToPrivacyPolicy">
-                    <Button variant="link">Privacy Policy</Button>
-                  </Link>
+                  {process.env.MAINTENANCE_MODE === 'true' ? null : (
+                    <Link rel={'nofollow'} href="/terms-and-privacy?action=scrollToPrivacyPolicy">
+                      <Button variant="link">Privacy Policy</Button>
+                    </Link>
+                  )}
                   <Button variant="secondary" onClick={handleDecline}>
                     Decline
                   </Button>

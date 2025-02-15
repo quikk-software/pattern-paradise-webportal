@@ -3,6 +3,7 @@
 import PatternCard from './pattern-card';
 import { useListPatterns } from '@/lib/api/pattern';
 import { useEffect } from 'react';
+import NoPatterns from '@/lib/components/NoPatterns';
 
 export default function BoughtPatterns() {
   const { fetch: fetchPatterns, data: patterns } = useListPatterns({});
@@ -15,6 +16,7 @@ export default function BoughtPatterns() {
     <div className="space-y-6 max-w-lg">
       <h1 className="text-3xl font-bold">Your Patterns</h1>
       <div className="grid grid-cols-1 gap-6">
+        {patterns.length === 0 ? <NoPatterns /> : null}
         {patterns.map((pattern) => (
           <PatternCard key={pattern.orderId} pattern={pattern} />
         ))}
