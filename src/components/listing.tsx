@@ -3,7 +3,18 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, SlidersHorizontal, Trash, Trash2, CircleX } from 'lucide-react';
+import {
+  ArrowDown01,
+  ArrowUp10,
+  CalendarArrowDown,
+  CalendarArrowUp,
+  CircleX,
+  Search,
+  SlidersHorizontal,
+  Star,
+  Trash,
+  Trash2,
+} from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
 import { combineArraysById } from '@/lib/core/utils';
@@ -13,12 +24,19 @@ import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
-import { CATEGORIES } from '@/lib/constants';
+import { CATEGORIES, MAX_PRICE, MIN_PRICE } from '@/lib/constants';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { updateSelectedFlags } from '@/lib/utils';
 import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
 import LanguageSelect from '@/lib/components/LanguageSelect';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -38,13 +56,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     craft: 'All',
     options: {},
   });
-  const [priceRange, setPriceRange] = useState([3, 100]);
-  const [isFree, setIsFree] = useState(true);
+  const [priceRange, setPriceRange] = useState([MIN_PRICE, MAX_PRICE]);
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [language, setLanguage] = useState<string | undefined>(undefined);
   const [showFilter, setShowFilter] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [triggerLoad, setTriggerLoad] = useState(false);
+  const [sortValue, setSortValue] = useState('mostRelevant');
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
   const { mutate: mutateProductImpression } = useCreateProductImpression();
@@ -82,7 +100,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
         status,
         categories: selectedCategory ? [selectedCategory.craft] : ['All'],
         hashtags,
-        minPrice: isFree ? 0 : priceRange[0],
+        minPrice: priceRange[0],
         maxPrice: priceRange[1],
         pageNumber: 1,
         pageSize: 20,
@@ -96,7 +114,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
 
   useEffect(() => {
     fetchProductsByFilter();
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, sortValue]);
 
   useEffect(() => {
     if (!triggerLoad) {
@@ -105,7 +123,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProductsByFilter();
   }, [triggerLoad]);
 
-  const fetchProductsByFilter = () => {
+  const fetchProductsByFilter = (scrollToResults = false) => {
     fetch({
       q: debouncedSearchTerm ?? undefined,
       status,
@@ -113,15 +131,19 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       subCategories: Object.values(selectedCategory.options)
         .map((options) => options.map((option) => option.name))
         .flat(),
-      minPrice: isFree ? 0 : priceRange[0],
+      minPrice: priceRange[0],
       maxPrice: priceRange[1],
       hashtags,
       languages: language ? [language] : [],
       pageNumber: 1,
       pageSize: 20,
+      sortBy: sortValue,
     }).then((result) => {
       setProducts(result.products);
       setTriggerLoad(false);
+      if (scrollToResults) {
+        document.getElementById('listing-results')?.scrollIntoView();
+      }
     });
   };
 
@@ -132,11 +154,11 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       craft: 'All',
       options: {},
     });
-    setPriceRange([3, 100]);
+    setPriceRange([MIN_PRICE, MAX_PRICE]);
     setTriggerLoad(true);
-    setIsFree(true);
     setHashtags([]);
     setLanguage(undefined);
+    setSortValue('mostRelevant');
   };
 
   const handleImpression = async (productId: string) => {
@@ -163,6 +185,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const handleLanguageChange = (language: string) => {
     setLanguage(language);
   };
+
+  const onSortSelectChange = (value: string) => setSortValue(value);
 
   return (
     <div>
@@ -248,16 +272,14 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
 
             <PriceFilter
               onFilterChange={(filter) => {
-                setIsFree(filter.isFree);
                 setPriceRange([filter.minPrice, filter.maxPrice]);
               }}
-              isFree={isFree}
               overrideMinPrice={priceRange?.[0]}
               overrideMaxPrice={priceRange?.[1]}
             />
             <Button
               onClick={() => {
-                fetchProductsByFilter();
+                fetchProductsByFilter(true);
               }}
               disabled={isLoading}
               className="w-full"
@@ -281,6 +303,38 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             />
           </div>
         </div>
+        <Select onValueChange={onSortSelectChange} value={sortValue} defaultValue={sortValue}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a reason" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="mostRelevant">
+              <span className="flex flex-row gap-2 items-center">
+                <Star size={14} /> Most Relevant
+              </span>
+            </SelectItem>
+            <SelectItem value="priceAscending">
+              <span className="flex flex-row gap-2 items-center">
+                <ArrowDown01 size={14} /> Price Ascending
+              </span>
+            </SelectItem>
+            <SelectItem value="priceDescending">
+              <span className="flex flex-row gap-2 items-center">
+                <ArrowUp10 size={14} /> Price Descending
+              </span>
+            </SelectItem>
+            <SelectItem value="newest">
+              <span className="flex flex-row gap-2 items-center">
+                <CalendarArrowDown size={14} /> Newest
+              </span>
+            </SelectItem>
+            <SelectItem value="oldest">
+              <span className="flex flex-row gap-2 items-center">
+                <CalendarArrowUp size={14} /> Oldest
+              </span>
+            </SelectItem>
+          </SelectContent>
+        </Select>
         <div className="w-full mb-6">
           <Button variant={'outline'} className={'w-full'} onClick={clearFilter}>
             <Trash />
@@ -288,12 +342,14 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </Button>
         </div>
 
-        <WaterfallListing
-          products={products}
-          listingType={listingType}
-          columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
-          onImpression={(productId) => handleImpression(productId)}
-        />
+        <div id={'listing-results'}>
+          <WaterfallListing
+            products={products}
+            listingType={listingType}
+            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+            onImpression={(productId) => handleImpression(productId)}
+          />
+        </div>
 
         {hasNextPage ? (
           <Button

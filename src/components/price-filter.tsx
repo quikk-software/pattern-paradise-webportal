@@ -1,26 +1,23 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import CurrencyInput from 'react-currency-input-field';
+import { MAX_PRICE, MIN_PRICE } from '@/lib/constants';
 
 interface PriceFilterProps {
-  onFilterChange: (filter: { isFree: boolean; minPrice: number; maxPrice: number }) => void;
-  isFree: boolean;
+  onFilterChange: (filter: { minPrice: number; maxPrice: number }) => void;
   overrideMinPrice?: number;
   overrideMaxPrice?: number;
 }
 
 export default function PriceFilter({
   onFilterChange,
-  isFree,
   overrideMinPrice,
   overrideMaxPrice,
 }: PriceFilterProps) {
-  const [minPrice, setMinPrice] = useState(overrideMinPrice ?? 3.0);
-  const [maxPrice, setMaxPrice] = useState(overrideMaxPrice ?? 100.0);
+  const [minPrice, setMinPrice] = useState(overrideMinPrice ?? MIN_PRICE);
+  const [maxPrice, setMaxPrice] = useState(overrideMaxPrice ?? MAX_PRICE);
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -29,16 +26,16 @@ export default function PriceFilter({
       return;
     }
     setError(undefined);
-    onFilterChange({ isFree, minPrice, maxPrice });
-  }, [isFree, minPrice, maxPrice]);
+    onFilterChange({ minPrice, maxPrice });
+  }, [minPrice, maxPrice]);
 
   const handleMinPriceChange = (value: string | undefined) => {
-    const newMinPrice = value ? parseFloat(value?.replace(',', '.')) : 3.0;
+    const newMinPrice = value ? parseFloat(value?.replace(',', '.')) : MIN_PRICE;
     if (isNaN(newMinPrice)) {
       return;
     }
-    if (newMinPrice < 3.0) {
-      setError('Minimum price must be greater than 3.00$');
+    if (newMinPrice < MIN_PRICE) {
+      setError(`Minimum price must be greater than ${MIN_PRICE.toFixed(2)}$`);
       return;
     }
     setError(undefined);
@@ -46,19 +43,15 @@ export default function PriceFilter({
   };
 
   const handleMaxPriceChange = (value: string | undefined) => {
-    const newMaxPrice = value ? parseFloat(value?.replace(',', '.')) : 100.0;
+    const newMaxPrice = value ? parseFloat(value?.replace(',', '.')) : MAX_PRICE;
     if (isNaN(newMaxPrice)) {
       return;
     }
-    if (newMaxPrice > 100.0) {
-      setError('Maximum price must be smaller than 100.00$');
+    if (newMaxPrice > MAX_PRICE) {
+      setError(`Maximum price must be smaller than ${MAX_PRICE.toFixed(2)}$`);
       return;
     }
     setMaxPrice(newMaxPrice);
-  };
-
-  const handleFreeChange = (checked: boolean) => {
-    onFilterChange({ isFree: checked, minPrice, maxPrice });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -105,16 +98,6 @@ export default function PriceFilter({
               <span className="text-orange-500 text-sm">{error}</span>
             </div>
           ) : null}
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox id="free" checked={isFree} onCheckedChange={handleFreeChange} />
-          <Label
-            htmlFor="free"
-            className="text-sm font-medium leading-none cursor-pointer select-none"
-          >
-            Show free patterns
-          </Label>
         </div>
       </div>
     </div>

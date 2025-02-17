@@ -1510,6 +1510,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         q?: string;
         /** The status of the product. */
         status?: string;
+        /** How to sort the result. */
+        sortBy?: string;
         /** List of categories to filter products. */
         categories?: string[];
         /** List of subcategories to filter products. */
