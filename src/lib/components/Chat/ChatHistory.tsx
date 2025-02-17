@@ -28,6 +28,7 @@ import useWebSocket from '@/lib/hooks/useWebSocket';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
+import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -101,6 +102,7 @@ interface ChatHistoryProps {
   navbarHeight: number;
   changedChat: boolean;
   selectedTestingStatus: string | null;
+  productLanguages: string[];
   messages: GetTestingCommentResponse[];
   fetchTestingComments: (
     testingId: string,
@@ -120,6 +122,7 @@ export default function ChatHistory({
   testings,
   selectedTestingId,
   selectedProductIdByTesting,
+  productLanguages,
   showChatList,
   bottomNavHeight,
   navbarHeight,
@@ -138,6 +141,7 @@ export default function ChatHistory({
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
+  const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -278,12 +282,11 @@ export default function ChatHistory({
     }
   };
 
-  const handleDownloadPatternClick = async (productId: string | null) => {
+  const handleDownloadPatternClick = (productId: string | null, language: string) => {
     if (!productId) {
       return;
     }
-    // TODO: Download by language
-    await downloadPatterns(productId, 'en');
+    downloadPatterns(productId, language).then(() => setIsDownloadPatternsDrawerOpen(false));
   };
 
   const handleReviewClick = async (testingId: string | null) => {
@@ -374,7 +377,7 @@ export default function ChatHistory({
                       !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
                     }
                     onClick={() => {
-                      handleDownloadPatternClick(selectedProductIdByTesting);
+                      setIsDownloadPatternsDrawerOpen(true);
                     }}
                   >
                     <DownloadIcon className="h-6 w-6" />
@@ -673,6 +676,13 @@ export default function ChatHistory({
           ) : null}
         </Card>
       )}
+      <DownloadPatternsDrawer
+        isOpen={isDownloadPatternsDrawerOpen}
+        setIsOpen={setIsDownloadPatternsDrawerOpen}
+        isLoading={downloadPatternsIsLoading}
+        callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
+        languages={productLanguages}
+      />
     </div>
   );
 }

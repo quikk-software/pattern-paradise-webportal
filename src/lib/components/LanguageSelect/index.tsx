@@ -13,12 +13,14 @@ interface LanguageSelectProps {
   language?: string;
   handleLanguageChange: (value: string, language?: string) => void;
   fullWidth?: boolean;
+  allowedLanguages?: string[];
 }
 
 export default function LanguageSelect({
   language,
   handleLanguageChange,
   fullWidth,
+  allowedLanguages,
 }: LanguageSelectProps) {
   return (
     <div className="flex-grow">
@@ -30,7 +32,10 @@ export default function LanguageSelect({
           <SelectValue placeholder="Select language" />
         </SelectTrigger>
         <SelectContent>
-          {LANGUAGES.map((lang) => (
+          {(allowedLanguages && allowedLanguages?.length > 0
+            ? LANGUAGES.filter((language) => allowedLanguages?.includes(language.code))
+            : LANGUAGES
+          ).map((lang) => (
             <SelectItem key={lang.code} value={lang.code}>
               <div className="flex items-center">
                 <ReactCountryFlag countryCode={lang.country} svg className="mr-2" />
