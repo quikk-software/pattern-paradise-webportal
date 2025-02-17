@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { Search, SlidersHorizontal, Trash, Trash2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Trash, Trash2, CircleX } from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
 import { combineArraysById } from '@/lib/core/utils';
@@ -43,7 +42,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [isFree, setIsFree] = useState(true);
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [language, setLanguage] = useState<string | undefined>(undefined);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [triggerLoad, setTriggerLoad] = useState(false);
 
@@ -106,8 +105,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProductsByFilter();
   }, [triggerLoad]);
 
-  const fetchProductsByFilter = async () => {
-    const result = await fetch({
+  const fetchProductsByFilter = () => {
+    fetch({
       q: debouncedSearchTerm ?? undefined,
       status,
       categories: selectedCategory ? [selectedCategory.craft] : ['All'],
@@ -120,10 +119,10 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       languages: language ? [language] : [],
       pageNumber: 1,
       pageSize: 20,
+    }).then((result) => {
+      setProducts(result.products);
+      setTriggerLoad(false);
     });
-    setProducts(result.products);
-    setIsDrawerOpen(false);
-    setTriggerLoad(false);
   };
 
   const clearFilter = () => {
@@ -167,108 +166,110 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">
-          {listingType === 'sell' ? 'Find Patterns' : listingType === 'test' && 'Find Tester Calls'}
-        </h2>
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerTrigger asChild>
-            <Button variant={'outline'}>
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">
+            {listingType === 'sell'
+              ? 'Find Patterns'
+              : listingType === 'test' && 'Find Tester Calls'}
+          </h2>
+          {!showFilter ? (
+            <Button variant={'outline'} onClick={() => setShowFilter(true)}>
               <SlidersHorizontal className="mr-2 h-4 w-4" />
               Filter
             </Button>
-          </DrawerTrigger>
-          <DrawerContent className="p-4">
-            <div className="max-h-[100vh] overflow-y-auto">
-              <div className="p-4">
-                <div className="space-y-6">
-                  <div>
-                    <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
-                    <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-semibold mb-2">Language</h2>
-                    <div className="flex gap-2">
-                      <LanguageSelect
-                        language={language}
-                        handleLanguageChange={handleLanguageChange}
-                        fullWidth
-                      />
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setLanguage(undefined);
-                        }}
-                        disabled={language === undefined}
-                      >
-                        <Trash2 />
-                      </Button>
-                    </div>
-                  </div>
+          ) : (
+            <Button variant={'outline'} onClick={() => setShowFilter(false)}>
+              <CircleX className="mr-2 h-4 w-4" />
+              Filter
+            </Button>
+          )}
+        </div>
 
-                  <div>
-                    <h2 className="text-lg font-semibold mb-2">Category</h2>
-                    <RadioGroup
-                      value={selectedCategory.craft}
-                      onValueChange={(value) =>
-                        setSelectedCategory({
-                          craft: value,
-                          options: {},
-                        })
-                      }
-                      className="flex flex-col space-y-1"
-                    >
-                      {categories.map((category) => (
-                        <div className="flex items-center space-x-2" key={category}>
-                          <RadioGroupItem value={category} id={category?.toLowerCase()} />
-                          <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
-                            {category}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
-
-                  <MultiSelect
-                    initialCategories={updatedCategories}
-                    onChange={(value) => {
-                      setSelectedCategory(value);
-                    }}
-                    injectCategories={true}
-                    overrideCraft={selectedCategory.craft}
-                  />
-
-                  <PriceFilter
-                    onFilterChange={(filter) => {
-                      setIsFree(filter.isFree);
-                      setPriceRange([filter.minPrice, filter.maxPrice]);
-                    }}
-                    isFree={isFree}
-                    overrideMinPrice={priceRange?.[0]}
-                    overrideMaxPrice={priceRange?.[1]}
-                  />
-                  <Button
-                    onClick={() => {
-                      fetchProductsByFilter();
-                    }}
-                    disabled={isLoading}
-                    className="w-full"
-                  >
-                    {isLoading ? (
-                      <LoadingSpinnerComponent size="sm" className="text-white" />
-                    ) : null}
-                    Apply Filter
-                  </Button>
-                </div>
+        {showFilter ? (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
+              <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Language</h2>
+              <div className="flex gap-2">
+                <LanguageSelect
+                  language={language}
+                  handleLanguageChange={handleLanguageChange}
+                  fullWidth
+                />
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setLanguage(undefined);
+                  }}
+                  disabled={language === undefined}
+                >
+                  <Trash2 />
+                </Button>
               </div>
             </div>
-          </DrawerContent>
-        </Drawer>
+
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Category</h2>
+              <RadioGroup
+                value={selectedCategory.craft}
+                onValueChange={(value) =>
+                  setSelectedCategory({
+                    craft: value,
+                    options: {},
+                  })
+                }
+                className="flex flex-col space-y-1"
+              >
+                {categories.map((category) => (
+                  <div className="flex items-center space-x-2" key={category}>
+                    <RadioGroupItem value={category} id={category?.toLowerCase()} />
+                    <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
+                      {category}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+
+            <MultiSelect
+              initialCategories={updatedCategories}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+              injectCategories={true}
+              overrideCraft={selectedCategory.craft}
+            />
+
+            <PriceFilter
+              onFilterChange={(filter) => {
+                setIsFree(filter.isFree);
+                setPriceRange([filter.minPrice, filter.maxPrice]);
+              }}
+              isFree={isFree}
+              overrideMinPrice={priceRange?.[0]}
+              overrideMaxPrice={priceRange?.[1]}
+            />
+            <Button
+              onClick={() => {
+                fetchProductsByFilter();
+              }}
+              disabled={isLoading}
+              className="w-full"
+            >
+              {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
+              Apply Filter
+            </Button>
+          </div>
+        ) : null}
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 mt-6">
         <div className="w-full">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
