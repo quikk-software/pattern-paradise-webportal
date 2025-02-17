@@ -1,39 +1,30 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 
-export const useDownloadPatternsByProductId = () => {
-  const [data, setData] = useState<any>(undefined);
-
+export const useSendPatterns = () => {
   const { data: session } = useSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
-  const fetch = async (productId: string, language: string) => {
-    const response = await handleFn(
+  const mutate = async (patternId: string, language: string, channel: string) => {
+    await handleFn(
       async () =>
-        await client.api.downloadPatterns(
-          productId,
+        await client.api.sendPatterns(
+          patternId,
           {
             language,
+            channel,
           },
           {
             ...(await getApi(session)),
           },
         ),
     );
-
-    const file = await response.blob();
-
-    setData(file);
-
-    return file;
   };
 
   return {
     ...apiStates,
-    fetch,
-    data,
+    mutate,
   };
 };

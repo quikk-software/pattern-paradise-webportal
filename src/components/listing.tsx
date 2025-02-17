@@ -243,10 +243,11 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
                   <PriceFilter
                     onFilterChange={(filter) => {
                       setIsFree(filter.isFree);
-                      setPriceRange([filter.minPrice, 100]);
+                      setPriceRange([filter.minPrice, filter.maxPrice]);
                     }}
-                    value={priceRange[0]}
                     isFree={isFree}
+                    overrideMinPrice={priceRange?.[0]}
+                    overrideMaxPrice={priceRange?.[1]}
                   />
                   <Button
                     onClick={() => {

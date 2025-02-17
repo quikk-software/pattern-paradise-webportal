@@ -282,7 +282,8 @@ export default function ChatHistory({
     if (!productId) {
       return;
     }
-    await downloadPatterns(productId);
+    // TODO: Download by language
+    await downloadPatterns(productId, 'en');
   };
 
   const handleReviewClick = async (testingId: string | null) => {

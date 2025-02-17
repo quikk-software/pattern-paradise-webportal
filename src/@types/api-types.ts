@@ -2255,14 +2255,41 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     downloadPatterns: (
       productId: string,
-      query?: {
+      query: {
         /** The language of the pattern. */
-        language?: string;
+        language: string;
       },
       params: RequestParams = {},
     ) =>
       this.request<void, any>({
         path: `/api/v1/patterns/products/${productId}/download`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The patterns will be queried by a given product ID and language and will be send to the specified channel.
+     *
+     * @tags Pattern
+     * @name SendPatterns
+     * @summary Sends patterns by product ID and language to a specified channel.
+     * @request GET:/api/v1/patterns/products/{productId}/send
+     * @secure
+     */
+    sendPatterns: (
+      productId: string,
+      query: {
+        /** The language of the pattern. */
+        language: string;
+        /** The channel where patterns should be send to. */
+        channel: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/patterns/products/${productId}/send`,
         method: 'GET',
         query: query,
         secure: true,
