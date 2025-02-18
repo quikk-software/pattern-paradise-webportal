@@ -10,6 +10,7 @@ import { GetOrderResponse, GetProductResponse } from '@/@types/api-types';
 import { useSession } from 'next-auth/react';
 import QuickSignUpDrawer from '@/lib/components/QuickSignUpDrawer';
 import { usePathname, useRouter } from 'next/navigation';
+import CountryFlag from '@/lib/components/CountryFlag';
 
 interface DownloadPatternButtonProps {
   productId: string;
@@ -111,7 +112,14 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           ) : (
             <Download className="mr-2 h-4 w-4" />
           )}
-          {buttonLabel ? buttonLabel : 'Download Patterns'}{' '}
+          {buttonLabel ? (
+            buttonLabel
+          ) : (
+            <>
+              Download Patterns
+              <CountryFlag languageCode={fileLanguage} />
+            </>
+          )}
         </Button>
       ))}
       <RequestStatus

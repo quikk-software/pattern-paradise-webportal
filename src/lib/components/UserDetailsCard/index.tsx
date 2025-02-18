@@ -22,11 +22,13 @@ const roleOptions = [
 
 interface UserDetailsCardProps {
   user: GetUserAccountResponse;
+  showFlag?: boolean;
   showRoles?: boolean;
 }
 
 export default function UserDetailsCard({
   user,
+  showFlag = true,
   showRoles = false,
 }: UserDetailsCardProps): JSX.Element {
   const hasSocialLinks = user.instagramRef || user.tiktokRef;
@@ -59,7 +61,7 @@ export default function UserDetailsCard({
             </div>
           </div>
         </Link>
-        <ReportUser userId={user.id} />
+        {showFlag ? <ReportUser userId={user.id} /> : null}
       </CardHeader>
       {showCardContent ? (
         <CardContent>
