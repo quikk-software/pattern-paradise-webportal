@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { ArrowUpDown, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +23,8 @@ import { useSelectedOrders } from '@/hooks/use-selected-orders';
 import { GetOrderResponse } from '@/@types/api-types';
 import { useListOrders } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -35,6 +37,8 @@ export default function OrderTable({ filter }: OrderTableProps) {
   const [sortColumn, setSortColumn] = useState<keyof GetOrderResponse>('createdAt');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const { selectedIds, isSelected, isAllSelected, toggleSelection, toggleAll, clearSelection } =
     useSelectedOrders(orders);
 
@@ -50,8 +54,22 @@ export default function OrderTable({ filter }: OrderTableProps) {
   }, []);
 
   useEffect(() => {
-    fetch(currentPage, ITEMS_PER_PAGE).then((result) => setOrders(result?.orders));
-  }, [currentPage]);
+    fetch(
+      currentPage,
+      ITEMS_PER_PAGE,
+      sortColumn,
+      sortDirection,
+      debouncedSearchTerm || undefined,
+    ).then((result) => setOrders(result?.orders));
+  }, [currentPage, sortColumn, sortDirection, debouncedSearchTerm]);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timerId);
+  }, [searchTerm]);
 
   const getStatusColor = (status: GetOrderResponse['status']) => {
     switch (status) {
@@ -75,14 +93,6 @@ export default function OrderTable({ filter }: OrderTableProps) {
       setSortColumn(column);
       setSortDirection('asc');
     }
-
-    const sortedOrders = [...orders].sort((a, b) => {
-      if (a[column] < b[column]) return sortDirection === 'asc' ? -1 : 1;
-      if (a[column] > b[column]) return sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
-
-    setOrders(sortedOrders);
   };
 
   const handleAction = (action: string, id: string) => {
@@ -99,8 +109,8 @@ export default function OrderTable({ filter }: OrderTableProps) {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex flex-row justify-end items-center space-y-2 sm:space-y-0">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-row justify-end items-center gap-2">
         <div className="flex items-center space-x-2">
           <Button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -123,6 +133,17 @@ export default function OrderTable({ filter }: OrderTableProps) {
           </Button>
         </div>
       </div>
+      <div className="w-full">
+        <div className="relative">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-8"
+          />
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -132,7 +153,7 @@ export default function OrderTable({ filter }: OrderTableProps) {
               </TableHead>
               <TableHead>
                 <Button variant="ghost" onClick={() => handleSort('productName')}>
-                  Product
+                  Pattern
                   <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
               </TableHead>
@@ -173,11 +194,19 @@ export default function OrderTable({ filter }: OrderTableProps) {
                 <TableCell className={`text-sm font-semibold ${getStatusColor(order.status)}`}>
                   {order.status}
                 </TableCell>
+                <TableCell className="text-right">${order.amount.toFixed(2)}</TableCell>
                 <TableCell className="text-right">
-                  {order.amount} {order.currency}
-                </TableCell>
-                <TableCell className="text-right">
-                  {filter === 'customer' ? order.seller.username : order.customer.username}
+                  <Link
+                    href={
+                      filter === 'customer'
+                        ? `/users/${order.seller.id}`
+                        : `/users/${order.customer.id}`
+                    }
+                    className="text-blue-500 underline"
+                    rel={'nofollow'}
+                  >
+                    {filter === 'customer' ? order.seller.username : order.customer.username}
+                  </Link>
                 </TableCell>
                 <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>

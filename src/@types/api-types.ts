@@ -2121,10 +2121,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         pageNumber?: number;
         /** The page size. */
         pageSize?: number;
+        /** The query for product name or user. */
+        q?: string;
         /** The status of the order. */
         status?: string;
         /** Filter for showing all, only the customers or only the sellers orders. */
         filter?: string;
+        /** How to sort the result. */
+        sortBy?: string;
+        /** Direction to sort the result. */
+        sortDirection?: string;
       },
       params: RequestParams = {},
     ) =>

@@ -96,7 +96,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     }
     const fetchProducts = async () => {
       const result = await fetch({
-        q: debouncedSearchTerm ?? undefined,
+        q: debouncedSearchTerm || undefined,
         status,
         categories: selectedCategory ? [selectedCategory.craft] : ['All'],
         hashtags,
