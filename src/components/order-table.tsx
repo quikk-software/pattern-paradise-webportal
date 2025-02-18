@@ -17,7 +17,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useSelectedOrders } from '@/hooks/use-selected-orders';
@@ -27,7 +26,11 @@ import { useRouter } from 'next/navigation';
 
 const ITEMS_PER_PAGE = 20;
 
-export default function OrderTable() {
+interface OrderTableProps {
+  filter?: 'customer' | 'seller';
+}
+
+export default function OrderTable({ filter }: OrderTableProps) {
   const [orders, setOrders] = useState<GetOrderResponse[]>([]);
   const [sortColumn, setSortColumn] = useState<keyof GetOrderResponse>('createdAt');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -38,7 +41,7 @@ export default function OrderTable() {
   const router = useRouter();
 
   const { fetch, totalPages } = useListOrders({
-    filter: 'seller',
+    filter,
     pageSize: ITEMS_PER_PAGE,
   });
 
@@ -87,7 +90,7 @@ export default function OrderTable() {
       case 'view':
         router.push(`/app/secure/auth/me/orders/${id}`);
         break;
-      case 'customer':
+      case 'profile':
         router.push(`/users/${id}`);
         break;
       default:
@@ -145,7 +148,9 @@ export default function OrderTable() {
                   <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
               </TableHead>
-              <TableHead className="text-right">Customer</TableHead>
+              <TableHead className="text-right">
+                {filter === 'seller' ? 'Customer' : 'Seller'}
+              </TableHead>
               <TableHead>
                 <Button variant="ghost" onClick={() => handleSort('createdAt')}>
                   Date
@@ -171,7 +176,9 @@ export default function OrderTable() {
                 <TableCell className="text-right">
                   {order.amount} {order.currency}
                 </TableCell>
-                <TableCell className="text-right">{order.customer.username}</TableCell>
+                <TableCell className="text-right">
+                  {filter === 'customer' ? order.seller.username : order.customer.username}
+                </TableCell>
                 <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -186,8 +193,8 @@ export default function OrderTable() {
                       <DropdownMenuItem onClick={() => handleAction('view', order.id)}>
                         View order details
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleAction('customer', order.customer.id)}>
-                        View customer
+                      <DropdownMenuItem onClick={() => handleAction('profile', order.customer.id)}>
+                        View {filter === 'customer' ? 'seller' : 'customer'}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

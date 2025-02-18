@@ -162,7 +162,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
               ) : null}
             </div>
           ) : (
-            <OrderTable />
+            <OrderTable filter={filter} />
           )}
         </div>
       ) : null}
