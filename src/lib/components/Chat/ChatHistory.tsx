@@ -213,7 +213,7 @@ export default function ChatHistory({
         ...new Map([...socketMessagesForThisChat, ...msgs].map((item) => [item.id, item])).values(),
       ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
     );
-  }, [socketMessages, selectedTestingId]);
+  }, [socketMessages, selectedTestingId, setMessages]);
 
   useEffect(() => {
     if (!file) {
