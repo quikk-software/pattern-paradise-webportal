@@ -1721,6 +1721,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         /** List of status to filter testings. */
         status?: string[];
+        /** If the result is for chat. */
+        isChat?: boolean;
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */

@@ -140,7 +140,7 @@ export default function ChatHistory({
   const [files, setFiles] = useState<FileList | null>(null);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
+  const [_hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
   const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
@@ -164,18 +164,19 @@ export default function ChatHistory({
   );
 
   useEffect(() => {
-    if (
-      bottomRef.current &&
-      !showChatList &&
-      (initialLoad || hasNewSocketMessage || changedChat) &&
-      messages.length > 0
-    ) {
+    if (messages?.at(0)?.creatorId === userId) {
+      setChangedChat(true);
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (bottomRef.current && !showChatList && (initialLoad || changedChat) && messages.length > 0) {
       bottomRef.current.scrollIntoView({ behavior: 'instant' });
       setInitialLoad(false);
       setHasNewSocketMessage(false);
       setChangedChat(false);
     }
-  }, [messages, setChangedChat, showChatList, hasNewSocketMessage, changedChat, initialLoad]);
+  }, [messages, setChangedChat, showChatList, changedChat, initialLoad]);
 
   useEffect(() => {
     if (!selectedTestingId) {
@@ -320,9 +321,9 @@ export default function ChatHistory({
 
   return (
     <div
-      className={cn('flex flex-col bg-white w-full md:w-2/3', {
+      className={cn('bg-white w-full md:w-2/3', {
         'hidden md:block': showChatList,
-        'block md:block': !showChatList,
+        block: !showChatList,
       })}
     >
       {!selectedTestingId ? (
@@ -621,6 +622,7 @@ export default function ChatHistory({
               })}
             {!showChatList ? <div ref={bottomRef} /> : null}
           </ScrollArea>
+
           {/* Message Input Area */}
           {!!selectedTestingId ? (
             <div className="p-4 flex-none border-t border-gray-200">

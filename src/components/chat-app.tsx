@@ -41,7 +41,7 @@ export function ChatAppComponent({}: ChatAppComponentProps) {
   const router = useRouter();
 
   useEffect(() => {
-    fetchTestings(['InProgress', 'Aborted', 'Declined', 'Approved']).then(() =>
+    fetchTestings(['InProgress', 'Aborted', 'Declined', 'Approved'], true).then(() =>
       setTestingsLoaded(true),
     );
   }, []);
@@ -68,7 +68,7 @@ export function ChatAppComponent({}: ChatAppComponentProps) {
   };
 
   return (
-    <div className="flex w-full">
+    <div className="flex flex-col md:flex-row w-full">
       <ChatList
         showChatList={showChatList}
         fetchTestingsIsLoading={fetchTestingsIsLoading}

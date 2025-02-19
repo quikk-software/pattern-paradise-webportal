@@ -28,7 +28,7 @@ export default function ChatList({
   return (
     <div
       className={cn('bg-white w-full md:w-1/3', {
-        'block md:block': showChatList,
+        block: showChatList,
         'hidden md:block': !showChatList,
       })}
       style={{
