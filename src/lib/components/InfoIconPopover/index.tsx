@@ -17,7 +17,7 @@ export function InfoIconPopover({ title, content }: QuestionMarkPopoverProps) {
           <span className="sr-only">Open information popover</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent>
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">{title}</h4>

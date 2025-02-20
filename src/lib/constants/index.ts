@@ -299,3 +299,5 @@ export const FEATURED_PRODUCTS_LENGTH = 3;
 
 export const MIN_PRICE = 0.0;
 export const MAX_PRICE = 100.0;
+
+export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;

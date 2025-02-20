@@ -56,9 +56,8 @@ export function PayPalButton({
       options={{
         clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
         currency: 'USD',
-        disableFunding: hasPayPalBusinessAccount
-          ? undefined // Show all available funding sources
-          : 'card,bancontact,blik,eps,giropay,ideal,mybank,p24,sepa,sofort,venmo,paylater',
+        disableFunding:
+          'card,bancontact,blik,eps,giropay,ideal,mybank,p24,sepa,sofort,venmo,paylater',
       }}
     >
       <Card className="mx-auto">
