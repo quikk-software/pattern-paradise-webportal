@@ -3,7 +3,13 @@
 import { PropsWithChildren, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from 'next-auth/react';
-import { setRoles, setSubscriptionStatus, setUserId } from '@/lib/features/auth/authSlice';
+import {
+  setEmail,
+  setRoles,
+  setSubscriptionStatus,
+  setUserId,
+  setUsername,
+} from '@/lib/features/auth/authSlice';
 
 export default function TokenDataWrapper({ children }: PropsWithChildren) {
   const dispatch = useDispatch();
@@ -11,6 +17,8 @@ export default function TokenDataWrapper({ children }: PropsWithChildren) {
 
   useEffect(() => {
     dispatch(setUserId(session?.user.id || ''));
+    dispatch(setEmail(session?.user.email || ''));
+    dispatch(setUsername(session?.user.name || ''));
     dispatch(setRoles(session?.user.roles || []));
     dispatch(setSubscriptionStatus(session?.user.subscriptionStatus || ''));
   }, [session?.user]);

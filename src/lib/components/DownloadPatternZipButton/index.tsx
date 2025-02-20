@@ -6,11 +6,11 @@ import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Download } from 'lucide-react';
-import CountryFlag from '@/lib/components/CountryFlag';
 import { GetOrderResponse, GetProductResponse } from '@/@types/api-types';
 import { useSession } from 'next-auth/react';
 import QuickSignUpDrawer from '@/lib/components/QuickSignUpDrawer';
 import { usePathname, useRouter } from 'next/navigation';
+import CountryFlag from '@/lib/components/CountryFlag';
 
 interface DownloadPatternButtonProps {
   productId: string;
@@ -104,7 +104,6 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
       {Object.keys(filesGroupedByLanguage).map((fileLanguage) => (
         <Button
           key={fileLanguage}
-          className="w-full sm:w-auto"
           onClick={() => handleDownloadClick(productId, fileLanguage, isLoggedIn)}
           disabled={downloadPatternIsLoading}
         >
@@ -113,8 +112,14 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           ) : (
             <Download className="mr-2 h-4 w-4" />
           )}
-          {buttonLabel ? buttonLabel : 'Download Patterns'}{' '}
-          <CountryFlag languageCode={fileLanguage} />
+          {buttonLabel ? (
+            buttonLabel
+          ) : (
+            <>
+              Download Patterns
+              <CountryFlag languageCode={fileLanguage} />
+            </>
+          )}
         </Button>
       ))}
       <RequestStatus

@@ -1510,6 +1510,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         q?: string;
         /** The status of the product. */
         status?: string;
+        /** How to sort the result. */
+        sortBy?: string;
         /** List of categories to filter products. */
         categories?: string[];
         /** List of subcategories to filter products. */
@@ -1719,6 +1721,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         /** List of status to filter testings. */
         status?: string[];
+        /** If the result is for chat. */
+        isChat?: boolean;
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
@@ -2119,10 +2123,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         pageNumber?: number;
         /** The page size. */
         pageSize?: number;
+        /** The query for product name or user. */
+        q?: string;
         /** The status of the order. */
         status?: string;
         /** Filter for showing all, only the customers or only the sellers orders. */
         filter?: string;
+        /** How to sort the result. */
+        sortBy?: string;
+        /** Direction to sort the result. */
+        sortDirection?: string;
       },
       params: RequestParams = {},
     ) =>
@@ -2255,14 +2265,41 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     downloadPatterns: (
       productId: string,
-      query?: {
+      query: {
         /** The language of the pattern. */
-        language?: string;
+        language: string;
       },
       params: RequestParams = {},
     ) =>
       this.request<void, any>({
         path: `/api/v1/patterns/products/${productId}/download`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The patterns will be queried by a given product ID and language and will be send to the specified channel.
+     *
+     * @tags Pattern
+     * @name SendPatterns
+     * @summary Sends patterns by product ID and language to a specified channel.
+     * @request GET:/api/v1/patterns/products/{productId}/send
+     * @secure
+     */
+    sendPatterns: (
+      productId: string,
+      query: {
+        /** The language of the pattern. */
+        language: string;
+        /** The channel where patterns should be send to. */
+        channel: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/patterns/products/${productId}/send`,
         method: 'GET',
         query: query,
         secure: true,

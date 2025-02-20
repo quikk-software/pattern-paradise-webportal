@@ -10,6 +10,7 @@ import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { useDownloadPattern } from '@/lib/api/pattern';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
+import SendFilesButton from '@/lib/components/SendFilesButton';
 
 interface Pattern {
   language: string;
@@ -120,6 +121,14 @@ export default function PatternCard({ pattern }: PatternCardProps) {
                     productTitle={pattern.productTitle}
                     files={pattern.patterns.filter((p) => p.language === language)}
                     buttonLabel={'Download all files'}
+                  />
+                </div>
+                <h5 className="mb-1 text-muted-foreground">Send as mail</h5>
+                <div className="mb-2">
+                  <SendFilesButton
+                    productId={pattern.productId}
+                    channel={'MAIL'}
+                    language={language}
                   />
                 </div>
                 <h5 className="mb-1 text-muted-foreground">Download single files</h5>

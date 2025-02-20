@@ -24,7 +24,13 @@ export const useListOrders = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async (customPageNumber?: number, customPageSize?: number) => {
+  const fetch = async (
+    customPageNumber?: number,
+    customPageSize?: number,
+    sortBy?: string,
+    sortDirection?: string,
+    q?: string,
+  ) => {
     const response = await handleFn(
       async () =>
         await client.api.listOrders(
@@ -33,6 +39,9 @@ export const useListOrders = ({
             pageSize: customPageSize ?? pagination.pageSize,
             status,
             filter,
+            sortBy,
+            sortDirection,
+            q,
           },
           {
             ...(await getApi(session)),

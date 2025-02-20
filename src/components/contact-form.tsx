@@ -14,6 +14,7 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { EMAIL_REGEX } from '@/lib/constants';
 
 type FormData = {
   name: string;
@@ -80,7 +81,7 @@ export default function ContactForm() {
             {...register('email', {
               required: 'Email is required',
               pattern: {
-                value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                value: EMAIL_REGEX,
                 message: 'Invalid email address',
               },
             })}

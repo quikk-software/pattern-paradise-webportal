@@ -35,6 +35,15 @@ const getStatusColor = (status?: string) => {
   }
 };
 
+const getStatusDisplayText = (status?: string) => {
+  switch (status) {
+    case 'InProgress':
+      return 'Test Phase';
+    default:
+      return status;
+  }
+};
+
 export function SellPageComponent() {
   const [loadMore, setLoadMore] = useState(false);
 
@@ -144,7 +153,7 @@ export function SellPageComponent() {
                           product.status,
                         )}`}
                       >
-                        {product.status}
+                        {getStatusDisplayText(product.status)}
                       </CardDescription>
                     </CardHeader>
                   ) : null}

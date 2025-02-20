@@ -56,9 +56,8 @@ export function PayPalButton({
       options={{
         clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
         currency: 'USD',
-        disableFunding: hasPayPalBusinessAccount
-          ? undefined // Show all available funding sources
-          : 'card,bancontact,blik,eps,giropay,ideal,mybank,p24,sepa,sofort,venmo,paylater',
+        disableFunding:
+          'card,bancontact,blik,eps,giropay,ideal,mybank,p24,sepa,sofort,venmo,paylater',
       }}
     >
       <Card className="mx-auto">
@@ -87,7 +86,7 @@ export function PayPalButton({
                   );
                 }}
                 className={cn(
-                  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-md ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-md ring-offset-background file:border-0 file:bg-transparent file:text-md file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
                 )}
                 onKeyDown={handleKeyDown}
               />
