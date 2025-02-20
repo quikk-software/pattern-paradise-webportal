@@ -28,6 +28,7 @@ import useWebSocket from '@/lib/hooks/useWebSocket';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
+import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -101,6 +102,7 @@ interface ChatHistoryProps {
   navbarHeight: number;
   changedChat: boolean;
   selectedTestingStatus: string | null;
+  productLanguages: string[];
   messages: GetTestingCommentResponse[];
   fetchTestingComments: (
     testingId: string,
@@ -120,6 +122,7 @@ export default function ChatHistory({
   testings,
   selectedTestingId,
   selectedProductIdByTesting,
+  productLanguages,
   showChatList,
   bottomNavHeight,
   navbarHeight,
@@ -137,7 +140,8 @@ export default function ChatHistory({
   const [files, setFiles] = useState<FileList | null>(null);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
+  const [_hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
+  const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -160,18 +164,19 @@ export default function ChatHistory({
   );
 
   useEffect(() => {
-    if (
-      bottomRef.current &&
-      !showChatList &&
-      (initialLoad || hasNewSocketMessage || changedChat) &&
-      messages.length > 0
-    ) {
+    if (messages?.at(0)?.creatorId === userId) {
+      setChangedChat(true);
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (bottomRef.current && !showChatList && (initialLoad || changedChat) && messages.length > 0) {
       bottomRef.current.scrollIntoView({ behavior: 'instant' });
       setInitialLoad(false);
       setHasNewSocketMessage(false);
       setChangedChat(false);
     }
-  }, [messages, setChangedChat, showChatList, hasNewSocketMessage, changedChat, initialLoad]);
+  }, [messages, setChangedChat, showChatList, changedChat, initialLoad]);
 
   useEffect(() => {
     if (!selectedTestingId) {
@@ -208,7 +213,7 @@ export default function ChatHistory({
         ...new Map([...socketMessagesForThisChat, ...msgs].map((item) => [item.id, item])).values(),
       ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
     );
-  }, [socketMessages, selectedTestingId]);
+  }, [socketMessages, selectedTestingId, setMessages]);
 
   useEffect(() => {
     if (!file) {
@@ -278,11 +283,11 @@ export default function ChatHistory({
     }
   };
 
-  const handleDownloadPatternClick = async (productId: string | null) => {
+  const handleDownloadPatternClick = (productId: string | null, language: string) => {
     if (!productId) {
       return;
     }
-    await downloadPatterns(productId);
+    downloadPatterns(productId, language).then(() => setIsDownloadPatternsDrawerOpen(false));
   };
 
   const handleReviewClick = async (testingId: string | null) => {
@@ -316,9 +321,9 @@ export default function ChatHistory({
 
   return (
     <div
-      className={cn('flex flex-col bg-white w-full md:w-2/3', {
+      className={cn('bg-white w-full md:w-2/3', {
         'hidden md:block': showChatList,
-        'block md:block': !showChatList,
+        block: !showChatList,
       })}
     >
       {!selectedTestingId ? (
@@ -373,7 +378,7 @@ export default function ChatHistory({
                       !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
                     }
                     onClick={() => {
-                      handleDownloadPatternClick(selectedProductIdByTesting);
+                      setIsDownloadPatternsDrawerOpen(true);
                     }}
                   >
                     <DownloadIcon className="h-6 w-6" />
@@ -617,6 +622,7 @@ export default function ChatHistory({
               })}
             {!showChatList ? <div ref={bottomRef} /> : null}
           </ScrollArea>
+
           {/* Message Input Area */}
           {!!selectedTestingId ? (
             <div className="p-4 flex-none border-t border-gray-200">
@@ -672,6 +678,13 @@ export default function ChatHistory({
           ) : null}
         </Card>
       )}
+      <DownloadPatternsDrawer
+        isOpen={isDownloadPatternsDrawerOpen}
+        setIsOpen={setIsDownloadPatternsDrawerOpen}
+        isLoading={downloadPatternsIsLoading}
+        callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
+        languages={productLanguages}
+      />
     </div>
   );
 }

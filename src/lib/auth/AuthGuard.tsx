@@ -7,7 +7,13 @@ import { buildQueryString } from '@/lib/utils';
 import useGetAllSearchParams from '@/lib/core/useGetAllSearchParams';
 import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
-import { setRoles, setUserId, setSubscriptionStatus } from '@/lib/features/auth/authSlice';
+import {
+  setRoles,
+  setUserId,
+  setSubscriptionStatus,
+  setEmail,
+  setUsername,
+} from '@/lib/features/auth/authSlice';
 
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
@@ -30,6 +36,8 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
       router.push(`/auth/login?redirect=${encodedRedirect}`);
     }
     dispatch(setUserId(session?.user.id || ''));
+    dispatch(setEmail(session?.user.email || ''));
+    dispatch(setUsername(session?.user.name || ''));
     dispatch(setRoles(session?.user.roles || []));
     dispatch(setSubscriptionStatus(session?.user.subscriptionStatus || ''));
   }, [status, session, router]);

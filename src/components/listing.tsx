@@ -3,8 +3,18 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { Search, SlidersHorizontal, Trash, Trash2 } from 'lucide-react';
+import {
+  ArrowDown01,
+  ArrowUp10,
+  CalendarArrowDown,
+  CalendarArrowUp,
+  CircleX,
+  Search,
+  SlidersHorizontal,
+  Star,
+  Trash,
+  Trash2,
+} from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
 import { combineArraysById } from '@/lib/core/utils';
@@ -14,12 +24,19 @@ import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
-import { CATEGORIES } from '@/lib/constants';
+import { CATEGORIES, MAX_PRICE, MIN_PRICE } from '@/lib/constants';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { updateSelectedFlags } from '@/lib/utils';
 import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
 import LanguageSelect from '@/lib/components/LanguageSelect';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -39,13 +56,13 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     craft: 'All',
     options: {},
   });
-  const [priceRange, setPriceRange] = useState([3, 100]);
-  const [isFree, setIsFree] = useState(true);
+  const [priceRange, setPriceRange] = useState([MIN_PRICE, MAX_PRICE]);
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [language, setLanguage] = useState<string | undefined>(undefined);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [triggerLoad, setTriggerLoad] = useState(false);
+  const [sortValue, setSortValue] = useState('mostRelevant');
 
   const { fetch, hasNextPage, isLoading } = useListProducts({});
   const { mutate: mutateProductImpression } = useCreateProductImpression();
@@ -79,11 +96,11 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     }
     const fetchProducts = async () => {
       const result = await fetch({
-        q: debouncedSearchTerm ?? undefined,
+        q: debouncedSearchTerm || undefined,
         status,
         categories: selectedCategory ? [selectedCategory.craft] : ['All'],
         hashtags,
-        minPrice: isFree ? 0 : priceRange[0],
+        minPrice: priceRange[0],
         maxPrice: priceRange[1],
         pageNumber: 1,
         pageSize: 20,
@@ -97,7 +114,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
 
   useEffect(() => {
     fetchProductsByFilter();
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, sortValue]);
 
   useEffect(() => {
     if (!triggerLoad) {
@@ -106,24 +123,28 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     fetchProductsByFilter();
   }, [triggerLoad]);
 
-  const fetchProductsByFilter = async () => {
-    const result = await fetch({
+  const fetchProductsByFilter = (scrollToResults = false) => {
+    fetch({
       q: debouncedSearchTerm ?? undefined,
       status,
       categories: selectedCategory ? [selectedCategory.craft] : ['All'],
       subCategories: Object.values(selectedCategory.options)
         .map((options) => options.map((option) => option.name))
         .flat(),
-      minPrice: isFree ? 0 : priceRange[0],
+      minPrice: priceRange[0],
       maxPrice: priceRange[1],
       hashtags,
       languages: language ? [language] : [],
       pageNumber: 1,
       pageSize: 20,
+      sortBy: sortValue,
+    }).then((result) => {
+      setProducts(result.products);
+      setTriggerLoad(false);
+      if (scrollToResults) {
+        document.getElementById('listing-results')?.scrollIntoView();
+      }
     });
-    setProducts(result.products);
-    setIsDrawerOpen(false);
-    setTriggerLoad(false);
   };
 
   const clearFilter = () => {
@@ -133,11 +154,11 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       craft: 'All',
       options: {},
     });
-    setPriceRange([3, 100]);
+    setPriceRange([MIN_PRICE, MAX_PRICE]);
     setTriggerLoad(true);
-    setIsFree(true);
     setHashtags([]);
     setLanguage(undefined);
+    setSortValue('mostRelevant');
   };
 
   const handleImpression = async (productId: string) => {
@@ -165,109 +186,112 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
     setLanguage(language);
   };
 
+  const onSortSelectChange = (value: string) => setSortValue(value);
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">
-          {listingType === 'sell' ? 'Find Patterns' : listingType === 'test' && 'Find Tester Calls'}
-        </h2>
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerTrigger asChild>
-            <Button variant={'outline'}>
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">
+            {listingType === 'sell'
+              ? 'Find Patterns'
+              : listingType === 'test' && 'Find Tester Calls'}
+          </h2>
+          {!showFilter ? (
+            <Button variant={'outline'} onClick={() => setShowFilter(true)}>
               <SlidersHorizontal className="mr-2 h-4 w-4" />
               Filter
             </Button>
-          </DrawerTrigger>
-          <DrawerContent className="p-4">
-            <div className="max-h-[100vh] overflow-y-auto">
-              <div className="p-4">
-                <div className="space-y-6">
-                  <div>
-                    <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
-                    <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-semibold mb-2">Language</h2>
-                    <div className="flex gap-2">
-                      <LanguageSelect
-                        language={language}
-                        handleLanguageChange={handleLanguageChange}
-                        fullWidth
-                      />
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setLanguage(undefined);
-                        }}
-                        disabled={language === undefined}
-                      >
-                        <Trash2 />
-                      </Button>
-                    </div>
-                  </div>
+          ) : (
+            <Button variant={'outline'} onClick={() => setShowFilter(false)}>
+              <CircleX className="mr-2 h-4 w-4" />
+              Filter
+            </Button>
+          )}
+        </div>
 
-                  <div>
-                    <h2 className="text-lg font-semibold mb-2">Category</h2>
-                    <RadioGroup
-                      value={selectedCategory.craft}
-                      onValueChange={(value) =>
-                        setSelectedCategory({
-                          craft: value,
-                          options: {},
-                        })
-                      }
-                      className="flex flex-col space-y-1"
-                    >
-                      {categories.map((category) => (
-                        <div className="flex items-center space-x-2" key={category}>
-                          <RadioGroupItem value={category} id={category?.toLowerCase()} />
-                          <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
-                            {category}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
-
-                  <MultiSelect
-                    initialCategories={updatedCategories}
-                    onChange={(value) => {
-                      setSelectedCategory(value);
-                    }}
-                    injectCategories={true}
-                    overrideCraft={selectedCategory.craft}
-                  />
-
-                  <PriceFilter
-                    onFilterChange={(filter) => {
-                      setIsFree(filter.isFree);
-                      setPriceRange([filter.minPrice, 100]);
-                    }}
-                    value={priceRange[0]}
-                    isFree={isFree}
-                  />
-                  <Button
-                    onClick={() => {
-                      fetchProductsByFilter();
-                    }}
-                    disabled={isLoading}
-                    className="w-full"
-                  >
-                    {isLoading ? (
-                      <LoadingSpinnerComponent size="sm" className="text-white" />
-                    ) : null}
-                    Apply Filter
-                  </Button>
-                </div>
+        {showFilter ? (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
+              <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Language</h2>
+              <div className="flex gap-2">
+                <LanguageSelect
+                  language={language}
+                  handleLanguageChange={handleLanguageChange}
+                  fullWidth
+                />
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setLanguage(undefined);
+                  }}
+                  disabled={language === undefined}
+                >
+                  <Trash2 />
+                </Button>
               </div>
             </div>
-          </DrawerContent>
-        </Drawer>
+
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Category</h2>
+              <RadioGroup
+                value={selectedCategory.craft}
+                onValueChange={(value) =>
+                  setSelectedCategory({
+                    craft: value,
+                    options: {},
+                  })
+                }
+                className="flex flex-col space-y-1"
+              >
+                {categories.map((category) => (
+                  <div className="flex items-center space-x-2" key={category}>
+                    <RadioGroupItem value={category} id={category?.toLowerCase()} />
+                    <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
+                      {category}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+
+            <MultiSelect
+              initialCategories={updatedCategories}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+              injectCategories={true}
+              overrideCraft={selectedCategory.craft}
+            />
+
+            <PriceFilter
+              onFilterChange={(filter) => {
+                setPriceRange([filter.minPrice, filter.maxPrice]);
+              }}
+              overrideMinPrice={priceRange?.[0]}
+              overrideMaxPrice={priceRange?.[1]}
+            />
+            <Button
+              onClick={() => {
+                fetchProductsByFilter(true);
+              }}
+              disabled={isLoading}
+              className="w-full"
+            >
+              {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
+              Apply Filter
+            </Button>
+          </div>
+        ) : null}
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 mt-6">
         <div className="w-full">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -279,6 +303,38 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             />
           </div>
         </div>
+        <Select onValueChange={onSortSelectChange} value={sortValue} defaultValue={sortValue}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a reason" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="mostRelevant">
+              <span className="flex flex-row gap-2 items-center">
+                <Star size={14} /> Most Relevant
+              </span>
+            </SelectItem>
+            <SelectItem value="priceAscending">
+              <span className="flex flex-row gap-2 items-center">
+                <ArrowDown01 size={14} /> Price Ascending
+              </span>
+            </SelectItem>
+            <SelectItem value="priceDescending">
+              <span className="flex flex-row gap-2 items-center">
+                <ArrowUp10 size={14} /> Price Descending
+              </span>
+            </SelectItem>
+            <SelectItem value="newest">
+              <span className="flex flex-row gap-2 items-center">
+                <CalendarArrowDown size={14} /> Newest
+              </span>
+            </SelectItem>
+            <SelectItem value="oldest">
+              <span className="flex flex-row gap-2 items-center">
+                <CalendarArrowUp size={14} /> Oldest
+              </span>
+            </SelectItem>
+          </SelectContent>
+        </Select>
         <div className="w-full mb-6">
           <Button variant={'outline'} className={'w-full'} onClick={clearFilter}>
             <Trash />
@@ -286,12 +342,14 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           </Button>
         </div>
 
-        <WaterfallListing
-          products={products}
-          listingType={listingType}
-          columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
-          onImpression={(productId) => handleImpression(productId)}
-        />
+        <div id={'listing-results'}>
+          <WaterfallListing
+            products={products}
+            listingType={listingType}
+            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+            onImpression={(productId) => handleImpression(productId)}
+          />
+        </div>
 
         {hasNextPage ? (
           <Button

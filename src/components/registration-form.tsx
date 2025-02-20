@@ -21,7 +21,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import useRedirect from '@/lib/core/useRedirect';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
-import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
+import { EMAIL_REGEX, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -128,7 +128,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
               {...register('email', {
                 required: 'Email is required',
                 pattern: {
-                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                  value: EMAIL_REGEX,
                   message: 'Invalid email address',
                 },
                 onChange: (e) => {

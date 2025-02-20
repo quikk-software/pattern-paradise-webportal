@@ -8,9 +8,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import RequestStatus from '@/lib/components/RequestStatus';
-import { Input } from '@/components/ui/input';
 
 interface ConfirmDrawerProps {
+  paypalEmail?: string;
   isOpen: boolean;
   setIsOpen: (state: boolean) => void;
   isLoading: boolean;
@@ -25,6 +25,7 @@ interface ConfirmDrawerProps {
 }
 
 export default function ConnectPayPalDrawer({
+  paypalEmail,
   isOpen,
   setIsOpen,
   isLoading,
@@ -35,7 +36,6 @@ export default function ConnectPayPalDrawer({
 }: ConfirmDrawerProps) {
   const [selectedType, setSelectedType] = useState<'business' | 'personal' | null>(null);
   const [shareDataToPayPalGranted, setShareDataToPayPalGranted] = useState(false);
-  const [paypalEmail, setPaypalEmail] = useState<string | null>(null);
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -49,11 +49,6 @@ export default function ConnectPayPalDrawer({
             </DrawerTitle>
           </DrawerHeader>
           <PayPalAccountSelector selectedType={selectedType} setSelectedType={setSelectedType} />
-          <Input
-            placeholder={'Your PayPal email'}
-            value={paypalEmail ?? ''}
-            onChange={(e) => setPaypalEmail(e.target.value?.toLowerCase().trim())}
-          />
           <div className="flex gap-2">
             <Checkbox
               id="share-data-to-paypal-checkbox"
@@ -101,11 +96,7 @@ export default function ConnectPayPalDrawer({
                 <br />
                 <br />
                 Connecting your PayPal account failed. Please ensure that your provided email is
-                connected to an existing{' '}
-                <strong>
-                  {selectedType === 'business' ? 'Business' : 'Personal'} PayPal account
-                </strong>
-                . If this error persists,{' '}
+                connected to an existing <strong>PayPal account</strong>. If this error persists,{' '}
                 <Link href="/help" className="text-blue-500 underline">
                   please contact us
                 </Link>

@@ -18,27 +18,16 @@ export default function PayPalAccountSelector({
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <h2 className="text-sm font-bold">
         What type of PayPal account do you have?{' '}
         <InfoIconPopover
           title={'Why do we need to know this?'}
           content={
-            'PayPal Business Accounts are not available in every country. In order to sell your products via Pattern Paradise, you can also use your personal PayPal account. In this case, PayPal only offers your customers payment via Express Checkout. In order to use all PayPal functions such as payment via Apple and Google Pay, you need a PayPal Business account.'
+            'PayPal Business Accounts are not available in every country. In order to sell your products via Pattern Paradise, you can also use your personal PayPal account.'
           }
         />
       </h2>
-      <p className="text-xs text-muted-foreground mb-2">
-        ⚠️ Note: Selecting &apos;Business&apos; when you don&apos;t have access to a{' '}
-        <Link
-          href="https://www.paypal.com/business"
-          target="_blank"
-          className="text-blue-500 underline"
-        >
-          PayPal Business
-        </Link>{' '}
-        account may cause errors when processing your customers&apos; payments.
-      </p>
       <div className="grid grid-cols-2 gap-2">
         <Card
           className={`cursor-pointer transition-all duration-300 ${

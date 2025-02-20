@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
+import { EMAIL_REGEX, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Rabbit, ShieldCheck } from 'lucide-react';
 import { useCreateUser } from '@/lib/api';
@@ -86,7 +86,7 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
                 {...register('email', {
                   required: 'Email is required',
                   pattern: {
-                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                    value: EMAIL_REGEX,
                     message: 'Invalid email address',
                   },
                   onChange: (e) => {
