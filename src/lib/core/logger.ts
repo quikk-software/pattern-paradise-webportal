@@ -3,7 +3,7 @@ import prefix from 'loglevel-plugin-prefix';
 
 if (
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' ||
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'staging'
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
 ) {
   log.setLevel('debug');
 }
