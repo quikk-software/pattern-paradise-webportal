@@ -19,7 +19,7 @@ const useChatWebSocket = (url: string): UseChatWebSocketReturn => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   console.log({
-    env: process.env.VERCEL_ENV,
+    env: process.env.NEXT_PUBLIC_VERCEL_ENV,
   });
 
   const { data: session } = useSession();
