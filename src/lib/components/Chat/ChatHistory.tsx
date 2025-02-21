@@ -21,67 +21,11 @@ import { DynamicTextarea } from '@/components/dynamic-textarea';
 import { useCreateChatMessage } from '@/lib/api';
 import logger from '@/lib/core/logger';
 
-function getColor(uuid: string) {
-  let hash = 0;
-  for (let i = 0; i < uuid.length; i++) {
-    hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
+function getColor(isCreator: boolean) {
+  if (isCreator) {
+    return 'bg-primary';
   }
-
-  const hue = hash % 360;
-  const saturation = 60 + 20;
-  const lightness = 70 + 10;
-
-  const rgb = hslToRgb(hue, saturation / 100, lightness / 100);
-
-  return rgbToHex(rgb[0], rgb[1], rgb[2]);
-}
-
-function hslToRgb(h: number, s: number, l: number) {
-  let r, g, b;
-
-  const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-  const m = l - c / 2;
-
-  if (h < 60) {
-    r = c;
-    g = x;
-    b = 0;
-  } else if (h < 120) {
-    r = x;
-    g = c;
-    b = 0;
-  } else if (h < 180) {
-    r = 0;
-    g = c;
-    b = x;
-  } else if (h < 240) {
-    r = 0;
-    g = x;
-    b = c;
-  } else if (h < 300) {
-    r = x;
-    g = 0;
-    b = c;
-  } else {
-    r = c;
-    g = 0;
-    b = x;
-  }
-
-  return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
-}
-
-function rgbToHex(r: number, g: number, b: number) {
-  return (
-    '#' +
-    [r, g, b]
-      .map((x) => {
-        const hex = x.toString(16);
-        return hex.length === 1 ? '0' + hex : hex;
-      })
-      .join('')
-  );
+  return 'bg-gray-200';
 }
 
 interface ChatHistoryProps {
@@ -282,7 +226,7 @@ export default function ChatHistory({
                 }}
               >
                 {chatMessagesIsLoading ? (
-                  <LoadingSpinnerComponent size="sm" className="text-white" />
+                  <LoadingSpinnerComponent size="sm" className="text-black" />
                 ) : null}
                 Load more
               </Button>
@@ -294,7 +238,7 @@ export default function ChatHistory({
                 const currentChat = chats.find((chat) => chat.id === selectedChatId);
 
                 const chatMessageCreator = currentChat?.participants?.find(
-                  (p) => p.id === message.creatorId,
+                  (p) => p.userId === message.creatorId,
                 )?.user;
                 const otherName = buildUserName(chatMessageCreator) || 'Other';
                 const isCreator = message.creatorId === userId;
@@ -345,13 +289,8 @@ export default function ChatHistory({
                           </AvatarFallback>
                         </Avatar>
                       </Link>
-                      <div
-                        className={`flex-1 rounded-lg p-3 max-w-xs`}
-                        style={{
-                          backgroundColor: getColor(message.creatorId),
-                        }}
-                      >
-                        <div className="flex gap-2 justify-between items-baseline">
+                      <div className={`flex-1 rounded-lg p-3 max-w-xs ${getColor(isCreator)}`}>
+                        <div className="flex gap-2 justify-between items-center">
                           <span className={`font-semibold`}>{isCreator ? 'You' : otherName}</span>
                           <span className={`text-xs`}>
                             {dayjs(message.createdAt).format(TIME_FORMAT)}

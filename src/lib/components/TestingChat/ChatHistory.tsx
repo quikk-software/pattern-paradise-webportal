@@ -407,7 +407,7 @@ export default function ChatHistory({
                 }}
               >
                 {testingCommentsIsLoading ? (
-                  <LoadingSpinnerComponent size="sm" className="text-white" />
+                  <LoadingSpinnerComponent size="sm" className="text-black" />
                 ) : null}
                 Load more
               </Button>
@@ -438,7 +438,7 @@ export default function ChatHistory({
                             <AvatarFallback>PP</AvatarFallback>
                           </Avatar>
                           <div className="flex-1 rounded-lg p-3 bg-primary">
-                            <div className="flex gap-2 justify-between items-baseline">
+                            <div className="flex gap-2 justify-between items-center">
                               <span className="font-semibold text-secondary">Pattern Paradise</span>
                               <span className="text-xs text-secondary">
                                 {dayjs(message.createdAt).format(TIME_FORMAT)}
@@ -540,7 +540,7 @@ export default function ChatHistory({
                                 <span className="text-sm font-semibold">Review</span>
                               </div>
                             )}
-                            <div className="flex gap-2 justify-between items-baseline">
+                            <div className="flex gap-2 justify-between items-center">
                               <span
                                 className={`font-semibold ${
                                   message.type === 'Review'
