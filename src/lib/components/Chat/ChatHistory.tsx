@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
 import { useCreateChatMessage } from '@/lib/api';
+import logger from '@/lib/core/logger';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -169,6 +170,11 @@ export default function ChatHistory({
     ]
       .filter((socketMessage) => socketMessage.payload.id === selectedChatId)
       .map((socketMessage) => socketMessage.payload) as GetChatMessageResponse[];
+
+    logger.info(
+      'Add messages from socket to chat:',
+      socketMessagesForThisChat.map((s) => s.message).join(', '),
+    );
 
     setMessages((msgs) =>
       [
