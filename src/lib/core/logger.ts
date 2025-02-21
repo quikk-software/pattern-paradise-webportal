@@ -1,7 +1,7 @@
 import log from 'loglevel';
 import prefix from 'loglevel-plugin-prefix';
 
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+if (process.env.VERCEL_ENV === 'development') {
   log.setLevel('debug');
 }
 
