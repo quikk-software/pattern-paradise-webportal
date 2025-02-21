@@ -1,15 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  ArrowLeftIcon,
-  DownloadIcon,
-  MessageCircle,
-  PaperclipIcon,
-  SendIcon,
-  StarIcon,
-} from 'lucide-react';
+import { ArrowLeftIcon, MessageCircle, PaperclipIcon, SendIcon, StarIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { InfoBoxComponent } from '@/components/info-box';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { buildUserName } from '@/lib/features/chat/utils';
@@ -17,18 +9,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import dayjs, { TIME_FORMAT } from '@/lib/core/dayjs';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { GetTestingCommentResponse, GetTestingResponse } from '@/@types/api-types';
+import { GetChatMessageResponse, GetChatResponse } from '@/@types/api-types';
 import { Store } from '@/lib/redux/store';
 import { useSelector } from 'react-redux';
 import { handleImageUpload } from '@/lib/features/common/utils';
-import { useCreateTestingComment, useListTesterApplications } from '@/lib/api/testing';
-import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { useRouter } from 'next/navigation';
-import useWebSocket from '@/lib/hooks/useWebSocket';
+import useChatWebSocket from '@/lib/hooks/useChatWebSocket';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
-import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
+import { useCreateChatMessage } from '@/lib/api';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -94,54 +84,43 @@ function rgbToHex(r: number, g: number, b: number) {
 }
 
 interface ChatHistoryProps {
-  testings: GetTestingResponse[];
-  selectedTestingId: string | null;
-  selectedProductIdByTesting: string | null;
+  chats: GetChatResponse[];
+  selectedChatId: string | null;
   showChatList: boolean;
   bottomNavHeight: number;
   navbarHeight: number;
   changedChat: boolean;
-  selectedTestingStatus: string | null;
-  productLanguages: string[];
-  messages: GetTestingCommentResponse[];
-  fetchTestingComments: (
-    testingId: string,
-    {
-      overridePageNumber,
-      overridePageSize,
-    }: { overridePageNumber?: number; overridePageSize?: number },
-  ) => Promise<{ testingComments: GetTestingCommentResponse[] }>;
-  testingCommentsHasNextPage: boolean;
-  testingCommentsIsLoading: boolean;
+  messages: GetChatMessageResponse[];
+  fetchChatMessages: (
+    chatId: string,
+    overridePageNumber?: number,
+    overridePageSize?: number,
+  ) => Promise<GetChatMessageResponse[]>;
+  chatMessagesHasNextPage: boolean;
+  chatMessagesIsLoading: boolean;
   setChangedChat: React.Dispatch<React.SetStateAction<boolean>>;
-  setMessages: React.Dispatch<React.SetStateAction<GetTestingCommentResponse[]>>;
-  setIsReviewDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMessages: React.Dispatch<React.SetStateAction<GetChatMessageResponse[]>>;
 }
 
 export default function ChatHistory({
-  testings,
-  selectedTestingId,
-  selectedProductIdByTesting,
-  productLanguages,
+  chats,
+  selectedChatId,
   showChatList,
   bottomNavHeight,
   navbarHeight,
   messages,
-  testingCommentsHasNextPage,
-  testingCommentsIsLoading,
-  fetchTestingComments,
-  selectedTestingStatus,
+  chatMessagesHasNextPage,
+  chatMessagesIsLoading,
+  fetchChatMessages,
   changedChat,
   setChangedChat,
   setMessages,
-  setIsReviewDrawerOpen,
 }: ChatHistoryProps) {
   const [newMessage, setNewMessage] = useState('');
   const [files, setFiles] = useState<FileList | null>(null);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [_hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
-  const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -149,19 +128,11 @@ export default function ChatHistory({
 
   const bottomRef = useRef<any>(null);
 
-  const { sendMessage, messages: socketMessages } = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/testing-comments/subscribe`,
+  const { sendMessage, messages: socketMessages } = useChatWebSocket(
+    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/chat-messages/subscribe`,
   );
 
-  const { mutate: createTestingComment } = useCreateTestingComment();
-  const {
-    fetch: downloadPatterns,
-    isLoading: downloadPatternsIsLoading,
-    data: file,
-  } = useDownloadPatternsByProductId();
-  const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications(
-    {},
-  );
+  const { mutate: createChatMessage } = useCreateChatMessage();
 
   useEffect(() => {
     if (messages?.at(0)?.creatorId === userId) {
@@ -179,70 +150,43 @@ export default function ChatHistory({
   }, [messages, setChangedChat, showChatList, changedChat, initialLoad]);
 
   useEffect(() => {
-    if (!selectedTestingId) {
+    if (!selectedChatId) {
       return;
     }
-    const loadComments = async () => {
-      const result = await fetchTestingComments(selectedTestingId, {
-        overridePageNumber: 1,
-        overridePageSize: 20,
-      });
-      setMessages(result.testingComments);
+    const loadMessages = async () => {
+      const chatMessages = await fetchChatMessages(selectedChatId, 1, 20);
+      setMessages(chatMessages);
     };
-    fetchTesterApplications(selectedTestingId, {
-      filter: [],
-      direction: 'asc',
-      sortKey: 'assignedAt',
-      status: ['InProgress', 'Approved', 'Declined'],
-    });
-    loadComments();
-  }, [selectedTestingId, setMessages]);
+    loadMessages();
+  }, [selectedChatId, setMessages]);
 
   useEffect(() => {
-    if (!selectedTestingId) {
+    if (!selectedChatId) {
       return;
     }
     const socketMessagesForThisChat = [
       ...new Map(socketMessages.map((item) => [item.payload.id, item])).values(),
     ]
-      .filter((socketMessage) => socketMessage.payload.testingId === selectedTestingId)
-      .map((socketMessage) => socketMessage.payload);
+      .filter((socketMessage) => socketMessage.payload.id === selectedChatId)
+      .map((socketMessage) => socketMessage.payload) as GetChatMessageResponse[];
 
     setMessages((msgs) =>
       [
         ...new Map([...socketMessagesForThisChat, ...msgs].map((item) => [item.id, item])).values(),
       ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
     );
-  }, [socketMessages, selectedTestingId, setMessages]);
-
-  useEffect(() => {
-    if (!file) {
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_self';
-    link.download = file.name ?? 'testing_patterns.zip';
-    document.body.appendChild(link);
-    link.click();
-
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      document.body.removeChild(link);
-    }, 1000);
-  }, [file]);
+  }, [socketMessages, selectedChatId, setMessages]);
 
   const loadMore = async () => {
-    if (!selectedTestingId) {
+    if (!selectedChatId) {
       return;
     }
-    const result = await fetchTestingComments(selectedTestingId, {});
-    setMessages((msgs) => [...msgs, ...result.testingComments]);
+    const chatMessages = await fetchChatMessages(selectedChatId);
+    setMessages((msgs) => [...msgs, ...chatMessages]);
   };
 
   const handleSendMessage = async () => {
-    if (!selectedTestingId) {
+    if (!selectedChatId) {
       return;
     }
     if (newMessage.trim() || files !== null) {
@@ -262,39 +206,23 @@ export default function ChatHistory({
           () => {},
         );
 
-        const result = await createTestingComment({
-          type: 'Standard',
-          comment: newMessage.trim(),
+        const chatMessage = await createChatMessage(selectedChatId, {
+          message: newMessage.trim(),
           files: urls.map((fu) => ({
             url: fu.url,
             mimeType: fu.mimeType,
           })),
-          testingId: selectedTestingId,
         });
-        if (result) {
+        if (chatMessage) {
           setNewMessage('');
           setFiles(null);
         }
-        sendMessage({ payload: result, event: 'testingcommentcreated' });
+        sendMessage({ payload: chatMessage, event: 'chatmessagecreated' });
         setHasNewSocketMessage(true);
       } finally {
         setSendMessageIsLoading(false);
       }
     }
-  };
-
-  const handleDownloadPatternClick = (productId: string | null, language: string) => {
-    if (!productId) {
-      return;
-    }
-    downloadPatterns(productId, language).then(() => setIsDownloadPatternsDrawerOpen(false));
-  };
-
-  const handleReviewClick = async (testingId: string | null) => {
-    if (!testingId) {
-      return;
-    }
-    setIsReviewDrawerOpen(true);
   };
 
   const handleActionPayload = (payload?: string) => {
@@ -307,18 +235,6 @@ export default function ChatHistory({
     }
   };
 
-  const isInactive = selectedTestingStatus !== 'InProgress';
-  const isAborted = selectedTestingStatus === 'Aborted';
-  const isDeclined = selectedTestingStatus === 'Declined';
-  const isApproved = selectedTestingStatus === 'Approved';
-  const isTesterOrCreator =
-    !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
-    testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
-
-  const status = testerApplications.find(
-    (testerApplication) => testerApplication.user.id === userId,
-  )?.status;
-
   return (
     <div
       className={cn('bg-white w-full md:w-2/3', {
@@ -326,12 +242,12 @@ export default function ChatHistory({
         block: !showChatList,
       })}
     >
-      {!selectedTestingId ? (
+      {!selectedChatId ? (
         <div className="flex flex-col h-full items-center justify-center text-center p-4">
           <MessageCircle className="h-16 w-16 text-primary mb-4" />
           <h2 className="text-2xl font-semibold mb-2">No Chat Selected</h2>
           <p className="text-primary max-w-sm">
-            Choose a testing from the list on the left to start chatting.
+            Choose a chat from the list on the left to start chatting.
           </p>
         </div>
       ) : (
@@ -345,60 +261,21 @@ export default function ChatHistory({
         >
           {/* Top navigation */}
           <CardContent className="p-4 flex-none">
-            <div className="space-y-2 w-full">
-              <div className="flex flex-row justify-between items-center">
-                <div className="flex items-center justify-start">
-                  <Button
-                    variant="ghost"
-                    size="default"
-                    className="md:hidden mr-2"
-                    onClick={() => router.push('/app/secure/test/chats')}
-                  >
-                    <ArrowLeftIcon className="h-6 w-6" />
-                  </Button>
-                  <h2 className="text-2xl font-bold">Chat History</h2>
-                </div>
-                <div className="flex items-center justify-end gap-2">
-                  {status !== 'Created' ? (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      disabled={!selectedTestingId}
-                      onClick={() => {
-                        handleReviewClick(selectedTestingId);
-                      }}
-                    >
-                      <StarIcon className="h-6 w-6" />
-                    </Button>
-                  ) : null}
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    disabled={
-                      !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
-                    }
-                    onClick={() => {
-                      setIsDownloadPatternsDrawerOpen(true);
-                    }}
-                  >
-                    <DownloadIcon className="h-6 w-6" />
-                  </Button>
-                </div>
-              </div>
-              {isApproved ? (
-                <InfoBoxComponent severity="success" message={`This testing has been approved.`} />
-              ) : null}
-              {isAborted ? (
-                <InfoBoxComponent severity="warning" message={`This testing has been aborted.`} />
-              ) : null}
-              {isDeclined ? (
-                <InfoBoxComponent severity="error" message={`This testing has been declined.`} />
-              ) : null}
+            <div className="flex items-center justify-start">
+              <Button
+                variant="ghost"
+                size="default"
+                className="md:hidden mr-2"
+                onClick={() => router.push('/app/secure/chats')}
+              >
+                <ArrowLeftIcon className="h-6 w-6" />
+              </Button>
+              <h2 className="text-2xl font-bold">Chat History</h2>
             </div>
           </CardContent>
           {/* Chat History (Scroll Area) */}
           <ScrollArea className="flex-grow px-4 overflow-y-auto">
-            {testingCommentsHasNextPage && !!selectedTestingId ? (
+            {chatMessagesHasNextPage && !!selectedChatId ? (
               <Button
                 variant={'outline'}
                 className={'w-full mb-4'}
@@ -406,7 +283,7 @@ export default function ChatHistory({
                   loadMore();
                 }}
               >
-                {testingCommentsIsLoading ? (
+                {chatMessagesIsLoading ? (
                   <LoadingSpinnerComponent size="sm" className="text-white" />
                 ) : null}
                 Load more
@@ -416,215 +293,135 @@ export default function ChatHistory({
               .slice(0)
               .reverse()
               .map((message) => {
-                const currentTesting = testings.find((testing) => testing.id === selectedTestingId);
+                const currentChat = chats.find((chat) => chat.id === selectedChatId);
 
-                const testerUser = currentTesting?.testers?.find(
-                  (tester) => tester.id === message.creatorId,
-                );
-                const sellerUser =
-                  currentTesting?.creatorId === message.creatorId
-                    ? currentTesting.creator
-                    : undefined;
-                const otherName = buildUserName(testerUser) || buildUserName(sellerUser) || 'Other';
+                const chatMessageCreator = currentChat?.participants?.find(
+                  (p) => p.id === message.creatorId,
+                )?.user;
+                const otherName = buildUserName(chatMessageCreator) || 'Other';
                 const isCreator = message.creatorId === userId;
 
                 return (
-                  <>
-                    {message.type === 'System' ? (
-                      <div key={message.id} className={`mb-4 mr-auto w-full`}>
-                        <div className="flex items-start">
-                          <Avatar className="w-8 h-8 mr-2">
-                            <AvatarImage src={testerUser?.imageUrl} />
-                            <AvatarFallback>PP</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 rounded-lg p-3 bg-primary">
-                            <div className="flex gap-2 justify-between items-baseline">
-                              <span className="font-semibold text-secondary">Pattern Paradise</span>
-                              <span className="text-xs text-secondary">
-                                {dayjs(message.createdAt).format(TIME_FORMAT)}
-                              </span>
-                            </div>
-                            <p className={'mt-1 text-left text-secondary'}>{message.message}</p>
-                            {message.actions.length > 0 ? (
-                              <div className="flex flex-col gap-2">
-                                {message.actions.map((action) => (
-                                  <div key={action.id} className="w-full">
-                                    <Button
-                                      variant={
-                                        (action.variant as
-                                          | 'default'
-                                          | 'destructive'
-                                          | 'outline'
-                                          | 'secondary'
-                                          | 'ghost'
-                                          | 'link'
-                                          | null
-                                          | undefined) ?? 'default'
-                                      }
-                                      onClick={() => {
-                                        handleActionPayload(action.payload);
-                                      }}
-                                    >
-                                      {action.description}
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div
-                        key={message.id}
-                        className="mb-4 max-w-[80%] w-fit"
-                        style={
-                          isCreator
-                            ? {
-                                marginLeft: 'auto',
-                              }
-                            : {
-                                marginRight: 'auto',
-                              }
-                        }
-                      >
-                        <div
-                          className="flex items-start"
+                  <div
+                    key={message.id}
+                    className="mb-4 max-w-[80%] w-fit"
+                    style={
+                      isCreator
+                        ? {
+                            marginLeft: 'auto',
+                          }
+                        : {
+                            marginRight: 'auto',
+                          }
+                    }
+                  >
+                    <div
+                      className="flex items-start"
+                      style={
+                        isCreator
+                          ? {
+                              flexDirection: 'row-reverse',
+                            }
+                          : {}
+                      }
+                    >
+                      <Link href={`/users/${chatMessageCreator?.id}`} rel={'nofollow'}>
+                        <Avatar
+                          className="w-8 h-8"
                           style={
                             isCreator
                               ? {
-                                  flexDirection: 'row-reverse',
+                                  marginLeft: '0.5rem',
                                 }
-                              : {}
+                              : {
+                                  marginRight: '0.5rem',
+                                }
                           }
                         >
-                          <Link
-                            href={
-                              sellerUser ? `/users/${sellerUser?.id}` : `/users/${testerUser?.id}`
-                            }
-                          >
-                            <Avatar
-                              className="w-8 h-8"
-                              style={
-                                isCreator
-                                  ? {
-                                      marginLeft: '0.5rem',
-                                    }
-                                  : {
-                                      marginRight: '0.5rem',
-                                    }
-                              }
-                            >
-                              <AvatarImage src={testerUser?.imageUrl} />
-                              <AvatarFallback>
-                                {testerUser?.firstName?.at(0) && testerUser?.lastName?.at(0)
-                                  ? `${testerUser.firstName.at(0)}${testerUser.lastName.at(0)}`
-                                  : ''}
-                              </AvatarFallback>
-                            </Avatar>
-                          </Link>
-                          <div
-                            className={`flex-1 rounded-lg p-3 ${
-                              message.type === 'Review'
-                                ? 'bg-yellow-100 border-2 border-yellow-300 dark:bg-yellow-900 dark:border-yellow-700'
-                                : undefined
-                            } rounded-lg p-3 max-w-xs`}
-                            style={{
-                              backgroundColor:
-                                message.type === 'Review' ? undefined : getColor(message.creatorId),
-                            }}
-                          >
-                            {message.type === 'Review' && (
-                              <div className="flex items-center mb-1">
-                                <StarIcon className="w-4 h-4 text-yellow-500 mr-1" />
-                                <span className="text-sm font-semibold">Review</span>
-                              </div>
-                            )}
-                            <div className="flex gap-2 justify-between items-baseline">
-                              <span
-                                className={`font-semibold ${
-                                  message.type === 'Review'
-                                    ? 'text-gray-800 dark:text-gray-200'
-                                    : ''
-                                }`}
-                              >
-                                {isCreator ? 'You' : otherName}
-                              </span>
-                              <span
-                                className={`text-xs ${
-                                  message.type === 'Review'
-                                    ? 'text-gray-800 dark:text-gray-200'
-                                    : 'text-gray-500'
-                                }`}
-                              >
-                                {dayjs(message.createdAt).format(TIME_FORMAT)}
-                              </span>
-                            </div>
+                          <AvatarImage src={chatMessageCreator?.imageUrl} />
+                          <AvatarFallback>
+                            {chatMessageCreator?.firstName?.at(0) &&
+                            chatMessageCreator?.lastName?.at(0)
+                              ? `${chatMessageCreator.firstName.at(0)}${chatMessageCreator.lastName.at(0)}`
+                              : ''}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
+                      <div
+                        className={`flex-1 rounded-lg p-3 max-w-xs`}
+                        style={{
+                          backgroundColor: getColor(message.creatorId),
+                        }}
+                      >
+                        <div className="flex gap-2 justify-between items-baseline">
+                          <span className={`font-semibold`}>{isCreator ? 'You' : otherName}</span>
+                          <span className={`text-xs`}>
+                            {dayjs(message.createdAt).format(TIME_FORMAT)}
+                          </span>
+                        </div>
 
-                            <p
-                              className="mt-1 break-words overflow-hidden"
-                              style={{
-                                textAlign: 'left',
-                                whiteSpace: 'pre-line',
-                              }}
-                            >
-                              {message.message}
-                            </p>
-                            <div className="flex flex-col gap-2">
-                              {message.files.length > 0
-                                ? message.files.map((file) =>
-                                    file.mimeType.startsWith('image/') ? (
-                                      <a href={file.url} key={file.url} target="_blank">
-                                        <CldImage
-                                          alt="Pattern paradise"
-                                          src={file.url}
-                                          width="340"
-                                          height="250"
-                                          crop={{
-                                            type: 'auto',
-                                            source: true,
-                                          }}
-                                        />
-                                      </a>
-                                    ) : (
-                                      <div
-                                        key={file.url}
-                                        className="mt-2"
-                                        style={
-                                          isCreator
-                                            ? {
-                                                textAlign: 'right',
-                                              }
-                                            : {
-                                                textAlign: 'left',
-                                              }
-                                        }
-                                      >
-                                        <a
-                                          href={file.url}
-                                          className="text-blue-500 hover:underline"
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                        >
-                                          <Button variant={'ghost'}>📎 Download file</Button>
-                                        </a>
-                                      </div>
-                                    ),
-                                  )
-                                : null}
-                            </div>
-                          </div>
+                        <p
+                          className="mt-1 break-words overflow-hidden"
+                          style={{
+                            textAlign: 'left',
+                            whiteSpace: 'pre-line',
+                          }}
+                        >
+                          {message.message}
+                        </p>
+                        <div className="flex flex-col gap-2">
+                          {message.files.length > 0
+                            ? message.files.map((file) =>
+                                file.mimeType.startsWith('image/') ? (
+                                  <a href={file.url} key={file.url} target="_blank">
+                                    <CldImage
+                                      alt="Pattern Paradise"
+                                      src={file.url}
+                                      width="340"
+                                      height="250"
+                                      crop={{
+                                        type: 'auto',
+                                        source: true,
+                                      }}
+                                    />
+                                  </a>
+                                ) : (
+                                  <div
+                                    key={file.url}
+                                    className="mt-2"
+                                    style={
+                                      isCreator
+                                        ? {
+                                            textAlign: 'right',
+                                          }
+                                        : {
+                                            textAlign: 'left',
+                                          }
+                                    }
+                                  >
+                                    <a
+                                      href={file.url}
+                                      className="text-blue-500 hover:underline"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <Button variant={'ghost'}>📎 Download file</Button>
+                                    </a>
+                                  </div>
+                                ),
+                              )
+                            : null}
                         </div>
                       </div>
-                    )}
-                  </>
+                    </div>
+                  </div>
                 );
               })}
             {!showChatList ? <div ref={bottomRef} /> : null}
           </ScrollArea>
 
           {/* Message Input Area */}
-          {!!selectedTestingId ? (
+          {!!selectedChatId ? (
             <div className="p-4 flex-none border-t border-gray-200">
               <div className="flex flex-col gap-4">
                 {files && (
@@ -657,13 +454,10 @@ export default function ChatHistory({
                         multiple
                         accept="image/*"
                         onChange={(e) => setFiles(e.target.files)}
-                        disabled={isInactive || sendMessageIsLoading}
+                        disabled={sendMessageIsLoading}
                       />
                     </label>
-                    <Button
-                      onClick={handleSendMessage}
-                      disabled={isInactive || sendMessageIsLoading}
-                    >
+                    <Button onClick={handleSendMessage} disabled={sendMessageIsLoading}>
                       Send
                       {sendMessageIsLoading ? (
                         <LoadingSpinnerComponent size="sm" className="text-white" />
@@ -678,13 +472,6 @@ export default function ChatHistory({
           ) : null}
         </Card>
       )}
-      <DownloadPatternsDrawer
-        isOpen={isDownloadPatternsDrawerOpen}
-        setIsOpen={setIsDownloadPatternsDrawerOpen}
-        isLoading={downloadPatternsIsLoading}
-        callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
-        languages={productLanguages}
-      />
     </div>
   );
 }

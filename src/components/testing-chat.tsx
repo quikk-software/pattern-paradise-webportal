@@ -5,13 +5,11 @@ import { useListTestingComments, useListTestings } from '@/lib/api/testing';
 import { GetTestingCommentResponse, GetTestingResponse } from '@/@types/api-types';
 import { useElementHeight } from '@/lib/core/useElementHeight';
 import ReviewDrawer from '@/lib/components/ReviewDrawer';
-import ChatList from '@/lib/components/Chat/ChatList';
-import ChatHistory from '@/lib/components/Chat/ChatHistory';
+import ChatList from '@/lib/components/TestingChat/ChatList';
+import ChatHistory from '@/lib/components/TestingChat/ChatHistory';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-interface ChatAppComponentProps {}
-
-export function ChatAppComponent({}: ChatAppComponentProps) {
+export function TestingChat() {
   const [testingId, setTestingId] = useState<string | null>(null);
   const [changedChat, setChangedChat] = useState(false);
   const [selectedProductIdByTesting, setSelectedProductIdByTesting] = useState<string | null>(null);

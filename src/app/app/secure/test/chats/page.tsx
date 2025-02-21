@@ -1,6 +1,6 @@
 import React from 'react';
-import { ChatAppComponent } from '@/components/chat-app';
+import { TestingChat } from '@/components/testing-chat';
 
 export default function TestChatsPage() {
-  return <ChatAppComponent />;
+  return <TestingChat />;
 }
