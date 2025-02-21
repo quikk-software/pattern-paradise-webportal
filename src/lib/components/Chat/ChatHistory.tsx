@@ -129,7 +129,7 @@ export default function ChatHistory({
 
   const bottomRef = useRef<any>(null);
 
-  const { sendMessage, messages: socketMessages } = useChatWebSocket(
+  const { sendMessage, message: socketMessage } = useChatWebSocket(
     `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/chat-messages/subscribe`,
   );
 
@@ -162,26 +162,18 @@ export default function ChatHistory({
   }, [selectedChatId, setMessages]);
 
   useEffect(() => {
-    if (!selectedChatId) {
+    if (!selectedChatId || !socketMessage || socketMessage.chatId !== selectedChatId) {
       return;
     }
-    const socketMessagesForThisChat = [
-      ...new Map(socketMessages.map((item) => [item.payload.id, item])).values(),
-    ]
-      .filter((socketMessage) => socketMessage.payload.id === selectedChatId)
-      .map((socketMessage) => socketMessage.payload) as GetChatMessageResponse[];
 
-    logger.info(
-      'Add messages from socket to chat:',
-      socketMessagesForThisChat.map((s) => s.message).join(', '),
-    );
+    logger.info('Add message from socket to chat:', socketMessage.message);
 
     setMessages((msgs) =>
-      [
-        ...new Map([...socketMessagesForThisChat, ...msgs].map((item) => [item.id, item])).values(),
-      ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+      [...new Map([socketMessage, ...msgs].map((item) => [item.id, item])).values()].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
     );
-  }, [socketMessages, selectedChatId, setMessages]);
+  }, [socketMessage, selectedChatId, setMessages]);
 
   const loadMore = async () => {
     if (!selectedChatId) {

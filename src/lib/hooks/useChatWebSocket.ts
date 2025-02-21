@@ -9,13 +9,13 @@ interface ChatWebSocketMessage {
 }
 
 interface UseChatWebSocketReturn {
-  messages: ChatWebSocketMessage[];
+  message: GetChatMessageResponse | undefined;
   sendMessage: (message: ChatWebSocketMessage) => void;
   isConnected: boolean;
 }
 
 const useChatWebSocket = (url: string): UseChatWebSocketReturn => {
-  const [messages, setMessages] = useState<ChatWebSocketMessage[]>([]);
+  const [message, setMessage] = useState<GetChatMessageResponse | undefined>(undefined);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   const { data: session } = useSession();
@@ -51,7 +51,7 @@ const useChatWebSocket = (url: string): UseChatWebSocketReturn => {
         payload: JSON.parse(parsedEvent.payload),
       };
       logger.info('Received message:', data);
-      setMessages((prevMessages) => [...prevMessages, data]);
+      setMessage(data.payload);
     };
 
     ws.onerror = null;
@@ -87,7 +87,7 @@ const useChatWebSocket = (url: string): UseChatWebSocketReturn => {
     };
   }, []);
 
-  return { messages, sendMessage, isConnected };
+  return { message, sendMessage, isConnected };
 };
 
 export default useChatWebSocket;
