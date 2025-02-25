@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, User } from 'lucide-react';
+import { MessagesSquare, ShoppingCart, User } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -9,6 +9,11 @@ import { GetUserAccountResponse } from '@/@types/api-types';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { ReportUser } from '@/lib/components/ReportUser';
+import { Button } from '@/components/ui/button';
+import { useCreateChat } from '@/lib/api';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart },
@@ -30,9 +35,22 @@ export default function UserDetailsCard({
   user,
   showFlag = true,
   showRoles = false,
-}: UserDetailsCardProps): JSX.Element {
+}: UserDetailsCardProps) {
+  const { userId } = useSelector((store: Store) => store.auth);
+
+  const { mutate: createChat } = useCreateChat();
+
+  const router = useRouter();
+
+  const handleChatClick = (initiatorUserId: string, correspondenceUserId: string) => {
+    createChat([correspondenceUserId, initiatorUserId]).then((chatId) => {
+      router.push(`/app/secure/chats?chatId=${chatId}`);
+    });
+  };
+
   const hasSocialLinks = user.instagramRef || user.tiktokRef;
   const showCardContent = hasSocialLinks || showRoles;
+  const isMe = userId === user.id;
   return (
     <Card key={user.id} className={`relative cursor-pointer transition-all`}>
       <CardHeader className="flex flex-row justify-between items-start gap-2">
@@ -64,7 +82,7 @@ export default function UserDetailsCard({
         {showFlag ? <ReportUser userId={user.id} /> : null}
       </CardHeader>
       {showCardContent ? (
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
           {hasSocialLinks ? (
             <div className="flex space-x-2 mb-2">
               {user.instagramRef && (
@@ -108,6 +126,12 @@ export default function UserDetailsCard({
                   </Card>
                 ))}
             </div>
+          ) : null}
+          {!isMe ? (
+            <Button variant={'outline'} onClick={() => handleChatClick(userId, user.id)}>
+              <MessagesSquare />
+              Start a Chat
+            </Button>
           ) : null}
         </CardContent>
       ) : null}

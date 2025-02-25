@@ -25,6 +25,9 @@ import { useListOrders } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import { useCreateChat } from '@/lib/api';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -42,12 +45,15 @@ export default function OrderTable({ filter }: OrderTableProps) {
   const { selectedIds, isSelected, isAllSelected, toggleSelection, toggleAll, clearSelection } =
     useSelectedOrders(orders);
 
+  const { userId } = useSelector((s: Store) => s.auth);
+
   const router = useRouter();
 
   const { fetch, totalPages } = useListOrders({
     filter,
     pageSize: ITEMS_PER_PAGE,
   });
+  const { mutate: createChat } = useCreateChat();
 
   useEffect(() => {
     fetch(1, ITEMS_PER_PAGE).then((result) => setOrders(result?.orders));
@@ -102,6 +108,11 @@ export default function OrderTable({ filter }: OrderTableProps) {
         break;
       case 'profile':
         router.push(`/users/${id}`);
+        break;
+      case 'chat':
+        createChat([id, userId]).then((chatId) => {
+          router.push(`/app/secure/chats?chatId=${chatId}`);
+        });
         break;
       default:
         break;
@@ -222,8 +233,25 @@ export default function OrderTable({ filter }: OrderTableProps) {
                       <DropdownMenuItem onClick={() => handleAction('view', order.id)}>
                         View order details
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleAction('profile', order.customer.id)}>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          handleAction(
+                            'profile',
+                            filter === 'customer' ? order.seller.id : order.customer.id,
+                          )
+                        }
+                      >
                         View {filter === 'customer' ? 'seller' : 'customer'}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          handleAction(
+                            'chat',
+                            filter === 'customer' ? order.seller.id : order.customer.id,
+                          )
+                        }
+                      >
+                        Start chat
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

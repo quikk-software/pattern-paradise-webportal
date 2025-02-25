@@ -5,26 +5,30 @@ import { Users } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { GetTestingResponse } from '@/@types/api-types';
+import { GetChatResponse } from '@/@types/api-types';
 import { cn } from '@/lib/utils';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 interface ChatListProps {
   showChatList: boolean;
-  fetchTestingsIsLoading: boolean;
-  testings: GetTestingResponse[];
+  fetchChatsIsLoading: boolean;
+  chats: GetChatResponse[];
   bottomNavHeight: number;
   navbarHeight: number;
-  handleChatSelect: (testing: GetTestingResponse) => void;
+  handleChatSelect: (chat: GetChatResponse) => void;
 }
 
 export default function ChatList({
   showChatList,
-  fetchTestingsIsLoading,
-  testings,
+  fetchChatsIsLoading,
+  chats,
   bottomNavHeight,
   navbarHeight,
   handleChatSelect,
 }: ChatListProps) {
+  const { userId } = useSelector((s: Store) => s.auth);
+
   return (
     <div
       className={cn('bg-white w-full md:w-1/3', {
@@ -45,44 +49,54 @@ export default function ChatList({
           <CardTitle className="text-2xl font-bold">Chats</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
-          {testings.length === 0 && !fetchTestingsIsLoading ? (
+          {fetchChatsIsLoading ? <LoadingSpinnerComponent /> : null}
+          {chats.length === 0 && !fetchChatsIsLoading ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-4">
               <Users className="h-12 w-12 text-primary mb-4" />
               <h3 className="text-xl font-semibold mb-2">No Chats Yet</h3>
               <p className="text-text-primary mb-4">
-                Chats will be displayed here if you have applied for a tester call and have been
-                accepted.
+                Start a Chat with a Seller by clicking on the Chat Icon in their Profile or{' '}
+                <Link
+                  rel={'nofollow'}
+                  href="/app/secure/auth/me/orders"
+                  className="text-blue-500 underline"
+                >
+                  through the Actions in your Orders
+                </Link>
+                .
               </p>
-              <Link rel={'nofollow'} href="/app/secure/test">
-                <Button>Show Tester Calls</Button>
+              <Link rel={'nofollow'} href="/">
+                <Button>Find Patterns</Button>
               </Link>
             </div>
           ) : null}
           <div className="space-y-2">
-            {testings.map((testing) => (
-              <div
-                key={testing.id}
-                className="flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg mb-2"
-                onClick={() => handleChatSelect(testing)}
-              >
-                <Avatar className="w-12 h-12 mr-3">
-                  <AvatarImage src={testing.product.imageUrls?.[0]} />
-                  <AvatarFallback>
-                    {testing.product.title.at(0)}
-                    {testing.product.title.at(1)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col flex-1 overflow-hidden">
-                  <h3 className="font-semibold truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
-                    {testing.product.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
-                    {testing.lastComment}
-                  </p>
+            {chats.map((chat) => {
+              const correspondence = chat.participants.find((p) => p.userId !== userId)?.user;
+              return (
+                <div
+                  key={chat.id}
+                  className="flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg mb-2"
+                  onClick={() => handleChatSelect(chat)}
+                >
+                  <Avatar className="w-12 h-12 mr-3">
+                    <AvatarImage src={correspondence?.imageUrl} />
+                    <AvatarFallback>
+                      {correspondence?.firstName?.at(0)}
+                      {correspondence?.lastName?.at(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col flex-1 overflow-hidden">
+                    <h3 className="font-semibold truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
+                      {correspondence?.username}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
+                      Last chat here
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </CardContent>
       </Card>

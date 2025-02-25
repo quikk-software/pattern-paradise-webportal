@@ -220,6 +220,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
           </Button>
           <Button
             onClick={() => {
+              router.push('/app/secure/chats');
+            }}
+            className="w-full"
+            variant={'outline'}
+          >
+            My Chats
+          </Button>
+          <Button
+            onClick={() => {
               router.push('/app/secure/auth/me/reports');
             }}
             className={`w-full${hasOpenIncidents ? ' border-red-500 text-red-500' : ''}`}

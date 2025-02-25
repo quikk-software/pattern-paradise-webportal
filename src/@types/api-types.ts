@@ -724,6 +724,96 @@ export interface PostNewsletterSubscriptionRequest {
   email: string;
 }
 
+export interface GetChatMessageResponse {
+  id: string;
+  files: {
+    url: string;
+    mimeType: string;
+  }[];
+  message?: string;
+  creatorId: string;
+  chatId: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListChatMessagesResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  chatMessages: GetChatMessageResponse[];
+}
+
+export interface GetChatParticipantResponse {
+  id: string;
+  chatId: string;
+  userId: string;
+  user?: GetUserAccountResponse;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface GetChatResponse {
+  id: string;
+  participants: GetChatParticipantResponse[];
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListChatsResponse {
+  count: number;
+  chats: GetChatResponse[];
+}
+
+export interface PostChatRequest {
+  participantIds: string[];
+}
+
+export interface PostChatResponse {
+  chatId: string;
+}
+
+export interface PostChatMessageRequest {
+  files: {
+    url: string;
+    mimeType: string;
+  }[];
+  message?: string;
+}
+
 export interface ExceptionResponse {
   /** A human-readable explanation specific to this occurrence of the problem */
   detail?: string;
@@ -2703,6 +2793,107 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The chats will be retrieved by a given user ID and returns a list of chats.
+     *
+     * @tags Chat
+     * @name ListChatsByUserId
+     * @summary Gets the chats for a user ID.
+     * @request GET:/api/v1/chats/users/{userId}
+     * @secure
+     */
+    listChatsByUserId: (userId: string, params: RequestParams = {}) =>
+      this.request<ListChatsResponse, any>({
+        path: `/api/v1/chats/users/${userId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The chat will be created between given participants.
+     *
+     * @tags Chat
+     * @name PostChat
+     * @summary Creates a new chat.
+     * @request POST:/api/v1/chats
+     * @secure
+     */
+    postChat: (
+      data: {
+        /** @example "any" */
+        participantIds?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostChatResponse, any>({
+        path: `/api/v1/chats`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The chat messages will be retrieved by a given chat ID and returns a list of chat messages.
+     *
+     * @tags Chat
+     * @name ListChatMessages
+     * @summary Gets the chat messages for a chat ID.
+     * @request GET:/api/v1/chats/{chatId}/chat-messages
+     * @secure
+     */
+    listChatMessages: (
+      chatId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListChatMessagesResponse, any>({
+        path: `/api/v1/chats/${chatId}/chat-messages`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The chat message will be created based on a given chat ID.
+     *
+     * @tags Chat
+     * @name PostChatMessage
+     * @summary Creates a new chat message.
+     * @request POST:/api/v1/chats/{chatId}/chat-messages
+     * @secure
+     */
+    postChatMessage: (
+      chatId: string,
+      data: {
+        /** @example "any" */
+        message?: any;
+        /** @example "any" */
+        files?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<GetChatMessageResponse, any>({
+        path: `/api/v1/chats/${chatId}/chat-messages`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
         ...params,
       }),
   };
