@@ -182,7 +182,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
   return (
     <div
       className={classNames(
-        'bg-gradient-to-b to-white',
+        'bg-gradient-to-b to-white p-4',
         themeBgClasses[theme] || 'from-neutral-100',
       )}
     >

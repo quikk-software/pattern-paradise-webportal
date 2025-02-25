@@ -1,21 +1,21 @@
 import { useEffect, useState, useRef } from 'react';
-import { GetTestingCommentResponse } from '@/@types/api-types';
+import { GetChatMessageResponse } from '@/@types/api-types';
 import logger from '@/lib/core/logger';
 import { useSession } from 'next-auth/react';
 
-interface WebSocketMessage {
+interface ChatWebSocketMessage {
   event: string;
-  payload: GetTestingCommentResponse;
+  payload: GetChatMessageResponse;
 }
 
-interface UseWebSocketReturn {
-  messages: WebSocketMessage[];
-  sendMessage: (message: WebSocketMessage) => void;
+interface UseChatWebSocketReturn {
+  message: GetChatMessageResponse | undefined;
+  sendMessage: (message: ChatWebSocketMessage) => void;
   isConnected: boolean;
 }
 
-const useWebSocket = (url: string): UseWebSocketReturn => {
-  const [messages, setMessages] = useState<WebSocketMessage[]>([]);
+const useChatWebSocket = (url: string): UseChatWebSocketReturn => {
+  const [message, setMessage] = useState<GetChatMessageResponse | undefined>(undefined);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   const { data: session } = useSession();
@@ -46,12 +46,12 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
     ws.onmessage = null;
     ws.onmessage = (event: MessageEvent) => {
       const parsedEvent = JSON.parse(event.data);
-      const data: WebSocketMessage = {
+      const data: ChatWebSocketMessage = {
         event: parsedEvent.event,
         payload: JSON.parse(parsedEvent.payload),
       };
       logger.info('Received message:', data);
-      setMessages((prevMessages) => [...prevMessages, data]);
+      setMessage(data.payload);
     };
 
     ws.onerror = null;
@@ -68,7 +68,7 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
     socketRef.current = ws;
   };
 
-  const sendMessage = (message: WebSocketMessage) => {
+  const sendMessage = (message: ChatWebSocketMessage) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       socketRef.current.send(JSON.stringify(message));
     }
@@ -87,7 +87,7 @@ const useWebSocket = (url: string): UseWebSocketReturn => {
     };
   }, []);
 
-  return { messages, sendMessage, isConnected };
+  return { message, sendMessage, isConnected };
 };
 
-export default useWebSocket;
+export default useChatWebSocket;
