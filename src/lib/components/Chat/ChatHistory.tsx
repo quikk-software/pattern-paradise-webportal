@@ -65,7 +65,6 @@ export default function ChatHistory({
   const [files, setFiles] = useState<FileList | null>(null);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [_hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -73,7 +72,7 @@ export default function ChatHistory({
 
   const bottomRef = useRef<any>(null);
 
-  const { sendMessage, message: socketMessage } = useChatWebSocket(
+  const { message: socketMessage } = useChatWebSocket(
     `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/chat-messages/subscribe`,
   );
 
@@ -89,7 +88,6 @@ export default function ChatHistory({
     if (bottomRef.current && !showChatList && (initialLoad || changedChat) && messages.length > 0) {
       bottomRef.current.scrollIntoView({ behavior: 'instant' });
       setInitialLoad(false);
-      setHasNewSocketMessage(false);
       setChangedChat(false);
     }
   }, [messages, setChangedChat, showChatList, changedChat, initialLoad]);
@@ -159,8 +157,6 @@ export default function ChatHistory({
           setNewMessage('');
           setFiles(null);
         }
-        sendMessage({ payload: chatMessage, event: 'chatmessagecreated' });
-        setHasNewSocketMessage(true);
       } finally {
         setSendMessageIsLoading(false);
       }

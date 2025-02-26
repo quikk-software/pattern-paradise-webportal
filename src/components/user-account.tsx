@@ -42,6 +42,8 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         </Card>
       ) : null}
 
+      {user.galleryImages.length > 0 ? <div className=""></div> : null}
+
       {products.length > 0 ? (
         <div className="space-y-2">
           <h2 className="text-2xl font-bold mb-4">Associated Products</h2>
