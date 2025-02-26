@@ -154,22 +154,17 @@ export default function ChatHistory({
           })),
         });
         if (chatMessage) {
+          setMessages((msgs) =>
+            [...new Map([chatMessage, ...msgs].map((item) => [item.id, item])).values()].sort(
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            ),
+          );
           setNewMessage('');
           setFiles(null);
         }
       } finally {
         setSendMessageIsLoading(false);
       }
-    }
-  };
-
-  const handleActionPayload = (payload?: string) => {
-    if (!payload) {
-      return;
-    }
-    // handle link
-    if (payload?.startsWith('https://') || payload.startsWith('/')) {
-      router.push(payload);
     }
   };
 
