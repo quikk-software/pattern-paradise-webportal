@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ArrowLeftIcon, MessageCircle, PaperclipIcon, SendIcon, StarIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
 import { useCreateChatMessage } from '@/lib/api';
 import logger from '@/lib/core/logger';
+import NewMessages from '@/lib/components/NewMessages';
 
 function getColor(isCreator: boolean) {
   if (isCreator) {
@@ -207,7 +208,7 @@ export default function ChatHistory({
             </div>
           </CardContent>
           {/* Chat History (Scroll Area) */}
-          <ScrollArea className="flex-grow px-4 overflow-y-auto">
+          <ScrollArea className="flex-grow px-4 overflow-y-auto relative">
             {chatMessagesHasNextPage && !!selectedChatId ? (
               <Button
                 variant={'outline'}
@@ -346,6 +347,9 @@ export default function ChatHistory({
                 );
               })}
             {!showChatList ? <div ref={bottomRef} /> : null}
+            <div className="sticky bottom-0 left-0 w-full py-1 bg-white">
+              <NewMessages message={socketMessage} currentBottomRef={bottomRef} />
+            </div>
           </ScrollArea>
 
           {/* Message Input Area */}
