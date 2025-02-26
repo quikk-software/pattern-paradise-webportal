@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { GetChatMessageResponse } from '@/@types/api-types';
+import { GetChatMessageResponse, GetTestingCommentResponse } from '@/@types/api-types';
 import { ArrowDown, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface NewMessagesProps {
-  message?: GetChatMessageResponse;
+  message?: GetChatMessageResponse | GetTestingCommentResponse;
   currentBottomRef?: React.MutableRefObject<any>;
 }
 
