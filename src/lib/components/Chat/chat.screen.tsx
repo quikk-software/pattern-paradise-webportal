@@ -39,7 +39,7 @@ export default function ChatScreen() {
     fetchChats(userId).then(() => {
       setChatsLoaded(true);
     });
-  }, [userId]);
+  }, [userId, searchParams]);
 
   useEffect(() => {
     const chatIdFromQuery = searchParams.get('chatId');

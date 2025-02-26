@@ -781,6 +781,7 @@ export interface GetChatParticipantResponse {
 export interface GetChatResponse {
   id: string;
   participants: GetChatParticipantResponse[];
+  latestChatMessage?: GetChatMessageResponse;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -2440,6 +2441,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The redirect will include the business type and merchant ID of the onboarded merchant. Incoming query data will be saved.
+     *
+     * @tags Webhook
+     * @name RedirectMerchant
+     * @summary Saves and redirects an onboarded merchant to Pattern Paradise onboarding page.
+     * @request GET:/api/v1/paypal/redirect-merchant
+     * @secure
+     */
+    redirectMerchant: (
+      query?: {
+        merchantIdInPayPal?: string;
+        merchantId?: string;
+        accountStatus?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/api/v1/paypal/redirect-merchant`,
+        method: 'GET',
+        query: query,
+        secure: true,
         ...params,
       }),
 

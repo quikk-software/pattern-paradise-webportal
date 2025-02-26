@@ -91,7 +91,7 @@ export default function ChatList({
                       {correspondence?.username}
                     </h3>
                     <p className="text-sm text-gray-500 truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
-                      Last chat here
+                      {chat?.latestChatMessage?.message ?? ''}
                     </p>
                   </div>
                 </div>
