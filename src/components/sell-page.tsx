@@ -15,6 +15,14 @@ import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
 import { useGetProductReportsCount } from '@/lib/api/report';
 import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const getStatusColor = (status?: string) => {
   switch (status) {
@@ -46,6 +54,9 @@ const getStatusDisplayText = (status?: string) => {
 
 export function SellPageComponent() {
   const [loadMore, setLoadMore] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   const router = useRouter();
 
@@ -66,12 +77,32 @@ export function SellPageComponent() {
     if (!loadMore) {
       return;
     }
-    fetch(userId);
+    fetch(userId, {
+      status: selectedStatus !== 'All' ? selectedStatus : undefined,
+      q: debouncedSearchTerm || undefined,
+    });
     setLoadMore((p) => !p);
-  }, [loadMore, userId]);
+  }, [loadMore, userId, selectedStatus, debouncedSearchTerm]);
+
+  useEffect(() => {
+    fetch(userId, {
+      status: selectedStatus !== 'All' ? selectedStatus : undefined,
+      q: debouncedSearchTerm || undefined,
+      pageNumber: 1,
+      pageSize: 20,
+    });
+  }, [selectedStatus, debouncedSearchTerm]);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timerId);
+  }, [searchTerm]);
 
   return (
-    <div>
+    <div className="space-y-8">
       <header className="flex flex-col gap-4 mb-8">
         <h1 className="text-3xl font-bold">Actions</h1>
         {productReportsCount && productReportsCount > 0 ? (
@@ -139,61 +170,84 @@ export function SellPageComponent() {
 
       <h2 className="text-2xl font-bold mb-8">Your Patterns</h2>
       {isLoading ? <LoadingSpinnerComponent /> : null}
-      {products.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {products.map((product) => {
-              const isCreator = userId === product.creatorId;
-              return (
-                <Card key={product.id}>
-                  {isCreator ? (
-                    <CardHeader className="flex w-full">
-                      <CardDescription
-                        className={`text-sm font-semibold text-right ${getStatusColor(
-                          product.status,
-                        )}`}
-                      >
-                        {getStatusDisplayText(product.status)}
-                      </CardDescription>
-                    </CardHeader>
-                  ) : null}
-                  <CardContent>
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      name={product.title}
-                      price={product.price}
-                      isFree={product.isFree}
-                      imageUrls={product.imageUrls}
-                      creatorId={product.creatorId}
-                      status={product.status}
-                      unavailable={
-                        product.status === 'Deleted' ||
-                        product.status === 'Aborted' ||
-                        product.status === 'Declined'
-                      }
-                      isProductView={true}
-                    />
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-          <div className="flex">
-            {hasNextPage ? (
-              <Button
-                variant={'outline'}
-                className={'w-full'}
-                onClick={() => {
-                  setLoadMore(true);
-                }}
-              >
-                Load more
-              </Button>
-            ) : null}
-          </div>
-        </>
-      ) : null}
+      <div className="space-y-4">
+        <Input
+          placeholder={'Search...'}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Select onValueChange={(value) => setSelectedStatus(value)} defaultValue={selectedStatus}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="All">All</SelectItem>
+            <SelectItem value="InProgress">Test Phase</SelectItem>
+            <SelectItem value="Created">Created</SelectItem>
+            <SelectItem value="Released">Released</SelectItem>
+            <SelectItem value="Deleted">Deleted</SelectItem>
+            <SelectItem value="Declined">Declined</SelectItem>
+            <SelectItem value="Aborted">Aborted</SelectItem>
+            <SelectItem value="Hidden">Hidden</SelectItem>
+          </SelectContent>
+        </Select>
+        {products.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+              {products.map((product) => {
+                const isCreator = userId === product.creatorId;
+                return (
+                  <Card key={product.id}>
+                    {isCreator ? (
+                      <CardHeader className="flex w-full">
+                        <CardDescription
+                          className={`text-sm font-semibold text-right ${getStatusColor(
+                            product.status,
+                          )}`}
+                        >
+                          {getStatusDisplayText(product.status)}
+                        </CardDescription>
+                      </CardHeader>
+                    ) : null}
+                    <CardContent>
+                      <ProductCard
+                        key={product.id}
+                        id={product.id}
+                        name={product.title}
+                        price={product.price}
+                        isFree={product.isFree}
+                        imageUrls={product.imageUrls}
+                        creatorId={product.creatorId}
+                        status={product.status}
+                        unavailable={
+                          product.status === 'Deleted' ||
+                          product.status === 'Aborted' ||
+                          product.status === 'Declined'
+                        }
+                        isProductView={true}
+                      />
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+            <div className="flex">
+              {hasNextPage ? (
+                <Button
+                  variant={'outline'}
+                  className={'w-full'}
+                  onClick={() => {
+                    setLoadMore(true);
+                  }}
+                >
+                  Load more
+                </Button>
+              ) : null}
+            </div>
+          </>
+        ) : null}
+      </div>
+
       {products.length === 0 && !isLoading ? (
         <p>
           No patterns available.
