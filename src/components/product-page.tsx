@@ -21,6 +21,7 @@ import ProductMetrics from '@/lib/components/ProductMetrics';
 import TestingMetrics from '@/lib/components/TestingMetrics';
 import { ReportProduct } from '@/lib/components/ReportProduct';
 import ReviewMessages from '@/lib/components/ReviewMessages';
+import TesterShoutout from '@/lib/components/TesterShoutout';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -56,6 +57,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
 
   return (
     <div className="flex flex-col gap-8">
+      <GoBackButton />
       <Card className="overflow-hidden">
         <CardContent className="p-6">
           <div className="grid gap-8">
@@ -106,7 +108,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
         </CardContent>
       </Card>
       <ReviewMessages productId={product.id} />
-      <GoBackButton />
+      <TesterShoutout productId={product.id} />
     </div>
   );
 }
