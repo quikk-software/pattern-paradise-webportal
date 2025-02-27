@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import PayPalAccountSelector from '../../../components/paypal-account-selector';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
@@ -17,11 +16,7 @@ interface ConfirmDrawerProps {
   isSuccess: boolean;
   isError: boolean;
   errorDetail?: string;
-  callbackFn?: (
-    selectedType: 'business' | 'personal',
-    shareDataToPayPalGranted: boolean,
-    paypalEmail: string,
-  ) => void;
+  callbackFn?: (shareDataToPayPalGranted: boolean, paypalEmail: string) => void;
 }
 
 export default function ConnectPayPalDrawer({
@@ -34,7 +29,6 @@ export default function ConnectPayPalDrawer({
   errorDetail,
   callbackFn,
 }: ConfirmDrawerProps) {
-  const [selectedType, setSelectedType] = useState<'business' | 'personal' | null>(null);
   const [shareDataToPayPalGranted, setShareDataToPayPalGranted] = useState(false);
 
   return (
@@ -48,7 +42,6 @@ export default function ConnectPayPalDrawer({
               service provider PayPal and take your Pattern business to the next level.
             </DrawerTitle>
           </DrawerHeader>
-          <PayPalAccountSelector selectedType={selectedType} setSelectedType={setSelectedType} />
           <div className="flex gap-2">
             <Checkbox
               id="share-data-to-paypal-checkbox"
@@ -76,13 +69,13 @@ export default function ConnectPayPalDrawer({
           </Button>
           <Button
             onClick={() => {
-              if (!selectedType || !shareDataToPayPalGranted || !paypalEmail) {
+              if (!shareDataToPayPalGranted || !paypalEmail) {
                 return;
               }
-              callbackFn?.(selectedType, shareDataToPayPalGranted, paypalEmail);
+              callbackFn?.(shareDataToPayPalGranted, paypalEmail);
             }}
             variant={'default'}
-            disabled={isLoading || !selectedType || !shareDataToPayPalGranted || !paypalEmail}
+            disabled={isLoading || !shareDataToPayPalGranted || !paypalEmail}
           >
             {isLoading ? <LoadingSpinnerComponent size="sm" /> : null}
             Connect PayPal

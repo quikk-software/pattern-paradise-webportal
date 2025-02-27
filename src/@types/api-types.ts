@@ -63,7 +63,6 @@ export interface GetUserMetricsResponse {
 }
 
 export interface PostUserPayPalReferralRequest {
-  hasPayPalBusinessAccount: boolean;
   shareDataToPayPalGranted: boolean;
   paypalEmail: string;
 }
@@ -726,6 +725,7 @@ export interface PostNewsletterSubscriptionRequest {
 
 export interface GetChatMessageResponse {
   id: string;
+  isRead: boolean;
   files: {
     url: string;
     mimeType: string;
@@ -763,6 +763,7 @@ export interface ListChatMessagesResponse {
 
 export interface GetChatParticipantResponse {
   id: string;
+  blocked: boolean;
   chatId: string;
   userId: string;
   user?: GetUserAccountResponse;
@@ -781,6 +782,7 @@ export interface GetChatParticipantResponse {
 export interface GetChatResponse {
   id: string;
   participants: GetChatParticipantResponse[];
+  latestChatMessage?: GetChatMessageResponse;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -1321,8 +1323,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     postUserPayPalReferral: (
       userId: string,
       data: {
-        /** @example "any" */
-        hasPayPalBusinessAccount?: any;
         /** @example "any" */
         shareDataToPayPalGranted?: any;
         /** @example "any" */
@@ -2444,6 +2444,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The redirect will include the business type and merchant ID of the onboarded merchant. Incoming query data will be saved.
+     *
+     * @tags Webhook
+     * @name RedirectMerchant
+     * @summary Saves and redirects an onboarded merchant to Pattern Paradise onboarding page.
+     * @request GET:/api/v1/paypal/redirect-merchant
+     * @secure
+     */
+    redirectMerchant: (
+      query?: {
+        merchantIdInPayPal?: string;
+        merchantId?: string;
+        accountStatus?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/api/v1/paypal/redirect-merchant`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The webhook will parse the event
      *
      * @tags Webhook
@@ -2894,6 +2919,57 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         secure: true,
         type: ContentType.Json,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The chat messages will be read based on a given chat ID and based of the authenticated user ID.
+     *
+     * @tags Chat
+     * @name ReadAllChatMessages
+     * @summary Read all messages of a chat.
+     * @request PATCH:/api/v1/chats/{chatId}/read-all
+     * @secure
+     */
+    readAllChatMessages: (chatId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/chats/${chatId}/read-all`,
+        method: 'PATCH',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The chat will be blocked based on a given user ID.
+     *
+     * @tags Chat
+     * @name BlockChat
+     * @summary Blocks a chat.
+     * @request PATCH:/api/v1/chats/{chatId}/block-user/{userId}
+     * @secure
+     */
+    blockChat: (chatId: string, userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/chats/${chatId}/block-user/${userId}`,
+        method: 'PATCH',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The chat will be unblocked based on a given user ID.
+     *
+     * @tags Chat
+     * @name UnblockChat
+     * @summary Unblocks a chat.
+     * @request PATCH:/api/v1/chats/{chatId}/unblock-user/{userId}
+     * @secure
+     */
+    unblockChat: (chatId: string, userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/chats/${chatId}/unblock-user/${userId}`,
+        method: 'PATCH',
+        secure: true,
         ...params,
       }),
   };
