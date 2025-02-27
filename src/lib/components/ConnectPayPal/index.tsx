@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { Input } from '@/components/ui/input';
-import { Regex } from 'lucide-react';
 import { EMAIL_REGEX } from '@/lib/constants';
 
 interface ConnectPayPalProps {
@@ -43,20 +42,15 @@ export default function ConnectPayPal({ highlight }: ConnectPayPalProps) {
     router.push(paypalReferralData.actionUrl);
   }, [createPayPalReferralIsSuccess, paypalReferralData, router]);
 
-  const handleCreatePayPalReferralClick = async (
+  const handleCreatePayPalReferralClick = (
     userId: string,
-    selectedType: 'business' | 'personal',
     shareDataToPayPalGranted: boolean,
     paypalEmail: string,
   ) => {
-    const hasPayPalBusinessAccount = selectedType === 'business';
-    const result = await createPayPalReferral(userId, {
-      hasPayPalBusinessAccount,
+    createPayPalReferral(userId, {
       shareDataToPayPalGranted,
       paypalEmail,
-    });
-
-    router.push(result.actionUrl);
+    }).then((result) => router.push(result.actionUrl));
   };
 
   const invalidEmail = !EMAIL_REGEX.test(paypalEmail || '');
@@ -93,13 +87,8 @@ export default function ConnectPayPal({ highlight }: ConnectPayPalProps) {
         paypalEmail={paypalEmail}
         isOpen={isConnectPayPalDrawerOpen}
         setIsOpen={setIsConnectPayPalDrawerOpen}
-        callbackFn={(selectedType, shareDataToPayPalGranted, paypalEmail) => {
-          handleCreatePayPalReferralClick(
-            userId,
-            selectedType,
-            shareDataToPayPalGranted,
-            paypalEmail,
-          );
+        callbackFn={(shareDataToPayPalGranted, paypalEmail) => {
+          handleCreatePayPalReferralClick(userId, shareDataToPayPalGranted, paypalEmail);
         }}
         isLoading={createPayPalReferralIsLoading}
         isSuccess={createPayPalReferralIsSuccess}
