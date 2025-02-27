@@ -1,5 +1,5 @@
-import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
-import { ArrowLeftIcon, MessageCircle, PaperclipIcon, SendIcon, StarIcon } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowLeftIcon, MessageCircle, PaperclipIcon, SendIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -18,9 +18,10 @@ import useChatWebSocket from '@/lib/hooks/useChatWebSocket';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
-import { useCreateChatMessage } from '@/lib/api';
+import { useCreateChatMessage, useReadAllChatMessages } from '@/lib/api';
 import logger from '@/lib/core/logger';
 import NewMessages from '@/lib/components/NewMessages';
+import BlockChatButton from '@/lib/components/Chat/BlockChatButton';
 
 function getColor(isCreator: boolean) {
   if (isCreator) {
@@ -78,6 +79,7 @@ export default function ChatHistory({
   );
 
   const { mutate: createChatMessage } = useCreateChatMessage();
+  const { mutate: readAllChatMessages } = useReadAllChatMessages();
 
   useEffect(() => {
     if (messages?.at(0)?.creatorId === userId) {
@@ -169,6 +171,15 @@ export default function ChatHistory({
     }
   };
 
+  const handleReadAllChatMessages = () => {
+    if (!selectedChatId) {
+      return;
+    }
+    readAllChatMessages(selectedChatId).then();
+  };
+
+  const currentChat = chats.find((chat) => chat.id === selectedChatId);
+
   return (
     <div
       className={cn('bg-white w-full md:w-2/3', {
@@ -195,16 +206,19 @@ export default function ChatHistory({
         >
           {/* Top navigation */}
           <CardContent className="p-4 flex-none">
-            <div className="flex items-center justify-start">
-              <Button
-                variant="ghost"
-                size="default"
-                className="md:hidden mr-2"
-                onClick={() => router.push('/app/secure/chats')}
-              >
-                <ArrowLeftIcon className="h-6 w-6" />
-              </Button>
-              <h2 className="text-2xl font-bold">Chat History</h2>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center justify-start">
+                <Button
+                  variant="ghost"
+                  size="default"
+                  className="md:hidden mr-2"
+                  onClick={() => router.push('/app/secure/chats')}
+                >
+                  <ArrowLeftIcon className="h-6 w-6" />
+                </Button>
+                <h2 className="text-2xl font-bold">Chat History</h2>
+              </div>
+              <BlockChatButton chat={currentChat} />
             </div>
           </CardContent>
           {/* Chat History (Scroll Area) */}
@@ -227,8 +241,6 @@ export default function ChatHistory({
               .slice(0)
               .reverse()
               .map((message) => {
-                const currentChat = chats.find((chat) => chat.id === selectedChatId);
-
                 const chatMessageCreator = currentChat?.participants?.find(
                   (p) => p.userId === message.creatorId,
                 )?.user;
@@ -348,7 +360,11 @@ export default function ChatHistory({
               })}
             {!showChatList ? <div ref={bottomRef} /> : null}
             <div className="sticky bottom-0 left-0 w-full py-1 bg-white">
-              <NewMessages message={socketMessage} currentBottomRef={bottomRef} />
+              <NewMessages
+                message={socketMessage}
+                currentBottomRef={bottomRef}
+                callback={handleReadAllChatMessages}
+              />
             </div>
           </ScrollArea>
 

@@ -726,6 +726,7 @@ export interface PostNewsletterSubscriptionRequest {
 
 export interface GetChatMessageResponse {
   id: string;
+  isRead: boolean;
   files: {
     url: string;
     mimeType: string;
@@ -763,6 +764,7 @@ export interface ListChatMessagesResponse {
 
 export interface GetChatParticipantResponse {
   id: string;
+  blocked: boolean;
   chatId: string;
   userId: string;
   user?: GetUserAccountResponse;
@@ -2920,6 +2922,57 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         secure: true,
         type: ContentType.Json,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The chat messages will be read based on a given chat ID and based of the authenticated user ID.
+     *
+     * @tags Chat
+     * @name ReadAllChatMessages
+     * @summary Read all messages of a chat.
+     * @request PATCH:/api/v1/chats/{chatId}/read-all
+     * @secure
+     */
+    readAllChatMessages: (chatId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/chats/${chatId}/read-all`,
+        method: 'PATCH',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The chat will be blocked based on a given user ID.
+     *
+     * @tags Chat
+     * @name BlockChat
+     * @summary Blocks a chat.
+     * @request PATCH:/api/v1/chats/{chatId}/block-user/{userId}
+     * @secure
+     */
+    blockChat: (chatId: string, userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/chats/${chatId}/block-user/${userId}`,
+        method: 'PATCH',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The chat will be unblocked based on a given user ID.
+     *
+     * @tags Chat
+     * @name UnblockChat
+     * @summary Unblocks a chat.
+     * @request PATCH:/api/v1/chats/{chatId}/unblock-user/{userId}
+     * @secure
+     */
+    unblockChat: (chatId: string, userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/chats/${chatId}/unblock-user/${userId}`,
+        method: 'PATCH',
+        secure: true,
         ...params,
       }),
   };

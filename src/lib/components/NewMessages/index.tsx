@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 interface NewMessagesProps {
   message?: GetChatMessageResponse | GetTestingCommentResponse;
   currentBottomRef?: React.MutableRefObject<any>;
+  callback?: () => void;
 }
 
-export default function NewMessages({ message, currentBottomRef }: NewMessagesProps) {
+export default function NewMessages({ message, currentBottomRef, callback }: NewMessagesProps) {
   const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function NewMessages({ message, currentBottomRef }: NewMessagesPr
     if (!currentBottomRef?.current) {
       return;
     }
+    callback?.();
     currentBottomRef.current.scrollIntoView({ behavior: 'smooth' });
     setShowHint(false);
   };
