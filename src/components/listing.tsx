@@ -351,7 +351,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           <WaterfallListing
             products={products}
             listingType={listingType}
-            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 20}
+            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
             onImpression={(productId) => handleImpression(productId)}
           />
           <div ref={lastProductRef} className="h-10" />
