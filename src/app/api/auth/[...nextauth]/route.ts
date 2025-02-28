@@ -61,7 +61,7 @@ const handler = NextAuth({
             // @ts-ignore
             email: decodedToken?.email,
             // @ts-ignore
-            roles: decodedToken?.resource_access?.cbj?.roles || [],
+            roles: decodedToken?.resource_access?.[process.env.KEYCLOAK_CLIENT_ID]?.roles || [],
             // @ts-ignore
             subscriptionStatus: user.paypalSubscriptionStatus,
           };
