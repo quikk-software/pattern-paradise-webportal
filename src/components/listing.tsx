@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
-import { combineArraysById } from '@/lib/core/utils';
 import PriceFilter from '@/components/price-filter';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import WaterfallListing from '@/lib/components/WaterfallListing';
@@ -46,7 +45,6 @@ interface ListingComponentProps {
 }
 
 export function ListingComponent({ listingType, defaultProducts }: ListingComponentProps) {
-  const [products, setProducts] = useState<GetProductResponse[]>(defaultProducts);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState<{
@@ -60,11 +58,12 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [language, setLanguage] = useState<string | undefined>(undefined);
   const [showFilter, setShowFilter] = useState(false);
-  const [loadMore, setLoadMore] = useState(false);
   const [triggerLoad, setTriggerLoad] = useState(false);
   const [sortValue, setSortValue] = useState('mostRelevant');
 
-  const { fetch, hasNextPage, isLoading } = useListProducts({});
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const { fetch, data: products, hasNextPage, isLoading } = useListProducts({});
   const { mutate: mutateProductImpression } = useCreateProductImpression();
   const { mutate: mutateTestingImpression } = useCreateTestingImpression();
   const screenSize = useScreenSize();
@@ -81,36 +80,10 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   }, [searchTerm]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const result = await fetch({
-        status,
-      });
-      setProducts(result?.products ?? []);
-    };
-    fetchProducts();
+    fetch({
+      status,
+    }).then();
   }, [status]);
-
-  useEffect(() => {
-    if (!loadMore) {
-      return;
-    }
-    const fetchProducts = async () => {
-      const result = await fetch({
-        q: debouncedSearchTerm || undefined,
-        status,
-        categories: selectedCategory ? [selectedCategory.craft] : ['All'],
-        hashtags,
-        minPrice: priceRange[0],
-        maxPrice: priceRange[1],
-        pageNumber: 1,
-        pageSize: 20,
-      });
-      setProducts((p) => [...combineArraysById(p, result?.products ?? [], 'id')]);
-
-      setLoadMore((p) => !p);
-    };
-    fetchProducts();
-  }, [loadMore]);
 
   useEffect(() => {
     fetchProductsByFilter();
@@ -138,8 +111,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
       pageNumber: 1,
       pageSize: 20,
       sortBy: sortValue,
-    }).then((result) => {
-      setProducts(result.products);
+    }).then(() => {
       setTriggerLoad(false);
       if (scrollToResults) {
         document.getElementById('listing-results')?.scrollIntoView();
@@ -187,6 +159,39 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
   };
 
   const onSortSelectChange = (value: string) => setSortValue(value);
+
+  const lastProductRef = (node: HTMLElement | null) => {
+    if (isLoading) {
+      return;
+    }
+    if (observer.current) {
+      observer.current.disconnect();
+    }
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasNextPage) {
+        fetch({
+          q: debouncedSearchTerm ?? undefined,
+          status,
+          categories: selectedCategory ? [selectedCategory.craft] : ['All'],
+          subCategories: Object.values(selectedCategory.options)
+            .map((options) => options.map((option) => option.name))
+            .flat(),
+          minPrice: priceRange[0],
+          maxPrice: priceRange[1],
+          hashtags,
+          languages: language ? [language] : [],
+          pageNumber: 1,
+          pageSize: 20,
+          sortBy: sortValue,
+        });
+      }
+    });
+
+    if (node) {
+      observer.current.observe(node);
+    }
+  };
 
   return (
     <div>
@@ -296,7 +301,7 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search..."
+              placeholder="Search pattern or creator..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
@@ -349,22 +354,8 @@ export function ListingComponent({ listingType, defaultProducts }: ListingCompon
             columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
             onImpression={(productId) => handleImpression(productId)}
           />
+          <div ref={lastProductRef} className="h-10" />
         </div>
-
-        {hasNextPage ? (
-          <Button
-            variant={'outline'}
-            className={'w-full'}
-            onClick={() => {
-              setLoadMore(true);
-            }}
-            disabled={isLoading}
-          >
-            Load more
-          </Button>
-        ) : null}
-
-        {isLoading ? <LoadingSpinnerComponent /> : null}
 
         {products.length === 0 && !isLoading && (
           <p className="text-center text-muted-foreground mt-6">
