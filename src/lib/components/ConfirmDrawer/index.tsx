@@ -10,6 +10,7 @@ interface ConfirmDrawerProps {
   isLoading?: boolean;
   callbackFn?: () => void;
   description: string;
+  errorDetail?: string;
 }
 
 export default function ConfirmDrawer({
@@ -18,6 +19,7 @@ export default function ConfirmDrawer({
   isLoading,
   callbackFn,
   description,
+  errorDetail,
 }: ConfirmDrawerProps) {
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -40,6 +42,7 @@ export default function ConfirmDrawer({
             {isLoading ? <LoadingSpinnerComponent size="sm" /> : null}
             OK
           </Button>
+          {errorDetail ? <p className="text-red-500">{errorDetail}</p> : null}
         </div>
       </DrawerContent>
     </Drawer>

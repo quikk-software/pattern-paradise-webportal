@@ -9,6 +9,8 @@ import { GetChatResponse } from '@/@types/api-types';
 import { cn } from '@/lib/utils';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import dayjs from '@/lib/core/dayjs';
+import { PulsatingDot } from '@/lib/components/Chat/PulsatingDot';
 
 interface ChatListProps {
   showChatList: boolean;
@@ -73,27 +75,40 @@ export default function ChatList({
           <div className="space-y-2">
             {chats.map((chat) => {
               const correspondence = chat.participants.find((p) => p.userId !== userId)?.user;
+              const hasNewMessages =
+                !chat?.latestChatMessage?.isRead && chat.latestChatMessage?.creatorId !== userId;
               return (
                 <div
                   key={chat.id}
-                  className="flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg mb-2"
+                  className="flex items-center gap-2 justify-between p-3 cursor-pointer hover:bg-gray-100 rounded-lg mb-2"
                   onClick={() => handleChatSelect(chat)}
                 >
-                  <Avatar className="w-12 h-12 mr-3">
-                    <AvatarImage src={correspondence?.imageUrl} />
-                    <AvatarFallback>
-                      {correspondence?.firstName?.at(0)}
-                      {correspondence?.lastName?.at(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col flex-1 overflow-hidden">
-                    <h3 className="font-semibold truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
-                      {correspondence?.username}
-                    </h3>
-                    <p className="text-sm text-gray-500 truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
-                      Last chat here
-                    </p>
+                  <div className="flex items-center overflow-hidden">
+                    <Avatar className="w-12 h-12 mr-3">
+                      <AvatarImage src={correspondence?.imageUrl} />
+                      <AvatarFallback>
+                        {correspondence?.firstName?.at(0)}
+                        {correspondence?.lastName?.at(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col overflow-hidden">
+                      <h3 className="font-semibold truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]">
+                        {correspondence?.username}
+                      </h3>
+                      <p
+                        className={`text-sm ${hasNewMessages ? 'font-bold text-black' : 'font-medium text-gray-500'} truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]`}
+                      >
+                        {chat?.latestChatMessage?.message ?? ''}
+                      </p>
+                    </div>
                   </div>
+                  {hasNewMessages ? (
+                    <PulsatingDot size={'sm'} />
+                  ) : chat?.latestChatMessage?.createdAt ? (
+                    <span className="text-sm text-gray-500 whitespace-nowrap">
+                      {dayjs(chat?.latestChatMessage?.createdAt).fromNow()}
+                    </span>
+                  ) : null}
                 </div>
               );
             })}

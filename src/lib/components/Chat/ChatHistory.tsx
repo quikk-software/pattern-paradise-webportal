@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeftIcon, MessageCircle, PaperclipIcon, SendIcon, StarIcon } from 'lucide-react';
+import { ArrowLeftIcon, MessageCircle, PaperclipIcon, SendIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -18,8 +18,10 @@ import useChatWebSocket from '@/lib/hooks/useChatWebSocket';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
-import { useCreateChatMessage } from '@/lib/api';
+import { useCreateChatMessage, useReadAllChatMessages } from '@/lib/api';
 import logger from '@/lib/core/logger';
+import NewMessages from '@/lib/components/NewMessages';
+import BlockChatButton from '@/lib/components/Chat/BlockChatButton';
 
 function getColor(isCreator: boolean) {
   if (isCreator) {
@@ -65,7 +67,6 @@ export default function ChatHistory({
   const [files, setFiles] = useState<FileList | null>(null);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [_hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -73,11 +74,12 @@ export default function ChatHistory({
 
   const bottomRef = useRef<any>(null);
 
-  const { sendMessage, message: socketMessage } = useChatWebSocket(
+  const { message: socketMessage } = useChatWebSocket(
     `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/chat-messages/subscribe`,
   );
 
   const { mutate: createChatMessage } = useCreateChatMessage();
+  const { mutate: readAllChatMessages } = useReadAllChatMessages();
 
   useEffect(() => {
     if (messages?.at(0)?.creatorId === userId) {
@@ -89,7 +91,6 @@ export default function ChatHistory({
     if (bottomRef.current && !showChatList && (initialLoad || changedChat) && messages.length > 0) {
       bottomRef.current.scrollIntoView({ behavior: 'instant' });
       setInitialLoad(false);
-      setHasNewSocketMessage(false);
       setChangedChat(false);
     }
   }, [messages, setChangedChat, showChatList, changedChat, initialLoad]);
@@ -156,26 +157,28 @@ export default function ChatHistory({
           })),
         });
         if (chatMessage) {
+          setMessages((msgs) =>
+            [...new Map([chatMessage, ...msgs].map((item) => [item.id, item])).values()].sort(
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            ),
+          );
           setNewMessage('');
           setFiles(null);
         }
-        sendMessage({ payload: chatMessage, event: 'chatmessagecreated' });
-        setHasNewSocketMessage(true);
       } finally {
         setSendMessageIsLoading(false);
       }
     }
   };
 
-  const handleActionPayload = (payload?: string) => {
-    if (!payload) {
+  const handleReadAllChatMessages = () => {
+    if (!selectedChatId) {
       return;
     }
-    // handle link
-    if (payload?.startsWith('https://') || payload.startsWith('/')) {
-      router.push(payload);
-    }
+    readAllChatMessages(selectedChatId).then();
   };
+
+  const currentChat = chats.find((chat) => chat.id === selectedChatId);
 
   return (
     <div
@@ -203,20 +206,23 @@ export default function ChatHistory({
         >
           {/* Top navigation */}
           <CardContent className="p-4 flex-none">
-            <div className="flex items-center justify-start">
-              <Button
-                variant="ghost"
-                size="default"
-                className="md:hidden mr-2"
-                onClick={() => router.push('/app/secure/chats')}
-              >
-                <ArrowLeftIcon className="h-6 w-6" />
-              </Button>
-              <h2 className="text-2xl font-bold">Chat History</h2>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center justify-start">
+                <Button
+                  variant="ghost"
+                  size="default"
+                  className="md:hidden mr-2"
+                  onClick={() => router.push('/app/secure/chats')}
+                >
+                  <ArrowLeftIcon className="h-6 w-6" />
+                </Button>
+                <h2 className="text-2xl font-bold">Chat History</h2>
+              </div>
+              <BlockChatButton chat={currentChat} />
             </div>
           </CardContent>
           {/* Chat History (Scroll Area) */}
-          <ScrollArea className="flex-grow px-4 overflow-y-auto">
+          <ScrollArea className="flex-grow px-4 overflow-y-auto relative">
             {chatMessagesHasNextPage && !!selectedChatId ? (
               <Button
                 variant={'outline'}
@@ -235,8 +241,6 @@ export default function ChatHistory({
               .slice(0)
               .reverse()
               .map((message) => {
-                const currentChat = chats.find((chat) => chat.id === selectedChatId);
-
                 const chatMessageCreator = currentChat?.participants?.find(
                   (p) => p.userId === message.creatorId,
                 )?.user;
@@ -355,6 +359,13 @@ export default function ChatHistory({
                 );
               })}
             {!showChatList ? <div ref={bottomRef} /> : null}
+            <div className="sticky bottom-0 left-0 w-full py-1 bg-white">
+              <NewMessages
+                message={socketMessage}
+                currentBottomRef={bottomRef}
+                callback={handleReadAllChatMessages}
+              />
+            </div>
           </ScrollArea>
 
           {/* Message Input Area */}

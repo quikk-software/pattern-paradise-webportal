@@ -28,7 +28,11 @@ export const useListProducts = ({
         }),
     );
 
-    setData((p) => [...combineArraysById(p, response?.data.products ?? [], 'id')]);
+    if (filter?.pageNumber === 1) {
+      setData(response?.data.products ?? []);
+    } else {
+      setData((p) => [...combineArraysById(p, response?.data.products ?? [], 'id')]);
+    }
 
     pagination.handlePaginationPayload(response?.data);
 

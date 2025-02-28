@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
 import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
+import NewMessages from '@/lib/components/NewMessages';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -140,7 +141,6 @@ export default function ChatHistory({
   const [files, setFiles] = useState<FileList | null>(null);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [_hasNewSocketMessage, setHasNewSocketMessage] = useState(false);
   const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
@@ -149,7 +149,7 @@ export default function ChatHistory({
 
   const bottomRef = useRef<any>(null);
 
-  const { sendMessage, messages: socketMessages } = useTestingWebSocket(
+  const { message: socketMessage } = useTestingWebSocket(
     `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/api/v1/testing-comments/subscribe`,
   );
 
@@ -173,7 +173,6 @@ export default function ChatHistory({
     if (bottomRef.current && !showChatList && (initialLoad || changedChat) && messages.length > 0) {
       bottomRef.current.scrollIntoView({ behavior: 'instant' });
       setInitialLoad(false);
-      setHasNewSocketMessage(false);
       setChangedChat(false);
     }
   }, [messages, setChangedChat, showChatList, changedChat, initialLoad]);
@@ -199,21 +198,16 @@ export default function ChatHistory({
   }, [selectedTestingId, setMessages]);
 
   useEffect(() => {
-    if (!selectedTestingId) {
+    if (!selectedTestingId || !socketMessage) {
       return;
     }
-    const socketMessagesForThisChat = [
-      ...new Map(socketMessages.map((item) => [item.payload.id, item])).values(),
-    ]
-      .filter((socketMessage) => socketMessage.payload.testingId === selectedTestingId)
-      .map((socketMessage) => socketMessage.payload);
 
     setMessages((msgs) =>
-      [
-        ...new Map([...socketMessagesForThisChat, ...msgs].map((item) => [item.id, item])).values(),
-      ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+      [...new Map([socketMessage, ...msgs].map((item) => [item.id, item])).values()].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
     );
-  }, [socketMessages, selectedTestingId, setMessages]);
+  }, [socketMessage, selectedTestingId, setMessages]);
 
   useEffect(() => {
     if (!file) {
@@ -262,7 +256,7 @@ export default function ChatHistory({
           () => {},
         );
 
-        const result = await createTestingComment({
+        const message = await createTestingComment({
           type: 'Standard',
           comment: newMessage.trim(),
           files: urls.map((fu) => ({
@@ -271,12 +265,15 @@ export default function ChatHistory({
           })),
           testingId: selectedTestingId,
         });
-        if (result) {
+        if (message) {
+          setMessages((msgs) =>
+            [...new Map([message, ...msgs].map((item) => [item.id, item])).values()].sort(
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            ),
+          );
           setNewMessage('');
           setFiles(null);
         }
-        sendMessage({ payload: result, event: 'testingcommentcreated' });
-        setHasNewSocketMessage(true);
       } finally {
         setSendMessageIsLoading(false);
       }
@@ -621,6 +618,9 @@ export default function ChatHistory({
                 );
               })}
             {!showChatList ? <div ref={bottomRef} /> : null}
+            <div className="sticky bottom-0 left-0 w-full py-1 bg-white">
+              <NewMessages message={socketMessage} currentBottomRef={bottomRef} />
+            </div>
           </ScrollArea>
 
           {/* Message Input Area */}

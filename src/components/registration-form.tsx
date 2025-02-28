@@ -24,6 +24,7 @@ import InstagramIcon from '@/lib/icons/InstagramIcon';
 import { EMAIL_REGEX, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useRouter } from 'next/navigation';
 
 const ALLOWED_ROLES = ['Buyer', 'Seller', 'Tester'];
 
@@ -47,6 +48,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
   const [rolesError, setRolesError] = useState<string | undefined>(undefined);
 
   const { redirectUrl } = useRedirect();
+  const router = useRouter();
 
   const { mutate, isSuccess, isError, isLoading, errorDetail } = useCreateUser();
 
@@ -74,8 +76,8 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
     }
 
     await mutate({
-      email: data.email,
-      password: data.password,
+      email: data.email?.trim(),
+      password: data.password?.trim(),
       firstName: data.firstName?.trim(),
       lastName: data.lastName?.trim(),
       username: data.username?.trim(),
@@ -85,6 +87,8 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
       hasAcceptedPrivacy: data.hasAcceptedPrivacy,
       roles,
     });
+
+    router.push(`/auth/registration/success?email=${data.email.trim()}&roles=${roles.join(',')}`);
   };
 
   const handleRoleChange = (role: string) => {

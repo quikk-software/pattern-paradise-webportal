@@ -9,13 +9,13 @@ interface TestingWebSocketMessage {
 }
 
 interface UseTestingWebSocketReturn {
-  messages: TestingWebSocketMessage[];
+  message?: GetTestingCommentResponse;
   sendMessage: (message: TestingWebSocketMessage) => void;
   isConnected: boolean;
 }
 
 const useTestingWebSocket = (url: string): UseTestingWebSocketReturn => {
-  const [messages, setMessages] = useState<TestingWebSocketMessage[]>([]);
+  const [message, setMessage] = useState<GetTestingCommentResponse |undefined>(undefined);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   const { data: session } = useSession();
@@ -51,7 +51,7 @@ const useTestingWebSocket = (url: string): UseTestingWebSocketReturn => {
         payload: JSON.parse(parsedEvent.payload),
       };
       logger.info('Received message:', data);
-      setMessages((prevMessages) => [...prevMessages, data]);
+      setMessage(data.payload);
     };
 
     ws.onerror = null;
@@ -87,7 +87,7 @@ const useTestingWebSocket = (url: string): UseTestingWebSocketReturn => {
     };
   }, []);
 
-  return { messages, sendMessage, isConnected };
+  return { message, sendMessage, isConnected };
 };
 
 export default useTestingWebSocket;

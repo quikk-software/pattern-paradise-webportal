@@ -42,7 +42,7 @@ export function TestingChat() {
     fetchTestings(['InProgress', 'Aborted', 'Declined', 'Approved'], true).then(() =>
       setTestingsLoaded(true),
     );
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const testingIdFromQuery = searchParams.get('testingId');

@@ -32,7 +32,7 @@ export function RecentSales({ recentSales }: RecentSalesProps): JSX.Element {
             ) : null}
             <p className="text-sm text-muted-foreground">{recentSale.username}</p>
           </div>
-          <div className="ml-auto font-medium">+${recentSale.revenue.toLocaleString('en-US')}</div>
+          <div className="ml-auto font-medium">+${recentSale.revenue.toFixed(2)}</div>
         </Link>
       ))}
     </div>
