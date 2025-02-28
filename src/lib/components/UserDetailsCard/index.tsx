@@ -14,6 +14,7 @@ import { useCreateChat } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { useSession } from 'next-auth/react';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart },
@@ -38,6 +39,8 @@ export default function UserDetailsCard({
 }: UserDetailsCardProps) {
   const { userId } = useSelector((store: Store) => store.auth);
 
+  const { status } = useSession();
+
   const { mutate: createChat } = useCreateChat();
 
   const router = useRouter();
@@ -51,6 +54,8 @@ export default function UserDetailsCard({
   const hasSocialLinks = user.instagramRef || user.tiktokRef;
   const showCardContent = hasSocialLinks || showRoles;
   const isMe = userId === user.id;
+  const isLoggedIn = status === 'authenticated';
+
   return (
     <Card key={user.id} className={`relative cursor-pointer transition-all`}>
       <CardHeader className="flex flex-row justify-between items-start gap-2">
@@ -127,7 +132,7 @@ export default function UserDetailsCard({
                 ))}
             </div>
           ) : null}
-          {!isMe ? (
+          {!isMe && isLoggedIn ? (
             <Button variant={'outline'} onClick={() => handleChatClick(userId, user.id)}>
               <MessagesSquare />
               Start a Chat
