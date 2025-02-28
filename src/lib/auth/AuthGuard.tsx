@@ -14,6 +14,7 @@ import {
   setEmail,
   setUsername,
 } from '@/lib/features/auth/authSlice';
+import PayPalReminderWrapper from '@/app/wrappers/PayPalReminderWrapper';
 
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
@@ -50,7 +51,7 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     );
   }
 
-  return <>{children}</>;
+  return <PayPalReminderWrapper>{children}</PayPalReminderWrapper>;
 };
 
 export default AuthGuard;
