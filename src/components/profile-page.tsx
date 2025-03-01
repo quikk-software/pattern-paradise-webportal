@@ -9,12 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import {
-  useCreatePayPalReferral,
-  useGetPayPalMerchantStatus,
-  useRemovePayPalReferral,
-  useUpdateUser,
-} from '@/lib/api';
+import { useGetPayPalMerchantStatus, useRemovePayPalReferral, useUpdateUser } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -35,10 +30,9 @@ import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
 import { EMAIL_REGEX, SUPPORT_EMAIL } from '@/lib/constants';
 import useAuth from '@/lib/auth/useAuth';
-import { setRoles } from '@/lib/features/auth/authSlice';
-import ConnectPayPalDrawer from '@/lib/components/ConnectPayPalDrawer';
 import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 import ConnectPayPal from '@/lib/components/ConnectPayPal';
+import { useSession } from 'next-auth/react';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -50,6 +44,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
   const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
+
+  const { update } = useSession();
 
   const { action } = useAction();
   const {
@@ -147,10 +143,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       roles: data.roles ?? undefined,
     })
       .then(() => {
-        // TODO: Improve by refreshing access token and access roles from useSession where necessary
-        if (Array.isArray(data.roles)) {
-          dispatch(setRoles(data.roles));
-        }
+        update().then();
       })
       .catch(() => {
         setUpdateUserIsError(true);
