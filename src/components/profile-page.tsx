@@ -201,7 +201,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/auth/me/orders');
             }}
             className="w-full"
@@ -210,7 +211,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
             My Orders
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/auth/me/patterns');
             }}
             className="w-full"
@@ -219,7 +221,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
             My Patterns
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/chats');
             }}
             className="w-full"
@@ -228,7 +231,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
             My Chats
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/auth/me/reports');
             }}
             className={`w-full${hasOpenIncidents ? ' border-red-500 text-red-500' : ''}`}
@@ -236,7 +240,14 @@ export function ProfilePage({ user }: ProfilePageProps) {
           >
             Open Incidents{hasOpenIncidents ? ` (${user.openIncidentsCount})` : ''}
           </Button>
-          <Button variant={'secondary'} onClick={() => handleLogout()} disabled={isLoading}>
+          <Button
+            variant={'secondary'}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogout();
+            }}
+            disabled={isLoading}
+          >
             {isLoading ? <LoadingSpinnerComponent size="sm" className="text-black" /> : null}
             Logout
           </Button>
@@ -314,7 +325,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 <Button
                   variant="secondary"
                   className="w-full"
-                  onClick={() => setIsDisconnectPayPalDrawerOpen(true)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsDisconnectPayPalDrawerOpen(true);
+                  }}
                 >
                   {removePayPalReferralIsLoading ? (
                     <LoadingSpinnerComponent size="sm" className="text-black" />
@@ -351,7 +365,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
             <Button
               variant={'outline'}
               disabled={checkPayPalMerchantStatusIsLoading}
-              onClick={() => handleCheckPayPalMerchantStatus(userId)}
+              onClick={(e) => {
+                e.preventDefault();
+                handleCheckPayPalMerchantStatus(userId);
+              }}
             >
               {checkPayPalMerchantStatusIsLoading ? (
                 <LoadingSpinnerComponent size="sm" className="text-black" />
