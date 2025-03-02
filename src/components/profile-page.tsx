@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,12 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import {
-  useCreatePayPalReferral,
-  useGetPayPalMerchantStatus,
-  useRemovePayPalReferral,
-  useUpdateUser,
-} from '@/lib/api';
+import { useGetPayPalMerchantStatus, useRemovePayPalReferral, useUpdateUser } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -35,10 +30,10 @@ import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import OpenIncidentsInfoBox from '@/lib/components/OpenIncidentsInfoBox';
 import { EMAIL_REGEX, SUPPORT_EMAIL } from '@/lib/constants';
 import useAuth from '@/lib/auth/useAuth';
-import { setRoles } from '@/lib/features/auth/authSlice';
-import ConnectPayPalDrawer from '@/lib/components/ConnectPayPalDrawer';
 import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 import ConnectPayPal from '@/lib/components/ConnectPayPal';
+import { useSession } from 'next-auth/react';
+import ProfileImageGallery from '@/lib/components/ProfileImageGallery';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -50,6 +45,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
   const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
+
+  const { update } = useSession();
 
   const { action } = useAction();
   const {
@@ -89,20 +86,33 @@ export function ProfilePage({ user }: ProfilePageProps) {
   } = useForm({ defaultValues: user });
 
   const rolesRef = useRef<HTMLDivElement | null>(null);
+  const paypalRef = useRef<HTMLDivElement | null>(null);
+  const galleryRef = useRef<HTMLDivElement | null>(null);
 
-  const executeScroll = () => {
-    rolesRef.current?.scrollIntoView();
+  const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
+    console.log({
+      ref: ref.current,
+    });
+    ref.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
   };
 
   useEffect(() => {
     switch (action) {
       case 'scrollToRoles':
-        executeScroll();
+        executeScroll(rolesRef);
+        break;
+      case 'scrollToPayPal':
+        executeScroll(paypalRef);
+        break;
+      case 'scrollToGallery':
+        executeScroll(galleryRef);
         break;
       default:
         break;
     }
-  }, [action]);
+  }, [action, rolesRef, paypalRef, galleryRef]);
 
   useEffect(() => {
     if (!profileImage || profileImage === user.imageUrl) {
@@ -147,10 +157,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       roles: data.roles ?? undefined,
     })
       .then(() => {
-        // TODO: Improve by refreshing access token and access roles from useSession where necessary
-        if (Array.isArray(data.roles)) {
-          dispatch(setRoles(data.roles));
-        }
+        update().then();
       })
       .catch(() => {
         setUpdateUserIsError(true);
@@ -161,8 +168,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) =>
-        setProfileImage((e.target?.result as string) ?? '/placeholder.svg?height=100&width=100');
+      reader.onload = (e) => setProfileImage(e.target?.result as string);
       reader.readAsDataURL(file);
     }
   };
@@ -189,6 +195,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const roles = watch('roles');
   const highlightPayPal = action === 'scrollToPayPal';
+  const highlightGallery = action === 'scrollToGallery';
   const highlightRoles = action === 'scrollToRoles';
 
   const hasOpenIncidents = user?.openIncidentsCount > 0;
@@ -201,7 +208,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/auth/me/orders');
             }}
             className="w-full"
@@ -210,7 +218,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
             My Orders
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/auth/me/patterns');
             }}
             className="w-full"
@@ -219,7 +228,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
             My Patterns
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/chats');
             }}
             className="w-full"
@@ -228,7 +238,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
             My Chats
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               router.push('/app/secure/auth/me/reports');
             }}
             className={`w-full${hasOpenIncidents ? ' border-red-500 text-red-500' : ''}`}
@@ -236,7 +247,14 @@ export function ProfilePage({ user }: ProfilePageProps) {
           >
             Open Incidents{hasOpenIncidents ? ` (${user.openIncidentsCount})` : ''}
           </Button>
-          <Button variant={'secondary'} onClick={() => handleLogout()} disabled={isLoading}>
+          <Button
+            variant={'secondary'}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogout();
+            }}
+            disabled={isLoading}
+          >
             {isLoading ? <LoadingSpinnerComponent size="sm" className="text-black" /> : null}
             Logout
           </Button>
@@ -248,7 +266,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardContent>
       </Card>
       {user.roles?.includes('Seller') ? (
-        <Card>
+        <Card ref={paypalRef}>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Manage PayPal</CardTitle>
           </CardHeader>
@@ -314,7 +332,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 <Button
                   variant="secondary"
                   className="w-full"
-                  onClick={() => setIsDisconnectPayPalDrawerOpen(true)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsDisconnectPayPalDrawerOpen(true);
+                  }}
                 >
                   {removePayPalReferralIsLoading ? (
                     <LoadingSpinnerComponent size="sm" className="text-black" />
@@ -351,7 +372,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
             <Button
               variant={'outline'}
               disabled={checkPayPalMerchantStatusIsLoading}
-              onClick={() => handleCheckPayPalMerchantStatus(userId)}
+              onClick={(e) => {
+                e.preventDefault();
+                handleCheckPayPalMerchantStatus(userId);
+              }}
             >
               {checkPayPalMerchantStatusIsLoading ? (
                 <LoadingSpinnerComponent size="sm" className="text-black" />
@@ -631,6 +655,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardContent>
       </Card>
       <EditPassword />
+      <div ref={galleryRef}>
+        <ProfileImageGallery gallery={user.gallery} highlight={highlightGallery} />
+      </div>
       <ConfirmDrawer
         isOpen={isDisconnectPayPalDrawerOpen}
         setIsOpen={setIsDisconnectPayPalDrawerOpen}

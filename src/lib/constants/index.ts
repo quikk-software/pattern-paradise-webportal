@@ -187,6 +187,7 @@ export type TesterApplicationFilterObject = {
 
 export const HASHTAG_LIMIT = 10;
 export const IMAGE_LIMIT = 6;
+export const FEED_IMAGE_LIMIT = 96;
 
 export const reportProductReasons = [
   {

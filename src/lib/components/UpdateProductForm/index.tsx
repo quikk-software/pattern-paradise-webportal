@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, ChangeEvent, useEffect, useMemo } from 'react';
-import { CheckCircle2, FileIcon, X } from 'lucide-react';
+import React, { useState, ChangeEvent, useMemo } from 'react';
+import { CheckCircle2, FileIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,6 +24,10 @@ import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
 import { updateSelectedFlags } from '@/lib/utils';
 import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
+import { closestCenter, DndContext } from '@dnd-kit/core';
+import { arrayMove, rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+import DragAndDropImage from '@/lib/components/DragAndDropImage';
+import ImageUploadProgress from '@/lib/components/ImageUploadProgress';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
@@ -112,8 +116,15 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     }
     setImageError(undefined);
 
+    const newImageIndices: number[] = [];
     const newImages = images
-      .filter((image) => !initialData.imageUrls.includes(image.url))
+      .filter((image, index) => {
+        if (!initialData.imageUrls.includes(image.url)) {
+          newImageIndices.push(index);
+          return true;
+        }
+        return false;
+      })
       .map((image) => image.url);
 
     const urls = await handleImageUpload(
@@ -147,6 +158,18 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       return;
     }
 
+    const uploadedUrlsMap = new Map();
+    newImageIndices.forEach((index, i) => {
+      uploadedUrlsMap.set(index, urls[i]?.url);
+    });
+
+    const imageUrls = images.map((image, index) => {
+      if (uploadedUrlsMap.has(index)) {
+        return uploadedUrlsMap.get(index)!;
+      }
+      return image.url;
+    });
+
     await mutate(initialData.id, {
       title: data.title.trim(),
       description: data.description.trim(),
@@ -165,16 +188,20 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       subCategories: Object.values(category.options)
         .map((options) => options.map((option) => option.name))
         .flat(),
-      imageUrls: [
-        ...new Set([
-          ...images
-            .filter((image) => image.url.startsWith('https://res.cloudinary.com/'))
-            .map((image) => image.url),
-          ...urls.map((fu) => fu.url),
-        ]),
-      ],
+      imageUrls,
       category: category.craft,
     });
+  };
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setImages((items) => {
+        const oldIndex = items.findIndex((item) => item.url === active.id);
+        const newIndex = items.findIndex((item) => item.url === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -311,24 +338,25 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             Images (max. {IMAGE_LIMIT}) <span className="text-red-500">*</span>
           </Label>
           <div className="grid grid-cols-3 gap-4 mb-4">
-            {images.map((img, index) => (
-              <div key={index} className="relative">
-                <img
-                  src={img.url}
-                  alt={`Product ${index + 1}`}
-                  className="w-full h-32 object-cover rounded-md"
-                />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="icon"
-                  className="absolute top-1 right-1 h-6 w-6"
-                  onClick={() => removeImage(index)}
-                >
-                  <X />
-                </Button>
-              </div>
-            ))}
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragEnd={(event) => handleDragEnd(event)}
+            >
+              <SortableContext
+                key={images.map((img) => img.url).join('-')}
+                items={images.map((img) => img.url)}
+                strategy={rectSortingStrategy}
+              >
+                {images.map((img, index) => (
+                  <DragAndDropImage
+                    imageUrl={img.url}
+                    index={index}
+                    removeImage={removeImage}
+                    key={index}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
           </div>
           <Input
             id="images"
@@ -356,40 +384,10 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           Update Pattern
         </Button>
 
-        {uploadProgress.map((up) => (
-          <div key={up.fileIndex} className="p-1">
-            <Card className="w-full mb-2">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center space-x-2">
-                    <FileIcon className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm font-medium truncate max-w-[200px]">
-                      {images[up.fileIndex]?.name}
-                    </span>
-                  </div>
-                  <span className="text-xs font-semibold text-muted-foreground">
-                    {up.progress === 100 ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    ) : (
-                      `${Math.round(up.progress)}%`
-                    )}
-                  </span>
-                </div>
-                <Progress
-                  value={up.progress}
-                  className="h-2 transition-all duration-300 ease-in-out"
-                  style={{
-                    background: `linear-gradient(90deg, 
-                                var(--primary) 0%, 
-                                var(--primary) ${up.progress}%, 
-                                var(--muted) ${up.progress}%, 
-                                var(--muted) 100%)`,
-                  }}
-                />
-              </CardContent>
-            </Card>
-          </div>
-        ))}
+        <ImageUploadProgress
+          imageNames={images.map((img) => img.name)}
+          uploadProgress={uploadProgress}
+        />
 
         {!!hasErrors ? (
           <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
