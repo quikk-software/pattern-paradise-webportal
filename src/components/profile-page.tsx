@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,6 +33,7 @@ import useAuth from '@/lib/auth/useAuth';
 import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 import ConnectPayPal from '@/lib/components/ConnectPayPal';
 import { useSession } from 'next-auth/react';
+import ProfileImageGallery from '@/lib/components/ProfileImageGallery';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -85,20 +86,33 @@ export function ProfilePage({ user }: ProfilePageProps) {
   } = useForm({ defaultValues: user });
 
   const rolesRef = useRef<HTMLDivElement | null>(null);
+  const paypalRef = useRef<HTMLDivElement | null>(null);
+  const galleryRef = useRef<HTMLDivElement | null>(null);
 
-  const executeScroll = () => {
-    rolesRef.current?.scrollIntoView();
+  const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
+    console.log({
+      ref: ref.current,
+    });
+    ref.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
   };
 
   useEffect(() => {
     switch (action) {
       case 'scrollToRoles':
-        executeScroll();
+        executeScroll(rolesRef);
+        break;
+      case 'scrollToPayPal':
+        executeScroll(paypalRef);
+        break;
+      case 'scrollToGallery':
+        executeScroll(galleryRef);
         break;
       default:
         break;
     }
-  }, [action]);
+  }, [action, rolesRef, paypalRef, galleryRef]);
 
   useEffect(() => {
     if (!profileImage || profileImage === user.imageUrl) {
@@ -154,8 +168,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) =>
-        setProfileImage((e.target?.result as string) ?? '/placeholder.svg?height=100&width=100');
+      reader.onload = (e) => setProfileImage(e.target?.result as string);
       reader.readAsDataURL(file);
     }
   };
@@ -182,6 +195,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const roles = watch('roles');
   const highlightPayPal = action === 'scrollToPayPal';
+  const highlightGallery = action === 'scrollToGallery';
   const highlightRoles = action === 'scrollToRoles';
 
   const hasOpenIncidents = user?.openIncidentsCount > 0;
@@ -252,7 +266,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardContent>
       </Card>
       {user.roles?.includes('Seller') ? (
-        <Card>
+        <Card ref={paypalRef}>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Manage PayPal</CardTitle>
           </CardHeader>
@@ -641,6 +655,9 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </CardContent>
       </Card>
       <EditPassword />
+      <div ref={galleryRef}>
+        <ProfileImageGallery gallery={user.gallery} highlight={highlightGallery} />
+      </div>
       <ConfirmDrawer
         isOpen={isDisconnectPayPalDrawerOpen}
         setIsOpen={setIsDisconnectPayPalDrawerOpen}

@@ -56,7 +56,7 @@ export default function DragAndDropImage({
         <img
           src={imageUrl}
           alt={`Product ${index + 1}`}
-          className="w-full h-32 object-cover rounded-md"
+          className="w-full h-32 md:h-48 object-cover rounded-md"
         />
       </div>
       <Button

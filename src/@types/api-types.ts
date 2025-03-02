@@ -121,6 +121,8 @@ export interface PutUserRequest {
   lastName?: string;
   description?: string;
   instagramRef?: string;
+  refLinks?: string[];
+  gallery?: string[];
   tiktokRef?: string;
   imageUrl?: string;
   hasAcceptedPrivacy?: boolean;
@@ -150,7 +152,7 @@ export interface GetUserResponse {
   email: string;
   username: string;
   description?: string;
-  galleryImages: string[];
+  gallery: string[];
   isActive: boolean;
   isBlocked: boolean;
   isMailConfirmed: boolean;
@@ -162,6 +164,7 @@ export interface GetUserResponse {
   lastName?: string;
   instagramRef?: string;
   tiktokRef?: string;
+  refLinks: string[];
   paypalMerchantIsActive: boolean;
   paypalPaymentsReceivable: boolean;
   paypalPrimaryEmailConfirmed: boolean;
@@ -214,9 +217,10 @@ export interface GetUserAccountResponse {
   firstName?: string;
   lastName?: string;
   description?: string;
-  galleryImages: string[];
+  gallery: string[];
   instagramRef?: string;
   tiktokRef?: string;
+  refLinks: string[];
   imageUrl?: string;
   roles?: string[];
 }

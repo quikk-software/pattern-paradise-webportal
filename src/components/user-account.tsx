@@ -9,6 +9,12 @@ import useScreenSize from '@/lib/core/useScreenSize';
 import UserDetailsCard from '@/lib/components/UserDetailsCard';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { Input } from '@/components/ui/input';
+import GalleryGrid from '@/lib/components/GalleryGrid';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -17,6 +23,8 @@ interface UserAccountComponentProps {
 export default function UserAccountComponent({ user }: UserAccountComponentProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+  const { userId } = useSelector((s: Store) => s.auth);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -74,6 +82,8 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
     }
   };
 
+  const isMe = user.id === userId;
+
   return (
     <div className="space-y-8">
       <GoBackButton />
@@ -89,7 +99,18 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         </Card>
       ) : null}
 
-      {user.galleryImages.length > 0 ? <div className=""></div> : null}
+      {user.gallery.length > 0 ? (
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold mb-4">Gallery</h2>
+          <GalleryGrid images={user.gallery} />
+          <Button variant={'outline'} asChild>
+            <Link href={`/app/secure/auth/me?action=scrollToGallery`} className="w-full">
+              <Plus className="w-4 h-4" />
+              Add Images to Gallery
+            </Link>
+          </Button>
+        </div>
+      ) : null}
 
       <div className="space-y-4">
         <h2 className="text-2xl font-bold mb-4">Associated Patterns</h2>
