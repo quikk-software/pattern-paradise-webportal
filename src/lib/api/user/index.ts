@@ -12,3 +12,5 @@ export * from './useCreatePayPalReferral';
 export * from './useConfirmMail';
 export * from './useResendCode';
 export * from './useRemovePayPalReferral';
+export * from './useCheckUsername';
+export * from './useCheckEmail';

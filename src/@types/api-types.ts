@@ -17,6 +17,14 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface PostCheckUsernameRequest {
+  username: string;
+}
+
+export interface PostCheckEmailRequest {
+  email: string;
+}
+
 export interface PostUserReportRequest {
   reason: string;
   comment?: string;
@@ -1217,6 +1225,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @example "any" */
         tiktokRef?: any;
         /** @example "any" */
+        gallery?: any;
+        /** @example "any" */
+        refLinks?: any;
+        /** @example "any" */
         imageUrl?: any;
         /** @example "any" */
         hasAcceptedTerms?: any;
@@ -1520,6 +1532,56 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<void, any>({
         path: `/api/v1/users/verification-codes/resend-code`,
         method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description If the username can be found, an exception will be thrown.
+     *
+     * @tags User
+     * @name CheckUsername
+     * @summary Checks if a username is available.
+     * @request POST:/api/v1/users/check/username
+     * @secure
+     */
+    checkUsername: (
+      data: {
+        /** @example "any" */
+        username?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/check/username`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description If the email can be found, an exception will be thrown.
+     *
+     * @tags User
+     * @name CheckEmail
+     * @summary Checks if an email is available.
+     * @request POST:/api/v1/users/check/email
+     * @secure
+     */
+    checkEmail: (
+      data: {
+        /** @example "any" */
+        email?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/check/email`,
+        method: 'POST',
         body: data,
         secure: true,
         type: ContentType.Json,

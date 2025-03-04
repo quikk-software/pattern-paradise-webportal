@@ -34,7 +34,7 @@ export function LoginForm() {
     await handleLogin(email.toLowerCase().trim(), password.trim());
   };
 
-  const disabled = !email || !password;
+  const disabled = !email || !password || isLoading;
 
   return (
     <Card>

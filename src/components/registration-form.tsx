@@ -76,11 +76,11 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
     }
 
     await mutate({
-      email: data.email?.trim(),
+      email: data.email?.toLowerCase().trim(),
       password: data.password?.trim(),
       firstName: data.firstName?.trim(),
       lastName: data.lastName?.trim(),
-      username: data.username?.trim(),
+      username: data.username?.toLowerCase().trim(),
       instagramRef: data.instagram?.trim(),
       tiktokRef: data.tiktok?.trim(),
       hasAcceptedTerms: data.hasAcceptedTerms,

@@ -13,7 +13,7 @@ import { useGetPayPalMerchantStatus, useRemovePayPalReferral, useUpdateUser } fr
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import RequestStatus from '@/lib/components/RequestStatus';
 import EditPassword from '@/lib/components/EditPassword';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
@@ -34,6 +34,7 @@ import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 import ConnectPayPal from '@/lib/components/ConnectPayPal';
 import { useSession } from 'next-auth/react';
 import ProfileImageGallery from '@/lib/components/ProfileImageGallery';
+import QuickLinks from '@/lib/components/QuickLinks';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -54,7 +55,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
     logoutStates: { isLoading, isSuccess, isError },
   } = useAuth();
 
-  const dispatch = useDispatch();
   const { userId } = useSelector((s: Store) => s.auth);
 
   const router = useRouter();
@@ -90,9 +90,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const galleryRef = useRef<HTMLDivElement | null>(null);
 
   const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
-    console.log({
-      ref: ref.current,
-    });
     ref.current?.scrollIntoView({
       behavior: 'smooth',
     });
@@ -202,69 +199,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">Quick Links</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              router.push('/app/secure/auth/me/orders');
-            }}
-            className="w-full"
-            variant={'outline'}
-          >
-            My Orders
-          </Button>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              router.push('/app/secure/auth/me/patterns');
-            }}
-            className="w-full"
-            variant={'outline'}
-          >
-            My Patterns
-          </Button>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              router.push('/app/secure/chats');
-            }}
-            className="w-full"
-            variant={'outline'}
-          >
-            My Chats
-          </Button>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              router.push('/app/secure/auth/me/reports');
-            }}
-            className={`w-full${hasOpenIncidents ? ' border-red-500 text-red-500' : ''}`}
-            variant={'outline'}
-          >
-            Open Incidents{hasOpenIncidents ? ` (${user.openIncidentsCount})` : ''}
-          </Button>
-          <Button
-            variant={'secondary'}
-            onClick={(e) => {
-              e.preventDefault();
-              handleLogout();
-            }}
-            disabled={isLoading}
-          >
-            {isLoading ? <LoadingSpinnerComponent size="sm" className="text-black" /> : null}
-            Logout
-          </Button>
-          <RequestStatus
-            isSuccess={isSuccess}
-            isError={isError}
-            errorMessage="Failed to log out. Please consider reloading the page and try again."
-          />
-        </CardContent>
-      </Card>
+      <QuickLinks
+        user={user}
+        handleLogout={handleLogout}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+      />
       {user.roles?.includes('Seller') ? (
         <Card ref={paypalRef}>
           <CardHeader>

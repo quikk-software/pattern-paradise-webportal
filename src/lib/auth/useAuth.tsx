@@ -59,7 +59,7 @@ const useAuth = () => {
   const handleLogout = () => {
     const refreshToken = session?.user?.refreshToken;
     if (refreshToken) {
-      setLoginIsLoading(true);
+      setLogoutIsLoading(true);
       handleLogoutFlow(refreshToken)
         .then(() => {
           setLogoutIsError(false);
@@ -69,7 +69,7 @@ const useAuth = () => {
           setLogoutIsSuccess(false);
           setLogoutIsError(true);
         })
-        .finally(() => setLoginIsLoading(false));
+        .finally(() => setLogoutIsLoading(false));
     }
   };
 
