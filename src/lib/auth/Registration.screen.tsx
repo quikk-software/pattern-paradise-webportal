@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { RegistrationFormComponent } from '@/components/registration-form';
 import usePreselectedRoles from '@/lib/core/usePreselectedRoles';
+import { RegistrationStepper } from '@/components/registration-stepper';
 
 const RegistrationScreen: React.FunctionComponent = () => {
   const { preselectedRoles } = usePreselectedRoles();
 
-  return <RegistrationFormComponent preselectedRoles={preselectedRoles} />;
+  return <RegistrationStepper preselectedRoles={preselectedRoles} />;
 };
 
 export default RegistrationScreen;
