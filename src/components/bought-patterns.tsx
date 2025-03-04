@@ -14,7 +14,7 @@ export default function BoughtPatterns() {
 
   return (
     <div className="space-y-6 max-w-lg">
-      <h1 className="text-3xl font-bold">Your Patterns</h1>
+      <h1 className="text-2xl font-bold">My Patterns</h1>
       <div className="grid grid-cols-1 gap-6">
         {patterns.length === 0 ? <NoPatterns /> : null}
         {patterns.map((pattern) => (
