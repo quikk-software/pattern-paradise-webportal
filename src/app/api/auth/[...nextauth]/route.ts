@@ -5,6 +5,7 @@ import logger from '@/lib/core/logger';
 import axios from 'axios';
 import qs from 'qs';
 import { getUser } from '@/lib/api/static/user/getUser';
+import { refreshAccessToken } from '@/app/api/auth/utils';
 
 const handler = NextAuth({
   providers: [
@@ -72,7 +73,7 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
@@ -82,7 +83,11 @@ const handler = NextAuth({
         token.subscriptionStatus = user?.subscriptionStatus;
       }
 
-      if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
+      if (
+        !token?.expiresAt ||
+        Date.now() >= new Date(token.expiresAt as number).getTime() ||
+        trigger === 'update'
+      ) {
         logger.info('Use refresh token to get fresh access token');
         return await refreshAccessToken(token);
       }
@@ -109,44 +114,3 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
-
-async function refreshAccessToken(token: any) {
-  try {
-    const response = await axios.post(
-      `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
-      qs.stringify({
-        grant_type: 'refresh_token',
-        client_id: process.env.KEYCLOAK_CLIENT_ID,
-        client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
-        refresh_token: token.refreshToken,
-      }),
-    );
-
-    const refreshedTokens = response.data;
-
-    if (response.status !== 200) {
-      logger.error("Couldn't get access token with refresh token");
-      throw new Error('Failed to refresh access token');
-    }
-
-    logger.info('Got fresh access token');
-
-    const decodedToken = jwtDecode(refreshedTokens.access_token);
-
-    // @ts-ignore
-    const id = decodedToken?.refId;
-
-    const user = await getUser(id, refreshedTokens.access_token);
-
-    return {
-      ...token,
-      subscriptionStatus: user?.paypalSubscriptionStatus,
-      accessToken: refreshedTokens.access_token,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
-      expiresAt: decodedToken.exp! * 1000,
-    };
-  } catch (error) {
-    logger.error('Error refreshing access token:', error);
-    return { ...token, error: 'RefreshAccessTokenError' };
-  }
-}

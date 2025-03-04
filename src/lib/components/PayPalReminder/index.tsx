@@ -64,7 +64,7 @@ export default function PayPalReminder({ open, setOpen }: PayPalReminderProps) {
             </div>
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>
             Later
           </Button>

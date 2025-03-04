@@ -109,33 +109,31 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="">
-            <div className="flex flex-row gap-2">
-              {isPro ? (
-                <LanguageSelect
-                  language={uploadLanguage}
-                  handleLanguageChange={(language) => setUploadLanguage(language)}
-                />
-              ) : null}
-              <Button
-                onClick={(e) => {
-                  handleUploadFilesButtonClick(e);
-                }}
-                className="flex items-center gap-2"
-              >
-                <Upload className="w-4 h-4" />
-                Upload PDFs and Images
-              </Button>
-              <input
-                ref={fileInputRef}
-                id="pdf-upload"
-                type="file"
-                accept=".pdf,image/*"
-                onChange={(event) => handleFileChange(event, uploadLanguage)}
-                className="hidden"
-                multiple
+          <div className="flex flex-col md:flex-row gap-2">
+            {isPro ? (
+              <LanguageSelect
+                language={uploadLanguage}
+                handleLanguageChange={(language) => setUploadLanguage(language)}
               />
-            </div>
+            ) : null}
+            <Button
+              onClick={(e) => {
+                handleUploadFilesButtonClick(e);
+              }}
+              className="flex items-center gap-2"
+            >
+              <Upload className="w-4 h-4" />
+              Upload PDFs and Images
+            </Button>
+            <input
+              ref={fileInputRef}
+              id="pdf-upload"
+              type="file"
+              accept=".pdf,image/*"
+              onChange={(event) => handleFileChange(event, uploadLanguage)}
+              className="hidden"
+              multiple
+            />
           </div>
 
           {Object.keys(groupedFiles).length > 0 && (
