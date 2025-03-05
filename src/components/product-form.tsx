@@ -172,6 +172,8 @@ export function ProductFormComponent() {
           setUploadStatus((prev) => {
             const existingIndex = prev.findIndex((item) => item.id === fileIndex);
 
+            setCloudinaryProgress(((fileIndex + 1) / images.length) * 100);
+
             if (existingIndex !== -1) {
               return prev.map((item, index) =>
                 index === existingIndex

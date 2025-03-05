@@ -98,14 +98,14 @@ export default function ProductCard({
                 <Trash />
               </Button>
             </div>
-            {status === 'Created' || status === 'InProgress' ? (
+            {status === 'Created' || status === 'InProgress' || status === 'Aborted' ? (
               <Button
                 onClick={() => {
                   setIsReleaseProductDrawerOpen(true);
                 }}
                 className="w-full"
               >
-                Release pattern
+                Release Pattern
               </Button>
             ) : null}
           </CardFooter>
