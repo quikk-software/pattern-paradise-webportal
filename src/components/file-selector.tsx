@@ -123,7 +123,7 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
               className="flex items-center gap-2"
             >
               <Upload className="w-4 h-4" />
-              Upload PDFs and Images
+              Select PDFs and Images
             </Button>
             <input
               ref={fileInputRef}
