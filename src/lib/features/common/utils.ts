@@ -3,12 +3,11 @@ import logger from '@/lib/core/logger';
 
 export const handleImageUpload = async (
   files: string[],
-  startLoadingCallback: () => void,
-  endLoadingCallback: () => void,
-  errorCallback: () => void,
+  startLoadingCallback: (fileIndex: number) => void,
+  endLoadingCallback: (fileIndex: number) => void,
+  errorCallback: (fileIndex: number) => void,
   progressCallback: (fileIndex: number, progress: number) => void,
 ) => {
-  startLoadingCallback();
   const urls: { url: string; mimeType: string }[] = [];
   const blobs: Blob[] = [];
 
@@ -18,6 +17,8 @@ export const handleImageUpload = async (
   }
 
   for await (const [index, file] of Array.from(blobs).entries()) {
+    startLoadingCallback(index);
+
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'product_form');
@@ -39,11 +40,11 @@ export const handleImageUpload = async (
       );
       urls.push({ url: response.data.url.replace('http://', 'https://'), mimeType: file.type });
     } catch (error) {
-      errorCallback();
+      errorCallback(index);
       logger.error('Error uploading image:', error);
     }
+    endLoadingCallback(index);
   }
-  endLoadingCallback();
 
   return urls;
 };

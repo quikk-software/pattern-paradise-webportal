@@ -10,7 +10,7 @@ export const useCreateProduct = () => {
 
   const { data: session } = useSession();
 
-  const { handleFn, ...apiStates } = useApiStates();
+  const { handleFn, setUploadProgress, ...apiStates } = useApiStates();
 
   const mutate = async (product: FormData) => {
     const response = await handleFn(async () => {
@@ -19,6 +19,14 @@ export const useCreateProduct = () => {
         product,
         {
           ...(await getApi(session)),
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total,
+              );
+              setUploadProgress(percentCompleted);
+            }
+          },
         },
       );
     });
@@ -30,6 +38,7 @@ export const useCreateProduct = () => {
 
   return {
     ...apiStates,
+    setUploadProgress,
     mutate,
     data,
   };

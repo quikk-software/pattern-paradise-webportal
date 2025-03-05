@@ -8,6 +8,7 @@ export const useApiStates = () => {
   const [isCalled, setIsCalled] = useState(false);
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const handleFn = async <T>(fn: () => Promise<T>, ignoreIsLoading = false) => {
     if (!ignoreIsLoading) {
@@ -15,6 +16,7 @@ export const useApiStates = () => {
     }
     setIsCalled((ic) => !ic);
     try {
+      setUploadProgress(0);
       const result = await fn();
       setIsSuccess(true);
       setIsError(false);
@@ -54,6 +56,8 @@ export const useApiStates = () => {
     setErrorDetail,
     validationErrors,
     setValidationErrors,
+    uploadProgress,
+    setUploadProgress,
     isCalled,
     setIsCalled,
     handleFn,
