@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import { useSession } from 'next-auth/react';
 import PayPalLogo from '@/assets/logos/paypal-logo.png';
+import AnimatedHeroHeading from '@/lib/components/AnimatedHeroHeading';
 
 const theme = {
   colors: {
@@ -79,10 +80,7 @@ export default function HeroV2({ products }: HeroV2Props) {
         <div className="grid gap-6 md:grid-cols-2 md:gap-10">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                <span className="block">Your Crochet</span>
-                <span className="block text-primary">Pattern Paradise</span>
-              </h1>
+              <AnimatedHeroHeading />
               <p className="text-lg text-muted-foreground">
                 Buy, test, and sell your patterns in one place. Join our community of passionate
                 crocheters today!
