@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
@@ -35,41 +35,39 @@ const NAV_LINKS = [
 ];
 
 interface NavbarComponentProps {
-  background: 'primary' | 'none';
+  background: 'primary' | 'amber-200' | 'none';
+  scrolled: boolean;
 }
 
-export function NavbarComponent({ background }: NavbarComponentProps) {
+export function NavbarComponent({ background, scrolled }: NavbarComponentProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => setIsOpen(!isOpen);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const filteredNavLinks = NAV_LINKS.filter((link) => link.enabled);
 
   return (
-    <nav ref={navRef} className={`bg-${background}`} id="navbar">
+    <nav
+      className={cn(
+        `px-4 transition-colors duration-300`,
+        scrolled ? 'bg-white' : `bg-${background}`,
+      )}
+      id="navbar"
+    >
       <div className="flex justify-between h-16 mx-auto">
         <div className="flex-shrink-0 flex items-center">
           <Link
             href="/"
             className={cn(
               'text-lg font-bold flex gap-1 items-center',
-              background === 'primary' ? 'text-white' : 'text-black',
+              scrolled ? 'text-black' : background === 'primary' ? 'text-white' : 'text-black',
             )}
           >
             <PatternParadiseIcon
-              className={cn('w-8 h-8', background === 'primary' ? 'fill-white' : 'fill-black')}
+              className={cn(
+                'w-8 h-8',
+                scrolled ? 'fill-black' : background === 'primary' ? 'fill-white' : 'fill-black',
+              )}
             />
             <span>Pattern Paradise</span>
           </Link>
@@ -77,7 +75,7 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
         <div className="hidden sm:ml-6 sm:flex sm:items-center flex flex-row gap-4">
           <div className="flex space-x-4">
             {filteredNavLinks.map(({ href, name }) => (
-              <NavLink key={name} href={href} background={background}>
+              <NavLink key={name} href={href} scrolled={scrolled} background={background}>
                 {name}
               </NavLink>
             ))}
@@ -86,13 +84,14 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
         <div className="flex items-center sm:hidden">
           <button
             onClick={toggleMenu}
-            className={`inline-flex items-center justify-center p-2 rounded-md text-${
-              background === 'primary' ? 'white' : 'black'
-            } hover:text-${background === 'primary' ? 'white' : 'black'} hover:bg-${
-              background === 'primary' ? 'white' : 'black'
-            } focus:outline-none focus:ring-2 focus:ring-inset focus:ring-${
-              background === 'primary' ? 'white' : 'black'
-            }`}
+            className={cn(
+              `inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset`,
+              scrolled
+                ? 'text-black hover:text-black hover:bg-gray-200 focus:ring-black'
+                : background === 'primary'
+                  ? 'text-white hover:text-white hover:bg-white focus:ring-white'
+                  : 'text-black hover:text-black hover:bg-gray-200 focus:ring-black',
+            )}
             aria-expanded={isOpen}
           >
             <span className="sr-only">Open main menu</span>
@@ -109,7 +108,7 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
       <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1">
           {filteredNavLinks.map(({ href, name }) => (
-            <MobileNavLink background={background} key={name} href={href}>
+            <MobileNavLink key={name} href={href} scrolled={scrolled} background={background}>
               {name}
             </MobileNavLink>
           ))}
@@ -122,18 +121,25 @@ export function NavbarComponent({ background }: NavbarComponentProps) {
 function NavLink({
   href,
   background,
+  scrolled,
   children,
 }: {
   href: string;
   background: string;
+  scrolled: boolean;
   children: React.ReactNode;
 }) {
   return (
     <Link
       href={href}
-      className={`text-${background === 'primary' ? 'white' : 'black'} hover:text-${
-        background === 'primary' ? 'white' : 'gray-900'
-      } px-3 py-2 rounded-md text-sm font-medium`}
+      className={cn(
+        'px-3 py-2 rounded-md text-sm font-medium',
+        scrolled
+          ? 'text-black hover:text-gray-900'
+          : background === 'primary'
+            ? 'text-white hover:text-white'
+            : 'text-black hover:text-gray-900',
+      )}
     >
       {children}
     </Link>
@@ -143,18 +149,25 @@ function NavLink({
 function MobileNavLink({
   href,
   background,
+  scrolled,
   children,
 }: {
   background: string;
+  scrolled: boolean;
   href: string;
   children: React.ReactNode;
 }) {
   return (
     <Link
       href={href}
-      className={`text-${
-        background === 'primary' ? 'white' : 'gray-600'
-      } hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium`}
+      className={cn(
+        'block px-3 py-2 rounded-md text-base font-medium',
+        scrolled
+          ? 'text-black hover:text-gray-900'
+          : background === 'primary'
+            ? 'text-white hover:text-gray-900'
+            : 'text-gray-600 hover:text-gray-900',
+      )}
     >
       {children}
     </Link>

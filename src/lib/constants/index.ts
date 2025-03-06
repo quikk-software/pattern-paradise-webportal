@@ -296,7 +296,7 @@ export type ReportUserReason = (typeof reportUserReasons)[number]['value'];
 
 export const COOKIE_CONSENT_NAME = 'pp-cookie-consent';
 
-export const FEATURED_PRODUCTS_LENGTH = 3;
+export const FEATURED_PRODUCTS_LENGTH = 4;
 
 export const MIN_PRICE = 0.0;
 export const MAX_PRICE = 100.0;
