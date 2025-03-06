@@ -22,7 +22,7 @@ export default function TestPage() {
           </Link>
         </CardContent>
       </Card>
-      <ListingComponent listingType={'test'} defaultProducts={[]} />
+      <ListingComponent listingType={'test'} />
     </div>
   );
 }
