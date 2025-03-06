@@ -27,7 +27,7 @@ interface QuickLinksProps {
   isError: boolean;
 }
 
-export default function QuickLinks({
+export default function ProfileQuickLinks({
   user,
   handleLogout,
   isLoading,
