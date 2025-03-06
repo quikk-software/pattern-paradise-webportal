@@ -34,7 +34,7 @@ import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 import ConnectPayPal from '@/lib/components/ConnectPayPal';
 import { useSession } from 'next-auth/react';
 import ProfileImageGallery from '@/lib/components/ProfileImageGallery';
-import QuickLinks from '@/lib/components/QuickLinks';
+import ProfileQuickLinks from '../lib/components/ProfileQuickLinks';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -199,7 +199,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <QuickLinks
+      <ProfileQuickLinks
         user={user}
         handleLogout={handleLogout}
         isLoading={isLoading}

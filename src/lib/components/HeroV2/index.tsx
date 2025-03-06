@@ -83,7 +83,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               <AnimatedHeroHeading />
               <p className="text-lg text-muted-foreground">
                 Buy, test, and sell your patterns in one place. Join our community of passionate
-                crocheters today!
+                crocheters & knitters today!
               </p>
             </div>
 
