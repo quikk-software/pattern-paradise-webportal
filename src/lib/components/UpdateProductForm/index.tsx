@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, ChangeEvent, useMemo } from 'react';
-import { CheckCircle2, FileIcon } from 'lucide-react';
+import React, { useState, ChangeEvent, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,8 +13,6 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CATEGORIES, ExperienceLevel, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
 import { GetProductResponse } from '@/@types/api-types';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import GoBackButton from '@/lib/components/GoBackButton';
 import PriceInput from '@/lib/components/PriceInput';
 import HashtagInput from '@/components/hashtag-input';
@@ -27,13 +24,19 @@ import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
 import { closestCenter, DndContext } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import DragAndDropImage from '@/lib/components/DragAndDropImage';
-import ImageUploadProgress from '@/lib/components/ImageUploadProgress';
+import { PDFFile } from '@/components/product-form';
+import FileSelector from '@/components/file-selector';
+import { checkProStatus } from '@/lib/core/utils';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
+import UploadFeedback from '@/components/upload-feedback';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
 }
 
 export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
+  const [patterns, setPatterns] = useState<PDFFile[]>([]);
   const [images, setImages] = useState<{ url: string; name: string }[]>(
     initialData.imageUrls.map((url) => ({
       url,
@@ -57,9 +60,30 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
-  const [fileOrder, setFileOrder] = useState<{ [key: string]: string[] }>({});
+  const [uploadStatus, setUploadStatus] = useState<
+    {
+      status: string;
+      type: string;
+      id: number;
+    }[]
+  >([]);
 
-  const { mutate, isLoading, isSuccess, isError, errorDetail } = useUpdateProduct();
+  const [fileOrder, setFileOrder] = useState<{ [key: string]: string[] }>({});
+  const [uploadStage, setUploadStage] = useState<'idle' | 'running' | 'complete' | 'error'>('idle');
+  const [cloudinaryProgress, setCloudinaryProgress] = useState(0);
+  const [overallProgress, setOverallProgress] = useState(0);
+
+  const { subscriptionStatus } = useSelector((s: Store) => s.auth);
+
+  const {
+    mutate,
+    isLoading,
+    isSuccess,
+    isError,
+    errorDetail,
+    uploadProgress: backendProgress,
+    setUploadProgress: setBackendProgress,
+  } = useUpdateProduct();
 
   const {
     register,
@@ -86,7 +110,17 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         },
   });
 
-  const hasErrors = errors.title || errors.description || errors.price;
+  useEffect(() => {
+    setPatterns(
+      initialData.fileOrder.map((file) => ({
+        file: new File([], file.fileId),
+        id: file.fileId,
+        language: file.language,
+        originalFilename:
+          initialData.files.find((f) => f.id === file.fileId)?.objectName ?? file.fileId,
+      })),
+    );
+  }, [initialData.fileOrder]);
 
   const updatedCategories = updateSelectedFlags(
     CATEGORIES,
@@ -110,6 +144,13 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   };
 
   const onSubmit = async (data: any) => {
+    setUploadStatus([]);
+    setUploadProgress([]);
+    setUploadStage('idle');
+    setCloudinaryProgress(0);
+    setBackendProgress(0);
+    setOverallProgress(0);
+
     if (images.length === 0 || images.length > IMAGE_LIMIT) {
       setImageError(`Please add 1 to ${IMAGE_LIMIT} images.`);
       return;
@@ -127,70 +168,210 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       })
       .map((image) => image.url);
 
-    const urls = await handleImageUpload(
-      newImages,
-      () => {
-        if (hasErrors) {
-          setImageError('Please fill out the form before uploading');
-          return;
-        }
-        setImageUploadIsLoading(true);
-      },
-      () => {
-        setImageUploadIsLoading(false);
-      },
-      () => {
-        setImageError('Error uploading images. Please try again.');
-      },
-      (fileIndex, progress) => {
-        const currentProgress = {
-          fileIndex,
-          progress,
-        };
-        const uploadProgressCopy = [...uploadProgress];
-        uploadProgressCopy.push(currentProgress);
-        setUploadProgress(uploadProgressCopy);
-      },
-    );
+    try {
+      setUploadStage('running');
 
-    if (!urls) {
-      setImageError("Images couldn't be uploaded. Please try again later.");
-      return;
-    }
+      const urls = await handleImageUpload(
+        newImages,
+        (fileIndex) => {
+          if (hasErrors) {
+            setImageError('Please fill out the form before uploading');
+            return;
+          }
+          setImageUploadIsLoading(true);
+          setUploadStatus((prev) => {
+            const existingIndex = prev.findIndex((item) => item.id === fileIndex);
 
-    const uploadedUrlsMap = new Map();
-    newImageIndices.forEach((index, i) => {
-      uploadedUrlsMap.set(index, urls[i]?.url);
-    });
+            if (existingIndex !== -1) {
+              return prev.map((item, index) =>
+                index === existingIndex
+                  ? { ...item, type: 'info', status: 'Image upload started' }
+                  : item,
+              );
+            } else {
+              return [
+                ...prev,
+                {
+                  type: 'info',
+                  status: 'Image upload started',
+                  id: fileIndex,
+                },
+              ];
+            }
+          });
+        },
+        (fileIndex) => {
+          setImageUploadIsLoading(false);
+          setUploadStatus((prev) => {
+            const existingIndex = prev.findIndex((item) => item.id === fileIndex);
 
-    const imageUrls = images.map((image, index) => {
-      if (uploadedUrlsMap.has(index)) {
-        return uploadedUrlsMap.get(index)!;
+            setCloudinaryProgress(((fileIndex + 1) / images.length) * 100);
+
+            if (existingIndex !== -1) {
+              return prev.map((item, index) =>
+                index === existingIndex
+                  ? { ...item, type: 'info', status: 'Image upload successful' }
+                  : item,
+              );
+            } else {
+              return [
+                ...prev,
+                {
+                  type: 'info',
+                  status: 'Image upload successful',
+                  id: fileIndex,
+                },
+              ];
+            }
+          });
+        },
+        (fileIndex) => {
+          setImageError('Error uploading images. Please try again.');
+          setUploadStatus((prev) => {
+            const existingIndex = prev.findIndex((item) => item.id === fileIndex);
+
+            if (existingIndex !== -1) {
+              return prev.map((item, index) =>
+                index === existingIndex
+                  ? { ...item, type: 'error', status: 'Image upload failed' }
+                  : item,
+              );
+            } else {
+              return [
+                ...prev,
+                {
+                  type: 'error',
+                  status: 'Image upload failed',
+                  id: fileIndex,
+                },
+              ];
+            }
+          });
+        },
+        (fileIndex, progress) => {
+          setUploadProgress((prev) => {
+            const existingIndex = prev.findIndex((item) => item.fileIndex === fileIndex);
+            let updatedProgress;
+
+            if (existingIndex !== -1) {
+              updatedProgress = prev.map((item, index) =>
+                index === existingIndex ? { fileIndex, progress } : item,
+              );
+            } else {
+              updatedProgress = [...prev, { fileIndex, progress }];
+            }
+
+            return updatedProgress.sort((a, b) => a.fileIndex - b.fileIndex);
+          });
+        },
+      );
+
+      if (!urls) {
+        setImageError("Images couldn't be uploaded. Please try again later.");
+        return;
       }
-      return image.url;
-    });
 
-    await mutate(initialData.id, {
-      title: data.title.trim(),
-      description: data.description.trim(),
-      price: isFree ? 0.0 : parseFloat(data.price.replace(',', '.')),
-      experience: selectedExperienceLevel,
-      isFree,
-      hashtags,
-      fileOrder: Object.entries(fileOrder)
-        .map(([language, fileIds]) =>
-          fileIds.map((fileId) => ({
-            language,
-            fileId,
-          })),
-        )
-        .flat(1),
-      subCategories: Object.values(category.options)
-        .map((options) => options.map((option) => option.name))
-        .flat(),
-      imageUrls,
-      category: category.craft,
-    });
+      const uploadedUrlsMap = new Map();
+      newImageIndices.forEach((index, i) => {
+        uploadedUrlsMap.set(index, urls[i]?.url);
+      });
+
+      const imageUrls = images.map((image, index) => {
+        if (uploadedUrlsMap.has(index)) {
+          return uploadedUrlsMap.get(index)!;
+        }
+        return image.url;
+      });
+
+      const formData = new FormData();
+
+      const oldPatterns = patterns.filter((pattern) =>
+        initialData.fileOrder.map((fo) => fo.fileId).includes(pattern.id),
+      );
+      const overrideFileNames = oldPatterns.map((file) => ({
+        fileId: file.id,
+        filename: file.originalFilename,
+      }));
+      const newPatterns = patterns.filter(
+        (pattern) => !initialData.fileOrder.map((fo) => fo.fileId).includes(pattern.id),
+      );
+      const deletedFileIds = initialData.fileOrder
+        .filter((fo) => !oldPatterns.map((op) => op.id).includes(fo.fileId))
+        .map((fo) => fo.fileId);
+
+      newPatterns.forEach((pattern) => formData.append('newFiles', pattern.file));
+      formData.append(
+        'newFileNames',
+        JSON.stringify(
+          newPatterns.map((pattern, index) => {
+            const splittedFilename = pattern.originalFilename.split('.');
+            let suffix;
+            if (splittedFilename.length > 1) {
+              suffix = splittedFilename.pop();
+            }
+            const filenameWithoutSuffix = splittedFilename.join('');
+            return {
+              filename: pattern.file.name,
+              originalFilename: filenameWithoutSuffix.trim()
+                ? pattern.originalFilename
+                : `Page ${index + 1}${suffix ? `.${suffix}` : ''}`,
+              fileId: pattern.id,
+            };
+          }),
+        ),
+      );
+      formData.append('deletedFileIds', JSON.stringify(deletedFileIds));
+      formData.append('overrideFileNames', JSON.stringify(overrideFileNames));
+
+      formData.append('title', data.title);
+      formData.append('description', data.description);
+      formData.append('experience', selectedExperienceLevel);
+      formData.append('category', category.craft);
+      formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
+      formData.append('isFree', isFree ? 'true' : 'false');
+
+      formData.append(
+        'subCategories',
+        JSON.stringify(
+          Object.values(category.options)
+            .map((options) => options.map((option) => option.name))
+            .flat(),
+        ),
+      );
+      formData.append('imageUrls', JSON.stringify(imageUrls));
+      formData.append('hashtags', JSON.stringify(hashtags));
+      formData.append(
+        'fileOrder',
+        JSON.stringify(
+          Object.entries(fileOrder)
+            .map(([language, fileIds]) =>
+              fileIds.map((fileId) => ({
+                language,
+                fileId,
+              })),
+            )
+            .flat(1),
+        ),
+      );
+      formData.append(
+        'languages',
+        JSON.stringify(
+          oldPatterns.map(({ language, file }) => ({ language, fileName: file.name })),
+        ),
+      );
+      formData.append(
+        'newFileLanguages',
+        JSON.stringify(
+          newPatterns.map(({ language, file }) => ({ language, fileName: file.name })),
+        ),
+      );
+
+      await mutate(initialData.id, formData);
+
+      setUploadStage('complete');
+    } catch (e) {
+      setUploadStage('error');
+    }
   };
 
   const handleDragEnd = (event: any) => {
@@ -212,15 +393,9 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
 
   const titleWatch = watch('title');
 
-  const files = useMemo(() => {
-    return initialData.fileOrder.map((file) => ({
-      file: new File([], file.fileId),
-      id: file.fileId,
-      language: file.language,
-      originalFilename:
-        initialData.files.find((f) => f.id === file.fileId)?.objectName ?? file.fileId,
-    }));
-  }, [initialData.fileOrder]);
+  const isPro = checkProStatus(subscriptionStatus);
+
+  const hasErrors = errors.title || errors.description || errors.price;
 
   return (
     <div className="flex flex-col gap-8">
@@ -374,8 +549,32 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         </div>
 
         <div className="w-full">
-          <DragAndDropContainer selectedFiles={files} setFileOrder={setFileOrder} />
+          <FileSelector selectedFiles={patterns} setSelectedFiles={setPatterns} isPro={isPro} />
         </div>
+
+        {patterns.length > 0 ? (
+          <div className="w-full">
+            <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
+          </div>
+        ) : null}
+
+        <UploadFeedback
+          uploadStage={uploadStage}
+          images={images
+            .filter((image) => !initialData.imageUrls.includes(image.url))
+            .map((image, index) => ({
+              ...image,
+              status: uploadStatus.at(index)?.status,
+              progress: uploadProgress.at(index)?.progress,
+            }))}
+          patterns={patterns.filter(
+            (pattern) => !initialData.files.map((file) => file.id).includes(pattern.id),
+          )}
+          cloudinaryProgress={cloudinaryProgress}
+          backendProgress={backendProgress}
+          overallProgress={overallProgress}
+          setOverallProgress={setOverallProgress}
+        />
 
         <Button type="submit" className="w-full" disabled={imageUploadIsLoading || isLoading}>
           {imageUploadIsLoading || isLoading ? (
@@ -383,11 +582,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           ) : null}
           Update Pattern
         </Button>
-
-        <ImageUploadProgress
-          imageNames={images.map((img) => img.name)}
-          uploadProgress={uploadProgress}
-        />
 
         {!!hasErrors ? (
           <p className="text-sm text-red-500 mb-2">Please check all fields with a * mark.</p>
