@@ -89,7 +89,7 @@ export const CATEGORIES = [
       {
         name: 'Special Features',
         options: [
-          { name: 'Seamless Patterns', selected: false },
+          { name: 'No-Sew Patterns', selected: false },
           { name: 'Quick Projects', selected: false },
           { name: 'Scrap Yarn Projects', selected: false },
         ],
