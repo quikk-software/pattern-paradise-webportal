@@ -114,21 +114,22 @@ export default function HeroV2({ products }: HeroV2Props) {
             </div>
           </div>
 
-          {/* Right column - Image grid */}
           <div className="relative flex items-center justify-center rounded-lg border border-border p-2">
             <div className="grid grid-cols-2 gap-2">
               {products.map((product) => (
-                <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm" key={product.id}>
-                  <div className="aspect-square overflow-hidden rounded-md">
-                    <CldImage
-                      alt={`${product.category} Pattern '${product.title}'`}
-                      src={product.imageUrls?.at(0) ?? ''}
-                      width={200}
-                      height={200}
-                      className="h-full w-full object-cover"
-                    />
+                <Link href={`/app/products/${product.id}`} key={product.id}>
+                  <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm">
+                    <div className="aspect-square overflow-hidden rounded-md">
+                      <CldImage
+                        alt={`${product.category} Pattern '${product.title}'`}
+                        src={product.imageUrls?.at(0) ?? ''}
+                        width={200}
+                        height={200}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
