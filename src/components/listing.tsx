@@ -41,10 +41,9 @@ const categories = ['All', 'Crocheting', 'Knitting'];
 
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
-  defaultProducts: GetProductResponse[];
 }
 
-export function ListingComponent({ listingType, defaultProducts }: ListingComponentProps) {
+export function ListingComponent({ listingType }: ListingComponentProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState<{

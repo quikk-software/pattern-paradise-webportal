@@ -50,7 +50,7 @@ export default function ReleasePatternDrawer({
       <DrawerContent className="p-4">
         <div className="flex flex-col gap-4">
           <DrawerHeader>
-            <DrawerTitle>Release pattern</DrawerTitle>
+            <DrawerTitle>Release Pattern</DrawerTitle>
             {!isTestingApproved ? (
               <DrawerTitle className="text-sm font-medium">
                 If you release your pattern yourself without testers approving it in a{' '}
@@ -89,7 +89,7 @@ export default function ReleasePatternDrawer({
             {releaseProductIsLoading || fetchTestingIsLoading ? (
               <LoadingSpinnerComponent size="sm" />
             ) : null}
-            Release pattern
+            Release Pattern
           </Button>
           <RequestStatus
             isSuccess={releaseProductIsSuccess}
