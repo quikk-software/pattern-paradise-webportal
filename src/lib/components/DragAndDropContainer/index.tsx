@@ -45,12 +45,16 @@ export default function DragAndDropContainer({
   }, [selectedFiles]);
 
   useEffect(() => {
-    Object.entries(groupedFiles).map(([language, files]) =>
-      setFileOrder((fileOrder) => ({
-        ...fileOrder,
-        [language]: files.map((file) => file.id),
-      })),
-    );
+    if (groupedFiles) {
+      Object.entries(groupedFiles).map(([language, files]) =>
+        setFileOrder((fileOrder) => ({
+          ...fileOrder,
+          [language]: files.map((file) => file.id),
+        })),
+      );
+    } else {
+      setFileOrder({});
+    }
   }, [groupedFiles]);
 
   const handleDragEnd = (event: any, language: string) => {
