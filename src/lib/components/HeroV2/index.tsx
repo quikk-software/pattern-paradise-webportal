@@ -114,8 +114,23 @@ export default function HeroV2({ products }: HeroV2Props) {
             </div>
           </div>
 
-          <div className="relative flex items-center justify-center rounded-lg border border-border p-2">
-            <div className="grid grid-cols-2 gap-2">
+          <div
+            className="relative flex items-center justify-center rounded-lg p-2 mx-auto mt-4 mb-4"
+            style={{
+              width: '300px',
+              height: '300px',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                inset: '0',
+                background: `linear-gradient(to bottom right, ${theme.colors.amber[200]}, ${theme.colors.background})`,
+                opacity: 0.8,
+              }}
+              className="shadow-lg rounded-lg"
+            />
+            <div className="absolute inset-0 grid grid-cols-2 gap-2">
               {products.map((product) => (
                 <Link href={`/app/products/${product.id}`} key={product.id}>
                   <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm">
@@ -131,6 +146,30 @@ export default function HeroV2({ products }: HeroV2Props) {
                   </div>
                 </Link>
               ))}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '-1rem',
+                  right: '-1rem',
+                  height: '6rem',
+                  width: '6rem',
+                  borderRadius: '9999px',
+                  backgroundColor: theme.colors.amber[500],
+                  opacity: 0.7,
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '-1.5rem',
+                  left: '-1.5rem',
+                  height: '5rem',
+                  width: '5rem',
+                  borderRadius: '9999px',
+                  backgroundColor: theme.colors.amber[500],
+                  opacity: 0.5,
+                }}
+              />
             </div>
           </div>
         </div>
