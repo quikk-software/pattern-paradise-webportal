@@ -45,16 +45,17 @@ export default function DragAndDropContainer({
   }, [selectedFiles]);
 
   useEffect(() => {
-    if (groupedFiles) {
-      Object.entries(groupedFiles).map(([language, files]) =>
-        setFileOrder((fileOrder) => ({
-          ...fileOrder,
-          [language]: files.map((file) => file.id),
-        })),
-      );
-    } else {
+    if (Object.values(groupedFiles).flat(1).length === 0) {
       setFileOrder({});
+      return;
     }
+    const fileOrder: Record<string, string[]> = {};
+
+    Object.entries(groupedFiles).forEach(([language, files]) => {
+      fileOrder[language] = files.map((file) => file.id);
+    });
+
+    setFileOrder(fileOrder);
   }, [groupedFiles]);
 
   const handleDragEnd = (event: any, language: string) => {
@@ -67,6 +68,10 @@ export default function DragAndDropContainer({
       });
     }
   };
+
+  if (Object.keys(groupedFiles).length === 0) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-4">

@@ -14,6 +14,7 @@ interface LanguageSelectProps {
   handleLanguageChange: (value: string, language?: string) => void;
   fullWidth?: boolean;
   allowedLanguages?: string[];
+  disabled?: boolean;
 }
 
 export default function LanguageSelect({
@@ -21,12 +22,14 @@ export default function LanguageSelect({
   handleLanguageChange,
   fullWidth,
   allowedLanguages,
+  disabled = false,
 }: LanguageSelectProps) {
   return (
     <div className="flex-grow">
       <Select
         value={language ?? ''}
         onValueChange={(value) => handleLanguageChange(value, language)}
+        disabled={disabled}
       >
         <SelectTrigger className={`${fullWidth ? 'w-full' : 'w-[180px]'}`}>
           <SelectValue placeholder="Select language" />

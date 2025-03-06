@@ -13,13 +13,19 @@ interface PdfSelectorProps {
   selectedFiles: PDFFile[];
   setSelectedFiles: React.Dispatch<React.SetStateAction<PDFFile[]>>;
   isPro: boolean;
+  disableLanguageSelect?: boolean;
 }
 
 interface GroupedFiles {
   [key: string]: PDFFile[];
 }
 
-export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }: PdfSelectorProps) {
+export default function FileSelector({
+  selectedFiles,
+  setSelectedFiles,
+  isPro,
+  disableLanguageSelect = false,
+}: PdfSelectorProps) {
   const [groupedFiles, setGroupedFiles] = useState<GroupedFiles>({});
   const [uploadLanguage, setUploadLanguage] = useState('en');
 
@@ -151,6 +157,7 @@ export default function FileSelector({ selectedFiles, setSelectedFiles, isPro }:
                     <LanguageSelect
                       language={language}
                       handleLanguageChange={handleLanguageChange}
+                      disabled={disableLanguageSelect}
                     />
                     <div className="flex-grow space-y-2">
                       {files.map((fileData, index) => {

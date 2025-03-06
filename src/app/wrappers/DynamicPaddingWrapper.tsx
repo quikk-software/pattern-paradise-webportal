@@ -38,7 +38,6 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
     const handleScroll = () => {
       if (scrollableDivRef.current) {
         setScrolled(scrollableDivRef.current.scrollTop > 10);
-        console.log('Div scrollTop:', scrollableDivRef.current.scrollTop);
       }
     };
 
