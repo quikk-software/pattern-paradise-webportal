@@ -244,8 +244,8 @@ function BackendFilesItem({
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-start">
           <div className="truncate pr-2">
-            <p className="text-sm font-medium truncate">Backend Files ({files.length})</p>
-            <p className="text-xs text-muted-foreground">{formatTotalSize()} total • Backend</p>
+            <p className="text-sm font-medium truncate">Pattern Files ({files.length})</p>
+            <p className="text-xs text-muted-foreground">{formatTotalSize()} total • Patterns</p>
           </div>
           {getStatusIcon()}
         </div>

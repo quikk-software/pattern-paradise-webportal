@@ -32,7 +32,6 @@ import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
 import { checkProStatus } from '@/lib/core/utils';
 import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
-import { InfoBoxComponent } from '@/components/info-box';
 import { closestCenter, DndContext } from '@dnd-kit/core';
 import { arrayMove, SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import DragAndDropImage from '@/lib/components/DragAndDropImage';
@@ -520,17 +519,9 @@ export function ProductFormComponent() {
         </div>
 
         {patterns.length > 0 ? (
-          <>
-            <div className="w-full">
-              <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
-            </div>
-            <InfoBoxComponent
-              message={
-                'You can only change the file order after uploading this pattern. Files and their names cannot be changed after uploading.'
-              }
-              severity={'info'}
-            />
-          </>
+          <div className="w-full">
+            <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
+          </div>
         ) : null}
 
         <div className="flex flex-col gap-2">

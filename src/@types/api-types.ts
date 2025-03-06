@@ -304,22 +304,6 @@ export interface PostProductResponse {
   productId: string;
 }
 
-export interface PutProductRequest {
-  imageUrls: any[];
-  hashtags: any[];
-  subCategories: any[];
-  fileOrder: {
-    language?: string;
-    fileId?: string;
-  }[];
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  isFree: boolean;
-  experience: string;
-}
-
 export interface GetProductResponse {
   id: string;
   imageUrls: string[];
@@ -1704,26 +1688,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     putProduct: (
       productId: string,
       data: {
-        /** @example "any" */
-        imageUrls?: any;
-        /** @example "any" */
-        hashtags?: any;
-        /** @example "any" */
-        fileOrder?: any;
-        /** @example "any" */
-        subCategories?: any;
-        /** @example "any" */
-        title?: any;
-        /** @example "any" */
-        description?: any;
-        /** @example "any" */
-        category?: any;
-        /** @example "any" */
-        experience?: any;
-        /** @example "any" */
-        isFree?: any;
-        /** @example "any" */
-        price?: any;
+        /** Array of files to upload. */
+        newFiles: File[];
+        /** Array of file names. */
+        newFileNames: {
+          filename?: string;
+          originalFilename?: string;
+        }[];
+        /** Array of files to be renamed. */
+        overrideFileNames: {
+          filename?: string;
+          fileId?: string;
+        }[];
+        /** Array of product image URLs. */
+        imageUrls: string[];
+        /** Array of hashtags. */
+        hashtags: string[];
+        /** Array of sub categories. */
+        subCategories: string[];
+        /** Array of languages related to files. */
+        newFileLanguages: {
+          language?: string;
+          fileName?: string;
+        }[];
+        /** Array of file IDs to be deleted. */
+        deletedFileIds: string[];
+        /** Array of files order. */
+        fileOrder: {
+          language?: string;
+          fileId?: string;
+        }[];
+        /** The title of the product. */
+        title: string;
+        /** A description of the product. */
+        description: string;
+        /** The category of the product. */
+        category: string;
+        /** The price of the product. */
+        price: number;
+        /** Indicates if the product is free (true/false). */
+        isFree: string;
+        /** The experience level of the product. */
+        experience: string;
       },
       params: RequestParams = {},
     ) =>
@@ -1732,7 +1738,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'PUT',
         body: data,
         secure: true,
-        type: ContentType.Json,
+        type: ContentType.FormData,
         ...params,
       }),
 
