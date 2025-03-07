@@ -1,9 +1,17 @@
 {
-  "name": "Pattern Paradise",
+  "name": "Pattern Paradise – The Ultimate Crochet &amp; Knitting Pattern Hub",
   "short_name": "Pattern Paradise",
-  "id": "pattern-paradise",
-  "description": "Find, sell and test patterns from creatives around the world!",
+  "description": "Find, sell, and test crochet &amp; knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern business effortlessly.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#ed8332",
   "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    },
     {
       "src": "https://pattern-paradise.shop/icons/main/16.png",
       "sizes": "16x16",
@@ -47,9 +55,29 @@
       "purpose": "any"
     }
   ],
-  "theme_color": "#f4930b",
-  "background_color": "#FFFFFF",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "portrait"
+  "id": "pattern-paradise",
+  "dir": "auto",
+  "lang": "en",
+  "orientation": "portrait",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "View tester chats",
+      "url": "/app/secure/test/chats",
+      "description": "View chats for your testings"
+    },
+    {
+      "name": "View chats",
+      "url": "/app/secure/chats",
+      "description": "View chats with other users"
+    },
+    {
+      "name": "Create pattern",
+      "url": "/app/secure/sell/submit",
+      "description": "Create a new pattern"
+    }
+  ],
+  "categories": [
+    "productivity"
+  ]
 }
