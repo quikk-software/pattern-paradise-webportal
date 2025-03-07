@@ -7,6 +7,7 @@ import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
 import ComingSoon from '@/components/coming-soon';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
+import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -97,16 +98,18 @@ export default async function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        <CookiesProvider>
-          {maintenanceMode ? (
-            <ComingSoon />
-          ) : (
-            <AuthSessionProvider>
-              <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
-            </AuthSessionProvider>
-          )}
-          <CookieConsentBanner maintenanceMode={maintenanceMode} />
-        </CookiesProvider>
+        <ServiceWorkerProvider>
+          <CookiesProvider>
+            {maintenanceMode ? (
+              <ComingSoon />
+            ) : (
+              <AuthSessionProvider>
+                <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+              </AuthSessionProvider>
+            )}
+            <CookieConsentBanner maintenanceMode={maintenanceMode} />
+          </CookiesProvider>
+        </ServiceWorkerProvider>
       </body>
     </html>
   );
