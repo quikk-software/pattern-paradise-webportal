@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     other: [
       { rel: 'apple-touch-icon', url: '/favicons/apple-icon-152x152.png', sizes: '152x152' },
       { rel: 'apple-touch-icon', url: '/favicons/apple-icon-180x180.png', sizes: '180x180' },
-      { rel: 'manifest', url: '/manifest.json' },
+      { rel: 'manifest', url: '/manifest.webmanifest' },
     ],
   },
   openGraph: {
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     minimumScale: 1.0,
     userScalable: false,
   },
-  manifest: '/manifest.json',
+  manifest: '/manifest.webmanifest',
   other: {
     'mobile-web-app-capable': 'yes',
     'msapplication-config': '/favicons/browserconfig.xml',
@@ -94,7 +94,7 @@ export default async function RootLayout({
 
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
