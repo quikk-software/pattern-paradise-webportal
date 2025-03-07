@@ -549,14 +549,17 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
         </div>
 
         <div className="w-full">
-          <FileSelector selectedFiles={patterns} setSelectedFiles={setPatterns} isPro={isPro} />
+          <FileSelector
+            selectedFiles={patterns}
+            setSelectedFiles={setPatterns}
+            isPro={isPro}
+            disableLanguageSelect={true}
+          />
         </div>
 
-        {patterns.length > 0 ? (
-          <div className="w-full">
-            <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
-          </div>
-        ) : null}
+        <div className="w-full">
+          <DragAndDropContainer selectedFiles={patterns} setFileOrder={setFileOrder} />
+        </div>
 
         <UploadFeedback
           uploadStage={uploadStage}

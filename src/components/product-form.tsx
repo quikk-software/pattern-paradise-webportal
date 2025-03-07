@@ -36,6 +36,7 @@ import { closestCenter, DndContext } from '@dnd-kit/core';
 import { arrayMove, SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import DragAndDropImage from '@/lib/components/DragAndDropImage';
 import UploadFeedback from '@/components/upload-feedback';
+import { useRouter } from 'next/navigation';
 
 export interface PDFFile {
   file: File;
@@ -98,6 +99,8 @@ export function ProductFormComponent() {
     watch,
     reset,
   } = useForm();
+
+  const router = useRouter();
 
   const hasErrors =
     errors.title || errors.description || errors.price || imageError || patternError;
@@ -296,11 +299,13 @@ export function ProductFormComponent() {
         JSON.stringify(patterns.map(({ language, file }) => ({ language, fileName: file.name }))),
       );
 
-      await mutate(formData);
+      const { productId } = await mutate(formData);
 
       handleResetFormClick();
 
       setUploadStage('complete');
+
+      router.push(`/app/secure/sell/submit/success?productId=${productId}`);
     } catch (error) {
       setUploadStage('error');
     }
