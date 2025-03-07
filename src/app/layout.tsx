@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicons/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/favicons/apple-touch-icon.png',
+    apple: '/icons/ios/512.png',
     other: [
       { rel: 'apple-touch-icon', url: '/favicons/apple-icon-152x152.png', sizes: '152x152' },
       { rel: 'apple-touch-icon', url: '/favicons/apple-icon-180x180.png', sizes: '180x180' },
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
       {
         url: `${APP_DOMAIN}/favicons/apple-icon-precomposed.png`,
         width: 1200,
-        height: 630,
+        height: 1200,
       },
     ],
   },
