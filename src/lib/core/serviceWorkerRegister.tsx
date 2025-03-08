@@ -9,29 +9,38 @@ export default function ServiceWorkerRegister() {
       return;
     }
 
-    if ('serviceWorker' in navigator) {
-      const registerServiceWorker = async () => {
-        try {
-          const registration = await navigator.serviceWorker.register('/sw.js');
-          logger.log('Service Worker registered with scope:', registration.scope);
-        } catch (error) {
-          logger.error('Service Worker registration failed:', error);
-        }
-      };
+    try {
+      if ('serviceWorker' in navigator) {
+        const registerServiceWorker = async () => {
+          try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            logger.log('Service Worker registered with scope:', registration.scope);
+          } catch (error) {
+            logger.error('Service Worker registration failed:', error);
+          }
+        };
 
-      const registerFirebaseServiceWorker = async () => {
-        try {
-          const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-          logger.log('Firebase Messaging Service Worker registered:', registration.scope);
-        } catch (error) {
-          logger.error('Firebase Service Worker registration failed:', error);
-        }
-      };
+        const registerFirebaseServiceWorker = async () => {
+          try {
+            const registration = await navigator.serviceWorker.register(
+              '/firebase-messaging-sw.js',
+            );
+            logger.log('Firebase Messaging Service Worker registered:', registration.scope);
+          } catch (error) {
+            logger.error('Firebase Service Worker registration failed:', error);
+          }
+        };
 
-      window.addEventListener('load', () => {
-        registerServiceWorker();
-        setTimeout(registerFirebaseServiceWorker, 3000);
-      });
+        window.addEventListener('load', () => {
+          registerServiceWorker();
+          setTimeout(registerFirebaseServiceWorker, 3000);
+        });
+      }
+    } catch (error) {
+      logger.error(
+        'High level service worker registration failed (probably due to undefined navigator):',
+        error,
+      );
     }
   }, []);
 
