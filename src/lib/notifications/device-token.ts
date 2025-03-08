@@ -3,12 +3,13 @@ import { getMessaging, getToken } from 'firebase/messaging';
 import logger from '@/lib/core/logger';
 
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_AUTH_DOMAIN',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_STORAGE_BUCKET',
-  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-  appId: 'YOUR_APP_ID',
+  apiKey: 'AIzaSyDZK-s64gEzXF8dsTP42w3T2rlD3OKgWpI',
+  authDomain: 'pattern-paradise.firebaseapp.com',
+  projectId: 'pattern-paradise',
+  storageBucket: 'pattern-paradise.firebasestorage.app',
+  messagingSenderId: '608358089878',
+  appId: '1:608358089878:web:3acc6039e99f44d86aeeb7',
+  measurementId: 'G-DYG4Q4N3JJ',
 };
 
 const app = initializeApp(firebaseConfig);
@@ -27,7 +28,8 @@ export const getDeviceToken = async () => {
     }
 
     const token = await getToken(messaging, {
-      vapidKey: 'YOUR_PUBLIC_VAPID_KEY',
+      vapidKey:
+        'BOXmZ_Hwa4Aqm9t4EIqFLoktOdvLwR0CBrS3vzleKZPemlcKwkSK3T3ZRqaP34sysWTSOvkqxHNm9Z9CmjZE6XA',
     });
 
     if (token) {
