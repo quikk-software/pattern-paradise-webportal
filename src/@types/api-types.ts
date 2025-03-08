@@ -17,6 +17,12 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface PostDeviceTokenRequest {
+  deviceToken: string;
+  platform: string;
+  events?: string[];
+}
+
 export interface PostCheckUsernameRequest {
   username: string;
 }
@@ -1565,6 +1571,36 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/check/email`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Device tokens can be stored for multiple users simultaneously.
+     *
+     * @tags User
+     * @name StoreDeviceToken
+     * @summary Stores the device token of a user.
+     * @request POST:/api/v1/users/{userId}/store-device-token
+     * @secure
+     */
+    storeDeviceToken: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        deviceToken?: any;
+        /** @example "any" */
+        platform?: any;
+        /** @example "any" */
+        events?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/store-device-token`,
         method: 'POST',
         body: data,
         secure: true,

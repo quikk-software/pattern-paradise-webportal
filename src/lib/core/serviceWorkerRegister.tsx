@@ -15,6 +15,14 @@ export default function ServiceWorkerRegister() {
           .catch((error) => {
             logger.error('Service Worker registration failed:', error);
           });
+        navigator.serviceWorker
+          .register('/firebase-messaging-sw.js')
+          .then((registration) => {
+            logger.log('Service Worker registered:', registration.scope);
+          })
+          .catch((error) => {
+            logger.error('Service Worker registration failed:', error);
+          });
       });
     }
   }, []);

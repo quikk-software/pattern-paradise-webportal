@@ -14,3 +14,4 @@ export * from './useResendCode';
 export * from './useRemovePayPalReferral';
 export * from './useCheckUsername';
 export * from './useCheckEmail';
+export * from './useStoreDeviceToken';
