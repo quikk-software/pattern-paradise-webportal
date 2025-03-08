@@ -1,8 +1,8 @@
 import logger from '../src/lib/core/logger';
 
 try {
-  importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js');
-  importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js');
+  importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js');
+  importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-messaging.js');
 
   firebase.initializeApp({
     apiKey: 'AIzaSyDZK-s64gEzXF8dsTP42w3T2rlD3OKgWpI',
