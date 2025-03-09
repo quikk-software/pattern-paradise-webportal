@@ -363,7 +363,15 @@ export default function NotificationPreferences({
   return (
     <>
       {disableCard ? (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) {
+              localStorage.setItem('pushNotificationDenied', 'true');
+            }
+          }}
+        >
           <DialogContent>
             <PreferencesCard
               setIsDialogOpen={setIsDialogOpen}
