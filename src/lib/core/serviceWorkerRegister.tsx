@@ -30,10 +30,7 @@ export default function ServiceWorkerRegister() {
         }
       };
 
-      window.addEventListener('load', () => {
-        registerServiceWorker();
-        setTimeout(registerFirebaseServiceWorker, 3000);
-      });
+      registerServiceWorker().then(() => registerFirebaseServiceWorker());
     }
   }, []);
 
