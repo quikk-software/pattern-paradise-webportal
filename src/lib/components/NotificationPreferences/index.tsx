@@ -18,7 +18,7 @@ import { firebaseConfig, getDeviceToken } from '@/lib/notifications/device-token
 import { initializeApp } from '@firebase/app';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { useStoreDeviceToken } from '@/lib/api';
+import { useGetDeviceToken, useStoreDeviceToken } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestStatus from '@/lib/components/RequestStatus';
 
@@ -66,12 +66,13 @@ export default function NotificationPreferences({
   const { userId } = useSelector((s: Store) => s.auth);
 
   const {
-    mutate,
-    isLoading,
+    mutate: storeDeviceToken,
+    isLoading: storeDeviceTokenIsLoading,
     isSuccess: storeDeviceTokenIsSuccess,
     isError: storeDeviceTokenIsError,
     errorDetail: storeDeviceTokenErrorDetail,
   } = useStoreDeviceToken();
+  const { fetch: fetchDeviceToken } = useGetDeviceToken();
 
   useEffect(() => {
     const checkSupport = async () => {
@@ -79,12 +80,15 @@ export default function NotificationPreferences({
         setIsSupported(true);
 
         try {
-          const registration = await navigator.serviceWorker.ready;
-          const subscription = await registration.pushManager.getSubscription();
-          setIsSubscribed(!!subscription);
-          // callback?.(!subscription);
+          const device = await getDeviceToken(initializeApp(firebaseConfig));
+          if (device?.token) {
+            const result = await fetchDeviceToken(userId, device.token);
+            setIsSubscribed(!!result.deviceToken);
+            callback?.(false);
+          }
         } catch (error) {
           console.error('Error checking subscription:', error);
+          callback?.(true);
         }
       }
     };
@@ -104,7 +108,7 @@ export default function NotificationPreferences({
         if (permission === 'granted') {
           getDeviceToken(initializeApp(firebaseConfig)).then((result) => {
             if (result?.token) {
-              mutate(userId, {
+              storeDeviceToken(userId, {
                 deviceToken: result.token,
                 platform: result.platform,
               }).then(() => {
@@ -205,8 +209,14 @@ export default function NotificationPreferences({
           </>
         ) : (
           <>
-            <Button onClick={handleSubscribe} disabled={isLoading} className="w-full">
-              {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
+            <Button
+              onClick={handleSubscribe}
+              disabled={storeDeviceTokenIsLoading}
+              className="w-full"
+            >
+              {storeDeviceTokenIsLoading ? (
+                <LoadingSpinnerComponent size="sm" className="text-white" />
+              ) : null}
               Enable Push Notifications
             </Button>
             <RequestStatus

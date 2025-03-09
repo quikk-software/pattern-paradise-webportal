@@ -17,6 +17,23 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface GetDeviceTokenResponse {
+  userId: string;
+  deviceToken: string;
+  platform: string;
+  events?: string[];
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
 export interface PostDeviceTokenRequest {
   deviceToken: string;
   platform: string;
@@ -1605,6 +1622,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The device token data will be queried by the authenticated user ID and given device token.
+     *
+     * @tags User
+     * @name GetDeviceToken
+     * @summary Gets the device token data of a user.
+     * @request GET:/api/v1/users/{userId}/device-tokens/{deviceToken}
+     * @secure
+     */
+    getDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+      this.request<GetDeviceTokenResponse, any>({
+        path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
         ...params,
       }),
 

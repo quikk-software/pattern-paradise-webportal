@@ -15,3 +15,4 @@ export * from './useRemovePayPalReferral';
 export * from './useCheckUsername';
 export * from './useCheckEmail';
 export * from './useStoreDeviceToken';
+export * from './useGetDeviceToken';
