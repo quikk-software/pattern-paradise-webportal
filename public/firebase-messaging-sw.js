@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-messaging-compat.js');
 
 firebase.initializeApp({
   apiKey: 'AIzaSyDZK-s64gEzXF8dsTP42w3T2rlD3OKgWpI',
@@ -13,16 +13,9 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
-  if (typeof self !== 'undefined') {
-    if (self.Notification.permission === 'granted') {
-      if (self.navigator.serviceWorker)
-        self.navigator.serviceWorker.getRegistration().then(async function (reg) {
-          if (reg)
-            await reg.showNotification(payload.notification.title, {
-              body: payload.notification.body,
-            });
-        });
-    }
-  }
+messaging.onBackgroundMessage((payload) => {
+  self.registration.showNotification(payload.notification.title, {
+    body: payload.notification.body,
+    icon: '/icons/main/256.png',
+  });
 });
