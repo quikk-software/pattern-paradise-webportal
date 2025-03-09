@@ -21,12 +21,20 @@ import { Store } from '@/lib/redux/store';
 import { useGetDeviceToken, useStoreDeviceToken } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestStatus from '@/lib/components/RequestStatus';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE';
 
 interface NotificationPreferencesProps {
-  callback?: (value: boolean) => void;
   disableCard?: boolean;
+}
+
+interface PreferencesCardProps {
+  setIsDialogOpen: (isOpen: boolean) => void;
+  disableCard: boolean;
+  isSupported: boolean;
+  isSubscribed: boolean;
+  setIsSubscribed: (value: boolean) => void;
 }
 
 interface NotificationPreference {
@@ -36,12 +44,13 @@ interface NotificationPreference {
   description: string;
 }
 
-export default function NotificationPreferences({
-  callback,
-  disableCard = false,
-}: NotificationPreferencesProps) {
-  const [isSupported, setIsSupported] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+function PreferencesCard({
+  setIsDialogOpen,
+  disableCard,
+  isSupported,
+  isSubscribed,
+  setIsSubscribed,
+}: PreferencesCardProps) {
   const [preferences, setPreferences] = useState<NotificationPreference[]>([
     {
       type: 'DIRECT_MESSAGE',
@@ -72,29 +81,6 @@ export default function NotificationPreferences({
     isError: storeDeviceTokenIsError,
     errorDetail: storeDeviceTokenErrorDetail,
   } = useStoreDeviceToken();
-  const { fetch: fetchDeviceToken } = useGetDeviceToken();
-
-  useEffect(() => {
-    const checkSupport = async () => {
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        setIsSupported(true);
-
-        try {
-          const device = await getDeviceToken(initializeApp(firebaseConfig));
-          if (device?.token) {
-            const result = await fetchDeviceToken(userId, device.token);
-            setIsSubscribed(!!result?.deviceToken);
-            callback?.(!result?.deviceToken);
-          }
-          callback?.(false);
-        } catch (error) {
-          console.error('Error checking subscription:', error);
-        }
-      }
-    };
-
-    checkSupport();
-  }, [callback]);
 
   const handleTogglePreference = (type: NotificationType) => {
     setPreferences((prev) =>
@@ -113,7 +99,7 @@ export default function NotificationPreferences({
                 platform: result.platform,
               }).then(() => {
                 setIsSubscribed(true);
-                callback?.(false);
+                setIsDialogOpen(false);
               });
             }
           });
@@ -134,7 +120,7 @@ export default function NotificationPreferences({
         await deleteSubscription();
 
         setIsSubscribed(false);
-        callback?.(false);
+        setIsDialogOpen(false);
       }
     } catch (error) {
       logger.error('Error unsubscribing from push notifications:', error);
@@ -158,17 +144,6 @@ export default function NotificationPreferences({
     //   method: 'DELETE'
     // })
   };
-
-  if (!isSupported) {
-    return (
-      <Card className={`w-full${disableCard ? ' border-none shadow-none border-0' : ''}`}>
-        <CardHeader>
-          <CardTitle>Push Notifications</CardTitle>
-          <CardDescription>Push notifications are not supported in your browser.</CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
 
   return (
     <Card className={`w-full${disableCard ? ' border-none shadow-none border-0' : ''}`}>
@@ -228,5 +203,83 @@ export default function NotificationPreferences({
         )}
       </CardFooter>
     </Card>
+  );
+}
+
+export default function NotificationPreferences({
+  disableCard = false,
+}: NotificationPreferencesProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSupported, setIsSupported] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const { userId } = useSelector((s: Store) => s.auth);
+
+  const { fetch: fetchDeviceToken } = useGetDeviceToken();
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      setIsSupported(true);
+
+      getDeviceToken(initializeApp(firebaseConfig))
+        .then((device) => {
+          if (device?.token) {
+            fetchDeviceToken(userId, device.token)
+              .then((result) => {
+                setIsSubscribed(!!result?.deviceToken);
+                setIsDialogOpen(!result?.deviceToken);
+              })
+              .catch((error) => {
+                logger.error('Error fetching device token:', error);
+                setIsDialogOpen(true);
+              });
+            return;
+          }
+          setIsDialogOpen(false);
+        })
+        .catch((error) => {
+          logger.error('Error checking subscription:', error);
+        });
+    }
+  }, [userId]);
+
+  if (!isSupported && !disableCard) {
+    return (
+      <Card className={'w-full border-none shadow-none border-0'}>
+        <CardHeader>
+          <CardTitle>Push Notifications</CardTitle>
+          <CardDescription>Push notifications are not supported in your browser.</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  return (
+    <>
+      {disableCard ? (
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent>
+            <PreferencesCard
+              setIsDialogOpen={setIsDialogOpen}
+              disableCard={disableCard}
+              isSupported={isSupported}
+              isSubscribed={isSubscribed}
+              setIsSubscribed={setIsSubscribed}
+            />
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <PreferencesCard
+          setIsDialogOpen={setIsDialogOpen}
+          disableCard={disableCard}
+          isSupported={isSupported}
+          isSubscribed={isSubscribed}
+          setIsSubscribed={setIsSubscribed}
+        />
+      )}
+    </>
   );
 }
