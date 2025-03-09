@@ -9,23 +9,23 @@ export default function ServiceWorkerRegister() {
       return;
     }
 
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in window.navigator) {
       const registerServiceWorker = async () => {
         try {
-          const registration = await navigator.serviceWorker.register('/sw.js');
+          const registration = await window.navigator.serviceWorker.register('/sw.js');
           logger.log('Service Worker registered with scope:', registration.scope);
         } catch (error) {
-          console.log('Service Worker registration failed:', { error });
           logger.error('Service Worker registration failed:', error);
         }
       };
 
       const registerFirebaseServiceWorker = async () => {
         try {
-          const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+          const registration = await window.navigator.serviceWorker.register(
+            '/firebase-messaging-sw.js',
+          );
           logger.log('Firebase Messaging Service Worker registered:', registration.scope);
         } catch (error) {
-          console.log('Firebase Service Worker registration failed:', { error });
           logger.error('Firebase Service Worker registration failed:', error);
         }
       };
