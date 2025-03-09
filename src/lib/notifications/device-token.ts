@@ -35,7 +35,7 @@ export const getDeviceToken = async (app: FirebaseApp) => {
 
       if (token) {
         logger.log('Device Token:', token);
-        return { token, platform: isIOS(window.navigator) ? 'ios' : 'android' };
+        return { token, platform: isIOS(window.navigator) ? 'IOS' : 'ANDROID' };
       } else {
         logger.log('Failed to get device token.');
         return null;
