@@ -165,6 +165,8 @@ function PreferencesCard({
               });
             }
           });
+        } else if (permission === 'denied') {
+          localStorage.setItem('pushNotificationDenied', 'true');
         }
       });
     } catch (error) {
@@ -316,6 +318,10 @@ export default function NotificationPreferences({
 
   useEffect(() => {
     if (!userId) {
+      return;
+    }
+    const pushNotificationDenied = localStorage.getItem('pushNotificationDenied');
+    if (pushNotificationDenied === 'true') {
       return;
     }
     if ('serviceWorker' in navigator && 'PushManager' in window) {
