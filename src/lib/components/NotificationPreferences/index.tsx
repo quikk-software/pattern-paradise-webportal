@@ -83,12 +83,12 @@ export default function NotificationPreferences({
           const device = await getDeviceToken(initializeApp(firebaseConfig));
           if (device?.token) {
             const result = await fetchDeviceToken(userId, device.token);
-            setIsSubscribed(!!result.deviceToken);
-            callback?.(false);
+            setIsSubscribed(!!result?.deviceToken);
+            callback?.(!result?.deviceToken);
           }
+          callback?.(false);
         } catch (error) {
           console.error('Error checking subscription:', error);
-          callback?.(true);
         }
       }
     };
