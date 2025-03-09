@@ -14,10 +14,10 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
-  if (typeof window !== 'undefined') {
-    if (Notification.permission === 'granted') {
-      if (navigator.serviceWorker)
-        navigator.serviceWorker.getRegistration().then(async function (reg) {
+  if (typeof self !== 'undefined') {
+    if (self.Notification.permission === 'granted') {
+      if (self.navigator.serviceWorker)
+        self.navigator.serviceWorker.getRegistration().then(async function (reg) {
           if (reg)
             await reg.showNotification(payload.notification.title, {
               body: payload.notification.body,
