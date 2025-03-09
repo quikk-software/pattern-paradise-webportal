@@ -320,12 +320,13 @@ export default function NotificationPreferences({
     if (!userId) {
       return;
     }
-    const pushNotificationDenied = localStorage.getItem('pushNotificationDenied');
-    if (pushNotificationDenied === 'true') {
-      return;
-    }
+
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       setIsSupported(true);
+      const pushNotificationDenied = localStorage.getItem('pushNotificationDenied');
+      if (pushNotificationDenied === 'true') {
+        return;
+      }
 
       getDeviceToken(initializeApp(firebaseConfig))
         .then((device) => {
