@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 
 export default function NotificationPermissionProvider() {
-  const [isDialogOpen, setIsDialogOpen] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
