@@ -1,3 +1,5 @@
+'use client';
+
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 import logger from '@/lib/core/logger';
