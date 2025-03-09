@@ -1,10 +1,10 @@
 'use client';
 
-import { initializeApp } from 'firebase/app';
+import { FirebaseApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 import logger from '@/lib/core/logger';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyDZK-s64gEzXF8dsTP42w3T2rlD3OKgWpI',
   authDomain: 'pattern-paradise.firebaseapp.com',
   projectId: 'pattern-paradise',
@@ -14,16 +14,14 @@ const firebaseConfig = {
   measurementId: 'G-DYG4Q4N3JJ',
 };
 
-const app = initializeApp(firebaseConfig);
-export const messaging = getMessaging(app);
-
 const isIOS = (navigator: Navigator) => {
   return /iPad|iPhone|iPod/.test(navigator.userAgent);
 };
 
-export const getDeviceToken = async () => {
+export const getDeviceToken = async (app: FirebaseApp) => {
   if (typeof window !== 'undefined') {
     try {
+      const messaging = getMessaging(app);
       const permission = await window.Notification.requestPermission();
       if (permission !== 'granted') {
         logger.log('Notification permission denied.');
