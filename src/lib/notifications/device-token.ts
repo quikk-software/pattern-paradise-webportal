@@ -30,7 +30,7 @@ export const getDeviceToken = async (app: FirebaseApp) => {
 
       const token = await getToken(messaging, {
         vapidKey:
-          'BOXmZ_Hwa4Aqm9t4EIqFLoktOdvLwR0CBrS3vzleKZPemlcKwkSK3T3ZRqaP34sysWTSOvkqxHNm9Z9CmjZE6XA',
+          'BLAuhDOnKtEgZoVeFR6KSqga0xt59mOseRP6QL-uOoEnv1nrozU_68MAIVO6wCDB8CZa33k94jgKcHUWrzDd51g',
       });
 
       if (token) {
