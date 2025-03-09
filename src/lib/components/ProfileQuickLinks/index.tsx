@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   LogOut,
   ChevronRight,
+  Bell,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -69,6 +70,12 @@ export default function ProfileQuickLinks({
       description: 'View your incidents',
       highlight: hasOpenIncidents,
       count: user.openIncidentsCount,
+    },
+    {
+      title: 'Notification Settings',
+      href: '/app/secure/auth/me/notifications',
+      icon: <Bell className="h-5 w-5" />,
+      description: 'View your notification settings',
     },
   ];
 
