@@ -34,6 +34,11 @@ export interface GetDeviceTokenResponse {
   updatedAt: string;
 }
 
+export interface PutDeviceTokenRequest {
+  deviceToken: string;
+  events?: string[];
+}
+
 export interface PostDeviceTokenRequest {
   deviceToken: string;
   platform: string;
@@ -1599,12 +1604,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description Device tokens can be stored for multiple users simultaneously.
      *
      * @tags User
-     * @name StoreDeviceToken
+     * @name PostDeviceToken
      * @summary Stores the device token of a user.
-     * @request POST:/api/v1/users/{userId}/store-device-token
+     * @request POST:/api/v1/users/{userId}/device-token
      * @secure
      */
-    storeDeviceToken: (
+    postDeviceToken: (
       userId: string,
       data: {
         /** @example "any" */
@@ -1617,8 +1622,36 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<void, any>({
-        path: `/api/v1/users/${userId}/store-device-token`,
+        path: `/api/v1/users/${userId}/device-token`,
         method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Events of a device token can be updated.
+     *
+     * @tags User
+     * @name PutDeviceToken
+     * @summary Updates the device token of a user.
+     * @request PATCH:/api/v1/users/{userId}/device-token
+     * @secure
+     */
+    putDeviceToken: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        deviceToken?: any;
+        /** @example "any" */
+        events?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-token`,
+        method: 'PATCH',
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1640,6 +1673,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         secure: true,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The device token data will be deleted by the authenticated user ID and given device token.
+     *
+     * @tags User
+     * @name DeleteDeviceToken
+     * @summary Deletes the device token data of a user.
+     * @request DELETE:/api/v1/users/{userId}/device-tokens/{deviceToken}
+     * @secure
+     */
+    deleteDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
+        method: 'DELETE',
+        secure: true,
         ...params,
       }),
 

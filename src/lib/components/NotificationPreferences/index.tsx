@@ -18,10 +18,16 @@ import { firebaseConfig, getDeviceToken } from '@/lib/notifications/device-token
 import { initializeApp } from '@firebase/app';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { useGetDeviceToken, useStoreDeviceToken } from '@/lib/api';
+import {
+  useGetDeviceToken,
+  useCreateDeviceToken,
+  useUpdateDeviceToken,
+  useDeleteDeviceToken,
+} from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { GetDeviceTokenResponse } from '@/@types/api-types';
 
 type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE';
 
@@ -32,9 +38,10 @@ interface NotificationPreferencesProps {
 interface PreferencesCardProps {
   setIsDialogOpen: (isOpen: boolean) => void;
   disableCard: boolean;
-  isSupported: boolean;
   isSubscribed: boolean;
   setIsSubscribed: (value: boolean) => void;
+  deviceToken?: GetDeviceTokenResponse;
+  getDeviceTokenIsLoading: boolean;
 }
 
 interface NotificationPreference {
@@ -47,9 +54,10 @@ interface NotificationPreference {
 function PreferencesCard({
   setIsDialogOpen,
   disableCard,
-  isSupported,
   isSubscribed,
   setIsSubscribed,
+  deviceToken,
+  getDeviceTokenIsLoading,
 }: PreferencesCardProps) {
   const [preferences, setPreferences] = useState<NotificationPreference[]>([
     {
@@ -75,12 +83,52 @@ function PreferencesCard({
   const { userId } = useSelector((s: Store) => s.auth);
 
   const {
-    mutate: storeDeviceToken,
-    isLoading: storeDeviceTokenIsLoading,
-    isSuccess: storeDeviceTokenIsSuccess,
-    isError: storeDeviceTokenIsError,
-    errorDetail: storeDeviceTokenErrorDetail,
-  } = useStoreDeviceToken();
+    mutate: postDeviceToken,
+    isLoading: postDeviceTokenIsLoading,
+    isSuccess: postDeviceTokenIsSuccess,
+    isError: postDeviceTokenIsError,
+    errorDetail: postDeviceTokenErrorDetail,
+  } = useCreateDeviceToken();
+  const {
+    mutate: putDeviceToken,
+    isLoading: putDeviceTokenIsLoading,
+    isSuccess: putDeviceTokenIsSuccess,
+    isError: putDeviceTokenIsError,
+    errorDetail: putDeviceTokenErrorDetail,
+  } = useUpdateDeviceToken();
+  const {
+    mutate: deleteDeviceToken,
+    isLoading: deleteDeviceTokenIsLoading,
+    isSuccess: deleteDeviceTokenIsSuccess,
+    isError: deleteDeviceTokenIsError,
+    errorDetail: deleteDeviceTokenErrorDetail,
+  } = useDeleteDeviceToken();
+
+  useEffect(() => {
+    if (!deviceToken?.deviceToken) {
+      return;
+    }
+    setPreferences([
+      {
+        type: 'DIRECT_MESSAGE',
+        enabled: !!deviceToken.events?.find((x) => x === 'DIRECT_MESSAGE'),
+        label: 'Direct Messages',
+        description: 'Get notified when someone sends you a direct message',
+      },
+      {
+        type: 'TESTER_MESSAGE',
+        enabled: !!deviceToken.events?.find((x) => x === 'TESTER_MESSAGE'),
+        label: 'Tester Messages',
+        description: 'Get notified about tester-related communications',
+      },
+      {
+        type: 'PATTERN_SALE',
+        enabled: !!deviceToken.events?.find((x) => x === 'PATTERN_SALE'),
+        label: 'Pattern Sales',
+        description: 'Get notified when a pattern has been sold',
+      },
+    ]);
+  }, [deviceToken]);
 
   const handleTogglePreference = (type: NotificationType) => {
     setPreferences((prev) =>
@@ -90,11 +138,25 @@ function PreferencesCard({
 
   const handleSubscribe = async () => {
     try {
-      Notification.requestPermission().then((permission) => {
+      const registration = await navigator.serviceWorker.getRegistration('/sw.js');
+
+      if (!registration) {
+        return;
+      }
+
+      Notification.requestPermission().then(async (permission) => {
         if (permission === 'granted') {
+          await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey:
+              'BLAuhDOnKtEgZoVeFR6KSqga0xt59mOseRP6QL-uOoEnv1nrozU_68MAIVO6wCDB8CZa33k94jgKcHUWrzDd51g',
+          });
           getDeviceToken(initializeApp(firebaseConfig)).then((result) => {
             if (result?.token) {
-              storeDeviceToken(userId, {
+              postDeviceToken(userId, {
+                events: preferences
+                  .filter((preference) => preference.enabled)
+                  .map((preference) => preference.type),
                 deviceToken: result.token,
                 platform: result.platform,
               }).then(() => {
@@ -111,13 +173,16 @@ function PreferencesCard({
   };
 
   const handleUnsubscribe = async () => {
+    if (!userId || !deviceToken?.deviceToken) {
+      return;
+    }
     try {
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.getSubscription();
 
       if (subscription) {
         await subscription.unsubscribe();
-        await deleteSubscription();
+        await deleteDeviceToken(userId, deviceToken.deviceToken);
 
         setIsSubscribed(false);
         setIsDialogOpen(false);
@@ -127,23 +192,26 @@ function PreferencesCard({
     }
   };
 
-  const handleSavePreferences = async () => {
+  const handleSavePreferences = async (preferences: NotificationPreference[]) => {
+    if (!userId || !deviceToken?.deviceToken) {
+      return;
+    }
     if (isSubscribed) {
       try {
-        // TODO: save changes
+        console.log({ preferences });
+        await putDeviceToken(userId, {
+          deviceToken: deviceToken?.deviceToken,
+          events: preferences
+            .filter((preference) => preference.enabled)
+            .map((preference) => preference.type),
+        });
       } catch (error) {
         logger.error('Error saving preferences:', error);
       }
     }
   };
 
-  const deleteSubscription = async () => {
-    // In a real app, you would send this to your server
-    console.log('Deleting subscription');
-    // await fetch('/api/notifications/unsubscribe', {
-    //   method: 'DELETE'
-    // })
-  };
+  const isDisabled = !userId || !deviceToken?.deviceToken;
 
   return (
     <Card className={`w-full${disableCard ? ' border-none shadow-none border-0' : ''}`}>
@@ -160,8 +228,8 @@ function PreferencesCard({
             <Checkbox
               id={pref.type}
               checked={pref.enabled}
-              disabled={!isSubscribed}
               onCheckedChange={() => handleTogglePreference(pref.type)}
+              disabled={getDeviceTokenIsLoading}
             />
             <div className="grid gap-1.5 leading-none">
               <Label htmlFor={pref.type} className={!isSubscribed ? 'text-muted-foreground' : ''}>
@@ -175,29 +243,54 @@ function PreferencesCard({
       <CardFooter className="flex flex-col space-y-2">
         {isSubscribed ? (
           <>
-            <Button onClick={handleSavePreferences} className="w-full">
+            <Button
+              disabled={isDisabled || putDeviceTokenIsLoading}
+              onClick={() => handleSavePreferences(preferences)}
+              className="w-full"
+            >
+              {putDeviceTokenIsLoading ? (
+                <LoadingSpinnerComponent size="sm" className="text-white" />
+              ) : null}
               Save Preferences
             </Button>
-            <Button variant="outline" onClick={handleUnsubscribe} className="w-full">
+            <RequestStatus
+              isSuccess={putDeviceTokenIsSuccess}
+              isError={putDeviceTokenIsError}
+              errorMessage={putDeviceTokenErrorDetail}
+            />
+            <Button
+              disabled={isDisabled || deleteDeviceTokenIsLoading}
+              variant="outline"
+              onClick={handleUnsubscribe}
+              className="w-full"
+            >
+              {deleteDeviceTokenIsLoading ? (
+                <LoadingSpinnerComponent size="sm" className="text-white" />
+              ) : null}
               Unsubscribe from Notifications
             </Button>
+            <RequestStatus
+              isSuccess={deleteDeviceTokenIsSuccess}
+              isError={deleteDeviceTokenIsError}
+              errorMessage={deleteDeviceTokenErrorDetail}
+            />
           </>
         ) : (
           <>
             <Button
               onClick={handleSubscribe}
-              disabled={storeDeviceTokenIsLoading}
+              disabled={postDeviceTokenIsLoading}
               className="w-full"
             >
-              {storeDeviceTokenIsLoading ? (
+              {postDeviceTokenIsLoading ? (
                 <LoadingSpinnerComponent size="sm" className="text-white" />
               ) : null}
               Enable Push Notifications
             </Button>
             <RequestStatus
-              isSuccess={storeDeviceTokenIsSuccess}
-              isError={storeDeviceTokenIsError}
-              errorMessage={storeDeviceTokenErrorDetail}
+              isSuccess={postDeviceTokenIsSuccess}
+              isError={postDeviceTokenIsError}
+              errorMessage={postDeviceTokenErrorDetail}
             />
           </>
         )}
@@ -215,7 +308,11 @@ export default function NotificationPreferences({
 
   const { userId } = useSelector((s: Store) => s.auth);
 
-  const { fetch: fetchDeviceToken } = useGetDeviceToken();
+  const {
+    fetch: fetchDeviceToken,
+    data: deviceToken,
+    isLoading: getDeviceTokenIsLoading,
+  } = useGetDeviceToken();
 
   useEffect(() => {
     if (!userId) {
@@ -265,9 +362,10 @@ export default function NotificationPreferences({
             <PreferencesCard
               setIsDialogOpen={setIsDialogOpen}
               disableCard={disableCard}
-              isSupported={isSupported}
               isSubscribed={isSubscribed}
               setIsSubscribed={setIsSubscribed}
+              deviceToken={deviceToken}
+              getDeviceTokenIsLoading={getDeviceTokenIsLoading}
             />
           </DialogContent>
         </Dialog>
@@ -275,9 +373,10 @@ export default function NotificationPreferences({
         <PreferencesCard
           setIsDialogOpen={setIsDialogOpen}
           disableCard={disableCard}
-          isSupported={isSupported}
           isSubscribed={isSubscribed}
           setIsSubscribed={setIsSubscribed}
+          deviceToken={deviceToken}
+          getDeviceTokenIsLoading={getDeviceTokenIsLoading}
         />
       )}
     </>
