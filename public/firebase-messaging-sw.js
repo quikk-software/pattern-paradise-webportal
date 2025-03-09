@@ -14,13 +14,15 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
-  if (Notification.permission === 'granted') {
-    if (navigator.serviceWorker)
-      navigator.serviceWorker.getRegistration().then(async function (reg) {
-        if (reg)
-          await reg.showNotification(payload.notification.title, {
-            body: payload.notification.body,
-          });
-      });
+  if (typeof window !== 'undefined') {
+    if (Notification.permission === 'granted') {
+      if (navigator.serviceWorker)
+        navigator.serviceWorker.getRegistration().then(async function (reg) {
+          if (reg)
+            await reg.showNotification(payload.notification.title, {
+              body: payload.notification.body,
+            });
+        });
+    }
   }
 });
