@@ -9,7 +9,9 @@ export default function ServiceWorkerRegister() {
       if ('serviceWorker' in window.navigator) {
         const registerMainServiceWorker = async () => {
           try {
-            const registration = await window.navigator.serviceWorker.register('/sw.js');
+            const registration = await window.navigator.serviceWorker.register(
+              '/firebase-messaging-sw.js',
+            );
             logger.log('Main Service Worker registered with scope:', registration.scope);
           } catch (error) {
             logger.error('Main Service Worker registration failed:', error);
