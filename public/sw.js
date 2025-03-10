@@ -8,7 +8,7 @@ self.addEventListener('message', (event) => {
   }
 });
 
-self.addEventListener('notificationclick', function (event) {
+self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   const url = event.notification.data?.url;
@@ -21,6 +21,7 @@ self.addEventListener('notificationclick', function (event) {
             return client.focus();
           }
         }
+
         if (clients.openWindow) {
           return clients.openWindow(url);
         }
