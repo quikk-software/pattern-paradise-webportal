@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { useSelector } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -14,9 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Bell, BellOff } from 'lucide-react';
 import logger from '@/lib/core/logger';
-import { firebaseConfig, getDeviceToken } from '@/lib/notifications/device-token';
-import { initializeApp } from '@firebase/app';
-import { useSelector } from 'react-redux';
+import { getDeviceToken } from '@/lib/notifications/device-token';
 import { Store } from '@/lib/redux/store';
 import {
   useGetDeviceToken,
@@ -25,9 +23,9 @@ import {
   useDeleteDeviceToken,
 } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import RequestStatus from '@/lib/components/RequestStatus';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { GetDeviceTokenResponse } from '@/@types/api-types';
+import { Button } from '@/components/ui/button';
 
 type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE';
 
@@ -35,7 +33,7 @@ interface NotificationPreferencesProps {
   disableCard?: boolean;
 }
 
-interface PreferencesCardProps {
+export interface PreferencesCardProps {
   setIsDialogOpen: (isOpen: boolean) => void;
   disableCard: boolean;
   isSubscribed: boolean;
@@ -44,7 +42,7 @@ interface PreferencesCardProps {
   getDeviceTokenIsLoading: boolean;
 }
 
-interface NotificationPreference {
+export interface NotificationPreference {
   type: NotificationType;
   enabled: boolean;
   label: string;
@@ -79,56 +77,43 @@ function PreferencesCard({
       description: 'Get notified when a pattern has been sold',
     },
   ]);
-
-  const { userId } = useSelector((s: Store) => s.auth);
-
-  const {
-    mutate: postDeviceToken,
-    isLoading: postDeviceTokenIsLoading,
-    isSuccess: postDeviceTokenIsSuccess,
-    isError: postDeviceTokenIsError,
-    errorDetail: postDeviceTokenErrorDetail,
-  } = useCreateDeviceToken();
-  const {
-    mutate: putDeviceToken,
-    isLoading: putDeviceTokenIsLoading,
-    isSuccess: putDeviceTokenIsSuccess,
-    isError: putDeviceTokenIsError,
-    errorDetail: putDeviceTokenErrorDetail,
-  } = useUpdateDeviceToken();
-  const {
-    mutate: deleteDeviceToken,
-    isLoading: deleteDeviceTokenIsLoading,
-    isSuccess: deleteDeviceTokenIsSuccess,
-    isError: deleteDeviceTokenIsError,
-    errorDetail: deleteDeviceTokenErrorDetail,
-  } = useDeleteDeviceToken();
+  const [enableIsLoading, setEnableIsLoading] = useState(false);
+  const [disableIsLoading, setDisableIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!deviceToken?.deviceToken) {
+    if (!deviceToken?.events) {
       return;
     }
     setPreferences([
       {
         type: 'DIRECT_MESSAGE',
-        enabled: !!deviceToken.events?.find((x) => x === 'DIRECT_MESSAGE'),
+        enabled: deviceToken?.events?.includes('DIRECT_MESSAGE') ?? false,
         label: 'Direct Messages',
         description: 'Get notified when someone sends you a direct message',
       },
       {
         type: 'TESTER_MESSAGE',
-        enabled: !!deviceToken.events?.find((x) => x === 'TESTER_MESSAGE'),
+        enabled: deviceToken?.events?.includes('TESTER_MESSAGE') ?? false,
         label: 'Tester Messages',
         description: 'Get notified about tester-related communications',
       },
       {
         type: 'PATTERN_SALE',
-        enabled: !!deviceToken.events?.find((x) => x === 'PATTERN_SALE'),
+        enabled: deviceToken?.events?.includes('PATTERN_SALE') ?? false,
         label: 'Pattern Sales',
         description: 'Get notified when a pattern has been sold',
       },
     ]);
-  }, [deviceToken]);
+  }, [deviceToken?.events]);
+
+  const { userId } = useSelector((s: Store) => s.auth);
+
+  const { mutate: postDeviceToken, isLoading: postDeviceTokenIsLoading } = useCreateDeviceToken();
+
+  const { mutate: putDeviceToken, isLoading: putDeviceTokenIsLoading } = useUpdateDeviceToken();
+
+  const { mutate: deleteDeviceToken, isLoading: deleteDeviceTokenIsLoading } =
+    useDeleteDeviceToken();
 
   const handleTogglePreference = (type: NotificationType) => {
     setPreferences((prev) =>
@@ -138,82 +123,63 @@ function PreferencesCard({
 
   const handleSubscribe = async () => {
     try {
-      const registration = await navigator.serviceWorker.getRegistration('/sw.js');
+      setEnableIsLoading(true);
+      const device = await getDeviceToken();
 
-      if (!registration) {
-        return;
+      if (device?.token) {
+        await postDeviceToken(userId, {
+          deviceToken: device.token,
+          events: preferences.filter((p) => p.enabled).map((p) => p.type),
+          platform: device.platform,
+        });
+        setIsSubscribed(true);
+        setIsDialogOpen(false);
+        localStorage.setItem('pushNotificationEnabled', 'true');
+        localStorage.removeItem('pushNotificationDeclined');
+        window.location.reload();
       }
-
-      Notification.requestPermission().then(async (permission) => {
-        if (permission === 'granted') {
-          await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey:
-              'BLAuhDOnKtEgZoVeFR6KSqga0xt59mOseRP6QL-uOoEnv1nrozU_68MAIVO6wCDB8CZa33k94jgKcHUWrzDd51g',
-          });
-          getDeviceToken(initializeApp(firebaseConfig)).then((result) => {
-            if (result?.token) {
-              postDeviceToken(userId, {
-                events: preferences
-                  .filter((preference) => preference.enabled)
-                  .map((preference) => preference.type),
-                deviceToken: result.token,
-                platform: result.platform,
-              }).then(() => {
-                setIsSubscribed(true);
-                setIsDialogOpen(false);
-              });
-            }
-          });
-        } else if (permission === 'denied') {
-          localStorage.setItem('pushNotificationDenied', 'true');
-        }
-      });
     } catch (error) {
       logger.error('Error subscribing to push notifications:', error);
+    } finally {
+      setEnableIsLoading(false);
     }
   };
 
   const handleUnsubscribe = async () => {
-    if (!userId || !deviceToken?.deviceToken) {
-      return;
-    }
     try {
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
+      setDisableIsLoading(true);
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
+        });
+      });
 
-      if (subscription) {
-        await subscription.unsubscribe();
-        await deleteDeviceToken(userId, deviceToken.deviceToken);
+      await deleteDeviceToken(userId, deviceToken?.deviceToken || '');
+      setIsSubscribed(false);
+      setIsDialogOpen(false);
+      localStorage.removeItem('pushNotificationDeclined');
+      localStorage.removeItem('pushNotificationEnabled');
 
-        setIsSubscribed(false);
-        setIsDialogOpen(false);
-      }
+      window.location.reload();
     } catch (error) {
       logger.error('Error unsubscribing from push notifications:', error);
+    } finally {
+      setDisableIsLoading(false);
     }
   };
 
-  const handleSavePreferences = async (preferences: NotificationPreference[]) => {
-    if (!userId || !deviceToken?.deviceToken) {
-      return;
-    }
-    if (isSubscribed) {
-      try {
-        console.log({ preferences });
-        await putDeviceToken(userId, {
-          deviceToken: deviceToken?.deviceToken,
-          events: preferences
-            .filter((preference) => preference.enabled)
-            .map((preference) => preference.type),
-        });
-      } catch (error) {
-        logger.error('Error saving preferences:', error);
-      }
+  const handleSavePreferences = async () => {
+    if (!userId || !deviceToken?.deviceToken) return;
+
+    try {
+      await putDeviceToken(userId, {
+        deviceToken: deviceToken.deviceToken,
+        events: preferences.filter((p) => p.enabled).map((p) => p.type),
+      });
+    } catch (error) {
+      logger.error('Error updating preferences:', error);
     }
   };
-
-  const isDisabled = !userId || !deviceToken?.deviceToken;
 
   return (
     <Card className={`w-full${disableCard ? ' border-none shadow-none border-0' : ''}`}>
@@ -246,8 +212,8 @@ function PreferencesCard({
         {isSubscribed ? (
           <>
             <Button
-              disabled={isDisabled || putDeviceTokenIsLoading}
-              onClick={() => handleSavePreferences(preferences)}
+              onClick={handleSavePreferences}
+              disabled={putDeviceTokenIsLoading}
               className="w-full"
             >
               {putDeviceTokenIsLoading ? (
@@ -255,46 +221,29 @@ function PreferencesCard({
               ) : null}
               Save Preferences
             </Button>
-            <RequestStatus
-              isSuccess={putDeviceTokenIsSuccess}
-              isError={putDeviceTokenIsError}
-              errorMessage={putDeviceTokenErrorDetail}
-            />
             <Button
-              disabled={isDisabled || deleteDeviceTokenIsLoading}
-              variant="outline"
               onClick={handleUnsubscribe}
+              disabled={deleteDeviceTokenIsLoading || disableIsLoading}
+              variant="outline"
               className="w-full"
             >
-              {deleteDeviceTokenIsLoading ? (
+              {deleteDeviceTokenIsLoading || disableIsLoading ? (
                 <LoadingSpinnerComponent size="sm" className="text-white" />
               ) : null}
               Unsubscribe from Notifications
             </Button>
-            <RequestStatus
-              isSuccess={deleteDeviceTokenIsSuccess}
-              isError={deleteDeviceTokenIsError}
-              errorMessage={deleteDeviceTokenErrorDetail}
-            />
           </>
         ) : (
-          <>
-            <Button
-              onClick={handleSubscribe}
-              disabled={postDeviceTokenIsLoading}
-              className="w-full"
-            >
-              {postDeviceTokenIsLoading ? (
-                <LoadingSpinnerComponent size="sm" className="text-white" />
-              ) : null}
-              Enable Push Notifications
-            </Button>
-            <RequestStatus
-              isSuccess={postDeviceTokenIsSuccess}
-              isError={postDeviceTokenIsError}
-              errorMessage={postDeviceTokenErrorDetail}
-            />
-          </>
+          <Button
+            onClick={handleSubscribe}
+            disabled={postDeviceTokenIsLoading || enableIsLoading}
+            className="w-full"
+          >
+            {postDeviceTokenIsLoading || enableIsLoading ? (
+              <LoadingSpinnerComponent size="sm" className="text-white" />
+            ) : null}
+            Enable Push Notifications
+          </Button>
         )}
       </CardFooter>
     </Card>
@@ -306,6 +255,7 @@ export default function NotificationPreferences({
 }: NotificationPreferencesProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
+  const [isDeclined, setIsDeclined] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
@@ -317,42 +267,69 @@ export default function NotificationPreferences({
   } = useGetDeviceToken();
 
   useEffect(() => {
-    if (!userId) {
-      return;
-    }
+    if (!userId) return;
 
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       setIsSupported(true);
-      const pushNotificationDenied = localStorage.getItem('pushNotificationDenied');
-      if (pushNotificationDenied === 'true') {
+      const pushNotificationEnabled = localStorage.getItem('pushNotificationEnabled');
+      const pushNotificationDeclined = localStorage.getItem('pushNotificationDeclined');
+
+      if (Notification.permission === 'denied') {
+        setIsDeclined(true);
+        return;
+      }
+      if (Notification.permission === 'default' && pushNotificationDeclined !== 'true') {
+        setIsDialogOpen(true);
         return;
       }
 
-      getDeviceToken(initializeApp(firebaseConfig))
+      if (pushNotificationDeclined === 'true') {
+        return;
+      }
+
+      getDeviceToken()
         .then((device) => {
           if (device?.token) {
             fetchDeviceToken(userId, device.token)
               .then((result) => {
                 setIsSubscribed(!!result?.deviceToken);
+                if (pushNotificationDeclined === 'true' || pushNotificationEnabled === 'true') {
+                  return;
+                }
                 setIsDialogOpen(!result?.deviceToken);
               })
               .catch((error) => {
                 logger.error('Error fetching device token:', error);
+                if (pushNotificationDeclined === 'true' || pushNotificationEnabled === 'true') {
+                  return;
+                }
                 setIsDialogOpen(true);
               });
-            return;
           }
-          setIsDialogOpen(false);
         })
         .catch((error) => {
-          logger.error('Error checking subscription:', error);
+          logger.error('Error initializing push notifications:', error);
         });
     }
   }, [userId]);
 
+  if (isDeclined && !disableCard) {
+    return (
+      <Card className="w-full border-none shadow-none border-0">
+        <CardHeader>
+          <CardTitle>Push Notifications</CardTitle>
+          <CardDescription>
+            You have declined push notifications. Please activate them in the browser settings to be
+            able to use push notifications for Pattern Paradise.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
   if (!isSupported && !disableCard) {
     return (
-      <Card className={'w-full border-none shadow-none border-0'}>
+      <Card className="w-full border-none shadow-none border-0">
         <CardHeader>
           <CardTitle>Push Notifications</CardTitle>
           <CardDescription>Push notifications are not supported in your browser.</CardDescription>
@@ -366,10 +343,10 @@ export default function NotificationPreferences({
       {disableCard ? (
         <Dialog
           open={isDialogOpen}
-          onOpenChange={(open) => {
-            setIsDialogOpen(open);
-            if (!open) {
-              localStorage.setItem('pushNotificationDenied', 'true');
+          onOpenChange={(value) => {
+            setIsDialogOpen(value);
+            if (!value) {
+              localStorage.setItem('pushNotificationDeclined', 'true');
             }
           }}
         >
