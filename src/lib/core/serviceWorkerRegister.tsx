@@ -16,18 +16,7 @@ export default function ServiceWorkerRegister() {
           }
         };
 
-        const registerFirebaseServiceWorker = async () => {
-          try {
-            const registration = await window.navigator.serviceWorker.register(
-              '/firebase-messaging-sw.js',
-            );
-            logger.log('Firebase Service Worker registered with scope:', registration.scope);
-          } catch (error) {
-            logger.error('Firebase Service Worker registration failed:', error);
-          }
-        };
-
-        registerMainServiceWorker().then(() => registerFirebaseServiceWorker());
+        registerMainServiceWorker();
       }
     }
   }, []);
