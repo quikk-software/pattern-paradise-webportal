@@ -1,6 +1,8 @@
 importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-messaging-compat.js');
 
+console.log('Initializing Firebase Messaging');
+
 firebase.initializeApp({
   apiKey: 'AIzaSyDZK-s64gEzXF8dsTP42w3T2rlD3OKgWpI',
   authDomain: 'pattern-paradise.firebaseapp.com',
