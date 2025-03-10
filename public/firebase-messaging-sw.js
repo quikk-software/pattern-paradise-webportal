@@ -14,31 +14,40 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
+  const notificationTitle = payload.notification.title || 'Pattern Paradise';
+  const notificationOptions = {
+    body: payload.notification.body || 'New Notification',
     icon: '/icons/main/256.png',
     data: payload.notification.data,
+  };
+
+  console.log('Notification received:', {
+    title: payload.notification.title,
+    body: payload.notification.body,
+    data: payload.notification.data,
   });
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  const url = event.notification.data?.url;
+  const url = event.notification.data?.url || '/';
 
-  if (url) {
-    event.waitUntil(
-      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-        for (const client of clientList) {
-          if (client.url === url && 'focus' in client) {
-            return client.focus();
-          }
-        }
+  console.log('Redirect to URL:', event.notification.data?.url);
 
-        if (clients.openWindow) {
-          return clients.openWindow(url);
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url === url && 'focus' in client) {
+          return client.focus();
         }
-      }),
-    );
-  }
+      }
+
+      if (clients.openWindow) {
+        return clients.openWindow(url);
+      }
+    }),
+  );
 });
