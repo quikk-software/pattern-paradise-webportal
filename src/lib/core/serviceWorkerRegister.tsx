@@ -23,7 +23,7 @@ export default function ServiceWorkerRegister() {
 
         onMessageListener()
           .then((payload: any) => {
-            console.log('Message received in foreground: ', payload);
+            logger.log('Message received in foreground: ', payload);
             alert(`New message: ${payload?.notification?.title}`);
           })
           .catch((err) => console.error('Message listener error:', err));

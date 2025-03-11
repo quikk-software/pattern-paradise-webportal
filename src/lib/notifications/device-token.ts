@@ -63,7 +63,6 @@ export const onMessageListener = () =>
     const app = getFirebaseApp();
     const messaging = getMessaging(app);
     onMessage(messaging, (payload) => {
-      console.log('Message received. ', payload);
       resolve(payload);
     });
   });
