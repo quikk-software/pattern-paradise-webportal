@@ -1,8 +1,8 @@
 'use client';
 
-import { getMessaging, getToken } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import logger from '@/lib/core/logger';
-import { initializeApp } from '@firebase/app';
+import { initializeApp, getApps, getApp } from '@firebase/app';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDZK-s64gEzXF8dsTP42w3T2rlD3OKgWpI',
@@ -18,10 +18,17 @@ const isIOS = (navigator: Navigator) => {
   return /iPad|iPhone|iPod/.test(navigator.userAgent);
 };
 
+const getFirebaseApp = () => {
+  if (!getApps().length) {
+    return initializeApp(firebaseConfig);
+  }
+  return getApp();
+};
+
 export const getDeviceToken = async () => {
   if (typeof window !== 'undefined') {
     try {
-      const app = initializeApp(firebaseConfig);
+      const app = getFirebaseApp();
       const messaging = getMessaging(app);
 
       const permission = await window.Notification.requestPermission();
@@ -50,3 +57,13 @@ export const getDeviceToken = async () => {
     }
   }
 };
+
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    const app = getFirebaseApp();
+    const messaging = getMessaging(app);
+    onMessage(messaging, (payload) => {
+      console.log('Message received. ', payload);
+      resolve(payload);
+    });
+  });

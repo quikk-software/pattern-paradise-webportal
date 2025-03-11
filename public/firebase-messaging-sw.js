@@ -1,8 +1,8 @@
 const CACHE = 'pattern-paradise-offline';
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
-importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/11.4.0/firebase-messaging-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
 
 console.log('Initializing Firebase Messaging');
 

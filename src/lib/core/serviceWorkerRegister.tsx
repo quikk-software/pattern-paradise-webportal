@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import logger from '@/lib/core/logger';
+import { onMessageListener } from '@/lib/notifications/device-token';
 
 export default function ServiceWorkerRegister() {
   useEffect(() => {
@@ -19,6 +20,13 @@ export default function ServiceWorkerRegister() {
         };
 
         registerMainServiceWorker();
+
+        onMessageListener()
+          .then((payload: any) => {
+            console.log('Message received in foreground: ', payload);
+            alert(`New message: ${payload?.notification?.title}`);
+          })
+          .catch((err) => console.error('Message listener error:', err));
       }
     }
   }, []);
