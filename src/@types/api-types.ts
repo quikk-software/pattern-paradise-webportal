@@ -17,6 +17,34 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface GetDeviceTokenResponse {
+  userId: string;
+  deviceToken: string;
+  platform: string;
+  events?: string[];
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface PutDeviceTokenRequest {
+  deviceToken: string;
+  events?: string[];
+}
+
+export interface PostDeviceTokenRequest {
+  deviceToken: string;
+  platform: string;
+  events?: string[];
+}
+
 export interface PostCheckUsernameRequest {
   username: string;
 }
@@ -1569,6 +1597,99 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Device tokens can be stored for multiple users simultaneously.
+     *
+     * @tags User
+     * @name PostDeviceToken
+     * @summary Stores the device token of a user.
+     * @request POST:/api/v1/users/{userId}/device-token
+     * @secure
+     */
+    postDeviceToken: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        deviceToken?: any;
+        /** @example "any" */
+        platform?: any;
+        /** @example "any" */
+        events?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-token`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Events of a device token can be updated.
+     *
+     * @tags User
+     * @name PutDeviceToken
+     * @summary Updates the device token of a user.
+     * @request PATCH:/api/v1/users/{userId}/device-token
+     * @secure
+     */
+    putDeviceToken: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        deviceToken?: any;
+        /** @example "any" */
+        events?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-token`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The device token data will be queried by the authenticated user ID and given device token.
+     *
+     * @tags User
+     * @name GetDeviceToken
+     * @summary Gets the device token data of a user.
+     * @request GET:/api/v1/users/{userId}/device-tokens/{deviceToken}
+     * @secure
+     */
+    getDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+      this.request<GetDeviceTokenResponse, any>({
+        path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The device token data will be deleted by the authenticated user ID and given device token.
+     *
+     * @tags User
+     * @name DeleteDeviceToken
+     * @summary Deletes the device token data of a user.
+     * @request DELETE:/api/v1/users/{userId}/device-tokens/{deviceToken}
+     * @secure
+     */
+    deleteDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
+        method: 'DELETE',
+        secure: true,
         ...params,
       }),
 
