@@ -3,8 +3,6 @@ const CACHE = 'pattern-paradise-offline';
 importScripts('https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.5.0/firebase-messaging-compat.js');
 
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
-
 console.log('[firebase-messaging-sw.js] Initializing Firebase Messaging');
 
 firebase.initializeApp({
@@ -57,16 +55,3 @@ self.addEventListener('notificationclick', (event) => {
     }),
   );
 });
-
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
-
-workbox.routing.registerRoute(
-  new RegExp('/*'),
-  new workbox.strategies.StaleWhileRevalidate({
-    cacheName: CACHE,
-  }),
-);
