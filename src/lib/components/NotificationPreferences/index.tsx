@@ -26,6 +26,8 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { GetDeviceTokenResponse } from '@/@types/api-types';
 import { Button } from '@/components/ui/button';
+import { useSession } from 'next-auth/react';
+import RequestStatus from '@/lib/components/RequestStatus';
 
 type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE';
 
@@ -108,12 +110,29 @@ function PreferencesCard({
 
   const { userId } = useSelector((s: Store) => s.auth);
 
-  const { mutate: postDeviceToken, isLoading: postDeviceTokenIsLoading } = useCreateDeviceToken();
+  const {
+    mutate: postDeviceToken,
+    isLoading: postDeviceTokenIsLoading,
+    isSuccess: postDeviceTokenIsSuccess,
+    isError: postDeviceTokenIsError,
+    errorDetail: postDeviceTokenErrorDetail,
+  } = useCreateDeviceToken();
 
-  const { mutate: putDeviceToken, isLoading: putDeviceTokenIsLoading } = useUpdateDeviceToken();
+  const {
+    mutate: putDeviceToken,
+    isLoading: putDeviceTokenIsLoading,
+    isSuccess: putDeviceTokenIsSuccess,
+    isError: putDeviceTokenIsError,
+    errorDetail: putDeviceTokenErrorDetail,
+  } = useUpdateDeviceToken();
 
-  const { mutate: deleteDeviceToken, isLoading: deleteDeviceTokenIsLoading } =
-    useDeleteDeviceToken();
+  const {
+    mutate: deleteDeviceToken,
+    isLoading: deleteDeviceTokenIsLoading,
+    isSuccess: deleteDeviceTokenIsSuccess,
+    isError: deleteDeviceTokenIsError,
+    errorDetail: deleteDeviceTokenErrorDetail,
+  } = useDeleteDeviceToken();
 
   const handleTogglePreference = (type: NotificationType) => {
     setPreferences((prev) =>
@@ -132,11 +151,12 @@ function PreferencesCard({
           events: preferences.filter((p) => p.enabled).map((p) => p.type),
           platform: device.platform,
         });
-        setIsSubscribed(true);
-        setIsDialogOpen(false);
+
         localStorage.setItem('pushNotificationEnabled', 'true');
         localStorage.removeItem('pushNotificationDeclined');
-        window.location.reload();
+
+        setIsSubscribed(true);
+        setIsDialogOpen(false);
       }
     } catch (error) {
       logger.error('Error subscribing to push notifications:', error);
@@ -155,12 +175,12 @@ function PreferencesCard({
       });
 
       await deleteDeviceToken(userId, deviceToken?.deviceToken || '');
-      setIsSubscribed(false);
-      setIsDialogOpen(false);
+
       localStorage.removeItem('pushNotificationDeclined');
       localStorage.removeItem('pushNotificationEnabled');
 
-      window.location.reload();
+      setIsSubscribed(false);
+      setIsDialogOpen(false);
     } catch (error) {
       logger.error('Error unsubscribing from push notifications:', error);
     } finally {
@@ -221,6 +241,11 @@ function PreferencesCard({
               ) : null}
               Save Preferences
             </Button>
+            <RequestStatus
+              isSuccess={putDeviceTokenIsSuccess}
+              isError={putDeviceTokenIsError}
+              errorMessage={putDeviceTokenErrorDetail}
+            />
             <Button
               onClick={handleUnsubscribe}
               disabled={deleteDeviceTokenIsLoading || disableIsLoading}
@@ -232,18 +257,30 @@ function PreferencesCard({
               ) : null}
               Unsubscribe from Notifications
             </Button>
+            <RequestStatus
+              isSuccess={deleteDeviceTokenIsSuccess}
+              isError={deleteDeviceTokenIsError}
+              errorMessage={deleteDeviceTokenErrorDetail}
+            />
           </>
         ) : (
-          <Button
-            onClick={handleSubscribe}
-            disabled={postDeviceTokenIsLoading || enableIsLoading}
-            className="w-full"
-          >
-            {postDeviceTokenIsLoading || enableIsLoading ? (
-              <LoadingSpinnerComponent size="sm" className="text-white" />
-            ) : null}
-            Enable Push Notifications
-          </Button>
+          <>
+            <Button
+              onClick={handleSubscribe}
+              disabled={postDeviceTokenIsLoading || enableIsLoading}
+              className="w-full"
+            >
+              {postDeviceTokenIsLoading || enableIsLoading ? (
+                <LoadingSpinnerComponent size="sm" className="text-white" />
+              ) : null}
+              Enable Push Notifications
+            </Button>
+            <RequestStatus
+              isSuccess={postDeviceTokenIsSuccess}
+              isError={postDeviceTokenIsError}
+              errorMessage={`Something went wrong: ${postDeviceTokenErrorDetail ?? 'No error details found'}. Your app or browser might not support push notifications at this time.`}
+            />
+          </>
         )}
       </CardFooter>
     </Card>
@@ -259,6 +296,7 @@ export default function NotificationPreferences({
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
+  const { status } = useSession();
 
   const {
     fetch: fetchDeviceToken,
@@ -267,7 +305,9 @@ export default function NotificationPreferences({
   } = useGetDeviceToken();
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || status !== 'authenticated') {
+      return;
+    }
 
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       setIsSupported(true);
