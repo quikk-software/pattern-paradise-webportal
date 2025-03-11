@@ -1,9 +1,5 @@
-const CACHE = 'pattern-paradise-offline';
-
 importScripts('https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.5.0/firebase-messaging-compat.js');
-
-console.log('[firebase-messaging-sw.js] Initializing Firebase Messaging');
 
 firebase.initializeApp({
   apiKey: 'AIzaSyDZK-s64gEzXF8dsTP42w3T2rlD3OKgWpI',
@@ -18,8 +14,6 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Background message received:', payload);
-
   const notificationTitle =
     payload.data?.title || payload.notification?.title || 'Pattern Paradise';
   const notificationOptions = {
@@ -34,8 +28,6 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   const url = event.notification.data?.url || '/';
-
-  console.log('[firebase-messaging-sw.js] Redirect to URL:', event.notification.data?.url);
 
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {

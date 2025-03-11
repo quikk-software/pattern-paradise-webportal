@@ -10,6 +10,8 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     background_color: '#fff',
     theme_color: '#ed8332',
+    // @ts-ignore
+    gcm_sender_id: '608358089878',
     icons: [
       {
         src: '/favicon.ico',
