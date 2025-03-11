@@ -18,22 +18,18 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Notification received:', {
-    title: payload.notification.title,
-    body: payload.notification.body,
-    data: payload.notification.data,
-  });
+  console.log('[firebase-messaging-sw.js] Background message received:', payload);
 
-  const notificationTitle = payload.notification.title || 'Pattern Paradise';
+  const notificationTitle =
+    payload.data?.title || payload.notification?.title || 'Pattern Paradise';
   const notificationOptions = {
-    body: payload.notification.body || 'New Notification',
+    body: payload.data?.body || payload.notification?.body || 'New Notification',
     icon: '/icons/main/256.png',
-    data: payload.notification.data,
+    data: { url: payload.data?.url || payload.notification?.url || '/' },
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
-
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
