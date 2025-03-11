@@ -291,7 +291,7 @@ export default function NotificationPreferences({
   disableCard = false,
 }: NotificationPreferencesProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isSupported, setIsSupported] = useState(false);
+  const [isSupported] = useState(true);
   const [isDeclined, setIsDeclined] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -307,7 +307,6 @@ export default function NotificationPreferences({
   useEffect(() => {
     if (userId && status === 'authenticated') {
       if ('serviceWorker' in navigator && 'PushManager' in window) {
-        setIsSupported(true);
         const pushNotificationEnabled = localStorage.getItem('pushNotificationEnabled');
         const pushNotificationDeclined = localStorage.getItem('pushNotificationDeclined');
 

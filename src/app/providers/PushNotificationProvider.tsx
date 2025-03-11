@@ -1,4 +1,3 @@
-// contexts/PushNotificationContext.tsx
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
@@ -58,16 +57,13 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
     };
 
     // Add event listeners
-    window.addEventListener('pushNotificationReceived', handlePushNotification as EventListener);
-    window.addEventListener('fcmTokenReceived', handleFcmToken as EventListener);
+    window.addEventListener('push-notification', handlePushNotification as EventListener);
+    window.addEventListener('push-token', handleFcmToken as EventListener);
 
     // Clean up
     return () => {
-      window.removeEventListener(
-        'pushNotificationReceived',
-        handlePushNotification as EventListener,
-      );
-      window.removeEventListener('fcmTokenReceived', handleFcmToken as EventListener);
+      window.removeEventListener('push-notification', handlePushNotification as EventListener);
+      window.removeEventListener('push-token', handleFcmToken as EventListener);
     };
   }, [userId]);
 
