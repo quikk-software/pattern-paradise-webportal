@@ -305,7 +305,7 @@ export default function NotificationPreferences({
   } = useGetDeviceToken();
 
   useEffect(() => {
-    if (!userId || status !== 'authenticated') {
+    if (!userId || status === 'unauthenticated' || status === 'loading') {
       return;
     }
 
