@@ -382,9 +382,11 @@ export default function NotificationPreferences({
         <Dialog
           open={isDialogOpen}
           onOpenChange={(value) => {
-            setIsDialogOpen(value);
-            if (!value) {
-              localStorage.setItem('pushNotificationDeclined', 'true');
+            if (userId && status === 'authenticated') {
+              setIsDialogOpen(value);
+              if (!value) {
+                localStorage.setItem('pushNotificationDeclined', 'true');
+              }
             }
           }}
         >
