@@ -23,7 +23,7 @@ import {
   useDeleteDeviceToken,
 } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { GetDeviceTokenResponse } from '@/@types/api-types';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
@@ -388,9 +388,6 @@ export default function NotificationPreferences({
             }
           }}
         >
-          <DialogTitle>
-            {userId} {status}
-          </DialogTitle>
           <DialogContent>
             <PreferencesCard
               setIsDialogOpen={setIsDialogOpen}
