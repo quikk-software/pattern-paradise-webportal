@@ -19,13 +19,13 @@ export default function ServiceWorkerRegister() {
           }
         };
 
-        registerMainServiceWorker();
-
-        onMessageListener()
-          .then((payload: any) => {
-            logger.log('Message received in foreground: ', payload);
-          })
-          .catch((err) => console.error('Message listener error:', err));
+        registerMainServiceWorker().finally(() => {
+          onMessageListener()
+            .then((payload: any) => {
+              logger.log('Message received in foreground: ', payload);
+            })
+            .catch((err) => logger.error('Message listener error:', err));
+        });
       }
     }
   }, []);
