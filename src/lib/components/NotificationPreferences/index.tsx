@@ -305,51 +305,49 @@ export default function NotificationPreferences({
   } = useGetDeviceToken();
 
   useEffect(() => {
-    if (!userId || status === 'unauthenticated' || status === 'loading') {
-      return;
-    }
+    if (userId || status === 'authenticated') {
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        setIsSupported(true);
+        const pushNotificationEnabled = localStorage.getItem('pushNotificationEnabled');
+        const pushNotificationDeclined = localStorage.getItem('pushNotificationDeclined');
 
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      setIsSupported(true);
-      const pushNotificationEnabled = localStorage.getItem('pushNotificationEnabled');
-      const pushNotificationDeclined = localStorage.getItem('pushNotificationDeclined');
+        if (Notification.permission === 'denied') {
+          setIsDeclined(true);
+          return;
+        }
+        if (Notification.permission === 'default' && pushNotificationDeclined !== 'true') {
+          setIsDialogOpen(true);
+          return;
+        }
 
-      if (Notification.permission === 'denied') {
-        setIsDeclined(true);
-        return;
+        if (pushNotificationDeclined === 'true') {
+          return;
+        }
+
+        getDeviceToken()
+          .then((device) => {
+            if (device?.token) {
+              fetchDeviceToken(userId, device.token)
+                .then((result) => {
+                  setIsSubscribed(!!result?.deviceToken);
+                  if (pushNotificationDeclined === 'true' || pushNotificationEnabled === 'true') {
+                    return;
+                  }
+                  setIsDialogOpen(!result?.deviceToken);
+                })
+                .catch((error) => {
+                  logger.error('Error fetching device token:', error);
+                  if (pushNotificationDeclined === 'true' || pushNotificationEnabled === 'true') {
+                    return;
+                  }
+                  setIsDialogOpen(true);
+                });
+            }
+          })
+          .catch((error) => {
+            logger.error('Error initializing push notifications:', error);
+          });
       }
-      if (Notification.permission === 'default' && pushNotificationDeclined !== 'true') {
-        setIsDialogOpen(true);
-        return;
-      }
-
-      if (pushNotificationDeclined === 'true') {
-        return;
-      }
-
-      getDeviceToken()
-        .then((device) => {
-          if (device?.token) {
-            fetchDeviceToken(userId, device.token)
-              .then((result) => {
-                setIsSubscribed(!!result?.deviceToken);
-                if (pushNotificationDeclined === 'true' || pushNotificationEnabled === 'true') {
-                  return;
-                }
-                setIsDialogOpen(!result?.deviceToken);
-              })
-              .catch((error) => {
-                logger.error('Error fetching device token:', error);
-                if (pushNotificationDeclined === 'true' || pushNotificationEnabled === 'true') {
-                  return;
-                }
-                setIsDialogOpen(true);
-              });
-          }
-        })
-        .catch((error) => {
-          logger.error('Error initializing push notifications:', error);
-        });
     }
   }, [userId, status]);
 
