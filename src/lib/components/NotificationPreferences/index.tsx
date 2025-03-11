@@ -305,7 +305,7 @@ export default function NotificationPreferences({
   } = useGetDeviceToken();
 
   useEffect(() => {
-    if (!userId || status !== 'authenticated') {
+    if (!userId || status === 'unauthenticated' || status !== 'authenticated') {
       return;
     }
 
@@ -351,7 +351,7 @@ export default function NotificationPreferences({
           logger.error('Error initializing push notifications:', error);
         });
     }
-  }, [userId]);
+  }, [userId, status]);
 
   if (isDeclined && !disableCard) {
     return (
