@@ -36,7 +36,7 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
       setLastNotification(event.detail);
 
       toast(event.detail.title, {
-        description: event.detail.description,
+        description: event.detail.body,
         style: {
           backgroundColor: THEME_COLOR,
           color: 'white',
