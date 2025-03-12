@@ -19,22 +19,24 @@ export default function CookieConsentBanner({ maintenanceMode }: CookieConsentBa
 
   useEffect(() => {
     const consent = cookieStore.get(COOKIE_CONSENT_NAME);
-    if (consent === undefined) {
+    const localStorageConsent = localStorage.getItem(COOKIE_CONSENT_NAME);
+    if (consent === undefined && localStorageConsent === null) {
       setVisible(true);
     }
-    if (consent === 'true') {
+    if (consent === 'true' || localStorageConsent === 'true') {
       setConsentGiven(true);
     }
   }, [cookieStore]);
 
   const handleAccept = () => {
     cookieStore.set(COOKIE_CONSENT_NAME, 'true', { path: '/' });
+    localStorage.setItem(COOKIE_CONSENT_NAME, 'true');
     setVisible(false);
-    window.location.reload(); // Reload to apply middleware changes
   };
 
   const handleDecline = () => {
     cookieStore.set(COOKIE_CONSENT_NAME, 'false', { path: '/' });
+    localStorage.removeItem(COOKIE_CONSENT_NAME);
     setVisible(false);
   };
 
