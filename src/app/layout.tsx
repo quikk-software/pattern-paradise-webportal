@@ -8,6 +8,7 @@ import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
 import ComingSoon from '@/components/coming-soon';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
+import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -108,7 +109,9 @@ export default async function RootLayout({
               <ComingSoon />
             ) : (
               <AuthSessionProvider>
-                <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+                <PushNotificationProvider>
+                  <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+                </PushNotificationProvider>
               </AuthSessionProvider>
             )}
             <CookieConsentBanner maintenanceMode={maintenanceMode} />
