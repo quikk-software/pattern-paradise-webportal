@@ -192,15 +192,29 @@ function PreferencesCard({
   };
 
   const handleSavePreferences = async () => {
-    if (!userId || !deviceToken?.deviceToken) return;
+    if (!userId) return;
 
-    try {
-      await putDeviceToken(userId, {
-        deviceToken: deviceToken.deviceToken,
-        events: preferences.filter((p) => p.enabled).map((p) => p.type),
-      });
-    } catch (error) {
-      logger.error('Error updating preferences:', error);
+    if (deviceToken?.deviceToken) {
+      try {
+        await putDeviceToken(userId, {
+          deviceToken: deviceToken?.deviceToken,
+          events: preferences.filter((p) => p.enabled).map((p) => p.type),
+        });
+        return;
+      } catch (error) {
+        logger.error('Error updating preferences:', error);
+      }
+    }
+    if (fcmToken) {
+      try {
+        await putDeviceToken(userId, {
+          deviceToken: fcmToken,
+          events: preferences.filter((p) => p.enabled).map((p) => p.type),
+        });
+        return;
+      } catch (error) {
+        logger.error('Error updating preferences:', error);
+      }
     }
   };
 
