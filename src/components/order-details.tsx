@@ -22,6 +22,7 @@ import { X } from 'lucide-react';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import { useDeleteOrder } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
+import { PayPalOrderProvider } from '@/lib/contexts/PayPalOrderContext';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -62,7 +63,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         imageUrls={order.productImageUrls}
         title={order?.productName ?? 'Pattern images'}
       />
-      <div className="space-y-8">
+      <div className="space-y-4">
         <div className="space-y-2">
           {!!order.productName ? <h1 className="text-3xl font-bold">{order.productName}</h1> : null}
           {!!order.productDescription ? (
@@ -91,11 +92,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 message="Please complete your payment with PayPal by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
               />
               {!!product ? (
-                <BuyNowButton
-                  product={product}
+                <PayPalOrderProvider
+                  productId={product.id}
+                  userId={userId}
                   price={order.productPrice}
-                  isCustomPrice={order.isCustomPrice}
-                />
+                >
+                  <BuyNowButton product={product} />
+                </PayPalOrderProvider>
               ) : (
                 <p className="text-sm text-red-500 mb-2">
                   Couldn&apos;t load pattern details. Please reload or try again later. If this
@@ -116,7 +119,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         <div className="space-y-2">
           {!!order.productPrice ? (
             <p>
-              <strong>Order price:</strong> {order.productPrice}$
+              <strong>Order price:</strong> {order.productPrice.toFixed(2)}$
             </p>
           ) : null}
           {!!order.paypalFee && isSeller ? (
