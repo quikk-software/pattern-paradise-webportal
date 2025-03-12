@@ -7,7 +7,6 @@ import StoreProvider from '@/app/providers/StoreProvider';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import TokenDataWrapper from '@/app/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
-import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
 
 const noPaddingPages = [
   '/',
@@ -70,7 +69,7 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
         <StoreProvider>
           <TokenDataWrapper>
             <NotificationPermissionProvider />
-            <PushNotificationProvider>{children}</PushNotificationProvider>
+            {children}
           </TokenDataWrapper>
         </StoreProvider>
       </div>

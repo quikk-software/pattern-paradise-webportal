@@ -3,8 +3,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import logger from '@/lib/core/logger';
 import { useCreateDeviceToken } from '@/lib/api';
-import { useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
 
 type PushNotification = {
   title?: string;
@@ -30,13 +28,7 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
 
   const { mutate: postDeviceToken } = useCreateDeviceToken();
 
-  const { userId } = useSelector((s: Store) => s.auth);
-
   useEffect(() => {
-    if (!userId) {
-      return;
-    }
-
     // Listen for push notifications from the iOS WebView
     const handlePushNotification = (event: CustomEvent) => {
       logger.log('Received push notification from native app:', event.detail);
@@ -61,7 +53,7 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
       window.removeEventListener('push-notification', handlePushNotification as EventListener);
       window.removeEventListener('push-token', handleFcmToken as EventListener);
     };
-  }, [userId]);
+  }, []);
 
   // Function to send token to your backend
   const sendTokenToBackend = async (userId: string, token: string) => {
