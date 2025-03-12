@@ -48,8 +48,8 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
 
     // Listen for FCM token from the iOS WebView
     const handleFcmToken = (event: CustomEvent) => {
-      logger.log('Received FCM token from native app:', event.detail.token);
-      setFcmToken(event.detail.token);
+      setFcmToken(event.detail);
+      alert(`Received FCM token from native app: ${event.detail}`);
     };
 
     // Add event listeners
