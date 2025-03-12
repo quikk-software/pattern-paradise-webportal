@@ -28,6 +28,7 @@ import { GetDeviceTokenResponse } from '@/@types/api-types';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
 import RequestStatus from '@/lib/components/RequestStatus';
+import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 
 type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE';
 
@@ -81,6 +82,8 @@ function PreferencesCard({
   ]);
   const [enableIsLoading, setEnableIsLoading] = useState(false);
   const [disableIsLoading, setDisableIsLoading] = useState(false);
+
+  const { fcmToken } = usePushNotification();
 
   useEffect(() => {
     if (!deviceToken?.events) {
@@ -205,7 +208,11 @@ function PreferencesCard({
     <Card className={`w-full${disableCard ? ' border-none shadow-none border-0' : ''}`}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          {isSubscribed ? <Bell className="h-5 w-5" /> : <BellOff className="h-5 w-5" />}
+          {isSubscribed || fcmToken ? (
+            <Bell className="h-5 w-5" />
+          ) : (
+            <BellOff className="h-5 w-5" />
+          )}
           Push Notifications
         </CardTitle>
         <CardDescription>Choose which notifications you&apos;d like to receive</CardDescription>
@@ -229,7 +236,7 @@ function PreferencesCard({
         ))}
       </CardContent>
       <CardFooter className="flex flex-col space-y-2">
-        {isSubscribed ? (
+        {isSubscribed || fcmToken ? (
           <>
             <Button
               onClick={handleSavePreferences}
@@ -246,22 +253,26 @@ function PreferencesCard({
               isError={putDeviceTokenIsError}
               errorMessage={putDeviceTokenErrorDetail}
             />
-            <Button
-              onClick={handleUnsubscribe}
-              disabled={deleteDeviceTokenIsLoading || disableIsLoading}
-              variant="outline"
-              className="w-full"
-            >
-              {deleteDeviceTokenIsLoading || disableIsLoading ? (
-                <LoadingSpinnerComponent size="sm" className="text-white" />
-              ) : null}
-              Unsubscribe from Notifications
-            </Button>
-            <RequestStatus
-              isSuccess={deleteDeviceTokenIsSuccess}
-              isError={deleteDeviceTokenIsError}
-              errorMessage={deleteDeviceTokenErrorDetail}
-            />
+            {!fcmToken ? (
+              <>
+                <Button
+                  onClick={handleUnsubscribe}
+                  disabled={deleteDeviceTokenIsLoading || disableIsLoading}
+                  variant="outline"
+                  className="w-full"
+                >
+                  {deleteDeviceTokenIsLoading || disableIsLoading ? (
+                    <LoadingSpinnerComponent size="sm" className="text-white" />
+                  ) : null}
+                  Unsubscribe from Notifications
+                </Button>
+                <RequestStatus
+                  isSuccess={deleteDeviceTokenIsSuccess}
+                  isError={deleteDeviceTokenIsError}
+                  errorMessage={deleteDeviceTokenErrorDetail}
+                />
+              </>
+            ) : null}
           </>
         ) : (
           <>
@@ -291,7 +302,6 @@ export default function NotificationPreferences({
   disableCard = false,
 }: NotificationPreferencesProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isSupported] = useState(true);
   const [isDeclined, setIsDeclined] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -359,17 +369,6 @@ export default function NotificationPreferences({
             You have declined push notifications. Please activate them in the browser settings to be
             able to use push notifications for Pattern Paradise.
           </CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
-
-  if (!isSupported && !disableCard) {
-    return (
-      <Card className="w-full border-none shadow-none border-0">
-        <CardHeader>
-          <CardTitle>Push Notifications</CardTitle>
-          <CardDescription>Push notifications are not supported in your browser.</CardDescription>
         </CardHeader>
       </Card>
     );

@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import logger from '@/lib/core/logger';
 import { useCreateDeviceToken } from '@/lib/api';
+import { toast } from 'sonner';
+import { THEME_COLOR } from '@/lib/constants';
 
 type PushNotification = {
   title?: string;
@@ -29,13 +31,18 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
   const { mutate: postDeviceToken } = useCreateDeviceToken();
 
   useEffect(() => {
-    // Listen for push notifications from the iOS WebView
     const handlePushNotification = (event: CustomEvent) => {
       logger.log('Received push notification from native app:', event.detail);
       setLastNotification(event.detail);
 
-      // You can also show a toast/notification UI here
-      // or trigger other app-specific behavior
+      toast(event.detail.title, {
+        description: event.detail.description,
+        style: {
+          backgroundColor: THEME_COLOR,
+          color: 'white',
+        },
+        position: 'top-center',
+      });
     };
 
     // Listen for FCM token from the iOS WebView
