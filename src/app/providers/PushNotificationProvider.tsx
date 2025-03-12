@@ -15,11 +15,13 @@ type PushNotification = {
 type PushNotificationContextType = {
   lastNotification: PushNotification | null;
   fcmToken: string | null;
+  sendTokenToBackend: ((userId: string, token: string) => void) | null;
 };
 
 const PushNotificationContext = createContext<PushNotificationContextType>({
   lastNotification: null,
   fcmToken: null,
+  sendTokenToBackend: null,
 });
 
 export const PushNotificationProvider = ({ children }: { children: ReactNode }) => {
@@ -48,12 +50,6 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
     const handleFcmToken = (event: CustomEvent) => {
       logger.log('Received FCM token from native app:', event.detail.token);
       setFcmToken(event.detail.token);
-
-      // You might want to send this token to your backend
-      // to associate it with the current user
-      if (event.detail.token) {
-        sendTokenToBackend(userId, event.detail.token);
-      }
     };
 
     // Add event listeners
@@ -82,7 +78,7 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
   };
 
   return (
-    <PushNotificationContext.Provider value={{ lastNotification, fcmToken }}>
+    <PushNotificationContext.Provider value={{ lastNotification, fcmToken, sendTokenToBackend }}>
       {children}
     </PushNotificationContext.Provider>
   );
