@@ -9,6 +9,7 @@ import React from 'react';
 import { useSession } from 'next-auth/react';
 import PayPalLogo from '@/assets/logos/paypal-logo.png';
 import AnimatedHeroHeading from '@/lib/components/AnimatedHeroHeading';
+import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 
 const theme = {
   colors: {
@@ -41,6 +42,8 @@ export default function HeroV2({ products }: HeroV2Props) {
   const { status } = useSession();
 
   const isLoggedIn = status === 'authenticated';
+
+  const { fcmToken, lastNotification } = usePushNotification();
 
   return (
     <section
@@ -84,6 +87,10 @@ export default function HeroV2({ products }: HeroV2Props) {
               <p className="text-lg text-muted-foreground">
                 Buy, test, and sell your patterns in one place. Join our community of passionate
                 crocheters & knitters today!
+              </p>
+              <p>
+                FCM token: {JSON.stringify({ fcmToken })} | Last Notification:{' '}
+                {JSON.stringify({ title: lastNotification?.title })}
               </p>
             </div>
 

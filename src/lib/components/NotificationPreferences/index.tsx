@@ -23,12 +23,11 @@ import {
   useDeleteDeviceToken,
 } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { GetDeviceTokenResponse } from '@/@types/api-types';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
 import RequestStatus from '@/lib/components/RequestStatus';
-import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 
 type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE';
 
@@ -305,8 +304,6 @@ export default function NotificationPreferences({
     isLoading: getDeviceTokenIsLoading,
   } = useGetDeviceToken();
 
-  const { fcmToken, lastNotification } = usePushNotification();
-
   useEffect(() => {
     if (userId && status === 'authenticated') {
       if ('serviceWorker' in navigator && 'PushManager' in window) {
@@ -390,10 +387,6 @@ export default function NotificationPreferences({
             }
           }}
         >
-          <DialogTitle>
-            FCM token: {JSON.stringify({ fcmToken })} | Last Notification:{' '}
-            {JSON.stringify({ title: lastNotification?.title })}
-          </DialogTitle>
           <DialogContent>
             <PreferencesCard
               setIsDialogOpen={setIsDialogOpen}
