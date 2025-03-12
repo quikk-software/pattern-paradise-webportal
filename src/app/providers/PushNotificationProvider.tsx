@@ -5,6 +5,7 @@ import logger from '@/lib/core/logger';
 import { useCreateDeviceToken } from '@/lib/api';
 import { toast } from 'sonner';
 import { THEME_COLOR } from '@/lib/constants';
+import { useRouter } from 'next/navigation';
 
 type PushNotification = {
   title?: string;
@@ -30,6 +31,8 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
 
   const { mutate: postDeviceToken } = useCreateDeviceToken();
 
+  const router = useRouter();
+
   useEffect(() => {
     const handlePushNotification = (event: CustomEvent) => {
       logger.log('Received push notification from native app:', event.detail);
@@ -42,6 +45,10 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
           color: 'white',
         },
         position: 'top-center',
+        action: {
+          label: 'View',
+          onClick: () => router.push(event.detail.url),
+        },
       });
     };
 
