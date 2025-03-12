@@ -9,6 +9,7 @@ import ComingSoon from '@/components/coming-soon';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
 import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -103,6 +104,7 @@ export default async function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
+        <Toaster />
         <ServiceWorkerProvider>
           <CookiesProvider>
             {maintenanceMode ? (
