@@ -38,18 +38,18 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
       logger.log('Received push notification from native app:', event.detail);
       setLastNotification(event.detail);
 
-      toast(event.detail.title, {
-        description: event.detail.body,
-        style: {
-          backgroundColor: THEME_COLOR,
-          color: 'white',
-        },
-        position: 'top-center',
-        action: {
-          label: 'View',
-          onClick: () => router.push(event.detail.url),
-        },
-      });
+      if (!event.detail.url) {
+        toast(event.detail.title, {
+          description: event.detail.body,
+          style: {
+            backgroundColor: THEME_COLOR,
+            color: 'white',
+          },
+          position: 'top-center',
+        });
+        return;
+      }
+      router.push(event.detail.url);
     };
 
     // Listen for FCM token from the iOS WebView
