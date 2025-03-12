@@ -95,6 +95,23 @@ export function BuyNowButton({ product }: BuyNowButtonProps) {
     );
   }
 
+  if (!isLoggedIn) {
+    return (
+      <div className="flex flex-col gap-4">
+        <QuickSignUp
+          redirect={`${encodeURIComponent(`/app/products/${product.id}?action=toggleBuyNow`)}`}
+          signupCallback={() =>
+            router.push(
+              `/auth/login?redirect=${encodeURIComponent(
+                `/app/products/${product.id}?action=toggleBuyNow`,
+              )}`,
+            )
+          }
+        />
+      </div>
+    );
+  }
+
   if (isApp(window)) {
     return (
       <div className="space-y-2">
@@ -169,22 +186,6 @@ export function BuyNowButton({ product }: BuyNowButtonProps) {
                   {product.title}
                 </DrawerTitle>
               </div>
-              {!isLoggedIn ? (
-                <div className="flex flex-col gap-4">
-                  <QuickSignUp
-                    redirect={`${encodeURIComponent(
-                      `/app/products/${product.id}?action=toggleBuyNow`,
-                    )}`}
-                    signupCallback={() =>
-                      router.push(
-                        `/auth/login?redirect=${encodeURIComponent(
-                          `/app/products/${product.id}?action=toggleBuyNow`,
-                        )}`,
-                      )
-                    }
-                  />
-                </div>
-              ) : null}
               <PayPalButton disabled={!isLoggedIn} price={customPrice ?? product.price} />
             </DrawerHeader>
             <Button variant="destructive" onClick={() => setIsOpen(false)}>
