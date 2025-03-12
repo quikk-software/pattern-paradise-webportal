@@ -22,6 +22,7 @@ import TestingMetrics from '@/lib/components/TestingMetrics';
 import { ReportProduct } from '@/lib/components/ReportProduct';
 import ReviewMessages from '@/lib/components/ReviewMessages';
 import TesterShoutout from '@/lib/components/TesterShoutout';
+import { PayPalOrderProvider } from '@/lib/hooks/usePayPalOrder';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -56,59 +57,59 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
   const isOwner = product.creatorId === userId;
 
   return (
-    <div className="flex flex-col gap-8">
-      <GoBackButton />
-      <Card className="overflow-hidden">
-        <CardContent className="p-6">
-          <div className="grid gap-8">
-            <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-            <div className="flex flex-col justify-between gap-8">
-              <div className="flex flex-col gap-4">
-                <h1 className="text-3xl font-bold">{product.title}</h1>
-                <ProductCategories
-                  category={product.category}
-                  subCategories={product.subCategories}
-                />
-                <ShowMoreText description={product.description} maxRows={4} />
-                <ProductHashtags hashtags={product.hashtags} />
-              </div>
-              <div className="space-y-2">
-                <div className="flex gap-2 justify-between items-center">
-                  <CreatedByRef creatorId={product.creatorId} />
-                  <ReportProduct productId={product.id} />
+    <PayPalOrderProvider
+      productId={product.id}
+      userId={userId}
+      price={product.price}
+      callback={(orderId: string) => router.push(`/app/secure/auth/me/orders/${orderId}`)}
+    >
+      <div className="flex flex-col gap-8">
+        <GoBackButton />
+        <Card className="overflow-hidden">
+          <CardContent className="p-6">
+            <div className="grid gap-4">
+              <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
+              <div className="flex flex-col justify-between gap-8">
+                <div className="flex flex-col gap-4">
+                  <h1 className="text-3xl font-bold">{product.title}</h1>
+                  <ProductCategories
+                    category={product.category}
+                    subCategories={product.subCategories}
+                  />
+                  <ShowMoreText description={product.description} maxRows={4} />
+                  <ProductHashtags hashtags={product.hashtags} />
                 </div>
-                {isOwner ? (
-                  <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
-                ) : null}
-              </div>
-              <div className="flex flex-col gap-2">
-                {product.isFree || isOwner ? (
-                  <DownloadPatternZipButton
-                    productId={product.id}
-                    productTitle={product.title}
-                    files={product.files}
-                  />
-                ) : (
-                  <BuyNowButton
-                    product={product}
-                    price={product.price}
-                    isCustomPrice={false}
-                    callback={(orderId: string) =>
-                      router.push(`/app/secure/auth/me/orders/${orderId}`)
-                    }
-                  />
-                )}
-                <div className="flex flex-col gap-2 mt-4">
-                  <ProductMetrics productId={product.id} />
-                  <TestingMetrics productId={product.id} />
+                <div className="space-y-2">
+                  <div className="flex gap-2 justify-between items-center">
+                    <CreatedByRef creatorId={product.creatorId} />
+                    <ReportProduct productId={product.id} />
+                  </div>
+                  {isOwner ? (
+                    <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
+                  ) : null}
+                </div>
+                <div className="flex flex-col gap-2">
+                  {product.isFree || isOwner ? (
+                    <DownloadPatternZipButton
+                      productId={product.id}
+                      productTitle={product.title}
+                      files={product.files}
+                    />
+                  ) : (
+                    <BuyNowButton product={product} />
+                  )}
+                  <div className="flex flex-col gap-2 mt-4">
+                    <ProductMetrics productId={product.id} />
+                    <TestingMetrics productId={product.id} />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      <ReviewMessages productId={product.id} />
-      <TesterShoutout productId={product.id} />
-    </div>
+          </CardContent>
+        </Card>
+        <ReviewMessages productId={product.id} />
+        <TesterShoutout productId={product.id} />
+      </div>
+    </PayPalOrderProvider>
   );
 }
