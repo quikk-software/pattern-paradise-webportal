@@ -17,16 +17,16 @@ export default function MePage() {
     fetch(userId);
   }, [userId]);
 
-  if (isError) {
-    return <NotFoundPage />;
-  }
-
-  if (isLoading || !user) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-full">
         <LoadingSpinnerComponent />
       </div>
     );
+  }
+
+  if (isError || !user) {
+    return <NotFoundPage />;
   }
 
   return <ProfilePage user={user} />;
