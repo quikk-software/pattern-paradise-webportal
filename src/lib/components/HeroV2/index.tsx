@@ -52,30 +52,6 @@ export default function HeroV2({ products }: HeroV2Props) {
         paddingBottom: '2rem',
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          top: '-6rem',
-          right: '-6rem',
-          height: '16rem',
-          width: '16rem',
-          borderRadius: '9999px',
-          backgroundColor: theme.colors.amber[200],
-          opacity: 0.5,
-        }}
-      ></div>
-      <div
-        style={{
-          position: 'absolute',
-          top: '10rem',
-          left: '-5rem',
-          height: '10rem',
-          width: '10rem',
-          borderRadius: '9999px',
-          backgroundColor: theme.colors.amber[200],
-          opacity: 0.3,
-        }}
-      ></div>
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-6 md:grid-cols-2 md:gap-10">
           <div className="flex flex-col justify-center space-y-4">
@@ -89,23 +65,27 @@ export default function HeroV2({ products }: HeroV2Props) {
 
             <div className="flex flex-row gap-2">
               {isLoggedIn ? (
-                <Link rel={'nofollow'} href="/app/secure/sell">
+                <Link rel={'nofollow'} href="/app/secure/sell" className="z-10">
                   <Button variant={'default'}>Start Selling</Button>
                 </Link>
               ) : (
                 <Link
                   rel={'nofollow'}
                   href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
+                  className="z-10"
                 >
                   <Button variant={'default'}>Start Selling</Button>
                 </Link>
               )}
               {isLoggedIn ? (
-                <Link href="/app/secure/test">
+                <Link href="/app/secure/test" className="z-10">
                   <Button variant="outline">Show Tester Calls</Button>
                 </Link>
               ) : (
-                <Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/secure/test">
+                <Link
+                  href="/auth/registration?preselectedRoles=Tester&redirect=/app/secure/test"
+                  className="z-10"
+                >
                   <Button variant="outline">Become a Tester</Button>
                 </Link>
               )}
@@ -130,7 +110,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             />
             <div className="absolute inset-0 grid grid-cols-2 gap-2">
               {products.map((product) => (
-                <Link href={`/app/products/${product.id}`} key={product.id}>
+                <Link href={`/app/products/${product.id}`} key={product.id} className="z-10">
                   <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm">
                     <div className="aspect-square overflow-hidden rounded-md">
                       <CldImage
@@ -188,6 +168,30 @@ export default function HeroV2({ products }: HeroV2Props) {
           />
         </div>
       </div>
+      <div
+        style={{
+          position: 'absolute',
+          top: '-6rem',
+          right: '-6rem',
+          height: '16rem',
+          width: '16rem',
+          borderRadius: '9999px',
+          backgroundColor: theme.colors.amber[200],
+          opacity: 0.5,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: '10rem',
+          left: '-5rem',
+          height: '10rem',
+          width: '10rem',
+          borderRadius: '9999px',
+          backgroundColor: theme.colors.amber[200],
+          opacity: 0.3,
+        }}
+      />
     </section>
   );
 }
