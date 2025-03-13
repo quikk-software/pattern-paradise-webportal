@@ -431,12 +431,32 @@ export function ProfilePage({ user }: ProfilePageProps) {
                               : field?.value?.filter((role) => role !== 'Buyer');
                             field.onChange(updatedRoles);
                           }}
+                          disabled={true}
                         />
                         <label
                           htmlFor="buyer"
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                           Buyer
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="Tester"
+                          checked={field.value?.includes('Tester')}
+                          onCheckedChange={(checked) => {
+                            const updatedRoles = checked
+                              ? [...(field?.value ?? []), 'Tester']
+                              : field?.value?.filter((role) => role !== 'Tester');
+                            field.onChange(updatedRoles);
+                          }}
+                          disabled={true}
+                        />
+                        <label
+                          htmlFor="tester"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Tester
                         </label>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -455,24 +475,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                           Seller
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="Tester"
-                          checked={field.value?.includes('Tester')}
-                          onCheckedChange={(checked) => {
-                            const updatedRoles = checked
-                              ? [...(field?.value ?? []), 'Tester']
-                              : field?.value?.filter((role) => role !== 'Tester');
-                            field.onChange(updatedRoles);
-                          }}
-                        />
-                        <label
-                          htmlFor="tester"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Tester
                         </label>
                       </div>
                     </>
