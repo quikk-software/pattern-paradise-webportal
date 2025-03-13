@@ -13,8 +13,6 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import {
-  User,
-  ShoppingCart,
   Check,
   X,
   ChevronRight,
@@ -23,6 +21,9 @@ import {
   UserPlus,
   UserCircle,
   CheckCircle2,
+  HandCoins,
+  ThumbsDown,
+  ThumbsUp,
 } from 'lucide-react';
 import { useCheckEmail, useCheckUsername, useCreateUser } from '@/lib/api';
 import { Controller, useForm } from 'react-hook-form';
@@ -32,7 +33,6 @@ import useRedirect from '@/lib/core/useRedirect';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import { EMAIL_REGEX, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
-import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useRouter } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
@@ -40,25 +40,13 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 const ALLOWED_ROLES = ['Buyer', 'Seller', 'Tester'];
 
-const roleOptions = [
-  { id: 'Buyer', label: 'Buyer', icon: ShoppingCart, description: 'Purchase patterns' },
-  { id: 'Seller', label: 'Seller', icon: User, description: 'List and sell your patterns' },
-  {
-    id: 'Tester',
-    label: 'Tester',
-    icon: PatternParadiseIcon,
-    description: 'Try out new patterns and provide feedback',
-  },
-];
-
 interface RegistrationStepperProps {
   preselectedRoles: string[];
 }
 
 export function RegistrationStepper({ preselectedRoles }: RegistrationStepperProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [roles, setRoles] = useState<string[]>([]);
-  const [rolesError, setRolesError] = useState<string | undefined>(undefined);
+  const [roles, setRoles] = useState<string[]>(['Buyer', 'Tester']);
   const [debouncedUsername, setDebouncedUsername] = useState('');
   const [debouncedEmail, setDebouncedEmail] = useState('');
   const [showOptionalFields, setShowOptionalFields] = useState(false);
@@ -144,21 +132,12 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
   }, [debouncedEmail]);
 
   useEffect(() => {
-    setRoles(preselectedRoles.filter((role) => ALLOWED_ROLES.includes(role)));
+    if (preselectedRoles.length === 1 && preselectedRoles.at(0) === 'Seller') {
+      setRoles(ALLOWED_ROLES);
+    }
   }, [preselectedRoles]);
 
-  useEffect(() => {
-    if (roles.length > 0) {
-      setRolesError(undefined);
-    }
-  }, [roles]);
-
   const onSubmit = async (data: any) => {
-    if (roles.length === 0) {
-      setRolesError('Select one or more roles');
-      return;
-    }
-
     await mutate({
       email: data.email?.toLowerCase().trim(),
       password: data.password?.trim(),
@@ -197,10 +176,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       const result = await trigger(['email', 'password']);
       canProceed = result;
     } else if (currentStep === 2) {
-      canProceed = roles.length > 0;
-      if (!canProceed) {
-        setRolesError('Select one or more roles');
-      }
+      canProceed = true;
     } else if (currentStep === 3) {
       const result = await trigger(['hasAcceptedTerms', 'hasAcceptedPrivacy']);
       canProceed = result;
@@ -349,43 +325,74 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
           {currentStep === 2 && (
             <div className="space-y-4">
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="bg-primary text-primary-foreground rounded-full p-2">
+                    <UserCircle className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-lg font-medium">What should we call you?</h3>
+                </div>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="First name"
+                  required={false}
+                  {...register('firstName', {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.trim();
+                    },
+                  })}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
               <div className="flex items-center gap-2 mb-6">
                 <div className="bg-primary text-primary-foreground rounded-full p-2">
-                  <UserCircle className="h-4 w-4" />
+                  <HandCoins className="h-4 w-4" />
                 </div>
-                <h3 className="text-lg font-medium">Select Your Role</h3>
+                <h3 className="text-lg font-medium">Do you plan to sell your patterns?</h3>
               </div>
 
               <div className="space-y-2">
-                <Label>
-                  Roles <span className="text-red-500">*</span>
-                </Label>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Select one or more roles that apply to you:
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {roleOptions.map((role) => (
-                    <Card
-                      key={role.id}
-                      className={`cursor-pointer transition-all ${
-                        roles.includes(role.id) ? 'ring-2 ring-primary' : ''
-                      }`}
-                      onClick={() => handleRoleChange(role.id)}
-                    >
-                      <CardContent className="flex flex-col items-center text-center p-4">
-                        <role.icon className="w-10 h-10 mb-2 text-primary" />
-                        <h3 className="font-semibold">{role.label}</h3>
-                        <p className="text-sm text-muted-foreground">{role.description}</p>
-                        {roles.includes(role.id) && (
-                          <div className="absolute top-2 right-2 text-primary">
-                            <CheckCircle2 className="h-4 w-4" />
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
+                <div className="grid grid-cols-2 gap-2">
+                  <Card
+                    className={`cursor-pointer transition-all ${
+                      !roles.includes('Seller') ? 'ring-2 ring-primary' : ''
+                    }`}
+                    onClick={() => handleRoleChange('Seller')}
+                  >
+                    <CardContent className="flex flex-col items-center text-center p-4">
+                      <ThumbsDown className="w-10 h-10 mb-2 text-primary" />
+                      <h3 className="font-semibold">No</h3>
+                      <p className="text-sm text-muted-foreground">
+                        I just want to buy and test patterns
+                      </p>
+                      {!roles.includes('Seller') ? (
+                        <div className="absolute top-2 right-2 text-primary">
+                          <CheckCircle2 className="h-4 w-4" />
+                        </div>
+                      ) : null}
+                    </CardContent>
+                  </Card>
+                  <Card
+                    className={`cursor-pointer transition-all ${
+                      roles.includes('Seller') ? 'ring-2 ring-primary' : ''
+                    }`}
+                    onClick={() => handleRoleChange('Seller')}
+                  >
+                    <CardContent className="flex flex-col items-center text-center p-4">
+                      <ThumbsUp className="w-10 h-10 mb-2 text-primary" />
+                      <h3 className="font-semibold">Yes</h3>
+                      <p className="text-sm text-muted-foreground">
+                        I also want to sell my patterns
+                      </p>
+                      {roles.includes('Seller') ? (
+                        <div className="absolute top-2 right-2 text-primary">
+                          <CheckCircle2 className="h-4 w-4" />
+                        </div>
+                      ) : null}
+                    </CardContent>
+                  </Card>
                 </div>
-                {!!rolesError ? <p className="text-sm text-red-500">{rolesError}</p> : null}
                 <p className="text-xs text-muted-foreground mt-2">
                   ⚠️ Note: Users with the role &apos;Seller&apos; are required to connect a valid
                   PayPal account in their profile settings.
@@ -405,21 +412,6 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                 {showOptionalFields && (
                   <div className="space-y-4 mt-4 pt-4 border-t">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input
-                          id="firstName"
-                          type="text"
-                          placeholder="First name"
-                          required={false}
-                          {...register('firstName', {
-                            onChange: (e) => {
-                              e.target.value = e.target.value.trim();
-                            },
-                          })}
-                          onKeyDown={handleKeyDown}
-                        />
-                      </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name</Label>
                         <Input
