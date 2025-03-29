@@ -23,19 +23,27 @@ export default function SellSubmitPage() {
     return <NotFoundPage />;
   }
 
-  if (!user?.paypalMerchantIsActive) {
+  if (!user?.paypalMerchantIsActive && !user?.stripeAccountId) {
     return (
       <div className="space-y-8">
         <InfoBoxComponent
           message={
             <>
-              In order to create and sell patterns, you must{' '}
+              In order to create and sell patterns, you must either{' '}
               <Link
                 rel={'nofollow'}
                 href="/app/secure/auth/me?action=scrollToPayPal"
                 className="text-blue-500 underline"
               >
                 connect PayPal
+              </Link>{' '}
+              or{' '}
+              <Link
+                rel={'nofollow'}
+                href="/app/secure/auth/me?action=scrollToStripe"
+                className="text-blue-500 underline"
+              >
+                connect Stripe
               </Link>{' '}
               to your Pattern Paradise account.
             </>

@@ -101,6 +101,8 @@ export function SellPageComponent() {
     return () => clearTimeout(timerId);
   }, [searchTerm]);
 
+  const isSellingDisabled = !user?.paypalMerchantIsActive && !user?.stripeAccountId;
+
   return (
     <div className="space-y-8">
       <header className="flex flex-col gap-4 mb-8">
@@ -108,17 +110,25 @@ export function SellPageComponent() {
         {productReportsCount && productReportsCount > 0 ? (
           <OpenIncidentsInfoBox type="product" count={productReportsCount} />
         ) : null}
-        {user?.paypalMerchantIsActive === false ? (
+        {isSellingDisabled ? (
           <InfoBoxComponent
             message={
               <>
-                In order to create and sell patterns, you must{' '}
+                In order to create and sell patterns, you must either{' '}
                 <Link
                   href="/app/secure/auth/me?action=scrollToPayPal"
                   rel={'nofollow'}
                   className="text-blue-500 underline"
                 >
                   connect PayPal
+                </Link>{' '}
+                or{' '}
+                <Link
+                  rel={'nofollow'}
+                  href="/app/secure/auth/me?action=scrollToStripe"
+                  className="text-blue-500 underline"
+                >
+                  connect Stripe
                 </Link>{' '}
                 to your Pattern Paradise account.
               </>
@@ -132,7 +142,7 @@ export function SellPageComponent() {
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2"
-            disabled={!user?.paypalMerchantIsActive}
+            disabled={isSellingDisabled}
             onClick={() => router.push('/app/secure/sell/submit')}
           >
             <PlusCircle className="h-8 w-8" />

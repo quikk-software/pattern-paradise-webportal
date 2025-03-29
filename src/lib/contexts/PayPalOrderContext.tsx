@@ -4,7 +4,7 @@ import { createContext, useContext, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   useCaptureOrder,
-  useCreateOrder,
+  useCreateOrderPayPal,
   useDeleteOrder,
   useListOrdersByProductId,
 } from '@/lib/api/order';
@@ -51,7 +51,11 @@ export function PayPalOrderProvider({
   const [customPrice, setCustomPrice] = useState<number | undefined>(undefined);
   const [priceError, setPriceError] = useState<string | null>(null);
 
-  const { mutate: createOrder, isError: createOrderIsError, data: orderData } = useCreateOrder();
+  const {
+    mutate: createOrder,
+    isError: createOrderIsError,
+    data: orderData,
+  } = useCreateOrderPayPal();
   const {
     mutate: captureOrder,
     isSuccess: captureOrderIsSuccess,
@@ -86,12 +90,9 @@ export function PayPalOrderProvider({
       return;
     }
     const customerOrder = orders.find((order) => order.customer.id === userId);
-    const sellerOrder = orders.find((order) => order.seller.id === userId);
 
     if (customerOrder) {
       router.push(`/app/secure/auth/me/orders/${customerOrder.id}?action=toggleBuyNow`);
-    } else if (sellerOrder) {
-      router.push(`/app/secure/sell/orders`);
     }
   }, [listOrdersByProductIdIsSuccess, orders, userId, router]);
 

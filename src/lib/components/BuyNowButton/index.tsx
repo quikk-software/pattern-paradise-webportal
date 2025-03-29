@@ -15,7 +15,7 @@ import { ShieldCheck, Lock, X, MonitorCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
-import { PayPalButton } from '@/lib/components/PayPalButton';
+import { CheckoutButtons } from '../CheckoutButtons';
 import { GetProductResponse } from '@/@types/api-types';
 import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
@@ -186,7 +186,11 @@ export function BuyNowButton({ product }: BuyNowButtonProps) {
                   {product.title}
                 </DrawerTitle>
               </div>
-              <PayPalButton disabled={!isLoggedIn} price={customPrice ?? product.price} />
+              <CheckoutButtons
+                disabled={!isLoggedIn}
+                price={customPrice ?? product.price}
+                product={product}
+              />
             </DrawerHeader>
             <Button variant="destructive" onClick={() => setIsOpen(false)}>
               Cancel

@@ -3,7 +3,7 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -35,6 +35,10 @@ import ConnectPayPal from '@/lib/components/ConnectPayPal';
 import { useSession } from 'next-auth/react';
 import ProfileImageGallery from '@/lib/components/ProfileImageGallery';
 import ProfileQuickLinks from '../lib/components/ProfileQuickLinks';
+import StripeOnboarding from '@/lib/components/StripeOnboarding';
+import StripeManagement from '@/lib/components/StripeManagement';
+import { CheckCircle2 } from 'lucide-react';
+import CopyClipboard from '@/lib/components/CopyClipboard';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -68,7 +72,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isLoading: removePayPalReferralIsLoading,
     isSuccess: removePayPalReferralIsSuccess,
     isError: removePayPalReferralIsError,
-    errorDetail,
+    errorDetail: removePayPalReferralErrorDetail,
   } = useRemovePayPalReferral();
   const {
     fetch: getPayPalMerchantStatus,
@@ -87,6 +91,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const rolesRef = useRef<HTMLDivElement | null>(null);
   const paypalRef = useRef<HTMLDivElement | null>(null);
+  const stripeRef = useRef<HTMLDivElement | null>(null);
   const galleryRef = useRef<HTMLDivElement | null>(null);
 
   const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
@@ -103,13 +108,16 @@ export function ProfilePage({ user }: ProfilePageProps) {
       case 'scrollToPayPal':
         executeScroll(paypalRef);
         break;
+      case 'scrollToStripe':
+        executeScroll(stripeRef);
+        break;
       case 'scrollToGallery':
         executeScroll(galleryRef);
         break;
       default:
         break;
     }
-  }, [action, rolesRef, paypalRef, galleryRef]);
+  }, [action, rolesRef, paypalRef, stripeRef, galleryRef]);
 
   useEffect(() => {
     if (!profileImage || profileImage === user.imageUrl) {
@@ -192,8 +200,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const roles = watch('roles');
   const highlightPayPal = action === 'scrollToPayPal';
+  const highlightStripe = action === 'scrollToStripe';
   const highlightGallery = action === 'scrollToGallery';
   const highlightRoles = action === 'scrollToRoles';
+  const isSeller = user.roles?.includes('Seller');
 
   const hasOpenIncidents = user?.openIncidentsCount > 0;
 
@@ -206,10 +216,26 @@ export function ProfilePage({ user }: ProfilePageProps) {
         isSuccess={isSuccess}
         isError={isError}
       />
-      {user.roles?.includes('Seller') ? (
+      {isSeller ? (
         <Card ref={paypalRef}>
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Manage PayPal</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle>{highlightPayPal ? '❗️' : null}Connect PayPal</CardTitle>
+              {user.paypalMerchantIsActive ? (
+                <Badge
+                  variant="outline"
+                  className="bg-green-50 text-green-700 border-green-200 px-3 py-1"
+                >
+                  <CheckCircle2 className="mr-1 h-4 w-4" />
+                  Active
+                </Badge>
+              ) : null}
+            </div>
+            {user.paypalMerchantIsActive ? (
+              <CardDescription>
+                Your PayPal account is connected and ready to process payments
+              </CardDescription>
+            ) : null}
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             {user.paypalMerchantIsActive && !user.paypalPaymentsReceivable ? (
@@ -253,76 +279,59 @@ export function ProfilePage({ user }: ProfilePageProps) {
               />
             ) : null}
 
-            {roles?.includes('Seller') && !user.paypalMerchantIsActive ? (
-              <div className="space-y-2">
-                {highlightPayPal ? (
-                  <Badge variant="secondary" className="text-md">
-                    {'❗️'} Connect PayPal
-                  </Badge>
-                ) : null}
-                <ConnectPayPal highlight={highlightPayPal} />
-              </div>
-            ) : null}
+            {roles?.includes('Seller') && !user.paypalMerchantIsActive ? <ConnectPayPal /> : null}
 
             {user.paypalMerchantIsActive ? (
-              <div className="flex flex-col gap-2">
-                <InfoBoxComponent
-                  message="Your PayPal is connected to your Pattern Paradise account."
-                  severity={'success'}
-                />
-                <Button
-                  variant="secondary"
-                  className="w-full"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsDisconnectPayPalDrawerOpen(true);
-                  }}
-                >
-                  {removePayPalReferralIsLoading ? (
-                    <LoadingSpinnerComponent size="sm" className="text-black" />
-                  ) : null}
-                  Disconnect PayPal
-                </Button>
+              <div className="space-y-4">
+                {user.paypalMerchantId ? (
+                  <CopyClipboard value={user.paypalMerchantId} title="PayPal Merchant ID" />
+                ) : null}
+                <div className="flex justify-end">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsDisconnectPayPalDrawerOpen(true);
+                    }}
+                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                  >
+                    {removePayPalReferralIsLoading ? (
+                      <LoadingSpinnerComponent size="sm" className="text-black" />
+                    ) : null}
+                    Disconnect PayPal Account
+                  </Button>
+                </div>
                 <RequestStatus
                   isSuccess={removePayPalReferralIsSuccess}
                   isError={removePayPalReferralIsError}
                   errorMessage={
                     <>
                       Something went wrong while disconnecting your PayPal account from Pattern
-                      Paradise{errorDetail ? `: ${errorDetail}` : ''}
+                      Paradise
+                      {removePayPalReferralErrorDetail
+                        ? `: ${removePayPalReferralErrorDetail}`
+                        : ''}
                     </>
                   }
                 />
-                <p className="text-xs text-muted-foreground">
-                  ⚠️ Note: You can also disconnect your PayPal from your Pattern Paradise account
-                  from your{' '}
-                  <Link
-                    href="https://paypal.com"
-                    rel={'nofollow'}
-                    target="_blank"
-                    className="text-blue-500 underline"
-                  >
-                    PayPal dashboard
-                  </Link>
-                  . Please be aware that all your released products will be set to{' '}
-                  <strong>&apos;Hidden&apos;</strong> status and will no longer be visible to
-                  Pattern Paradise users after disconnecting.
-                </p>
               </div>
             ) : null}
-            <Button
-              variant={'outline'}
-              disabled={checkPayPalMerchantStatusIsLoading}
-              onClick={(e) => {
-                e.preventDefault();
-                handleCheckPayPalMerchantStatus(userId);
-              }}
-            >
-              {checkPayPalMerchantStatusIsLoading ? (
-                <LoadingSpinnerComponent size="sm" className="text-black" />
-              ) : null}
-              Check PayPal merchant status
-            </Button>
+            {user.paypalMerchantIsActive ? (
+              <Button
+                variant={'outline'}
+                disabled={checkPayPalMerchantStatusIsLoading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCheckPayPalMerchantStatus(userId);
+                }}
+              >
+                {checkPayPalMerchantStatusIsLoading ? (
+                  <LoadingSpinnerComponent size="sm" className="text-black" />
+                ) : null}
+                Check PayPal merchant status
+              </Button>
+            ) : null}
             {paypalMerchantStatus ? <PayPalMerchantStatus {...paypalMerchantStatus} /> : null}
             {checkPayPalMerchantStatusIsError ? (
               <p className="text-sm">
@@ -338,6 +347,24 @@ export function ProfilePage({ user }: ProfilePageProps) {
           </CardContent>
         </Card>
       ) : null}
+
+      {isSeller ? (
+        <>
+          {user.stripeAccountId ? (
+            <StripeManagement stripeAccountId={user.stripeAccountId} />
+          ) : (
+            <Card ref={stripeRef}>
+              <CardHeader>
+                <CardTitle>{highlightStripe ? '❗️' : null}Connect Stripe</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                <StripeOnboarding />
+              </CardContent>
+            </Card>
+          )}
+        </>
+      ) : null}
+
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>

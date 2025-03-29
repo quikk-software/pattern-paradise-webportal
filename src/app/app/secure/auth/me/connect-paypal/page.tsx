@@ -61,8 +61,6 @@ export default function ConnectPayPalPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-3">
             <ConnectPayPal
-              highlight={false}
-              hideNote={true}
               buttonTheme="bg-[#0070ba] hover:bg-[#005ea6]"
               inputTheme="focus-visible:ring-[#0070ba]"
             />
