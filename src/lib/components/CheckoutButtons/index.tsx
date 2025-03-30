@@ -71,10 +71,12 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
                 className="w-full"
               />
             ) : null}
-            {seller?.paypalMerchantIsActive && seller?.stripeMerchantIsActive ? (
+            {seller?.paypalMerchantIsActive &&
+            seller?.stripeMerchantIsActive &&
+            seller?.stripeCardPaymentActive ? (
               <PaymentDivider />
             ) : null}
-            {seller?.stripeMerchantIsActive ? (
+            {seller?.stripeMerchantIsActive && seller?.stripeCardPaymentActive ? (
               <StripeButton
                 disabled={disabled || !!priceError}
                 productId={product.id}

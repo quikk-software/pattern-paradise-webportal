@@ -218,6 +218,7 @@ export interface GetUserResponse {
   paypalSubscriptionValidUntil?: string;
   paypalSubscriptionStatus: string;
   stripeAccountId?: string;
+  stripeCardPaymentActive: boolean;
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
@@ -257,6 +258,7 @@ export interface GetUserAccountResponse {
   stripeMerchantIsActive: boolean;
   paypalMerchantIsActive: boolean;
   paypalSubscriptionStatus: string;
+  stripeCardPaymentActive: boolean;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;

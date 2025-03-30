@@ -350,6 +350,26 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
       {isSeller ? (
         <>
+          {!user.stripeCardPaymentActive ? (
+            <InfoBoxComponent
+              severity="warning"
+              message={
+                <span>
+                  <strong>Attention:</strong> Your account is not yet ready to accept credit card
+                  payments with Stripe. Please check your{' '}
+                  <Link
+                    href={'https://dashboard.stripe.com/'}
+                    target={'_blank'}
+                    rel={'nofollow'}
+                    className={'text-blue-500 underline'}
+                  >
+                    Stripe Dashboard
+                  </Link>{' '}
+                  to verify your identity and enable credit card payments.
+                </span>
+              }
+            />
+          ) : null}
           {user.stripeAccountId ? (
             <StripeManagement stripeAccountId={user.stripeAccountId} />
           ) : (
