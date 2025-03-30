@@ -18,7 +18,7 @@ import Link from 'next/link';
 import TestingMetrics from '@/lib/components/TestingMetrics';
 import ReviewCTA from '@/lib/components/ReviewCTA';
 import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
+import { CreditCard, RefreshCw, X } from 'lucide-react';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import { useDeleteOrder } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
@@ -54,6 +54,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
 
   const isPayed =
     order.status === 'CAPTURED' || order.status === 'APPROVED' || order.status === 'COMPLETED';
+  const isPending = order.status === 'PENDING';
   const isCreated = order.status === 'CREATED';
   const isSeller = order.seller.id === userId;
 
@@ -77,12 +78,52 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           ) : null}
         </div>
         <div className="space-y-2">
-          <Badge
-            variant="secondary"
-            className={`text-lg${isPayed ? ' bg-green-400 text-white' : ''}`}
-          >
-            Order Status: {order.status}
-          </Badge>
+          <div className="flex flex-row gap-2 justify-between items-center">
+            <Badge
+              variant="secondary"
+              className={`text-lg${isPayed ? ' bg-green-400 text-white' : ''}`}
+            >
+              Order Status: {order.status}
+            </Badge>
+            {isPending ? (
+              <Button
+                variant={'secondary'}
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                <RefreshCw />
+              </Button>
+            ) : null}
+          </div>
+
+          {isPending && order.stripeCheckoutUrl ? (
+            <Button
+              onClick={() => {
+                router.push(order.stripeCheckoutUrl!);
+              }}
+              style={{
+                position: 'relative',
+                background: 'linear-gradient(to right, #6772e5, #4d61fc)',
+                color: 'white',
+                fontWeight: '500',
+                padding: '10px 16px',
+                borderRadius: '6px',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+                transition: 'all 0.2s',
+                border: 'none',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'linear-gradient(to right, #5469d4, #4257e5)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'linear-gradient(to right, #6772e5, #4d61fc)')
+              }
+            >
+              <CreditCard size="sm" className="text-white" />
+              Continue Payment with Stripe
+            </Button>
+          ) : null}
 
           {isCreated && !isSeller ? (
             <div className="flex flex-col gap-4">
@@ -109,10 +150,12 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                   .
                 </p>
               )}
-              <Button variant={'destructive'} onClick={() => setIsCancelOrderDialogOpen(true)}>
-                <X />
-                Cancel Order
-              </Button>
+              {order?.paypalOrderId ? (
+                <Button variant={'destructive'} onClick={() => setIsCancelOrderDialogOpen(true)}>
+                  <X />
+                  Cancel Order
+                </Button>
+              ) : null}
             </div>
           ) : null}
         </div>

@@ -583,7 +583,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
             <div />
           )}
           {currentStep === totalSteps ? (
-            <>
+            <div className="space-y-1">
               <Button
                 type="submit"
                 variant="default"
@@ -599,7 +599,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                 successMessage="Your account has been created. You can login to your account now."
                 errorMessage={`Registration failed: ${errorDetail}`}
               />
-            </>
+            </div>
           ) : null}
         </CardFooter>
       </Card>

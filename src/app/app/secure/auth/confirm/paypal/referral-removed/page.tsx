@@ -1,6 +1,6 @@
 import React from 'react';
-import PayPalRevokedPage from '@/app/paypal-revoked/page';
+import PayPalRevoked from '@/lib/components/PayPalRevoked';
 
-export default function PayPalReferralRemoved() {
-  return <PayPalRevokedPage />;
+export default function PayPalRevokedPage() {
+  return <PayPalRevoked />;
 }

@@ -38,7 +38,7 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
     await mutate({
       email: data.email?.trim(),
       password: data.password?.trim(),
-      roles: ['Buyer'],
+      roles: ['Buyer', 'Tester'],
       hasAcceptedPrivacy: data.hasAcceptedTermsAndPrivacy,
       hasAcceptedTerms: data.hasAcceptedTermsAndPrivacy,
     });

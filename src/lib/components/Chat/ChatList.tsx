@@ -106,7 +106,7 @@ export default function ChatList({
                     <PulsatingDot size={'sm'} />
                   ) : chat?.latestChatMessage?.createdAt ? (
                     <span className="text-sm text-gray-500 whitespace-nowrap">
-                      {dayjs(chat?.latestChatMessage?.createdAt).fromNow()}
+                      {dayjs(chat?.latestChatMessage?.createdAt)?.fromNow()}
                     </span>
                   ) : null}
                 </div>
