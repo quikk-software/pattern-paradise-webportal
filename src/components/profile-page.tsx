@@ -220,7 +220,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
         <Card ref={paypalRef}>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>{highlightPayPal ? '❗️' : null}Connect PayPal</CardTitle>
+              <CardTitle>
+                {highlightPayPal ? '❗️' : null}
+                {user.paypalMerchantIsActive ? 'Manage PayPal' : 'Connect PayPal'}
+              </CardTitle>
               {user.paypalMerchantIsActive ? (
                 <Badge
                   variant="outline"
