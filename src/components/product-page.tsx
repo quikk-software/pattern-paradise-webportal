@@ -67,9 +67,9 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
         <GoBackButton />
         <Card className="overflow-hidden">
           <CardContent className="p-6">
-            <div className="grid gap-4">
+            <div className="grid lg:grid-cols-2 gap-4">
               <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
-              <div className="flex flex-col justify-between gap-8">
+              <div className="flex flex-col justify-start gap-8">
                 <div className="flex flex-col gap-4">
                   <h1 className="text-3xl font-bold">{product.title}</h1>
                   <ProductCategories

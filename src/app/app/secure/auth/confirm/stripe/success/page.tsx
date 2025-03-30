@@ -19,15 +19,23 @@ export default function StripeOnboardingSuccess() {
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">Onboarding Successful!</CardTitle>
+          <CardTitle className="text-2xl font-bold text-gray-900">Everything Fine!</CardTitle>
           <CardDescription className="text-gray-600">
-            Your Stripe account has been successfully connected to Pattern Paradise.
+            Stripe is connected to Pattern Paradise.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 text-center">
           <div className="rounded-lg bg-green-50 p-4">
             <p className="text-sm text-green-800">
-              You can now receive payments through our platform.
+              If you have not yet completed the onboarding form, you can always continue the process{' '}
+              <Link
+                href={'/app/secure/auth/me?action=scrollToStripe'}
+                className="text-blue-500 underline"
+              >
+                from your profile
+              </Link>
+              . Once you have successfully connected your account, you will be able to receive
+              payments through our platform.
             </p>
           </div>
         </CardContent>

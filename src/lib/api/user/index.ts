@@ -20,3 +20,4 @@ export * from './useUpdateDeviceToken';
 export * from './useGetDeviceToken';
 export * from './useDeleteDeviceToken';
 export * from './useOnboardStripe';
+export * from './useGetStripeOnboardingLink';
