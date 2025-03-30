@@ -47,17 +47,19 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
       options={{
         clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
         currency: 'USD',
-        disableFunding:
-          'card,bancontact,blik,eps,giropay,ideal,mybank,p24,sepa,sofort,venmo,paylater',
+        disableFunding: 'bancontact,blik,eps,giropay,ideal,mybank,p24,sepa,sofort,venmo,paylater',
       }}
     >
-      <Card className="mx-auto">
+      <Card>
         <CardHeader>
           <CardTitle>Complete Your Purchase</CardTitle>
           <CardDescription>Secure payment</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <h3>{order?.productPrice ? order.productPrice.toFixed(2) : price.toFixed(2)}$</h3>
+          <h3>
+            {price ? price.toFixed(2) : order?.productPrice ? order.productPrice.toFixed(2) : price}
+            $
+          </h3>
           <div className="space-y-2">
             {seller?.paypalMerchantIsActive ? (
               <PayPalButtons
