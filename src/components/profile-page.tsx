@@ -353,7 +353,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
       {isSeller ? (
         <>
-          {!user.stripeCardPaymentActive ? (
+          {user.stripeAccountId && !user.stripeCardPaymentActive ? (
             <InfoBoxComponent
               severity="warning"
               message={
@@ -374,7 +374,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
             />
           ) : null}
           {user.stripeAccountId ? (
-            <StripeManagement stripeAccountId={user.stripeAccountId} />
+            <StripeManagement
+              stripeAccountId={user.stripeAccountId}
+              stripeOnboardingCompleted={user.stripeOnboardingCompleted}
+            />
           ) : (
             <Card ref={stripeRef}>
               <CardHeader>

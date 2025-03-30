@@ -18,6 +18,10 @@ export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
 }
 
+export interface GetStripeOnboardingLinkResponse {
+  stripeOnboardingLink: string;
+}
+
 export interface PostOnboardStripeResponse {
   stripeRedirectUrl: string;
 }
@@ -219,6 +223,7 @@ export interface GetUserResponse {
   paypalSubscriptionStatus: string;
   stripeAccountId?: string;
   stripeCardPaymentActive: boolean;
+  stripeOnboardingCompleted: boolean;
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
@@ -1398,6 +1403,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/users/${userId}/paypal-referral`,
         method: 'DELETE',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The authenticated user gets a fresh Stripe onboarding link based on the existing account ID.
+     *
+     * @tags User
+     * @name GetStripeOnboardingLink
+     * @summary Gets a fresh onboarding link for Stripe.
+     * @request GET:/api/v1/users/{userId}/stripe-referral/onboarding
+     * @secure
+     */
+    getStripeOnboardingLink: (userId: string, params: RequestParams = {}) =>
+      this.request<GetStripeOnboardingLinkResponse, any>({
+        path: `/api/v1/users/${userId}/stripe-referral/onboarding`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
         ...params,
       }),
 
