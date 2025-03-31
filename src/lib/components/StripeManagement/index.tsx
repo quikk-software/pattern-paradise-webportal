@@ -105,7 +105,7 @@ export default function StripeManagement({
             </div>
             {!stripeOnboardingCompleted ? (
               <div className="space-y-1">
-                <Button variant="outline" size="sm" onClick={handleOnboardingClick}>
+                <Button variant="outline" className="w-full" onClick={handleOnboardingClick}>
                   {fetchStripeOnboardingLinkIsLoading ? (
                     <LoadingSpinnerComponent size={`sm`} />
                   ) : null}
