@@ -11,16 +11,16 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export default function PayPalRevokedPage() {
+export default function StripeRevoked() {
   return (
     <div className="flex flex-col items-center justify-center">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            PayPal Merchant Status Revoked
+            Stripe Merchant Status Revoked
           </CardTitle>
           <CardDescription className="text-center">
-            We&apos;ve noticed a change in your PayPal account status
+            We&apos;ve noticed a change in your Stripe account status
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -28,12 +28,12 @@ export default function PayPalRevokedPage() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Account Status Change</AlertTitle>
             <AlertDescription>
-              Your PayPal merchant status has been revoked on our platform.
+              Your Stripe merchant status has been revoked on our platform.
             </AlertDescription>
           </Alert>
           <p className="text-gray-600">
-            This means that you can no longer receive payments through PayPal on our platform. If
-            you want to reactivate your PayPal merchant status,{' '}
+            This means that you can no longer receive payments through Stripe on our platform. If
+            you want to reactivate your Stripe merchant status,{' '}
             <Link href="/app/secure/auth/me" className="text-blue-500 underline" rel={'nofollow'}>
               go to your profile
             </Link>
@@ -41,23 +41,9 @@ export default function PayPalRevokedPage() {
           </p>
           <h3 className="font-semibold text-lg">What this means for you:</h3>
           <ul className="list-disc pl-5 space-y-2 text-gray-600">
-            <li>You cannot receive new payments via PayPal</li>
+            <li>You cannot receive new payments via Stripe</li>
             <li>Existing funds in your account are not affected</li>
-            <li>Your patterns are now hidden on Pattern Paradise</li>
           </ul>
-          <h3 className="font-semibold text-lg">Next steps:</h3>
-          <ol className="list-decimal pl-5 space-y-2 text-gray-600">
-            <li>Check your email for any notifications from PayPal</li>
-            <li>Log in to your PayPal account to review any issues</li>
-            <li>Contact PayPal support for more information</li>
-            <li>
-              Once resolved,{' '}
-              <Link href="/app/secure/auth/me" className="text-blue-500 underline">
-                go to your profile
-              </Link>{' '}
-              to reactivate your merchant status
-            </li>
-          </ol>
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" asChild>

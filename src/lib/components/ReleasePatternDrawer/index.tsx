@@ -53,7 +53,7 @@ export default function ReleasePatternDrawer({
             <DrawerTitle>Release Pattern</DrawerTitle>
             {!isTestingApproved ? (
               <DrawerTitle className="text-sm font-medium">
-                If you release your pattern yourself without testers approving it in a{' '}
+                If your pattern is approved by testers in a{' '}
                 <Link
                   rel={'nofollow'}
                   href="/app/secure/sell/testings"
@@ -61,7 +61,7 @@ export default function ReleasePatternDrawer({
                 >
                   testing
                 </Link>
-                , your pattern will be <strong>ranked the lowest</strong> in search results on
+                , your pattern will be <strong>ranked the highest</strong> in search results on
                 Pattern Paradise.
               </DrawerTitle>
             ) : (

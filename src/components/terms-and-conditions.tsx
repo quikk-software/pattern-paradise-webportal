@@ -368,7 +368,7 @@ export default function TermsAndConditions() {
               <AccordionContent>
                 <p>
                   All payments on Pattern Paradise are processed securely through our payment
-                  gateway partner{' '}
+                  gateway partners{' '}
                   <Link
                     rel={'nofollow'}
                     href="https://paypal.com"
@@ -376,6 +376,15 @@ export default function TermsAndConditions() {
                     className="text-blue-500 underline"
                   >
                     PayPal
+                  </Link>{' '}
+                  or{' '}
+                  <Link
+                    rel={'nofollow'}
+                    href="https://stripe.com"
+                    target="_blank"
+                    className="text-blue-500 underline"
+                  >
+                    Stripe
                   </Link>
                   . Buyers can purchase crochet and knitting patterns directly from designers via a
                   seamless and secure checkout process. Upon successful payment, buyers will receive
@@ -394,8 +403,8 @@ export default function TermsAndConditions() {
 
                 <p className="mb-1">
                   If a pattern is sold for $10.00, Pattern Paradise will keep $0.50 as platform fee
-                  and $9.50 will be transferred to the PayPal account provided by the seller.
-                  Regarding fees of our payment gateway partner PayPal, please refer to{' '}
+                  and $9.50 will be transferred to the PayPal or Stripe account provided by the
+                  seller. Regarding fees of our payment gateway partner PayPal, please refer to{' '}
                   <Link
                     href="https://www.paypal.com/al/webapps/mpp/merchant-fees"
                     rel={'nofollow'}
@@ -404,7 +413,15 @@ export default function TermsAndConditions() {
                   >
                     PayPal Merchant Fees
                   </Link>
-                  .
+                  . In case of Stripe, please refer to{' '}
+                  <Link
+                    href="https://stripe.com/de/pricing"
+                    rel={'nofollow'}
+                    target="_blank"
+                    className="text-blue-500 underline"
+                  >
+                    Stripe Pricing
+                  </Link>
                 </p>
 
                 <p>

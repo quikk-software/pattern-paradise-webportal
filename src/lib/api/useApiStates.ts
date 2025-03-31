@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import logger from '@/lib/core/logger';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const useApiStates = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -9,6 +10,9 @@ export const useApiStates = () => {
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleFn = async <T>(fn: () => Promise<T>, ignoreIsLoading = false) => {
     if (!ignoreIsLoading) {
@@ -36,6 +40,9 @@ export const useApiStates = () => {
       ) {
         setValidationErrors(errorPayload?.errors ?? []);
         setErrorDetail(errorPayload?.detail);
+      }
+      if (errorPayload?.status === 401) {
+        router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
       }
       throw err;
     } finally {

@@ -108,7 +108,13 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
       <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1">
           {filteredNavLinks.map(({ href, name }) => (
-            <MobileNavLink key={name} href={href} scrolled={scrolled} background={background}>
+            <MobileNavLink
+              key={name}
+              href={href}
+              scrolled={scrolled}
+              onClick={() => toggleMenu()}
+              background={background}
+            >
               {name}
             </MobileNavLink>
           ))}
@@ -150,16 +156,19 @@ function MobileNavLink({
   href,
   background,
   scrolled,
+  onClick,
   children,
 }: {
   background: string;
   scrolled: boolean;
   href: string;
+  onClick: () => void;
   children: React.ReactNode;
 }) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={cn(
         'block px-3 py-2 rounded-md text-base font-medium',
         scrolled

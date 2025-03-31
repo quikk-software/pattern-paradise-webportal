@@ -1,21 +1,88 @@
-import type { MetadataRoute } from 'next';
-import { APP_DESCRIPTION, APP_NAME, APP_TITLE } from '@/lib/constants';
+import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: APP_NAME,
-    short_name: APP_TITLE,
-    description: APP_DESCRIPTION,
+    name: 'Pattern Paradise – The Ultimate Crochet & Knitting Pattern Hub',
+    short_name: 'Pattern Paradise',
+    description:
+      'Find, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern business effortlessly.',
     start_url: '/',
     display: 'standalone',
     background_color: '#fff',
-    theme_color: '#000',
+    theme_color: '#ed8332',
+    // @ts-ignore
+    gcm_sender_id: '608358089878',
     icons: [
       {
         src: '/favicon.ico',
         sizes: 'any',
         type: 'image/x-icon',
       },
+      {
+        src: 'https://pattern-paradise.shop/icons/main/16.png',
+        sizes: '16x16',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: 'https://pattern-paradise.shop/icons/main/32.png',
+        sizes: '32x32',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: 'https://pattern-paradise.shop/icons/main/64.png',
+        sizes: '64x64',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: 'https://pattern-paradise.shop/icons/main/128.png',
+        sizes: '128x128',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: 'https://pattern-paradise.shop/icons/main/256.png',
+        sizes: '256x256',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: 'https://pattern-paradise.shop/icons/main/512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: 'https://pattern-paradise.shop/icons/main/1024.png',
+        sizes: '1024x1024',
+        type: 'image/png',
+        purpose: 'any',
+      },
     ],
+    id: 'pattern-paradise',
+    dir: 'auto',
+    lang: 'en',
+    orientation: 'portrait',
+    prefer_related_applications: false,
+    shortcuts: [
+      {
+        name: 'View tester chats',
+        url: '/app/secure/test/chats',
+        description: 'View chats for your testings',
+      },
+      {
+        name: 'View chats',
+        url: '/app/secure/chats',
+        description: 'View chats with other users',
+      },
+      {
+        name: 'Create pattern',
+        url: '/app/secure/sell/submit',
+        description: 'Create a new pattern',
+      },
+    ],
+    categories: ['productivity'],
   };
 }

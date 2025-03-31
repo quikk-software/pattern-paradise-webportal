@@ -15,6 +15,7 @@ import {
   setUsername,
 } from '@/lib/features/auth/authSlice';
 import PayPalReminderWrapper from '@/app/wrappers/PayPalReminderWrapper';
+import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
@@ -25,6 +26,8 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const dispatch = useDispatch();
   const pathname = usePathname();
   const allSearchParams = useGetAllSearchParams();
+
+  const { fcmToken, sendTokenToBackend } = usePushNotification();
 
   const query = allSearchParams ? buildQueryString(allSearchParams) : null;
   const redirect = query ? `${pathname}?${query}` : pathname;
@@ -41,7 +44,10 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
     dispatch(setUsername(session?.user.name || ''));
     dispatch(setRoles(session?.user.roles || []));
     dispatch(setSubscriptionStatus(session?.user.subscriptionStatus || ''));
-  }, [status, session, router]);
+    if (fcmToken && session?.user.id) {
+      sendTokenToBackend?.(session.user.id, fcmToken);
+    }
+  }, [status, session, router, fcmToken]);
 
   if (isLoading) {
     return (

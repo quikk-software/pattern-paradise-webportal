@@ -8,6 +8,8 @@ import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
 import ComingSoon from '@/components/coming-soon';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
+import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -35,11 +37,11 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicons/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/favicons/apple-touch-icon.png',
+    apple: '/icons/ios/512.png',
     other: [
       { rel: 'apple-touch-icon', url: '/favicons/apple-icon-152x152.png', sizes: '152x152' },
       { rel: 'apple-touch-icon', url: '/favicons/apple-icon-180x180.png', sizes: '180x180' },
-      { rel: 'manifest', url: '/manifest.json' },
+      { rel: 'manifest', url: '/manifest.webmanifest' },
     ],
   },
   openGraph: {
@@ -52,7 +54,7 @@ export const metadata: Metadata = {
       {
         url: `${APP_DOMAIN}/favicons/apple-icon-precomposed.png`,
         width: 1200,
-        height: 630,
+        height: 1200,
       },
     ],
   },
@@ -70,7 +72,7 @@ export const metadata: Metadata = {
     minimumScale: 1.0,
     userScalable: false,
   },
-  manifest: '/manifest.json',
+  manifest: '/manifest.webmanifest',
   other: {
     'mobile-web-app-capable': 'yes',
     'msapplication-config': '/favicons/browserconfig.xml',
@@ -92,19 +94,26 @@ export default async function RootLayout({
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-icon-180x180.png" />
 
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Pattern Paradise" />
+
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
+        <Toaster />
         <ServiceWorkerProvider>
           <CookiesProvider>
             {maintenanceMode ? (
               <ComingSoon />
             ) : (
               <AuthSessionProvider>
-                <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+                <PushNotificationProvider>
+                  <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+                </PushNotificationProvider>
               </AuthSessionProvider>
             )}
             <CookieConsentBanner maintenanceMode={maintenanceMode} />

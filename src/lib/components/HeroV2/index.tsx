@@ -9,6 +9,10 @@ import React from 'react';
 import { useSession } from 'next-auth/react';
 import PayPalLogo from '@/assets/logos/paypal-logo.png';
 import AnimatedHeroHeading from '@/lib/components/AnimatedHeroHeading';
+import { AnimatePresence, motion } from 'framer-motion';
+import WelcomeHero from '@/components/welcome-hero';
+import { LogIn } from 'lucide-react';
+import RegisterButton from '@/lib/components/RegisterButton';
 
 const theme = {
   colors: {
@@ -38,7 +42,7 @@ interface HeroV2Props {
 }
 
 export default function HeroV2({ products }: HeroV2Props) {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
 
   const isLoggedIn = status === 'authenticated';
 
@@ -52,64 +56,30 @@ export default function HeroV2({ products }: HeroV2Props) {
         paddingBottom: '2rem',
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          top: '-6rem',
-          right: '-6rem',
-          height: '16rem',
-          width: '16rem',
-          borderRadius: '9999px',
-          backgroundColor: theme.colors.amber[200],
-          opacity: 0.5,
-        }}
-      ></div>
-      <div
-        style={{
-          position: 'absolute',
-          top: '10rem',
-          left: '-5rem',
-          height: '10rem',
-          width: '10rem',
-          borderRadius: '9999px',
-          backgroundColor: theme.colors.amber[200],
-          opacity: 0.3,
-        }}
-      ></div>
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-6 md:grid-cols-2 md:gap-10">
-          <div className="flex flex-col justify-center space-y-4">
-            <div className="space-y-2">
-              <AnimatedHeroHeading />
-              <p className="text-lg text-muted-foreground">
-                Buy, test, and sell your patterns in one place. Join our community of passionate
-                crocheters & knitters today!
-              </p>
-            </div>
+          <div className="flex flex-col justify-center space-y-4 z-10 pb-4">
+            {isLoggedIn && session ? (
+              <WelcomeHero
+                userName={session.user.name as string}
+                isSeller={session.user.roles?.includes('Seller') ?? false}
+                avatarUrl={session.user.image ?? ''}
+              />
+            ) : (
+              <div className="space-y-2">
+                <AnimatedHeroHeading />
+                <p className="text-lg text-muted-foreground">
+                  Buy, test, and sell your patterns in one place. Join our community of passionate
+                  crocheters & knitters today!
+                </p>
+              </div>
+            )}
 
-            <div className="flex flex-row gap-2">
-              {isLoggedIn ? (
-                <Link rel={'nofollow'} href="/app/secure/sell">
-                  <Button variant={'default'}>Start Selling</Button>
-                </Link>
-              ) : (
-                <Link
-                  rel={'nofollow'}
-                  href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
-                >
-                  <Button variant={'default'}>Start Selling</Button>
-                </Link>
-              )}
-              {isLoggedIn ? (
-                <Link href="/app/secure/test">
-                  <Button variant="outline">Show Tester Calls</Button>
-                </Link>
-              ) : (
-                <Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/secure/test">
-                  <Button variant="outline">Become a Tester</Button>
-                </Link>
-              )}
-            </div>
+            {!isLoggedIn ? (
+              <Link rel={'nofollow'} href="/auth/registration" className="z-10">
+                <RegisterButton />
+              </Link>
+            ) : null}
           </div>
 
           <div
@@ -130,7 +100,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             />
             <div className="absolute inset-0 grid grid-cols-2 gap-2">
               {products.map((product) => (
-                <Link href={`/app/products/${product.id}`} key={product.id}>
+                <Link href={`/app/products/${product.id}`} key={product.id} className="z-10">
                   <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm">
                     <div className="aspect-square overflow-hidden rounded-md">
                       <CldImage
@@ -188,6 +158,30 @@ export default function HeroV2({ products }: HeroV2Props) {
           />
         </div>
       </div>
+      <div
+        style={{
+          position: 'absolute',
+          top: '-6rem',
+          right: '-6rem',
+          height: '16rem',
+          width: '16rem',
+          borderRadius: '9999px',
+          backgroundColor: theme.colors.amber[200],
+          opacity: 0.5,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: '10rem',
+          left: '-5rem',
+          height: '10rem',
+          width: '10rem',
+          borderRadius: '9999px',
+          backgroundColor: theme.colors.amber[200],
+          opacity: 0.3,
+        }}
+      />
     </section>
   );
 }

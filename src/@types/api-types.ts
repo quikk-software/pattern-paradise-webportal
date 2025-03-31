@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+// @ts-nocheck
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -15,6 +16,42 @@ export interface PostSubscriptionRequest {
 
 export interface CancelSubscriptionRequest {
   paypalSubscriptionId: string;
+}
+
+export interface GetStripeOnboardingLinkResponse {
+  stripeOnboardingLink: string;
+}
+
+export interface PostOnboardStripeResponse {
+  stripeRedirectUrl: string;
+}
+
+export interface GetDeviceTokenResponse {
+  userId: string;
+  deviceToken: string;
+  platform: string;
+  events?: string[];
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface PutDeviceTokenRequest {
+  deviceToken: string;
+  events?: string[];
+}
+
+export interface PostDeviceTokenRequest {
+  deviceToken: string;
+  platform: string;
+  events?: string[];
 }
 
 export interface PostCheckUsernameRequest {
@@ -174,6 +211,7 @@ export interface GetUserResponse {
   tiktokRef?: string;
   refLinks: string[];
   paypalMerchantIsActive: boolean;
+  paypalMerchantId?: string;
   paypalPaymentsReceivable: boolean;
   paypalPrimaryEmailConfirmed: boolean;
   paypalSubscriptionId?: string;
@@ -183,6 +221,9 @@ export interface GetUserResponse {
    */
   paypalSubscriptionValidUntil?: string;
   paypalSubscriptionStatus: string;
+  stripeAccountId?: string;
+  stripeCardPaymentActive: boolean;
+  stripeOnboardingCompleted: boolean;
   imageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
@@ -219,8 +260,10 @@ export interface GetUserAccountResponse {
   username: string;
   isActive: boolean;
   isBlocked: boolean;
+  stripeMerchantIsActive: boolean;
   paypalMerchantIsActive: boolean;
   paypalSubscriptionStatus: string;
+  stripeCardPaymentActive: boolean;
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
@@ -530,10 +573,15 @@ export interface PostOrderRequest {
   customPrice?: number;
 }
 
-export interface PostOrderResponse {
+export interface PostOrderPayPalResponse {
   orderId: string;
   paypalOrderId: string;
   captureLink: string;
+}
+
+export interface PostOrderStripeResponse {
+  orderId: string;
+  stripeCheckoutUrl: string;
 }
 
 export interface GetOrderAnalyticsResponse {
@@ -579,6 +627,7 @@ export interface GetOrderResponse {
   customer: GetUserAccountResponse;
   amount: number;
   currency: string;
+  stripeCheckoutUrl?: string;
   paypalFee: number;
   paypalFeeCurrency: string;
   platformFee: number;
@@ -1358,6 +1407,41 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The authenticated user gets a fresh Stripe onboarding link based on the existing account ID.
+     *
+     * @tags User
+     * @name GetStripeOnboardingLink
+     * @summary Gets a fresh onboarding link for Stripe.
+     * @request GET:/api/v1/users/{userId}/stripe-referral/onboarding
+     * @secure
+     */
+    getStripeOnboardingLink: (userId: string, params: RequestParams = {}) =>
+      this.request<GetStripeOnboardingLinkResponse, any>({
+        path: `/api/v1/users/${userId}/stripe-referral/onboarding`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Removes a Stripe referral of the authenticated user by the given user ID.
+     *
+     * @tags User
+     * @name DeleteUserStripeReferral
+     * @summary Removes the Stripe referral of the user.
+     * @request DELETE:/api/v1/users/{userId}/stripe-referral
+     * @secure
+     */
+    deleteUserStripeReferral: (userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/stripe-referral`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The user will be queried by a given ID or username. If the user cannot be found, an exception will be thrown.
      *
      * @tags User
@@ -1569,6 +1653,117 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Device tokens can be stored for multiple users simultaneously.
+     *
+     * @tags User
+     * @name PostDeviceToken
+     * @summary Stores the device token of a user.
+     * @request POST:/api/v1/users/{userId}/device-token
+     * @secure
+     */
+    postDeviceToken: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        deviceToken?: any;
+        /** @example "any" */
+        platform?: any;
+        /** @example "any" */
+        events?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-token`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Events of a device token can be updated.
+     *
+     * @tags User
+     * @name PutDeviceToken
+     * @summary Updates the device token of a user.
+     * @request PATCH:/api/v1/users/{userId}/device-token
+     * @secure
+     */
+    putDeviceToken: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        deviceToken?: any;
+        /** @example "any" */
+        events?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-token`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The device token data will be queried by the authenticated user ID and given device token.
+     *
+     * @tags User
+     * @name GetDeviceToken
+     * @summary Gets the device token data of a user.
+     * @request GET:/api/v1/users/{userId}/device-tokens/{deviceToken}
+     * @secure
+     */
+    getDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+      this.request<GetDeviceTokenResponse, any>({
+        path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The device token data will be deleted by the authenticated user ID and given device token.
+     *
+     * @tags User
+     * @name DeleteDeviceToken
+     * @summary Deletes the device token data of a user.
+     * @request DELETE:/api/v1/users/{userId}/device-tokens/{deviceToken}
+     * @secure
+     */
+    deleteDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description User will be redirected to Stripe.
+     *
+     * @tags User
+     * @name OnboardStripeUser
+     * @summary Onboards the user to Stripe Payment.
+     * @request POST:/api/v1/users/{userId}/onboard-stripe
+     * @secure
+     */
+    onboardStripeUser: (userId: string, params: RequestParams = {}) =>
+      this.request<PostOnboardStripeResponse, any>({
+        path: `/api/v1/users/${userId}/onboard-stripe`,
+        method: 'POST',
+        secure: true,
+        format: 'json',
         ...params,
       }),
 
@@ -1799,6 +1994,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/products/${productId}/release`,
         method: 'PUT',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a 4 random products.
+     *
+     * @tags Product
+     * @name ListProductsForShowcase
+     * @summary Gets the products for the showcase.
+     * @request GET:/api/v1/showcase/products
+     * @secure
+     */
+    listProductsForShowcase: (params: RequestParams = {}) =>
+      this.request<ListProductsResponse, any>({
+        path: `/api/v1/showcase/products`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
         ...params,
       }),
 
@@ -2246,12 +2459,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description Creates an order by the given request body data.
      *
      * @tags Order
-     * @name PostOrder
-     * @summary Creates an order.
-     * @request POST:/api/v1/orders
+     * @name PostOrderPayPal
+     * @summary Creates an order with payment intent PayPal.
+     * @request POST:/api/v1/orders/paypal
      * @secure
      */
-    postOrder: (
+    postOrderPayPal: (
       data: {
         /** @example "any" */
         productId?: any;
@@ -2260,8 +2473,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<PostOrderResponse, any>({
-        path: `/api/v1/orders`,
+      this.request<PostOrderPayPalResponse, any>({
+        path: `/api/v1/orders/paypal`,
         method: 'POST',
         body: data,
         secure: true,
@@ -2271,38 +2484,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The query returns a list of orders of the authenticated user.
+     * @description Creates an order by the given request body data.
      *
      * @tags Order
-     * @name ListOrders
-     * @summary Gets the orders.
-     * @request GET:/api/v1/orders
+     * @name PostOrderStripe
+     * @summary Creates an order with payment intent Stripe.
+     * @request POST:/api/v1/orders/stripe
      * @secure
      */
-    listOrders: (
-      query?: {
-        /** The current page number. */
-        pageNumber?: number;
-        /** The page size. */
-        pageSize?: number;
-        /** The query for product name or user. */
-        q?: string;
-        /** The status of the order. */
-        status?: string;
-        /** Filter for showing all, only the customers or only the sellers orders. */
-        filter?: string;
-        /** How to sort the result. */
-        sortBy?: string;
-        /** Direction to sort the result. */
-        sortDirection?: string;
+    postOrderStripe: (
+      data: {
+        /** @example "any" */
+        productId?: any;
+        /** @example "any" */
+        customPrice?: any;
       },
       params: RequestParams = {},
     ) =>
-      this.request<ListOrdersResponse, any>({
-        path: `/api/v1/orders`,
-        method: 'GET',
-        query: query,
+      this.request<PostOrderStripeResponse, any>({
+        path: `/api/v1/orders/stripe`,
+        method: 'POST',
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: 'json',
         ...params,
       }),
@@ -2381,6 +2585,43 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListOrdersResponse, any>({
         path: `/api/v1/orders/products/${productId}`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of orders of the authenticated user.
+     *
+     * @tags Order
+     * @name ListOrders
+     * @summary Gets the orders.
+     * @request GET:/api/v1/orders
+     * @secure
+     */
+    listOrders: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The query for product name or user. */
+        q?: string;
+        /** The status of the order. */
+        status?: string;
+        /** Filter for showing all, only the customers or only the sellers orders. */
+        filter?: string;
+        /** How to sort the result. */
+        sortBy?: string;
+        /** Direction to sort the result. */
+        sortDirection?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListOrdersResponse, any>({
+        path: `/api/v1/orders`,
         method: 'GET',
         query: query,
         secure: true,
@@ -2589,6 +2830,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description The webhook will parse the event
+     *
+     * @tags Webhook
+     * @name StrapiWebhook
+     * @summary Handles all Strapi webhook events.
+     * @request POST:/api/v1/webhooks/stripe
+     * @secure
+     */
+    strapiWebhook: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/webhooks/stripe`,
+        method: 'POST',
+        secure: true,
         ...params,
       }),
 

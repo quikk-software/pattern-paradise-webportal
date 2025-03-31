@@ -1,10 +1,10 @@
 import { ListingComponent } from '@/components/listing';
-import { listProducts } from '@/lib/api/static/product/listProducts';
 import { FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
 import HeroV2 from '@/lib/components/HeroV2';
+import { listProductsForShowcase } from '@/lib/api/static/product/listProductsForShowcase';
 
 export default async function Home() {
-  const products = await listProducts({});
+  const products = await listProductsForShowcase();
 
   return (
     <div>
