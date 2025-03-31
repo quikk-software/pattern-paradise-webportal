@@ -83,44 +83,41 @@ export default function StripeManagement({
         <CardContent>
           <div className="space-y-4">
             <CopyClipboard value={stripeAccountId} title="Stripe Account ID" />
-            <div className="flex justify-end gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsDisconnectStripeDrawerOpen(true);
-                }}
-                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-              >
-                Disconnect Stripe Account
-              </Button>
-              {!stripeOnboardingCompleted ? (
-                <div className="space-y-1">
-                  <Button variant="outline" size="sm" onClick={handleOnboardingClick}>
-                    {fetchStripeOnboardingLinkIsLoading ? (
-                      <LoadingSpinnerComponent size={`sm`} />
-                    ) : null}
-                    Complete Onboarding
-                  </Button>
-                  <RequestStatus
-                    isSuccess={fetchStripeOnboardingLinkIsSuccess}
-                    isError={fetchStripeOnboardingLinkIsError}
-                    errorMessage={fetchStripeOnboardingLinkErrorDetail}
-                  />
-                </div>
-              ) : null}
+            <div className="flex justify-end">
+              <div className="space-y-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsDisconnectStripeDrawerOpen(true);
+                  }}
+                  className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                >
+                  Disconnect Stripe Account
+                </Button>
+                <RequestStatus
+                  isSuccess={removeStripeReferralIsSuccess}
+                  isError={removeStripeReferralIsError}
+                  errorMessage={removeStripeReferralErrorDetail}
+                />
+              </div>
             </div>
-            <RequestStatus
-              isSuccess={removeStripeReferralIsSuccess}
-              isError={removeStripeReferralIsError}
-              errorMessage={
-                <>
-                  Something went wrong while disconnecting your PayPal account from Pattern Paradise
-                  {removeStripeReferralErrorDetail ? `: ${removeStripeReferralErrorDetail}` : ''}
-                </>
-              }
-            />
+            {!stripeOnboardingCompleted ? (
+              <div className="space-y-1">
+                <Button variant="outline" size="sm" onClick={handleOnboardingClick}>
+                  {fetchStripeOnboardingLinkIsLoading ? (
+                    <LoadingSpinnerComponent size={`sm`} />
+                  ) : null}
+                  Complete Onboarding
+                </Button>
+                <RequestStatus
+                  isSuccess={fetchStripeOnboardingLinkIsSuccess}
+                  isError={fetchStripeOnboardingLinkIsError}
+                  errorMessage={fetchStripeOnboardingLinkErrorDetail}
+                />
+              </div>
+            ) : null}
           </div>
         </CardContent>
       </Card>
