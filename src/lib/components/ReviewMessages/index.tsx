@@ -46,6 +46,10 @@ export default function ReviewMessages({ productId }: ReviewMessagesProps) {
     );
   }
 
+  if (comments.length === 0 && testing.status === 'Approved') {
+    return null;
+  }
+
   return (
     <Card>
       <CardContent className="p-6 flex flex-col gap-4">
