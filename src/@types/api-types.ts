@@ -1998,6 +1998,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The query returns a 4 random products.
+     *
+     * @tags Product
+     * @name ListProductsForShowcase
+     * @summary Gets the products for the showcase.
+     * @request GET:/api/v1/showcase/products
+     * @secure
+     */
+    listProductsForShowcase: (params: RequestParams = {}) =>
+      this.request<ListProductsResponse, any>({
+        path: `/api/v1/showcase/products`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
      * @description The query returns a list of products of a given user ID.
      *
      * @tags Product
