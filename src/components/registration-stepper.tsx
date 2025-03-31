@@ -38,18 +38,16 @@ import { useRouter } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
-const ALLOWED_ROLES = ['Buyer', 'Seller', 'Tester'];
-
 interface RegistrationStepperProps {
   preselectedRoles: string[];
 }
 
 export function RegistrationStepper({ preselectedRoles }: RegistrationStepperProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [roles, setRoles] = useState<string[]>(['Buyer', 'Tester']);
   const [debouncedUsername, setDebouncedUsername] = useState('');
   const [debouncedEmail, setDebouncedEmail] = useState('');
   const [showOptionalFields, setShowOptionalFields] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
 
   const totalSteps = 3;
   const progressPercentage = (currentStep / totalSteps) * 100;
@@ -133,11 +131,17 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
   useEffect(() => {
     if (preselectedRoles.length === 1 && preselectedRoles.at(0) === 'Seller') {
-      setRoles(ALLOWED_ROLES);
+      setIsSeller(true);
     }
   }, [preselectedRoles]);
 
   const onSubmit = async (data: any) => {
+    const roles = ['Buyer', 'Tester'];
+
+    if (isSeller) {
+      roles.push('Seller');
+    }
+
     await mutate({
       email: data.email?.toLowerCase().trim(),
       password: data.password?.trim(),
@@ -154,8 +158,8 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
     router.push(`/auth/registration/success?email=${data.email.trim()}&roles=${roles.join(',')}`);
   };
 
-  const handleRoleChange = (role: string) => {
-    setRoles((prev) => (prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]));
+  const handleIsSeller = (isSeller: boolean) => {
+    setIsSeller(isSeller);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -196,8 +200,6 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
   const isNextButtonDisabled = () => {
     if (currentStep === 1) {
       return !email || !!errors.email || !password || !!errors.password;
-    } else if (currentStep === 2) {
-      return roles.length === 0;
     }
     return false;
   };
@@ -356,9 +358,9 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                 <div className="grid grid-cols-2 gap-2">
                   <Card
                     className={`cursor-pointer transition-all ${
-                      !roles.includes('Seller') ? 'ring-2 ring-primary' : ''
+                      !isSeller ? 'ring-2 ring-primary' : ''
                     }`}
-                    onClick={() => handleRoleChange('Seller')}
+                    onClick={() => handleIsSeller(false)}
                   >
                     <CardContent className="flex flex-col items-center text-center p-4">
                       <ThumbsDown className="w-10 h-10 mb-2 text-primary" />
@@ -366,7 +368,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                       <p className="text-sm text-muted-foreground">
                         I just want to buy and test patterns
                       </p>
-                      {!roles.includes('Seller') ? (
+                      {!isSeller ? (
                         <div className="absolute top-2 right-2 text-primary">
                           <CheckCircle2 className="h-4 w-4" />
                         </div>
@@ -375,9 +377,9 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                   </Card>
                   <Card
                     className={`cursor-pointer transition-all ${
-                      roles.includes('Seller') ? 'ring-2 ring-primary' : ''
+                      isSeller ? 'ring-2 ring-primary' : ''
                     }`}
-                    onClick={() => handleRoleChange('Seller')}
+                    onClick={() => handleIsSeller(true)}
                   >
                     <CardContent className="flex flex-col items-center text-center p-4">
                       <ThumbsUp className="w-10 h-10 mb-2 text-primary" />
@@ -385,7 +387,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                       <p className="text-sm text-muted-foreground">
                         I also want to sell my patterns
                       </p>
-                      {roles.includes('Seller') ? (
+                      {isSeller ? (
                         <div className="absolute top-2 right-2 text-primary">
                           <CheckCircle2 className="h-4 w-4" />
                         </div>
@@ -395,7 +397,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
                   ⚠️ Note: Users with the role &apos;Seller&apos; are required to connect a valid
-                  PayPal account in their profile settings.
+                  PayPal or Stripe account in their profile settings.
                 </p>
               </div>
 
