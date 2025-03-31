@@ -536,7 +536,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
               <p className="text-xs text-muted-foreground">
                 ⚠️ Note: Users with the role &apos;Seller&apos; are required to connect a valid
-                PayPal account which is eligible of receiving money.
+                PayPal or Stripe account which is eligible of receiving money.
               </p>
             </div>
 

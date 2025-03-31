@@ -198,7 +198,7 @@ export function RegistrationFormComponent({ preselectedRoles }: RegistrationForm
             </div>
             <p className="text-xs text-muted-foreground">
               ⚠️ Note: Users with the role &apos;Seller&apos; are required to connect a valid PayPal
-              account in their profile settings that is authorised to receive money.
+              or Stripe account in their profile settings that is authorised to receive money.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">

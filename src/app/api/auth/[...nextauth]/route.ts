@@ -58,9 +58,11 @@ const handler = NextAuth({
             refreshToken: data.refresh_token,
             expiresAt: Date.now() + data.expires_in * 1000,
             // @ts-ignore
-            name: decodedToken?.name,
+            name: decodedToken.given_name ?? decodedToken.preferred_username,
             // @ts-ignore
             email: decodedToken?.email,
+            // @ts-ignore
+            image: decodedToken?.image,
             // @ts-ignore
             roles: decodedToken?.resource_access?.[process.env.KEYCLOAK_CLIENT_ID]?.roles || [],
             // @ts-ignore
@@ -79,6 +81,8 @@ const handler = NextAuth({
         token.refreshToken = user.refreshToken;
         token.expiresAt = user.expiresAt;
         token.id = user.id;
+        token.name = user.name;
+        token.image = user.image;
         token.roles = user.roles;
         token.subscriptionStatus = user?.subscriptionStatus;
       }
@@ -106,6 +110,8 @@ const handler = NextAuth({
       session.user.refreshToken = sessionToken.refreshToken as string;
       session.user.expiresAt = sessionToken.expiresAt as number;
       session.user.id = sessionToken.id as string;
+      session.user.name = sessionToken.name;
+      session.user.image = sessionToken.image as string;
       session.user.roles = sessionToken.roles as string[];
       session.user.subscriptionStatus = sessionToken.subscriptionStatus as string;
       return { ...session, error: sessionToken?.error };

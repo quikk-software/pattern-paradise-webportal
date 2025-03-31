@@ -34,8 +34,9 @@ export async function refreshAccessToken(token: any) {
 
     return {
       ...token,
-      name: decodedToken?.name,
+      name: decodedToken?.given_name ?? decodedToken?.preferred_username,
       email: decodedToken?.email,
+      image: user?.imageUrl,
       sub: decodedToken?.refId,
       roles: decodedToken?.resource_access?.[process.env.KEYCLOAK_CLIENT_ID || '']?.roles || [],
       subscriptionStatus: user?.paypalSubscriptionStatus,

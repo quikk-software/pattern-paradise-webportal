@@ -134,7 +134,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 <InfoBoxComponent
                   severity="warning"
                   title="One last step"
-                  message="Please complete your payment with PayPal by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
+                  message="Please complete your payment by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
                 />
                 {!!product ? (
                   <PayPalOrderProvider
