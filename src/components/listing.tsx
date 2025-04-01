@@ -180,8 +180,6 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
           maxPrice: priceRange[1],
           hashtags,
           languages: language ? [language] : [],
-          pageNumber: 1,
-          pageSize: 20,
           sortBy: sortValue,
         });
       }
