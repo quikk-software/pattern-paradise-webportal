@@ -138,7 +138,7 @@ export default function HeroV2({ products }: HeroV2Props) {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col md:flex-row items-center justify-center">
+        <div className="mt-8 flex flex-col gap-4 md:flex-row items-center justify-center">
           <div className="flex flex-col items-center text-center md:text-left md:items-start px-6 py-4 md:w-1/2">
             <Link
               href="https://instagram.com/the.patternparadise"
@@ -164,7 +164,7 @@ export default function HeroV2({ products }: HeroV2Props) {
 
           <div className="hidden md:block h-24 w-px bg-zinc-200 dark:bg-zinc-700 mx-4"></div>
 
-          <div className="md:hidden w-full h-px bg-zinc-200 dark:bg-zinc-700 my-4"></div>
+          <div className="md:hidden w-full h-px bg-zinc-200 dark:bg-zinc-700"></div>
 
           <div className="flex flex-col items-center text-center md:text-left md:items-start px-6 py-4 md:w-1/2">
             <div className="flex items-center gap-2 text-amber-600 hover:text-amber-700 transition-colors mb-3">
