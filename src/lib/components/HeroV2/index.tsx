@@ -1,17 +1,13 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { GetProductResponse } from '@/@types/api-types';
 import { CldImage } from 'next-cloudinary';
-import { Button } from '@/components/ui/button';
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import PayPalLogo from '@/assets/logos/paypal-logo.png';
 import AnimatedHeroHeading from '@/lib/components/AnimatedHeroHeading';
-import { AnimatePresence, motion } from 'framer-motion';
 import WelcomeHero from '@/components/welcome-hero';
-import { LogIn } from 'lucide-react';
+import { HeartHandshake, Instagram } from 'lucide-react';
 import RegisterButton from '@/lib/components/RegisterButton';
 
 const theme = {
@@ -142,20 +138,61 @@ export default function HeroV2({ products }: HeroV2Props) {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="inline-block rounded-lg bg-orange-50 px-3 py-1 text-sm text-primary">
-            Official PayPal Platform Partner
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-center">
+          <div className="flex flex-col items-center text-center md:text-left md:items-start px-6 py-4 md:w-1/2">
+            <Link
+              href="https://instagram.com/the.patternparadise"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-amber-600 hover:text-amber-700 transition-colors mb-3"
+            >
+              <Instagram className="h-6 w-6" />
+              <span className="font-medium text-lg">Follow our creative journey</span>
+            </Link>
+            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
+              <Link
+                href="https://instagram.com/the.patternparadise"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                Join our community
+              </Link>{' '}
+              and get inspired with our latest patterns and designs.
+            </p>
           </div>
-          <p className="text-zinc-500 text-md/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
-            Secure transactions powered by PayPal. Buy and sell with confidence on our platform.
-          </p>
-          <Image
-            alt="PayPal Logo"
-            className="h-8 lg:h-12 w-auto"
-            height="51"
-            src={PayPalLogo}
-            width="200"
-          />
+
+          <div className="hidden md:block h-24 w-px bg-zinc-200 dark:bg-zinc-700 mx-4"></div>
+
+          <div className="md:hidden w-full h-px bg-zinc-200 dark:bg-zinc-700 my-4"></div>
+
+          <div className="flex flex-col items-center text-center md:text-left md:items-start px-6 py-4 md:w-1/2">
+            <div className="flex items-center gap-2 text-amber-600 hover:text-amber-700 transition-colors mb-3">
+              <HeartHandshake className="h-6 w-6" />
+              <span className="font-medium text-lg text-primary">Secure payment</span>
+            </div>
+            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
+              Buy and sell safely with our secure{' '}
+              <Link
+                href="https://paypal.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                PayPal
+              </Link>{' '}
+              and{' '}
+              <Link
+                href="https://stripe.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                Stripe
+              </Link>{' '}
+              payment options.
+            </p>
+          </div>
         </div>
       </div>
       <div
