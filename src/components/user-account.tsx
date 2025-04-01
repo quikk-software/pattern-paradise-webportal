@@ -15,6 +15,7 @@ import { Store } from '@/lib/redux/store';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import ShareButton from '@/lib/components/ShareButton';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -86,7 +87,17 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
   return (
     <div className="space-y-8">
-      <GoBackButton />
+      <div className="flex items-center gap-2">
+        <GoBackButton />
+        <ShareButton
+          url={`${process.env.NEXT_PUBLIC_URL}/users/${user.username}`}
+          shareText={
+            isMe
+              ? 'Check out my profile on Pattern Paradise!'
+              : 'Check out this profile on Pattern Paradise!'
+          }
+        />
+      </div>
 
       <UserDetailsCard user={user} showRoles={true} />
 
