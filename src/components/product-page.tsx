@@ -23,6 +23,7 @@ import { ReportProduct } from '@/lib/components/ReportProduct';
 import ReviewMessages from '@/lib/components/ReviewMessages';
 import TesterShoutout from '@/lib/components/TesterShoutout';
 import { PayPalOrderProvider } from '@/lib/hooks/usePayPalOrder';
+import ShareButton from '@/lib/components/ShareButton';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -64,7 +65,13 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
       callback={(orderId: string) => router.push(`/app/secure/auth/me/orders/${orderId}`)}
     >
       <div className="flex flex-col gap-8">
-        <GoBackButton />
+        <div className="flex items-center gap-2">
+          <GoBackButton />
+          <ShareButton
+            url={`${process.env.NEXT_PUBLIC_URL}/app/products/${productId}`}
+            shareText={'Check out this pattern on Pattern Paradise!'}
+          />
+        </div>
         <Card className="overflow-hidden">
           <CardContent className="p-6">
             <div className="grid lg:grid-cols-2 gap-4">
