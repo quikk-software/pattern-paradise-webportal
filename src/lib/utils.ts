@@ -35,16 +35,16 @@ export function updateSelectedFlags(
 }
 
 export function isApp(window: Window) {
-  const userAgent = window.navigator.userAgent;
+  // const userAgent = window.navigator.userAgent;
 
-  const isIOS = /iPhone|iPad|iPod/i.test(userAgent) && !/Mac OS X/i.test(userAgent);
+  // const isIOS = /iPhone|iPad|iPod/i.test(userAgent) && !/Mac OS X/i.test(userAgent);
 
-  const isAndroid = /Android/i.test(userAgent);
+  // const isAndroid = /Android/i.test(userAgent);
 
-  const isStandalone =
-    navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+  // const isStandalone =
+  //   navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
 
-  return isIOS || isAndroid || isStandalone;
+  return false;
 }
 
 export function getAppType(window: Window) {
