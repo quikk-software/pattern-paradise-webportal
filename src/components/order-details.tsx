@@ -101,35 +101,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               ) : null}
             </div>
 
-            {isPending && order.stripeCheckoutUrl ? (
-              <Button
-                onClick={() => {
-                  router.push(order.stripeCheckoutUrl!);
-                }}
-                style={{
-                  position: 'relative',
-                  background: 'linear-gradient(to right, #6772e5, #4d61fc)',
-                  color: 'white',
-                  fontWeight: '500',
-                  padding: '10px 16px',
-                  borderRadius: '6px',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
-                  transition: 'all 0.2s',
-                  border: 'none',
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = 'linear-gradient(to right, #5469d4, #4257e5)')
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = 'linear-gradient(to right, #6772e5, #4d61fc)')
-                }
-              >
-                <CreditCard size="sm" className="text-white" />
-                Continue Payment with Stripe
-              </Button>
-            ) : null}
-
-            {isCreated && !isSeller ? (
+            {(isCreated || isPending) && !isSeller ? (
               <div className="flex flex-col gap-4">
                 <InfoBoxComponent
                   severity="warning"
