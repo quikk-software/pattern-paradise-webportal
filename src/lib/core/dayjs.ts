@@ -17,11 +17,7 @@ dayjs.updateLocale('en', {
     h: '1 hour',
     hh: '%d hours',
     d: 'yesterday',
-    dd: (value: string) => {
-      const now = dayjs();
-      const difference = now.add(-Number(value), 'day');
-      return dayjs(difference).format('MM/DD/YYYY');
-    },
+    dd: (value: number) => `${value} days ago`,
   },
 });
 

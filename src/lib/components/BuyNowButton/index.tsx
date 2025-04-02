@@ -15,6 +15,9 @@ import { Label } from '@/components/ui/label';
 import CurrencyInput from 'react-currency-input-field';
 import { cn, getAppType, isApp } from '@/lib/utils';
 import { usePayPalOrder } from '@/lib/hooks/usePayPalOrder';
+import { useListOrdersByProductId } from '@/lib/api/order';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -24,11 +27,14 @@ interface BuyNowButtonProps {
 export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { userId } = useSelector((s: Store) => s.auth);
+
   const router = useRouter();
   const { action } = useAction();
   const { status } = useSession();
 
   const { priceError, handleCustomPriceChange, customPrice } = usePayPalOrder();
+  const { fetch: fetchOrdersByProductId } = useListOrdersByProductId();
 
   useEffect(() => {
     if (!action) {
@@ -38,6 +44,20 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
       setIsOpen(true);
     }
   }, [action]);
+
+  const handleBuyNowClick = () => {
+    fetchOrdersByProductId(product.id)
+      .then((result) => {
+        const customerOrder = result?.find((order) => order.customer.id === userId);
+
+        if (customerOrder) {
+          router.push(`/app/secure/auth/me/orders/${customerOrder.id}?action=toggleBuyNow`);
+        }
+      })
+      .finally(() => {
+        setIsOpen(true);
+      });
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
@@ -166,7 +186,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
           product={product}
         />
       ) : (
-        <Button className="w-full" onClick={() => setIsOpen(true)} disabled={!!priceError}>
+        <Button className="w-full" onClick={handleBuyNowClick} disabled={!!priceError}>
           <Lock />
           Buy Now
         </Button>
