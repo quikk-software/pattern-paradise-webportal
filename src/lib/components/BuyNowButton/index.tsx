@@ -109,23 +109,6 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
     );
   }
 
-  if (!isLoggedIn) {
-    return (
-      <div className="flex flex-col gap-4">
-        <QuickSignUp
-          redirect={`${encodeURIComponent(`/app/products/${product.id}?action=toggleBuyNow`)}`}
-          signupCallback={() =>
-            router.push(
-              `/auth/login?redirect=${encodeURIComponent(
-                `/app/products/${product.id}?action=toggleBuyNow`,
-              )}`,
-            )
-          }
-        />
-      </div>
-    );
-  }
-
   if (isApp(window)) {
     return (
       <div className="space-y-2">
@@ -180,11 +163,38 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
         </div>
       ) : null}
       {isOpen ? (
-        <CheckoutButtons
-          disabled={!isLoggedIn}
-          price={customPrice ?? product.price}
-          product={product}
-        />
+        <>
+          {isLoggedIn ? (
+            <CheckoutButtons
+              disabled={!isLoggedIn}
+              price={customPrice ?? product.price}
+              product={product}
+            />
+          ) : (
+            <div className="flex flex-col gap-4">
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">Almost there!🎉</h3>
+                <p>
+                  You&apos;re just one step away from getting this stunning pattern!
+                  <br />
+                  <br />
+                  Simply sign up to complete your purchase, and we&apos;ll bring you right back here
+                  in no time. Quick, easy, and totally worth it!
+                </p>
+              </div>
+              <QuickSignUp
+                redirect={`${encodeURIComponent(`/app/products/${product.id}?action=toggleBuyNow`)}`}
+                signupCallback={() =>
+                  router.push(
+                    `/auth/login?redirect=${encodeURIComponent(
+                      `/app/products/${product.id}?action=toggleBuyNow`,
+                    )}`,
+                  )
+                }
+              />
+            </div>
+          )}
+        </>
       ) : (
         <Button className="w-full" onClick={handleBuyNowClick} disabled={!!priceError}>
           <Lock />
