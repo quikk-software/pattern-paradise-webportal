@@ -51,7 +51,7 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
       <div
         className="relative w-full"
         style={{
-          height: '400px',
+          height: '350px',
         }}
       >
         {visibleProducts.map((product, index) => {
