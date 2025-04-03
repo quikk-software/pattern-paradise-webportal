@@ -156,7 +156,9 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       roles,
     });
 
-    router.push(`/auth/registration/success?email=${data.email.trim()}&roles=${roles.join(',')}`);
+    router.push(
+      `/auth/registration/success?email=${data.email.trim()}&roles=${roles.join(',')}&redirect=${redirectUrl}`,
+    );
   };
 
   const handleIsSeller = (isSeller: boolean) => {
@@ -178,8 +180,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
     let canProceed = false;
 
     if (currentStep === 1) {
-      const result = await trigger(['email', 'password']);
-      canProceed = result;
+      canProceed = await trigger(['email', 'password']);
     } else if (currentStep === 2) {
       canProceed = true;
     } else if (currentStep === 3) {

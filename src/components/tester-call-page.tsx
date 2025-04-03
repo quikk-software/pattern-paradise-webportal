@@ -16,6 +16,7 @@ import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GoBackButton from '@/lib/components/GoBackButton';
+import ShareButton from '@/lib/components/ShareButton';
 
 function ApplyButton({
   testingId,
@@ -129,6 +130,8 @@ interface TesterCallPageProps {
 export function TesterCallPage({ product, testing, theme }: TesterCallPageProps) {
   const [hasApplied, setHasApplied] = useState(false);
 
+  const { userId } = useSelector((s: Store) => s.auth);
+
   const themeTextClasses: any = {
     slate: 'text-slate-600',
     gray: 'text-gray-600',
@@ -179,6 +182,8 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
     rose: 'from-rose-100',
   };
 
+  const isMe = userId === product.creatorId;
+
   return (
     <div
       className={classNames(
@@ -186,8 +191,16 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
         themeBgClasses[theme] || 'from-neutral-100',
       )}
     >
-      <div className="flex justify-start items-start">
+      <div className="flex justify-between items-start">
         <GoBackButton className="mb-8 w-fit" />
+        <ShareButton
+          url={`${process.env.NEXT_PUBLIC_URL}/app/tester-calls/${product.id}`}
+          shareText={
+            isMe
+              ? 'Check out my tester call on Pattern Paradise!'
+              : 'Check out this tester call on Pattern Paradise!'
+          }
+        />
       </div>
       {/* Hero Section */}
       <section className="text-center mb-8">

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import useRedirect from '@/lib/core/useRedirect';
 
 export default function RegistrationSuccess() {
   const [email, setEmail] = useState<string | undefined>(undefined);
@@ -13,6 +14,7 @@ export default function RegistrationSuccess() {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { redirectUrl } = useRedirect();
 
   useEffect(() => {
     setEmail(searchParams.get('email') || undefined);
@@ -20,12 +22,12 @@ export default function RegistrationSuccess() {
   }, [searchParams]);
 
   const handleLoginClick = () => {
-    if (roles.includes('Seller')) {
+    if (roles.includes('Seller') && !redirectUrl) {
       router.push(
         `/auth/login?redirect=${encodeURIComponent('/app/secure/auth/me/connect-paypal')}`,
       );
     } else {
-      router.push('/auth/login');
+      router.push(`/auth/login?redirect=${redirectUrl}`);
     }
   };
 

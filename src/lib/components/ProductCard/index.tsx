@@ -72,7 +72,7 @@ export default function ProductCard({
           <span className="text-lg font-bold">${price.toFixed(2)}</span>
         )}
         {isTesterCall ? (
-          <Link rel={'nofollow'} href={`/app/secure/test/products/${id}`}>
+          <Link rel={'nofollow'} href={`/app/tester-calls/${id}`}>
             <Button>Show tester call</Button>
           </Link>
         ) : (

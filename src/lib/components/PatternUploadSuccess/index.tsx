@@ -158,7 +158,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
               </div>
             </CardContent>
             <CardFooter>
-              <Link href={`/app/secure/test/products/${productId}`}>
+              <Link href={`/app/tester-calls/${productId}`}>
                 <Button variant="secondary" className="w-full">
                   Tester Call
                 </Button>

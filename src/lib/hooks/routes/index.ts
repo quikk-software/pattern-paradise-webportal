@@ -135,7 +135,7 @@ const pages: Page[] = [
   },
   {
     title: 'Test patterns',
-    pathname: '/app/secure/test',
+    pathname: '/app/tester-calls',
     description: '',
   },
   {

@@ -8,12 +8,7 @@ import { BottomNavigation } from '@/components/bottom-navigation';
 import TokenDataWrapper from '@/app/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
 
-const noPaddingPages = [
-  '/',
-  '/app/secure/test/chats',
-  '/app/secure/chats',
-  '/app/secure/test/products/*',
-];
+const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 
 const noContainerPages = ['/'];
 
