@@ -8,9 +8,10 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Download } from 'lucide-react';
 import { GetOrderResponse, GetProductResponse } from '@/@types/api-types';
 import { useSession } from 'next-auth/react';
-import QuickSignUpDrawer from '@/lib/components/QuickSignUpDrawer';
 import { usePathname, useRouter } from 'next/navigation';
 import CountryFlag from '@/lib/components/CountryFlag';
+import QuickSignUp from '@/lib/components/QuickSignUp';
+import Link from 'next/link';
 
 interface DownloadPatternButtonProps {
   productId: string;
@@ -105,7 +106,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
         <Button
           key={fileLanguage}
           onClick={() => handleDownloadClick(productId, fileLanguage, isLoggedIn)}
-          disabled={downloadPatternIsLoading}
+          disabled={downloadPatternIsLoading || downloadPatternIsSuccess}
         >
           {downloadPatternIsLoading && fileLanguage === language ? (
             <LoadingSpinnerComponent size="sm" className="text-white" />
@@ -125,17 +126,34 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
       <RequestStatus
         isSuccess={downloadPatternIsSuccess}
         isError={downloadPatternIsError}
-        successMessage={''}
-      />
-      <QuickSignUpDrawer
-        isOpen={isQuickSignupDrawerOpen}
-        setIsOpen={setIsQuickSignupDrawerOpen}
-        reason={
-          'Quickly and easily create an account to download this pattern. After registering, you will be automatically redirected to the login page and will be returned to this page immediately upon successful login.'
+        successMessage={
+          'Your pattern has been successfully downloaded! Check your Downloads folder to access it.'
         }
-        signupCallback={setIsQuickSignupSuccess}
-        redirect={pathname}
+        errorMessage={
+          <span>
+            Something went wrong while downloading this pattern. Please try again or{' '}
+            <Link className="text-blue-500 underline" href="/help">
+              contact us
+            </Link>{' '}
+            for assistance.
+          </span>
+        }
       />
+      {isQuickSignupDrawerOpen ? (
+        <div className="flex flex-col gap-4">
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold">Almost there!🎉</h3>
+            <p>
+              Sign up for instant access to this beautiful pattern!
+              <br />
+              <br />
+              Once you&apos;re registered, we&apos;ll bring you right back here so you can start
+              creating in no time.✨
+            </p>
+          </div>
+          <QuickSignUp redirect={pathname} signupCallback={setIsQuickSignupSuccess} />
+        </div>
+      ) : null}
     </div>
   );
 };
