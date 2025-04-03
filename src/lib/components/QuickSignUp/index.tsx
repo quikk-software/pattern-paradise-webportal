@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import React from 'react';
+import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 
 type FormValues = {
   email: string;
@@ -31,6 +32,7 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm<FormValues>();
 
@@ -45,6 +47,8 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
 
     signupCallback(true);
   };
+
+  const password = watch('password');
 
   if (isSuccess) {
     return (
@@ -115,9 +119,7 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
                   },
                 })}
               />
-              {errors.password && (
-                <p className="text-sm text-left text-red-500 mt-1">{errors.password.message}</p>
-              )}
+              {password ? <PasswordValidationChecklist password={password} /> : null}
             </div>
           </div>
 

@@ -37,6 +37,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useRouter } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 
 interface RegistrationStepperProps {
   preselectedRoles: string[];
@@ -287,9 +288,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                   })}
                   onKeyDown={handleKeyDown}
                 />
-                {errors.password ? (
-                  <p className="text-sm text-red-500">{errors.password.message as string}</p>
-                ) : null}
+                <PasswordValidationChecklist password={password} />
               </div>
 
               <div className="space-y-2">

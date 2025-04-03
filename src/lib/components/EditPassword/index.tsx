@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE } from '@/lib/constants';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 
 const passwordProps: {
   oldPassword?: string;
@@ -31,6 +32,7 @@ export default function EditPassword() {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({ defaultValues: passwordProps });
 
   const {
@@ -60,6 +62,8 @@ export default function EditPassword() {
       e.preventDefault();
     }
   };
+
+  const newPassword = watch('newPassword');
 
   return (
     <Card>
@@ -99,9 +103,7 @@ export default function EditPassword() {
                 })}
                 onKeyDown={handleKeyDown}
               />
-              {errors.newPassword && (
-                <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
-              )}
+              {newPassword ? <PasswordValidationChecklist password={newPassword} /> : null}
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm New Password</Label>
@@ -118,9 +120,6 @@ export default function EditPassword() {
                 })}
                 onKeyDown={handleKeyDown}
               />
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
-              )}
             </div>
             {passwordError ? <p className="text-yellow-600 text-sm mt-2">{passwordError}</p> : null}
             <RequestStatus
