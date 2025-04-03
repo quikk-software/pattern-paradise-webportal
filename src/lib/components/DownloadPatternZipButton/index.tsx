@@ -116,7 +116,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
             buttonLabel
           ) : (
             <>
-              Download Patterns
+              Download Pattern
               <CountryFlag languageCode={fileLanguage} />
             </>
           )}

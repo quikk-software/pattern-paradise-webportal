@@ -62,9 +62,11 @@ export function ReportUser({ userId }: ReportUserProps) {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger>
-        <Flag className="h-4 w-4" />
-        <span className="sr-only">Report User</span>
+      <DrawerTrigger asChild>
+        <Button variant="secondary" size="icon">
+          <Flag className="h-4 w-4" />
+          <span className="sr-only">Report User</span>
+        </Button>
       </DrawerTrigger>
       <DrawerContent className="p-4">
         <DrawerHeader>

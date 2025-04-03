@@ -78,7 +78,10 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
               <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
               <div className="flex flex-col justify-start gap-8">
                 <div className="flex flex-col gap-4">
-                  <h1 className="text-3xl font-bold">{product.title}</h1>
+                  <div className="flex gap-2 justify-between items-start">
+                    <h1 className="text-3xl font-bold break-words">{product.title}</h1>
+                    <ReportProduct productId={product.id} />
+                  </div>
                   <ProductCategories
                     category={product.category}
                     subCategories={product.subCategories}
@@ -87,10 +90,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                   <ProductHashtags hashtags={product.hashtags} />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex gap-2 justify-between items-center">
-                    <CreatedByRef creatorId={product.creatorId} />
-                    <ReportProduct productId={product.id} />
-                  </div>
+                  <CreatedByRef creatorId={product.creatorId} />
                   {isOwner ? (
                     <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
                   ) : null}

@@ -63,7 +63,7 @@ export function ReportProduct({ productId }: ReportProductProps) {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="secondary" size="icon">
           <Flag className="h-4 w-4" />
           <span className="sr-only">Report Pattern</span>
         </Button>

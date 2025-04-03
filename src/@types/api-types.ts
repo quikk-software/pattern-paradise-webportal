@@ -170,6 +170,7 @@ export interface PutUserRequest {
   gallery?: string[];
   tiktokRef?: string;
   imageUrl?: string;
+  bannerImageUrl?: string;
   hasAcceptedPrivacy?: boolean;
   hasAcceptedTerms?: boolean;
   roles?: string[];
@@ -225,6 +226,7 @@ export interface GetUserResponse {
   stripeCardPaymentActive: boolean;
   stripeOnboardingCompleted: boolean;
   imageUrl?: string;
+  bannerImageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
   /**
@@ -273,6 +275,7 @@ export interface GetUserAccountResponse {
   tiktokRef?: string;
   refLinks: string[];
   imageUrl?: string;
+  bannerImageUrl?: string;
   roles?: string[];
 }
 
@@ -1263,6 +1266,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         refLinks?: any;
         /** @example "any" */
         imageUrl?: any;
+        /** @example "any" */
+        bannerImageUrl?: any;
         /** @example "any" */
         hasAcceptedTerms?: any;
         /** @example "any" */
@@ -2838,7 +2843,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags Webhook
      * @name StrapiWebhook
-     * @summary Handles all Strapi webhook events.
+     * @summary Handles all Stripe webhook events.
      * @request POST:/api/v1/webhooks/stripe
      * @secure
      */
