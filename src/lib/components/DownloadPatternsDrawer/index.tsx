@@ -30,7 +30,7 @@ export default function DownloadPatternsDrawer({
       <DrawerContent className="p-4">
         <div className="flex flex-col gap-4">
           <DrawerHeader>
-            <DrawerTitle>Download Patterns</DrawerTitle>
+            <DrawerTitle>Download Pattern</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">
               Select the language of the patterns you want to download.
             </DrawerTitle>
@@ -61,7 +61,7 @@ export default function DownloadPatternsDrawer({
             disabled={isLoading || !language}
           >
             {isLoading ? <LoadingSpinnerComponent size="sm" /> : null}
-            Download Patterns
+            Download Pattern
           </Button>
         </div>
       </DrawerContent>

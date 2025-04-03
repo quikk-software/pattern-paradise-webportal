@@ -39,6 +39,7 @@ import StripeOnboarding from '@/lib/components/StripeOnboarding';
 import StripeManagement from '@/lib/components/StripeManagement';
 import { CheckCircle2 } from 'lucide-react';
 import CopyClipboard from '@/lib/components/CopyClipboard';
+import Image from 'next/image';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -46,6 +47,7 @@ interface ProfilePageProps {
 
 export function ProfilePage({ user }: ProfilePageProps) {
   const [profileImage, setProfileImage] = useState(user.imageUrl);
+  const [bannerImage, setBannerImage] = useState(user.bannerImageUrl);
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
@@ -123,15 +125,22 @@ export function ProfilePage({ user }: ProfilePageProps) {
     if (!profileImage || profileImage === user.imageUrl) {
       return;
     }
-    onPersonalDataSubmit({});
+    onPersonalDataSubmit(user);
   }, [profileImage]);
+
+  useEffect(() => {
+    if (!bannerImage || bannerImage === user.bannerImageUrl) {
+      return;
+    }
+    onPersonalDataSubmit(user);
+  }, [bannerImage]);
 
   const onPersonalDataSubmit = async (data: any) => {
     setImageError(undefined);
     setUpdateUserIsError(false);
-    let urls: { url: string; mimeType: string }[] = [];
-    if (!!profileImage) {
-      [urls] = await Promise.all([
+    let profileImageUrls: { url: string; mimeType: string }[] = [];
+    if (!!profileImage && profileImage !== user.imageUrl) {
+      [profileImageUrls] = await Promise.all([
         handleImageUpload(
           [profileImage],
           () => {
@@ -150,15 +159,37 @@ export function ProfilePage({ user }: ProfilePageProps) {
       ]);
     }
 
+    let bannerImageUrls: { url: string; mimeType: string }[] = [];
+    if (!!bannerImage && bannerImage !== user.bannerImageUrl) {
+      [bannerImageUrls] = await Promise.all([
+        handleImageUpload(
+          [bannerImage],
+          () => {
+            setImageIsLoading(true);
+          },
+          () => {
+            setImageIsLoading(false);
+          },
+          () => {
+            setImageError('Image upload failed. Please use another image or try again later.');
+            setImageIsLoading(false);
+          },
+          // TODO: Add progress handler
+          () => {},
+        ),
+      ]);
+    }
+
     mutateUser(userId, {
       email: data.email ? data.email.toLowerCase().trim() : undefined,
-      firstName: data.firstName ? data.firstName.trim() : undefined,
-      lastName: data.lastName ? data.lastName.trim() : undefined,
-      description: data.description ? data.description.trim() : undefined,
-      imageUrl: urls.length > 0 ? urls[0].url : undefined,
-      instagramRef: data.instagramRef ? data.instagramRef.toLowerCase().trim() : undefined,
-      tiktokRef: data.tiktokRef ? data.tiktokRef.toLowerCase().trim() : undefined,
-      username: data.username ? data.username.toLowerCase().trim() : undefined,
+      firstName: data.firstName?.trim() ? data.firstName.trim() : undefined,
+      lastName: data.lastName?.trim() ? data.lastName.trim() : undefined,
+      description: data.description?.trim() ? data.description.trim() : undefined,
+      imageUrl: profileImageUrls.length > 0 ? profileImageUrls[0].url : undefined,
+      bannerImageUrl: bannerImageUrls.length > 0 ? bannerImageUrls[0].url : undefined,
+      instagramRef: data.instagramRef?.trim() ? data.instagramRef.toLowerCase().trim() : undefined,
+      tiktokRef: data.tiktokRef?.trim() ? data.tiktokRef.toLowerCase().trim() : undefined,
+      username: data.username?.trim() ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
     })
       .then(() => {
@@ -169,11 +200,20 @@ export function ProfilePage({ user }: ProfilePageProps) {
       });
   };
 
-  const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => setProfileImage(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const selectBannerImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setBannerImage(e.target?.result as string);
       reader.readAsDataURL(file);
     }
   };
@@ -406,14 +446,14 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 htmlFor="picture"
                 className="cursor-pointer text-sm text-blue-500 hover:text-blue-600"
               >
-                Change Picture
+                Change Profile Picture
               </Label>
               <Input
                 id="picture"
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={selectImage}
+                onChange={selectProfileImage}
               />
             </div>
             <ProInfoBox user={user} />
@@ -460,6 +500,35 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 mailType={'UserConfirmEmail'}
               />
             ) : null}
+
+            <div className="space-y-2 flex flex-col items-center">
+              {bannerImage ? (
+                <div className="relative w-full h-32">
+                  <Image
+                    src={bannerImage}
+                    alt="Profile banner"
+                    fill
+                    className="object-cover rounded-md"
+                    priority
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-32 bg-gray-300 rounded-md" />
+              )}
+              <Label
+                htmlFor="banner"
+                className="cursor-pointer text-sm text-blue-500 hover:text-blue-600"
+              >
+                Change Banner Picture
+              </Label>
+              <Input
+                id="banner"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={selectBannerImage}
+              />
+            </div>
 
             <div className="space-y-2" ref={rolesRef}>
               {highlightRoles ? (

@@ -1,11 +1,11 @@
-import React from 'react';
+'use client';
 import { MessagesSquare, ShoppingCart, User } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
-import { GetUserAccountResponse } from '@/@types/api-types';
+import type { GetUserAccountResponse } from '@/@types/api-types';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { ReportUser } from '@/lib/components/ReportUser';
@@ -13,8 +13,9 @@ import { Button } from '@/components/ui/button';
 import { useCreateChat } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
+import type { Store } from '@/lib/redux/store';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart },
@@ -57,11 +58,23 @@ export default function UserDetailsCard({
   const isLoggedIn = status === 'authenticated';
 
   return (
-    <Card key={user.id} className={`relative cursor-pointer transition-all`}>
-      <CardHeader className="flex flex-row justify-between items-start gap-2">
+    <Card key={user.id} className="relative transition-all overflow-hidden">
+      {user.bannerImageUrl ? (
+        <div className="relative w-full h-32">
+          <Image
+            src={user.bannerImageUrl}
+            alt="Profile banner"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      ) : null}
+
+      <CardHeader className="flex flex-row justify-between items-start gap-2 pt-4">
         <Link href={`/users/${user.id}`}>
           <div className="flex items-center space-x-4">
-            <Avatar className="w-12 h-12">
+            <Avatar className="w-12 h-12 border-2 border-background shadow-md">
               <AvatarImage src={user.imageUrl} alt={`${user.firstName} ${user.lastName}`} />
               <AvatarFallback>
                 {user.firstName?.[0]}
@@ -75,9 +88,7 @@ export default function UserDetailsCard({
                 </h2>
               ) : null}
               <p
-                className={`${
-                  user.firstName && user.lastName ? 'text-sm' : 'text-lg'
-                } text-muted-foreground`}
+                className={`${user.firstName && user.lastName ? 'text-sm' : 'text-lg'} text-muted-foreground`}
               >
                 @{user.username}
               </p>
@@ -134,7 +145,7 @@ export default function UserDetailsCard({
           ) : null}
           {!isMe && isLoggedIn ? (
             <Button variant={'outline'} onClick={() => handleChatClick(userId, user.id)}>
-              <MessagesSquare />
+              <MessagesSquare className="w-4 h-4 mr-2" />
               Start a Chat
             </Button>
           ) : null}
