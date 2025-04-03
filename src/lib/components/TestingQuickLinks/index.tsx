@@ -1,12 +1,16 @@
 'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MessageCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import React from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function TestingQuickLinks() {
+  const { status } = useSession();
+
   const pathname = usePathname();
 
   const links = [
@@ -23,6 +27,12 @@ export default function TestingQuickLinks() {
       description: 'Show testings in which you take part',
     },
   ];
+
+  const isLoggedIn = status === 'authenticated';
+
+  if (!isLoggedIn) {
+    return null;
+  }
 
   return (
     <Card>

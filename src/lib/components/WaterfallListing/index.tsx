@@ -78,7 +78,7 @@ export default function WaterfallListing({
               href={`${
                 listingType === 'sell'
                   ? '/app/products'
-                  : listingType === 'test' && '/app/secure/test/products'
+                  : listingType === 'test' && '/app/tester-calls'
               }/${product.id}`}
               className="w-full"
             >

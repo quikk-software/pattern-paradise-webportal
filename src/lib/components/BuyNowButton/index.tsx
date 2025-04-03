@@ -93,7 +93,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
                 {' '}
                 <Link
                   rel={'nofollow'}
-                  href={`/app/secure/test/products/${product.id}`}
+                  href={`/app/tester-calls/${product.id}`}
                   className="text-blue-500 underline"
                 >
                   Apply as a Tester here!
