@@ -88,13 +88,13 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
     if (exitDirection === 'right') {
       return {
         transform: `translateX(200%) rotate(45deg)`,
-        transition: 'all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275)', // Slower animation (600ms)
+        transition: 'all 1300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)',
         opacity: 0,
       };
     } else if (exitDirection === 'left') {
       return {
         transform: `translateX(-200%) rotate(-45deg)`,
-        transition: 'all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275)', // Slower animation (600ms)
+        transition: 'all 1300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)',
         opacity: 0,
       };
     }
