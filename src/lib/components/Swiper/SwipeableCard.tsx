@@ -68,7 +68,7 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
     setIsDragging(false);
 
     // Determine if the swipe was significant enough
-    const threshold = 60; // Lower threshold to make swiping easier
+    const threshold = 120; // Lower threshold to make swiping easier
 
     if (offsetX > threshold) {
       setExitDirection('right');
@@ -144,7 +144,7 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
         transition: 'opacity 600ms ease-out', // Match the exit animation duration
         borderRadius: '0.75rem',
       };
-    } else if (offsetX > 30) {
+    } else if (offsetX > 120) {
       // Lower threshold for earlier feedback
       return {
         opacity: Math.min(offsetX / 80, 0.8), // More gradual opacity increase
@@ -152,7 +152,7 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
         transition: isDragging ? 'none' : 'opacity 200ms ease-out',
         borderRadius: '0.75rem', // Match the card's border radius
       };
-    } else if (offsetX < -30) {
+    } else if (offsetX < -120) {
       // Lower threshold for earlier feedback
       return {
         opacity: Math.min(Math.abs(offsetX) / 80, 0.8), // More gradual opacity increase
