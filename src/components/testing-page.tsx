@@ -123,7 +123,6 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     }
 
     await mutateTesting(testing.id, {
-      testerIds: [],
       theme: theme ?? undefined,
       durationInWeeks: !!durationInWeeks ? Number(durationInWeeks) : undefined,
     });
