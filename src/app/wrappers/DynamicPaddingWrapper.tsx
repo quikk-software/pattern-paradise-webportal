@@ -61,12 +61,14 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
         ref={scrollableDivRef}
         className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto no-scrollbar${shouldRemoveContainer ? '' : ' mx-auto container'}`}
       >
-        <StoreProvider>
-          <TokenDataWrapper>
-            <NotificationPermissionProvider />
-            {children}
-          </TokenDataWrapper>
-        </StoreProvider>
+        <div id="main-area" className="w-full h-full">
+          <StoreProvider>
+            <TokenDataWrapper>
+              <NotificationPermissionProvider />
+              {children}
+            </TokenDataWrapper>
+          </StoreProvider>
+        </div>
       </div>
       <BottomNavigation />
     </div>
