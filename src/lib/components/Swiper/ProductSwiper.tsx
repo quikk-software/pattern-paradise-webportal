@@ -6,6 +6,7 @@ import { X, Heart } from 'lucide-react';
 import SwipeableCard, { type SwipeableCardRef } from './SwipeableCard';
 import { GetProductResponse } from '@/@types/api-types';
 import useMainAreaHeight from '@/hooks/useMainAreaHeight';
+import { useCreateProductLike } from '@/lib/api/product-like';
 
 interface ProductSwiperProps {
   products: GetProductResponse[];
@@ -15,12 +16,15 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const activeCardRef = useRef<SwipeableCardRef>(null);
 
+  const { mutate: createProductLike } = useCreateProductLike();
+
   const mainAreaHeight = useMainAreaHeight();
 
-  const handleSwiped = (direction: 'left' | 'right') => {
-    setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
-    }, 600);
+  const handleSwiped = (direction: 'left' | 'right', productId: string) => {
+    if (direction === 'right') {
+      createProductLike(productId, true);
+    }
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const handleLike = () => {
@@ -63,7 +67,7 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
               product={product}
               isActive={isTop}
               stackPosition={index}
-              onSwiped={isTop ? handleSwiped : undefined}
+              onSwiped={(direction) => (isTop ? handleSwiped(direction, product.id) : undefined)}
             />
           );
         })}
@@ -81,22 +85,27 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
       <div>{renderCardStack()}</div>
 
       {currentIndex < products.length && (
-        <div className="flex w-full justify-center gap-4 mt-4 absolute bottom-0 left-0 right-0">
+        <div
+          className="flex w-full gap-4 mt-4 absolute bottom-0 left-0 right-0"
+          style={{
+            justifyContent: 'space-around',
+          }}
+        >
           <Button
             variant="outline"
             size="icon"
-            className="h-12 w-12 rounded-full border-2 border-red-500 text-red-500 hover:bg-red-50"
+            className="h-12 w-12 rounded-full border-2 border-red-500 text-red-500"
             onClick={handleDislike}
           >
-            <X className="h-8 w-8" />
+            <X />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="h-12 w-12 rounded-full border-2 border-green-500 text-green-500 hover:bg-green-50"
+            className="h-12 w-12 rounded-full border-2 border-green-500 text-green-500"
             onClick={handleLike}
           >
-            <Heart className="h-8 w-8" />
+            <Heart />
           </Button>
         </div>
       )}

@@ -24,6 +24,8 @@ import ReviewMessages from '@/lib/components/ReviewMessages';
 import TesterShoutout from '@/lib/components/TesterShoutout';
 import { PayPalOrderProvider } from '@/lib/hooks/usePayPalOrder';
 import ShareButton from '@/lib/components/ShareButton';
+import LikeProductButton from '@/lib/components/LikeProductButton';
+import { useSession } from 'next-auth/react';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -33,6 +35,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
   const { userId } = useSelector((s: Store) => s.auth);
 
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const { fetch, data: product, isLoading, isError } = useGetProduct();
 
@@ -56,6 +59,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
   }
 
   const isOwner = product.creatorId === userId;
+  const isLoggedIn = status === 'authenticated' && session?.user.accessToken;
 
   return (
     <PayPalOrderProvider
@@ -80,7 +84,12 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                 <div className="flex flex-col gap-4">
                   <div className="flex gap-2 justify-between items-start">
                     <h1 className="text-3xl font-bold break-words">{product.title}</h1>
-                    <ReportProduct productId={product.id} />
+                    {isLoggedIn ? (
+                      <div className="space-x-2">
+                        <ReportProduct productId={product.id} />
+                        <LikeProductButton productId={product.id} />
+                      </div>
+                    ) : null}
                   </div>
                   <ProductCategories
                     category={product.category}

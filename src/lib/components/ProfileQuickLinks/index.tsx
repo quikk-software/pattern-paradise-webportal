@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronRight,
   Bell,
+  Heart,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -46,16 +47,22 @@ export default function ProfileQuickLinks({
       description: 'View your profile information',
     },
     {
-      title: 'My Orders',
-      href: '/app/secure/auth/me/orders',
-      icon: <ShoppingBag className="h-5 w-5" />,
-      description: 'Manage your orders',
+      title: 'My Favorites',
+      href: '/app/secure/auth/me/favorites',
+      icon: <Heart className="h-5 w-5" />,
+      description: 'See your favorited patterns',
     },
     {
       title: 'My Patterns',
       href: '/app/secure/auth/me/patterns',
       icon: <FileText className="h-5 w-5" />,
       description: 'Access your patterns',
+    },
+    {
+      title: 'My Orders',
+      href: '/app/secure/auth/me/orders',
+      icon: <ShoppingBag className="h-5 w-5" />,
+      description: 'Manage your orders',
     },
     {
       title: 'My Chats',

@@ -864,6 +864,50 @@ export interface PostChatMessageRequest {
   message?: string;
 }
 
+export interface PostProductLikeRequest {
+  productId: string;
+  isSwipeLike: boolean;
+}
+
+export interface PostProductLikeResponse {
+  productLikeId: string;
+}
+
+export interface GetProductLikeResponse {
+  id: string;
+  productId: string;
+  userId: string;
+  isSwipeLike: boolean;
+  product: GetProductResponse;
+  user?: GetUserAccountResponse;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListProductLikesResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  productLikes: GetProductLikeResponse[];
+}
+
 export interface ExceptionResponse {
   /** A human-readable explanation specific to this occurrence of the problem */
   detail?: string;
@@ -3305,6 +3349,99 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/chats/${chatId}/unblock-user/${userId}`,
         method: 'PATCH',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The product like will be created by a given product ID and optionally the authenticated user ID. If the product cannot be found, an exception will be thrown.
+     *
+     * @tags Product like
+     * @name PostProductLike
+     * @summary Creates a product likes.
+     * @request POST:/api/v1/product-likes
+     * @secure
+     */
+    postProductLike: (
+      data: {
+        /** @example "any" */
+        productId?: any;
+        /** @example "any" */
+        isSwipeLike?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostProductLikeResponse, any>({
+        path: `/api/v1/product-likes`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The product likes will be queried by a given user ID and optionally by a flag if the product like is a swipe like.
+     *
+     * @tags Product like
+     * @name ListProductLikes
+     * @summary Lists the product likes of a user.
+     * @request GET:/api/v1/product-likes
+     * @secure
+     */
+    listProductLikes: (
+      query?: {
+        /** Filter for swipe likes. */
+        isSwipeLike?: boolean;
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListProductLikesResponse, any>({
+        path: `/api/v1/product-likes`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The product like will be queried by a given user ID and product ID.
+     *
+     * @tags Product like
+     * @name GetProductLikeByProductId
+     * @summary Gets a product like.
+     * @request GET:/api/v1/product-likes/products/{productId}
+     * @secure
+     */
+    getProductLikeByProductId: (productId: string, params: RequestParams = {}) =>
+      this.request<GetProductLikeResponse, any>({
+        path: `/api/v1/product-likes/products/${productId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The product like will be deleted by a given user ID and product ID.
+     *
+     * @tags Product like
+     * @name DeleteProductLikeByProductId
+     * @summary Deletes a product like.
+     * @request DELETE:/api/v1/product-likes/products/{productId}
+     * @secure
+     */
+    deleteProductLikeByProductId: (productId: string, params: RequestParams = {}) =>
+      this.request<GetProductLikeResponse, any>({
+        path: `/api/v1/product-likes/products/${productId}`,
+        method: 'DELETE',
+        secure: true,
+        format: 'json',
         ...params,
       }),
   };

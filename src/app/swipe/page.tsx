@@ -6,7 +6,10 @@ import ProductSwiper from '@/lib/components/Swiper/ProductSwiper';
 import { useListProducts } from '@/lib/api';
 
 export default function SwipePage() {
-  const { fetch, data: products, isLoading } = useListProducts({});
+  const { fetch, data: products } = useListProducts({
+    pageNumber: 1,
+    pageSize: 999,
+  });
 
   useEffect(() => {
     fetch();

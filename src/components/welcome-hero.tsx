@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, ShoppingBag, User } from 'lucide-react';
+import { BookHeart, Heart, PlusCircle, ShoppingBag, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
@@ -85,6 +85,18 @@ export default function WelcomeHero({ userName, avatarUrl = '', isSeller }: Welc
             <Button variant="outline" className="flex items-center gap-2">
               <User className="h-4 w-4" />
               Go to Profile
+            </Button>
+          </Link>
+          <Link href="/app/secure/auth/me/favorites">
+            <Button variant="outline" className="flex items-center gap-2">
+              <BookHeart className="h-4 w-4" />
+              Show Favorite Patterns
+            </Button>
+          </Link>
+          <Link href="/swipe">
+            <Button variant="outline" className="flex items-center gap-2 bg-rose-500 text-white">
+              <Heart className="h-4 w-4" />
+              Swipe Patterns
             </Button>
           </Link>
         </div>
