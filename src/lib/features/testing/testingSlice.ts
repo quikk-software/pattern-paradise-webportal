@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GetUserAccountResponse } from '@/@types/api-types';
 
 export interface TestingState {
-  selectedApplicants: { [key: string]: GetUserAccountResponse }; // Use a plain object instead of Map
+  selectedApplicants: { [key: string]: GetUserAccountResponse };
 }
 
 export const initialState: TestingState = {
