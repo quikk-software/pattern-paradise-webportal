@@ -55,7 +55,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
       case 'CREATED':
         return 'text-yellow-500';
       case 'CAPTURED':
-        return 'text-green-500';
+        return 'text-yellow-500';
       case 'APPROVED':
         return 'text-green-500';
       case 'COMPLETED':

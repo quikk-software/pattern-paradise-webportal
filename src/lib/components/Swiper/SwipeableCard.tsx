@@ -12,7 +12,6 @@ interface SwipeableCardProps {
   onSwiped?: (direction: 'left' | 'right') => void;
 }
 
-// Define the ref type for the card
 export interface SwipeableCardRef {
   triggerSwipe: (direction: 'left' | 'right') => void;
 }
@@ -27,7 +26,6 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
   const [exitDirection, setExitDirection] = useState<'left' | 'right' | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Expose the triggerSwipe method to parent components via ref
   useImperativeHandle(ref, () => ({
     triggerSwipe: (direction: 'left' | 'right') => {
       if (!isActive || exitDirection) return;
@@ -36,7 +34,6 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
     },
   }));
 
-  // Handle mouse/touch events only if this is the active card
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!isActive || exitDirection) return;
     setIsDragging(true);
@@ -67,8 +64,7 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
     if (!isDragging || !isActive || exitDirection) return;
     setIsDragging(false);
 
-    // Determine if the swipe was significant enough
-    const threshold = 120; // Lower threshold to make swiping easier
+    const threshold = 120;
 
     if (offsetX > threshold) {
       setExitDirection('right');
@@ -77,14 +73,11 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
       setExitDirection('left');
       onSwiped && onSwiped('left');
     } else {
-      // Reset position if not swiped far enough
       setOffsetX(0);
     }
   };
 
-  // Calculate card style based on state
   const getCardStyle = () => {
-    // If card has been swiped out
     if (exitDirection === 'right') {
       return {
         transform: `translateX(200%) rotate(45deg)`,
@@ -97,13 +90,9 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
         transition: 'all 1300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)',
         opacity: 0,
       };
-    }
-    // If card is being dragged
-    else if (isActive) {
-      // Calculate rotation based on drag distance, with a more natural feel
+    } else if (isActive) {
       const rotate = offsetX * 0.08; // Slightly reduced rotation for more subtlety
 
-      // Calculate opacity reduction as card moves away from center
       const opacityFactor =
         Math.abs(offsetX) > 150 ? Math.max(1 - (Math.abs(offsetX) - 150) / 100, 0.5) : 1;
 
@@ -113,9 +102,7 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
         opacity: opacityFactor,
         zIndex: 20,
       };
-    }
-    // If card is in the stack but not active
-    else {
+    } else {
       return {
         transform: `scale(${0.95 - stackPosition * 0.05}) translateY(${stackPosition * 10}px)`,
         opacity: 0.8 - stackPosition * 0.2,
@@ -126,7 +113,6 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
     }
   };
 
-  // Determine the color overlay based on swipe direction
   const getOverlayStyle = () => {
     if (!isActive) return { opacity: 0 };
 
@@ -141,24 +127,22 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
       return {
         opacity: 0.8,
         backgroundColor: 'rgba(255, 0, 0, 0.2)',
-        transition: 'opacity 600ms ease-out', // Match the exit animation duration
+        transition: 'opacity 600ms ease-out',
         borderRadius: '0.75rem',
       };
     } else if (offsetX > 120) {
-      // Lower threshold for earlier feedback
       return {
-        opacity: Math.min(offsetX / 80, 0.8), // More gradual opacity increase
+        opacity: Math.min(offsetX / 80, 0.8),
         backgroundColor: 'rgba(0, 255, 0, 0.2)',
         transition: isDragging ? 'none' : 'opacity 200ms ease-out',
-        borderRadius: '0.75rem', // Match the card's border radius
+        borderRadius: '0.75rem',
       };
     } else if (offsetX < -120) {
-      // Lower threshold for earlier feedback
       return {
-        opacity: Math.min(Math.abs(offsetX) / 80, 0.8), // More gradual opacity increase
+        opacity: Math.min(Math.abs(offsetX) / 80, 0.8),
         backgroundColor: 'rgba(255, 0, 0, 0.2)',
         transition: isDragging ? 'none' : 'opacity 200ms ease-out',
-        borderRadius: '0.75rem', // Match the card's border radius
+        borderRadius: '0.75rem',
       };
     }
     return {

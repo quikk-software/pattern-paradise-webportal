@@ -278,7 +278,7 @@ export function TesterApplicantsPage({
                     </Link>
                     <Link href={`/users/${application.user.id}`}>
                       <p
-                        className={`${application.user.firstName && application.user.lastName ? 'text-sm' : 'text-lg font-semibold underline'} text-muted-foreground`}
+                        className={`${application.user.firstName || application.user.lastName ? 'text-sm' : 'text-lg font-semibold underline'} text-muted-foreground`}
                       >
                         @{application.user.username}
                       </p>

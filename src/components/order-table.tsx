@@ -82,7 +82,7 @@ export default function OrderTable({ filter }: OrderTableProps) {
       case 'CREATED':
         return 'text-yellow-500';
       case 'CAPTURED':
-        return 'text-green-500';
+        return 'text-yellow-500';
       case 'APPROVED':
         return 'text-green-500';
       case 'COMPLETED':

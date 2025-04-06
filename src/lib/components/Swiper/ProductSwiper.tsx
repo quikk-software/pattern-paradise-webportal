@@ -2,10 +2,11 @@
 
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Heart } from 'lucide-react';
+import { X, Heart, ShoppingBag, RefreshCw } from 'lucide-react';
 import SwipeableCard, { type SwipeableCardRef } from './SwipeableCard';
 import { GetProductResponse } from '@/@types/api-types';
 import useMainAreaHeight from '@/hooks/useMainAreaHeight';
+import { useCreateProductLike } from '@/lib/api/product-like';
 
 interface ProductSwiperProps {
   products: GetProductResponse[];
@@ -15,12 +16,15 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const activeCardRef = useRef<SwipeableCardRef>(null);
 
+  const { mutate: createProductLike } = useCreateProductLike();
+
   const mainAreaHeight = useMainAreaHeight();
 
-  const handleSwiped = (direction: 'left' | 'right') => {
-    setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
-    }, 600);
+  const handleSwiped = (direction: 'left' | 'right', productId: string) => {
+    if (direction === 'right') {
+      createProductLike(productId, true);
+    }
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const handleLike = () => {
@@ -33,14 +37,36 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
     activeCardRef.current?.triggerSwipe('left');
   };
 
-  // Render the card stack
   const renderCardStack = () => {
     if (currentIndex >= products.length) {
       return (
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          <h3 className="text-xl font-semibold mb-4">No more products!</h3>
-          <p className="text-gray-500 mb-6">You&apos;ve seen all available products.</p>
-          <Button onClick={() => setCurrentIndex(0)}>Start Over</Button>
+        <div className="bg-gradient-to-br from-rose-50 to-rose-100 rounded-xl shadow-xl p-8 text-center border border-rose-200">
+          <div className="mb-6 relative">
+            <div className="relative">
+              <div className="absolute -top-1 -right-1 w-20 h-20 bg-rose-100 rounded-full opacity-60 animate-pulse"></div>
+              <div className="absolute -bottom-2 -left-3 w-16 h-16 bg-rose-200 rounded-full opacity-60 animate-pulse delay-300"></div>
+              <div className="relative bg-white p-6 rounded-full mx-auto w-32 h-32 flex items-center justify-center shadow-md">
+                <ShoppingBag className="w-16 h-16 text-rose-400" />
+              </div>
+            </div>
+          </div>
+
+          <h3 className={`text-2xl font-bold mb-3 text-rose-700`}>You&apos;ve seen it all!</h3>
+
+          <p className={`text-rose-600/80 mb-8`}>
+            You&apos;ve swiped through all our amazing products. Ready to discover them again?
+          </p>
+
+          <div className="flex flex-col gap-3">
+            <Button
+              onClick={() => setCurrentIndex(0)}
+              className={`bg-rose-500 hover:bg-rose-600 text-white gap-2`}
+              size="lg"
+            >
+              <RefreshCw className="w-4 h-4 mr-1" />
+              Start Over
+            </Button>
+          </div>
         </div>
       );
     }
@@ -63,7 +89,7 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
               product={product}
               isActive={isTop}
               stackPosition={index}
-              onSwiped={isTop ? handleSwiped : undefined}
+              onSwiped={(direction) => (isTop ? handleSwiped(direction, product.id) : undefined)}
             />
           );
         })}
@@ -81,22 +107,27 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
       <div>{renderCardStack()}</div>
 
       {currentIndex < products.length && (
-        <div className="flex w-full justify-center gap-4 mt-4 absolute bottom-0 left-0 right-0">
+        <div
+          className="flex w-full gap-4 mt-4 absolute bottom-0 left-0 right-0"
+          style={{
+            justifyContent: 'space-around',
+          }}
+        >
           <Button
             variant="outline"
             size="icon"
-            className="h-12 w-12 rounded-full border-2 border-red-500 text-red-500 hover:bg-red-50"
+            className="h-12 w-12 rounded-full border-2 border-red-500 text-red-500"
             onClick={handleDislike}
           >
-            <X className="h-8 w-8" />
+            <X />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="h-12 w-12 rounded-full border-2 border-green-500 text-green-500 hover:bg-green-50"
+            className="h-12 w-12 rounded-full border-2 border-green-500 text-green-500"
             onClick={handleLike}
           >
-            <Heart className="h-8 w-8" />
+            <Heart />
           </Button>
         </div>
       )}

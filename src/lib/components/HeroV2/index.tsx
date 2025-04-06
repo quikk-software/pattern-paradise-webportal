@@ -7,8 +7,10 @@ import React from 'react';
 import { useSession } from 'next-auth/react';
 import AnimatedHeroHeading from '@/lib/components/AnimatedHeroHeading';
 import WelcomeHero from '@/components/welcome-hero';
-import { HeartHandshake, Instagram } from 'lucide-react';
+import { ArrowRight, Heart, HeartHandshake, Instagram } from 'lucide-react';
 import RegisterButton from '@/lib/components/RegisterButton';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const theme = {
   colors: {
@@ -72,9 +74,26 @@ export default function HeroV2({ products }: HeroV2Props) {
             )}
 
             {!isLoggedIn ? (
-              <Link rel={'nofollow'} href="/auth/registration" className="z-10">
-                <RegisterButton />
-              </Link>
+              <div className="flex flex-wrap gap-2">
+                <Link rel={'nofollow'} href="/auth/registration" className="z-10">
+                  <RegisterButton />
+                </Link>
+                <Link rel={'nofollow'} href="/swipe" className="z-10">
+                  <div className="relative">
+                    <Button
+                      size="lg"
+                      className={cn(
+                        'relative overflow-hidden font-semibold text-base px-8 py-6 transition-all duration-300 shadow-lg',
+                        'bg-rose-500 text-white hover:bg-rose-500/90 text-primary-foreground',
+                        'flex items-center gap-2 group',
+                      )}
+                    >
+                      <span>Swipe Patterns</span>
+                      <Heart className="w-5 h-5 fill-white transition-transform duration-300 group-hover:translate-x-1" />
+                    </Button>
+                  </div>
+                </Link>
+              </div>
             ) : null}
           </div>
 
