@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Heart } from 'lucide-react';
+import { X, Heart, ShoppingBag, RefreshCw } from 'lucide-react';
 import SwipeableCard, { type SwipeableCardRef } from './SwipeableCard';
 import { GetProductResponse } from '@/@types/api-types';
 import useMainAreaHeight from '@/hooks/useMainAreaHeight';
@@ -37,14 +37,36 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
     activeCardRef.current?.triggerSwipe('left');
   };
 
-  // Render the card stack
   const renderCardStack = () => {
     if (currentIndex >= products.length) {
       return (
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          <h3 className="text-xl font-semibold mb-4">No more products!</h3>
-          <p className="text-gray-500 mb-6">You&apos;ve seen all available products.</p>
-          <Button onClick={() => setCurrentIndex(0)}>Start Over</Button>
+        <div className="bg-gradient-to-br from-rose-50 to-rose-100 rounded-xl shadow-xl p-8 text-center border border-rose-200">
+          <div className="mb-6 relative">
+            <div className="relative">
+              <div className="absolute -top-1 -right-1 w-20 h-20 bg-rose-100 rounded-full opacity-60 animate-pulse"></div>
+              <div className="absolute -bottom-2 -left-3 w-16 h-16 bg-rose-200 rounded-full opacity-60 animate-pulse delay-300"></div>
+              <div className="relative bg-white p-6 rounded-full mx-auto w-32 h-32 flex items-center justify-center shadow-md">
+                <ShoppingBag className="w-16 h-16 text-rose-400" />
+              </div>
+            </div>
+          </div>
+
+          <h3 className={`text-2xl font-bold mb-3 text-rose-700`}>You&apos;ve seen it all!</h3>
+
+          <p className={`text-rose-600/80 mb-8`}>
+            You&apos;ve swiped through all our amazing products. Ready to discover them again?
+          </p>
+
+          <div className="flex flex-col gap-3">
+            <Button
+              onClick={() => setCurrentIndex(0)}
+              className={`bg-rose-500 hover:bg-rose-600 text-white gap-2`}
+              size="lg"
+            >
+              <RefreshCw className="w-4 h-4 mr-1" />
+              Start Over
+            </Button>
+          </div>
         </div>
       );
     }

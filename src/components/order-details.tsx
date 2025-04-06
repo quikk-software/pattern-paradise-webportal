@@ -52,8 +52,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
     return <LoadingSpinnerComponent />;
   }
 
-  const isPayed =
-    order.status === 'CAPTURED' || order.status === 'APPROVED' || order.status === 'COMPLETED';
+  const isPayed = order.status === 'APPROVED' || order.status === 'COMPLETED';
   const isPending = order.status === 'PENDING';
   const isCreated = order.status === 'CREATED';
   const isSeller = order.seller.id === userId;
