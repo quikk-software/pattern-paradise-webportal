@@ -112,7 +112,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <div className="flex flex-col gap-4">
                 <InfoBoxComponent
                   severity="warning"
-                  title="One last step"
+                  title="One Last Step"
                   message="Please complete your payment by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
                 />
                 {!!product ? (
