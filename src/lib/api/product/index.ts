@@ -6,3 +6,4 @@ export * from './useUpdateProduct';
 export * from './useReleaseProduct';
 export * from './useListProductsByUserId';
 export * from './useListProductsForShowcase';
+export * from './useListProductsForSwipe';
