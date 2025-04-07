@@ -438,6 +438,35 @@ export function ProfilePage({ user }: ProfilePageProps) {
         <CardContent>
           <form onSubmit={handleSubmit(onPersonalDataSubmit)} className="space-y-8">
             <div className="space-y-2 flex flex-col items-center">
+              {bannerImage ? (
+                <div className="relative w-full h-32">
+                  <Image
+                    src={bannerImage}
+                    alt="Profile banner"
+                    fill
+                    className="object-cover rounded-md"
+                    priority
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-32 bg-gray-300 rounded-md" />
+              )}
+              <Label
+                htmlFor="banner"
+                className="cursor-pointer text-sm text-blue-500 hover:text-blue-600"
+              >
+                Change Banner Picture
+              </Label>
+              <Input
+                id="banner"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={selectBannerImage}
+              />
+            </div>
+
+            <div className="space-y-2 flex flex-col items-center">
               <Avatar className="w-32 h-32">
                 <AvatarImage src={profileImage} alt="Profile" />
                 <AvatarFallback>{initials ? initials : ''}</AvatarFallback>
@@ -500,35 +529,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 mailType={'UserConfirmEmail'}
               />
             ) : null}
-
-            <div className="space-y-2 flex flex-col items-center">
-              {bannerImage ? (
-                <div className="relative w-full h-32">
-                  <Image
-                    src={bannerImage}
-                    alt="Profile banner"
-                    fill
-                    className="object-cover rounded-md"
-                    priority
-                  />
-                </div>
-              ) : (
-                <div className="w-full h-32 bg-gray-300 rounded-md" />
-              )}
-              <Label
-                htmlFor="banner"
-                className="cursor-pointer text-sm text-blue-500 hover:text-blue-600"
-              >
-                Change Banner Picture
-              </Label>
-              <Input
-                id="banner"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={selectBannerImage}
-              />
-            </div>
 
             <div className="space-y-2" ref={rolesRef}>
               {highlightRoles ? (
@@ -719,10 +719,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
           </form>
         </CardContent>
       </Card>
-      <EditPassword />
       <div ref={galleryRef}>
         <ProfileImageGallery gallery={user.gallery} highlight={highlightGallery} />
       </div>
+      <EditPassword />
       <ConfirmDrawer
         isOpen={isDisconnectPayPalDrawerOpen}
         setIsOpen={setIsDisconnectPayPalDrawerOpen}

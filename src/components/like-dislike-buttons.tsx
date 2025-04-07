@@ -7,9 +7,14 @@ import React from 'react';
 interface LikeDislikeButtons {
   likeState: 'Approved' | 'Declined' | null;
   setLikeState: React.Dispatch<React.SetStateAction<'Approved' | 'Declined' | null>>;
+  showLikeText?: boolean;
 }
 
-export function LikeDislikeButtons({ likeState, setLikeState }: LikeDislikeButtons) {
+export function LikeDislikeButtons({
+  likeState,
+  setLikeState,
+  showLikeText = true,
+}: LikeDislikeButtons) {
   const handleLike = () => {
     setLikeState((prevState) => (prevState === 'Approved' ? null : 'Approved'));
   };
@@ -30,7 +35,7 @@ export function LikeDislikeButtons({ likeState, setLikeState }: LikeDislikeButto
         onClick={handleLike}
       >
         <ThumbsUp className="h-5 w-5" />
-        <span>Approve</span>
+        {showLikeText ? <span>Approve</span> : null}
       </Button>
       <Button
         variant={likeState === 'Declined' ? 'default' : 'outline'}
@@ -42,7 +47,7 @@ export function LikeDislikeButtons({ likeState, setLikeState }: LikeDislikeButto
         onClick={handleDislike}
       >
         <ThumbsDown className="h-5 w-5" />
-        <span>Decline</span>
+        {showLikeText ? <span>Decline</span> : null}
       </Button>
     </div>
   );

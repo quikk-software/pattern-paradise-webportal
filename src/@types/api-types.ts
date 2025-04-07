@@ -2523,6 +2523,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The query returns a testing review comment of a given testing ID and user ID.
+     *
+     * @tags Testing comment
+     * @name GetTestingReviewComment
+     * @summary Gets the testing review comment by testing ID and user ID.
+     * @request GET:/api/v1/testing-comments/testings/{testingId}/reviews/{userId}
+     * @secure
+     */
+    getTestingReviewComment: (testingId: string, userId: string, params: RequestParams = {}) =>
+      this.request<GetTestingCommentResponse, any>({
+        path: `/api/v1/testing-comments/testings/${testingId}/reviews/${userId}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
      * @description Creates an order by the given request body data.
      *
      * @tags Order

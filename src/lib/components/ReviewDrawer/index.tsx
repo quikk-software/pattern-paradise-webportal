@@ -11,6 +11,10 @@ import { useApproveTesting, useCreateTestingComment, useDeclineTesting } from '@
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { Progress } from '@/components/ui/progress';
+import { closestCenter, DndContext } from '@dnd-kit/core';
+import { arrayMove, rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+import DragAndDropImage from '@/lib/components/DragAndDropImage';
+import { IMAGE_LIMIT } from '@/lib/constants';
 
 interface ReviewDrawerProps {
   drawerIsOpen: boolean;
@@ -31,6 +35,7 @@ export default function ReviewDrawer({
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     fetch: approveTesting,
@@ -73,17 +78,19 @@ export default function ReviewDrawer({
     images: string[],
     testingId: string,
   ) => {
-    if (!skipRating) {
-      if (likeState === 'Approved') {
-        await approveTesting(testingId);
-      } else if (likeState === 'Declined') {
-        await declineTesting(testingId);
-      } else {
-        return;
-      }
-    }
+    setIsLoading(true);
 
     try {
+      if (!skipRating) {
+        if (likeState === 'Approved') {
+          await approveTesting(testingId);
+        } else if (likeState === 'Declined') {
+          await declineTesting(testingId);
+        } else {
+          setIsLoading(false);
+          return;
+        }
+      }
       const urls = await handleImageUpload(
         images,
         () => {},
@@ -109,13 +116,28 @@ export default function ReviewDrawer({
           likeState === 'Approved' ? 'Approved' : likeState === 'Declined' ? 'Declined' : undefined,
       });
     } finally {
+      setIsLoading(false);
       setDrawerIsOpen(false);
       window.location.reload();
     }
   };
 
-  const isLoading =
-    approveTestingIsLoading || declineTestingIsLoading || createTestingCommentIsLoading;
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setImages((items) => {
+        const oldIndex = items.findIndex((item) => item === active.id);
+        const newIndex = items.findIndex((item) => item === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  const isOverallLoading =
+    approveTestingIsLoading ||
+    declineTestingIsLoading ||
+    createTestingCommentIsLoading ||
+    isLoading;
 
   return (
     <Drawer open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
@@ -133,27 +155,28 @@ export default function ReviewDrawer({
           <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-col">
               <Label htmlFor="images" className="block text-lg font-semibold mb-2">
-                Images (max. 6) <span className="text-red-500">*</span>
+                Images (max. {IMAGE_LIMIT}) <span className="text-red-500">*</span>
               </Label>
               <div className="grid grid-cols-3 gap-4 mb-4">
-                {images.map((img, index) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={img}
-                      alt={`Product ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-md"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-1 right-1 h-6 w-6"
-                      onClick={() => removeImage(index)}
-                    >
-                      <X />
-                    </Button>
-                  </div>
-                ))}
+                <DndContext
+                  collisionDetection={closestCenter}
+                  onDragEnd={(event) => handleDragEnd(event)}
+                >
+                  <SortableContext
+                    key={images.map((img) => img).join('-')}
+                    items={images.map((img) => img)}
+                    strategy={rectSortingStrategy}
+                  >
+                    {images.map((img, index) => (
+                      <DragAndDropImage
+                        imageUrl={img}
+                        index={index}
+                        removeImage={removeImage}
+                        key={index}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
               </div>
               <Input
                 id="images"
@@ -161,10 +184,10 @@ export default function ReviewDrawer({
                 accept="image/*"
                 multiple
                 onChange={handleImageSelect}
-                disabled={images.length >= 6}
+                disabled={images.length >= IMAGE_LIMIT}
                 className="cursor-pointer"
               />
-              {images.length >= 6 && (
+              {images.length >= IMAGE_LIMIT && (
                 <p className="text-yellow-600 text-sm mt-2">Maximum number of images reached.</p>
               )}
             </div>
@@ -232,7 +255,7 @@ export default function ReviewDrawer({
                 setDrawerIsOpen(false);
               }}
               variant={'outline'}
-              disabled={isLoading}
+              disabled={isOverallLoading}
             >
               Cancel
             </Button>
@@ -240,9 +263,11 @@ export default function ReviewDrawer({
               onClick={() => {
                 handleReviewClick(likeState, reviewMessage, images, testingId);
               }}
-              disabled={likeState === null || isLoading}
+              disabled={likeState === null || isOverallLoading}
             >
-              {isLoading ? <LoadingSpinnerComponent size={`sm`} className={`text-white`} /> : null}
+              {isOverallLoading ? (
+                <LoadingSpinnerComponent size={`sm`} className={`text-white`} />
+              ) : null}
               Add review
             </Button>
           </div>
