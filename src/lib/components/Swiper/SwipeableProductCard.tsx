@@ -16,10 +16,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           className="object-cover"
           loading="eager"
           width={448}
-          height={300}
+          height={480}
           style={{
             width: '100%',
-            height: '300px',
+            height: '480px',
           }}
           onError={(e) => {
             e.currentTarget.src = '';

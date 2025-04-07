@@ -14,3 +14,4 @@ export * from './useListTestingComments';
 export * from './useListTestingReviewComments';
 export * from './useListTesterApplications';
 export * from './useRemoveUsersFromTesting';
+export * from './useGetTestingComment';

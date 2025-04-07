@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useListTestingComments, useListTestings } from '@/lib/api/testing';
 import { GetTestingCommentResponse, GetTestingResponse } from '@/@types/api-types';
 import { useElementHeight } from '@/lib/core/useElementHeight';
-import ReviewDrawer from '@/lib/components/ReviewDrawer';
 import ChatList from '@/lib/components/TestingChat/ChatList';
 import ChatHistory from '@/lib/components/TestingChat/ChatHistory';
 import { useRouter, useSearchParams } from 'next/navigation';
+import ReviewDrawer from '@/lib/components/ReviewDrawer';
 
 export function TestingChat() {
   const [testingId, setTestingId] = useState<string | null>(null);
