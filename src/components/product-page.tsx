@@ -82,14 +82,14 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
               <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
               <div className="flex flex-col justify-start gap-8">
                 <div className="flex flex-col gap-4">
-                  <div className="flex gap-2 justify-between items-start">
-                    <h1 className="text-3xl font-bold break-words">{product.title}</h1>
+                  <div className="flex flex-col gap-2">
                     {isLoggedIn ? (
-                      <div className="space-x-2">
+                      <div className="flex justify-end gap-2">
                         <ReportProduct productId={product.id} />
                         <LikeProductButton productId={product.id} />
                       </div>
                     ) : null}
+                    <h1 className="text-3xl font-bold break-words">{product.title}</h1>
                   </div>
                   <ProductCategories
                     category={product.category}
