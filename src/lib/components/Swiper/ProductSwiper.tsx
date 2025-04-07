@@ -2,11 +2,12 @@
 
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Heart, ShoppingBag, RefreshCw } from 'lucide-react';
+import { X, Heart, ShoppingBag, RefreshCw, ArrowRight } from 'lucide-react';
 import SwipeableCard, { type SwipeableCardRef } from './SwipeableCard';
 import { GetProductResponse } from '@/@types/api-types';
 import useMainAreaHeight from '@/hooks/useMainAreaHeight';
 import { useCreateProductLike } from '@/lib/api/product-like';
+import Link from 'next/link';
 
 interface ProductSwiperProps {
   products: GetProductResponse[];
@@ -74,12 +75,7 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
     const visibleProducts = products.slice(currentIndex, currentIndex + 3);
 
     return (
-      <div
-        className="relative w-full"
-        style={{
-          height: '350px',
-        }}
-      >
+      <div className="relative w-full h-full grow">
         {visibleProducts.map((product, index) => {
           const isTop = index === 0;
           return (
@@ -104,31 +100,42 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
         height: `${mainAreaHeight}px`,
       }}
     >
-      <div>{renderCardStack()}</div>
+      <div className="flex-1">{renderCardStack()}</div>
 
       {currentIndex < products.length && (
-        <div
-          className="flex w-full gap-4 mt-4 absolute bottom-0 left-0 right-0"
-          style={{
-            justifyContent: 'space-around',
-          }}
-        >
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-12 w-12 rounded-full border-2 border-red-500 text-red-500"
-            onClick={handleDislike}
+        <div>
+          <div
+            className="flex w-full gap-4 mt-4 flex-0"
+            style={{
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            }}
           >
-            <X />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-12 w-12 rounded-full border-2 border-green-500 text-green-500"
-            onClick={handleLike}
-          >
-            <Heart />
-          </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-12 w-12 rounded-full border-2 border-red-500 text-red-500"
+              onClick={handleDislike}
+            >
+              <X />
+            </Button>
+            {products.at(currentIndex)?.id ? (
+              <Button asChild variant={'secondary'} className="space-x-2">
+                <Link href={`/app/products/${products.at(currentIndex)?.id}`}>
+                  <ArrowRight />
+                  Show Details
+                </Link>
+              </Button>
+            ) : null}
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-12 w-12 rounded-full border-2 border-green-500 text-green-500"
+              onClick={handleLike}
+            >
+              <Heart />
+            </Button>
+          </div>
         </div>
       )}
     </div>
