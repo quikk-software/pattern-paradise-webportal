@@ -11,8 +11,9 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
+import useAuth from '@/lib/auth/useAuth';
 
 type FormValues = {
   email: string;
@@ -21,12 +22,18 @@ type FormValues = {
 };
 
 interface QuickSignUpProps {
-  signupCallback: (isSuccess: boolean) => void;
   redirect?: string;
 }
 
-export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpProps) {
-  const { mutate, isLoading, isSuccess, isError, errorDetail } = useCreateUser();
+export default function QuickSignUp({ redirect }: QuickSignUpProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { mutate, isSuccess, isError, errorDetail } = useCreateUser();
+
+  const {
+    handleLogin,
+    loginStates: { isSuccess: loginIsSuccess, isError: loginIsError },
+  } = useAuth();
 
   const {
     register,
@@ -37,15 +44,28 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await mutate({
-      email: data.email?.trim(),
-      password: data.password?.trim(),
-      roles: ['Buyer', 'Tester'],
-      hasAcceptedPrivacy: data.hasAcceptedTermsAndPrivacy,
-      hasAcceptedTerms: data.hasAcceptedTermsAndPrivacy,
-    });
+    setIsLoading(true);
+    try {
+      const email = data.email?.toLowerCase().trim();
+      const password = data.password?.trim();
+      await mutate({
+        email,
+        password,
+        roles: ['Buyer', 'Tester'],
+        hasAcceptedPrivacy: data.hasAcceptedTermsAndPrivacy,
+        hasAcceptedTerms: data.hasAcceptedTermsAndPrivacy,
+      });
 
-    signupCallback(true);
+      await handleLogin(email, password);
+
+      if (redirect) {
+        window.location.replace(decodeURIComponent(redirect));
+      } else {
+        window.location.reload();
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const password = watch('password');
@@ -168,7 +188,34 @@ export default function QuickSignUp({ signupCallback, redirect }: QuickSignUpPro
             ) : null}
           </div>
 
-          <RequestStatus isSuccess={isSuccess} isError={isError} errorMessage={errorDetail} />
+          <RequestStatus
+            isSuccess={isSuccess}
+            isError={isError}
+            successMessage={'Registration successful'}
+            errorMessage={errorDetail}
+          />
+          <RequestStatus
+            isSuccess={loginIsSuccess}
+            isError={loginIsError}
+            successMessage={'Login successful'}
+            errorMessage={
+              <span>
+                Login failed, but your registration was successful. Please try to{' '}
+                <Link
+                  rel={'nofollow'}
+                  href={`/auth/login?redirect=${redirect}`}
+                  className="text-blue-500 underline"
+                >
+                  Log In
+                </Link>{' '}
+                manually, or{' '}
+                <Link href="/help" className="text-blue-500 underline">
+                  Contact Us
+                </Link>{' '}
+                for further assistance.
+              </span>
+            }
+          />
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Signing up...' : 'Sign up'}
           </Button>

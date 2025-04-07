@@ -38,6 +38,7 @@ import { useRouter } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
+import useAuth from '@/lib/auth/useAuth';
 
 interface RegistrationStepperProps {
   preselectedRoles: string[];
@@ -55,6 +56,11 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
   const { redirectUrl } = useRedirect();
   const router = useRouter();
+
+  const {
+    handleLogin,
+    loginStates: { isSuccess: loginIsSuccess, isError: loginIsError },
+  } = useAuth();
 
   const { mutate, isSuccess, isError, isLoading, errorDetail } = useCreateUser();
   const {
@@ -143,9 +149,12 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       roles.push('Seller');
     }
 
+    const email = data.email?.toLowerCase().trim();
+    const password = data.password?.trim();
+
     await mutate({
-      email: data.email?.toLowerCase().trim(),
-      password: data.password?.trim(),
+      email,
+      password,
       firstName: data.firstName?.trim(),
       lastName: data.lastName?.trim(),
       username: data.username?.toLowerCase().trim(),
@@ -155,6 +164,8 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       hasAcceptedPrivacy: data.hasAcceptedPrivacy,
       roles,
     });
+
+    await handleLogin(email, password);
 
     router.push(
       `/auth/registration/success?email=${data.email.trim()}&roles=${roles.join(',')}&redirect=${redirectUrl}`,
@@ -598,8 +609,30 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
               <RequestStatus
                 isSuccess={isSuccess}
                 isError={isError}
-                successMessage="Your account has been created. You can login to your account now."
-                errorMessage={`Registration failed: ${errorDetail}`}
+                successMessage={'Registration successful'}
+                errorMessage={errorDetail}
+              />
+              <RequestStatus
+                isSuccess={loginIsSuccess}
+                isError={loginIsError}
+                successMessage={'Login successful'}
+                errorMessage={
+                  <span>
+                    Login failed, but your registration was successful. Please try to{' '}
+                    <Link
+                      rel={'nofollow'}
+                      href={`/auth/login?redirect=${redirectUrl}`}
+                      className="text-blue-500 underline"
+                    >
+                      Log In
+                    </Link>{' '}
+                    manually, or{' '}
+                    <Link href="/help" className="text-blue-500 underline">
+                      Contact Us
+                    </Link>{' '}
+                    for further assistance.
+                  </span>
+                }
               />
             </div>
           ) : null}

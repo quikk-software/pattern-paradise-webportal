@@ -8,7 +8,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Download } from 'lucide-react';
 import { GetOrderResponse, GetProductResponse } from '@/@types/api-types';
 import { useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import CountryFlag from '@/lib/components/CountryFlag';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import Link from 'next/link';
@@ -28,10 +28,8 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
 }) => {
   const [language, setLanguage] = useState<string | undefined>(undefined);
   const [isQuickSignupDrawerOpen, setIsQuickSignupDrawerOpen] = useState(false);
-  const [isQuickSignupSuccess, setIsQuickSignupSuccess] = useState(false);
 
   const { status } = useSession();
-  const router = useRouter();
   const pathname = usePathname();
 
   const {
@@ -65,13 +63,6 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
 
     setLanguage(undefined);
   }, [file, language, productTitle]);
-
-  useEffect(() => {
-    if (!isQuickSignupSuccess || !pathname) {
-      return;
-    }
-    router.push(`/auth/login?redirect=${pathname}`);
-  }, [isQuickSignupSuccess, router, pathname]);
 
   const filesGroupedByLanguage = files.reduce(
     (acc, file) => {
@@ -151,7 +142,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
               creating in no time.✨
             </p>
           </div>
-          <QuickSignUp redirect={pathname} signupCallback={setIsQuickSignupSuccess} />
+          <QuickSignUp redirect={pathname} />
         </div>
       ) : null}
     </div>
