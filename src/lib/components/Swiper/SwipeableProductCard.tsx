@@ -21,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         />
       </div>
       <CardContent className="p-4">
-        <div className="flex justify-between gap-2 items-start mb-2">
+        <div className="flex justify-between gap-2 items-center mb-2">
           <h2 className="text-lg font-bold line-clamp-1">{product.title}</h2>
           <span className="text-base font-semibold text-green-600">
             ${product.price.toFixed(2)}

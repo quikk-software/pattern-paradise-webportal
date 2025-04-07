@@ -7,11 +7,8 @@ dayjs.extend(advancedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
-const localeList = dayjs.Ls;
-
 dayjs.updateLocale('en', {
   relativeTime: {
-    ...localeList['en'].relativeTime,
     future: '%s',
     past: '%s',
     s: 'recently',
@@ -23,6 +20,18 @@ dayjs.updateLocale('en', {
     dd: (value: string) => {
       const now = dayjs();
       const difference = now.add(-Number(value), 'day');
+      return dayjs(difference).format('MM/DD/YYYY');
+    },
+    M: (value: string) => `${value} month${Number(value) > 1 ? 's' : ''} ago`,
+    MM: (value: string) => {
+      const now = dayjs();
+      const difference = now.add(-Number(value), 'month');
+      return dayjs(difference).format('MM/DD/YYYY');
+    },
+    y: (value: string) => `${value} year${Number(value) > 1 ? 's' : ''} ago`,
+    yy: (value: string) => {
+      const now = dayjs();
+      const difference = now.add(-Number(value), 'year');
       return dayjs(difference).format('MM/DD/YYYY');
     },
   },
