@@ -67,7 +67,7 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
                 disabled={disabled || !!priceError}
                 createOrder={() => handleCreateOrder(order)}
                 onApprove={async () => {
-                  router.push(`/app/secure/auth/me/orders/${orderId}`);
+                  router.push(`/app/secure/auth/me/orders/confirmation/success`);
                 }}
                 onError={(err: any) => {
                   logger.error('PayPal Buttons Error:', err);
