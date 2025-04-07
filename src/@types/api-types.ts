@@ -2065,6 +2065,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description The query returns all patterns in a randomized order.
+     *
+     * @tags Product
+     * @name ListProductsForSwipe
+     * @summary Gets the products for swipe.
+     * @request GET:/api/v1/swipe/products
+     * @secure
+     */
+    listProductsForSwipe: (params: RequestParams = {}) =>
+      this.request<ListProductsResponse, any>({
+        path: `/api/v1/swipe/products`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
      * @description The query returns a list of products of a given user ID.
      *
      * @tags Product
@@ -2573,6 +2591,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<PostCaptureOrderResponse, NotFoundResponse>({
         path: `/api/v1/orders/${paypalOrderId}/capture`,
         method: 'POST',
+        secure: true,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description The order will be captured by a given ID. If the order cannot be found, an exception will be thrown.
+     *
+     * @tags Order
+     * @name CaptureOrderByAdmin
+     * @summary Captures an order by paypal order ID.
+     * @request POST:/api/v1/orders/{paypalOrderId}/admin-capture
+     * @secure
+     */
+    captureOrderByAdmin: (
+      paypalOrderId: string,
+      query: {
+        /** The user for which an order should be captured. */
+        userId: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostCaptureOrderResponse, NotFoundResponse>({
+        path: `/api/v1/orders/${paypalOrderId}/admin-capture`,
+        method: 'POST',
+        query: query,
         secure: true,
         format: 'json',
         ...params,
