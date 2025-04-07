@@ -81,9 +81,9 @@ export default function OrderTable({ filter }: OrderTableProps) {
     switch (status) {
       case 'CREATED':
         return 'text-yellow-500';
-      case 'CAPTURED':
-        return 'text-yellow-500';
       case 'APPROVED':
+        return 'text-yellow-500';
+      case 'CAPTURED':
         return 'text-green-500';
       case 'COMPLETED':
         return 'text-green-500';
