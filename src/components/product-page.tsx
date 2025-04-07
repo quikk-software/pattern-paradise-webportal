@@ -10,7 +10,6 @@ import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import { Card, CardContent } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import CreatedByRef from '@/lib/components/CreatedByRef';
-import { useRouter } from 'next/navigation';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { InfoBoxComponent } from '@/components/info-box';
@@ -34,7 +33,6 @@ interface ProductPageComponentProps {
 export default function ProductPageComponent({ productId }: ProductPageComponentProps) {
   const { userId } = useSelector((s: Store) => s.auth);
 
-  const router = useRouter();
   const { data: session, status } = useSession();
 
   const { fetch, data: product, isLoading, isError } = useGetProduct();
@@ -62,12 +60,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
   const isLoggedIn = status === 'authenticated' && session?.user.accessToken;
 
   return (
-    <PayPalOrderProvider
-      productId={product.id}
-      userId={userId}
-      price={product.price}
-      callback={(orderId: string) => router.push(`/app/secure/auth/me/orders/${orderId}`)}
-    >
+    <PayPalOrderProvider productId={product.id} userId={userId} price={product.price}>
       <div className="flex flex-col gap-8">
         <div className="flex items-center gap-2">
           <GoBackButton />

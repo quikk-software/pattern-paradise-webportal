@@ -41,4 +41,5 @@ export default dayjs;
 
 export const DATE_FORMAT = 'DD/MM/YYYY';
 export const TIME_FORMAT = 'HH:mm';
+export const DATETIME_FORMAT = 'HH:mm DD/MM/YYYY';
 export const ADVANCED_DATE_FORMAT = 'Do [of] MMMM YYYY';

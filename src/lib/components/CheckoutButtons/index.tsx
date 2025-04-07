@@ -12,6 +12,7 @@ import PaymentDivider from '@/lib/components/PaymentDivider';
 import { GetProductResponse } from '@/@types/api-types';
 import { useGetUserById } from '@/lib/api';
 import { InfoBoxComponent } from '@/components/info-box';
+import { useRouter } from 'next/navigation';
 
 interface CheckoutButtonProps {
   price: number;
@@ -22,17 +23,17 @@ interface CheckoutButtonProps {
 export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProps) {
   const {
     priceError,
+    orderId,
     handleCreateOrder,
-    handleCaptureOrder,
     handleDeleteOrder,
     createOrderIsError,
-    captureOrderIsError,
-    captureOrderIsSuccess,
     listOrdersByProductIdIsLoading,
     order,
   } = usePayPalOrder();
 
   const { fetch, data: seller } = useGetUserById();
+
+  const router = useRouter();
 
   useEffect(() => {
     fetch(product.creatorId).then();
@@ -65,11 +66,18 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
               <PayPalButtons
                 disabled={disabled || !!priceError}
                 createOrder={() => handleCreateOrder(order)}
-                onApprove={(data) => handleCaptureOrder(data.orderID)}
+                onApprove={async (result) => {
+                  router.push(
+                    `/app/secure/auth/me/orders/confirmation/success?orderId=${result.orderID}`,
+                  );
+                }}
                 onError={(err: any) => {
                   logger.error('PayPal Buttons Error:', err);
                 }}
-                onCancel={(data) => handleDeleteOrder(data.orderID as string)}
+                onCancel={async (data) => {
+                  await handleDeleteOrder(data.orderID as string);
+                  window.location.reload();
+                }}
                 className="w-full"
               />
             ) : null}
@@ -95,7 +103,7 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
           </div>
         </CardContent>
       </Card>
-      {createOrderIsError || captureOrderIsError ? (
+      {createOrderIsError ? (
         <Alert variant="destructive" className="mt-4">
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>
@@ -103,12 +111,6 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
               ? 'Failed to create order. Please try again.'
               : 'Failed to process payment. Please try again or use a different PayPal account.'}
           </AlertDescription>
-        </Alert>
-      ) : null}
-      {captureOrderIsSuccess ? (
-        <Alert className="mt-4">
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>Your order has been successfully processed!</AlertDescription>
         </Alert>
       ) : null}
     </PayPalScriptProvider>

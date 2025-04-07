@@ -2600,24 +2600,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description The order will be captured by a given ID. If the order cannot be found, an exception will be thrown.
      *
      * @tags Order
-     * @name CaptureOrder
-     * @summary Captures an order by paypal order ID.
-     * @request POST:/api/v1/orders/{paypalOrderId}/capture
-     * @secure
-     */
-    captureOrder: (paypalOrderId: string, params: RequestParams = {}) =>
-      this.request<PostCaptureOrderResponse, NotFoundResponse>({
-        path: `/api/v1/orders/${paypalOrderId}/capture`,
-        method: 'POST',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * @description The order will be captured by a given ID. If the order cannot be found, an exception will be thrown.
-     *
-     * @tags Order
      * @name CaptureOrderByAdmin
      * @summary Captures an order by paypal order ID.
      * @request POST:/api/v1/orders/{paypalOrderId}/admin-capture
