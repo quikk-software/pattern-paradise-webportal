@@ -8,13 +8,11 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="w-full h-full flex flex-col overflow-hidden shadow-lg">
-      <div className="w-full relative flex-1">
+      <div className="w-full relative flex-1 overflow-hidden">
         <img
           src={product.imageUrls?.at(0) || ''}
           alt={product.title}
           style={{
-            width: '100%',
-            height: '100%',
             objectFit: 'contain',
           }}
           onError={(e) => {
