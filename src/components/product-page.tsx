@@ -83,7 +83,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
               <div className="flex flex-col justify-start gap-8">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-2">
-                    {isLoggedIn ? (
+                    {isLoggedIn && !isOwner ? (
                       <div className="flex justify-end gap-2">
                         <ReportProduct productId={product.id} />
                         <LikeProductButton productId={product.id} />
