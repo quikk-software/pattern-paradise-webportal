@@ -74,7 +74,10 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
                 onError={(err: any) => {
                   logger.error('PayPal Buttons Error:', err);
                 }}
-                onCancel={(data) => handleDeleteOrder(data.orderID as string)}
+                onCancel={async (data) => {
+                  await handleDeleteOrder(data.orderID as string);
+                  window.location.reload();
+                }}
                 className="w-full"
               />
             ) : null}
