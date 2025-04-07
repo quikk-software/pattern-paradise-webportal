@@ -13,9 +13,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           src={product.imageUrls?.at(0) || ''}
           alt={product.title}
           style={{
+            width: '100%',
             height: '100%',
+            objectFit: 'contain',
           }}
-          className="object-cover"
           onError={(e) => {
             e.currentTarget.src = '';
           }}
