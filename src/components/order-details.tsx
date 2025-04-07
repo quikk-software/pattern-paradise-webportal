@@ -88,7 +88,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               >
                 Order Status: {order.status}
               </Badge>
-              {isPending ? (
+              {!isPayed ? (
                 <Button
                   variant={'secondary'}
                   onClick={() => {
