@@ -23,6 +23,7 @@ interface CheckoutButtonProps {
 export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProps) {
   const {
     priceError,
+    orderId,
     handleCreateOrder,
     handleDeleteOrder,
     createOrderIsError,
@@ -65,8 +66,8 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
               <PayPalButtons
                 disabled={disabled || !!priceError}
                 createOrder={() => handleCreateOrder(order)}
-                onApprove={async (result) => {
-                  router.push(`/app/secure/auth/me/orders/${result.orderID}`);
+                onApprove={async () => {
+                  router.push(`/app/secure/auth/me/orders/${orderId}`);
                 }}
                 onError={(err: any) => {
                   logger.error('PayPal Buttons Error:', err);

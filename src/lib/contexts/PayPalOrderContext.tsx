@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from 'react';
 type PayPalOrderContextType = {
   customPrice: number | undefined;
   priceError: string | null;
+  orderId: string | null;
   handleCustomPriceChange: (price: number, minPrice: number) => void;
   handleCreateOrder: (order?: GetOrderResponse) => Promise<string>;
   handleDeleteOrder: (orderID: string) => Promise<void>;
@@ -39,6 +40,7 @@ export function PayPalOrderProvider({
   const router = useRouter();
   const [customPrice, setCustomPrice] = useState<number | undefined>(undefined);
   const [priceError, setPriceError] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
 
   const { mutate: createOrder, isError: createOrderIsError } = useCreateOrderPayPal();
   const {
@@ -77,6 +79,7 @@ export function PayPalOrderProvider({
 
   const handleCreateOrder = async (order?: GetOrderResponse) => {
     try {
+      setOrderId(null);
       const priceToUse = customPriceRef.current ?? price;
       if (order?.status === 'CREATED') {
         logger.info("Order with status 'CREATED' for user already exists");
@@ -86,7 +89,8 @@ export function PayPalOrderProvider({
         productId,
         customPrice: priceToUse,
       });
-      return response?.orderId;
+      setOrderId(response?.orderId ?? null);
+      return response.paypalOrderId;
     } catch (error) {
       logger.error('Error creating order:', error);
       setListOrdersByProductIdIsSuccess(false);
@@ -124,6 +128,7 @@ export function PayPalOrderProvider({
   const contextValue: PayPalOrderContextType = {
     customPrice,
     priceError,
+    orderId,
     handleCustomPriceChange,
     handleCreateOrder,
     handleDeleteOrder,
