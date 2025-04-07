@@ -12,6 +12,7 @@ import PaymentDivider from '@/lib/components/PaymentDivider';
 import { GetProductResponse } from '@/@types/api-types';
 import { useGetUserById } from '@/lib/api';
 import { InfoBoxComponent } from '@/components/info-box';
+import { useRouter } from 'next/navigation';
 
 interface CheckoutButtonProps {
   price: number;
@@ -30,6 +31,8 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
   } = usePayPalOrder();
 
   const { fetch, data: seller } = useGetUserById();
+
+  const router = useRouter();
 
   useEffect(() => {
     fetch(product.creatorId).then();
@@ -62,6 +65,9 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
               <PayPalButtons
                 disabled={disabled || !!priceError}
                 createOrder={() => handleCreateOrder(order)}
+                onApprove={async (result) => {
+                  router.push(`/app/secure/auth/me/orders/${result.orderID}`);
+                }}
                 onError={(err: any) => {
                   logger.error('PayPal Buttons Error:', err);
                 }}

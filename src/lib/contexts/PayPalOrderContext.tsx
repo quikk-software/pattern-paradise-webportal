@@ -86,8 +86,7 @@ export function PayPalOrderProvider({
         productId,
         customPrice: priceToUse,
       });
-      router.push(`/app/secure/auth/me/orders/${response?.orderId}`);
-      return response.paypalOrderId;
+      return response?.orderId;
     } catch (error) {
       logger.error('Error creating order:', error);
       setListOrdersByProductIdIsSuccess(false);
