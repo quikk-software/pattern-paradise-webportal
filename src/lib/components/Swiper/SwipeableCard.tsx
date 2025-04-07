@@ -154,7 +154,7 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
   return (
     <div
       ref={cardRef}
-      className="absolute top-0 left-0 w-full"
+      className="absolute top-0 left-0 w-full h-full"
       style={getCardStyle()}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
