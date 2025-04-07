@@ -54,7 +54,7 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
           <h3 className={`text-2xl font-bold mb-3 text-rose-700`}>You&apos;ve seen it all!</h3>
 
           <p className={`text-rose-600/80 mb-8`}>
-            You&apos;ve swiped through all our amazing products. Ready to discover them again?
+            You&apos;ve swiped through all our amazing patterns. Ready to discover them again?
           </p>
 
           <div className="flex flex-col gap-3">
