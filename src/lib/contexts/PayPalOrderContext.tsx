@@ -2,29 +2,20 @@
 
 import { createContext, useContext, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  useCaptureOrder,
-  useCreateOrderPayPal,
-  useDeleteOrder,
-  useListOrdersByProductId,
-} from '@/lib/api/order';
+import { useCreateOrderPayPal, useDeleteOrder, useListOrdersByProductId } from '@/lib/api/order';
 import logger from '@/lib/core/logger';
 import { MAX_PRICE } from '@/lib/constants';
 import type { GetOrderResponse } from '@/@types/api-types';
 import { useState, useEffect, useRef } from 'react';
 
-// Define the context type based on the hook's return values
 type PayPalOrderContextType = {
   customPrice: number | undefined;
   priceError: string | null;
   handleCustomPriceChange: (price: number, minPrice: number) => void;
   handleCreateOrder: (order?: GetOrderResponse) => Promise<string>;
-  handleCaptureOrder: (orderID: string) => Promise<void>;
   handleDeleteOrder: (orderID: string) => Promise<void>;
   createOrderIsError: boolean;
-  captureOrderIsError: boolean;
   deleteOrderIsError: boolean;
-  captureOrderIsSuccess: boolean;
   deleteOrderIsSuccess: boolean;
   listOrdersByProductIdIsLoading: boolean;
   order: GetOrderResponse | undefined;
@@ -37,7 +28,6 @@ type PayPalOrderProviderProps = {
   productId: string;
   userId: string;
   price: number;
-  callback?: (orderId: string) => void;
 };
 
 export function PayPalOrderProvider({
@@ -45,22 +35,12 @@ export function PayPalOrderProvider({
   productId,
   userId,
   price,
-  callback,
 }: PayPalOrderProviderProps) {
   const router = useRouter();
   const [customPrice, setCustomPrice] = useState<number | undefined>(undefined);
   const [priceError, setPriceError] = useState<string | null>(null);
 
-  const {
-    mutate: createOrder,
-    isError: createOrderIsError,
-    data: orderData,
-  } = useCreateOrderPayPal();
-  const {
-    mutate: captureOrder,
-    isSuccess: captureOrderIsSuccess,
-    isError: captureOrderIsError,
-  } = useCaptureOrder();
+  const { mutate: createOrder, isError: createOrderIsError } = useCreateOrderPayPal();
   const {
     mutate: deleteOrder,
     isSuccess: deleteOrderIsSuccess,
@@ -77,13 +57,6 @@ export function PayPalOrderProvider({
   useEffect(() => {
     fetchOrdersByProductId(productId);
   }, [productId]);
-
-  useEffect(() => {
-    if (!captureOrderIsSuccess || !orderData?.orderId) {
-      return;
-    }
-    router.push(`/app/secure/auth/me/orders/${orderData.orderId}`);
-  }, [captureOrderIsSuccess, orderData, router]);
 
   useEffect(() => {
     if (!listOrdersByProductIdIsSuccess || !orders || orders.length === 0) {
@@ -113,23 +86,13 @@ export function PayPalOrderProvider({
         productId,
         customPrice: priceToUse,
       });
+      router.push(`/app/secure/auth/me/orders/${response?.orderId}`);
       return response.paypalOrderId;
     } catch (error) {
       logger.error('Error creating order:', error);
       setListOrdersByProductIdIsSuccess(false);
       fetchOrdersByProductId(productId);
       return '';
-    }
-  };
-
-  const handleCaptureOrder = async (orderID: string) => {
-    try {
-      const orderId = await captureOrder(orderID);
-      callback ? callback(orderId) : window.location.reload();
-    } catch (error) {
-      logger.error('Error capturing order:', error);
-      setListOrdersByProductIdIsSuccess(false);
-      fetchOrdersByProductId(productId);
     }
   };
 
@@ -164,12 +127,9 @@ export function PayPalOrderProvider({
     priceError,
     handleCustomPriceChange,
     handleCreateOrder,
-    handleCaptureOrder,
     handleDeleteOrder,
     createOrderIsError,
-    captureOrderIsError,
     deleteOrderIsError,
-    captureOrderIsSuccess,
     deleteOrderIsSuccess,
     listOrdersByProductIdIsLoading,
     order,

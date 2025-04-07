@@ -23,11 +23,8 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
   const {
     priceError,
     handleCreateOrder,
-    handleCaptureOrder,
     handleDeleteOrder,
     createOrderIsError,
-    captureOrderIsError,
-    captureOrderIsSuccess,
     listOrdersByProductIdIsLoading,
     order,
   } = usePayPalOrder();
@@ -65,7 +62,6 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
               <PayPalButtons
                 disabled={disabled || !!priceError}
                 createOrder={() => handleCreateOrder(order)}
-                onApprove={(data) => handleCaptureOrder(data.orderID)}
                 onError={(err: any) => {
                   logger.error('PayPal Buttons Error:', err);
                 }}
@@ -95,7 +91,7 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
           </div>
         </CardContent>
       </Card>
-      {createOrderIsError || captureOrderIsError ? (
+      {createOrderIsError ? (
         <Alert variant="destructive" className="mt-4">
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>
@@ -103,12 +99,6 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
               ? 'Failed to create order. Please try again.'
               : 'Failed to process payment. Please try again or use a different PayPal account.'}
           </AlertDescription>
-        </Alert>
-      ) : null}
-      {captureOrderIsSuccess ? (
-        <Alert className="mt-4">
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>Your order has been successfully processed!</AlertDescription>
         </Alert>
       ) : null}
     </PayPalScriptProvider>
