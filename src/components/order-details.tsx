@@ -100,6 +100,14 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               ) : null}
             </div>
 
+            {!isPayed && !isSeller ? (
+              <InfoBoxComponent
+                severity="info"
+                title="Payment Processing May Take a Moment"
+                message="If you've already completed your payment, please hang tight - we're waiting for confirmation from our payment provider. You'll receive an email as soon as your payment is confirmed. You can also click the refresh button above to update this page."
+              />
+            ) : null}
+
             {(isCreated || isPending) && !isSeller ? (
               <div className="flex flex-col gap-4">
                 <InfoBoxComponent
