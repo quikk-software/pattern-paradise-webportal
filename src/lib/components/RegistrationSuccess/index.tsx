@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { CheckCircle, Mail } from 'lucide-react';
+import { ArrowRight, CheckCircle, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import useRedirect from '@/lib/core/useRedirect';
+import { useSession } from 'next-auth/react';
 
 export default function RegistrationSuccess() {
   const [email, setEmail] = useState<string | undefined>(undefined);
@@ -15,6 +16,7 @@ export default function RegistrationSuccess() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { redirectUrl } = useRedirect();
+  const { status } = useSession();
 
   useEffect(() => {
     setEmail(searchParams.get('email') || undefined);
@@ -30,6 +32,8 @@ export default function RegistrationSuccess() {
       router.push(`/auth/login?redirect=${redirectUrl}`);
     }
   };
+
+  const isLoggedIn = status === 'authenticated';
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -64,12 +68,22 @@ export default function RegistrationSuccess() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button className="w-full" onClick={handleLoginClick}>
-            Go to Login
-          </Button>
           <Button variant="outline" asChild className="w-full">
             <Link href="/">Return to Homepage</Link>
           </Button>
+          {isLoggedIn ? (
+            redirectUrl ? (
+              <Button className="w-full gap-2" asChild>
+                <Link href={redirectUrl}>
+                  Continue <ArrowRight />
+                </Link>
+              </Button>
+            ) : null
+          ) : (
+            <Button className="w-full" onClick={handleLoginClick}>
+              Go to Login
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </div>

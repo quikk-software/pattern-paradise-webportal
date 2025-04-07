@@ -178,19 +178,11 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
                   You&apos;re just one step away from getting this stunning pattern!
                   <br />
                   <br />
-                  Simply sign up to complete your purchase, and we&apos;ll bring you right back here
-                  in no time. Quick, easy, and totally worth it!
+                  Simply sign up to complete your purchase. Quick, easy, and totally worth it!
                 </p>
               </div>
               <QuickSignUp
                 redirect={`${encodeURIComponent(`/app/products/${product.id}?action=toggleBuyNow`)}`}
-                signupCallback={() =>
-                  router.push(
-                    `/auth/login?redirect=${encodeURIComponent(
-                      `/app/products/${product.id}?action=toggleBuyNow`,
-                    )}`,
-                  )
-                }
               />
             </div>
           )}

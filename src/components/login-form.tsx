@@ -17,11 +17,14 @@ import useAuth from '@/lib/auth/useAuth';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestPasswordDrawer from '@/lib/components/RequestPasswordDrawer';
+import useRedirect from '@/lib/core/useRedirect';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRequestPasswordDrawerOpen, setIsRequestPasswordDrawerOpen] = useState(false);
+
+  const { redirectUrl } = useRedirect();
 
   const {
     handleLogin,
@@ -82,7 +85,10 @@ export function LoginForm() {
       <CardFooter className="flex flex-col items-end gap-4">
         <p className="text-sm text-muted-foreground text-right">
           Don&apos;t have an account?{' '}
-          <Link href="/auth/registration" className="text-primary hover:underline">
+          <Link
+            href={`/auth/registration?redirect=${redirectUrl}`}
+            className="text-primary hover:underline"
+          >
             Register here
           </Link>
         </p>
