@@ -18,14 +18,20 @@ import Link from 'next/link';
 import TestingMetrics from '@/lib/components/TestingMetrics';
 import ReviewCTA from '@/lib/components/ReviewCTA';
 import { Button } from '@/components/ui/button';
-import { CreditCard, RefreshCw, X } from 'lucide-react';
+import { RefreshCw, X } from 'lucide-react';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import { useDeleteOrder } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
 import { PayPalOrderProvider } from '@/lib/contexts/PayPalOrderContext';
+import dayjs from '@/lib/core/dayjs';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
+}
+
+function isTenMinutesAgo(timestamp: string | number | Date) {
+  const tenMinutesAgo = dayjs().subtract(10, 'minute');
+  return dayjs(timestamp).isBefore(tenMinutesAgo);
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
@@ -133,7 +139,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                     .
                   </p>
                 )}
-                {order?.paypalOrderId ? (
+                {order?.paypalOrderId && isTenMinutesAgo(order?.updatedAt) ? (
                   <Button variant={'destructive'} onClick={() => setIsCancelOrderDialogOpen(true)}>
                     <X />
                     Cancel Order
