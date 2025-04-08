@@ -56,7 +56,6 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   }
 
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
-  const isPending = order.status === 'PENDING';
   const isCreated = order.status === 'CREATED';
   const isSeller = order.seller.id === userId;
 
@@ -110,8 +109,12 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 message="If you've already completed your payment, please hang tight - we're waiting for confirmation from our payment provider. You'll receive an email as soon as your payment is confirmed. You can also click the refresh button above to update this page."
               />
             ) : null}
-            {order?.paypalOrderId && isTenMinutesAgo(order?.updatedAt) ? (
-              <Button variant={'destructive'} onClick={() => setIsCancelOrderDialogOpen(true)}>
+            {isCreated && order?.paypalOrderId && isTenMinutesAgo(order?.updatedAt) ? (
+              <Button
+                className="w-full"
+                variant={'destructive'}
+                onClick={() => setIsCancelOrderDialogOpen(true)}
+              >
                 <X />
                 Cancel Order
               </Button>
