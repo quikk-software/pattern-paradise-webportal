@@ -32,7 +32,7 @@ export default function AnimatedHeroHeading() {
               {currentText}
             </motion.span>
           </AnimatePresence>
-        </span>
+        </span>{' '}
       </span>
       <span className="block text-primary">Pattern Paradise</span>
     </h1>

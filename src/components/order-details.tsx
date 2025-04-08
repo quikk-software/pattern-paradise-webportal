@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { GetOrderResponse } from '@/@types/api-types';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
-import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import CreatedByRef from '@/lib/components/CreatedByRef';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import { InfoBoxComponent } from '@/components/info-box';
@@ -14,18 +13,47 @@ import { Store } from '@/lib/redux/store';
 import ProductMetrics from '@/lib/components/ProductMetrics';
 import { useGetProduct } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import Link from 'next/link';
 import TestingMetrics from '@/lib/components/TestingMetrics';
 import ReviewCTA from '@/lib/components/ReviewCTA';
 import { Button } from '@/components/ui/button';
-import { CreditCard, RefreshCw, X } from 'lucide-react';
+import { RefreshCw, X } from 'lucide-react';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import { useDeleteOrder } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
-import { PayPalOrderProvider } from '@/lib/contexts/PayPalOrderContext';
+import dayjs from '@/lib/core/dayjs';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
+}
+
+const CANCEL_WINDOW_MINUTES = 15;
+
+function isMinutesAgo(timestamp: string | number | Date) {
+  const tenMinutesAgo = dayjs().subtract(CANCEL_WINDOW_MINUTES, 'minute');
+  return dayjs(timestamp).isBefore(tenMinutesAgo);
+}
+
+export function getCancelCountdownText(updatedAt: string | Date): string {
+  const updatedTime = dayjs(updatedAt);
+  const expirationTime = updatedTime.add(CANCEL_WINDOW_MINUTES, 'minute');
+  const now = dayjs();
+
+  const remainingMs = expirationTime.diff(now);
+
+  if (remainingMs <= 0) {
+    return 'This order can no longer be cancelled.';
+  }
+
+  const duration = dayjs.duration(remainingMs);
+  const minutes = Math.floor(duration.asMinutes());
+  const seconds = duration.seconds();
+
+  const timeLeft =
+    minutes > 0
+      ? `${minutes} minute${minutes !== 1 ? 's' : ''}`
+      : `${seconds} second${seconds !== 1 ? 's' : ''}`;
+
+  return `This order can be cancelled in ${timeLeft}.`;
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
@@ -53,9 +81,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   }
 
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
-  const isPending = order.status === 'PENDING';
   const isCreated = order.status === 'CREATED';
   const isSeller = order.seller.id === userId;
+  const isCancelable = isCreated && order?.paypalOrderId && isMinutesAgo(order?.updatedAt);
 
   return (
     <div className="grid gap-8">
@@ -107,40 +135,20 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 message="If you've already completed your payment, please hang tight - we're waiting for confirmation from our payment provider. You'll receive an email as soon as your payment is confirmed. You can also click the refresh button above to update this page."
               />
             ) : null}
-
-            {(isCreated || isPending) && !isSeller ? (
-              <div className="flex flex-col gap-4">
-                <InfoBoxComponent
-                  severity="warning"
-                  title="One Last Step"
-                  message="Please complete your payment by clicking on 'Buy Now' below. You'll get access to the pattern immediately after your payment was successful."
-                />
-                {!!product ? (
-                  <PayPalOrderProvider
-                    productId={product.id}
-                    userId={userId}
-                    price={order.productPrice}
-                  >
-                    <BuyNowButton product={product} customPriceDisabled />
-                  </PayPalOrderProvider>
-                ) : (
-                  <p className="text-sm text-red-500 mb-2">
-                    Couldn&apos;t load pattern details. Please reload or try again later. If this
-                    error persists, please reach out to us{' '}
-                    <Link href="/help" target="_blank" className="text-blue-500 underline">
-                      here
-                    </Link>
-                    .
-                  </p>
-                )}
-                {order?.paypalOrderId ? (
-                  <Button variant={'destructive'} onClick={() => setIsCancelOrderDialogOpen(true)}>
-                    <X />
-                    Cancel Order
-                  </Button>
-                ) : null}
-              </div>
-            ) : null}
+            <div className="space-y-2">
+              <Button
+                className="w-full"
+                variant={'destructive'}
+                disabled={!isCancelable}
+                onClick={() => setIsCancelOrderDialogOpen(true)}
+              >
+                <X />
+                Cancel Order
+              </Button>
+              {!isCancelable ? (
+                <InfoBoxComponent message={getCancelCountdownText(order.updatedAt)} />
+              ) : null}
+            </div>
           </div>
           <div className="space-y-2">
             {!!order.productPrice ? (

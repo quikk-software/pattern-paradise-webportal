@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     title: APP_NAME,
     description: APP_DESCRIPTION,
     images: [`${APP_DOMAIN}/favicons/android-icon-192x192.png`],
-    creator: '@PatternParadise',
+    creator: '@patternparadis3',
   },
   viewport: {
     width: 'device-width',

@@ -48,6 +48,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
   const handleBuyNowClick = () => {
     fetchOrdersByProductId(product.id)
       .then((result) => {
+        console.log({ result });
         const customerOrder = result?.find((order) => order.customer.id === userId);
 
         if (customerOrder) {
