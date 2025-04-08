@@ -26,9 +26,9 @@ interface OrderDetailsProps {
   order: GetOrderResponse;
 }
 
-const CANCEL_WINDOW_MINUTES = 10;
+const CANCEL_WINDOW_MINUTES = 15;
 
-function isTenMinutesAgo(timestamp: string | number | Date) {
+function isMinutesAgo(timestamp: string | number | Date) {
   const tenMinutesAgo = dayjs().subtract(CANCEL_WINDOW_MINUTES, 'minute');
   return dayjs(timestamp).isBefore(tenMinutesAgo);
 }
@@ -83,7 +83,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
   const isCreated = order.status === 'CREATED';
   const isSeller = order.seller.id === userId;
-  const isCancelable = isCreated && order?.paypalOrderId && isTenMinutesAgo(order?.updatedAt);
+  const isCancelable = isCreated && order?.paypalOrderId && isMinutesAgo(order?.updatedAt);
 
   return (
     <div className="grid gap-8">
@@ -135,7 +135,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 message="If you've already completed your payment, please hang tight - we're waiting for confirmation from our payment provider. You'll receive an email as soon as your payment is confirmed. You can also click the refresh button above to update this page."
               />
             ) : null}
-            <div>
+            <div className="space-y-2">
               <Button
                 className="w-full"
                 variant={'destructive'}
