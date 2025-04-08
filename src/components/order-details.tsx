@@ -26,9 +26,34 @@ interface OrderDetailsProps {
   order: GetOrderResponse;
 }
 
+const CANCEL_WINDOW_MINUTES = 10;
+
 function isTenMinutesAgo(timestamp: string | number | Date) {
-  const tenMinutesAgo = dayjs().subtract(10, 'minute');
+  const tenMinutesAgo = dayjs().subtract(CANCEL_WINDOW_MINUTES, 'minute');
   return dayjs(timestamp).isBefore(tenMinutesAgo);
+}
+
+export function getCancelCountdownText(updatedAt: string | Date): string {
+  const updatedTime = dayjs(updatedAt);
+  const expirationTime = updatedTime.add(CANCEL_WINDOW_MINUTES, 'minute');
+  const now = dayjs();
+
+  const remainingMs = expirationTime.diff(now);
+
+  if (remainingMs <= 0) {
+    return 'This order can no longer be cancelled.';
+  }
+
+  const duration = dayjs.duration(remainingMs);
+  const minutes = Math.floor(duration.asMinutes());
+  const seconds = duration.seconds();
+
+  const timeLeft =
+    minutes > 0
+      ? `${minutes} minute${minutes !== 1 ? 's' : ''}`
+      : `${seconds} second${seconds !== 1 ? 's' : ''}`;
+
+  return `This order can be cancelled in ${timeLeft}.`;
 }
 
 export function OrderDetails({ order }: OrderDetailsProps) {
@@ -58,6 +83,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
   const isCreated = order.status === 'CREATED';
   const isSeller = order.seller.id === userId;
+  const isCancelable = isCreated && order?.paypalOrderId && isTenMinutesAgo(order?.updatedAt);
 
   return (
     <div className="grid gap-8">
@@ -109,16 +135,20 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 message="If you've already completed your payment, please hang tight - we're waiting for confirmation from our payment provider. You'll receive an email as soon as your payment is confirmed. You can also click the refresh button above to update this page."
               />
             ) : null}
-            {isCreated && order?.paypalOrderId && isTenMinutesAgo(order?.updatedAt) ? (
+            <div>
               <Button
                 className="w-full"
                 variant={'destructive'}
+                disabled={!isCancelable}
                 onClick={() => setIsCancelOrderDialogOpen(true)}
               >
                 <X />
                 Cancel Order
               </Button>
-            ) : null}
+              {!isCancelable ? (
+                <InfoBoxComponent message={getCancelCountdownText(order.updatedAt)} />
+              ) : null}
+            </div>
           </div>
           <div className="space-y-2">
             {!!order.productPrice ? (

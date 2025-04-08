@@ -1,8 +1,10 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 
+dayjs.extend(duration);
 dayjs.extend(advancedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
