@@ -16,6 +16,7 @@ import {
 } from '@/lib/features/auth/authSlice';
 import PayPalReminderWrapper from '@/app/wrappers/PayPalReminderWrapper';
 import { usePushNotification } from '@/app/providers/PushNotificationProvider';
+import { signOut } from 'next-auth/react';
 
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
@@ -37,7 +38,8 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
 
   useEffect(() => {
     if (status === 'unauthenticated' || (session as any)?.error === 'RefreshAccessTokenError') {
-      router.push(`/auth/login?redirect=${encodedRedirect}`);
+      signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
+      return;
     }
     dispatch(setUserId(session?.user.id || ''));
     dispatch(setEmail(session?.user.email || ''));

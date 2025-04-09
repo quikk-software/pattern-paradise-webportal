@@ -8,6 +8,11 @@ import { getUser } from '@/lib/api/static/user/getUser';
 import { refreshAccessToken } from '@/app/api/auth/utils';
 
 const handler = NextAuth({
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 15,
+    updateAge: 0,
+  },
   providers: [
     CredentialsProvider({
       name: 'Keycloak Credentials',
