@@ -14,7 +14,7 @@ import { useCreateChat } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import type { Store } from '@/lib/redux/store';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import Image from 'next/image';
 
 const roleOptions = [
@@ -40,7 +40,7 @@ export default function UserDetailsCard({
 }: UserDetailsCardProps) {
   const { userId } = useSelector((store: Store) => store.auth);
 
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const { mutate: createChat } = useCreateChat();
 

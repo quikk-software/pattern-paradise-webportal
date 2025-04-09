@@ -22,7 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ReportUserReason, reportUserReasons } from '@/lib/constants';
 import { useCreateUserReport } from '@/lib/api/report';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface ReportUserProps {
   userId: string;
@@ -34,7 +34,7 @@ export function ReportUser({ userId }: ReportUserProps) {
   const [reasonError, setReasonError] = useState<string | undefined>();
   const [comment, setComment] = useState<string | undefined>(undefined);
 
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const { mutate, isLoading, isError, errorDetail } = useCreateUserReport();
 

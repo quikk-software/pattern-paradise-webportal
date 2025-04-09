@@ -1,13 +1,13 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { useState } from 'react';
 import { GetProductLikeResponse } from '@/@types/api-types';
 
 export const useGetProductLike = () => {
   const [data, setDate] = useState<GetProductLikeResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

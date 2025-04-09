@@ -24,7 +24,7 @@ import TesterShoutout from '@/lib/components/TesterShoutout';
 import { PayPalOrderProvider } from '@/lib/hooks/usePayPalOrder';
 import ShareButton from '@/lib/components/ShareButton';
 import LikeProductButton from '@/lib/components/LikeProductButton';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -33,7 +33,7 @@ interface ProductPageComponentProps {
 export default function ProductPageComponent({ productId }: ProductPageComponentProps) {
   const { userId } = useSelector((s: Store) => s.auth);
 
-  const { data: session, status } = useSession();
+  const { data: session, status } = useValidSession();
 
   const { fetch, data: product, isLoading, isError } = useGetProduct();
 

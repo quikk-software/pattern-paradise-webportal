@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { GetProductResponse } from '@/@types/api-types';
 import { CldImage } from 'next-cloudinary';
 import React from 'react';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import AnimatedHeroHeading from '@/lib/components/AnimatedHeroHeading';
 import WelcomeHero from '@/components/welcome-hero';
 import { ArrowRight, Heart, HeartHandshake, Instagram } from 'lucide-react';
@@ -40,7 +40,7 @@ interface HeroV2Props {
 }
 
 export default function HeroV2({ products }: HeroV2Props) {
-  const { status, data: session } = useSession();
+  const { status, data: session } = useValidSession();
 
   const isLoggedIn = status === 'authenticated';
 

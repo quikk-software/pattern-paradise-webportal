@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 import InsufficientRoles from '@/components/insufficient-roles';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import React from 'react';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { status } = useSession();
+  const { status } = useValidSession();
   const { roles } = useSelector((s: Store) => s.auth);
 
   if (status === 'loading') {

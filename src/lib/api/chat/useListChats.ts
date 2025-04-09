@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { client, getApi } from '@/@types';
 import type { GetChatResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useListChats = () => {
   const [data, setData] = useState<GetChatResponse[]>([]);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

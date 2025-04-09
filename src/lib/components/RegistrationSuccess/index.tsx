@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import useRedirect from '@/lib/core/useRedirect';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export default function RegistrationSuccess() {
   const [email, setEmail] = useState<string | undefined>(undefined);
@@ -16,7 +16,7 @@ export default function RegistrationSuccess() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { redirectUrl } = useRedirect();
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   useEffect(() => {
     setEmail(searchParams.get('email') || undefined);

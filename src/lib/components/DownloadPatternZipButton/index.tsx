@@ -7,7 +7,7 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Download } from 'lucide-react';
 import { GetOrderResponse, GetProductResponse } from '@/@types/api-types';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { usePathname } from 'next/navigation';
 import CountryFlag from '@/lib/components/CountryFlag';
 import QuickSignUp from '@/lib/components/QuickSignUp';
@@ -29,7 +29,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
   const [language, setLanguage] = useState<string | undefined>(undefined);
   const [isQuickSignupDrawerOpen, setIsQuickSignupDrawerOpen] = useState(false);
 
-  const { status } = useSession();
+  const { status } = useValidSession();
   const pathname = usePathname();
 
   const {

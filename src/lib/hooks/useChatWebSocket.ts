@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { GetChatMessageResponse } from '@/@types/api-types';
 import logger from '@/lib/core/logger';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface ChatWebSocketMessage {
   event: string;
@@ -18,7 +18,7 @@ const useChatWebSocket = (url: string): UseChatWebSocketReturn => {
   const [message, setMessage] = useState<GetChatMessageResponse | undefined>(undefined);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectIntervalRef = useRef<NodeJS.Timeout | null>(null);

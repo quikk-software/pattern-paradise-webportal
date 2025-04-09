@@ -6,10 +6,10 @@ import { MessageCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import React from 'react';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export default function TestingQuickLinks() {
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const pathname = usePathname();
 

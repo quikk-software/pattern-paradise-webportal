@@ -7,7 +7,7 @@ import {
   useGetProductLike,
 } from '@/lib/api/product-like';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface LikeProductButtonProps {
   productId: string;
@@ -16,7 +16,7 @@ interface LikeProductButtonProps {
 export default function LikeProductButton({ productId }: LikeProductButtonProps) {
   const [hasLike, setHasLike] = useState(false);
 
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const { fetch: fetchProductLike, isLoading: fetchProductLikeIsLoading } = useGetProductLike();
   const { mutate: createProductLike, isLoading: createProductLikeIsLoading } =

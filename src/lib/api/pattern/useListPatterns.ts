@@ -5,7 +5,7 @@ import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { combineArraysById } from '@/lib/core/utils';
 import { PatternFilterObject } from '@/lib/constants';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useListPatterns = ({
   pageNumber = 1,
@@ -16,7 +16,7 @@ export const useListPatterns = ({
 }) => {
   const [data, setData] = useState<GetPatternResponse[]>([]);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);

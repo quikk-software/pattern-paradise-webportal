@@ -26,7 +26,7 @@ import { EMAIL_REGEX, SUPPORT_EMAIL } from '@/lib/constants';
 import { MessageSquare, Mail, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import useAction from '@/lib/core/useAction';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { useCreateChat } from '@/lib/api';
@@ -49,7 +49,7 @@ export default function ContactForm() {
 
   const { action } = useAction();
 
-  const { status, data: session } = useSession();
+  const { status, data: session } = useValidSession();
 
   const { mutate: createChat } = useCreateChat();
 

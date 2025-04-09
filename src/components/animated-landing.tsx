@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { APP_NAME } from '@/lib/constants';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export default function AnimatedLanding() {
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const containerVariants = {
     hidden: { opacity: 0 },

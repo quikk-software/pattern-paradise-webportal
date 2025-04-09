@@ -26,7 +26,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { GetDeviceTokenResponse } from '@/@types/api-types';
 import { Button } from '@/components/ui/button';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 
@@ -320,7 +320,7 @@ export default function NotificationPreferences({
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const {
     fetch: fetchDeviceToken,

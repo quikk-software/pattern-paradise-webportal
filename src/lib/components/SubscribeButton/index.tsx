@@ -10,12 +10,12 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PartyPopper } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export default function SubscribeButton() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const { mutate } = useCreateSubscription();
   const router = useRouter();
