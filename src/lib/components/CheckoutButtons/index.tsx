@@ -76,7 +76,9 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
                 }}
                 onCancel={async (data) => {
                   await handleDeleteOrder(data.orderID as string);
-                  window.location.reload();
+                  if (typeof window !== 'undefined') {
+                    window.location.reload();
+                  }
                 }}
                 className="w-full"
               />

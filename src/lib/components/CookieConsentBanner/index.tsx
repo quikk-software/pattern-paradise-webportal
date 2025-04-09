@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useCookies } from 'next-client-cookies';
 import { COOKIE_CONSENT_NAME } from '@/lib/constants';
 import { Analytics } from '@vercel/analytics/react';
-import { isApp } from '@/lib/utils';
 
 interface CookieConsentBannerProps {
   maintenanceMode: boolean;
@@ -41,7 +40,7 @@ export default function CookieConsentBanner({ maintenanceMode }: CookieConsentBa
     setVisible(false);
   };
 
-  if (typeof window !== 'undefined' && !isApp(window)) {
+  if (typeof window !== 'undefined') {
     return (
       <>
         {/* {consentGiven ? <Analytics /> : null} */}

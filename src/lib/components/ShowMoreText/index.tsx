@@ -15,7 +15,7 @@ export default function ProductDescription({ description, maxRows = 4 }: Product
   const contentRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    if (contentRef.current) {
+    if (contentRef.current && typeof window !== 'undefined') {
       const lineHeight = parseInt(window.getComputedStyle(contentRef.current).lineHeight);
       const calculatedMaxHeight = lineHeight * maxRows;
       setMaxHeight(`${calculatedMaxHeight}px`);

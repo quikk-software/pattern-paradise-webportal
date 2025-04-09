@@ -6,9 +6,11 @@ export default function useMainAreaHeight() {
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    const element = document.getElementById('main-area');
-    if (element) {
-      setHeight(element.offsetHeight);
+    if (typeof window !== 'undefined') {
+      const element = document.getElementById('main-area');
+      if (element) {
+        setHeight(element.offsetHeight);
+      }
     }
   }, []);
 

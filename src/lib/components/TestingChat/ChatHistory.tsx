@@ -216,18 +216,20 @@ export default function ChatHistory({
     if (!file) {
       return;
     }
-    const url = URL.createObjectURL(file);
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_self';
-    link.download = file.name ?? 'testing_patterns.zip';
-    document.body.appendChild(link);
-    link.click();
+    if (typeof window !== 'undefined') {
+      const url = URL.createObjectURL(file);
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_self';
+      link.download = file.name ?? 'testing_patterns.zip';
+      document.body.appendChild(link);
+      link.click();
 
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      document.body.removeChild(link);
-    }, 1000);
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }, 1000);
+    }
   }, [file]);
 
   const loadMore = async () => {

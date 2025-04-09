@@ -112,8 +112,10 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
       sortBy: sortValue,
     }).then(() => {
       setTriggerLoad(false);
-      if (scrollToResults) {
-        document.getElementById('listing-results')?.scrollIntoView();
+      if (typeof window !== 'undefined') {
+        if (scrollToResults) {
+          document.getElementById('listing-results')?.scrollIntoView();
+        }
       }
     });
   };

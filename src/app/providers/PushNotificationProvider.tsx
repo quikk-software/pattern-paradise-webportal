@@ -58,9 +58,11 @@ export const PushNotificationProvider = ({ children }: { children: ReactNode }) 
       setFcmToken(event.detail);
     };
 
-    // Add event listeners
-    window.addEventListener('push-notification', handlePushNotification as EventListener);
-    window.addEventListener('push-token', handleFcmToken as EventListener);
+    if (typeof window !== 'undefined') {
+      // Add event listeners
+      window.addEventListener('push-notification', handlePushNotification as EventListener);
+      window.addEventListener('push-token', handleFcmToken as EventListener);
+    }
 
     // Clean up
     return () => {

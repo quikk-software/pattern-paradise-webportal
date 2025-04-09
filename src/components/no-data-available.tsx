@@ -14,7 +14,9 @@ export function NoDataAvailable({
   actionLabel = 'Refresh',
 }: NoDataAvailableProps) {
   const handleReload = () => {
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   return (

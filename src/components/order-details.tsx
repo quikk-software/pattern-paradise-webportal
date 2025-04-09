@@ -120,7 +120,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 <Button
                   variant={'secondary'}
                   onClick={() => {
-                    window.location.reload();
+                    if (typeof window !== 'undefined') {
+                      window.location.reload();
+                    }
                   }}
                 >
                   <RefreshCw />

@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { InfoBoxComponent } from '@/components/info-box';
 import Link from 'next/link';
-import { Lock, MonitorCheck } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
@@ -13,7 +13,7 @@ import { GetProductResponse } from '@/@types/api-types';
 import { useValidSession } from '@/hooks/useValidSession';
 import { Label } from '@/components/ui/label';
 import CurrencyInput from 'react-currency-input-field';
-import { cn, getAppType, isApp } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { usePayPalOrder } from '@/lib/hooks/usePayPalOrder';
 import { useListOrdersByProductId } from '@/lib/api/order';
 import { useSelector } from 'react-redux';
@@ -68,21 +68,6 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
 
   const isLoggedIn = status === 'authenticated';
 
-  const appType = getAppType(window);
-
-  const restriction = useMemo(() => {
-    switch (appType) {
-      case 'IOS':
-        return 'Apple App Store';
-      case 'ANDROID':
-        return 'Google Play Store';
-      case 'STANDALONE':
-        return 'Progressive Web App';
-      default:
-        return '';
-    }
-  }, [appType]);
-
   if (product?.status !== 'Released') {
     return (
       <InfoBoxComponent
@@ -107,28 +92,6 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
         }
         severity="info"
       />
-    );
-  }
-
-  if (isApp(window)) {
-    return (
-      <div className="space-y-2">
-        <InfoBoxComponent
-          message={
-            <span>
-              Due to {restriction} restrictions, you cannot purchase patterns from within the app.
-              Please <strong>long press</strong> the button below to navigate to your standard
-              browser and make the purchase there.
-            </span>
-          }
-        />
-        <Button className="w-full" asChild>
-          <a href={`${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}`}>
-            <MonitorCheck />
-            Open Browser
-          </a>
-        </Button>
-      </div>
     );
   }
 

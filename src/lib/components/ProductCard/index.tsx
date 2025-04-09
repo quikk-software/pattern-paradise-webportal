@@ -48,7 +48,9 @@ export default function ProductCard({
   const handleDeleteProductClick = async (productId: string) => {
     await deleteProduct(productId);
     setIsDeleteProductDrawerOpen(false);
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   return (
