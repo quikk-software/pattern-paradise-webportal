@@ -3,7 +3,7 @@ import { client, getApi } from '@/@types';
 import type { GetProductReportResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useListProductReports = ({
   pageNumber = 1,
@@ -14,7 +14,7 @@ export const useListProductReports = ({
 }) => {
   const [data, setData] = useState<GetProductReportResponse[]>([]);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);

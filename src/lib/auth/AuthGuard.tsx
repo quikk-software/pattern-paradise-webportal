@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { buildQueryString } from '@/lib/utils';
 import useGetAllSearchParams from '@/lib/core/useGetAllSearchParams';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { useDispatch } from 'react-redux';
 import {
   setRoles,
@@ -20,7 +20,7 @@ import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
 }) => {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useValidSession();
   const router = useRouter();
 
   const dispatch = useDispatch();

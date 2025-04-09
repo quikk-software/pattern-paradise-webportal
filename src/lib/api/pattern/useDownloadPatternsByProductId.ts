@@ -1,12 +1,12 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useDownloadPatternsByProductId = () => {
   const [data, setData] = useState<any>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

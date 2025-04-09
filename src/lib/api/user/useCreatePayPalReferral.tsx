@@ -5,12 +5,12 @@ import type {
   PostUserPayPalReferralResponse,
 } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useCreatePayPalReferral = () => {
   const [data, setData] = useState<PostUserPayPalReferralResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

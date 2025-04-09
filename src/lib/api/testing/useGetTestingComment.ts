@@ -2,12 +2,12 @@ import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
 import { useState } from 'react';
 import type { GetTestingCommentResponse } from '@/@types/api-types';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useGetTestingComment = () => {
   const [data, setData] = useState<GetTestingCommentResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

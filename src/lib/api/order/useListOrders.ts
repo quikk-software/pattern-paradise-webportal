@@ -4,7 +4,7 @@ import type { GetOrderResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { combineArraysById } from '@/lib/core/utils';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useListOrders = ({
   pageNumber = 1,
@@ -19,7 +19,7 @@ export const useListOrders = ({
 }) => {
   const [data, setData] = useState<GetOrderResponse[]>([]);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);

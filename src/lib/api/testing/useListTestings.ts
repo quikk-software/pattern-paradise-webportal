@@ -4,7 +4,7 @@ import type { GetTestingResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { usePagination } from '@/lib/api/usePagination';
 import { combineArraysById } from '@/lib/core/utils';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useListTestings = ({
   pageNumber = 1,
@@ -15,7 +15,7 @@ export const useListTestings = ({
 }) => {
   const [data, setData] = useState<GetTestingResponse[]>([]);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);

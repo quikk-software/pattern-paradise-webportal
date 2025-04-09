@@ -1,10 +1,10 @@
 import { client, getApi } from '@/@types';
 import type { PutGalleryImagesRequest } from '@/@types/api-types';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { useApiStates } from '@/lib/api/useApiStates';
 
 export const useAddGalleryImages = () => {
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

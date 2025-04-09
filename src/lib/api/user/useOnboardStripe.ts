@@ -1,13 +1,13 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { useState } from 'react';
 import { PostOnboardStripeResponse } from '@/@types/api-types';
 
 export const useOnboardStripe = () => {
   const [data, setData] = useState<PostOnboardStripeResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

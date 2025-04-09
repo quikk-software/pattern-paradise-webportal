@@ -10,7 +10,7 @@ import QuickSignUp from '@/lib/components/QuickSignUp';
 import useAction from '@/lib/core/useAction';
 import { CheckoutButtons } from '../CheckoutButtons';
 import { GetProductResponse } from '@/@types/api-types';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { Label } from '@/components/ui/label';
 import CurrencyInput from 'react-currency-input-field';
 import { cn, getAppType, isApp } from '@/lib/utils';
@@ -31,7 +31,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
 
   const router = useRouter();
   const { action } = useAction();
-  const { status } = useSession();
+  const { status } = useValidSession();
 
   const { priceError, handleCustomPriceChange, customPrice } = usePayPalOrder();
   const { fetch: fetchOrdersByProductId } = useListOrdersByProductId();

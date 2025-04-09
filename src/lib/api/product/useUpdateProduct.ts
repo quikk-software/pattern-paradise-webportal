@@ -1,10 +1,10 @@
 import { getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import axios from 'axios';
 
 export const useUpdateProduct = () => {
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, setUploadProgress, ...apiStates } = useApiStates();
 

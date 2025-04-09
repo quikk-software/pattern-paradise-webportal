@@ -6,7 +6,7 @@ import PayPalLogo from '@/assets/logos/paypal-logo.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { APP_TITLE, FEATURED_PRODUCTS_LENGTH } from '@/lib/constants';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import { GetProductResponse } from '@/@types/api-types';
 import { CldImage } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
@@ -20,7 +20,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const { status } = useSession();
+  const { status } = useValidSession();
   const router = useRouter();
   const screenSize = useScreenSize();
 

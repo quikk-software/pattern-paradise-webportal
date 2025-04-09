@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { GetTestingCommentResponse } from '@/@types/api-types';
 import logger from '@/lib/core/logger';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface TestingWebSocketMessage {
   event: string;
@@ -15,10 +15,10 @@ interface UseTestingWebSocketReturn {
 }
 
 const useTestingWebSocket = (url: string): UseTestingWebSocketReturn => {
-  const [message, setMessage] = useState<GetTestingCommentResponse |undefined>(undefined);
+  const [message, setMessage] = useState<GetTestingCommentResponse | undefined>(undefined);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectIntervalRef = useRef<NodeJS.Timeout | null>(null);

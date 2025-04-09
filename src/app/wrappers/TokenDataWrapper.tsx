@@ -2,7 +2,7 @@
 
 import { PropsWithChildren, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import {
   setEmail,
   setRoles,
@@ -13,7 +13,7 @@ import {
 
 export default function TokenDataWrapper({ children }: PropsWithChildren) {
   const dispatch = useDispatch();
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   useEffect(() => {
     dispatch(setUserId(session?.user.id || ''));

@@ -1,10 +1,10 @@
 import { client, getApi } from '@/@types';
 import type { PostSubscriptionRequest } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useCreateSubscription = () => {
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

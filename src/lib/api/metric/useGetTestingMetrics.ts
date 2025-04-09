@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { client, getApi } from '@/@types';
 import type { GetTestingMetricsResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useGetTestingMetrics = () => {
   const [data, setData] = useState<GetTestingMetricsResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

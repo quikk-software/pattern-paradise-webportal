@@ -1,12 +1,12 @@
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useDownloadPattern = () => {
   const [data, setData] = useState<{ file: Blob; objectName: string } | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 

@@ -5,9 +5,10 @@ import { useSelector } from 'react-redux';
 import logger from '@/lib/core/logger';
 import useRedirect from '@/lib/core/useRedirect';
 import { Store } from '@/lib/redux/store';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { handleLogoutFlow } from '@/lib/auth/auth.utils';
+import { useValidSession } from '@/hooks/useValidSession';
 
 const useAuth = () => {
   const [loginIsLoading, setLoginIsLoading] = useState(false);
@@ -20,7 +21,7 @@ const useAuth = () => {
   const { redirectUrl } = useRedirect();
 
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { username } = useSelector((store: Store) => store.auth);
 

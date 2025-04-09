@@ -3,12 +3,12 @@ import axios from 'axios';
 import type { PostProductResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { getApi } from '@/@types';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useCreateProduct = () => {
   const [data, setData] = useState<PostProductResponse | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, setUploadProgress, ...apiStates } = useApiStates();
 

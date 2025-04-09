@@ -32,7 +32,7 @@ import { EMAIL_REGEX, SUPPORT_EMAIL } from '@/lib/constants';
 import useAuth from '@/lib/auth/useAuth';
 import PayPalMerchantStatus from '@/lib/components/PayPalMerchantStatus';
 import ConnectPayPal from '@/lib/components/ConnectPayPal';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 import ProfileImageGallery from '@/lib/components/ProfileImageGallery';
 import ProfileQuickLinks from '../lib/components/ProfileQuickLinks';
 import StripeOnboarding from '@/lib/components/StripeOnboarding';
@@ -53,7 +53,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
   const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
 
-  const { update } = useSession();
+  const { update } = useValidSession();
 
   const { action } = useAction();
   const {

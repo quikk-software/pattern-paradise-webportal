@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
-import { useSession } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useGetProductReportsCount = () => {
   const [data, setData] = useState<number | undefined>(undefined);
 
-  const { data: session } = useSession();
+  const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
 
