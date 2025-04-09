@@ -169,25 +169,27 @@ function PreferencesCard({
   };
 
   const handleUnsubscribe = async () => {
-    try {
-      setDisableIsLoading(true);
-      navigator.serviceWorker.getRegistrations().then((registrations) => {
-        registrations.forEach((registration) => {
-          registration.unregister();
+    if (typeof window !== 'undefined') {
+      try {
+        setDisableIsLoading(true);
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          registrations.forEach((registration) => {
+            registration.unregister();
+          });
         });
-      });
 
-      await deleteDeviceToken(userId, deviceToken?.deviceToken || '');
+        await deleteDeviceToken(userId, deviceToken?.deviceToken || '');
 
-      localStorage.removeItem('pushNotificationDeclined');
-      localStorage.removeItem('pushNotificationEnabled');
+        localStorage.removeItem('pushNotificationDeclined');
+        localStorage.removeItem('pushNotificationEnabled');
 
-      setIsSubscribed(false);
-      setIsDialogOpen(false);
-    } catch (error) {
-      logger.error('Error unsubscribing from push notifications:', error);
-    } finally {
-      setDisableIsLoading(false);
+        setIsSubscribed(false);
+        setIsDialogOpen(false);
+      } catch (error) {
+        logger.error('Error unsubscribing from push notifications:', error);
+      } finally {
+        setDisableIsLoading(false);
+      }
     }
   };
 

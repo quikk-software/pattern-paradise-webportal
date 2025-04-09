@@ -30,18 +30,20 @@ export default function PatternCard({ pattern }: PatternCardProps) {
     if (!fileData) {
       return;
     }
-    const url = URL.createObjectURL(fileData.file);
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_self';
-    link.download = fileData.objectName;
-    document.body.appendChild(link);
-    link.click();
+    if (typeof window !== 'undefined') {
+      const url = URL.createObjectURL(fileData.file);
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_self';
+      link.download = fileData.objectName;
+      document.body.appendChild(link);
+      link.click();
 
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      document.body.removeChild(link);
-    }, 1000);
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }, 1000);
+    }
   }, [fileData]);
 
   const handleDownload = (fileId: string) => {

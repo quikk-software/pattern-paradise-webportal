@@ -36,13 +36,15 @@ export default function ShareButton({
   }, [copyStatus]);
 
   const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopyStatus('Copied!');
-      onCopy?.(true);
-    } catch (err) {
-      setCopyStatus('Failed to copy');
-      onCopy?.(false);
+    if (typeof window !== 'undefined') {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopyStatus('Copied!');
+        onCopy?.(true);
+      } catch (err) {
+        setCopyStatus('Failed to copy');
+        onCopy?.(false);
+      }
     }
   };
 
