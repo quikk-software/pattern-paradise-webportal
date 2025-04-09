@@ -58,10 +58,12 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
 
       await handleLogin(email, password);
 
-      if (redirect) {
-        window.location.replace(decodeURIComponent(redirect));
-      } else {
-        window.location.reload();
+      if (typeof window !== 'undefined') {
+        if (redirect) {
+          window.location.replace(decodeURIComponent(redirect));
+        } else {
+          window.location.reload();
+        }
       }
     } finally {
       setIsLoading(false);

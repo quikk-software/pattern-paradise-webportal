@@ -6,7 +6,9 @@ import { WifiOff, RefreshCw } from 'lucide-react';
 
 export function OfflinePageComponent() {
   const handleReconnect = () => {
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   return (

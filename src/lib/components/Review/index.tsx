@@ -113,7 +113,9 @@ export default function Review({ isOpen, testingId, skipRating = false }: Review
       });
     } finally {
       setIsLoading(false);
-      window.location.reload();
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
     }
   };
 

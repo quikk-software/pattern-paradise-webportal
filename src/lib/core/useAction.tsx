@@ -4,9 +4,11 @@ const useAction = () => {
   const [action, setAction] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const actionFromQuery = params.get('action');
-    setAction(actionFromQuery ?? undefined);
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const actionFromQuery = params.get('action');
+      setAction(actionFromQuery ?? undefined);
+    }
   }, []);
 
   return {

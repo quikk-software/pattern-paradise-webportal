@@ -42,7 +42,9 @@ export default function ReleasePatternDrawer({
   const handleReleaseProductClick = async (productId: string) => {
     await releaseProduct(productId);
     setIsOpen(false);
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   return (

@@ -41,7 +41,9 @@ export default function ManageTesterDrawers({
   const handleRemoveTestersFromTestingClick = (testingId: string, testerIds: string[]) => {
     mutate(testingId, testerIds).then(() => {
       setIsOpen(false);
-      window.location.reload();
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
     });
   };
 

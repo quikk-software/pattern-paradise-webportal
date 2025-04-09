@@ -4,15 +4,17 @@ const usePreselectedRoles = () => {
   const [preselectedRoles, setPreselectedRoles] = useState<string[]>([]);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const preselectedRoles = params.get('preselectedRoles');
-    setPreselectedRoles(
-      Array.isArray(preselectedRoles)
-        ? preselectedRoles
-        : !!preselectedRoles
-        ? [preselectedRoles]
-        : [],
-    );
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const preselectedRoles = params.get('preselectedRoles');
+      setPreselectedRoles(
+        Array.isArray(preselectedRoles)
+          ? preselectedRoles
+          : !!preselectedRoles
+            ? [preselectedRoles]
+            : [],
+      );
+    }
   }, []);
 
   return {

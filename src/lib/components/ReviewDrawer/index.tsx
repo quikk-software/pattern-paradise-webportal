@@ -118,7 +118,9 @@ export default function ReviewDrawer({
     } finally {
       setIsLoading(false);
       setDrawerIsOpen(false);
-      window.location.reload();
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
     }
   };
 

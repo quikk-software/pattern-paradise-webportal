@@ -33,34 +33,3 @@ export function updateSelectedFlags(
     return { ...item };
   });
 }
-
-export function isApp(window: Window) {
-  // const userAgent = window.navigator.userAgent;
-
-  // const isIOS = /iPhone|iPad|iPod/i.test(userAgent) && !/Mac OS X/i.test(userAgent);
-
-  // const isAndroid = /Android/i.test(userAgent);
-
-  // const isStandalone =
-  //   navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-
-  return false;
-}
-
-export function getAppType(window: Window) {
-  const userAgent = window.navigator.userAgent;
-
-  if (/iPhone|iPad|iPod/i.test(userAgent) && !/Mac OS X/i.test(userAgent)) {
-    return 'IOS';
-  }
-
-  if (/Android/i.test(userAgent)) {
-    return 'ANDROID';
-  }
-
-  if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
-    return 'STANDALONE';
-  }
-
-  return undefined;
-}

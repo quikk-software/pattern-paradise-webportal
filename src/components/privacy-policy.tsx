@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { MutableRefObject } from 'react';
 import useAction from '@/lib/core/useAction';
-import { isApp } from '@/lib/utils';
 
 interface PrivacyPolicyProps {
   privacyPolicyRef: MutableRefObject<HTMLDivElement | null>;
@@ -349,55 +348,49 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
           <AccordionItem value="data-collection">
             <AccordionTrigger>Data Collection on This Website</AccordionTrigger>
             <AccordionContent>
-              {!isApp(window) ? (
-                <>
-                  <h3 className="text-lg font-semibold mb-2">Cookies</h3>
-                  <p>
-                    Our websites use so-called &apos;cookies&apos;. Cookies are small text files and
-                    do not cause any damage to your device. They are stored either temporarily for
-                    the duration of a session (session cookies) or permanently (permanent cookies)
-                    on your device. Session cookies are automatically deleted at the end of your
-                    visit. Permanent cookies remain stored on your device until you delete them
-                    yourself or until they are automatically deleted by your web browser.
-                  </p>
-                  <p>
-                    In some cases, cookies from third-party companies may also be stored on your
-                    device when you enter our site (third-party cookies). These enable us or you to
-                    use certain services of the third-party company (e.g. cookies for processing
-                    payment services).
-                  </p>
-                  <p>
-                    Cookies have various functions. Many cookies are technically necessary, as
-                    certain website functions would not work without them (e.g. the shopping cart
-                    function or the display of videos). Other cookies are used to evaluate user
-                    behavior or display advertising.
-                  </p>
-                  <p>
-                    Cookies that are necessary to carry out the electronic communication process
-                    (necessary cookies) or to provide certain functions that you have requested
-                    (functional cookies, e.g. for the shopping cart function) or to optimize the
-                    website (e.g. cookies to measure the web audience) are stored on the basis of
-                    Art. 6 (1) lit. f GDPR, unless another legal basis is specified. The website
-                    operator has a legitimate interest in storing cookies for the technically
-                    error-free and optimized provision of its services. If consent to store cookies
-                    has been requested, the storage of the cookies in question is based exclusively
-                    on this consent (Art. 6 para. 1 lit. a GDPR); consent can be revoked at any
-                    time.
-                  </p>
-                  <p>
-                    You can set your browser so that you are informed about the setting of cookies
-                    and only allow cookies in individual cases, exclude the acceptance of cookies
-                    for certain cases or in general and activate the automatic deletion of cookies
-                    when closing the browser. When deactivating cookies, the functionality of this
-                    website may be limited.
-                  </p>
-                  <p>
-                    Insofar as cookies are used by third-party companies or for analysis purposes,
-                    we will inform you separately about this within the framework of this data
-                    protection declaration and, if necessary, request your consent.
-                  </p>
-                </>
-              ) : null}
+              <h3 className="text-lg font-semibold mb-2">Cookies</h3>
+              <p>
+                Our websites use so-called &apos;cookies&apos;. Cookies are small text files and do
+                not cause any damage to your device. They are stored either temporarily for the
+                duration of a session (session cookies) or permanently (permanent cookies) on your
+                device. Session cookies are automatically deleted at the end of your visit.
+                Permanent cookies remain stored on your device until you delete them yourself or
+                until they are automatically deleted by your web browser.
+              </p>
+              <p>
+                In some cases, cookies from third-party companies may also be stored on your device
+                when you enter our site (third-party cookies). These enable us or you to use certain
+                services of the third-party company (e.g. cookies for processing payment services).
+              </p>
+              <p>
+                Cookies have various functions. Many cookies are technically necessary, as certain
+                website functions would not work without them (e.g. the shopping cart function or
+                the display of videos). Other cookies are used to evaluate user behavior or display
+                advertising.
+              </p>
+              <p>
+                Cookies that are necessary to carry out the electronic communication process
+                (necessary cookies) or to provide certain functions that you have requested
+                (functional cookies, e.g. for the shopping cart function) or to optimize the website
+                (e.g. cookies to measure the web audience) are stored on the basis of Art. 6 (1)
+                lit. f GDPR, unless another legal basis is specified. The website operator has a
+                legitimate interest in storing cookies for the technically error-free and optimized
+                provision of its services. If consent to store cookies has been requested, the
+                storage of the cookies in question is based exclusively on this consent (Art. 6
+                para. 1 lit. a GDPR); consent can be revoked at any time.
+              </p>
+              <p>
+                You can set your browser so that you are informed about the setting of cookies and
+                only allow cookies in individual cases, exclude the acceptance of cookies for
+                certain cases or in general and activate the automatic deletion of cookies when
+                closing the browser. When deactivating cookies, the functionality of this website
+                may be limited.
+              </p>
+              <p>
+                Insofar as cookies are used by third-party companies or for analysis purposes, we
+                will inform you separately about this within the framework of this data protection
+                declaration and, if necessary, request your consent.
+              </p>
 
               <h3 className="text-lg font-semibold mt-4 mb-2">Server Log Files</h3>
               <p>

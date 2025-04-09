@@ -4,9 +4,11 @@ const useVerificationCode = () => {
   const [verificationCode, setVerificationCode] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const verificationCode = params.get('code');
-    setVerificationCode(verificationCode ?? undefined);
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const verificationCode = params.get('code');
+      setVerificationCode(verificationCode ?? undefined);
+    }
   }, []);
 
   return {
