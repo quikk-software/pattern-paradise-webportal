@@ -14,6 +14,8 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Trash2 } from 'lucide-react';
 import { useRemoveUsersFromTesting } from '@/lib/api/testing';
 import RequestStatus from '@/lib/components/RequestStatus';
+import { useSelector } from 'react-redux';
+import { Store } from '@/lib/redux/store';
 
 interface ManageTestersDrawerProps {
   isOpen: boolean;
@@ -29,6 +31,8 @@ export default function ManageTesterDrawers({
   const [selectedTesterIds, setSelectedTesterIds] = useState<string[]>([]);
 
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useRemoveUsersFromTesting();
+
+  const { userId } = useSelector((s: Store) => s.auth);
 
   if (!testing?.testers || testing.testers.length === 0) {
     return null;
@@ -52,16 +56,27 @@ export default function ManageTesterDrawers({
     setSelectedTesterIds([...selectedTesterIdsCopy, testerId]);
   };
 
+  const isOwner = testing.creatorId === userId;
+
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent className="p-4">
         <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
-          <DrawerHeader>
-            <DrawerTitle>Manage Testers</DrawerTitle>
-            <DrawerTitle className="text-sm font-medium">
-              View and remove testers from your tester call.
-            </DrawerTitle>
-          </DrawerHeader>
+          {isOwner ? (
+            <DrawerHeader>
+              <DrawerTitle>Manage Testers</DrawerTitle>
+              <DrawerTitle className="text-sm font-medium">
+                View and remove testers from your tester call.
+              </DrawerTitle>
+            </DrawerHeader>
+          ) : (
+            <DrawerHeader>
+              <DrawerTitle>View Testers</DrawerTitle>
+              <DrawerTitle className="text-sm font-medium">
+                View testers from this tester call.
+              </DrawerTitle>
+            </DrawerHeader>
+          )}
           <div className="flex flex-col gap-4 overflow-y-auto">
             {testing.testers?.map((tester) => (
               <div className="flex justify-between items-center space-x-4" key={tester.id}>
@@ -83,13 +98,15 @@ export default function ManageTesterDrawers({
                     <p className="text-sm text-muted-foreground">@{tester.username}</p>
                   </div>
                 </Link>
-                <Button
-                  variant={selectedTesterIds.includes(tester.id) ? 'destructive' : 'outline'}
-                  size="icon"
-                  onClick={() => handleTesterRemovableListClick(tester.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                {isOwner ? (
+                  <Button
+                    variant={selectedTesterIds.includes(tester.id) ? 'destructive' : 'outline'}
+                    size="icon"
+                    onClick={() => handleTesterRemovableListClick(tester.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                ) : null}
               </div>
             ))}
           </div>
@@ -111,16 +128,18 @@ export default function ManageTesterDrawers({
               variant={'outline'}
               disabled={isLoading}
             >
-              Cancel
+              {isOwner ? 'Cancel' : 'Go Back'}
             </Button>
-            <Button
-              onClick={() => handleRemoveTestersFromTestingClick(testing.id, selectedTesterIds)}
-              variant={'destructive'}
-              disabled={isLoading || selectedTesterIds.length === 0}
-            >
-              {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-              Delete Selected Testers
-            </Button>
+            {isOwner ? (
+              <Button
+                onClick={() => handleRemoveTestersFromTestingClick(testing.id, selectedTesterIds)}
+                variant={'destructive'}
+                disabled={isLoading || selectedTesterIds.length === 0}
+              >
+                {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
+                Delete Selected Testers
+              </Button>
+            ) : null}
           </DrawerFooter>
         </div>
       </DrawerContent>

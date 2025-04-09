@@ -6,6 +6,7 @@ import {
   PaperclipIcon,
   SendIcon,
   StarIcon,
+  Users,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ import Image from 'next/image';
 import { DynamicTextarea } from '@/components/dynamic-textarea';
 import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
 import NewMessages from '@/lib/components/NewMessages';
+import ManageTesterDrawers from '@/lib/components/ManageTestersDrawer';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -142,6 +144,7 @@ export default function ChatHistory({
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
+  const [isTestersDrawerOpen, setIsTestersDrawerOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -316,6 +319,8 @@ export default function ChatHistory({
     (testerApplication) => testerApplication.user.id === userId,
   )?.status;
 
+  const currentTesting = testings.find((testing) => testing.id === selectedTestingId);
+
   return (
     <div
       className={cn('bg-white w-full md:w-2/3', {
@@ -356,6 +361,16 @@ export default function ChatHistory({
                   <h2 className="text-2xl font-bold">Chat History</h2>
                 </div>
                 <div className="flex items-center justify-end gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={!currentTesting || !selectedProductIdByTesting || !isTesterOrCreator}
+                    onClick={() => {
+                      setIsTestersDrawerOpen(true);
+                    }}
+                  >
+                    <Users className="h-6 w-6" />
+                  </Button>
                   {status !== 'Created' ? (
                     <Button
                       variant="outline"
@@ -685,6 +700,13 @@ export default function ChatHistory({
         callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
         languages={productLanguages}
       />
+      {currentTesting ? (
+        <ManageTesterDrawers
+          testing={currentTesting}
+          isOpen={isTestersDrawerOpen}
+          setIsOpen={setIsTestersDrawerOpen}
+        />
+      ) : null}
     </div>
   );
 }
