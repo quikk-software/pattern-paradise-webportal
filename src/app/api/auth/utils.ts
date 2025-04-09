@@ -43,6 +43,7 @@ export async function refreshAccessToken(token: any) {
       accessToken: refreshedTokens.access_token,
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
       expiresAt: decodedToken.exp! * 1000,
+      error: null,
     };
   } catch (error) {
     logger.error('Error refreshing access token:', error);

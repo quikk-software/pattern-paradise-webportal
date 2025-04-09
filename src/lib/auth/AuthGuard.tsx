@@ -16,12 +16,14 @@ import {
 } from '@/lib/features/auth/authSlice';
 import PayPalReminderWrapper from '@/app/wrappers/PayPalReminderWrapper';
 import { usePushNotification } from '@/app/providers/PushNotificationProvider';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+
+const FIVE_MINUTES = 5 * 60 * 1000;
 
 const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> = ({
   children,
 }) => {
-  const { data: session, status } = useValidSession();
+  const { data: session, status, update } = useValidSession();
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -35,6 +37,14 @@ const AuthGuard: React.FunctionComponent<PropsWithChildren<Record<never, any>>> 
   const encodedRedirect = encodeURIComponent(redirect);
 
   const isLoading = status === 'loading';
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      update().then();
+    }, FIVE_MINUTES);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (status === 'unauthenticated' || (session as any)?.error === 'RefreshAccessTokenError') {

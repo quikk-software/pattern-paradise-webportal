@@ -10,7 +10,7 @@ import { refreshAccessToken } from '@/app/api/auth/utils';
 const handler = NextAuth({
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 15,
+    maxAge: 14 * 24 * 60 * 60,
     updateAge: 0,
   },
   providers: [
@@ -72,6 +72,7 @@ const handler = NextAuth({
             roles: decodedToken?.resource_access?.[process.env.KEYCLOAK_CLIENT_ID]?.roles || [],
             // @ts-ignore
             subscriptionStatus: user.paypalSubscriptionStatus,
+            error: null,
           };
         } catch (error: any) {
           throw new Error(`Keycloak authentication failed: ${error?.message}`);
