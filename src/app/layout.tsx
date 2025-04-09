@@ -65,13 +65,6 @@ export const metadata: Metadata = {
     images: [`${APP_DOMAIN}/favicons/android-icon-192x192.png`],
     creator: '@patternparadis3',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1.0,
-    maximumScale: 1.0,
-    minimumScale: 1.0,
-    userScalable: false,
-  },
   manifest: '/manifest.webmanifest',
   other: {
     'mobile-web-app-capable': 'yes',
