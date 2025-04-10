@@ -82,9 +82,9 @@ export default function UserDetailsCard({
               </AvatarFallback>
             </Avatar>
             <div>
-              {user.firstName && user.lastName ? (
+              {user.firstName || user.lastName ? (
                 <h2 className="text-lg font-semibold underline text-blue-500">
-                  {user.firstName} {user.lastName}
+                  {`${user.firstName ?? ''} ${user.lastName ?? ''}`.trim()}
                 </h2>
               ) : null}
               <p
