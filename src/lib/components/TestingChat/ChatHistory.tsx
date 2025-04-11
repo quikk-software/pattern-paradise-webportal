@@ -443,10 +443,9 @@ export default function ChatHistory({
                 const testerUser = currentTesting?.testers?.find(
                   (tester) => tester.id === message.creatorId,
                 );
-                const sellerUser =
-                  currentTesting?.creatorId === message.creatorId
-                    ? currentTesting.creator
-                    : undefined;
+
+                const isTestingOwner = currentTesting?.creatorId === message.creatorId;
+                const sellerUser = isTestingOwner ? currentTesting.creator : undefined;
                 const otherName = buildUserName(testerUser) || buildUserName(sellerUser) || 'Other';
                 const isCreator = message.creatorId === userId;
 
@@ -456,7 +455,9 @@ export default function ChatHistory({
                       <div key={message.id} className={`mb-4 mr-auto w-full`}>
                         <div className="flex items-start">
                           <Avatar className="w-8 h-8 mr-2">
-                            <AvatarImage src={testerUser?.imageUrl} />
+                            <AvatarImage
+                              src={`${process.env.NEXT_PUBLIC_URL}/icons/main/256.png`}
+                            />
                             <AvatarFallback>PP</AvatarFallback>
                           </Avatar>
                           <div className="flex-1 rounded-lg p-3 bg-primary">
@@ -523,7 +524,9 @@ export default function ChatHistory({
                           >
                             <Link
                               href={
-                                sellerUser ? `/users/${sellerUser?.id}` : `/users/${testerUser?.id}`
+                                isTestingOwner
+                                  ? `/users/${sellerUser?.id}`
+                                  : `/users/${testerUser?.id}`
                               }
                             >
                               <Avatar
@@ -538,11 +541,17 @@ export default function ChatHistory({
                                       }
                                 }
                               >
-                                <AvatarImage src={testerUser?.imageUrl} />
+                                <AvatarImage
+                                  src={isTestingOwner ? sellerUser?.imageUrl : testerUser?.imageUrl}
+                                />
                                 <AvatarFallback>
-                                  {testerUser?.firstName?.at(0) && testerUser?.lastName?.at(0)
-                                    ? `${testerUser.firstName.at(0)}${testerUser.lastName.at(0)}`
-                                    : ''}
+                                  {isTestingOwner
+                                    ? sellerUser?.firstName?.at(0) && sellerUser?.lastName?.at(0)
+                                      ? `${sellerUser.firstName.at(0)}${sellerUser.lastName.at(0)}`
+                                      : ''
+                                    : testerUser?.firstName?.at(0) && testerUser?.lastName?.at(0)
+                                      ? `${testerUser.firstName.at(0)}${testerUser.lastName.at(0)}`
+                                      : ''}
                                 </AvatarFallback>
                               </Avatar>
                             </Link>
