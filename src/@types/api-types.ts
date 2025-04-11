@@ -482,6 +482,7 @@ export interface PostTestingCommentRequest {
   comment: string;
   type: string;
   testerStatus?: string;
+  replyToId?: string;
   files: {
     url: string;
     mimeType: string;
@@ -504,6 +505,9 @@ export interface GetTestingCommentResponse {
   testingId: string;
   message: string;
   type: string;
+  replyToId?: string;
+  replyTo: GetTestingCommentResponse;
+  reactions: GetMessageReactionResponse[];
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -771,6 +775,18 @@ export interface PostNewsletterSubscriptionRequest {
   email: string;
 }
 
+export interface GetMessageReactionResponse {
+  id: string;
+  emoji: string;
+  userId: string;
+  messageId: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+}
+
 export interface GetChatMessageResponse {
   id: string;
   isRead: boolean;
@@ -781,6 +797,9 @@ export interface GetChatMessageResponse {
   message?: string;
   creatorId: string;
   chatId: string;
+  replyToId?: string;
+  replyTo: GetChatMessageResponse;
+  reactions: GetMessageReactionResponse[];
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -862,6 +881,7 @@ export interface PostChatMessageRequest {
     mimeType: string;
   }[];
   message?: string;
+  replyToId?: string;
 }
 
 export interface PostProductLikeRequest {
@@ -2453,6 +2473,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         type?: any;
         /** @example "any" */
         testerStatus?: any;
+        /** @example "any" */
+        replyToId?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -2623,7 +2645,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description The order will be queried by a given ID. If the order cannot be found, an exception will be thrown.
+     * @description The order will be queried by a given ID. The ID can be both a PayPal order ID or system order ID. If the order cannot be found, an exception will be thrown.
      *
      * @tags Order
      * @name GetOrderById
@@ -3332,6 +3354,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         message?: any;
         /** @example "any" */
         files?: any;
+        /** @example "any" */
+        replyToId?: any;
       },
       params: RequestParams = {},
     ) =>

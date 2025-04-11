@@ -7,7 +7,6 @@ import StoreProvider from '@/app/providers/StoreProvider';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import TokenDataWrapper from '@/app/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
-import { useSession } from 'next-auth/react';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 
@@ -30,12 +29,6 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
   const shouldRemoveContainer = !!getPublicUrl(pathname, noContainerPages);
 
   const scrollableDivRef = useRef<HTMLDivElement>(null);
-
-  const { update } = useSession();
-
-  useEffect(() => {
-    update().then();
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
