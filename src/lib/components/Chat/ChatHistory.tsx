@@ -22,6 +22,7 @@ import { useCreateChatMessage, useReadAllChatMessages } from '@/lib/api';
 import logger from '@/lib/core/logger';
 import NewMessages from '@/lib/components/NewMessages';
 import BlockChatButton from '@/lib/components/Chat/BlockChatButton';
+import ReplyMessage from '@/lib/components/ReplyMessage';
 
 function getColor(isCreator: boolean) {
   if (isCreator) {
@@ -67,6 +68,7 @@ export default function ChatHistory({
   const [files, setFiles] = useState<FileList | null>(null);
   const [sendMessageIsLoading, setSendMessageIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
+  const [replyingTo, setReplyingTo] = useState<GetChatMessageResponse | null>(null);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -155,6 +157,7 @@ export default function ChatHistory({
             url: fu.url,
             mimeType: fu.mimeType,
           })),
+          replyToId: replyingTo?.id,
         });
         if (chatMessage) {
           setMessages((msgs) =>
@@ -162,6 +165,7 @@ export default function ChatHistory({
               (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
             ),
           );
+          setReplyingTo(null);
           setNewMessage('');
           setFiles(null);
         }
@@ -176,6 +180,10 @@ export default function ChatHistory({
       return;
     }
     readAllChatMessages(selectedChatId).then();
+  };
+
+  const handleReply = (message: GetChatMessageResponse) => {
+    setReplyingTo(message);
   };
 
   const currentChat = chats.find((chat) => chat.id === selectedChatId);
@@ -261,112 +269,154 @@ export default function ChatHistory({
                           }
                     }
                   >
-                    <div
-                      className="flex items-start"
-                      style={
-                        isCreator
-                          ? {
-                              flexDirection: 'row-reverse',
+                    <ReplyMessage onSwipe={() => handleReply(message)}>
+                      <div
+                        className="flex items-start"
+                        style={
+                          isCreator
+                            ? {
+                                flexDirection: 'row-reverse',
+                              }
+                            : {}
+                        }
+                      >
+                        <Link href={`/users/${chatMessageCreator?.id}`} rel={'nofollow'}>
+                          <Avatar
+                            className="w-8 h-8"
+                            style={
+                              isCreator
+                                ? {
+                                    marginLeft: '0.5rem',
+                                  }
+                                : {
+                                    marginRight: '0.5rem',
+                                  }
                             }
-                          : {}
-                      }
-                    >
-                      <Link href={`/users/${chatMessageCreator?.id}`} rel={'nofollow'}>
-                        <Avatar
-                          className="w-8 h-8"
-                          style={
-                            isCreator
-                              ? {
-                                  marginLeft: '0.5rem',
-                                }
-                              : {
-                                  marginRight: '0.5rem',
-                                }
-                          }
-                        >
-                          <AvatarImage src={chatMessageCreator?.imageUrl} />
-                          <AvatarFallback>
-                            {chatMessageCreator?.firstName?.at(0) &&
-                            chatMessageCreator?.lastName?.at(0)
-                              ? `${chatMessageCreator.firstName.at(0)}${chatMessageCreator.lastName.at(0)}`
-                              : ''}
-                          </AvatarFallback>
-                        </Avatar>
-                      </Link>
-                      <div className={`flex-1 rounded-lg p-3 max-w-xs ${getColor(isCreator)}`}>
-                        <div className="flex gap-2 justify-between items-center">
-                          <span className={`font-semibold`}>{isCreator ? 'You' : otherName}</span>
-                          <span className={`text-xs`}>
-                            {dayjs(message.createdAt).format(TIME_FORMAT)}
-                          </span>
-                        </div>
+                          >
+                            <AvatarImage src={chatMessageCreator?.imageUrl} />
+                            <AvatarFallback>
+                              {chatMessageCreator?.firstName?.at(0) &&
+                              chatMessageCreator?.lastName?.at(0)
+                                ? `${chatMessageCreator.firstName.at(0)}${chatMessageCreator.lastName.at(0)}`
+                                : ''}
+                            </AvatarFallback>
+                          </Avatar>
+                        </Link>
+                        <div className={`flex-1 rounded-lg p-3 max-w-xs ${getColor(isCreator)}`}>
+                          {message.replyTo?.message && message.id !== message.replyTo.id ? (
+                            <div className="mb-1 rounded-md border bg-gray-200 p-1 text-xs">
+                              <p className="line-clamp-2 text-gray-600">
+                                {message.replyTo?.message}
+                              </p>
+                            </div>
+                          ) : null}
+                          <div className="flex gap-2 justify-between items-center">
+                            <span className={`font-semibold`}>{isCreator ? 'You' : otherName}</span>
+                            <span className={`text-xs`}>
+                              {dayjs(message.createdAt).format(TIME_FORMAT)}
+                            </span>
+                          </div>
 
-                        <p
-                          className="mt-1 break-words overflow-hidden"
-                          style={{
-                            textAlign: 'left',
-                            whiteSpace: 'pre-line',
-                          }}
-                        >
-                          {message.message}
-                        </p>
-                        <div className="flex flex-col gap-2">
-                          {message.files.length > 0
-                            ? message.files.map((file) =>
-                                file.mimeType.startsWith('image/') ? (
-                                  <a href={file.url} key={file.url} target="_blank">
-                                    <CldImage
-                                      alt="Pattern Paradise"
-                                      src={file.url}
-                                      width="340"
-                                      height="250"
-                                      crop={{
-                                        type: 'auto',
-                                        source: true,
-                                      }}
-                                    />
-                                  </a>
-                                ) : (
-                                  <div
-                                    key={file.url}
-                                    className="mt-2"
-                                    style={
-                                      isCreator
-                                        ? {
-                                            textAlign: 'right',
-                                          }
-                                        : {
-                                            textAlign: 'left',
-                                          }
-                                    }
-                                  >
-                                    <a
-                                      href={file.url}
-                                      className="text-blue-500 hover:underline"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <Button variant={'ghost'}>📎 Download file</Button>
+                          <p
+                            className="mt-1 break-words overflow-hidden"
+                            style={{
+                              textAlign: 'left',
+                              whiteSpace: 'pre-line',
+                            }}
+                          >
+                            {message.message}
+                          </p>
+                          <div className="flex flex-col gap-2">
+                            {message.files.length > 0
+                              ? message.files.map((file) =>
+                                  file.mimeType.startsWith('image/') ? (
+                                    <a href={file.url} key={file.url} target="_blank">
+                                      <CldImage
+                                        alt="Pattern Paradise"
+                                        src={file.url}
+                                        width="340"
+                                        height="250"
+                                        crop={{
+                                          type: 'auto',
+                                          source: true,
+                                        }}
+                                      />
                                     </a>
-                                  </div>
-                                ),
-                              )
-                            : null}
+                                  ) : (
+                                    <div
+                                      key={file.url}
+                                      className="mt-2"
+                                      style={
+                                        isCreator
+                                          ? {
+                                              textAlign: 'right',
+                                            }
+                                          : {
+                                              textAlign: 'left',
+                                            }
+                                      }
+                                    >
+                                      <a
+                                        href={file.url}
+                                        className="text-blue-500 hover:underline"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <Button variant={'ghost'}>📎 Download file</Button>
+                                      </a>
+                                    </div>
+                                  ),
+                                )
+                              : null}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </ReplyMessage>
                   </div>
                 );
               })}
-            {!showChatList ? <div ref={bottomRef} /> : null}
-            <div className="sticky bottom-0 left-0 w-full py-1 bg-white">
-              <NewMessages
-                message={socketMessage}
-                currentBottomRef={bottomRef}
-                callback={handleReadAllChatMessages}
-              />
-            </div>
           </ScrollArea>
+
+          {replyingTo ? (
+            <div className="sticky bottom-0 left-0 w-full py-1 bg-white flex gap-2 items-center px-4">
+              <div className="flex-1">
+                <span className="text-xs font-semibold">
+                  Replying to{' '}
+                  {replyingTo.creatorId === userId
+                    ? 'yourself'
+                    : buildUserName(
+                        currentChat?.participants?.find((p) => p.userId === replyingTo.creatorId)
+                          ?.user,
+                      )}
+                </span>
+                <p className="text-sm line-clamp-1">{replyingTo.message}</p>
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </Button>
+            </div>
+          ) : null}
+          {!showChatList ? <div ref={bottomRef} /> : null}
+          <div className="sticky bottom-0 left-0 w-full py-1 bg-white px-4">
+            <NewMessages
+              message={socketMessage}
+              currentBottomRef={bottomRef}
+              callback={handleReadAllChatMessages}
+            />
+          </div>
 
           {/* Message Input Area */}
           {!!selectedChatId ? (

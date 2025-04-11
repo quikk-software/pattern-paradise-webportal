@@ -32,6 +32,7 @@ import { DynamicTextarea } from '@/components/dynamic-textarea';
 import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
 import NewMessages from '@/lib/components/NewMessages';
 import ManageTesterDrawers from '@/lib/components/ManageTestersDrawer';
+import ReplyMessage from '@/lib/components/ReplyMessage';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -145,6 +146,7 @@ export default function ChatHistory({
   const [initialLoad, setInitialLoad] = useState(true);
   const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
   const [isTestersDrawerOpen, setIsTestersDrawerOpen] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<GetTestingCommentResponse | null>(null);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -269,6 +271,7 @@ export default function ChatHistory({
             mimeType: fu.mimeType,
           })),
           testingId: selectedTestingId,
+          replyToId: replyingTo?.id,
         });
         if (message) {
           setMessages((msgs) =>
@@ -278,6 +281,7 @@ export default function ChatHistory({
           );
           setNewMessage('');
           setFiles(null);
+          setReplyingTo(null);
         }
       } finally {
         setSendMessageIsLoading(false);
@@ -307,6 +311,10 @@ export default function ChatHistory({
     if (payload?.startsWith('https://') || payload.startsWith('/')) {
       router.push(payload);
     }
+  };
+
+  const handleReply = (message: GetTestingCommentResponse) => {
+    setReplyingTo(message);
   };
 
   const isInactive = selectedTestingStatus !== 'InProgress';
@@ -502,143 +510,189 @@ export default function ChatHistory({
                               }
                         }
                       >
-                        <div
-                          className="flex items-start"
-                          style={
-                            isCreator
-                              ? {
-                                  flexDirection: 'row-reverse',
-                                }
-                              : {}
-                          }
-                        >
-                          <Link
-                            href={
-                              sellerUser ? `/users/${sellerUser?.id}` : `/users/${testerUser?.id}`
+                        <ReplyMessage onSwipe={() => handleReply(message)}>
+                          <div
+                            className="flex items-start"
+                            style={
+                              isCreator
+                                ? {
+                                    flexDirection: 'row-reverse',
+                                  }
+                                : {}
                             }
                           >
-                            <Avatar
-                              className="w-8 h-8"
-                              style={
-                                isCreator
-                                  ? {
-                                      marginLeft: '0.5rem',
-                                    }
-                                  : {
-                                      marginRight: '0.5rem',
-                                    }
+                            <Link
+                              href={
+                                sellerUser ? `/users/${sellerUser?.id}` : `/users/${testerUser?.id}`
                               }
                             >
-                              <AvatarImage src={testerUser?.imageUrl} />
-                              <AvatarFallback>
-                                {testerUser?.firstName?.at(0) && testerUser?.lastName?.at(0)
-                                  ? `${testerUser.firstName.at(0)}${testerUser.lastName.at(0)}`
-                                  : ''}
-                              </AvatarFallback>
-                            </Avatar>
-                          </Link>
-                          <div
-                            className={`flex-1 rounded-lg p-3 ${
-                              message.type === 'Review'
-                                ? 'bg-yellow-100 border-2 border-yellow-300 dark:bg-yellow-900 dark:border-yellow-700'
-                                : undefined
-                            } rounded-lg p-3 max-w-xs`}
-                            style={{
-                              backgroundColor:
-                                message.type === 'Review' ? undefined : getColor(message.creatorId),
-                            }}
-                          >
-                            {message.type === 'Review' && (
-                              <div className="flex items-center mb-1">
-                                <StarIcon className="w-4 h-4 text-yellow-500 mr-1" />
-                                <span className="text-sm font-semibold">Review</span>
-                              </div>
-                            )}
-                            <div className="flex gap-2 justify-between items-center">
-                              <span
-                                className={`font-semibold ${
-                                  message.type === 'Review'
-                                    ? 'text-gray-800 dark:text-gray-200'
-                                    : ''
-                                }`}
+                              <Avatar
+                                className="w-8 h-8"
+                                style={
+                                  isCreator
+                                    ? {
+                                        marginLeft: '0.5rem',
+                                      }
+                                    : {
+                                        marginRight: '0.5rem',
+                                      }
+                                }
                               >
-                                {isCreator ? 'You' : otherName}
-                              </span>
-                              <span
-                                className={`text-xs ${
-                                  message.type === 'Review'
-                                    ? 'text-gray-800 dark:text-gray-200'
-                                    : 'text-gray-500'
-                                }`}
-                              >
-                                {dayjs(message.createdAt).format(TIME_FORMAT)}
-                              </span>
-                            </div>
-
-                            <p
-                              className="mt-1 break-words overflow-hidden"
+                                <AvatarImage src={testerUser?.imageUrl} />
+                                <AvatarFallback>
+                                  {testerUser?.firstName?.at(0) && testerUser?.lastName?.at(0)
+                                    ? `${testerUser.firstName.at(0)}${testerUser.lastName.at(0)}`
+                                    : ''}
+                                </AvatarFallback>
+                              </Avatar>
+                            </Link>
+                            <div
+                              className={`flex-1 rounded-lg p-3 ${
+                                message.type === 'Review'
+                                  ? 'bg-yellow-100 border-2 border-yellow-300 dark:bg-yellow-900 dark:border-yellow-700'
+                                  : undefined
+                              } rounded-lg p-3 max-w-xs`}
                               style={{
-                                textAlign: 'left',
-                                whiteSpace: 'pre-line',
+                                backgroundColor:
+                                  message.type === 'Review'
+                                    ? undefined
+                                    : getColor(message.creatorId),
                               }}
                             >
-                              {message.message}
-                            </p>
-                            <div className="flex flex-col gap-2">
-                              {message.files.length > 0
-                                ? message.files.map((file) =>
-                                    file.mimeType.startsWith('image/') ? (
-                                      <a href={file.url} key={file.url} target="_blank">
-                                        <CldImage
-                                          alt="Pattern Paradise"
-                                          src={file.url}
-                                          width="340"
-                                          height="250"
-                                          crop={{
-                                            type: 'auto',
-                                            source: true,
-                                          }}
-                                        />
-                                      </a>
-                                    ) : (
-                                      <div
-                                        key={file.url}
-                                        className="mt-2"
-                                        style={
-                                          isCreator
-                                            ? {
-                                                textAlign: 'right',
-                                              }
-                                            : {
-                                                textAlign: 'left',
-                                              }
-                                        }
-                                      >
-                                        <a
-                                          href={file.url}
-                                          className="text-blue-500 hover:underline"
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                        >
-                                          <Button variant={'ghost'}>📎 Download file</Button>
+                              {message.type === 'Review' && (
+                                <div className="flex items-center mb-1">
+                                  <StarIcon className="w-4 h-4 text-yellow-500 mr-1" />
+                                  <span className="text-sm font-semibold">Review</span>
+                                </div>
+                              )}
+
+                              {message.replyTo?.message && message.id !== message.replyTo.id ? (
+                                <div className="mb-1 rounded-md border bg-gray-200 p-1 text-xs">
+                                  <p className="line-clamp-2 text-gray-600">
+                                    {message.replyTo?.message}
+                                  </p>
+                                </div>
+                              ) : null}
+
+                              <div className="flex gap-2 justify-between items-center">
+                                <span
+                                  className={`font-semibold ${
+                                    message.type === 'Review'
+                                      ? 'text-gray-800 dark:text-gray-200'
+                                      : ''
+                                  }`}
+                                >
+                                  {isCreator ? 'You' : otherName}
+                                </span>
+                                <span
+                                  className={`text-xs ${
+                                    message.type === 'Review'
+                                      ? 'text-gray-800 dark:text-gray-200'
+                                      : 'text-gray-500'
+                                  }`}
+                                >
+                                  {dayjs(message.createdAt).format(TIME_FORMAT)}
+                                </span>
+                              </div>
+
+                              <p
+                                className="mt-1 break-words overflow-hidden"
+                                style={{
+                                  textAlign: 'left',
+                                  whiteSpace: 'pre-line',
+                                }}
+                              >
+                                {message.message}
+                              </p>
+                              <div className="flex flex-col gap-2">
+                                {message.files.length > 0
+                                  ? message.files.map((file) =>
+                                      file.mimeType.startsWith('image/') ? (
+                                        <a href={file.url} key={file.url} target="_blank">
+                                          <CldImage
+                                            alt="Pattern Paradise"
+                                            src={file.url}
+                                            width="340"
+                                            height="250"
+                                            crop={{
+                                              type: 'auto',
+                                              source: true,
+                                            }}
+                                          />
                                         </a>
-                                      </div>
-                                    ),
-                                  )
-                                : null}
+                                      ) : (
+                                        <div
+                                          key={file.url}
+                                          className="mt-2"
+                                          style={
+                                            isCreator
+                                              ? {
+                                                  textAlign: 'right',
+                                                }
+                                              : {
+                                                  textAlign: 'left',
+                                                }
+                                          }
+                                        >
+                                          <a
+                                            href={file.url}
+                                            className="text-blue-500 hover:underline"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            <Button variant={'ghost'}>📎 Download file</Button>
+                                          </a>
+                                        </div>
+                                      ),
+                                    )
+                                  : null}
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </ReplyMessage>
                       </div>
                     )}
                   </>
                 );
               })}
-            {!showChatList ? <div ref={bottomRef} /> : null}
-            <div className="sticky bottom-0 left-0 w-full py-1 bg-white">
-              <NewMessages message={socketMessage} currentBottomRef={bottomRef} />
-            </div>
           </ScrollArea>
+          {replyingTo ? (
+            <div className="sticky bottom-0 left-0 w-full py-1 bg-white flex gap-2 items-center px-4">
+              <div className="flex-1">
+                <span className="text-xs font-semibold">
+                  Replying to{' '}
+                  {replyingTo.creatorId === userId
+                    ? 'yourself'
+                    : buildUserName(
+                        testings
+                          .find((t) => t.id === selectedTestingId)
+                          ?.testers?.find((t) => t.id === replyingTo.creatorId),
+                      ) || 'Other'}
+                </span>
+                <p className="text-sm line-clamp-1">{replyingTo.message}</p>
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </Button>
+            </div>
+          ) : null}
+          {!showChatList ? <div ref={bottomRef} /> : null}
+          <div className="sticky bottom-0 left-0 w-full py-1 bg-white px-4">
+            <NewMessages message={socketMessage} currentBottomRef={bottomRef} />
+          </div>
 
           {/* Message Input Area */}
           {!!selectedTestingId ? (
