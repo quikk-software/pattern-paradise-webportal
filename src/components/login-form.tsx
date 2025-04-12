@@ -49,11 +49,11 @@ export function LoginForm() {
         <form onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Email or username</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Enter your email or username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
