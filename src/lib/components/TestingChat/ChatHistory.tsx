@@ -556,7 +556,7 @@ export default function ChatHistory({
                               </Avatar>
                             </Link>
                             <div
-                              className={`flex-1 rounded-lg p-3 ${
+                              className={`flex flex-col flex-1 gap-1 rounded-lg p-3 ${
                                 message.type === 'Review'
                                   ? 'bg-yellow-100 border-2 border-yellow-300 dark:bg-yellow-900 dark:border-yellow-700'
                                   : undefined
@@ -575,44 +575,23 @@ export default function ChatHistory({
                                 </div>
                               )}
 
-                              {message.replyTo?.message && message.id !== message.replyTo.id ? (
-                                <div className="mb-1 rounded-md border bg-gray-200 p-1 text-xs">
-                                  <p className="line-clamp-2 text-gray-600">
-                                    {message.replyTo?.message}
-                                  </p>
+                              {(message.replyTo?.message || message.replyTo?.files.at(0)?.url) &&
+                              message.id !== message.replyTo.id ? (
+                                <div className="flex flex-row gap-2 mb-1 rounded-md border bg-gray-200 p-1 text-xs">
+                                  {message.replyTo.files.at(0)?.url ? (
+                                    <img
+                                      src={message.replyTo.files.at(0)?.url}
+                                      className="aspect-square object-cover object-center w-12 h-12"
+                                    />
+                                  ) : null}
+                                  {message.replyTo?.message ? (
+                                    <p className="line-clamp-2 text-gray-600">
+                                      {message.replyTo?.message}
+                                    </p>
+                                  ) : null}
                                 </div>
                               ) : null}
 
-                              <div className="flex gap-2 justify-between items-center">
-                                <span
-                                  className={`font-semibold ${
-                                    message.type === 'Review'
-                                      ? 'text-gray-800 dark:text-gray-200'
-                                      : ''
-                                  }`}
-                                >
-                                  {isCreator ? 'You' : otherName}
-                                </span>
-                                <span
-                                  className={`text-xs ${
-                                    message.type === 'Review'
-                                      ? 'text-gray-800 dark:text-gray-200'
-                                      : 'text-gray-500'
-                                  }`}
-                                >
-                                  {dayjs(message.createdAt).format(TIME_FORMAT)}
-                                </span>
-                              </div>
-
-                              <p
-                                className="mt-1 break-words overflow-hidden"
-                                style={{
-                                  textAlign: 'left',
-                                  whiteSpace: 'pre-line',
-                                }}
-                              >
-                                {message.message}
-                              </p>
                               <div className="flex flex-col gap-2">
                                 {message.files.length > 0
                                   ? message.files.map((file) =>
@@ -655,6 +634,39 @@ export default function ChatHistory({
                                       ),
                                     )
                                   : null}
+                              </div>
+
+                              <div className="space-y-1">
+                                <div className="flex gap-2 justify-between items-center">
+                                  <span
+                                    className={`font-semibold ${
+                                      message.type === 'Review'
+                                        ? 'text-gray-800 dark:text-gray-200'
+                                        : ''
+                                    }`}
+                                  >
+                                    {isCreator ? 'You' : otherName}
+                                  </span>
+                                  <span
+                                    className={`text-xs ${
+                                      message.type === 'Review'
+                                        ? 'text-gray-800 dark:text-gray-200'
+                                        : 'text-gray-500'
+                                    }`}
+                                  >
+                                    {dayjs(message.createdAt).format(TIME_FORMAT)}
+                                  </span>
+                                </div>
+
+                                <p
+                                  className="mt-1 break-words overflow-hidden"
+                                  style={{
+                                    textAlign: 'left',
+                                    whiteSpace: 'pre-line',
+                                  }}
+                                >
+                                  {message.message}
+                                </p>
                               </div>
                             </div>
                           </div>
