@@ -15,7 +15,6 @@ import {
   Trash,
   Trash2,
 } from 'lucide-react';
-import { GetProductResponse } from '@/@types/api-types';
 import { useListProducts } from '@/lib/api';
 import PriceFilter from '@/components/price-filter';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';

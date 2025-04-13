@@ -928,6 +928,22 @@ export interface ListProductLikesResponse {
   productLikes: GetProductLikeResponse[];
 }
 
+export interface GetEventCampaignResponse {
+  id: string;
+  event: string;
+  description?: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
 export interface ExceptionResponse {
   /** A human-readable explanation specific to this occurrence of the problem */
   detail?: string;
@@ -951,9 +967,9 @@ export type NotFoundResponse = ExceptionResponse;
 export type InternalErrorResponse = ExceptionResponse;
 
 export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
+export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
-export interface FullRequestParams extends Omit<RequestInit, 'body'> {
+export interface FullRequestParams extends Omit<RequestInit, "body"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -972,18 +988,22 @@ export interface FullRequestParams extends Omit<RequestInit, 'body'> {
   cancelToken?: CancelToken;
 }
 
-export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'>;
+export type RequestParams = Omit<
+  FullRequestParams,
+  "body" | "method" | "query" | "path"
+>;
 
 export interface ApiConfig<SecurityDataType = unknown> {
   baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, 'baseUrl' | 'cancelToken' | 'signal'>;
+  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<RequestParams | void> | RequestParams | void;
   customFetch?: typeof fetch;
 }
 
-export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
+export interface HttpResponse<D extends unknown, E extends unknown = unknown>
+  extends Response {
   data: D;
   error: E;
 }
@@ -991,24 +1011,25 @@ export interface HttpResponse<D extends unknown, E extends unknown = unknown> ex
 type CancelToken = Symbol | string | number;
 
 export enum ContentType {
-  Json = 'application/json',
-  FormData = 'multipart/form-data',
-  UrlEncoded = 'application/x-www-form-urlencoded',
-  Text = 'text/plain',
+  Json = "application/json",
+  FormData = "multipart/form-data",
+  UrlEncoded = "application/x-www-form-urlencoded",
+  Text = "text/plain",
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://0.0.0.0:3001/';
+  public baseUrl: string = "http://0.0.0.0:3001/";
   private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
+  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
   private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) => fetch(...fetchParams);
+  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
+    fetch(...fetchParams);
 
   private baseApiParams: RequestParams = {
-    credentials: 'same-origin',
+    credentials: "same-origin",
     headers: {},
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
   };
 
   constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
@@ -1021,7 +1042,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
   protected encodeQueryParam(key: string, value: any) {
     const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === 'number' ? value : `${value}`)}`;
+    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
   }
 
   protected addQueryParam(query: QueryParamsType, key: string) {
@@ -1030,33 +1051,37 @@ export class HttpClient<SecurityDataType = unknown> {
 
   protected addArrayQueryParam(query: QueryParamsType, key: string) {
     const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join('&');
+    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
   }
 
   protected toQueryString(rawQuery?: QueryParamsType): string {
     const query = rawQuery || {};
-    const keys = Object.keys(query).filter((key) => 'undefined' !== typeof query[key]);
+    const keys = Object.keys(query).filter(
+      (key) => "undefined" !== typeof query[key],
+    );
     return keys
       .map((key) =>
         Array.isArray(query[key])
           ? this.addArrayQueryParam(query, key)
           : this.addQueryParam(query, key),
       )
-      .join('&');
+      .join("&");
   }
 
   protected addQueryParams(rawQuery?: QueryParamsType): string {
     const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : '';
+    return queryString ? `?${queryString}` : "";
   }
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === 'object' || typeof input === 'string')
+      input !== null && (typeof input === "object" || typeof input === "string")
         ? JSON.stringify(input)
         : input,
     [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== 'string' ? JSON.stringify(input) : input,
+      input !== null && typeof input !== "string"
+        ? JSON.stringify(input)
+        : input,
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key];
@@ -1064,7 +1089,7 @@ export class HttpClient<SecurityDataType = unknown> {
           key,
           property instanceof Blob
             ? property
-            : typeof property === 'object' && property !== null
+            : typeof property === "object" && property !== null
               ? JSON.stringify(property)
               : `${property}`,
         );
@@ -1073,7 +1098,10 @@ export class HttpClient<SecurityDataType = unknown> {
     [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
   };
 
-  protected mergeRequestParams(params1: RequestParams, params2?: RequestParams): RequestParams {
+  protected mergeRequestParams(
+    params1: RequestParams,
+    params2?: RequestParams,
+  ): RequestParams {
     return {
       ...this.baseApiParams,
       ...params1,
@@ -1086,7 +1114,9 @@ export class HttpClient<SecurityDataType = unknown> {
     };
   }
 
-  protected createAbortSignal = (cancelToken: CancelToken): AbortSignal | undefined => {
+  protected createAbortSignal = (
+    cancelToken: CancelToken,
+  ): AbortSignal | undefined => {
     if (this.abortControllers.has(cancelToken)) {
       const abortController = this.abortControllers.get(cancelToken);
       if (abortController) {
@@ -1121,7 +1151,7 @@ export class HttpClient<SecurityDataType = unknown> {
     ...params
   }: FullRequestParams): Promise<HttpResponse<T, E>> => {
     const secureParams =
-      ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) &&
+      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
         this.securityWorker &&
         (await this.securityWorker(this.securityData))) ||
       {};
@@ -1131,15 +1161,23 @@ export class HttpClient<SecurityDataType = unknown> {
     const responseFormat = format || requestParams.format;
 
     return this.customFetch(
-      `${baseUrl || this.baseUrl || ''}${path}${queryString ? `?${queryString}` : ''}`,
+      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
       {
         ...requestParams,
         headers: {
           ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
+          ...(type && type !== ContentType.FormData
+            ? { "Content-Type": type }
+            : {}),
         },
-        signal: (cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal) || null,
-        body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body),
+        signal:
+          (cancelToken
+            ? this.createAbortSignal(cancelToken)
+            : requestParams.signal) || null,
+        body:
+          typeof body === "undefined" || body === null
+            ? null
+            : payloadFormatter(body),
       },
     ).then(async (response) => {
       const r = response.clone() as HttpResponse<T, E>;
@@ -1179,7 +1217,9 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * The Pattern Paradise platform enables buyers, sellers and testers to get the most out of patterns.
  */
-export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+export class Api<
+  SecurityDataType extends unknown,
+> extends HttpClient<SecurityDataType> {
   api = {
     /**
      * @description The application error will be queried by a given ID. If the application error cannot be found, an exception will be thrown.
@@ -1190,12 +1230,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/application-errors/{applicationErrorId}
      * @secure
      */
-    getApplicationErrorById: (applicationErrorId: string, params: RequestParams = {}) =>
+    getApplicationErrorById: (
+      applicationErrorId: string,
+      params: RequestParams = {},
+    ) =>
       this.request<GetApplicationErrorResponse, NotFoundResponse>({
         path: `/api/v1/application-errors/${applicationErrorId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1220,10 +1263,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListApplicationErrorsResponse, any>({
         path: `/api/v1/application-errors/users/${userId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1263,11 +1306,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostUserResponse, any>({
         path: `/api/v1/users`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1291,10 +1334,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListUsersResponse, any>({
         path: `/api/v1/users`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1343,7 +1386,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1371,7 +1414,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/password`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1397,7 +1440,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/gallery`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1423,7 +1466,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/gallery`,
-        method: 'DELETE',
+        method: "DELETE",
         query: query,
         secure: true,
         ...params,
@@ -1450,11 +1493,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostUserPayPalReferralResponse, any>({
         path: `/api/v1/users/${userId}/paypal-referral`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1470,7 +1513,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     deleteUserPayPalReferral: (userId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/paypal-referral`,
-        method: 'DELETE',
+        method: "DELETE",
         secure: true,
         ...params,
       }),
@@ -1487,9 +1530,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getStripeOnboardingLink: (userId: string, params: RequestParams = {}) =>
       this.request<GetStripeOnboardingLinkResponse, any>({
         path: `/api/v1/users/${userId}/stripe-referral/onboarding`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1505,7 +1548,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     deleteUserStripeReferral: (userId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/stripe-referral`,
-        method: 'DELETE',
+        method: "DELETE",
         secure: true,
         ...params,
       }),
@@ -1529,10 +1572,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<GetUserAccountResponse, NotFoundResponse>({
         path: `/api/v1/users/account/${userId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1548,9 +1591,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getUser: (userId: string, params: RequestParams = {}) =>
       this.request<GetUserResponse, NotFoundResponse>({
         path: `/api/v1/users/${userId}/me`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1566,9 +1609,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getPayPalMerchantStatus: (userId: string, params: RequestParams = {}) =>
       this.request<GetUserPayPalMerchantStatusResponse, NotFoundResponse>({
         path: `/api/v1/users/${userId}/paypal-merchant-status`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1590,7 +1633,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/passwords/request-password`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1617,7 +1660,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/passwords/reset-password`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1642,11 +1685,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<VerifyCodeResponse, any>({
         path: `/api/v1/users/verification-codes/confirm-mail`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1668,7 +1711,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/verification-codes/resend-code`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1693,7 +1736,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/check/username`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1718,7 +1761,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/check/email`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1748,7 +1791,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/device-token`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1776,7 +1819,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/device-token`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -1792,12 +1835,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/users/{userId}/device-tokens/{deviceToken}
      * @secure
      */
-    getDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+    getDeviceToken: (
+      userId: string,
+      deviceToken: string,
+      params: RequestParams = {},
+    ) =>
       this.request<GetDeviceTokenResponse, any>({
         path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1810,10 +1857,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/api/v1/users/{userId}/device-tokens/{deviceToken}
      * @secure
      */
-    deleteDeviceToken: (userId: string, deviceToken: string, params: RequestParams = {}) =>
+    deleteDeviceToken: (
+      userId: string,
+      deviceToken: string,
+      params: RequestParams = {},
+    ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/device-tokens/${deviceToken}`,
-        method: 'DELETE',
+        method: "DELETE",
         secure: true,
         ...params,
       }),
@@ -1830,9 +1881,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     onboardStripeUser: (userId: string, params: RequestParams = {}) =>
       this.request<PostOnboardStripeResponse, any>({
         path: `/api/v1/users/${userId}/onboard-stripe`,
-        method: 'POST',
+        method: "POST",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1887,11 +1938,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostProductResponse, any>({
         path: `/api/v1/products`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.FormData,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1933,10 +1984,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListProductsResponse, any>({
         path: `/api/v1/products`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -1999,7 +2050,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/products/${productId}`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.FormData,
@@ -2025,10 +2076,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<GetProductResponse, NotFoundResponse>({
         path: `/api/v1/products/${productId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2044,7 +2095,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     deleteProduct: (productId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/products/${productId}`,
-        method: 'DELETE',
+        method: "DELETE",
         secure: true,
         ...params,
       }),
@@ -2061,7 +2112,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     releaseProduct: (productId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/products/${productId}/release`,
-        method: 'PUT',
+        method: "PUT",
         secure: true,
         ...params,
       }),
@@ -2078,9 +2129,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     listProductsForShowcase: (params: RequestParams = {}) =>
       this.request<ListProductsResponse, any>({
         path: `/api/v1/showcase/products`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2096,9 +2147,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     listProductsForSwipe: (params: RequestParams = {}) =>
       this.request<ListProductsResponse, any>({
         path: `/api/v1/swipe/products`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2133,10 +2184,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListProductsResponse, any>({
         path: `/api/v1/products/users/${userId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2162,11 +2213,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostTestingResponse, any>({
         path: `/api/v1/testings`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2194,10 +2245,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListTestingsResponse, any>({
         path: `/api/v1/testings`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2224,7 +2275,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/testings/${testingId}`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -2243,9 +2294,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getTestingById: (testingId: string, params: RequestParams = {}) =>
       this.request<GetTestingResponse, NotFoundResponse>({
         path: `/api/v1/testings/${testingId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2261,7 +2312,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     deleteTesting: (testingId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/testings/${testingId}`,
-        method: 'DELETE',
+        method: "DELETE",
         secure: true,
         ...params,
       }),
@@ -2278,7 +2329,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     applyTesting: (testingId: string, params: RequestParams = {}) =>
       this.request<void, NotFoundResponse>({
         path: `/api/v1/testings/${testingId}/apply`,
-        method: 'POST',
+        method: "POST",
         secure: true,
         ...params,
       }),
@@ -2312,10 +2363,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListTesterApplicationsResponse, any>({
         path: `/api/v1/testings/${testingId}/applications`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2331,7 +2382,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     approveTesting: (testingId: string, params: RequestParams = {}) =>
       this.request<void, NotFoundResponse>({
         path: `/api/v1/testings/${testingId}/approve`,
-        method: 'PUT',
+        method: "PUT",
         secure: true,
         ...params,
       }),
@@ -2348,7 +2399,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     declineTesting: (testingId: string, params: RequestParams = {}) =>
       this.request<void, NotFoundResponse>({
         path: `/api/v1/testings/${testingId}/decline`,
-        method: 'PUT',
+        method: "PUT",
         secure: true,
         ...params,
       }),
@@ -2365,7 +2416,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     abortTesting: (testingId: string, params: RequestParams = {}) =>
       this.request<void, NotFoundResponse>({
         path: `/api/v1/testings/${testingId}/abort`,
-        method: 'PUT',
+        method: "PUT",
         secure: true,
         ...params,
       }),
@@ -2393,10 +2444,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListTestingsResponse, any>({
         path: `/api/v1/testings/users/${userId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2419,10 +2470,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<GetTestingResponse, any>({
         path: `/api/v1/testings/products/${productId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2445,7 +2496,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/testings/${testingId}/users`,
-        method: 'DELETE',
+        method: "DELETE",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -2480,11 +2531,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<GetTestingCommentResponse, any>({
         path: `/api/v1/testing-comments`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2509,10 +2560,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListTestingCommentsResponse, any>({
         path: `/api/v1/testing-comments/testings/${testingId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2537,10 +2588,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListTestingCommentsResponse, any>({
         path: `/api/v1/testing-comments/testings/${testingId}/reviews`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2553,12 +2604,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/testing-comments/testings/{testingId}/reviews/{userId}
      * @secure
      */
-    getTestingReviewComment: (testingId: string, userId: string, params: RequestParams = {}) =>
+    getTestingReviewComment: (
+      testingId: string,
+      userId: string,
+      params: RequestParams = {},
+    ) =>
       this.request<GetTestingCommentResponse, any>({
         path: `/api/v1/testing-comments/testings/${testingId}/reviews/${userId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2582,11 +2637,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostOrderPayPalResponse, any>({
         path: `/api/v1/orders/paypal`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2610,11 +2665,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostOrderStripeResponse, any>({
         path: `/api/v1/orders/stripe`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2637,10 +2692,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostCaptureOrderResponse, NotFoundResponse>({
         path: `/api/v1/orders/${paypalOrderId}/admin-capture`,
-        method: 'POST',
+        method: "POST",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2656,9 +2711,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getOrderById: (orderId: string, params: RequestParams = {}) =>
       this.request<GetOrderResponse, NotFoundResponse>({
         path: `/api/v1/orders/${orderId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2674,7 +2729,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     deleteOrder: (orderId: string, params: RequestParams = {}) =>
       this.request<void, NotFoundResponse>({
         path: `/api/v1/orders/${orderId}`,
-        method: 'DELETE',
+        method: "DELETE",
         secure: true,
         ...params,
       }),
@@ -2700,10 +2755,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListOrdersResponse, any>({
         path: `/api/v1/orders/products/${productId}`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2737,10 +2792,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListOrdersResponse, any>({
         path: `/api/v1/orders`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2765,10 +2820,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<GetOrderAnalyticsResponse, any>({
         path: `/api/v1/orders/${userId}/analytics`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2791,7 +2846,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/patterns/products/${productId}/download`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
         ...params,
@@ -2818,7 +2873,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/patterns/products/${productId}/send`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
         ...params,
@@ -2836,9 +2891,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     downloadPattern: (patternId: string, params: RequestParams = {}) =>
       this.request<DownloadPatternResponse, NotFoundResponse>({
         path: `/api/v1/patterns/${patternId}/download`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2864,10 +2919,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListPatternsResponse, any>({
         path: `/api/v1/patterns`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -2890,7 +2945,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<any, void>({
         path: `/api/v1/paypal/redirect-merchant`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
         ...params,
@@ -2916,7 +2971,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/webhooks/paypal`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -2941,7 +2996,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/webhooks/paypal/subscription/cancel`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -2960,7 +3015,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     strapiWebhook: (params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/webhooks/stripe`,
-        method: 'POST',
+        method: "POST",
         secure: true,
         ...params,
       }),
@@ -2983,7 +3038,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/subscriptions`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -3002,7 +3057,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     cancelSubscription: (subscriptionId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/subscriptions/${subscriptionId}/cancel`,
-        method: 'POST',
+        method: "POST",
         secure: true,
         ...params,
       }),
@@ -3019,9 +3074,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getUserMetrics: (userId: string, params: RequestParams = {}) =>
       this.request<GetUserMetricsResponse, any>({
         path: `/api/v1/metrics/users/${userId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3037,9 +3092,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getProductMetrics: (productId: string, params: RequestParams = {}) =>
       this.request<GetProductMetricsResponse, any>({
         path: `/api/v1/metrics/products/${productId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3055,9 +3110,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getTestingMetrics: (productId: string, params: RequestParams = {}) =>
       this.request<GetTestingMetricsResponse, any>({
         path: `/api/v1/metrics/testings/${productId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3073,7 +3128,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     postProductImpression: (productId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/metrics/products/${productId}/impressions`,
-        method: 'POST',
+        method: "POST",
         secure: true,
         ...params,
       }),
@@ -3090,7 +3145,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     postTestingImpression: (productId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/metrics/testings/products/${productId}/impressions`,
-        method: 'POST',
+        method: "POST",
         secure: true,
         ...params,
       }),
@@ -3123,10 +3178,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListUserReportsResponse, any>({
         path: `/api/v1/reports/users`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3160,10 +3215,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListProductReportsResponse, any>({
         path: `/api/v1/reports/products`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3179,9 +3234,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getProductReportsCount: (userId: string, params: RequestParams = {}) =>
       this.request<GetProductReportsCountResponse, any>({
         path: `/api/v1/reports/products/users/${userId}/count`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3206,7 +3261,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/reports/users/${userId}`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -3234,7 +3289,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/reports/products/${productId}`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -3259,7 +3314,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<void, any>({
         path: `/api/v1/newsletter-subscriptions`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -3278,9 +3333,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     listChatsByUserId: (userId: string, params: RequestParams = {}) =>
       this.request<ListChatsResponse, any>({
         path: `/api/v1/chats/users/${userId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3302,11 +3357,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostChatResponse, any>({
         path: `/api/v1/chats`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3331,10 +3386,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListChatMessagesResponse, any>({
         path: `/api/v1/chats/${chatId}/chat-messages`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3361,11 +3416,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<GetChatMessageResponse, any>({
         path: `/api/v1/chats/${chatId}/chat-messages`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3381,7 +3436,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     readAllChatMessages: (chatId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/chats/${chatId}/read-all`,
-        method: 'PATCH',
+        method: "PATCH",
         secure: true,
         ...params,
       }),
@@ -3398,7 +3453,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     blockChat: (chatId: string, userId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/chats/${chatId}/block-user/${userId}`,
-        method: 'PATCH',
+        method: "PATCH",
         secure: true,
         ...params,
       }),
@@ -3415,7 +3470,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     unblockChat: (chatId: string, userId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/chats/${chatId}/unblock-user/${userId}`,
-        method: 'PATCH',
+        method: "PATCH",
         secure: true,
         ...params,
       }),
@@ -3440,11 +3495,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<PostProductLikeResponse, any>({
         path: `/api/v1/product-likes`,
-        method: 'POST',
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3470,10 +3525,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<ListProductLikesResponse, any>({
         path: `/api/v1/product-likes`,
-        method: 'GET',
+        method: "GET",
         query: query,
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3486,12 +3541,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/product-likes/products/{productId}
      * @secure
      */
-    getProductLikeByProductId: (productId: string, params: RequestParams = {}) =>
+    getProductLikeByProductId: (
+      productId: string,
+      params: RequestParams = {},
+    ) =>
       this.request<GetProductLikeResponse, any>({
         path: `/api/v1/product-likes/products/${productId}`,
-        method: 'GET',
+        method: "GET",
         secure: true,
-        format: 'json',
+        format: "json",
         ...params,
       }),
 
@@ -3504,12 +3562,50 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/api/v1/product-likes/products/{productId}
      * @secure
      */
-    deleteProductLikeByProductId: (productId: string, params: RequestParams = {}) =>
+    deleteProductLikeByProductId: (
+      productId: string,
+      params: RequestParams = {},
+    ) =>
       this.request<GetProductLikeResponse, any>({
         path: `/api/v1/product-likes/products/${productId}`,
-        method: 'DELETE',
+        method: "DELETE",
         secure: true,
-        format: 'json',
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The event campaign will be queried by a given ID. If the event campaign is associated with an user ID, an error will be thrown.
+     *
+     * @tags Event campaign
+     * @name GetEventCampaign
+     * @summary Gets an event campaign by ID.
+     * @request GET:/api/v1/event-campaigns/{eventCampaignId}
+     * @secure
+     */
+    getEventCampaign: (eventCampaignId: string, params: RequestParams = {}) =>
+      this.request<GetEventCampaignResponse, any>({
+        path: `/api/v1/event-campaigns/${eventCampaignId}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The event campaign will be updated by a given ID and the authenticated user ID. If the event campaign cannot be found or already has an associated user ID, an error will be thrown.
+     *
+     * @tags Event campaign
+     * @name PutEventCampaign
+     * @summary Updates an event campaign by ID.
+     * @request PUT:/api/v1/event-campaigns/{eventCampaignId}
+     * @secure
+     */
+    putEventCampaign: (eventCampaignId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/event-campaigns/${eventCampaignId}`,
+        method: "PUT",
+        secure: true,
         ...params,
       }),
   };
