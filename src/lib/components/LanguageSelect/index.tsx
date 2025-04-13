@@ -15,6 +15,7 @@ interface LanguageSelectProps {
   fullWidth?: boolean;
   allowedLanguages?: string[];
   disabled?: boolean;
+  text?: string;
 }
 
 export default function LanguageSelect({
@@ -23,6 +24,7 @@ export default function LanguageSelect({
   fullWidth,
   allowedLanguages,
   disabled = false,
+  text = 'Select language',
 }: LanguageSelectProps) {
   return (
     <div className="flex-grow">
@@ -32,7 +34,7 @@ export default function LanguageSelect({
         disabled={disabled}
       >
         <SelectTrigger className={`${fullWidth ? 'w-full' : 'w-[180px]'}`}>
-          <SelectValue placeholder="Select language" />
+          <SelectValue placeholder={text} />
         </SelectTrigger>
         <SelectContent>
           {(allowedLanguages && allowedLanguages?.length > 0

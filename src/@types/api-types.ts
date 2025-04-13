@@ -578,6 +578,7 @@ export interface PostCaptureOrderResponse {
 export interface PostOrderRequest {
   productId: string;
   customPrice?: number;
+  selfSelectedCountry?: string;
 }
 
 export interface PostOrderPayPalResponse {
@@ -2632,6 +2633,8 @@ export class Api<
         productId?: any;
         /** @example "any" */
         customPrice?: any;
+        /** @example "any" */
+        selfSelectedCountry?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -2660,6 +2663,8 @@ export class Api<
         productId?: any;
         /** @example "any" */
         customPrice?: any;
+        /** @example "any" */
+        selfSelectedCountry?: any;
       },
       params: RequestParams = {},
     ) =>

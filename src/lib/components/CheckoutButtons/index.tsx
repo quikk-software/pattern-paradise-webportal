@@ -18,12 +18,12 @@ interface CheckoutButtonProps {
   price: number;
   product: GetProductResponse;
   disabled?: boolean;
+  country?: string;
 }
 
-export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProps) {
+export function CheckoutButtons({ price, product, disabled, country }: CheckoutButtonProps) {
   const {
     priceError,
-    orderId,
     handleCreateOrder,
     handleDeleteOrder,
     createOrderIsError,
@@ -93,6 +93,7 @@ export function CheckoutButtons({ price, product, disabled }: CheckoutButtonProp
                 disabled={disabled || !!priceError}
                 productId={product.id}
                 price={order?.productPrice ? order?.productPrice : price}
+                country={country}
                 checkoutUrl={order?.stripeCheckoutUrl}
               />
             ) : null}

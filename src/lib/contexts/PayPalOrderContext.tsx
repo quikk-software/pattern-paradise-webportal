@@ -1,12 +1,11 @@
 'use client';
 
-import { createContext, useContext, type ReactNode } from 'react';
+import { createContext, useContext, type ReactNode, useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCreateOrderPayPal, useDeleteOrder, useListOrdersByProductId } from '@/lib/api/order';
 import logger from '@/lib/core/logger';
 import { MAX_PRICE } from '@/lib/constants';
 import type { GetOrderResponse } from '@/@types/api-types';
-import { useState, useEffect, useRef } from 'react';
 
 type PayPalOrderContextType = {
   customPrice: number | undefined;
@@ -20,6 +19,8 @@ type PayPalOrderContextType = {
   deleteOrderIsSuccess: boolean;
   listOrdersByProductIdIsLoading: boolean;
   order: GetOrderResponse | undefined;
+  country?: string;
+  setCountry: (country?: string) => void;
 };
 
 const PayPalOrderContext = createContext<PayPalOrderContextType | undefined>(undefined);
@@ -41,6 +42,7 @@ export function PayPalOrderProvider({
   const [customPrice, setCustomPrice] = useState<number | undefined>(undefined);
   const [priceError, setPriceError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [country, setCountry] = useState<string | undefined>(undefined);
 
   const { mutate: createOrder, isError: createOrderIsError } = useCreateOrderPayPal();
   const {
@@ -55,6 +57,9 @@ export function PayPalOrderProvider({
     data: orders,
     setIsSuccess: setListOrdersByProductIdIsSuccess,
   } = useListOrdersByProductId();
+
+  const customPriceRef = useRef<number | undefined>(undefined);
+  const countryRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     fetchOrdersByProductId(productId);
@@ -71,11 +76,13 @@ export function PayPalOrderProvider({
     }
   }, [listOrdersByProductIdIsSuccess, orders, userId, router]);
 
-  const customPriceRef = useRef<number | undefined>(undefined);
-
   useEffect(() => {
     customPriceRef.current = customPrice;
   }, [customPrice]);
+
+  useEffect(() => {
+    countryRef.current = country;
+  }, [country]);
 
   const handleCreateOrder = async (order?: GetOrderResponse) => {
     try {
@@ -88,6 +95,7 @@ export function PayPalOrderProvider({
       const response = await createOrder({
         productId,
         customPrice: priceToUse,
+        selfSelectedCountry: countryRef.current,
       });
       setOrderId(response?.orderId ?? null);
       return response.paypalOrderId;
@@ -137,6 +145,8 @@ export function PayPalOrderProvider({
     deleteOrderIsSuccess,
     listOrdersByProductIdIsLoading,
     order,
+    country,
+    setCountry,
   };
 
   return <PayPalOrderContext.Provider value={contextValue}>{children}</PayPalOrderContext.Provider>;

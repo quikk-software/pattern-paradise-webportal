@@ -12,6 +12,7 @@ interface StripeButtonProps {
   productId: string;
   price: number;
   checkoutUrl?: string;
+  country?: string;
 }
 
 export default function StripeButton({
@@ -19,6 +20,7 @@ export default function StripeButton({
   productId,
   price,
   checkoutUrl,
+  country,
 }: StripeButtonProps) {
   const { mutate, isLoading } = useCreateOrderStripe();
 
@@ -33,6 +35,7 @@ export default function StripeButton({
     mutate({
       productId,
       customPrice: price,
+      selfSelectedCountry: country,
     }).then((result) => {
       if (!result?.stripeCheckoutUrl) {
         return;
