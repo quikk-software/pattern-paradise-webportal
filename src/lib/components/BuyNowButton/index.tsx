@@ -18,6 +18,7 @@ import { usePayPalOrder } from '@/lib/hooks/usePayPalOrder';
 import { useListOrdersByProductId } from '@/lib/api/order';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import CountrySelect from '@/lib/components/CountrySelect';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -33,7 +34,8 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
   const { action } = useAction();
   const { status } = useValidSession();
 
-  const { priceError, handleCustomPriceChange, customPrice } = usePayPalOrder();
+  const { priceError, handleCustomPriceChange, customPrice, country, setCountry } =
+    usePayPalOrder();
   const { fetch: fetchOrdersByProductId } = useListOrdersByProductId();
 
   useEffect(() => {
@@ -48,7 +50,6 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
   const handleBuyNowClick = () => {
     fetchOrdersByProductId(product.id)
       .then((result) => {
-        console.log({ result });
         const customerOrder = result?.find((order) => order.customer.id === userId);
 
         if (customerOrder) {
@@ -58,6 +59,10 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
       .finally(() => {
         setIsOpen(true);
       });
+  };
+
+  const handleCountryChange = (value: string) => {
+    setCountry(value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -129,11 +134,33 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
       {isOpen ? (
         <>
           {isLoggedIn ? (
-            <CheckoutButtons
-              disabled={!isLoggedIn}
-              price={customPrice ?? product.price}
-              product={product}
-            />
+            <>
+              <div className="space-y-1">
+                <CountrySelect
+                  country={country}
+                  handleCountryChange={handleCountryChange}
+                  fullWidth
+                />
+                <p className="text-xs text-muted-foreground">
+                  ⚠️ Note: Selecting your current country helps the seller calculate the correct
+                  taxes for your purchase.{' '}
+                  <strong>
+                    Please select the country where you are physically located when buying this
+                    pattern.
+                  </strong>
+                </p>
+                <p className="text-xs text-muted-foreground italic">
+                  This should be the country you&apos;re in at the moment of purchase - not
+                  necessarily your country of residence.
+                </p>
+              </div>
+              <CheckoutButtons
+                disabled={!isLoggedIn}
+                price={customPrice ?? product.price}
+                product={product}
+                country={country}
+              />
+            </>
           ) : (
             <div className="flex flex-col gap-4">
               <div className="space-y-2">
