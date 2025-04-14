@@ -2,8 +2,6 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SalesChart } from '@/components/sales-chart';
 import { RecentSales } from '@/components/recent-sales';
-import { FeesComparison } from '@/components/fees-comparison';
-import { StatusDistribution } from '@/components/status-distribution';
 import { GetOrderAnalyticsResponse } from '@/@types/api-types';
 
 interface AnalyticsDashboardProps {
@@ -71,24 +69,6 @@ export default function AnalyticsDashboard({ analytics }: AnalyticsDashboardProp
           </CardHeader>
           <CardContent>
             <RecentSales recentSales={analytics.lastSales} />
-          </CardContent>
-        </Card>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Fees Comparison</CardTitle>
-          </CardHeader>
-          <CardContent className="pl-2">
-            <FeesComparison fees={analytics.feesComparisonPerMonth} />
-          </CardContent>
-        </Card>
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Order Status Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <StatusDistribution orderStatusDistribution={analytics.orderStatusDistribution} />
           </CardContent>
         </Card>
       </div>
