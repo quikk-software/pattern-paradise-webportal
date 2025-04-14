@@ -71,7 +71,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   }, [order.productId]);
 
   const handleDeleteOrder = () => {
-    deleteOrder(order.paypalOrderId).then(() => {
+    deleteOrder(order.id).then(() => {
       router.push(`/app/products/${order.productId}`);
     });
   };
@@ -82,8 +82,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
 
   const isPayed = order.status === 'CAPTURED' || order.status === 'COMPLETED';
   const isCreated = order.status === 'CREATED';
+  const isPending = order.status === 'PENDING';
   const isSeller = order.seller.id === userId;
-  const isCancelable = isCreated && order?.paypalOrderId && isMinutesAgo(order?.updatedAt);
+  const isCancelable = (isCreated || isPending) && isMinutesAgo(order?.updatedAt);
 
   return (
     <div className="grid gap-8">
@@ -137,7 +138,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 message="If you've already completed your payment, please hang tight - we're waiting for confirmation from our payment provider. You'll receive an email as soon as your payment is confirmed. You can also click the refresh button above to update this page."
               />
             ) : null}
-            {isCreated ? (
+            {isCreated || isPending ? (
               <div className="space-y-2">
                 <Button
                   className="w-full"
