@@ -9,6 +9,7 @@ import TokenDataWrapper from '@/app/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
+const fullHeightPages = ['/swipe'];
 
 const noContainerPages = ['/'];
 
@@ -27,6 +28,7 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const shouldRemovePadding = !!getPublicUrl(pathname, noPaddingPages);
   const shouldRemoveContainer = !!getPublicUrl(pathname, noContainerPages);
+  const shouldUseFullHeight = !!getPublicUrl(pathname, fullHeightPages);
 
   const scrollableDivRef = useRef<HTMLDivElement>(null);
 
@@ -51,17 +53,15 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
 
   return (
     <div className={`flex flex-col h-dvh`}>
-      <div className={`${shouldRemoveContainer ? '' : 'mx-auto container'}`}>
-        <NavbarComponent
-          background={shouldRemoveContainer ? 'amber-200' : 'none'}
-          scrolled={scrolled}
-        />
-      </div>
+      <NavbarComponent
+        background={shouldRemoveContainer ? 'amber-200' : 'none'}
+        scrolled={scrolled}
+      />
       <div
         ref={scrollableDivRef}
         className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto no-scrollbar${shouldRemoveContainer ? '' : ' mx-auto container'}`}
       >
-        <div id="main-area" className="w-full h-full">
+        <div id="main-area" className={`w-full${shouldUseFullHeight ? ' h-full' : ''}`}>
           <StoreProvider>
             <TokenDataWrapper>
               <NotificationPermissionProvider />
