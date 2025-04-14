@@ -131,7 +131,7 @@ export default function ProfileImageGallery({ gallery, highlight }: ProfileImage
             'Image Gallery'
           )}
         </CardTitle>
-        <CardTitle className="text-sm font-medium text-secondary">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
           Upload Images to your Gallery. Drag and Drop them to update the order.
         </CardTitle>
       </CardHeader>

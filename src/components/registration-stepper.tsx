@@ -22,6 +22,7 @@ import {
   UserCircle,
   CheckCircle2,
   HandCoins,
+  MapPinHouse,
   ThumbsDown,
   ThumbsUp,
 } from 'lucide-react';
@@ -39,6 +40,7 @@ import { Progress } from '@/components/ui/progress';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 import useAuth from '@/lib/auth/useAuth';
+import CountrySelect from '@/lib/components/CountrySelect';
 
 interface RegistrationStepperProps {
   preselectedRoles: string[];
@@ -50,6 +52,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
   const [debouncedEmail, setDebouncedEmail] = useState('');
   const [showOptionalFields, setShowOptionalFields] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
+  const [country, setCountry] = useState<string | undefined>(undefined);
 
   const totalSteps = 3;
   const progressPercentage = (currentStep / totalSteps) * 100;
@@ -157,6 +160,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       password,
       firstName: data.firstName?.trim(),
       lastName: data.lastName?.trim(),
+      country,
       username: data.username?.toLowerCase().trim(),
       instagramRef: data.instagram?.trim(),
       tiktokRef: data.tiktok?.trim(),
@@ -174,6 +178,9 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
   const handleIsSeller = (isSeller: boolean) => {
     setIsSeller(isSeller);
+    if (!isSeller) {
+      setCountry(undefined);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -193,7 +200,11 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
     if (currentStep === 1) {
       canProceed = await trigger(['email', 'password']);
     } else if (currentStep === 2) {
-      canProceed = true;
+      if (isSeller && !country) {
+        // can't proceed
+      } else {
+        canProceed = true;
+      }
     } else if (currentStep === 3) {
       const result = await trigger(['hasAcceptedTerms', 'hasAcceptedPrivacy']);
       canProceed = result;
@@ -214,7 +225,14 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
     if (currentStep === 1) {
       return !email || !!errors.email || !password || !!errors.password;
     }
+    if (currentStep === 2) {
+      return isSeller && !country;
+    }
     return false;
+  };
+
+  const handleCountryChange = (value: string) => {
+    setCountry(value);
   };
 
   return (
@@ -411,6 +429,24 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                   PayPal or Stripe account in their profile settings.
                 </p>
               </div>
+
+              {isSeller ? (
+                <>
+                  <div className="flex items-center gap-2 mb-6">
+                    <div className="bg-primary text-primary-foreground rounded-full p-2">
+                      <MapPinHouse className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-lg font-medium">
+                      Select your country of residence or business registration.
+                    </h3>
+                  </div>
+                  <CountrySelect
+                    country={country}
+                    handleCountryChange={handleCountryChange}
+                    fullWidth
+                  />
+                </>
+              ) : null}
 
               <div className="pt-4">
                 <Button

@@ -147,6 +147,7 @@ export interface PostUserRequest {
   username?: string;
   firstName?: string;
   lastName?: string;
+  country?: string;
   roles: string[];
   instagramRef?: string;
   tiktokRef?: string;
@@ -165,6 +166,7 @@ export interface PutUserRequest {
   firstName?: string;
   lastName?: string;
   description?: string;
+  country?: string;
   instagramRef?: string;
   refLinks?: string[];
   gallery?: string[];
@@ -208,6 +210,7 @@ export interface GetUserResponse {
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
+  country?: string;
   instagramRef?: string;
   tiktokRef?: string;
   refLinks: string[];
@@ -1295,6 +1298,8 @@ export class Api<
         /** @example "any" */
         username?: any;
         /** @example "any" */
+        country?: any;
+        /** @example "any" */
         instagramRef?: any;
         /** @example "any" */
         tiktokRef?: any;
@@ -1362,6 +1367,8 @@ export class Api<
         firstName?: any;
         /** @example "any" */
         lastName?: any;
+        /** @example "any" */
+        country?: any;
         /** @example "any" */
         description?: any;
         /** @example "any" */

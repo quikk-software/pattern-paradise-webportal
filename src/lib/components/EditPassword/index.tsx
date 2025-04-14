@@ -72,7 +72,7 @@ export default function EditPassword() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onPasswordSubmit)} className="space-y-8">
-          <div className="grid xs:grid-cols-1 xl:grid-cols-2 gap-4">
+          <div className="grid xs:grid-cols-1 gap-4">
             <div className="space-y-2">
               <Label htmlFor="oldPassword">Old Password</Label>
               <Input
