@@ -40,6 +40,7 @@ import StripeManagement from '@/lib/components/StripeManagement';
 import { CheckCircle2 } from 'lucide-react';
 import CopyClipboard from '@/lib/components/CopyClipboard';
 import Image from 'next/image';
+import CountrySelect from '@/lib/components/CountrySelect';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -52,6 +53,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
   const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
+  const [country, setCountry] = useState<string | undefined>(user.country);
+  const [highlightCountry, setHighlightCountry] = useState<boolean>(false);
 
   const { update } = useValidSession();
 
@@ -95,6 +98,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const paypalRef = useRef<HTMLDivElement | null>(null);
   const stripeRef = useRef<HTMLDivElement | null>(null);
   const galleryRef = useRef<HTMLDivElement | null>(null);
+  const countryRef = useRef<HTMLDivElement | null>(null);
 
   const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({
@@ -116,10 +120,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
       case 'scrollToGallery':
         executeScroll(galleryRef);
         break;
+      case 'scrollToCountry':
+        executeScroll(countryRef);
+        break;
       default:
         break;
     }
-  }, [action, rolesRef, paypalRef, stripeRef, galleryRef]);
+  }, [action, rolesRef, paypalRef, stripeRef, galleryRef, countryRef]);
 
   useEffect(() => {
     if (!profileImage || profileImage === user.imageUrl) {
@@ -136,6 +143,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
   }, [bannerImage]);
 
   const onPersonalDataSubmit = async (data: any) => {
+    if (data.roles?.includes('Seller') && !country && !user?.country) {
+      setHighlightCountry(true);
+      executeScroll(countryRef);
+      return;
+    }
+
+    setHighlightCountry(false);
     setImageError(undefined);
     setUpdateUserIsError(false);
     let profileImageUrls: { url: string; mimeType: string }[] = [];
@@ -191,6 +205,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       tiktokRef: data.tiktokRef?.trim() ? data.tiktokRef.toLowerCase().trim() : undefined,
       username: data.username?.trim() ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
+      country: data.roles?.includes('Seller') ? country : undefined,
     })
       .then(() => {
         update().then();
@@ -216,6 +231,10 @@ export function ProfilePage({ user }: ProfilePageProps) {
       reader.onload = (e) => setBannerImage(e.target?.result as string);
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCountryChange = (value: string) => {
+    setCountry(value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -608,6 +627,27 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 PayPal or Stripe account which is eligible of receiving money.
               </p>
             </div>
+
+            {roles?.includes('Seller') ? (
+              <div className="space-y-2" ref={countryRef}>
+                {highlightCountry ? (
+                  <Badge variant="secondary" className="text-md">
+                    {'❗️'} Country
+                  </Badge>
+                ) : null}
+                {!highlightCountry ? <Label>Country</Label> : null}
+                <div className="space-y-2">
+                  <CountrySelect
+                    country={country}
+                    handleCountryChange={handleCountryChange}
+                    fullWidth
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    ⚠️ Note: Please provide your country of residence or business registration.
+                  </p>
+                </div>
+              </div>
+            ) : null}
 
             <div className="space-y-2">
               <Label htmlFor="description">Profile description</Label>
