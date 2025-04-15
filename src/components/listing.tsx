@@ -307,7 +307,7 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
           </div>
         </div>
         <Select onValueChange={onSortSelectChange} value={sortValue} defaultValue={sortValue}>
-          <SelectTrigger>
+          <SelectTrigger aria-label={'Select a reason'}>
             <SelectValue placeholder="Select a reason" />
           </SelectTrigger>
           <SelectContent>

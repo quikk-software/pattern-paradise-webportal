@@ -21,7 +21,7 @@ export default function ExperienceSelect({
 }: ExperienceSelectProps) {
   return (
     <Select value={selectedExperienceLevel} onValueChange={setSelectedExperienceLevel}>
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-full" aria-label={'Select an experience label'}>
         <SelectValue placeholder="Select an experience level" />
       </SelectTrigger>
       <SelectContent>

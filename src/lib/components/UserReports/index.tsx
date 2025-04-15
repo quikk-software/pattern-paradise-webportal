@@ -147,7 +147,7 @@ export function UserReports() {
                 value={filters.status ?? 'all'}
                 onValueChange={(value) => handleFilterChange('status', value)}
               >
-                <SelectTrigger id="status">
+                <SelectTrigger id="status" aria-label={'Select a status'}>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -165,7 +165,7 @@ export function UserReports() {
                 value={filters.reasonType ?? 'all'}
                 onValueChange={(value) => handleFilterChange('reasonType', value)}
               >
-                <SelectTrigger id="reasonType">
+                <SelectTrigger id="reasonType" aria-label={'Select a reason type'}>
                   <SelectValue placeholder="Select reason type" />
                 </SelectTrigger>
                 <SelectContent>

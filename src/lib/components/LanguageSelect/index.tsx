@@ -33,7 +33,10 @@ export default function LanguageSelect({
         onValueChange={(value) => handleLanguageChange(value, language)}
         disabled={disabled}
       >
-        <SelectTrigger className={`${fullWidth ? 'w-full' : 'w-[180px]'}`}>
+        <SelectTrigger
+          aria-label={'Select a language'}
+          className={`${fullWidth ? 'w-full' : 'w-[180px]'}`}
+        >
           <SelectValue placeholder={text} />
         </SelectTrigger>
         <SelectContent>

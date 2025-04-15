@@ -83,7 +83,7 @@ export function ReportUser({ userId }: ReportUserProps) {
               onValueChange={(value) => setReason(value as ReportUserReason)}
               required
             >
-              <SelectTrigger>
+              <SelectTrigger aria-label={'Select a reason'}>
                 <SelectValue placeholder="Select a reason" />
               </SelectTrigger>
               <SelectContent>

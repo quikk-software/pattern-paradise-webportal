@@ -177,7 +177,7 @@ export default function ContactForm() {
 
           <div>
             <Select onValueChange={onSelectChange} value={selectValue}>
-              <SelectTrigger className="bg-background">
+              <SelectTrigger className="bg-background" aria-label={'Select a reason for contact'}>
                 <SelectValue placeholder="Select a reason for contact" />
               </SelectTrigger>
               <SelectContent>
