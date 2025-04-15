@@ -21,5 +21,13 @@ export const isInStandaloneMode = () => {
   if (typeof window === 'undefined') {
     return false;
   }
-  return window.matchMedia('(display-mode: standalone)').matches;
+
+  const isDisplayStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  const isIosStandalone = 'standalone' in navigator && (navigator as any).standalone;
+  const userAgent = navigator.userAgent || navigator.vendor;
+
+  const isWebView =
+    /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent) || /; wv\)/.test(userAgent);
+
+  return isDisplayStandalone || isIosStandalone || isWebView;
 };
