@@ -16,6 +16,7 @@ const menuItems = [
 
 export function BottomNavigation() {
   const [activeItem, setActiveItem] = useState('shop');
+  const [isStandalone, setIsStandalone] = useState(false);
 
   const pathname = usePathname();
 
@@ -30,9 +31,11 @@ export function BottomNavigation() {
     setActiveItem(element?.id ?? 'shop');
   }, [pathname]);
 
-  const { push } = useRouter();
+  useEffect(() => {
+    setIsStandalone(isInStandaloneMode());
+  }, []);
 
-  const isStandalone = isInStandaloneMode();
+  const { push } = useRouter();
 
   return (
     <div className={`bg-white ${isStandalone ? 'pb-4' : 'pb-0'}`}>
