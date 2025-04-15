@@ -392,6 +392,7 @@ export default function ChatHistory({
                   </div>
                 );
               })}
+            {!showChatList ? <div ref={bottomRef} /> : null}
           </ScrollArea>
 
           {replyingTo ? (
@@ -426,7 +427,6 @@ export default function ChatHistory({
               </Button>
             </div>
           ) : null}
-          {!showChatList ? <div ref={bottomRef} /> : null}
           <div className="sticky bottom-0 left-0 w-full py-1 bg-white px-4">
             <NewMessages
               message={socketMessage}
