@@ -24,7 +24,8 @@ dayjs.updateLocale('en', {
       const difference = now.add(-Number(value), 'day');
       return dayjs(difference).format('MM/DD/YYYY');
     },
-    M: (value: string) => `${value} month${Number(value) > 1 ? 's' : ''} ago`,
+    M: (value: string) =>
+      `${value} ${Number(value) <= 12 ? `month${Number(value) > 1 ? 's' : ''}` : `day${Number(value) > 1 ? 's' : ''}`} ago`,
     MM: (value: string) => {
       const now = dayjs();
       const difference = now.add(-Number(value), 'month');
