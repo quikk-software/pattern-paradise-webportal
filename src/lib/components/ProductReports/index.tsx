@@ -148,7 +148,7 @@ export function ProductReports() {
                 value={filters.status ?? 'all'}
                 onValueChange={(value) => handleFilterChange('status', value)}
               >
-                <SelectTrigger id="status">
+                <SelectTrigger aria-label={'Select a status'} id="status">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -166,7 +166,7 @@ export function ProductReports() {
                 value={filters.reasonType ?? 'all'}
                 onValueChange={(value) => handleFilterChange('reasonType', value)}
               >
-                <SelectTrigger id="reasonType">
+                <SelectTrigger aria-label={'Select a reason type'} id="reasonType">
                   <SelectValue placeholder="Select reason type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -195,7 +195,7 @@ export function ProductReports() {
                   handleFilterChange('orderDirection', value as 'asc' | 'desc')
                 }
               >
-                <SelectTrigger id="orderDirection">
+                <SelectTrigger aria-label={'Select an order direction'} id="orderDirection">
                   <SelectValue placeholder="Select order direction" />
                 </SelectTrigger>
                 <SelectContent>

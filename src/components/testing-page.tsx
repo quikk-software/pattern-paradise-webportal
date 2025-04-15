@@ -301,7 +301,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                 </strong>
               </span>
               <Select value={selectedDurationInWeeks} onValueChange={setSelectedDurationInWeeks}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full" aria-label={'Select a duration'}>
                   <SelectValue placeholder="Select a duration" />
                 </SelectTrigger>
                 <SelectContent>

@@ -187,7 +187,7 @@ export function SellPageComponent() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Select onValueChange={(value) => setSelectedStatus(value)} defaultValue={selectedStatus}>
-          <SelectTrigger>
+          <SelectTrigger aria-label={'Select a status'}>
             <SelectValue placeholder="Select a status" />
           </SelectTrigger>
           <SelectContent>
