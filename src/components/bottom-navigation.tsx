@@ -32,30 +32,32 @@ export function BottomNavigation() {
   const { push } = useRouter();
 
   return (
-    <div className="z-50 w-full h-16 bg-background border-t border-border" id="bottom-navigation">
-      <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            className={cn(
-              'px-5 hover:bg-muted/50 group transition-colors inline-flex flex-col items-center justify-center',
-              activeItem === item.id && 'text-primary',
-            )}
-            onClick={() => {
-              setActiveItem(item.id);
-              push(item.href);
-            }}
-          >
-            <item.icon
+    <div className="pb-4 md:pb-0 bg-white">
+      <div className="z-50 w-full h-16 bg-background border-t border-border" id="bottom-navigation">
+        <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              type="button"
               className={cn(
-                'w-6 h-6 mb-1 transition-transform group-hover:scale-110',
-                activeItem === item.id && 'animate-bounce',
+                'px-5 hover:bg-muted/50 group transition-colors inline-flex flex-col items-center justify-center',
+                activeItem === item.id && 'text-primary',
               )}
-            />
-            <span className="text-xs leading-none">{item.label}</span>
-          </button>
-        ))}
+              onClick={() => {
+                setActiveItem(item.id);
+                push(item.href);
+              }}
+            >
+              <item.icon
+                className={cn(
+                  'w-6 h-6 mb-1 transition-transform group-hover:scale-110',
+                  activeItem === item.id && 'animate-bounce',
+                )}
+              />
+              <span className="text-xs leading-none">{item.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
