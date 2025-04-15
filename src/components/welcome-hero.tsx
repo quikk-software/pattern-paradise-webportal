@@ -94,7 +94,7 @@ export default function WelcomeHero({ userName, avatarUrl = '', isSeller }: Welc
             </Button>
           </Link>
           <Link href="/swipe">
-            <Button variant="outline" className="flex items-center gap-2 bg-rose-700 text-white">
+            <Button variant="outline" className="flex items-center gap-2 bg-rose-600 text-white">
               <Heart className="h-4 w-4" />
               Swipe Patterns
             </Button>
