@@ -8,12 +8,16 @@ import { ChevronLeft, ChevronRight, HandIcon } from 'lucide-react';
 interface ProductImageSliderProps {
   imageUrls: string[];
   title: string;
+  category?: string;
+  subCategories?: string[];
   grids?: number;
 }
 
 export default function ProductImageSlider({
   imageUrls,
   title,
+  category,
+  subCategories,
   grids = 1,
 }: ProductImageSliderProps) {
   const chunkImages = (images: string[], chunkSize: number) =>
@@ -41,10 +45,10 @@ export default function ProductImageSlider({
             {groupedImages.map((group, groupIndex) => (
               <CarouselItem key={groupIndex}>
                 <div className="flex justify-center gap-2">
-                  {group.map((src, index) => (
+                  {group.map((src) => (
                     <CldImage
                       key={src}
-                      alt={`${title} view ${groupIndex * grids + index + 1}`}
+                      alt={`${title} in ${category}${subCategories?.length ? ` – styles: ${subCategories.join(', ')}` : ''}`}
                       src={src}
                       width={grids > 1 ? 200 / grids : 400}
                       height={grids > 1 ? 200 : 400}

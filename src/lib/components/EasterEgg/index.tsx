@@ -25,7 +25,7 @@ const eggPatterns = [
 
 export interface EasterEggProps extends HTMLAttributes<HTMLDivElement> {
   eventCampaignId: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   color?: string;
   randomColor?: boolean;
   pattern?: number;
@@ -53,6 +53,7 @@ export function EasterEgg({
   }, [eventCampaignId]);
 
   const sizeClasses = {
+    xs: 'w-4 h-5',
     sm: 'w-8 h-10',
     md: 'w-12 h-16',
     lg: 'w-16 h-20',
@@ -72,7 +73,9 @@ export function EasterEgg({
         ? eggPatterns[Math.floor(Math.random() * eggPatterns.length)]
         : '';
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+
     mutate(eventCampaignId)
       .then(() => {
         setIsSuccessOpen(true);

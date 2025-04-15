@@ -235,6 +235,8 @@ export function SellPageComponent() {
                           product.status === 'Declined'
                         }
                         isProductView={true}
+                        category={product.category}
+                        subCategories={product.subCategories}
                       />
                     </CardContent>
                   </Card>

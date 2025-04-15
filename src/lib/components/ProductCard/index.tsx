@@ -19,6 +19,8 @@ interface ProductCardProps {
   imageUrls: string[];
   isFree: boolean;
   creatorId: string;
+  category: string;
+  subCategories: string[];
   status?: string;
   unavailable?: boolean;
   isTesterCall?: boolean;
@@ -33,6 +35,8 @@ export default function ProductCard({
   isFree,
   creatorId,
   status,
+  category,
+  subCategories,
   unavailable = false,
   isTesterCall = false,
   isProductView = false,
@@ -56,7 +60,12 @@ export default function ProductCard({
   return (
     <Card key={id} className="flex flex-col">
       <CardHeader>
-        <ProductImageSlider imageUrls={imageUrls} title={name} />
+        <ProductImageSlider
+          imageUrls={imageUrls}
+          title={name}
+          category={category}
+          subCategories={subCategories}
+        />
       </CardHeader>
       <CardContent className="flex-grow">
         <CardTitle>{name}</CardTitle>

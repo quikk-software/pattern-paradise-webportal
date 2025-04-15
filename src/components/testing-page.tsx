@@ -196,6 +196,8 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         imageUrls={testing.product.imageUrls}
                         isTesterCall={true}
                         creatorId={testing.creatorId}
+                        category={testing.product.category}
+                        subCategories={testing.product.subCategories}
                       />
                     </div>
                   </CardContent>

@@ -67,6 +67,8 @@ export default function ReviewCard({ comment, testing }: ReviewCardProps) {
                 <ProductImageSlider
                   imageUrls={comment.files.map((file) => file.url)}
                   title={testing.product.title}
+                  category={testing.product.category}
+                  subCategories={testing.product.subCategories}
                   grids={comment.files.length > 1 ? 2 : undefined}
                 />
               </div>

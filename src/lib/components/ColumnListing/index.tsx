@@ -22,7 +22,12 @@ export default function ColumnListing({ products, listingType }: ColumnListingPr
         >
           <Card className="flex flex-col justify-between">
             <CardContent className="pt-4 flex flex-col gap-4">
-              <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
+              <ProductImageSlider
+                imageUrls={product.imageUrls}
+                title={product.title}
+                category={product.category}
+                subCategories={product.subCategories}
+              />
               <div className="flex flex-col gap-1">
                 <h3 className="font-semibold md:text-lg lg:text-xl">{product.title}</h3>
                 <p className="text-sm text-muted-foreground md:text-base lg:text-lg">
