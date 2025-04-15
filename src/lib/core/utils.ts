@@ -16,3 +16,10 @@ export const isPathnameInPages = (pathname: string, pages: string[]) => {
 
 export const checkProStatus = (subscriptionStatus: string) =>
   subscriptionStatus !== 'Inactive' && subscriptionStatus !== '';
+
+export const isInStandaloneMode = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  return window.matchMedia('(display-mode: standalone)').matches;
+};

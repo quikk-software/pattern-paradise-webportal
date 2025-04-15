@@ -5,6 +5,7 @@ import { Store, Tag, CircleUser } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
+import { isInStandaloneMode } from '@/lib/core/utils';
 
 const menuItems = [
   { id: 'shop', label: 'Shop', icon: Store, href: '/' },
@@ -31,8 +32,10 @@ export function BottomNavigation() {
 
   const { push } = useRouter();
 
+  const isStandalone = isInStandaloneMode();
+
   return (
-    <div className="pb-4 md:pb-0 bg-white">
+    <div className={`bg-white ${isStandalone ? 'pb-4' : 'pb-0'}`}>
       <div className="z-50 w-full h-16 bg-background border-t border-border" id="bottom-navigation">
         <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
           {menuItems.map((item) => (
