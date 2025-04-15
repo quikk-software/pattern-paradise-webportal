@@ -58,9 +58,43 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
       ],
     },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/products/${productId}`,
+    },
   };
 }
 
 export default async function ProductDetailPage({ params }: { params: { productId: string } }) {
-  return <ProductPageComponent productId={params.productId} />;
+  const product = await getProduct(params.productId);
+
+  const productSchema = {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: product?.title,
+    image: product?.imageUrls,
+    description: product?.description,
+    sku: params.productId,
+    brand: {
+      '@type': 'Brand',
+      name: 'Pattern Paradise',
+    },
+    offers: {
+      '@type': 'Offer',
+      url: `${APP_DOMAIN}/app/products/${params.productId}`,
+      priceCurrency: 'USD',
+      price: product?.price ?? '0.00',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <ProductPageComponent productId={params.productId} />
+    </>
+  );
 }

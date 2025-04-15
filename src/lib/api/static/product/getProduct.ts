@@ -9,7 +9,7 @@ export const getProduct = async (productId: string) => {
         trackMetrics: false,
       },
       {
-        next: { revalidate: 1 },
+        next: { revalidate: 60 * 60 }, // 1 hour
       },
     );
 
