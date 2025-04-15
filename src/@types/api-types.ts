@@ -267,6 +267,7 @@ export interface GetUserAccountResponse {
   isBlocked: boolean;
   stripeMerchantIsActive: boolean;
   paypalMerchantIsActive: boolean;
+  paypalEmail?: string;
   paypalSubscriptionStatus: string;
   stripeCardPaymentActive: boolean;
   isSponsored: boolean;
