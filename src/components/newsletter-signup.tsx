@@ -67,7 +67,7 @@ export default function NewsletterSignup() {
         isSuccess={isSuccess}
         isError={isError}
         successMessage={`Thank you! Your mail has been added to our mailing list.`}
-        errorMessage={<span className="text-white">{errorDetail}</span>}
+        errorMessage={errorDetail}
       />
     </form>
   );
