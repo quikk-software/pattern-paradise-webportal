@@ -19,6 +19,8 @@ export default function ProductListing({ products }: { products: GetProductRespo
             isFree={product.isFree}
             imageUrls={product.imageUrls}
             creatorId={product.creatorId}
+            category={product.category}
+            subCategories={product.subCategories}
           />
         ))}
       </div>

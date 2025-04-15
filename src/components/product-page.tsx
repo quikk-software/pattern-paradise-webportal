@@ -72,7 +72,12 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
         <Card className="overflow-hidden">
           <CardContent className="p-6">
             <div className="grid lg:grid-cols-2 gap-4">
-              <ProductImageSlider imageUrls={product.imageUrls} title={product.title} />
+              <ProductImageSlider
+                imageUrls={product.imageUrls}
+                title={product.title}
+                category={product.category}
+                subCategories={product.subCategories}
+              />
               <div className="flex flex-col justify-start gap-8">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-2">
