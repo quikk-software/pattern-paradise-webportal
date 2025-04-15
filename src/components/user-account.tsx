@@ -99,7 +99,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         />
       </div>
 
-      <UserDetailsCard user={user} showRoles={true} />
+      <UserDetailsCard user={user} showRoles={true} hasProducts={products.length > 0} />
 
       {user.description ? (
         <Card className="mb-6">
@@ -123,27 +123,25 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         </div>
       ) : null}
 
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold mb-4">Associated Patterns</h2>
-        <Input
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-8"
-        />
-        {products.length > 0 ? (
-          <>
-            <div className="flex flex-col gap-6">
-              <WaterfallListing
-                products={products}
-                listingType={'sell'}
-                columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
-              />
-            </div>
-            <div ref={lastProductRef} className="h-10" />
-          </>
-        ) : null}
-      </div>
+      {products.length > 0 ? (
+        <div className="space-y-4" id="shop">
+          <h2 className="text-2xl font-bold mb-4">Associated Patterns</h2>
+          <Input
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-8"
+          />
+          <div className="flex flex-col gap-6">
+            <WaterfallListing
+              products={products}
+              listingType={'sell'}
+              columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+            />
+          </div>
+          <div ref={lastProductRef} className="h-10" />
+        </div>
+      ) : null}
     </div>
   );
 }

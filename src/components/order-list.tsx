@@ -132,6 +132,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
                       <UserDetailsCard
                         user={filter === 'customer' ? order.seller : order.customer}
                         showFlag={false}
+                        showRoles={false}
                       />
                     </div>
                   </CardContent>

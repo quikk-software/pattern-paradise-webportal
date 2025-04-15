@@ -1,5 +1,6 @@
 'use client';
-import { MessagesSquare, ShoppingCart, User } from 'lucide-react';
+
+import { ArrowDown, MessagesSquare, ShoppingCart, User } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -16,6 +17,7 @@ import { useSelector } from 'react-redux';
 import type { Store } from '@/lib/redux/store';
 import { useValidSession } from '@/hooks/useValidSession';
 import Image from 'next/image';
+import { TipButton } from '@/lib/components/TipButton';
 
 const roleOptions = [
   { id: 'Buyer', label: 'Buyer', icon: ShoppingCart },
@@ -31,12 +33,14 @@ interface UserDetailsCardProps {
   user: GetUserAccountResponse;
   showFlag?: boolean;
   showRoles?: boolean;
+  hasProducts?: boolean;
 }
 
 export default function UserDetailsCard({
   user,
   showFlag = true,
   showRoles = false,
+  hasProducts = false,
 }: UserDetailsCardProps) {
   const { userId } = useSelector((store: Store) => store.auth);
 
@@ -143,11 +147,31 @@ export default function UserDetailsCard({
                 ))}
             </div>
           ) : null}
-          {!isMe && isLoggedIn ? (
-            <Button variant={'outline'} onClick={() => handleChatClick(userId, user.id)}>
-              <MessagesSquare className="w-4 h-4 mr-2" />
-              Start a Chat
-            </Button>
+          {!isMe ? (
+            <div className="grid grid-cols-1 gap-2">
+              <div className="flex flex-row gap-2">
+                {isLoggedIn ? (
+                  <Button
+                    className="w-full"
+                    variant={'outline'}
+                    onClick={() => handleChatClick(userId, user.id)}
+                  >
+                    <MessagesSquare className="w-4 h-4" />
+                    Start Chat
+                  </Button>
+                ) : null}
+                {user.paypalEmail ? <TipButton paypalEmail={user.paypalEmail} /> : null}
+              </div>
+              {hasProducts ? (
+                <Link href={'#shop'} className="w-full">
+                  <Button variant={'outline'} className="w-full">
+                    <ArrowDown className="w-4 h-4" />
+                    Go to Shop
+                    <ArrowDown className="w-4 h-4" />
+                  </Button>
+                </Link>
+              ) : null}
+            </div>
           ) : null}
         </CardContent>
       ) : null}
