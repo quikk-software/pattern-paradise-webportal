@@ -2,9 +2,13 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Instagram, Menu, X } from 'lucide-react';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
+import AppleLogo from '@/assets/logos/apple-logo.svg';
+import GooglePlayLogo from '@/assets/logos/google-play-logo.png';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import SocialBadges from '@/lib/components/SocialBadges';
 
 const NAV_LINKS = [
   {
@@ -104,9 +108,8 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1">
+        <div className="pt-2 pb-2 space-y-1">
           {filteredNavLinks.map(({ href, name }) => (
             <MobileNavLink
               key={name}
@@ -119,6 +122,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
             </MobileNavLink>
           ))}
         </div>
+        <SocialBadges />
       </div>
     </nav>
   );
@@ -170,7 +174,7 @@ function MobileNavLink({
       href={href}
       onClick={onClick}
       className={cn(
-        'block px-3 py-2 rounded-md text-base font-medium',
+        'block py-2 rounded-md text-base font-medium',
         scrolled
           ? 'text-black hover:text-gray-900'
           : background === 'primary'
