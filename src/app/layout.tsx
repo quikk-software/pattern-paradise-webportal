@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: '/favicons/favicon.ico?v=2',
-    shortcut: '/favicon.ico?v=2',
+    icon: '/favicons/favicon.ico?v=3',
+    shortcut: '/favicon.ico?v=3',
     apple: '/icons/ios/512.png',
     other: [
       { rel: 'apple-touch-icon', url: '/favicons/apple-icon-152x152.png', sizes: '152x152' },
@@ -94,7 +94,7 @@ export default async function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
-        <link rel="shortcut icon" href="/favicon.ico?v=2" />
+        <link rel="shortcut icon" href="/favicon.ico?v=3" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <Toaster />

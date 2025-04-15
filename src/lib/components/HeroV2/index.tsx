@@ -84,7 +84,7 @@ export default function HeroV2({ products }: HeroV2Props) {
                       size="lg"
                       className={cn(
                         'relative overflow-hidden font-semibold text-base px-8 py-6 transition-all duration-300 shadow-lg',
-                        'bg-rose-500 text-white hover:bg-rose-500/90 text-primary-foreground',
+                        'bg-rose-600 text-white hover:bg-rose-600/90 text-primary-foreground',
                         'flex items-center gap-2 group',
                       )}
                     >

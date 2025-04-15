@@ -14,7 +14,7 @@ export default function manifest(): MetadataRoute.Manifest {
     gcm_sender_id: '608358089878',
     icons: [
       {
-        src: '/favicon.ico?v=2',
+        src: '/favicon.ico?v=3',
         sizes: 'any',
         type: 'image/x-icon',
       },
