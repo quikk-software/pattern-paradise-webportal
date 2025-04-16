@@ -27,12 +27,12 @@ export default function ChatList({
 }: ChatListProps) {
   return (
     <div
-      className={cn('bg-white w-full md:w-1/3', {
+      className={cn('bg-white w-full md:w-1/3 overflow-y-auto', {
         block: showChatList,
         'hidden md:block': !showChatList,
       })}
       style={{
-        height: `calc(100svh - ${bottomNavHeight}px - ${navbarHeight})`,
+        height: `calc(100svh - ${bottomNavHeight}px - ${navbarHeight}px)`,
       }}
     >
       <Card
@@ -44,7 +44,7 @@ export default function ChatList({
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Chats</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent className="flex flex-col gap-4 overflow-y-auto">
           {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
           {testings.length === 0 && !fetchTestingsIsLoading ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-4">
