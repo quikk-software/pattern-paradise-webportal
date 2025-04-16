@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import logger from '@/lib/core/logger';
 import { usePathname } from 'next/navigation';
@@ -7,7 +7,6 @@ import { buildQueryString } from '@/lib/utils';
 
 export const useValidSession = () => {
   const { data, status, update } = useSession();
-
   const pathname = usePathname();
   const allSearchParams = useGetAllSearchParams();
 
@@ -15,18 +14,25 @@ export const useValidSession = () => {
   const redirect = query ? `${pathname}?${query}` : pathname;
   const encodedRedirect = encodeURIComponent(redirect);
 
-  // useEffect(() => {
-  //   if (status === 'authenticated') {
-  //     const expiresAt = data?.user?.expiresAt;
-  //     if (expiresAt && Date.now() > expiresAt) {
-  //       logger.warn('Access token expired. Update...');
-  //       update().catch(() => {
-  //         logger.warn('Update failed. Sign out...');
-  //         signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
-  //       });
-  //     }
-  //   }
-  // }, [data, status]);
+  const lastCheckedExpiresAt = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      const expiresAt = data?.user?.expiresAt;
+
+      if (expiresAt && Date.now() > expiresAt) {
+        if (lastCheckedExpiresAt.current !== expiresAt) {
+          lastCheckedExpiresAt.current = expiresAt;
+          logger.warn('Access token expired. Attempting update...');
+
+          update().catch(() => {
+            logger.warn('Update failed. Signing out...');
+            signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` });
+          });
+        }
+      }
+    }
+  }, [data?.user?.expiresAt, status]);
 
   return { data, status, update };
 };
