@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import logger from '@/lib/core/logger';
 import { usePathname } from 'next/navigation';
@@ -7,8 +7,6 @@ import { buildQueryString } from '@/lib/utils';
 
 export const useValidSession = () => {
   const { data, status, update } = useSession();
-  const hasTriedUpdate = useRef(false);
-
   const pathname = usePathname();
   const allSearchParams = useGetAllSearchParams();
 
@@ -16,13 +14,15 @@ export const useValidSession = () => {
   const redirect = query ? `${pathname}?${query}` : pathname;
   const encodedRedirect = encodeURIComponent(redirect);
 
+  const lastCheckedExpiresAt = useRef<number | null>(null);
+
   useEffect(() => {
     if (status === 'authenticated') {
       const expiresAt = data?.user?.expiresAt;
 
       if (expiresAt && Date.now() > expiresAt) {
-        if (!hasTriedUpdate.current) {
-          hasTriedUpdate.current = true;
+        if (lastCheckedExpiresAt.current !== expiresAt) {
+          lastCheckedExpiresAt.current = expiresAt;
           logger.warn('Access token expired. Attempting update...');
 
           update().catch(() => {
@@ -32,7 +32,7 @@ export const useValidSession = () => {
         }
       }
     }
-  }, [data, status]);
+  }, [data?.user?.expiresAt, status]);
 
   return { data, status, update };
 };
