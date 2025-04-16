@@ -15,18 +15,18 @@ export const useValidSession = () => {
   const redirect = query ? `${pathname}?${query}` : pathname;
   const encodedRedirect = encodeURIComponent(redirect);
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      const expiresAt = data?.user?.expiresAt;
-      if (expiresAt && Date.now() > expiresAt) {
-        logger.warn('Access token expired. Update...');
-        update().catch(() => {
-          logger.warn('Update failed. Sign out...');
-          signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
-        });
-      }
-    }
-  }, [data, status]);
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     const expiresAt = data?.user?.expiresAt;
+  //     if (expiresAt && Date.now() > expiresAt) {
+  //       logger.warn('Access token expired. Update...');
+  //       update().catch(() => {
+  //         logger.warn('Update failed. Sign out...');
+  //         signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
+  //       });
+  //     }
+  //   }
+  // }, [data, status]);
 
   return { data, status, update };
 };
