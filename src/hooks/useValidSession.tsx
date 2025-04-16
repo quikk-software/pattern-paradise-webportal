@@ -25,10 +25,17 @@ export const useValidSession = () => {
           lastCheckedExpiresAt.current = expiresAt;
           logger.warn('Access token expired. Attempting update...');
 
-          update().catch(() => {
-            logger.warn('Update failed. Signing out...');
-            signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` });
-          });
+          update()
+            .then((result) => {
+              if (result?.error === 'RefreshAccessTokenError') {
+                logger.warn('Refreshing access token failed. Signing out...');
+                signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` });
+              }
+            })
+            .catch(() => {
+              logger.warn('Update failed. Signing out...');
+              signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` });
+            });
         }
       }
     }
