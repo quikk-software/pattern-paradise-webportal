@@ -336,6 +336,7 @@ export default function ChatHistory({
                                           type: 'auto',
                                           source: true,
                                         }}
+                                        format="webp"
                                       />
                                     </a>
                                   ) : (

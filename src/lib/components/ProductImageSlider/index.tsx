@@ -53,6 +53,7 @@ export default function ProductImageSlider({
                       width={grids > 1 ? 200 / grids : 400}
                       height={grids > 1 ? 200 : 400}
                       className={`rounded-lg shadow-md`}
+                      format="webp"
                     />
                   ))}
                 </div>

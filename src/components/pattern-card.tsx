@@ -75,6 +75,7 @@ export default function PatternCard({ pattern }: PatternCardProps) {
               width={100}
               height={100}
               className={`rounded-lg shadow-md`}
+              format="webp"
             />
           </Link>
         ) : null}

@@ -279,6 +279,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
                       source: true,
                     }}
                     className={`rounded-lg shadow-md`}
+                    format="webp"
                   />
                 </div>
               </CarouselItem>

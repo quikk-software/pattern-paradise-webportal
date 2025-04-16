@@ -106,6 +106,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
                       src={product.imageUrls[0]}
                       width="250"
                       height="188"
+                      format="webp"
                       className={`rounded-lg shadow-md`}
                     />
                     <div className="p-4">
