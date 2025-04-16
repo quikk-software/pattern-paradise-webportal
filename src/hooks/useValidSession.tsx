@@ -29,12 +29,12 @@ export const useValidSession = () => {
             .then((result) => {
               if (result?.error === 'RefreshAccessTokenError') {
                 logger.warn('Refreshing access token failed. Signing out...');
-                signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` });
+                signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
               }
             })
             .catch(() => {
               logger.warn('Update failed. Signing out...');
-              signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` });
+              signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
             });
         }
       }
