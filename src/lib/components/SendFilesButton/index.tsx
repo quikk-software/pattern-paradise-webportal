@@ -6,9 +6,9 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Mail } from 'lucide-react';
 
 interface SendFilesButtonProps {
-  productId: string;
-  language: string;
-  channel: string;
+  productId?: string;
+  language?: string;
+  channel?: string;
 }
 
 const SendFilesButton: React.FunctionComponent<SendFilesButtonProps> = ({
@@ -28,11 +28,18 @@ const SendFilesButton: React.FunctionComponent<SendFilesButtonProps> = ({
     sendPatterns(productId, language, channel).then();
   };
 
+  const disabled = !productId || !language || !channel;
+
   return (
     <div className="flex flex-col gap-2">
       <Button
-        disabled={sendPatternsIsLoading || sendPatternsIsSuccess}
-        onClick={() => handleSendPatterns(productId, language, channel)}
+        disabled={sendPatternsIsLoading || sendPatternsIsSuccess || disabled}
+        onClick={() => {
+          if (disabled) {
+            return;
+          }
+          handleSendPatterns(productId, language, channel);
+        }}
       >
         {sendPatternsIsLoading ? (
           <LoadingSpinnerComponent size="sm" className="text-white" />
@@ -44,7 +51,7 @@ const SendFilesButton: React.FunctionComponent<SendFilesButtonProps> = ({
       <RequestStatus
         isSuccess={sendPatternsIsSuccess}
         isError={sendPatternsIsError}
-        successMessage={"We've sent the patterns to your mail. Please also check your spam folder."}
+        successMessage={"We've sent the pattern to your mail. Please also check your spam folder."}
         errorMessage={errorDetail}
       />
     </div>
