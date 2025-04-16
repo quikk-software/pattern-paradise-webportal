@@ -38,8 +38,8 @@ export function BottomNavigation() {
   const { push } = useRouter();
 
   return (
-    <div className={`bg-white ${isStandalone ? 'pb-4' : 'pb-0'}`}>
-      <div className="z-50 w-full h-16 bg-background border-t border-border" id="bottom-navigation">
+    <div className={`bg-white ${isStandalone ? 'pb-4' : 'pb-0'}`} id="bottom-navigation">
+      <div className="z-50 w-full h-16 bg-background border-t border-border">
         <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
           {menuItems.map((item) => (
             <button

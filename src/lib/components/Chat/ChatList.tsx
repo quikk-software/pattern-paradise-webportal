@@ -35,12 +35,12 @@ export default function ChatList({
 
   return (
     <div
-      className={cn('bg-white w-full md:w-1/3', {
+      className={cn('bg-white w-full md:w-1/3 overflow-y-auto', {
         block: showChatList,
         'hidden md:block': !showChatList,
       })}
       style={{
-        height: `calc(100svh - ${bottomNavHeight}px - ${navbarHeight})`,
+        height: `calc(100svh - ${bottomNavHeight}px - ${navbarHeight}px)`,
       }}
     >
       <Card
