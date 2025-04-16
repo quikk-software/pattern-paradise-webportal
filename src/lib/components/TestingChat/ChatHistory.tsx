@@ -775,6 +775,7 @@ export default function ChatHistory({
         isOpen={isDownloadPatternsDrawerOpen}
         setIsOpen={setIsDownloadPatternsDrawerOpen}
         isLoading={downloadPatternsIsLoading}
+        productId={currentTesting?.productId}
         callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
         languages={productLanguages}
       />

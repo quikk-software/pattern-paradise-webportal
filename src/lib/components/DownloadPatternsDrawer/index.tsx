@@ -3,11 +3,14 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import LanguageSelect from '@/lib/components/LanguageSelect';
+import SendFilesButton from '@/lib/components/SendFilesButton';
+import { DownloadIcon } from 'lucide-react';
 
 interface DownloadPatternsDrawerProps {
   isOpen: boolean;
   setIsOpen: (state: boolean) => void;
   isLoading: boolean;
+  productId?: string;
   callbackFn?: (language: string) => void;
   languages: string[];
 }
@@ -16,6 +19,7 @@ export default function DownloadPatternsDrawer({
   isOpen,
   setIsOpen,
   isLoading,
+  productId,
   callbackFn,
   languages,
 }: DownloadPatternsDrawerProps) {
@@ -32,7 +36,7 @@ export default function DownloadPatternsDrawer({
           <DrawerHeader>
             <DrawerTitle>Download Pattern</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">
-              Select the language of the patterns you want to download.
+              Select the language you want to download.
             </DrawerTitle>
           </DrawerHeader>
           <LanguageSelect
@@ -50,6 +54,7 @@ export default function DownloadPatternsDrawer({
           >
             Cancel
           </Button>
+          <SendFilesButton language={language} productId={productId} channel={'MAIL'} />
           <Button
             onClick={() => {
               if (!language) {
@@ -60,7 +65,11 @@ export default function DownloadPatternsDrawer({
             variant={'default'}
             disabled={isLoading || !language}
           >
-            {isLoading ? <LoadingSpinnerComponent size="sm" /> : null}
+            {isLoading ? (
+              <LoadingSpinnerComponent className="mr-4 h-4 w-4" />
+            ) : (
+              <DownloadIcon className="mr-4 h-4 w-4" />
+            )}
             Download Pattern
           </Button>
         </div>
