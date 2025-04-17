@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import {
-  CardElement,
   useStripe,
   useElements,
   CardNumberElement,
@@ -14,7 +13,7 @@ import { useRouter } from 'next/navigation';
 
 const stripeStyle = {
   base: {
-    fontSize: '1rem',
+    fontSize: '1.25rem',
     fontFamily: 'var(--font-sans)',
     color: 'hsl(var(--foreground))',
     '::placeholder': {
