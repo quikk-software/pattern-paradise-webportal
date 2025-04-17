@@ -88,12 +88,15 @@ export function CheckoutButtons({ price, product, disabled, country }: CheckoutB
             seller?.stripeCardPaymentActive ? (
               <PaymentDivider />
             ) : null}
-            {seller?.stripeMerchantIsActive && seller?.stripeCardPaymentActive ? (
+            {seller?.stripeMerchantIsActive &&
+            seller?.stripeCardPaymentActive &&
+            product?.stripeAccountId ? (
               <StripeButton
                 disabled={disabled || !!priceError}
                 productId={product.id}
                 price={order?.productPrice ? order?.productPrice : price}
                 country={country}
+                stripeAccountId={product.stripeAccountId}
                 checkoutUrl={order?.stripeCheckoutUrl}
               />
             ) : null}

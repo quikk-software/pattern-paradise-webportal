@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { client, getApi } from '@/@types';
-import type { PostOrderRequest, PostOrderStripeResponse } from '@/@types/api-types';
+import type { PostOrderRequest, PostSessionOrderStripeResponse } from '@/@types/api-types';
 import { useApiStates } from '../useApiStates';
 import { useValidSession } from '@/hooks/useValidSession';
 
-export const useCreateOrderStripe = () => {
-  const [data, setData] = useState<PostOrderStripeResponse | undefined>(undefined);
+export const useCreateSessionOrderStripe = () => {
+  const [data, setData] = useState<PostSessionOrderStripeResponse | undefined>(undefined);
 
   const { data: session } = useValidSession();
 
@@ -14,7 +14,7 @@ export const useCreateOrderStripe = () => {
   const mutate = async (order: PostOrderRequest) => {
     const response = await handleFn(
       async () =>
-        await client.api.postOrderStripe(order, {
+        await client.api.postOrderStripeSession(order, {
           ...(await getApi(session)),
         }),
     );
