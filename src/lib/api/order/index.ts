@@ -1,5 +1,6 @@
 export * from './useCreateOrderPayPal';
-export * from './useCreateOrderStripe';
+export * from './useCreateSessionOrderStripe';
+export * from './useCreateIntentOrderStripe';
 export * from './useGetOrder';
 export * from './useListOrders';
 export * from './useListOrdersByProductId';

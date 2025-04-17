@@ -377,6 +377,7 @@ export interface GetProductResponse {
   experience: string;
   isSponsored: boolean;
   hasPayPalBusinessAccount: boolean;
+  stripeAccountId?: string;
   status: string;
   creatorId: string;
   /**
@@ -591,9 +592,14 @@ export interface PostOrderPayPalResponse {
   captureLink: string;
 }
 
-export interface PostOrderStripeResponse {
+export interface PostSessionOrderStripeResponse {
   orderId: string;
   stripeCheckoutUrl: string;
+}
+
+export interface PostIntentOrderStripeResponse {
+  orderId: string;
+  clientSecret: string;
 }
 
 export interface GetOrderAnalyticsResponse {
@@ -2660,12 +2666,12 @@ export class Api<
      * @description Creates an order by the given request body data.
      *
      * @tags Order
-     * @name PostOrderStripe
-     * @summary Creates an order with payment intent Stripe.
-     * @request POST:/api/v1/orders/stripe
+     * @name PostOrderStripeSession
+     * @summary Creates an order with Stripe session.
+     * @request POST:/api/v1/orders/stripe-session
      * @secure
      */
-    postOrderStripe: (
+    postOrderStripeSession: (
       data: {
         /** @example "any" */
         productId?: any;
@@ -2676,8 +2682,38 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<PostOrderStripeResponse, any>({
-        path: `/api/v1/orders/stripe`,
+      this.request<PostSessionOrderStripeResponse, any>({
+        path: `/api/v1/orders/stripe-session`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Creates an order by the given request body data.
+     *
+     * @tags Order
+     * @name PostOrderStripeIntent
+     * @summary Creates an order with Stripe payment intent.
+     * @request POST:/api/v1/orders/stripe-intent
+     * @secure
+     */
+    postOrderStripeIntent: (
+      data: {
+        /** @example "any" */
+        productId?: any;
+        /** @example "any" */
+        customPrice?: any;
+        /** @example "any" */
+        selfSelectedCountry?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostIntentOrderStripeResponse, any>({
+        path: `/api/v1/orders/stripe-intent`,
         method: "POST",
         body: data,
         secure: true,
