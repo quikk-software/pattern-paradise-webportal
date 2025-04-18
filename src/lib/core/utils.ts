@@ -24,10 +24,21 @@ export const isInStandaloneMode = () => {
 
   const isDisplayStandalone = window.matchMedia('(display-mode: standalone)').matches;
   const isIosStandalone = 'standalone' in navigator && (navigator as any).standalone;
+
   const userAgent = navigator.userAgent || navigator.vendor;
 
-  const isWebView =
-    /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent) || /; wv\)/.test(userAgent);
+  // Detect iOS WebView
+  const isIosWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent);
 
-  return isDisplayStandalone || isIosStandalone || isWebView;
+  // Detect Android WebView
+  const isAndroidWebView =
+    /\bwv\b/.test(userAgent) || /Android.*Version\/[\d.]+.*Chrome\/[\d.]+ Mobile/i.test(userAgent);
+
+  // Detect some hybrid frameworks or embedded browsers
+  const isLikelyHybridApp =
+    /; wv\)/i.test(userAgent) || /Crosswalk|Cordova|Capacitor/i.test(userAgent);
+
+  return (
+    isDisplayStandalone || isIosStandalone || isIosWebView || isAndroidWebView || isLikelyHybridApp
+  );
 };
