@@ -32,7 +32,9 @@ export const isInStandaloneMode = () => {
 
   // Detect Android WebView
   const isAndroidWebView =
-    /\bwv\b/.test(userAgent) || /Android.*Version\/[\d.]+.*Chrome\/[\d.]+ Mobile/i.test(userAgent);
+    /\bwv\b/.test(userAgent) || // Classic WebView marker
+    /; wv\)/i.test(userAgent) || // Some OEM apps
+    /\bVersion\/[\d.]+\b(?!.*Chrome)/i.test(userAgent);
 
   // Detect some hybrid frameworks or embedded browsers
   const isLikelyHybridApp =
