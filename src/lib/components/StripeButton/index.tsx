@@ -121,7 +121,7 @@ export default function StripeButton({
           </span>
         </Button>
       ) : null}
-      {isStandalone && !stripePromise && !clientSecret ? (
+      {!stripePromise && !clientSecret ? (
         <Button
           onClick={handleCheckoutIntentClick}
           disabled={isLoading || disabled}
