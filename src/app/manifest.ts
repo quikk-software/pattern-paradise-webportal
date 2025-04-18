@@ -11,6 +11,8 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: '#fff',
     theme_color: '#ed8332',
     // @ts-ignore
+    display_override: 'standalone',
+    // @ts-ignore
     gcm_sender_id: '608358089878',
     icons: [
       {
