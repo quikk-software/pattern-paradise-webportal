@@ -48,12 +48,15 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
     try {
       const email = data.email?.toLowerCase().trim();
       const password = data.password?.trim();
+      const affiliate = sessionStorage.getItem('affiliate') ?? undefined;
+
       await mutate({
         email,
         password,
         roles: ['Buyer', 'Tester'],
         hasAcceptedPrivacy: data.hasAcceptedTermsAndPrivacy,
         hasAcceptedTerms: data.hasAcceptedTermsAndPrivacy,
+        affiliate: affiliate?.trim(),
       });
 
       await handleLogin(email, password);

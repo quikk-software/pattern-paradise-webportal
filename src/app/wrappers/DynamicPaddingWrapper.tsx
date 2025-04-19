@@ -7,6 +7,7 @@ import StoreProvider from '@/app/providers/StoreProvider';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import TokenDataWrapper from '@/app/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
+import AffiliateWrapper from '@/app/wrappers/AffiliateWrapper';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 const fullHeightPages = ['/swipe'];
@@ -64,8 +65,10 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
         <div id="main-area" className={`w-full${shouldUseFullHeight ? ' h-full' : ''}`}>
           <StoreProvider>
             <TokenDataWrapper>
-              <NotificationPermissionProvider />
-              {children}
+              <AffiliateWrapper>
+                <NotificationPermissionProvider />
+                {children}
+              </AffiliateWrapper>
             </TokenDataWrapper>
           </StoreProvider>
         </div>
