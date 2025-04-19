@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Eye, EyeClosed } from 'lucide-react';
+import { EasterEgg } from '@/lib/components/EasterEgg';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -34,6 +35,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {showPassword ? <Eye /> : <EyeClosed />}
           </button>
         )}
+        {props.id === 'oldPassword' && showPassword ? (
+          <EasterEgg
+            eventCampaignId={'00000000-0000-0000-0000-000000000008'}
+            size={'xs'}
+            className="absolute top-1/4 right-4"
+          />
+        ) : null}
       </div>
     );
   },

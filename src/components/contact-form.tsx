@@ -31,6 +31,7 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { useCreateChat } from '@/lib/api';
 import Link from 'next/link';
+import { EasterEgg } from '@/lib/components/EasterEgg';
 
 type FormData = {
   name: string;
@@ -192,6 +193,13 @@ export default function ContactForm() {
                 <SelectItem value="other">Other</SelectItem>
               </SelectContent>
             </Select>
+            {selectValue === 'general' ? (
+              <EasterEgg
+                eventCampaignId={'00000000-0000-0000-0000-000000000011'}
+                size={'sm'}
+                className="mt-4"
+              />
+            ) : null}
           </div>
 
           <div className="space-y-2">

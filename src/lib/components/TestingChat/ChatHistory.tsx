@@ -33,6 +33,7 @@ import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
 import NewMessages from '@/lib/components/NewMessages';
 import ManageTesterDrawers from '@/lib/components/ManageTestersDrawer';
 import ReplyMessage from '@/lib/components/ReplyMessage';
+import { EasterEgg } from '@/lib/components/EasterEgg';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -368,7 +369,13 @@ export default function ChatHistory({
                   >
                     <ArrowLeftIcon className="h-6 w-6" />
                   </Button>
-                  <h2 className="text-2xl font-bold">Chat History</h2>
+                  <h2 className="text-2xl font-bold">
+                    Chat History{' '}
+                    <EasterEgg
+                      eventCampaignId={'00000000-0000-0000-0000-000000000003'}
+                      size={'xs'}
+                    />
+                  </h2>
                 </div>
                 <div className="flex items-center justify-end gap-2">
                   <Button

@@ -11,6 +11,7 @@ import { ArrowRight, Heart, HeartHandshake, Instagram } from 'lucide-react';
 import RegisterButton from '@/lib/components/RegisterButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { EasterEgg } from '@/lib/components/EasterEgg';
 
 const theme = {
   colors: {
@@ -153,6 +154,11 @@ export default function HeroV2({ products }: HeroV2Props) {
                   backgroundColor: theme.colors.amber[500],
                   opacity: 0.5,
                 }}
+              />
+              <EasterEgg
+                eventCampaignId={'00000000-0000-0000-0000-000000000004'}
+                size={'xs'}
+                className="absolute top-2/3 left-2/3 z-50"
               />
             </div>
           </div>

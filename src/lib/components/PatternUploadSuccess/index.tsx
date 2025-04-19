@@ -19,6 +19,7 @@ import { useGetProduct } from '@/lib/api';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
+import { EasterEgg } from '@/lib/components/EasterEgg';
 
 interface PatternUploadSuccessProps {
   productId: string;
@@ -48,7 +49,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
   const isReleased = product.status === 'Released';
 
   return (
-    <div className="container max-w-3xl py-10 px-4 md:py-16">
+    <div>
       <div className="flex flex-col items-center text-center mb-8">
         <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
           <CheckCircle2 className="h-10 w-10 text-green-600" />
@@ -59,6 +60,10 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
             Your pattern has been uploaded and is almost ready to share with the community.
           </p>
         ) : null}
+      </div>
+
+      <div className="w-full flex justify-center items-center mb-4">
+        <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000002'} size={'md'} />
       </div>
 
       <Card className="mb-6">
