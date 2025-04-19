@@ -86,7 +86,9 @@ export function EventCampaignConfirmationDrawer({
               {description ?? 'We will get in touch in you with more details!'}
             </h3>
             {description ? (
-              <p>We just saved that you have won and will get in touch with you soon!</p>
+              <p className="text-center">
+                We just saved that you have won and will get in touch with you soon!
+              </p>
             ) : null}
           </div>
         </div>
