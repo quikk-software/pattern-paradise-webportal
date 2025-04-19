@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import creativeWomenIllustration from '@/assets/illustrations/undraw_creative_woman_re_u5tk.svg';
 import connectIllustration from '@/assets/illustrations/undraw_connection_re_lcud.svg';
 import { APP_NAME } from '@/lib/constants';
+import { EasterEgg } from '@/lib/components/EasterEgg';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -40,13 +41,18 @@ export default function AboutPage() {
           Connecting creatives worldwide to share, perfect, and celebrate handmade pattern
           creations.
         </motion.p>
-        <motion.div variants={fadeIn}>
+        <motion.div variants={fadeIn} className="relative">
           <Image
             src={creativeWomenIllustration}
             alt="Colorful yarn and crochet hooks"
             width={600}
             height={600}
             className="rounded-lg shadow-lg mx-auto"
+          />
+          <EasterEgg
+            eventCampaignId={'00000000-0000-0000-0000-000000000010'}
+            size={'sm'}
+            className="absolute top-1/3 left-50"
           />
         </motion.div>
       </motion.section>

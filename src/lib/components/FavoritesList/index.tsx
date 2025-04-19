@@ -10,6 +10,7 @@ import { useListProductLikes } from '@/lib/api/product-like';
 import React, { useEffect, useRef, useState } from 'react';
 import { GetProductLikeResponse } from '@/@types/api-types';
 import Link from 'next/link';
+import { EasterEgg } from '@/lib/components/EasterEgg';
 
 export default function FavoritesList() {
   const [filterOption, setFilterOption] = useState<string>('liked');
@@ -57,7 +58,10 @@ export default function FavoritesList() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">Your Favorite Patterns</h1>
+        <h1 className="text-2xl font-bold mb-2">
+          Your Favorite Patterns{' '}
+          <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000005'} size={'xs'} />
+        </h1>
       </div>
 
       <Tabs

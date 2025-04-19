@@ -152,6 +152,7 @@ export interface PostUserRequest {
   instagramRef?: string;
   tiktokRef?: string;
   imageUrl?: string;
+  affiliate?: string;
   hasAcceptedPrivacy: boolean;
   hasAcceptedTerms: boolean;
 }
@@ -1306,6 +1307,8 @@ export class Api<
         username?: any;
         /** @example "any" */
         country?: any;
+        /** @example "any" */
+        affiliate?: any;
         /** @example "any" */
         instagramRef?: any;
         /** @example "any" */

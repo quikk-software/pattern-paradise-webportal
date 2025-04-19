@@ -1,5 +1,7 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { EasterEgg } from '@/lib/components/EasterEgg';
+import * as React from 'react';
 
 interface SubcategorySelectProps {
   subcategory: Record<any, any>;
@@ -24,6 +26,9 @@ export function SubcategorySelect({ subcategory, onOptionToggle }: SubcategorySe
           <Label className="cursor-pointer" htmlFor={`${subcategory.name}-${option.name}`}>
             {option.name}
           </Label>
+          {option.name === 'Quick Projects' && option.selected ? (
+            <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000007'} size={'xs'} />
+          ) : null}
         </div>
       ))}
     </div>

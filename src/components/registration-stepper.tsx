@@ -155,6 +155,8 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
     const email = data.email?.toLowerCase().trim();
     const password = data.password?.trim();
 
+    const affiliate = sessionStorage.getItem('affiliate') ?? undefined;
+
     await mutate({
       email,
       password,
@@ -166,6 +168,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       tiktokRef: data.tiktok?.trim(),
       hasAcceptedTerms: data.hasAcceptedTerms,
       hasAcceptedPrivacy: data.hasAcceptedPrivacy,
+      affiliate: affiliate?.trim(),
       roles,
     });
 
