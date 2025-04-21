@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { EasterEgg } from '@/lib/components/EasterEgg';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import logger from '@/lib/core/logger';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -90,10 +89,7 @@ export default function BuyMysteryButton({ category }: BuyMysteryButtonProps) {
       >
         <Card>
           <CardHeader>
-            <CardTitle>
-              Complete Your Purchase{' '}
-              <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000001'} size={'xs'} />
-            </CardTitle>
+            <CardTitle>Complete Your Purchase</CardTitle>
             <CardDescription>Secure payment</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

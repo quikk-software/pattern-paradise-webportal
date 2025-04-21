@@ -35,7 +35,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { EasterEgg } from '@/lib/components/EasterEgg';
 
 const categories = ['All', 'Crocheting', 'Knitting'];
 
@@ -339,11 +338,6 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
             </SelectItem>
           </SelectContent>
         </Select>
-        {sortValue === 'priceAscending' && listingType === 'test' ? (
-          <div className="flex items-center justify-center">
-            <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000006'} size={'xs'} />
-          </div>
-        ) : null}
         <div className="w-full mb-6">
           <Button variant={'outline'} className={'w-full'} onClick={clearFilter}>
             <Trash />
