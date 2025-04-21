@@ -587,6 +587,11 @@ export interface PostOrderRequest {
   selfSelectedCountry?: string;
 }
 
+export interface PostMysteryOrderRequest {
+  category: string;
+  selfSelectedCountry?: string;
+}
+
 export interface PostOrderPayPalResponse {
   orderId: string;
   paypalOrderId: string;
@@ -2657,6 +2662,34 @@ export class Api<
     ) =>
       this.request<PostOrderPayPalResponse, any>({
         path: `/api/v1/orders/paypal`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Creates a mystery order by the given request body data.
+     *
+     * @tags Order
+     * @name PostMysteryOrderPayPal
+     * @summary Creates a mystery order with payment intent PayPal.
+     * @request POST:/api/v1/orders/paypal/mystery
+     * @secure
+     */
+    postMysteryOrderPayPal: (
+      data: {
+        /** @example "any" */
+        category?: any;
+        /** @example "any" */
+        selfSelectedCountry?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostOrderPayPalResponse, any>({
+        path: `/api/v1/orders/paypal/mystery`,
         method: "POST",
         body: data,
         secure: true,
