@@ -2324,7 +2324,7 @@ export class Api<
       }),
 
     /**
-     * @description The query deletes a testing by a given ID.
+     * @description The command deletes a testing by a given ID.
      *
      * @tags Testing
      * @name DeleteTesting
@@ -2353,6 +2353,23 @@ export class Api<
       this.request<void, NotFoundResponse>({
         path: `/api/v1/testings/${testingId}/apply`,
         method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The command removes the tester from the given testing.
+     *
+     * @tags Testing
+     * @name RevokeTesting
+     * @summary Revokes the tester application.
+     * @request DELETE:/api/v1/testings/{testingId}/revoke
+     * @secure
+     */
+    revokeTesting: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/${testingId}/revoke`,
+        method: "DELETE",
         secure: true,
         ...params,
       }),

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { GetProductResponse, GetTestingResponse } from '@/@types/api-types';
-import { useApplyTesting } from '@/lib/api/testing';
+import { useApplyTesting, useRevokeTesterApplication } from '@/lib/api/testing';
 import { CldImage } from 'next-cloudinary';
 import React, { useMemo, useState } from 'react';
 import RequestStatus from '@/lib/components/RequestStatus';
@@ -17,6 +17,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GoBackButton from '@/lib/components/GoBackButton';
 import ShareButton from '@/lib/components/ShareButton';
+import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 
 function ApplyButton({
   testingId,
@@ -35,7 +36,23 @@ function ApplyButton({
   hasApplied: boolean;
   setHasApplied: (state: boolean) => void;
 }) {
-  const { fetch: applyTesting, isSuccess, isError, isLoading } = useApplyTesting();
+  const [applyIsOpen, setApplyIsOpen] = useState(false);
+  const [revokeIsOpen, setRevokeIsOpen] = useState(false);
+
+  const {
+    fetch: applyTesting,
+    isSuccess: applyTestingIsSuccess,
+    isError: applyTestingIsError,
+    isLoading: applyTestingIsLoading,
+    errorDetail: applyTestingErrorDetail,
+  } = useApplyTesting();
+  const {
+    mutate: revokeTesting,
+    isSuccess: revokeTestingIsSuccess,
+    isError: revokeTestingIsError,
+    isLoading: revokeTestingIsLoading,
+    errorDetail: revokeTestingErrorDetail,
+  } = useRevokeTesterApplication();
   const { userId } = useSelector((store: Store) => store.auth);
 
   const router = useRouter();
@@ -48,6 +65,15 @@ function ApplyButton({
     }
     await applyTesting(testingId);
     setHasApplied(true);
+    setApplyIsOpen(false);
+  };
+
+  const handleRevokeClick = async (testingId: string) => {
+    await revokeTesting(testingId);
+    setRevokeIsOpen(false);
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   const themeClasses: any = {
@@ -95,27 +121,75 @@ function ApplyButton({
   }, [status]);
 
   return (
-    <div className={`block`}>
+    <div className="block">
       <Button
         onClick={() => {
-          handleApplyClick(testingId);
+          setApplyIsOpen(true);
         }}
-        disabled={isLoading || disableByStatus || isCreator || isTester || isSuccess || hasApplied}
+        disabled={
+          applyTestingIsLoading ||
+          disableByStatus ||
+          isCreator ||
+          isTester ||
+          applyTestingIsSuccess ||
+          hasApplied
+        }
         size={`lg`}
         className={classNames(
           themeClasses[theme] || 'bg-neutral-600 hover:bg-neutral-700',
           'text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105 text-lg mb-2',
         )}
       >
-        {isLoading ? <LoadingSpinnerComponent size={`sm`} className={`text-white`} /> : null}
+        {applyTestingIsLoading ? (
+          <LoadingSpinnerComponent size={`sm`} className={`text-white`} />
+        ) : null}
         {getTestingStatusInfo}
       </Button>
       {isCreator ? <p className="text-center">You are the creator of this tester call</p> : null}
-      {isTester ? <p className="text-center">You already applied for this tester call</p> : null}
+      {isTester ? (
+        <p className="text-center">
+          You already applied for this tester call.{' '}
+          <a className="text-blue-500 underline" onClick={() => setRevokeIsOpen(true)}>
+            Click here to leave.
+          </a>
+        </p>
+      ) : null}
       <RequestStatus
-        isSuccess={isSuccess}
-        isError={isError}
-        successMessage={`Congratulations! Your application for this tester call has been submitted. You'll receive an email with further instructions if the seller chooses you as a tester.`}
+        isSuccess={applyTestingIsSuccess}
+        isError={applyTestingIsError}
+        successMessage={
+          <span>
+            Congratulations! Your application for this tester call has been submitted. You&apos;ll
+            receive an email with further instructions if the seller chooses you as a tester.
+            <br />
+            <br />
+            <span className="text-foreground">Applied by accident?</span>{' '}
+            <a className="text-blue-500 underline" onClick={() => setRevokeIsOpen(true)}>
+              Click here to leave.
+            </a>
+          </span>
+        }
+      />
+      <RequestStatus
+        isSuccess={revokeTestingIsSuccess}
+        isError={revokeTestingIsError}
+        successMessage={`You’ve successfully left this tester call. Feel free to apply again anytime if you change your mind!`}
+      />
+      <ConfirmDrawer
+        isOpen={applyIsOpen}
+        setIsOpen={setApplyIsOpen}
+        isLoading={applyTestingIsLoading}
+        errorDetail={applyTestingErrorDetail}
+        description={'You are about to apply to this tester call. Continue?'}
+        callbackFn={() => handleApplyClick(testingId)}
+      />
+      <ConfirmDrawer
+        isOpen={revokeIsOpen}
+        setIsOpen={setRevokeIsOpen}
+        isLoading={revokeTestingIsLoading}
+        errorDetail={revokeTestingErrorDetail}
+        description={'You are about to leave this tester call. Continue?'}
+        callbackFn={() => handleRevokeClick(testingId)}
       />
     </div>
   );
