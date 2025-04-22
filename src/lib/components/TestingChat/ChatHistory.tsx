@@ -22,7 +22,11 @@ import { GetTestingCommentResponse, GetTestingResponse } from '@/@types/api-type
 import { Store } from '@/lib/redux/store';
 import { useSelector } from 'react-redux';
 import { handleImageUpload } from '@/lib/features/common/utils';
-import { useCreateTestingComment, useListTesterApplications } from '@/lib/api/testing';
+import {
+  useCreateTestingComment,
+  useListTesterApplications,
+  useReadAllTestingComments,
+} from '@/lib/api/testing';
 import { useDownloadPatternsByProductId } from '@/lib/api/pattern';
 import { useRouter } from 'next/navigation';
 import useTestingWebSocket from '@/lib/hooks/useTestingWebSocket';
@@ -167,6 +171,7 @@ export default function ChatHistory({
   const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications(
     {},
   );
+  const { mutate: readAllTestingComments } = useReadAllTestingComments();
 
   useEffect(() => {
     if (messages?.at(0)?.creatorId === userId) {
@@ -315,6 +320,13 @@ export default function ChatHistory({
 
   const handleReply = (message: GetTestingCommentResponse) => {
     setReplyingTo(message);
+  };
+
+  const handleReadAllTestingComments = () => {
+    if (!selectedTestingId) {
+      return;
+    }
+    readAllTestingComments(selectedTestingId).then();
   };
 
   const isInactive = selectedTestingStatus !== 'InProgress';
@@ -713,10 +725,13 @@ export default function ChatHistory({
             </div>
           ) : null}
           <div className="sticky bottom-0 left-0 w-full py-1 bg-white px-4">
-            <NewMessages message={socketMessage} currentBottomRef={bottomRef} />
+            <NewMessages
+              message={socketMessage}
+              currentBottomRef={bottomRef}
+              callback={handleReadAllTestingComments}
+            />
           </div>
 
-          {/* Message Input Area */}
           {!!selectedTestingId ? (
             <div className="p-4 flex-none border-t border-gray-200">
               <div className="flex flex-col gap-4">

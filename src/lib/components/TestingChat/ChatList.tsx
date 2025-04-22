@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { GetTestingResponse } from '@/@types/api-types';
 import { cn } from '@/lib/utils';
+import { PulsatingDot } from '@/lib/components/Chat/PulsatingDot';
+import dayjs from '@/lib/core/dayjs';
 
 interface ChatListProps {
   showChatList: boolean;
@@ -81,6 +83,7 @@ export default function ChatList({
                     {testing.lastComment}
                   </p>
                 </div>
+                {testing.lastCommentIsUnread ? <PulsatingDot size={'sm'} /> : null}
               </div>
             ))}
           </div>

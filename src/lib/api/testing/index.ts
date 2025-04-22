@@ -16,3 +16,5 @@ export * from './useListTesterApplications';
 export * from './useRemoveUsersFromTesting';
 export * from './useRevokeTesterApplication';
 export * from './useGetTestingComment';
+export * from './useGetUnreadTestingCommentsCount';
+export * from './useReadAllTestingComments';

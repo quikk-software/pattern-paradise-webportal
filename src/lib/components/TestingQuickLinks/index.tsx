@@ -2,16 +2,26 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MessageCircle } from 'lucide-react';
+import { ChevronRight, MessageCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useValidSession } from '@/hooks/useValidSession';
+import { useGetUnreadTestingCommentsCount } from '@/lib/api/testing';
+import { Badge } from '@/components/ui/badge';
 
 export default function TestingQuickLinks() {
-  const { status } = useValidSession();
+  const { fetch, data } = useGetUnreadTestingCommentsCount();
 
+  const { status, data: session } = useValidSession();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (!session?.user.id) {
+      return;
+    }
+    fetch(session.user.id);
+  }, [session?.user.id]);
 
   const links = [
     {
@@ -19,6 +29,8 @@ export default function TestingQuickLinks() {
       href: '/app/secure/test/chats',
       icon: <MessageCircle className="h-5 w-5" />,
       description: 'View your chats with testers',
+      highlight: data?.count && data.count > 0,
+      count: data?.count ?? 0,
     },
     {
       title: 'My Testings',
@@ -51,6 +63,7 @@ export default function TestingQuickLinks() {
                 className={`
                   flex items-center justify-between p-3 rounded-lg transition-colors
                   ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}
+                  ${link.highlight ? 'border border-red-500' : ''}
                 `}
               >
                 <div className="flex items-center gap-2">
@@ -66,6 +79,12 @@ export default function TestingQuickLinks() {
                     <div className="font-medium">{link.title}</div>
                     <div className="text-sm text-muted-foreground">{link.description}</div>
                   </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {link.count && link.highlight && (
+                    <Badge variant="destructive">{link.count}</Badge>
+                  )}
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </div>
               </Link>
             );
