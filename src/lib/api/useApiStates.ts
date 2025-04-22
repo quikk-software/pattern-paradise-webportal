@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import logger from '@/lib/core/logger';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { useValidSession } from '@/hooks/useValidSession';
 
 export const useApiStates = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,14 +13,30 @@ export const useApiStates = () => {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
-  const router = useRouter();
   const pathname = usePathname();
+  const { update } = useValidSession();
 
-  const handleFn = async <T>(fn: () => Promise<T>, ignoreIsLoading = false) => {
+  const refreshToken = async () => {
+    try {
+      const updatedSession = await update(); // Attempts to refresh token
+      logger.info('Token refreshed:', updatedSession);
+      return !!updatedSession;
+    } catch (err) {
+      logger.error('Token refresh failed', err);
+      return false;
+    }
+  };
+
+  const handleFn = async <T>(
+    fn: () => Promise<T>,
+    ignoreIsLoading = false,
+    retrying = false,
+  ): Promise<T> => {
     if (!ignoreIsLoading) {
       setIsLoading(true);
     }
     setIsCalled((ic) => !ic);
+
     try {
       setUploadProgress(0);
       const result = await fn();
@@ -28,22 +46,30 @@ export const useApiStates = () => {
     } catch (err: any) {
       setIsSuccess(false);
       setIsError(true);
+
       const errorPayload = await err
-        .json()
+        .json?.()
         .catch(() => logger.error("Couldn't load error response"));
+
       logger.error(errorPayload);
-      if (
-        errorPayload?.status !== undefined &&
-        errorPayload?.status !== '' &&
-        errorPayload?.detail !== '' &&
-        errorPayload?.detail !== undefined
-      ) {
+
+      if (errorPayload?.status && errorPayload?.detail !== undefined) {
         setValidationErrors(errorPayload?.errors ?? []);
         setErrorDetail(errorPayload?.detail);
       }
+
       if (errorPayload?.status === 401) {
-        router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
+        if (!retrying) {
+          const refreshed = await refreshToken();
+          if (refreshed) {
+            return await handleFn(fn, ignoreIsLoading, true);
+          }
+        }
+        await signIn(undefined, {
+          callbackUrl: `/auth/login?redirect=${encodeURIComponent(pathname)}`,
+        });
       }
+
       throw err;
     } finally {
       if (!ignoreIsLoading) {

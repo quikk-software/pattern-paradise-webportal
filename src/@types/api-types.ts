@@ -455,6 +455,7 @@ export interface GetTestingResponse {
    * @example "2024-01-01T00:00:00Z"
    */
   lastCommentCreatedAt?: string;
+  lastCommentIsUnread: boolean;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -2658,6 +2659,44 @@ export class Api<
         method: "GET",
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The total count of unread testing comments will be retrieved by a given user ID.
+     *
+     * @tags Testing comment
+     * @name GetUnreadTestingCommentsCount
+     * @summary Gets the total count of unread testing comments.
+     * @request GET:/api/v1/testing-comments/users/{userId}/unread-messages
+     * @secure
+     */
+    getUnreadTestingCommentsCount: (
+      userId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<GetUnreadMessagesCountResponse, any>({
+        path: `/api/v1/testing-comments/users/${userId}/unread-messages`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The testing comments will be read based on a given testing ID and based of the authenticated user ID.
+     *
+     * @tags Testing comment
+     * @name ReadAllTestingComments
+     * @summary Read all testing comments of a testing.
+     * @request PATCH:/api/v1/testing-comments/{testingId}/read-all
+     * @secure
+     */
+    readAllTestingComments: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/testing-comments/${testingId}/read-all`,
+        method: "PATCH",
+        secure: true,
         ...params,
       }),
 
