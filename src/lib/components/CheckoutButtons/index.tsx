@@ -13,7 +13,6 @@ import { GetProductResponse } from '@/@types/api-types';
 import { useGetUserById } from '@/lib/api';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
-import { EasterEgg } from '@/lib/components/EasterEgg';
 
 interface CheckoutButtonProps {
   price: number;
@@ -54,10 +53,7 @@ export function CheckoutButtons({ price, product, disabled, country }: CheckoutB
     >
       <Card>
         <CardHeader>
-          <CardTitle>
-            Complete Your Purchase{' '}
-            <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000001'} size={'xs'} />
-          </CardTitle>
+          <CardTitle>Complete Your Purchase</CardTitle>
           <CardDescription>Secure payment</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

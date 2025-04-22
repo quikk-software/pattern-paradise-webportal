@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { MutableRefObject } from 'react';
 import useAction from '@/lib/core/useAction';
-import { EasterEgg } from '@/lib/components/EasterEgg';
 
 interface PrivacyPolicyProps {
   privacyPolicyRef: MutableRefObject<HTMLDivElement | null>;
@@ -495,10 +494,7 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
                 object to the storage if your interests outweigh our legitimate interest.
               </p>
 
-              <h3 className="text-lg font-semibold mb-2">
-                6. Plugins and Tools{' '}
-                <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000012'} size={'xs'} />
-              </h3>
+              <h3 className="text-lg font-semibold mb-2">6. Plugins and Tools</h3>
               <h4 className="text-md font-semibold mb-1">Google Web Fonts (Local Hosting)</h4>
               <p>
                 This site uses so-called Web Fonts provided by Google for the uniform display of

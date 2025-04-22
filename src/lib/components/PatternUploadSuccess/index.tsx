@@ -19,7 +19,6 @@ import { useGetProduct } from '@/lib/api';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
-import { EasterEgg } from '@/lib/components/EasterEgg';
 
 interface PatternUploadSuccessProps {
   productId: string;
@@ -60,10 +59,6 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
             Your pattern has been uploaded and is almost ready to share with the community.
           </p>
         ) : null}
-      </div>
-
-      <div className="w-full flex justify-center items-center mb-4">
-        <EasterEgg eventCampaignId={'00000000-0000-0000-0000-000000000002'} size={'md'} />
       </div>
 
       <Card className="mb-6">

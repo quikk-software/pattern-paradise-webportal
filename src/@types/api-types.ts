@@ -587,6 +587,11 @@ export interface PostOrderRequest {
   selfSelectedCountry?: string;
 }
 
+export interface PostMysteryOrderRequest {
+  category: string;
+  selfSelectedCountry?: string;
+}
+
 export interface PostOrderPayPalResponse {
   orderId: string;
   paypalOrderId: string;
@@ -2319,7 +2324,7 @@ export class Api<
       }),
 
     /**
-     * @description The query deletes a testing by a given ID.
+     * @description The command deletes a testing by a given ID.
      *
      * @tags Testing
      * @name DeleteTesting
@@ -2348,6 +2353,23 @@ export class Api<
       this.request<void, NotFoundResponse>({
         path: `/api/v1/testings/${testingId}/apply`,
         method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The command removes the tester from the given testing.
+     *
+     * @tags Testing
+     * @name RevokeTesting
+     * @summary Revokes the tester application.
+     * @request DELETE:/api/v1/testings/{testingId}/revoke
+     * @secure
+     */
+    revokeTesting: (testingId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/${testingId}/revoke`,
+        method: "DELETE",
         secure: true,
         ...params,
       }),
@@ -2657,6 +2679,34 @@ export class Api<
     ) =>
       this.request<PostOrderPayPalResponse, any>({
         path: `/api/v1/orders/paypal`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Creates a mystery order by the given request body data.
+     *
+     * @tags Order
+     * @name PostMysteryOrderPayPal
+     * @summary Creates a mystery order with payment intent PayPal.
+     * @request POST:/api/v1/orders/paypal/mystery
+     * @secure
+     */
+    postMysteryOrderPayPal: (
+      data: {
+        /** @example "any" */
+        category?: any;
+        /** @example "any" */
+        selfSelectedCountry?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostOrderPayPalResponse, any>({
+        path: `/api/v1/orders/paypal/mystery`,
         method: "POST",
         body: data,
         secure: true,

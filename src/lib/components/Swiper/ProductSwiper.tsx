@@ -8,7 +8,6 @@ import { GetProductResponse } from '@/@types/api-types';
 import useMainAreaHeight from '@/hooks/useMainAreaHeight';
 import { useCreateProductLike } from '@/lib/api/product-like';
 import Link from 'next/link';
-import { EasterEgg } from '@/lib/components/EasterEgg';
 
 interface ProductSwiperProps {
   products: GetProductResponse[];
@@ -90,13 +89,6 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
             />
           );
         })}
-        {currentIndex === 5 ? (
-          <EasterEgg
-            eventCampaignId={'00000000-0000-0000-0000-000000000009'}
-            size={'sm'}
-            className="absolute top-1/2 left-1/2 z-50"
-          />
-        ) : null}
       </div>
     );
   };
