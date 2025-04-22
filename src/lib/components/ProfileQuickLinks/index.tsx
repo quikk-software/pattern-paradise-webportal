@@ -16,7 +16,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useGetUnreadMessagesCount } from '@/lib/api';
 
 interface QuickLinksProps {
   user: {
@@ -36,6 +37,12 @@ export default function ProfileQuickLinks({
   isSuccess,
   isError,
 }: QuickLinksProps) {
+  const { fetch, data } = useGetUnreadMessagesCount();
+
+  useEffect(() => {
+    fetch(user.id);
+  }, [user]);
+
   const pathname = usePathname();
   const hasOpenIncidents = user.openIncidentsCount > 0;
 
@@ -69,6 +76,8 @@ export default function ProfileQuickLinks({
       href: '/app/secure/chats',
       icon: <MessageCircle className="h-5 w-5" />,
       description: 'View your conversations',
+      highlight: data?.count && data.count > 0,
+      count: data?.count ?? 0,
     },
     {
       title: 'Open Incidents',

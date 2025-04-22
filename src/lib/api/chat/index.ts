@@ -5,3 +5,4 @@ export * from './useListChatMessages';
 export * from './useBlockChat';
 export * from './useUnblockChat';
 export * from './useReadAllChatMessages';
+export * from './useGetUnreadMessagesCount';

@@ -792,6 +792,10 @@ export interface PostNewsletterSubscriptionRequest {
   email: string;
 }
 
+export interface GetUnreadMessagesCountResponse {
+  count: number;
+}
+
 export interface GetMessageReactionResponse {
   id: string;
   emoji: string;
@@ -3435,6 +3439,24 @@ export class Api<
     listChatsByUserId: (userId: string, params: RequestParams = {}) =>
       this.request<ListChatsResponse, any>({
         path: `/api/v1/chats/users/${userId}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The total count of unread messages will be retrieved by a given user ID.
+     *
+     * @tags Chat
+     * @name GetUnreadMessagesCount
+     * @summary Gets the total count of unread messages.
+     * @request GET:/api/v1/chats/users/{userId}/unread-messages
+     * @secure
+     */
+    getUnreadMessagesCount: (userId: string, params: RequestParams = {}) =>
+      this.request<GetUnreadMessagesCountResponse, any>({
+        path: `/api/v1/chats/users/${userId}/unread-messages`,
         method: "GET",
         secure: true,
         format: "json",
