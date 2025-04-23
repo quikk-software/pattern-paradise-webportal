@@ -375,6 +375,7 @@ export interface GetProductResponse {
   category: string;
   price: number;
   isFree: boolean;
+  isMystery: boolean;
   experience: string;
   isSponsored: boolean;
   hasPayPalBusinessAccount: boolean;
@@ -1959,6 +1960,8 @@ export class Api<
         price: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
+        /** Indicates if the product is enrolled for mystery boxes. */
+        isMystery: string;
         /** The experience level of the product. */
         experience: string;
       },
@@ -2071,6 +2074,8 @@ export class Api<
         price: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
+        /** Indicates if the product is enrolled for mystery boxes. */
+        isMystery: string;
         /** The experience level of the product. */
         experience: string;
       },

@@ -28,7 +28,7 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
           <div className="grid lg:grid-cols-2 gap-4">
             <Image
               alt={`${category} Mystery Pattern`}
-              src={`/assets/mystery-pattern.png`}
+              src={`/assets/mystery-pattern_v2.jpeg`}
               width={400}
               height={400}
               className={`rounded-lg shadow-md`}
@@ -53,23 +53,26 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
                   <br />
                   🎁 What’s included:
                   <br />
-                  - 1 surprise digital pattern (crochet or knitting)
-                  <br />
-                  - PDF download delivered instantly
-                  <br />
-                  - Designed by one of our trusted creators
-                  <br />
+                </p>
+                <ul className="list-disc ml-5">
+                  <li>1 surprise digital pattern (crochet or knitting)</li>
+                  <li>PDF download delivered instantly</li>
+                  <li>Designed by one of our trusted creators</li>
+                </ul>
+                <p>
                   <br />
                   💡 Great for:
                   <br />
-                  - Gifting to yourself or fellow makers
+                </p>
+                <ul className="list-disc ml-5">
+                  <li>Gifting to yourself or fellow makers</li>
+                  <li>Trying something different</li>
+                  <li>Adding a spark of surprise to your crafting</li>
+                </ul>
+                <p>
                   <br />
-                  - Trying something different
                   <br />
-                  - Adding a spark of surprise to your crafting
-                  <br />
-                  <br />
-                  Take a chance—you might just discover your next favorite project. 🧶
+                  Take a chance - you might just discover your next favorite project. 🧶
                 </p>
                 <ProductHashtags hashtags={[category.toLowerCase(), 'mystery', 'pattern']} />
                 <BuyMysteryButton category={category} />

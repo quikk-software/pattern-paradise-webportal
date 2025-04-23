@@ -30,6 +30,8 @@ import { checkProStatus } from '@/lib/core/utils';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import UploadFeedback from '@/components/upload-feedback';
+import Link from 'next/link';
+import CardRadioGroup from '@/components/card-radio-group';
 
 interface UpdateProductFormProps {
   initialData: GetProductResponse;
@@ -57,6 +59,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
+  const [isMystery, setIsMystery] = useState<string | null>(initialData.isMystery ? 'yes' : 'no');
+
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
@@ -329,6 +333,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       formData.append('category', category.craft);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
       formData.append('isFree', isFree ? 'true' : 'false');
+      formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 
       formData.append(
         'subCategories',
@@ -480,6 +485,36 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             </Label>
           </div>
         </div>
+
+        {!isFree ? (
+          <CardRadioGroup
+            selectedOption={isMystery}
+            setSelectedOption={setIsMystery}
+            question={'Enroll in mystery boxes?'}
+            description={
+              <span>
+                Patterns included in{' '}
+                <Link href="/app/mystery" target="_blank" className="text-blue-500 underline">
+                  Mystery Boxes
+                </Link>{' '}
+                may receive additional exposure to customers. Each mystery box is sold for a{' '}
+                <strong>flat rate of $3</strong>.
+              </span>
+            }
+            options={[
+              {
+                id: 'yes',
+                title: 'Yes',
+                description: 'My pattern will be eligible to appear in mystery boxes',
+              },
+              {
+                id: 'no',
+                title: 'No',
+                description: 'My pattern will not be included in any mystery boxes',
+              },
+            ]}
+          />
+        ) : null}
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
