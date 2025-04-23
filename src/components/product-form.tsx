@@ -37,6 +37,7 @@ import { arrayMove, SortableContext, rectSortingStrategy } from '@dnd-kit/sortab
 import DragAndDropImage from '@/lib/components/DragAndDropImage';
 import UploadFeedback from '@/components/upload-feedback';
 import { useRouter } from 'next/navigation';
+import CardRadioGroup from '@/components/card-radio-group';
 
 export interface PDFFile {
   file: File;
@@ -60,6 +61,7 @@ export function ProductFormComponent() {
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
+  const [isMystery, setIsMystery] = useState<string | null>('yes');
   const [selectedExperienceLevel, setSelectedExperienceLevel] = useState<ExperienceLevel>(
     ExperienceLevels.Intermediate,
   );
@@ -270,6 +272,7 @@ export function ProductFormComponent() {
       formData.append('category', category.craft);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
       formData.append('isFree', isFree ? 'true' : 'false');
+      formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 
       formData.append(
         'subCategories',
@@ -451,6 +454,36 @@ export function ProductFormComponent() {
             </Label>
           </div>
         </div>
+
+        {!isFree ? (
+          <CardRadioGroup
+            selectedOption={isMystery}
+            setSelectedOption={setIsMystery}
+            question={'Enroll in mystery boxes?'}
+            description={
+              <span>
+                Patterns included in{' '}
+                <Link href="/app/mystery" target="_blank" className="text-blue-500 underline">
+                  Mystery Boxes
+                </Link>{' '}
+                may receive additional exposure to customers. Each mystery box is sold for a{' '}
+                <strong>flat rate of $3</strong>.
+              </span>
+            }
+            options={[
+              {
+                id: 'yes',
+                title: 'Yes',
+                description: 'My pattern will be eligible to appear in mystery boxes',
+              },
+              {
+                id: 'no',
+                title: 'No',
+                description: 'My pattern will not be included in any mystery boxes',
+              },
+            ]}
+          />
+        ) : null}
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
