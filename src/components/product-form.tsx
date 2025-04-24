@@ -127,6 +127,7 @@ export function ProductFormComponent() {
       setImageError(`Please add 1 to ${IMAGE_LIMIT} images.`);
       return;
     }
+
     setImageError(undefined);
     setUploadStatus([]);
     if (patterns.length === 0) {
@@ -135,7 +136,7 @@ export function ProductFormComponent() {
     }
     setPatternError(undefined);
 
-    if (uploadStage !== 'idle') {
+    if (uploadStage !== 'idle' && uploadStage !== 'error') {
       return;
     }
 
