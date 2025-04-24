@@ -58,7 +58,12 @@ export const useApiStates = () => {
         setErrorDetail(errorPayload?.detail);
       }
 
-      if (errorPayload?.status === 401) {
+      if (err?.response?.data?.status && err?.response?.data?.detail !== undefined) {
+        setValidationErrors(err?.response?.data?.errors ?? []);
+        setErrorDetail(err?.response?.data?.detail);
+      }
+
+      if (errorPayload?.status === 401 || err?.response?.data?.status === 401) {
         if (!retrying) {
           const refreshed = await refreshToken();
           if (refreshed) {

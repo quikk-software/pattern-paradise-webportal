@@ -127,6 +127,7 @@ export function ProductFormComponent() {
       setImageError(`Please add 1 to ${IMAGE_LIMIT} images.`);
       return;
     }
+
     setImageError(undefined);
     setUploadStatus([]);
     if (patterns.length === 0) {
@@ -135,7 +136,7 @@ export function ProductFormComponent() {
     }
     setPatternError(undefined);
 
-    if (uploadStage !== 'idle') {
+    if (uploadStage !== 'idle' && uploadStage !== 'error') {
       return;
     }
 
@@ -272,6 +273,7 @@ export function ProductFormComponent() {
       formData.append('category', category.craft);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
       formData.append('isFree', isFree ? 'true' : 'false');
+      formData.append('isPhysical', 'false');
       formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 
       formData.append(
