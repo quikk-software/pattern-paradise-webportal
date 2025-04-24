@@ -1960,6 +1960,15 @@ export class Api<
         price: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
+        /** Indicates if the product is physical (true/false). */
+        isPhysical: string;
+        /** Shipping options for physical products. Only required if isPhysical is true. */
+        shippingOptions?: {
+          /** The country code from which the product is shipped (e.g., DE, US, TH). */
+          origin_country?: string;
+          /** A map of destination country codes to shipping details. */
+          shipping?: object;
+        };
         /** Indicates if the product is enrolled for mystery boxes. */
         isMystery: string;
         /** The experience level of the product. */
@@ -2074,6 +2083,13 @@ export class Api<
         price: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
+        /** Shipping options for physical products. Only required if isPhysical is true. */
+        shippingOptions?: {
+          /** The country code from which the product is shipped (e.g., DE, US, TH). */
+          origin_country?: string;
+          /** A map of destination country codes to shipping details. */
+          shipping?: object;
+        };
         /** Indicates if the product is enrolled for mystery boxes. */
         isMystery: string;
         /** The experience level of the product. */
