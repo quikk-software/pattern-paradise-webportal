@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { APP_DOMAIN } from '@/lib/constants';
 import { listProducts } from '@/lib/api/static/product/listProducts';
+import { listUsers } from '@/lib/api/static/user/listUsers';
+import { getAccessTokenFromKeycloak } from '@/lib/auth/auth.utils';
 
 export async function GET() {
   const staticRoutes = [
@@ -15,6 +17,8 @@ export async function GET() {
     { url: `${APP_DOMAIN}/auth/reset-password`, lastModified: new Date().toISOString() },
   ];
 
+  const accessToken = await getAccessTokenFromKeycloak();
+
   // Fetch products
   const products = await listProducts({
     overridePageNumber: 1,
@@ -28,7 +32,29 @@ export async function GET() {
       : new Date().toISOString(),
   }));
 
-  const allRoutes = [...staticRoutes, ...dynamicProductRoutes];
+  let dynamicUsersRoutes: {
+    url: string;
+    lastModified: string;
+  }[] = [];
+  if (accessToken) {
+    // Fetch users
+    const users = await listUsers(
+      {
+        overridePageNumber: 1,
+        overridePageSize: 50000, // max limit for Google
+      },
+      accessToken,
+    );
+
+    dynamicUsersRoutes = users.map((user) => ({
+      url: `${APP_DOMAIN}/users/${user.username}`,
+      lastModified: user.updatedAt
+        ? new Date(user.updatedAt).toISOString()
+        : new Date().toISOString(),
+    }));
+  }
+
+  const allRoutes = [...staticRoutes, ...dynamicProductRoutes, ...dynamicUsersRoutes];
 
   // Generate XML format
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

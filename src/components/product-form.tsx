@@ -459,12 +459,12 @@ export function ProductFormComponent() {
           <CardRadioGroup
             selectedOption={isMystery}
             setSelectedOption={setIsMystery}
-            question={'Enroll in mystery boxes?'}
+            question={'Enroll in mystery patterns?'}
             description={
               <span>
                 Patterns included in{' '}
                 <Link href="/app/mystery" target="_blank" className="text-blue-500 underline">
-                  Mystery Boxes
+                  Mystery Patterns
                 </Link>{' '}
                 may receive additional exposure to customers. Each mystery box is sold for a{' '}
                 <strong>flat rate of $3</strong>.
@@ -474,12 +474,12 @@ export function ProductFormComponent() {
               {
                 id: 'yes',
                 title: 'Yes',
-                description: 'My pattern will be eligible to appear in mystery boxes',
+                description: 'My pattern will be eligible to appear in mystery patterns',
               },
               {
                 id: 'no',
                 title: 'No',
-                description: 'My pattern will not be included in any mystery boxes',
+                description: 'My pattern will not be included in any mystery patterns',
               },
             ]}
           />

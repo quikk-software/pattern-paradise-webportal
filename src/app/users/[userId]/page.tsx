@@ -1,28 +1,65 @@
-'use client';
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import UserAccountComponent from '@/components/user-account';
-import { useGetUserById } from '@/lib/api';
 import NotFoundPage from '@/app/not-found';
-import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { Metadata } from 'next';
+import { getUserById } from '@/lib/api/static/user/getUserById';
+import { APP_DOMAIN } from '@/lib/constants';
 
-export default function SellUserPage({ params }: { params: { userId: string } }) {
-  const { fetch, data: user, isLoading, isError } = useGetUserById();
+type Props = {
+  params: Promise<{ userId: string }>;
+};
 
-  useEffect(() => {
-    fetch(params.userId);
-  }, [params.userId]);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const userId = (await params).userId;
+  const user = await getUserById(userId);
+  const userName = user?.firstName || user?.username;
 
-  if (isError) {
+  const title = `${userName}'s Profile on Pattern Paradise`;
+  const description = `Check out ${userName}'s patterns, tester calls, and more on Pattern Paradise.`;
+  const imageUrl =
+    user?.imageUrl ?? `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'profile',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${userName}'s profile image`,
+        },
+      ],
+      url: `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/users/${userId}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${userName}'s profile image`,
+        },
+      ],
+    },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/users/${userId}`,
+    },
+  };
+}
+
+export default async function SellUserPage({ params }: { params: { userId: string } }) {
+  const user = await getUserById(params.userId);
+
+  if (!user) {
     return <NotFoundPage />;
-  }
-
-  if (isLoading || !user) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <LoadingSpinnerComponent />
-      </div>
-    );
   }
 
   return <UserAccountComponent user={user} />;
