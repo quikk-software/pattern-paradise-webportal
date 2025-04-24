@@ -42,4 +42,28 @@ async function getAccessToken(session: Session | null) {
   return session.user.accessToken;
 }
 
-export { handleLogoutFlow, getAccessToken };
+async function getAccessTokenFromKeycloak() {
+  const response = await fetch(`${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      client_id: process.env.KEYCLOAK_CLIENT_ID!,
+      client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
+      grant_type: 'password',
+      username: process.env.KEYCLOAK_SERVICE_ACCOUNT_USERNAME!,
+      password: process.env.KEYCLOAK_SERVICE_ACCOUNT_PASSWORD!,
+      scope: 'openid profile email offline_access',
+    }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to get token: ${data.error_description || data.error}`);
+  }
+
+  return data.access_token as string;
+}
+
+export { handleLogoutFlow, getAccessToken, getAccessTokenFromKeycloak };
