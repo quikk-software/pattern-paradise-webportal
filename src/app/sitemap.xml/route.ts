@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { APP_DOMAIN } from '@/lib/constants';
 import { listProducts } from '@/lib/api/static/product/listProducts';
+import { listUsers } from '@/lib/api/static/user/listUsers';
 
 export async function GET() {
   const staticRoutes = [
@@ -28,7 +29,20 @@ export async function GET() {
       : new Date().toISOString(),
   }));
 
-  const allRoutes = [...staticRoutes, ...dynamicProductRoutes];
+  // Fetch users
+  const users = await listUsers({
+    overridePageNumber: 1,
+    overridePageSize: 50000, // max limit for Google
+  });
+
+  const dynamicUsersRoutes = users.map((user) => ({
+    url: `${APP_DOMAIN}/users/${user.username}`,
+    lastModified: user.updatedAt
+      ? new Date(user.updatedAt).toISOString()
+      : new Date().toISOString(),
+  }));
+
+  const allRoutes = [...staticRoutes, ...dynamicProductRoutes, ...dynamicUsersRoutes];
 
   // Generate XML format
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
