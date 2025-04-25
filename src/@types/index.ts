@@ -17,7 +17,6 @@ const getBearerToken = (accessToken?: string) => {
 
 const getApi = async (session: Session | null) => {
   const accessToken = await getAccessToken(session);
-
   return getBearerToken(accessToken);
 };
 

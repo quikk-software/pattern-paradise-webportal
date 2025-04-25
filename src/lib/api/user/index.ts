@@ -21,3 +21,5 @@ export * from './useGetDeviceToken';
 export * from './useDeleteDeviceToken';
 export * from './useOnboardStripe';
 export * from './useGetStripeOnboardingLink';
+export * from './useFollowUser';
+export * from './useUnfollowUser';

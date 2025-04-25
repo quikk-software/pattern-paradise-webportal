@@ -233,6 +233,8 @@ export interface GetUserResponse {
   bannerImageUrl?: string;
   roles?: string[];
   keycloakUserId?: string;
+  followers?: number;
+  isFollowing?: boolean;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -282,6 +284,8 @@ export interface GetUserAccountResponse {
   imageUrl?: string;
   bannerImageUrl?: string;
   roles?: string[];
+  followers?: number;
+  isFollowing?: boolean;
 }
 
 export interface ListUserAccountsResponse {
@@ -1913,6 +1917,40 @@ export class Api<
         method: "POST",
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description A user will be followed based on the given user ID.
+     *
+     * @tags User
+     * @name FollowUser
+     * @summary Follows a user.
+     * @request POST:/api/v1/users/{userId}/follow
+     * @secure
+     */
+    followUser: (userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/follow`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description A user will be unfollowed based on the given user ID.
+     *
+     * @tags User
+     * @name UnfollowUser
+     * @summary Unfollows a user.
+     * @request DELETE:/api/v1/users/{userId}/unfollow
+     * @secure
+     */
+    unfollowUser: (userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/unfollow`,
+        method: "DELETE",
+        secure: true,
         ...params,
       }),
 

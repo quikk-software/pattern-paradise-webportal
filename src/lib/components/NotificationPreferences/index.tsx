@@ -30,7 +30,7 @@ import { useValidSession } from '@/hooks/useValidSession';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 
-type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE';
+type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE' | 'FOLLOW_ACTION';
 
 interface NotificationPreferencesProps {
   disableCard?: boolean;
@@ -79,6 +79,12 @@ function PreferencesCard({
       label: 'Pattern Sales',
       description: 'Get notified when a pattern has been sold',
     },
+    {
+      type: 'FOLLOW_ACTION',
+      enabled: true,
+      label: 'Followed Creator Activity',
+      description: 'Get notified when someone you creates a new pattern or tester call',
+    },
   ]);
   const [enableIsLoading, setEnableIsLoading] = useState(false);
   const [disableIsLoading, setDisableIsLoading] = useState(false);
@@ -107,6 +113,12 @@ function PreferencesCard({
         enabled: deviceToken?.events?.includes('PATTERN_SALE') ?? false,
         label: 'Pattern Sales',
         description: 'Get notified when a pattern has been sold',
+      },
+      {
+        type: 'FOLLOW_ACTION',
+        enabled: true,
+        label: 'Followed Creator Activity',
+        description: 'Get notified when someone you creates a new pattern or tester call',
       },
     ]);
   }, [deviceToken?.events]);
