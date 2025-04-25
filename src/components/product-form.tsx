@@ -273,7 +273,6 @@ export function ProductFormComponent() {
       formData.append('category', category.craft);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
       formData.append('isFree', isFree ? 'true' : 'false');
-      formData.append('isPhysical', 'false');
       formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 
       formData.append(
