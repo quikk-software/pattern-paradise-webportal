@@ -23,6 +23,7 @@ interface UserAccountComponentProps {
 }
 
 export default function UserAccountComponent({ user }: UserAccountComponentProps) {
+  const [userToUse, setUserToUse] = useState<GetUserAccountResponse>(user);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
@@ -31,7 +32,6 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
   const { data } = useValidSession();
 
   const observer = useRef<IntersectionObserver | null>(null);
-  const userToUse = useRef<GetUserAccountResponse>(user);
 
   const screenSize = useScreenSize();
 
@@ -59,7 +59,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
   useEffect(() => {
     if (currentUser) {
-      userToUse.current = currentUser;
+      setUserToUse(currentUser);
     }
   }, [currentUser]);
 
@@ -109,7 +109,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
       <div className="flex items-center gap-2">
         <GoBackButton />
         <ShareButton
-          url={`${process.env.NEXT_PUBLIC_URL}/users/${userToUse.current.username}`}
+          url={`${process.env.NEXT_PUBLIC_URL}/users/${userToUse.username}`}
           shareText={
             isMe
               ? 'Check out my profile on Pattern Paradise!'
@@ -118,25 +118,21 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         />
       </div>
 
-      <UserDetailsCard
-        user={userToUse.current}
-        showRoles={true}
-        hasProducts={products.length > 0}
-      />
+      <UserDetailsCard user={userToUse} showRoles={true} hasProducts={products.length > 0} />
 
-      {userToUse.current.description ? (
+      {userToUse.description ? (
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-2xl">About me</CardTitle>
           </CardHeader>
-          <CardContent>{userToUse.current.description}</CardContent>
+          <CardContent>{userToUse.description}</CardContent>
         </Card>
       ) : null}
 
-      {userToUse.current.gallery.length > 0 ? (
+      {userToUse.gallery.length > 0 ? (
         <div className="space-y-4">
           <h2 className="text-2xl font-bold mb-4">Gallery</h2>
-          <GalleryGrid images={userToUse.current.gallery} />
+          <GalleryGrid images={userToUse.gallery} />
           <Button variant={'outline'} asChild>
             <Link href={`/app/secure/auth/me?action=scrollToGallery`} className="w-full">
               <Plus className="w-4 h-4" />

@@ -96,7 +96,7 @@ export default function UserDetailsCard({
       </CardHeader>
       {showCardContent ? (
         <CardContent className="flex flex-col gap-4">
-          <div className="flex space-x-2 mb-2">
+          <div className="flex gap-2 mb-2 items-center flex-wrap">
             <FollowUserButton initialFollowing={!!user?.isFollowing} userId={user.id} />
             {hasSocialLinks ? (
               <>
@@ -105,6 +105,7 @@ export default function UserDetailsCard({
                     href={`https://instagram.com/${user.instagramRef}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="flex"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Badge variant="secondary">
@@ -118,6 +119,7 @@ export default function UserDetailsCard({
                     href={`https://tiktok.com/@${user.tiktokRef}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="flex"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Badge variant="secondary">

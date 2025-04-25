@@ -50,22 +50,28 @@ export default function FollowUserButton({
   }
 
   return (
-    <Badge variant="secondary" onClick={handleClick} className={`cursor-pointer`}>
-      {isFollowing ? (
-        <>
-          {unfollowUserIsLoading ? <LoadingSpinnerComponent /> : <UserX className="mr-1 h-4 w-4" />}{' '}
-          Unfollow
-        </>
-      ) : (
-        <>
-          {followUserIsLoading ? (
-            <LoadingSpinnerComponent />
-          ) : (
-            <UserPlus className="mr-1 h-4 w-4" />
-          )}{' '}
-          Follow
-        </>
-      )}
-    </Badge>
+    <a>
+      <Badge variant="secondary" onClick={handleClick} className={`cursor-pointer flex`}>
+        {isFollowing ? (
+          <>
+            {unfollowUserIsLoading ? (
+              <LoadingSpinnerComponent />
+            ) : (
+              <UserX className="mr-1 h-4 w-4" />
+            )}
+            Unfollow
+          </>
+        ) : (
+          <>
+            {followUserIsLoading ? (
+              <LoadingSpinnerComponent />
+            ) : (
+              <UserPlus className="mr-1 h-4 w-4" />
+            )}
+            Follow
+          </>
+        )}
+      </Badge>
+    </a>
   );
 }
