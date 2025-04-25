@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GetUserAccountResponse } from '@/@types/api-types';
-import { useListProductsByUserId } from '@/lib/api';
+import { useGetUserById, useListProductsByUserId } from '@/lib/api';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import UserDetailsCard from '@/lib/components/UserDetailsCard';
@@ -16,6 +16,7 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import ShareButton from '@/lib/components/ShareButton';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -27,7 +28,10 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
   const { userId } = useSelector((s: Store) => s.auth);
 
+  const { data } = useValidSession();
+
   const observer = useRef<IntersectionObserver | null>(null);
+  const userToUse = useRef<GetUserAccountResponse>(user);
 
   const screenSize = useScreenSize();
 
@@ -38,11 +42,26 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
     hasNextPage: fetchProductsHasNextPage,
   } = useListProductsByUserId({});
 
+  const { fetch: fetchUser, data: currentUser } = useGetUserById();
+
   useEffect(() => {
     fetchProducts(user.id, {
       status: 'Released',
     });
   }, [user.id]);
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+    fetchUser(user.id);
+  }, [user.id, data]);
+
+  useEffect(() => {
+    if (currentUser) {
+      userToUse.current = currentUser;
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     fetchProducts(user.id, {
@@ -90,7 +109,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
       <div className="flex items-center gap-2">
         <GoBackButton />
         <ShareButton
-          url={`${process.env.NEXT_PUBLIC_URL}/users/${user.username}`}
+          url={`${process.env.NEXT_PUBLIC_URL}/users/${userToUse.current.username}`}
           shareText={
             isMe
               ? 'Check out my profile on Pattern Paradise!'
@@ -99,21 +118,25 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         />
       </div>
 
-      <UserDetailsCard user={user} showRoles={true} hasProducts={products.length > 0} />
+      <UserDetailsCard
+        user={userToUse.current}
+        showRoles={true}
+        hasProducts={products.length > 0}
+      />
 
-      {user.description ? (
+      {userToUse.current.description ? (
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-2xl">About me</CardTitle>
           </CardHeader>
-          <CardContent>{user.description}</CardContent>
+          <CardContent>{userToUse.current.description}</CardContent>
         </Card>
       ) : null}
 
-      {user.gallery.length > 0 ? (
+      {userToUse.current.gallery.length > 0 ? (
         <div className="space-y-4">
           <h2 className="text-2xl font-bold mb-4">Gallery</h2>
-          <GalleryGrid images={user.gallery} />
+          <GalleryGrid images={userToUse.current.gallery} />
           <Button variant={'outline'} asChild>
             <Link href={`/app/secure/auth/me?action=scrollToGallery`} className="w-full">
               <Plus className="w-4 h-4" />

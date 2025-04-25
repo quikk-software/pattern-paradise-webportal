@@ -89,8 +89,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     setUploadProgress: setBackendProgress,
   } = useUpdateProduct();
 
-  console.log({ errorDetail });
-
   const {
     register,
     handleSubmit,
