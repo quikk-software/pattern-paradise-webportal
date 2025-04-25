@@ -71,7 +71,7 @@ export function PayPalOrderProvider({
     }
     const customerOrder = orders.find((order) => order.customer.id === userId);
 
-    if (customerOrder) {
+    if (customerOrder?.status === 'COMPLETED' || customerOrder?.status === 'CAPTURED') {
       router.push(`/app/secure/auth/me/orders/${customerOrder.id}?action=toggleBuyNow`);
     }
   }, [listOrdersByProductIdIsSuccess, orders, userId, router]);
