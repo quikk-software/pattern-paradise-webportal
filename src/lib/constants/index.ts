@@ -1,5 +1,5 @@
 ﻿export const APP_TITLE = 'Pattern Paradise';
-export const APP_NAME = 'Pattern Paradise – The Ultimate Crocheting & Knitting Pattern Hub';
+export const APP_NAME = 'Pattern Paradise';
 export const APP_DESCRIPTION =
   'Find, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern business effortlessly.';
 export const APP_DOMAIN = 'https://pattern-paradise.shop';
@@ -1146,6 +1146,129 @@ export const CATEGORIES = [
           { name: 'Top-Down Construction', selected: false },
           { name: 'Knit-in-the-Round', selected: false },
           { name: 'One-Skein Projects', selected: false },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Cross Stitch',
+    subcategories: [
+      {
+        name: 'Project Type',
+        options: [
+          { name: 'Wall Art', selected: false },
+          { name: 'Bookmarks', selected: false },
+          { name: 'Home Decor', selected: false },
+          { name: 'Greeting Cards', selected: false },
+          { name: 'Ornaments', selected: false },
+        ],
+      },
+      {
+        name: 'Difficulty',
+        options: [
+          { name: 'Beginner', selected: false },
+          { name: 'Intermediate', selected: false },
+          { name: 'Advanced', selected: false },
+        ],
+      },
+      {
+        name: 'Themes',
+        options: [
+          { name: 'Floral', selected: false },
+          { name: 'Animals', selected: false },
+          { name: 'Holiday', selected: false },
+          { name: 'Quotes/Lettering', selected: false },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Sewing',
+    subcategories: [
+      {
+        name: 'Project Type',
+        options: [
+          { name: 'Clothing', selected: false },
+          { name: 'Bags', selected: false },
+          { name: 'Home Decor', selected: false },
+          { name: 'Quilts', selected: false },
+          { name: 'Accessories', selected: false },
+        ],
+      },
+      {
+        name: 'Techniques',
+        options: [
+          { name: 'Appliqué', selected: false },
+          { name: 'Patchwork', selected: false },
+          { name: 'Garment Construction', selected: false },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Embroidery',
+    subcategories: [
+      {
+        name: 'Project Type',
+        options: [
+          { name: 'Hoop Art', selected: false },
+          { name: 'Clothing Embellishment', selected: false },
+          { name: 'Accessories', selected: false },
+          { name: 'Home Decor', selected: false },
+        ],
+      },
+      {
+        name: 'Techniques',
+        options: [
+          { name: 'Surface Embroidery', selected: false },
+          { name: 'Cross-Stitch', selected: false },
+          { name: 'Crewel Work', selected: false },
+          { name: 'Goldwork', selected: false },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Quilting',
+    subcategories: [
+      {
+        name: 'Project Type',
+        options: [
+          { name: 'Bed Quilts', selected: false },
+          { name: 'Wall Hangings', selected: false },
+          { name: 'Table Runners', selected: false },
+          { name: 'Mini Quilts', selected: false },
+        ],
+      },
+      {
+        name: 'Techniques',
+        options: [
+          { name: 'Patchwork', selected: false },
+          { name: 'Appliqué', selected: false },
+          { name: 'Paper Piecing', selected: false },
+          { name: 'Hand Quilting', selected: false },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Weaving',
+    subcategories: [
+      {
+        name: 'Project Type',
+        options: [
+          { name: 'Wall Hangings', selected: false },
+          { name: 'Scarves', selected: false },
+          { name: 'Table Runners', selected: false },
+          { name: 'Rugs', selected: false },
+        ],
+      },
+      {
+        name: 'Techniques',
+        options: [
+          { name: 'Tapestry Weaving', selected: false },
+          { name: 'Rigid Heddle Weaving', selected: false },
+          { name: 'Inkle Weaving', selected: false },
         ],
       },
     ],
