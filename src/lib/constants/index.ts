@@ -1196,14 +1196,6 @@ export const CATEGORIES = [
         ],
       },
       {
-        name: 'Skill Level',
-        options: [
-          { name: 'Beginner', selected: false },
-          { name: 'Intermediate', selected: false },
-          { name: 'Advanced', selected: false },
-        ],
-      },
-      {
         name: 'Techniques',
         options: [
           { name: 'Appliqué', selected: false },

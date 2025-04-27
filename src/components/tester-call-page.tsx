@@ -18,6 +18,8 @@ import Link from 'next/link';
 import GoBackButton from '@/lib/components/GoBackButton';
 import ShareButton from '@/lib/components/ShareButton';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
+import { meta } from 'eslint-plugin-react/lib/rules/jsx-props-no-spread-multi';
+import category = meta.docs.category;
 
 function ApplyButton({
   testingId,
@@ -303,7 +305,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
           <Link href={`/users/${testing.creator.username}`}>by @{testing.creator.username}</Link>
         </h3>
         <p className="text-xl text-gray-700 mb-6">
-          Help us perfect our patterns and shape the future of crocheting and knitting!
+          Help us perfect our patterns and shape the future of {testing.product.category}!
         </p>
         <ApplyButton
           testingId={testing.id}
