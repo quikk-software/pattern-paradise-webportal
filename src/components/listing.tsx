@@ -40,9 +40,10 @@ const categories = ['All', 'Crocheting', 'Knitting'];
 
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
+  infiniteScroll?: boolean;
 }
 
-export function ListingComponent({ listingType }: ListingComponentProps) {
+export function ListingComponent({ listingType, infiniteScroll = true }: ListingComponentProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState<{
@@ -161,7 +162,7 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
   const onSortSelectChange = (value: string) => setSortValue(value);
 
   const lastProductRef = (node: HTMLElement | null) => {
-    if (isLoading) {
+    if (isLoading || !infiniteScroll) {
       return;
     }
     if (observer.current) {
@@ -351,6 +352,7 @@ export function ListingComponent({ listingType }: ListingComponentProps) {
             listingType={listingType}
             columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
             onImpression={(productId) => handleImpression(productId)}
+            showFade={!infiniteScroll && hasNextPage}
           />
           <div ref={lastProductRef} className="h-10" />
         </div>
