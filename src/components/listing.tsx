@@ -37,17 +37,6 @@ import {
 } from '@/components/ui/select';
 import { CraftSelector } from '@/components/craft-selector';
 
-const categories = [
-  'All',
-  'Crocheting',
-  'Knitting',
-  'Cross-Stitch',
-  'Sewing',
-  'Embroidery',
-  'Quilting',
-  'Weaving',
-];
-
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
   infiniteScroll?: boolean;
