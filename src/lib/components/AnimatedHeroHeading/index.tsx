@@ -5,7 +5,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AnimatedHeroHeading() {
   const [currentText, setCurrentText] = useState('Crocheting');
-  const texts = ['Crocheting', 'Knitting'];
+  const texts = [
+    'Crocheting',
+    'Knitting',
+    'Cross-Stitch',
+    'Sewing',
+    'Embroidery',
+    'Quilting',
+    'Weaving',
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {

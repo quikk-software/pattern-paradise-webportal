@@ -35,8 +35,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { CraftSelector } from '@/components/craft-selector';
 
-const categories = ['All', 'Crocheting', 'Knitting'];
+const categories = [
+  'All',
+  'Crocheting',
+  'Knitting',
+  'Cross-Stitch',
+  'Sewing',
+  'Embroidery',
+  'Quilting',
+  'Weaving',
+];
 
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
@@ -244,25 +254,16 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
 
             <div>
               <h2 className="text-lg font-semibold mb-2">Category</h2>
-              <RadioGroup
-                value={selectedCategory.craft}
-                onValueChange={(value) =>
+              <CraftSelector
+                hasAll
+                selectedCraft={selectedCategory.craft}
+                onCraftChange={(craft) => {
                   setSelectedCategory({
-                    craft: value,
+                    craft,
                     options: {},
-                  })
-                }
-                className="flex flex-col space-y-1"
-              >
-                {categories.map((category) => (
-                  <div className="flex items-center space-x-2" key={category}>
-                    <RadioGroupItem value={category} id={category?.toLowerCase()} />
-                    <Label htmlFor={category?.toLowerCase()} className="cursor-pointer">
-                      {category}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
+                  });
+                }}
+              />
             </div>
 
             <MultiSelect
