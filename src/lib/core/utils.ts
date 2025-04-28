@@ -22,18 +22,11 @@ export const isIOSMode = () => {
     return false;
   }
 
-  const isIosStandalone = 'standalone' in navigator && (navigator as any).standalone;
-
   const userAgent = navigator.userAgent || navigator.vendor;
 
-  // Detect iOS WebView
-  const isIosWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent);
-
-  // Detect some hybrid frameworks or embedded browsers
-  const isLikelyHybridApp =
-    /; wv\)/i.test(userAgent) || /Crosswalk|Cordova|Capacitor/i.test(userAgent);
-
-  return (isIosStandalone && isIosWebView) || (isIosStandalone && isLikelyHybridApp);
+  return (
+    /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent) || userAgent.includes('PWAShell')
+  );
 };
 
 export const isInStandaloneMode = () => {
@@ -47,7 +40,9 @@ export const isInStandaloneMode = () => {
   const userAgent = navigator.userAgent || navigator.vendor;
 
   // Detect iOS WebView
-  const isIosWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent);
+  const isIosWebView =
+    /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent) ||
+    userAgent.includes('PWAShell');
 
   // Detect Android WebView
   const isAndroidWebView =
