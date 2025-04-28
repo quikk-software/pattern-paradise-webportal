@@ -17,6 +17,19 @@ export const isPathnameInPages = (pathname: string, pages: string[]) => {
 export const checkProStatus = (subscriptionStatus: string) =>
   subscriptionStatus !== 'Inactive' && subscriptionStatus !== '';
 
+export const isIOSMode = () => {
+  const userAgent = navigator.userAgent || navigator.vendor;
+
+  // Detect iOS WebView
+  const isIosWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent);
+
+  // Detect some hybrid frameworks or embedded browsers
+  const isLikelyHybridApp =
+    /; wv\)/i.test(userAgent) || /Crosswalk|Cordova|Capacitor/i.test(userAgent);
+
+  return isIosWebView || isLikelyHybridApp;
+};
+
 export const isInStandaloneMode = () => {
   if (typeof window === 'undefined') {
     return false;
