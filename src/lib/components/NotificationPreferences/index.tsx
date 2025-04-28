@@ -116,7 +116,7 @@ function PreferencesCard({
       },
       {
         type: 'FOLLOW_ACTION',
-        enabled: true,
+        enabled: deviceToken?.events?.includes('FOLLOW_ACTION') ?? false,
         label: 'Followed Creator Activity',
         description: 'Get notified when someone you creates a new pattern or tester call',
       },
