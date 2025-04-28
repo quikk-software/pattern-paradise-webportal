@@ -143,8 +143,8 @@ export default function ReviewDrawer({
 
   return (
     <Drawer open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
-      <DrawerContent className="p-4">
-        <div className="flex flex-col gap-8 max-h-[60vh] overflow-y-auto">
+      <DrawerContent>
+        <div className="flex flex-col gap-8 max-h-[60vh] overflow-y-auto py-8">
           <DrawerHeader className="flex flex-col gap-8 items-center mt-4">
             <MessageCircleHeartIcon className="w-20 h-20" />
             <DrawerTitle>Leave a Review</DrawerTitle>
@@ -254,15 +254,6 @@ export default function ReviewDrawer({
             />
             <Button
               onClick={() => {
-                setDrawerIsOpen(false);
-              }}
-              variant={'outline'}
-              disabled={isOverallLoading}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
                 handleReviewClick(likeState, reviewMessage, images, testingId);
               }}
               disabled={likeState === null || isOverallLoading}
@@ -271,6 +262,15 @@ export default function ReviewDrawer({
                 <LoadingSpinnerComponent size={`sm`} className={`text-white`} />
               ) : null}
               Add review
+            </Button>
+            <Button
+              onClick={() => {
+                setDrawerIsOpen(false);
+              }}
+              variant={'outline'}
+              disabled={isOverallLoading}
+            >
+              Cancel
             </Button>
           </div>
         </div>
