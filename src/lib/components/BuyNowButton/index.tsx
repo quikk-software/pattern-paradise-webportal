@@ -19,7 +19,7 @@ import { useListOrdersByProductId } from '@/lib/api/order';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import CountrySelect from '@/lib/components/CountrySelect';
-import { isInStandaloneMode } from '@/lib/core/utils';
+import { isIOSMode } from '@/lib/core/utils';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -41,7 +41,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
   const { fetch: fetchOrdersByProductId } = useListOrdersByProductId();
 
   useEffect(() => {
-    setIsStandalone(isInStandaloneMode());
+    setIsStandalone(isIOSMode());
   }, []);
 
   useEffect(() => {
