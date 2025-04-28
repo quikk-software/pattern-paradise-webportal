@@ -55,7 +55,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
 
   const handleBuyNowClick = () => {
     if (isStandalone) {
-      router.push(`/app/products/${product.id}`);
+      window.location.href = `/app/products/${product.id}`;
       return;
     }
     fetchOrdersByProductId(product.id)
