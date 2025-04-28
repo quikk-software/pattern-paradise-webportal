@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import logger from '@/lib/core/logger';
 import { usePathname } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useValidSession } from '@/hooks/useValidSession';
 
 export const useApiStates = () => {
@@ -70,9 +70,7 @@ export const useApiStates = () => {
             return await handleFn(fn, ignoreIsLoading, true);
           }
         }
-        await signIn(undefined, {
-          callbackUrl: `/auth/login?redirect=${encodeURIComponent(pathname)}`,
-        });
+        await signOut({ callbackUrl: `/auth/login` });
       }
 
       throw err;
