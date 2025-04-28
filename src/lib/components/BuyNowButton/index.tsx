@@ -19,6 +19,7 @@ import { useListOrdersByProductId } from '@/lib/api/order';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import CountrySelect from '@/lib/components/CountrySelect';
+import { isIOSMode } from '@/lib/core/utils';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -26,6 +27,7 @@ interface BuyNowButtonProps {
 }
 
 export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowButtonProps) {
+  const [isStandalone, setIsStandalone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
@@ -39,6 +41,10 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
   const { fetch: fetchOrdersByProductId } = useListOrdersByProductId();
 
   useEffect(() => {
+    setIsStandalone(isIOSMode());
+  }, []);
+
+  useEffect(() => {
     if (!action) {
       return;
     }
@@ -48,6 +54,10 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
   }, [action]);
 
   const handleBuyNowClick = () => {
+    if (isStandalone) {
+      router.push(`/app/products/${product.id}`);
+      return;
+    }
     fetchOrdersByProductId(product.id)
       .then((result) => {
         const customerOrder = result?.find((order) => order.customer.id === userId);
