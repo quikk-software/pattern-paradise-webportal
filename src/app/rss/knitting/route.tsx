@@ -20,7 +20,7 @@ export async function GET() {
   const products = await listProducts({
     overridePageNumber: 1,
     overridePageSize: 50000,
-    categories: ['Crocheting'],
+    categories: ['Knitting'],
   });
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
@@ -28,7 +28,7 @@ export async function GET() {
       <channel>
         <title>Pattern Paradise</title>
         <link>${process.env.NEXT_PUBLIC_URL}</link>
-        <description>Discover beautiful crochet patterns</description>
+        <description>Discover beautiful knitting patterns</description>
         ${products
           .map((product) => {
             const { title, description } = generatePinterestMetadata(product);
@@ -38,7 +38,7 @@ export async function GET() {
             <link>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}</link>
             <description>${escapeXml(description)}</description>
             <pubDate>${new Date(product.createdAt).toUTCString()}</pubDate>
-            <guid>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}-crocheting</guid>
+            <guid>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}-knitting</guid>
             ${
               product.imageUrls.length > 0
                 ? `
@@ -121,7 +121,7 @@ function generatePinterestMetadata(product: GetProductResponse): {
 
   // Description from title + description
   const coreDescriptionSentences = [
-    `Learn how to crochet your own ${productTitleClean.toLowerCase()}.`,
+    `Learn how to knit your own ${productTitleClean.toLowerCase()}.`,
     `Perfect for ${product.subCategories.slice(0, 5).join(', ')}.`,
   ];
 
