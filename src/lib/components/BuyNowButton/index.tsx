@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import CountrySelect from '@/lib/components/CountrySelect';
 import { isIOSMode } from '@/lib/core/utils';
+import { RedirectBrowserDrawer } from '@/lib/components/RedirectBrowserDrawer';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -29,6 +30,7 @@ interface BuyNowButtonProps {
 export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowButtonProps) {
   const [isStandalone, setIsStandalone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showRedirect, setShowRedirect] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -55,7 +57,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
 
   const handleBuyNowClick = () => {
     if (isStandalone) {
-      window.location.href = `/app/products/${product.id}`;
+      setShowRedirect(true);
       return;
     }
     fetchOrdersByProductId(product.id)
@@ -69,6 +71,10 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
       .finally(() => {
         setIsOpen(true);
       });
+  };
+
+  const handleRedirect = () => {
+    window.location.href = `/app/products/${product.id}`;
   };
 
   const handleCountryChange = (value: string) => {
@@ -194,6 +200,11 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
           Buy Now
         </Button>
       )}
+      <RedirectBrowserDrawer
+        isOpen={showRedirect}
+        onClose={() => setShowRedirect(false)}
+        onRedirect={handleRedirect}
+      />
     </div>
   );
 }
