@@ -20,6 +20,7 @@ export async function GET() {
   const products = await listProducts({
     overridePageNumber: 1,
     overridePageSize: 50000,
+    categories: ['Crocheting'],
   });
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
