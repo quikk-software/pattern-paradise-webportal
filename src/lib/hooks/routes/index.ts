@@ -35,7 +35,7 @@ const createBreadcrumbConfig = (
 
 const pages: Page[] = [
   {
-    title: 'Home',
+    title: 'Home | Pattern Paradise',
     pathname: '/',
     description: APP_DESCRIPTION,
   },
