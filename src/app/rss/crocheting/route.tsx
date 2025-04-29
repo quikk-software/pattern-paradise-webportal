@@ -36,7 +36,7 @@ export async function GET() {
           <item>
             <title>${escapeXml(title)}</title>
             <link>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}</link>
-            <description>${escapeXml(description + ' ' + product.hashtags.map((tag) => `#${tag}`).join(' '))}</description>
+            <description>${escapeXml(description)}</description>
             <pubDate>${new Date(product.createdAt).toUTCString()}</pubDate>
             <guid>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}</guid>
             ${
