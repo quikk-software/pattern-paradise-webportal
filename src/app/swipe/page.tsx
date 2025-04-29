@@ -3,6 +3,7 @@ import React from 'react';
 import pages from '@/lib/hooks/routes';
 import type { Metadata } from 'next';
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants';
+import SwipePageComponent from '@/components/swipe-page';
 
 const page = pages.find((page) => page.pathname === '/swipe');
 
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function SwipePage() {
-  return <SwipePage />;
+  return <SwipePageComponent />;
 }

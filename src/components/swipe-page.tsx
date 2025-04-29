@@ -4,7 +4,7 @@ import { useListProductsForSwipe } from '@/lib/api';
 import React, { useEffect } from 'react';
 import ProductSwiper from '@/lib/components/Swiper/ProductSwiper';
 
-export default function SwipePage() {
+export default function SwipePageComponent() {
   const { fetch, data: products } = useListProductsForSwipe();
 
   useEffect(() => {
