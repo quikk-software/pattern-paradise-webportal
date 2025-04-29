@@ -1,5 +1,5 @@
 ﻿export const APP_TITLE = 'Pattern Paradise';
-export const APP_NAME = 'Pattern Paradise';
+export const APP_NAME = 'Pattern Paradise - Where Creativity Pays Off';
 export const APP_DESCRIPTION =
   'Find, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern business effortlessly.';
 export const APP_DOMAIN = 'https://pattern-paradise.shop';
