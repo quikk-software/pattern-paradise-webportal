@@ -78,65 +78,9 @@ const pages: Page[] = [
     description: 'Access your Pattern Paradise account to manage your profile, orders, and more.',
   },
   {
-    title: 'My Profile | Pattern Paradise',
-    pathname: '/app/secure/auth/me',
-    description:
-      'Update your profile, manage your account settings, and view your activities on Pattern Paradise.',
-  },
-  {
-    title: 'Confirmation | Pattern Paradise',
-    pathname: '/app/secure/auth/confirm',
-    description: 'Your account confirmation at Pattern Paradise was successful. Welcome!',
-  },
-  {
-    title: 'My Orders | Pattern Paradise',
-    pathname: '/app/secure/auth/me/orders',
-    description: 'View and manage all your orders placed through Pattern Paradise.',
-  },
-  {
-    title: 'Open Incidents | Pattern Paradise',
-    pathname: '/app/secure/auth/me/reports',
-    description: 'Track and manage any open incidents or support issues on Pattern Paradise.',
-  },
-  {
-    title: 'Order Details | Pattern Paradise',
-    pathname: '/app/secure/auth/me/orders/[orderId]',
-    description: 'View detailed information about a specific order on Pattern Paradise.',
-  },
-  {
     title: 'Reset Password | Pattern Paradise',
     pathname: '/auth/reset-password',
     description: 'Reset your password securely for your Pattern Paradise account.',
-  },
-  {
-    title: 'Sell Patterns | Pattern Paradise',
-    pathname: '/app/secure/sell',
-    description: 'List and manage your patterns for sale on Pattern Paradise.',
-  },
-  {
-    title: 'Submit a Pattern | Pattern Paradise',
-    pathname: '/app/secure/sell/submit',
-    description: 'Submit a new pattern for review and sale on Pattern Paradise.',
-  },
-  {
-    title: 'Sales Orders | Pattern Paradise',
-    pathname: '/app/secure/sell/orders',
-    description: 'View and manage sales orders for your patterns on Pattern Paradise.',
-  },
-  {
-    title: 'Tester Calls | Pattern Paradise',
-    pathname: '/app/secure/sell/testings',
-    description: 'Create and manage tester calls for your pattern designs on Pattern Paradise.',
-  },
-  {
-    title: 'Edit Pattern | Pattern Paradise',
-    pathname: '/app/secure/sell/products/[productId]',
-    description: 'Edit and update your pattern listings on Pattern Paradise.',
-  },
-  {
-    title: 'User Profile | Pattern Paradise',
-    pathname: '/users/[userId]',
-    description: 'View the profile of creators and designers on Pattern Paradise.',
   },
   {
     title: 'Tester Calls Hub | Pattern Paradise',
@@ -144,14 +88,22 @@ const pages: Page[] = [
     description: 'Explore active tester calls and testing opportunities on Pattern Paradise.',
   },
   {
-    title: 'My Testing Projects | Pattern Paradise',
-    pathname: '/app/secure/test/testings',
-    description: 'Manage all your pattern testing projects and participations on Pattern Paradise.',
+    title: 'Mystery Pattern | Pattern Paradise',
+    pathname: '/app/mystery',
+    description:
+      'Shop exclusive mystery patterns and enjoy surprise designs from Pattern Paradise.',
   },
   {
-    title: 'Pattern Details | Pattern Paradise',
-    pathname: '/app/products/[productId]',
-    description: 'View full details and explore pattern designs available on Pattern Paradise.',
+    title: 'Swipe Patterns | Pattern Paradise',
+    pathname: '/swipe',
+    description:
+      'Discover new patterns by swiping — a fun and unique browsing experience at Pattern Paradise.',
+  },
+  {
+    title: 'Browse Patterns | Pattern Paradise',
+    pathname: '/browse',
+    description:
+      'Use advanced filters to find and select the perfect patterns on Pattern Paradise.',
   },
 
   ...errorPages,
