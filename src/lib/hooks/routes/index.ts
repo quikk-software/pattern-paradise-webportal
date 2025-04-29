@@ -1,6 +1,7 @@
 import type { Page } from './routes.types';
 import { BreadcrumbConfig } from './routes.types';
 import errorPages from '@/lib/hooks/routes/errorPages';
+import { APP_DESCRIPTION } from '@/lib/constants';
 
 const flattenPages = (pages: Page[]) => {
   const flattenedPages: Page[] = [];
@@ -34,119 +35,75 @@ const createBreadcrumbConfig = (
 
 const pages: Page[] = [
   {
-    title: 'Start',
+    title: 'Home | Pattern Paradise',
     pathname: '/',
-    description: '',
+    description: APP_DESCRIPTION,
   },
   {
-    title: 'Pattern Paradise Pro',
+    title: 'Pattern Paradise Pro | Pattern Paradise',
     pathname: '/pro',
-    description: '',
+    description:
+      'Unlock powerful features with Pattern Paradise Pro and boost your creative business.',
   },
   {
-    title: 'About Pattern Paradise',
+    title: 'About Us | Pattern Paradise',
     pathname: '/about',
-    description: '',
+    description:
+      'Learn about Pattern Paradise’s mission to empower creators with stunning patterns.',
   },
   {
-    title: 'Frequently asked questions on Pattern Paradise',
+    title: 'FAQs | Pattern Paradise',
     pathname: '/faq',
-    description: '',
+    description:
+      'Find answers to the most frequently asked questions about Pattern Paradise’s services.',
   },
   {
-    title: 'Imprint',
+    title: 'Imprint | Pattern Paradise',
     pathname: '/imprint',
-    description: '',
+    description: 'View official legal information and company details for Pattern Paradise.',
   },
   {
-    title: 'Help',
+    title: 'Help Center | Pattern Paradise',
     pathname: '/help',
-    description: '',
+    description: 'Get help and find support resources for using Pattern Paradise effectively.',
   },
   {
-    title: 'Privacy Policy, Terms and Conditions',
+    title: 'Privacy Policy & Terms | Pattern Paradise',
     pathname: '/terms-and-privacy',
-    description: '',
+    description: 'Review Pattern Paradise’s privacy policies and terms and conditions.',
   },
   {
-    title: 'Login',
+    title: 'Login | Pattern Paradise',
     pathname: '/auth/login',
-    description: '',
+    description: 'Access your Pattern Paradise account to manage your profile, orders, and more.',
   },
   {
-    title: 'My profile',
-    pathname: '/app/secure/auth/me',
-    description: '',
-  },
-  {
-    title: 'Confirmation',
-    pathname: '/app/secure/auth/confirm',
-    description: '',
-  },
-  {
-    title: 'My orders',
-    pathname: '/app/secure/auth/me/orders',
-    description: '',
-  },
-  {
-    title: 'Open incidents',
-    pathname: '/app/secure/auth/me/reports',
-    description: '',
-  },
-  {
-    title: 'My order',
-    pathname: '/app/secure/auth/me/orders/[orderId]',
-    description: '',
-  },
-  {
-    title: 'Reset password',
+    title: 'Reset Password | Pattern Paradise',
     pathname: '/auth/reset-password',
-    description: '',
+    description: 'Reset your password securely for your Pattern Paradise account.',
   },
   {
-    title: 'Sell patterns',
-    pathname: '/app/secure/sell',
-    description: '',
-  },
-  {
-    title: 'Submit a pattern',
-    pathname: '/app/secure/sell/submit',
-    description: '',
-  },
-  {
-    title: 'My orders',
-    pathname: '/app/secure/sell/orders',
-    description: '',
-  },
-  {
-    title: 'My tester calls',
-    pathname: '/app/secure/sell/testings',
-    description: '',
-  },
-  {
-    title: 'Update your product',
-    pathname: '/app/secure/sell/products/[productId]',
-    description: '',
-  },
-  {
-    title: "Seller's account",
-    pathname: '/users/[userId]',
-    description: '',
-  },
-  {
-    title: 'Test patterns',
+    title: 'Tester Calls Hub | Pattern Paradise',
     pathname: '/app/tester-calls',
-    description: '',
+    description: 'Explore active tester calls and testing opportunities on Pattern Paradise.',
   },
   {
-    title: 'My testings',
-    pathname: '/app/secure/test/testings',
-    description: '',
+    title: 'Mystery Pattern | Pattern Paradise',
+    pathname: '/app/mystery',
+    description:
+      'Shop exclusive mystery patterns and enjoy surprise designs from Pattern Paradise.',
   },
   {
-    title: 'Pattern',
-    pathname: '/app/products/[productId]',
-    description: '',
+    title: 'Swipe Patterns | Pattern Paradise',
+    pathname: '/swipe',
+    description:
+      'Discover new patterns by swiping — a fun and unique browsing experience at Pattern Paradise.',
+  },
+  {
+    title: 'Browse Patterns | Pattern Paradise',
+    pathname: '/browse',
+    description:
+      'Use advanced filters to find and select the perfect patterns on Pattern Paradise.',
   },
 
   ...errorPages,

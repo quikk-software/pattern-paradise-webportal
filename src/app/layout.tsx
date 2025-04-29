@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, THEME_COLOR } from '@/lib/constants';
+import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
 import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
@@ -25,7 +25,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: APP_NAME,
   description: APP_DESCRIPTION,
-  applicationName: APP_NAME,
+  applicationName: APP_TITLE,
   appleWebApp: {
     capable: true,
     title: APP_NAME,
