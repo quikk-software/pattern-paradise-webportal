@@ -22,7 +22,7 @@ export async function GET() {
   });
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
-    <rss version="2.0">
+    <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
       <channel>
         <title>Pattern Paradise</title>
         <link>${process.env.NEXT_PUBLIC_URL}</link>
