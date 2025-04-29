@@ -95,6 +95,8 @@ export default async function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
+
+        <meta name="p:domain_verify" content="e29836b4ecf762bb55e8700dc302db08" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <Toaster />
