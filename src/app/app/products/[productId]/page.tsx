@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProduct(productId);
 
   const title = product?.title
-    ? `Buy ${product.title} ${product.category} Pattern on Pattern Paradise`
-    : 'Shop Crochet Pattern on Pattern Paradise';
+    ? `Buy ${product.title} ${product.category} Pattern | Pattern Paradise`
+    : 'Pattern Details | Pattern Paradise';
   const description = `Check out this ${product?.category ? `${product?.category.toLowerCase()} pattern ` : 'pattern '}${product?.title ? ` '${product?.title}'` : ''}.`;
   const imageUrl =
     product?.imageUrls?.[0] ??

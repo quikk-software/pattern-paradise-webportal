@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const user = await getUserById(userId);
   const userName = user?.firstName || user?.username;
 
-  const title = `${userName}'s Profile on Pattern Paradise`;
+  const title = `${userName}'s Profile | Pattern Paradise`;
   const description = `Check out ${userName}'s patterns, tester calls, and more on Pattern Paradise.`;
   const imageUrl =
     user?.imageUrl ?? `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
