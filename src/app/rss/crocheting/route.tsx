@@ -28,7 +28,7 @@ export async function GET() {
       <channel>
         <title>Pattern Paradise</title>
         <link>${process.env.NEXT_PUBLIC_URL}</link>
-        <description>Discover beautiful crochet and knitting patterns</description>
+        <description>Discover beautiful crochet patterns</description>
         ${products
           .map((product) => {
             const { title, description } = generatePinterestMetadata(product);
