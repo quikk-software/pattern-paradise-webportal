@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 
+let cachedFeed: string | null = null;
+let lastGenerated: number | null = null;
+const CACHE_DURATION = 1000 * 60 * 15; // 15 minutes
+
 export async function GET() {
+  const now = Date.now();
+
+  if (cachedFeed && lastGenerated && now - lastGenerated < CACHE_DURATION) {
+    return new NextResponse(cachedFeed, {
+      headers: {
+        'Content-Type': 'application/rss+xml',
+      },
+    });
+  }
+
   const products = await listProducts({
     overridePageNumber: 1,
     overridePageSize: 50000,
@@ -40,6 +54,10 @@ export async function GET() {
       </channel>
     </rss>
   `;
+
+  // Cache the generated feed
+  cachedFeed = feed;
+  lastGenerated = now;
 
   return new NextResponse(feed, {
     headers: {
