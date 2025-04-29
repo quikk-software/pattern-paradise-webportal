@@ -1,0 +1,143 @@
+import { NextResponse } from 'next/server';
+import { listProducts } from '@/lib/api/static/product/listProducts';
+import { GetProductResponse } from '@/@types/api-types';
+
+let cachedFeed: string | null = null;
+let lastGenerated: number | null = null;
+const CACHE_DURATION = 1000 * 60 * 15; // 15 minutes
+
+export async function GET() {
+  const now = Date.now();
+
+  if (cachedFeed && lastGenerated && now - lastGenerated < CACHE_DURATION) {
+    return new NextResponse(cachedFeed, {
+      headers: {
+        'Content-Type': 'application/rss+xml',
+      },
+    });
+  }
+
+  const products = await listProducts({
+    overridePageNumber: 1,
+    overridePageSize: 50000,
+    categories: ['Crocheting'],
+  });
+
+  const feed = `<?xml version="1.0" encoding="UTF-8"?>
+    <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+      <channel>
+        <title>Pattern Paradise</title>
+        <link>${process.env.NEXT_PUBLIC_URL}</link>
+        <description>Discover beautiful crochet patterns</description>
+        ${products
+          .map((product) => {
+            const { title, description } = generatePinterestMetadata(product);
+            return `
+          <item>
+            <title>${escapeXml(title)}</title>
+            <link>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}</link>
+            <description>${escapeXml(description + ' ' + product.hashtags.map((tag) => `#${tag}`).join(' '))}</description>
+            <pubDate>${new Date(product.createdAt).toUTCString()}</pubDate>
+            <guid>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}</guid>
+            ${
+              product.imageUrls.length > 0
+                ? `
+              <media:content 
+                url="${getPinterestImageUrl(product.imageUrls[0])}" 
+                medium="image"
+              />
+            `
+                : ''
+            }
+          </item>
+        `;
+          })
+          .join('')}
+      </channel>
+    </rss>`;
+
+  // Cache the generated feed
+  cachedFeed = feed;
+  lastGenerated = now;
+
+  return new NextResponse(feed, {
+    headers: {
+      'Content-Type': 'application/rss+xml',
+    },
+  });
+}
+
+// Helper to escape special XML characters
+function escapeXml(unsafe: string) {
+  return unsafe.replace(/[<>&'"]/g, (c) => {
+    switch (c) {
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '&':
+        return '&amp;';
+      case "'":
+        return '&apos;';
+      case '"':
+        return '&quot;';
+      default:
+        return c;
+    }
+  });
+}
+
+function getPinterestImageUrl(originalUrl: string) {
+  return originalUrl.replace('/upload/', '/upload/w_1000,h_1500,c_fill/');
+}
+
+function generatePinterestMetadata(product: GetProductResponse): {
+  title: string;
+  description: string;
+} {
+  function trimBySentence(content: string, limit: number): string {
+    if (content.length <= limit) return content;
+    const sentences = content.split(/(?<=[.?!])\s+/);
+    let result = '';
+    for (const sentence of sentences) {
+      if ((result + sentence).length + 1 <= limit) {
+        result += sentence + ' ';
+      } else {
+        break;
+      }
+    }
+    return result.trim();
+  }
+
+  const MAX_TITLE = 100;
+  const MAX_DESCRIPTION = 500;
+
+  // Compose a clean title:
+  const productTitleClean = product.title.replace(/[^a-zA-Z0-9\s]/g, '').trim();
+  const subcategoryPart = product.subCategories.slice(0, 2).join(' ');
+  const rawTitle = `DIY ${productTitleClean} ${product.category} ${subcategoryPart} Pattern`;
+  const title =
+    rawTitle.length > MAX_TITLE ? rawTitle.slice(0, MAX_TITLE - 1).trim() + '…' : rawTitle;
+
+  // Description from title + description
+  const coreDescriptionSentences = [
+    `Learn how to crochet your own ${productTitleClean.toLowerCase()}.`,
+    `Perfect for ${product.subCategories.slice(0, 5).join(', ')}.`,
+  ];
+
+  // Prepare hashtags
+  const uniqueHashtags = Array.from(
+    new Set(product.hashtags.map((tag) => `#${tag.toLowerCase()}`)),
+  ).slice(0, 10);
+  const hashtagBlock = uniqueHashtags.join(' ');
+  const spaceForDescription = MAX_DESCRIPTION - hashtagBlock.length - 1;
+
+  const trimmedDescription = trimBySentence(
+    coreDescriptionSentences.join(' '),
+    spaceForDescription,
+  );
+
+  const finalDescription = `${trimmedDescription} ${hashtagBlock}`.trim();
+
+  return { title, description: finalDescription };
+}

@@ -1,7 +1,7 @@
 import type { Page } from './routes.types';
 import { BreadcrumbConfig } from './routes.types';
 import errorPages from '@/lib/hooks/routes/errorPages';
-import { APP_DESCRIPTION } from '@/lib/constants';
+import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants';
 
 const flattenPages = (pages: Page[]) => {
   const flattenedPages: Page[] = [];
@@ -35,7 +35,7 @@ const createBreadcrumbConfig = (
 
 const pages: Page[] = [
   {
-    title: 'Home | Pattern Paradise',
+    title: APP_NAME,
     pathname: '/',
     description: APP_DESCRIPTION,
   },
