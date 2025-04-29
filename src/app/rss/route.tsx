@@ -24,9 +24,9 @@ export async function GET() {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0">
       <channel>
-        <title>My Crochet & Knitting Patterns</title>
-        <link>https://yourdomain.com</link>
-        <description>Fresh crochet and knitting patterns</description>
+        <title>Pattern Paradise</title>
+        <link>${process.env.NEXT_PUBLIC_URL}</link>
+        <description>Discover beautiful crochet and knitting patterns</description>
         ${products
           .map(
             (product) => `
@@ -40,7 +40,7 @@ export async function GET() {
               product.imageUrls.length > 0
                 ? `
               <media:content 
-                url="${product.imageUrls[0]}" 
+                url="${getPinterestImageUrl(product.imageUrls[0])}" 
                 medium="image"
               />
             `
@@ -82,4 +82,8 @@ function escapeXml(unsafe: string) {
         return c;
     }
   });
+}
+
+function getPinterestImageUrl(originalUrl: string) {
+  return originalUrl.replace('/upload/', '/upload/w_1000,h_1500,c_fill/');
 }
