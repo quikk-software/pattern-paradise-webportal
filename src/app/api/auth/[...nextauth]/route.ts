@@ -14,9 +14,10 @@ const KeycloakGoogleProvider: OAuthConfig<User> = {
   clientId: process.env.KEYCLOAK_CLIENT_ID!,
   clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
   authorization: {
-    url: `${process.env.KEYCLOAK_BASE_URL}/broker/google/login`,
+    url: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/auth`,
     params: {
       scope: 'openid profile email offline_access',
+      kc_idp_hint: 'google',
     },
   },
   token: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
