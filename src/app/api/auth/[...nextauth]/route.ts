@@ -8,7 +8,7 @@ import { OAuthConfig } from 'next-auth/providers/oauth';
 
 const KeycloakGoogleProvider: OAuthConfig<User> = {
   id: 'google',
-  name: 'Google via Keycloak',
+  name: 'Google',
   type: 'oauth',
   version: '2.0',
   clientId: process.env.KEYCLOAK_CLIENT_ID!,
@@ -40,7 +40,7 @@ const handler = NextAuth({
   providers: [
     KeycloakGoogleProvider,
     CredentialsProvider({
-      name: 'Keycloak Credentials',
+      name: 'Pattern Paradise Credentials',
       credentials: {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
