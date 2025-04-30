@@ -13,6 +13,7 @@ const KeycloakGoogleProvider: OAuthConfig<User> = {
   version: '2.0',
   clientId: process.env.KEYCLOAK_CLIENT_ID!,
   clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
+  issuer: process.env.KEYCLOAK_BASE_URL,
   authorization: {
     url: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/auth`,
     params: {
