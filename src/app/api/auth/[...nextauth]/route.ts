@@ -20,7 +20,7 @@ const KeycloakGoogleProvider: OAuthConfig<Profile> = {
   authorization: {
     url: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/auth`,
     params: {
-      scope: 'openid profile email',
+      scope: 'openid profile email offline_access offline_access',
       kc_idp_hint: process.env.NODE_ENV === 'development' ? undefined : 'google',
     },
   },
