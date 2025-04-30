@@ -30,7 +30,7 @@ const KeycloakGoogleProvider: OAuthConfig<Profile> = {
     logger.info('Got profile from Google:', profile);
     return {
       id: profile.sub!,
-      name: profile.name,
+      name: (profile as any).preferred_username,
       email: profile.email,
     };
   },
