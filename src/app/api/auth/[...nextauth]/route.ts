@@ -1,11 +1,34 @@
-import NextAuth from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtDecode } from 'jwt-decode';
 import logger from '@/lib/core/logger';
-import axios from 'axios';
-import qs from 'qs';
 import { getUser } from '@/lib/api/static/user/getUser';
 import { refreshAccessToken } from '@/app/api/auth/utils';
+import { OAuthConfig } from 'next-auth/providers/oauth';
+
+const KeycloakGoogleProvider: OAuthConfig<User> = {
+  id: 'keycloak-google',
+  name: 'Google via Keycloak',
+  type: 'oauth',
+  version: '2.0',
+  clientId: process.env.KEYCLOAK_CLIENT_ID!,
+  clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
+  authorization: {
+    url: `${process.env.KEYCLOAK_BASE_URL}/broker/google/login`,
+    params: {
+      scope: 'openid profile email offline_access',
+    },
+  },
+  token: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
+  userinfo: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/userinfo`,
+  profile(profile) {
+    return {
+      id: profile.id,
+      name: profile.name,
+      email: profile.email,
+    };
+  },
+};
 
 const handler = NextAuth({
   session: {
@@ -14,6 +37,7 @@ const handler = NextAuth({
     updateAge: 0,
   },
   providers: [
+    KeycloakGoogleProvider,
     CredentialsProvider({
       name: 'Keycloak Credentials',
       credentials: {
