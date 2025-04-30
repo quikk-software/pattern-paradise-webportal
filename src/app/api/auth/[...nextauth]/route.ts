@@ -183,8 +183,8 @@ const handler = NextAuth({
         sessionToken = await refreshAccessToken(token);
       }
 
-      let userId = (sessionToken.id as string) ?? user.id ?? sessionToken.sub;
-      const existingUser = await getUserById(userId);
+      let userId = sessionToken?.id ?? user?.id ?? sessionToken?.sub;
+      const existingUser = await getUserById(userId as string);
 
       if (!existingUser) {
         throw new Error('User not found');
