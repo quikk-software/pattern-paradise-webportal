@@ -18,6 +18,8 @@ import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import RequestPasswordDrawer from '@/lib/components/RequestPasswordDrawer';
 import useRedirect from '@/lib/core/useRedirect';
+import GoogleLoginButton from '@/lib/components/GoogleLoginButton';
+import SectionDivider from '@/lib/components/SectionDivider';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -46,6 +48,8 @@ export function LoginForm() {
         <CardDescription>Enter your credentials to access your account.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
+        <GoogleLoginButton />
+        <SectionDivider />
         <form onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-2">

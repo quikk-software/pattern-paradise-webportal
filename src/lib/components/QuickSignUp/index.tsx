@@ -14,9 +14,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 import useAuth from '@/lib/auth/useAuth';
-import { signIn } from 'next-auth/react';
-import Image from 'next/image';
-import GoogleLogo from '@/assets/logos/google-logo.svg';
+import GoogleLoginButton from '@/lib/components/GoogleLoginButton';
 
 type FormValues = {
   email: string;
@@ -228,13 +226,7 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
             {isLoading ? 'Signing up...' : 'Sign up'}
           </Button>
         </form>
-        <Button
-          onClick={() => signIn('keycloak-google')}
-          className="w-full flex items-center justify-center gap-2 bg-white shadow hover:shadow-md hover:bg-gray-50 transition duration-150"
-        >
-          <Image src={GoogleLogo} alt="Google Logo" className="w-5 h-5" width={50} height={50} />
-          <span className="text-sm font-medium text-gray-700">Login with Google</span>
-        </Button>
+        <GoogleLoginButton />
       </CardContent>
     </Card>
   );
