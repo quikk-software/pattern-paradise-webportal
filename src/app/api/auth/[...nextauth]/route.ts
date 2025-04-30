@@ -5,6 +5,8 @@ import logger from '@/lib/core/logger';
 import { getUser } from '@/lib/api/static/user/getUser';
 import { refreshAccessToken } from '@/app/api/auth/utils';
 import { OAuthConfig } from 'next-auth/providers/oauth';
+import { getUserById } from '@/lib/api/static/user/getUserById';
+import { createExternalUser } from '@/lib/api/static/user/createExternalUser';
 
 const KeycloakGoogleProvider: OAuthConfig<Profile> = {
   id: 'google',
@@ -19,7 +21,7 @@ const KeycloakGoogleProvider: OAuthConfig<Profile> = {
     url: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/auth`,
     params: {
       scope: 'openid profile email',
-      kc_idp_hint: 'google',
+      kc_idp_hint: process.env.NODE_ENV === 'development' ? undefined : 'google',
     },
   },
   token: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
@@ -108,7 +110,20 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account, trigger }) {
+    async jwt({ token, user, account, profile, trigger }) {
+      const existingUser = profile?.sub ? await getUserById(profile.sub) : undefined;
+
+      if (!existingUser && profile?.email && profile?.sub) {
+        await createExternalUser({
+          email: profile.email,
+          roles: ['Buyer', 'Tester'],
+          hasAcceptedPrivacy: true,
+          hasAcceptedTerms: true,
+          keycloakUserId: profile.sub,
+          registeredWith: 'GOOGLE',
+        });
+      }
+
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
