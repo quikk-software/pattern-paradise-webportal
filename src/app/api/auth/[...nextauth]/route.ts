@@ -27,6 +27,7 @@ const KeycloakGoogleProvider: OAuthConfig<Profile> = {
   token: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/token`,
   userinfo: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/userinfo`,
   profile(profile) {
+    logger.info('Got profile from Google:', profile);
     return {
       id: profile.sub!,
       name: profile.name,
@@ -114,14 +115,21 @@ const handler = NextAuth({
       const existingUser = profile?.sub ? await getUserById(profile.sub) : undefined;
 
       if (!existingUser && profile?.email && profile?.sub) {
-        await createExternalUser({
-          email: profile.email,
-          roles: ['Buyer', 'Tester'],
-          hasAcceptedPrivacy: true,
-          hasAcceptedTerms: true,
-          keycloakUserId: profile.sub,
-          registeredWith: 'GOOGLE',
-        });
+        logger.info('Found user with external profile', profile);
+        logger.info(`Create user for email ${profile.email}`);
+        try {
+          await createExternalUser({
+            email: profile.email,
+            roles: ['Buyer', 'Tester'],
+            hasAcceptedPrivacy: true,
+            hasAcceptedTerms: true,
+            keycloakUserId: profile.sub,
+            registeredWith: 'GOOGLE',
+          });
+        } catch (e: any) {
+          logger.error('Creating external user failed', e);
+          throw e;
+        }
       }
 
       if (account) {
