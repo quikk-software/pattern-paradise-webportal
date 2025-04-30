@@ -142,10 +142,9 @@ const handler = NextAuth({
         token.expiresAt = Date.now() + (account.expires_in as number) * 1000;
       }
 
+      logger.info('Current user', user);
+
       if (user) {
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
-        token.expiresAt = user.expiresAt;
         token.id = user.id;
         token.name = user.name;
         token.image = user.image;
