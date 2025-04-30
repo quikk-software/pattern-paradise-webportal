@@ -28,7 +28,7 @@ export async function refreshAccessToken(token: any) {
     const decodedToken = jwtDecode(refreshedTokens.access_token) as any;
 
     // @ts-ignore
-    const id = decodedToken?.refId;
+    const id = decodedToken?.refId ?? decodedToken?.sub;
 
     const user = await getUser(id, refreshedTokens.access_token);
 

@@ -157,6 +157,18 @@ export interface PostUserRequest {
   hasAcceptedTerms: boolean;
 }
 
+export interface PostExternalUserRequest {
+  keycloakUserId: string;
+  email: string;
+  roles: string[];
+  affiliate?: string;
+  hasAcceptedPrivacy: boolean;
+  hasAcceptedTerms: boolean;
+  registeredWith: string;
+  firstName?: string;
+  lastName?: string;
+}
+
 export interface PostUserResponse {
   userId: string;
 }
@@ -1368,6 +1380,48 @@ export class Api<
         method: "GET",
         query: query,
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Creates a user by the given request body data.
+     *
+     * @tags User
+     * @name PostExternalUser
+     * @summary Creates a user from external auth provider.
+     * @request POST:/api/v1/users/external
+     * @secure
+     */
+    postExternalUser: (
+      data: {
+        /** @example "any" */
+        roles?: any;
+        /** @example "any" */
+        email?: any;
+        /** @example "any" */
+        affiliate?: any;
+        /** @example "any" */
+        hasAcceptedTerms?: any;
+        /** @example "any" */
+        hasAcceptedPrivacy?: any;
+        /** @example "any" */
+        registeredWith?: any;
+        /** @example "any" */
+        keycloakUserId?: any;
+        /** @example "any" */
+        firstName?: any;
+        /** @example "any" */
+        lastName?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostUserResponse, any>({
+        path: `/api/v1/users/external`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

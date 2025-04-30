@@ -14,6 +14,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 import useAuth from '@/lib/auth/useAuth';
+import GoogleLoginButton from '@/lib/components/GoogleLoginButton';
 
 type FormValues = {
   email: string;
@@ -104,7 +105,7 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
           </span>
         </span>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
           <div className="space-y-2">
             <div className="space-y-1">
@@ -225,6 +226,7 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
             {isLoading ? 'Signing up...' : 'Sign up'}
           </Button>
         </form>
+        <GoogleLoginButton />
       </CardContent>
     </Card>
   );

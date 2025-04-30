@@ -8,7 +8,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import logger from '@/lib/core/logger';
 import { usePayPalOrder } from '@/lib/hooks/usePayPalOrder';
 import StripeButton from '@/lib/components/StripeButton';
-import PaymentDivider from '@/lib/components/PaymentDivider';
+import SectionDivider from '../SectionDivider';
 import { GetProductResponse } from '@/@types/api-types';
 import { useGetUserById } from '@/lib/api';
 import { InfoBoxComponent } from '@/components/info-box';
@@ -86,7 +86,7 @@ export function CheckoutButtons({ price, product, disabled, country }: CheckoutB
             {seller?.paypalMerchantIsActive &&
             seller?.stripeMerchantIsActive &&
             seller?.stripeCardPaymentActive ? (
-              <PaymentDivider />
+              <SectionDivider />
             ) : null}
             {seller?.stripeMerchantIsActive &&
             seller?.stripeCardPaymentActive &&

@@ -112,10 +112,12 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                   ) : (
                     <BuyNowButton product={product} />
                   )}
-                  <div className="flex flex-col gap-2 mt-4">
-                    <ProductMetrics productId={product.id} />
-                    <TestingMetrics productId={product.id} />
-                  </div>
+                  {isOwner ? (
+                    <div className="flex flex-col gap-2 mt-4">
+                      <ProductMetrics productId={product.id} />
+                      <TestingMetrics productId={product.id} />
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
