@@ -83,12 +83,17 @@ const handler = NextAuth({
           const decodedToken = jwtDecode(data.access_token);
 
           // @ts-ignore
-          const id = decodedToken?.refId;
+          const id = decodedToken?.refId ?? decodedToken?.sub;
 
           const user = await getUser(id, data.access_token);
 
+          if (!user) {
+            throw new Error('User not found');
+          }
+
           return {
-            id,
+            // @ts-ignore
+            id: user?.id,
             accessToken: data.access_token,
             refreshToken: data.refresh_token,
             expiresAt: Date.now() + data.expires_in * 1000,
@@ -114,11 +119,12 @@ const handler = NextAuth({
     async jwt({ token, user, account, profile, trigger }) {
       const existingUser = profile?.sub ? await getUserById(profile.sub) : undefined;
 
+      let userId = existingUser?.id;
       if (!existingUser && profile?.email && profile?.sub) {
         logger.info('Found user with external profile', profile);
         logger.info(`Create user for email ${profile.email}`);
         try {
-          await createExternalUser({
+          const response = await createExternalUser({
             email: profile.email,
             roles: ['Buyer', 'Tester'],
             firstName: (profile as any).given_name ?? undefined,
@@ -128,6 +134,9 @@ const handler = NextAuth({
             keycloakUserId: profile.sub,
             registeredWith: 'GOOGLE',
           });
+          if (response?.userId) {
+            userId = response.userId;
+          }
         } catch (e: any) {
           logger.error('Creating external user failed', e);
           throw e;
@@ -148,7 +157,7 @@ const handler = NextAuth({
         token.accessToken = token.accessToken ?? user.accessToken;
         token.refreshToken = token.refreshToken ?? user.refreshToken;
         token.expiresAt = token.expiresAt ?? user.expiresAt;
-        token.id = user.id;
+        token.id = userId;
         token.name = user.name;
         token.image = user.image;
         token.roles = user.roles;
@@ -174,10 +183,17 @@ const handler = NextAuth({
         sessionToken = await refreshAccessToken(token);
       }
 
+      let userId = (sessionToken.id as string) ?? sessionToken.sub;
+      const existingUser = await getUserById(userId);
+
+      if (!existingUser) {
+        throw new Error('User not found');
+      }
+
       session.user.accessToken = sessionToken.accessToken as string;
       session.user.refreshToken = sessionToken.refreshToken as string;
       session.user.expiresAt = sessionToken.expiresAt as number;
-      session.user.id = (sessionToken.id as string) ?? sessionToken.sub;
+      session.user.id = existingUser.id;
       session.user.name = sessionToken.name;
       session.user.image = sessionToken.image as string;
       session.user.roles = sessionToken.roles as string[];
