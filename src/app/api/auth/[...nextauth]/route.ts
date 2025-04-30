@@ -14,6 +14,8 @@ const KeycloakGoogleProvider: OAuthConfig<User> = {
   clientId: process.env.KEYCLOAK_CLIENT_ID!,
   clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
   issuer: process.env.KEYCLOAK_BASE_URL,
+  wellKnown:
+    'https://fly-keycloak-broken-bird-3701.fly.dev/realms/cbj/.well-known/openid-configuration',
   authorization: {
     url: `${process.env.KEYCLOAK_BASE_URL}/protocol/openid-connect/auth`,
     params: {
