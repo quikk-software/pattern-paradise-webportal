@@ -182,10 +182,12 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               productTitle={order.productName}
             />
           ) : null}
-          <div className="flex flex-col gap-2">
-            <ProductMetrics productId={order.productId} />
-            <TestingMetrics productId={order.productId} />
-          </div>
+          {isSeller ? (
+            <div className="flex flex-col gap-2">
+              <ProductMetrics productId={order.productId} />
+              <TestingMetrics productId={order.productId} />
+            </div>
+          ) : null}
           {isPayed && !isSeller ? <ReviewCTA productId={order.productId} /> : null}
         </div>
       </div>
