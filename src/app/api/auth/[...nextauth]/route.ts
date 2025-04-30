@@ -145,6 +145,9 @@ const handler = NextAuth({
       logger.info('Current user', user);
 
       if (user) {
+        token.accessToken = token.accessToken ?? user.accessToken;
+        token.refreshToken = token.refreshToken ?? user.refreshToken;
+        token.expiresAt = token.expiresAt ?? user.expiresAt;
         token.id = user.id;
         token.name = user.name;
         token.image = user.image;
