@@ -48,7 +48,7 @@ export function LoginForm() {
         <CardDescription>Enter your credentials to access your account.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
-        <GoogleLoginButton />
+        <GoogleLoginButton callbackUrl={'/app/secure/auth/me'} />
         <SectionDivider />
         <form onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
