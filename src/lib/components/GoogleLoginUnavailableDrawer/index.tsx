@@ -39,6 +39,10 @@ export default function GoogleLoginUnavailableDrawer({
             <br />
             If you haven’t set a password yet, don’t worry - you can request a reset and set one
             now.
+            <br />
+            <br />
+            Please make sure to use a <strong>@gmail.com</strong> address when requesting a password
+            reset.
           </DrawerDescription>
         </DrawerHeader>
 
