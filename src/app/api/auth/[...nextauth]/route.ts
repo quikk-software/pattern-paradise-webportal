@@ -85,6 +85,8 @@ const handler = NextAuth({
           // @ts-ignore
           const id = decodedToken?.refId ?? decodedToken?.sub;
 
+          logger.info('Get user data with ID from token', id);
+
           const user = await getUser(id, data.access_token);
 
           if (!user) {
