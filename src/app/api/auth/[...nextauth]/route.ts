@@ -121,6 +121,8 @@ const handler = NextAuth({
           await createExternalUser({
             email: profile.email,
             roles: ['Buyer', 'Tester'],
+            firstName: (profile as any).given_name ?? undefined,
+            lastName: (profile as any).family_name ?? undefined,
             hasAcceptedPrivacy: true,
             hasAcceptedTerms: true,
             keycloakUserId: profile.sub,

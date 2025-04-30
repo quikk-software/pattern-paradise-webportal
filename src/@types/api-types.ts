@@ -165,6 +165,8 @@ export interface PostExternalUserRequest {
   hasAcceptedPrivacy: boolean;
   hasAcceptedTerms: boolean;
   registeredWith: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface PostUserResponse {
@@ -1407,6 +1409,10 @@ export class Api<
         registeredWith?: any;
         /** @example "any" */
         keycloakUserId?: any;
+        /** @example "any" */
+        firstName?: any;
+        /** @example "any" */
+        lastName?: any;
       },
       params: RequestParams = {},
     ) =>
