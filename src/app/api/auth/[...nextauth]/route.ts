@@ -176,14 +176,14 @@ const handler = NextAuth({
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, user, token }) {
       let sessionToken = token;
       if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
         logger.info('Use refresh token to get fresh access token');
         sessionToken = await refreshAccessToken(token);
       }
 
-      let userId = (sessionToken.id as string) ?? sessionToken.sub;
+      let userId = (sessionToken.id as string) ?? user.id ?? sessionToken.sub;
       const existingUser = await getUserById(userId);
 
       if (!existingUser) {
