@@ -134,6 +134,8 @@ const handler = NextAuth({
         }
       }
 
+      logger.info('Current account', account);
+
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
