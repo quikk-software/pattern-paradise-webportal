@@ -186,10 +186,11 @@ const handler = NextAuth({
       }
 
       logger.info('Current session token', sessionToken);
-      logger.info('Current session', session);
       logger.info('Current user', user);
 
-      let userId = sessionToken?.id ?? user?.id ?? sessionToken?.sub;
+      const decodedSessionToken = jwtDecode(sessionToken.accessToken as string);
+
+      let userId = decodedSessionToken?.sub ?? user?.id ?? sessionToken?.sub;
       const existingUser = await getUserById(userId as string);
 
       if (!existingUser) {
