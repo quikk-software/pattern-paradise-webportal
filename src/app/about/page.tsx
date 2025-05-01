@@ -1,15 +1,8 @@
 import React from 'react';
 import AboutPageComponent from '@/components/about-page';
-import pages from '@/lib/hooks/routes';
-import type { Metadata } from 'next';
-import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants';
+import { generatePageMetadata } from '@/lib/core/metadata';
 
-const page = pages.find((page) => page.pathname === '/about');
-
-export const metadata: Metadata = {
-  title: page?.title ?? APP_NAME,
-  description: page?.description ?? APP_DESCRIPTION,
-};
+export const metadata = generatePageMetadata('/about');
 
 export default function AboutPage() {
   return (
