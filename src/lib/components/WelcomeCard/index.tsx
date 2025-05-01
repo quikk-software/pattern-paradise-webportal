@@ -16,7 +16,7 @@ export default function WelcomeCard() {
   }
 
   return (
-    <Card className="mb-6 border-none shadow-none bg-muted/40">
+    <Card className="mb-6">
       <CardContent className="p-4 flex flex-col md:flex-row md:items-center gap-4">
         <div className="flex-1">
           <h3 className="text-lg font-medium">New to Pattern Paradise?</h3>
