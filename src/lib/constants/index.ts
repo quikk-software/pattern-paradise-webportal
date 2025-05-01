@@ -1437,14 +1437,14 @@ export const FAQ_CATEGORIES = [
     icon: 'scissors',
   },
   {
-    id: 'membership',
-    label: 'Membership',
-    icon: 'badge',
-  },
-  {
     id: 'collaboration',
     label: 'Collaboration',
     icon: 'users',
+  },
+  {
+    id: 'membership',
+    label: 'Membership',
+    icon: 'badge',
   },
 ];
 
