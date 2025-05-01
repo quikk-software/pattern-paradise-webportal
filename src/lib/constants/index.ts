@@ -1424,3 +1424,88 @@ export const MIN_PRICE = 0.0;
 export const MAX_PRICE = 100.0;
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
+
+export const FAQ_CATEGORIES = [
+  {
+    id: 'about',
+    label: 'About Us',
+    icon: 'info',
+  },
+  {
+    id: 'patterns',
+    label: 'Patterns',
+    icon: 'scissors',
+  },
+  {
+    id: 'membership',
+    label: 'Membership',
+    icon: 'badge',
+  },
+  {
+    id: 'collaboration',
+    label: 'Collaboration',
+    icon: 'users',
+  },
+];
+
+export const FAQ_ITEMS = [
+  {
+    id: 'item-1',
+    question: 'What is Pattern Paradise?',
+    answer:
+      'Pattern Paradise is an online marketplace that connects crochet and knitting enthusiasts. We provide a platform for designers to sell their unique patterns and for buyers to discover a wide range of high-quality, handmade designs. We also offer collaborative tools for pattern testing and refinement.',
+    category: 'about',
+  },
+  {
+    id: 'item-2',
+    question: 'How does Pattern Paradise make money?',
+    answer:
+      'We charge a 5% fee on the gross value of each pattern sold. This fee helps us maintain and improve our platform, develop new collaboration tools, and ensure the quality of patterns shared in our community. We also offer a Pro Membership for users who need advanced features and want to be the highest ranked on Pattern Paradise.',
+    category: 'about',
+    hasLink: true,
+  },
+  {
+    id: 'item-3',
+    question: 'What is a pattern?',
+    answer:
+      'A pattern is a detailed set of instructions for creating handmade items using crochet or knitting techniques. It includes step-by-step directions, stitch counts, measurements, and sometimes visual aids. Patterns serve as blueprints for crafting various items, from clothing to home decor.',
+    category: 'patterns',
+  },
+  {
+    id: 'item-4',
+    question: 'How are patterns delivered?',
+    answer:
+      'All patterns on Pattern Paradise are available as digital downloads. Once purchased, you can instantly access and start your project.',
+    category: 'patterns',
+  },
+  {
+    id: 'item-5',
+    question: 'Can I sell my own patterns on Pattern Paradise?',
+    answer:
+      "Yes! Pattern Paradise welcomes designers to showcase and sell their unique patterns. You can easily upload your designs and set your own prices. We'll handle the transactions and provide tools to help you manage your pattern sales.",
+    category: 'patterns',
+  },
+  {
+    id: 'item-6',
+    question: 'What makes Pattern Paradise unique?',
+    answer:
+      "Pattern Paradise stands out due to our strong ties with the crocheting and knitting community on social media. We leverage these connections to increase designers' visibility, promote patterns, and attract more creators and buyers to our platform. We also offer innovative collaboration tools for pattern testing and refinement.",
+    category: 'about',
+  },
+  {
+    id: 'collaborate',
+    question: 'How can I collaborate on pattern testing?',
+    answer:
+      "Pattern Paradise provides advanced tools for tutorials and feedback. You can participate in pattern testing, offer suggestions for improvements, and help refine designs before they're finalized. This collaborative approach ensures high-quality patterns and fosters community engagement.",
+    category: 'collaboration',
+    hasLink: true,
+  },
+  {
+    id: 'item-8',
+    question: 'Is there a membership fee to join Pattern Paradise?',
+    answer:
+      "No, there's no membership fee to join Pattern Paradise. Our platform is free to use for both designers and buyers. We only charge a 5% fee on successful pattern sales. If you are interested in a Pro membership for advanced features, you can purchase this in a separate subscription.",
+    category: 'membership',
+    hasLink: true,
+  },
+];
