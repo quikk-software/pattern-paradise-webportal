@@ -24,6 +24,7 @@ import TikTokIcon from '@/lib/icons/TikTokIcon';
 import pages from '@/lib/hooks/routes';
 import type { Metadata } from 'next';
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants';
+import WelcomeCard from '@/lib/components/WelcomeCard';
 
 const page = pages.find((page) => page.pathname === '/how-to');
 
@@ -55,25 +56,7 @@ export default function HowToPage() {
           {/*<TabsTrigger value="payments">Payments</TabsTrigger>*/}
         </TabsList>
 
-        <Card className="mb-6 border-none shadow-none bg-muted/40">
-          <CardContent className="p-4 flex flex-col md:flex-row md:items-center gap-4">
-            <div className="flex-1">
-              <h3 className="text-lg font-medium">New to Pattern Paradise?</h3>
-              <p className="text-muted-foreground text-sm mt-1">
-                Buy, sell and test your patterns in one place!
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Button size="sm" asChild>
-                <Link href="/auth/registration" className="flex items-center gap-2">
-                  <ArrowRight />
-                  Register Now
-                </Link>
-              </Button>
-              <GoogleLoginButton callbackUrl="/how-to" />
-            </div>
-          </CardContent>
-        </Card>
+        <WelcomeCard />
 
         <TabsContent value="all" className="space-y-6 mt-0">
           <GuideSection
