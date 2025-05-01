@@ -116,14 +116,17 @@ export const FAQItem: React.FunctionComponent<FAQItemProps> = ({
             value={item.id}
             className="mb-4 overflow-hidden border border-border rounded-lg shadow-sm group hover:shadow-md transition-shadow duration-300"
           >
-            <AccordionTrigger className="px-6 py-5 text-lg font-medium bg-gradient-to-r from-white to-secondary/20 group-data-[state=open]:from-secondary/10 group-data-[state=open]:to-secondary/30 transition-all duration-300">
+            <AccordionTrigger
+              disabled
+              className="px-6 py-5 text-lg font-medium bg-gradient-to-r from-white to-secondary/20 group-data-[state=open]:from-secondary/10 group-data-[state=open]:to-secondary/30 transition-all duration-300"
+            >
               <div className="flex items-center justify-between w-full">
                 <div className="text-left">
                   <span className="text-primary">{item.question}</span>
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-6 py-4 text-base leading-relaxed bg-white">
+            <AccordionContent forceMount className="px-6 py-4 text-base leading-relaxed bg-white">
               <div className="prose prose-sm max-w-none text-muted-foreground">
                 {formatAnswer(item)}
               </div>
