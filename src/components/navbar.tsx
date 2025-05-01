@@ -2,18 +2,20 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Instagram, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
-import AppleLogo from '@/assets/logos/apple-logo.svg';
-import GooglePlayLogo from '@/assets/logos/google-play-logo.png';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
 import SocialBadges from '@/lib/components/SocialBadges';
 
 const NAV_LINKS = [
   {
     href: '/about',
     name: 'About',
+    enabled: true,
+  },
+  {
+    href: '/how-to',
+    name: 'How To',
     enabled: true,
   },
   {
