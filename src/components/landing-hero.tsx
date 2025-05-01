@@ -58,11 +58,11 @@ export default function LandingHero({ products }: LandingHeroProps) {
               </Link>
             )}
             {isLoggedIn ? (
-              <Link href="/app/secure/test">
+              <Link href="/app/tester-calls">
                 <Button variant="outline">Show Tester Calls</Button>
               </Link>
             ) : (
-              <Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/secure/test">
+              <Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls">
                 <Button variant="outline">Become a Tester</Button>
               </Link>
             )}

@@ -121,7 +121,7 @@ export default function FAQPageComponent() {
                 Profile Settings
               </Link>
               . Once you have everything set up, you can{' '}
-              <Link href="/app/secure/test" className="text-blue-500 underline" rel={'nofollow'}>
+              <Link href="/app/tester-calls" className="text-blue-500 underline" rel={'nofollow'}>
                 browse Tester Calls
               </Link>
               .
