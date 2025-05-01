@@ -110,7 +110,7 @@ export function PatternParadiseProComponent() {
               creating patterns
             </Link>{' '}
             or{' '}
-            <Link rel={'nofollow'} href="/app/secure/test" className="text-blue-500 underline">
+            <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
               apply for tester calls
             </Link>
             !
@@ -180,7 +180,7 @@ export function PatternParadiseProComponent() {
               creating patterns
             </Link>{' '}
             or{' '}
-            <Link rel={'nofollow'} href="/app/secure/test" className="text-blue-500 underline">
+            <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
               apply for tester calls
             </Link>
             !

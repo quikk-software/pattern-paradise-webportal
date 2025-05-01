@@ -74,7 +74,7 @@ export default function WelcomeHero({ userName, avatarUrl = '', isSeller }: Welc
               </Button>
             </Link>
           ) : (
-            <Link href="/app/secure/test" className="z-10">
+            <Link href="/app/tester-calls" className="z-10">
               <Button variant="outline" className="flex items-center gap-2">
                 <PatternParadiseIcon className="h-4 w-4" />
                 Show Tester Calls

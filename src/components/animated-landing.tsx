@@ -73,7 +73,7 @@ export default function AnimatedLanding() {
               </Link>
             )}
             {isLoggedIn ? (
-              <Link href="/app/secure/test" rel={'nofollow'}>
+              <Link href="/app/tester-calls" rel={'nofollow'}>
                 <Button
                   variant="outline"
                   className="bg-transparent border-white text-white border-2 font-semibold"
@@ -84,7 +84,7 @@ export default function AnimatedLanding() {
             ) : (
               <Link
                 rel={'nofollow'}
-                href="/auth/registration?preselectedRoles=Tester&redirect=/app/secure/test"
+                href="/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls"
               >
                 <Button
                   variant="outline"
