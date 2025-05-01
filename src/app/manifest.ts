@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Pattern Paradise - Where Creativity Pays Off',
     short_name: 'Pattern Paradise',
     description:
-      'Find, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern business effortlessly.',
+      'Buy, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern business effortlessly.',
     start_url: '/',
     display: 'standalone',
     background_color: '#fff',
