@@ -24,8 +24,8 @@ export default function FAQPageComponent() {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 w-32 h-32 bg-primary/20 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl opacity-50" />
-      <div className="absolute bottom-0 right-0 w-40 h-40 bg-primary/20 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl opacity-40" />
+      <div className="absolute top-0 left-0 bg-primary/20 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl opacity-50" />
+      <div className="absolute bottom-0 right-0 bg-primary/20 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl opacity-40" />
 
       <div className="relative">
         <motion.div
