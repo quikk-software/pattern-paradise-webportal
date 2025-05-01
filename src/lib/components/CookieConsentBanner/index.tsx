@@ -43,7 +43,8 @@ export default function CookieConsentBanner({ maintenanceMode }: CookieConsentBa
   if (typeof window !== 'undefined') {
     return (
       <>
-        {consentGiven ? <Analytics /> : null}
+        {/* {consentGiven ? <Analytics /> : null} */}
+        <Analytics />
         {visible ? (
           <CookieConsent
             location="bottom"
