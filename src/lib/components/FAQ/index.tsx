@@ -21,9 +21,9 @@ export default function FAQPageComponent() {
           transition={{ duration: 0.5 }}
           className="mb-8 text-center"
         >
-          <h1 className="text-3xl font-bold text-primary sm:text-4xl md:text-5xl mb-3">
+          <h2 className="text-2xl font-bold text-primary sm:text-4xl md:text-5xl mb-3">
             Frequently Asked Questions
-          </h1>
+          </h2>
           <p className="text-muted-foreground">
             Find answers to common questions about Pattern Paradise and how our platform works.
           </p>
