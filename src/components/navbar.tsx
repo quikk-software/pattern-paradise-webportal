@@ -19,11 +19,6 @@ const NAV_LINKS = [
     enabled: true,
   },
   {
-    href: '/faq',
-    name: 'FAQ',
-    enabled: true,
-  },
-  {
     href: '/help',
     name: 'Help',
     enabled: true,
