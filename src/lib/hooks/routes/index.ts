@@ -58,12 +58,6 @@ const pages: Page[] = [
       'Discover how to use Pattern Paradise with easy guides for uploading patterns, joining tester calls, and collaborating with the crafting community.',
   },
   {
-    title: 'FAQs | Pattern Paradise',
-    pathname: '/faq',
-    description:
-      'Find answers to the most frequently asked questions about Pattern Paradise’s services.',
-  },
-  {
     title: 'Imprint | Pattern Paradise',
     pathname: '/imprint',
     description: 'View official legal information and company details for Pattern Paradise.',
