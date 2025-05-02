@@ -329,10 +329,11 @@ export default function ChatHistory({
     readAllTestingComments(selectedTestingId).then();
   };
 
-  const isInactive = selectedTestingStatus !== 'InProgress';
+  const isInProgress = selectedTestingStatus === 'InProgress';
   const isAborted = selectedTestingStatus === 'Aborted';
   const isDeclined = selectedTestingStatus === 'Declined';
   const isApproved = selectedTestingStatus === 'Approved';
+  const isInactive = !isInProgress && !isApproved && !isDeclined;
   const isTesterOrCreator =
     !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
     testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
