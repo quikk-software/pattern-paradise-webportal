@@ -25,6 +25,7 @@ import { PayPalOrderProvider } from '@/lib/hooks/usePayPalOrder';
 import ShareButton from '@/lib/components/ShareButton';
 import LikeProductButton from '@/lib/components/LikeProductButton';
 import { useValidSession } from '@/hooks/useValidSession';
+import Link from 'next/link';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -110,7 +111,28 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                       files={product.files}
                     />
                   ) : (
-                    <BuyNowButton product={product} />
+                    <>
+                      <BuyNowButton product={product} />
+                      <InfoBoxComponent
+                        title="Instant download"
+                        message={
+                          <span>
+                            As soon as payment has been confirmed, your files will be{' '}
+                            <Link
+                              href="/app/secure/auth/me/patterns"
+                              className="text-blue-500 underline"
+                            >
+                              available for download
+                            </Link>
+                            .
+                            <br />
+                            <br />
+                            Instant download items cannot be returned, exchanged or canceled. Please
+                            contact the seller first if you have any problems with your order.
+                          </span>
+                        }
+                      />
+                    </>
                   )}
                   {isOwner ? (
                     <div className="flex flex-col gap-2 mt-4">
