@@ -1427,6 +1427,11 @@ export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
 export const FAQ_CATEGORIES = [
   {
+    id: 'all',
+    label: 'All',
+    icon: 'all',
+  },
+  {
     id: 'about',
     label: 'About Us',
     icon: 'info',

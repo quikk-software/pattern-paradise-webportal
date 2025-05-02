@@ -2,7 +2,8 @@
 
 import { FAQ_CATEGORIES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import { Info, Scissors, Users, Badge } from 'lucide-react';
+import { Info, Scissors, Users, Badge, UserRoundSearch } from 'lucide-react';
+import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 
 interface FAQCategoryNavProps {
   activeCategory: string;
@@ -12,10 +13,12 @@ interface FAQCategoryNavProps {
 export const FAQCategoryNav: React.FC<FAQCategoryNavProps> = ({ activeCategory, onChange }) => {
   const getIcon = (iconName: string) => {
     switch (iconName) {
-      case 'info':
+      case 'all':
         return <Info className="w-5 h-5" />;
+      case 'info':
+        return <UserRoundSearch className="w-5 h-5" />;
       case 'scissors':
-        return <Scissors className="w-5 h-5" />;
+        return <PatternParadiseIcon className="w-5 h-5" />;
       case 'users':
         return <Users className="w-5 h-5" />;
       case 'badge':
