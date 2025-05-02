@@ -78,7 +78,7 @@ export default function HeroV2({ products }: HeroV2Props) {
                 <Link rel={'nofollow'} href="/auth/registration" className="z-10">
                   <RegisterButton />
                 </Link>
-                <Link rel={'nofollow'} href="/swipe" className="z-10">
+                <Link href="/swipe" className="z-10">
                   <div className="relative">
                     <Button
                       size="lg"
@@ -115,7 +115,12 @@ export default function HeroV2({ products }: HeroV2Props) {
             />
             <div className="absolute inset-0 grid grid-cols-2 gap-2">
               {products.map((product) => (
-                <Link href={`/app/products/${product.id}`} key={product.id} className="z-10">
+                <Link
+                  href={`/app/products/${product.id}`}
+                  rel={'nofollow'}
+                  key={product.id}
+                  className="z-10"
+                >
                   <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm">
                     <div className="aspect-square overflow-hidden rounded-md">
                       <CldImage
@@ -173,7 +178,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               <Link
                 href="https://instagram.com/the.patternparadise"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="text-blue-500 underline"
               >
                 Join our community
@@ -196,7 +201,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               <Link
                 href="https://paypal.com"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="text-blue-500 underline"
               >
                 PayPal
@@ -205,7 +210,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               <Link
                 href="https://stripe.com"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="text-blue-500 underline"
               >
                 Stripe
