@@ -12,7 +12,7 @@ export default function SocialBadges() {
           <a
             href="https://instagram.com/the.patternparadise"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow"
             style={{
               borderWidth: '1px',
               padding: '0.3rem',
@@ -45,7 +45,7 @@ export default function SocialBadges() {
         <a
           href="https://apps.apple.com/de/app/pattern-paradise/id6742999886"
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer nofollow"
           className="flex flex-col items-center justify-center text-white"
         >
           <Image
@@ -58,7 +58,7 @@ export default function SocialBadges() {
         <a
           href="https://play.google.com/store/apps/details?id=shop.pattern_paradise.preview.twa"
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer nofollow"
           className="flex flex-col items-center justify-center text-white"
         >
           <Image
