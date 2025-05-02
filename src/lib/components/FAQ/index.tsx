@@ -1,26 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { FAQCategoryNav } from './faq-category-nav';
 import { FAQItem } from './faq-item';
 import { motion } from 'framer-motion';
 
 export default function FAQPageComponent() {
-  const searchParams = useSearchParams();
   const [selectedAccordionItem, setSelectedAccordionItem] = useState<string | undefined>(undefined);
-  const [activeCategory, setActiveCategory] = useState('about');
-
-  useEffect(() => {
-    const action = searchParams.get('action');
-    if (action) {
-      setSelectedAccordionItem(action);
-
-      // Find category for the selected item
-      const item = action === 'collaborate' ? 'collaboration' : 'about';
-      setActiveCategory(item);
-    }
-  }, [searchParams]);
+  const [activeCategory, setActiveCategory] = useState('all');
 
   return (
     <div className="relative">
