@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,12 +17,14 @@ import FileSelector from '@/components/file-selector';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import {
-  CATEGORIES,
-  ExperienceLevel,
-  ExperienceLevels,
-  HASHTAG_LIMIT,
-  IMAGE_LIMIT,
-} from '@/lib/constants';
+  saveFile,
+  getAllFiles,
+  deleteAllFiles,
+  saveImageFile,
+  getAllImageFiles,
+  deleteAllImageFiles,
+} from '@/lib/db/productFormDB';
+import { CATEGORIES, ExperienceLevels, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import GoBackButton from '@/lib/components/GoBackButton';
 import PriceInput from '@/lib/components/PriceInput';
@@ -38,6 +40,9 @@ import DragAndDropImage from '@/lib/components/DragAndDropImage';
 import UploadFeedback from '@/components/upload-feedback';
 import { useRouter } from 'next/navigation';
 import CardRadioGroup from '@/components/card-radio-group';
+import logger from '@/lib/core/logger';
+
+const LOCAL_STORAGE_KEY = 'productFormData';
 
 export interface PDFFile {
   file: File;
@@ -62,9 +67,6 @@ export function ProductFormComponent() {
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
   const [isMystery, setIsMystery] = useState<string | null>('yes');
-  const [selectedExperienceLevel, setSelectedExperienceLevel] = useState<ExperienceLevel>(
-    ExperienceLevels.Intermediate,
-  );
   const [showResetDrawer, setShowResetDrawer] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<
     {
@@ -100,12 +102,109 @@ export function ProductFormComponent() {
     formState: { errors },
     watch,
     reset,
-  } = useForm();
+    control,
+  } = useForm({
+    defaultValues: {
+      title: '',
+      description: '',
+      price: '',
+      experienceLevel: ExperienceLevels.Intermediate,
+    },
+  });
 
   const router = useRouter();
 
+  const watchedValues = watch();
+  const watchedExperience = watch('experienceLevel');
+
   const hasErrors =
     errors.title || errors.description || errors.price || imageError || patternError;
+
+  useEffect(() => {
+    const restoreFormData = async () => {
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          reset({
+            title: parsed.title || '',
+            description: parsed.description || '',
+            price: parsed.price || '',
+            experienceLevel: parsed.experienceLevel || ExperienceLevels.Intermediate,
+          });
+
+          if (parsed.category) setCategory(parsed.category);
+          if (parsed.hashtags) setHashtags(parsed.hashtags);
+          if (parsed.images) setImages(parsed.images);
+          if (typeof parsed.isFree === 'boolean') setIsFree(parsed.isFree);
+          if (parsed.isMystery) setIsMystery(parsed.isMystery);
+        } catch (err) {
+          console.error('Failed to parse saved form data', err);
+        }
+      }
+
+      try {
+        const savedFiles = await getAllFiles();
+        const reconstructedPatterns = savedFiles.map(({ file, meta, id }) => ({
+          file,
+          id,
+          language: meta.language,
+          originalFilename: meta.originalFilename,
+        }));
+        setPatterns(reconstructedPatterns);
+      } catch (err) {
+        logger.error('Failed to restore files from IndexedDB', err);
+      }
+
+      try {
+        const savedImageFiles = await getAllImageFiles();
+        const restoredImages = savedImageFiles.map(({ file, meta }) => ({
+          name: meta.name,
+          url: URL.createObjectURL(file),
+        }));
+        setImages(restoredImages);
+      } catch (err) {
+        logger.error('Failed to restore images from IndexedDB', err);
+      }
+    };
+
+    restoreFormData();
+  }, []);
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      const stateToSave = {
+        ...watchedValues,
+        category,
+        hashtags,
+        images,
+        isFree,
+        isMystery,
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+    }, 300);
+
+    return () => clearTimeout(debounce);
+  }, [watchedValues, category, hashtags, images, isFree, isMystery]);
+
+  useEffect(() => {
+    patterns.forEach(async (pattern) => {
+      await saveFile(pattern.file, pattern.id, {
+        language: pattern.language,
+        originalFilename: pattern.originalFilename,
+      });
+    });
+  }, [patterns]);
+
+  useEffect(() => {
+    images.forEach(async (img, index) => {
+      const response = await fetch(img.url);
+      const blob = await response.blob();
+      const file = new File([blob], img.name, { type: blob.type });
+
+      await saveImageFile(file, `image-${index}`, { name: img.name });
+    });
+  }, [images]);
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -269,7 +368,7 @@ export function ProductFormComponent() {
 
       formData.append('title', data.title);
       formData.append('description', data.description);
-      formData.append('experience', selectedExperienceLevel);
+      formData.append('experience', data.experienceLevel);
       formData.append('category', category.craft);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
       formData.append('isFree', isFree ? 'true' : 'false');
@@ -305,7 +404,7 @@ export function ProductFormComponent() {
 
       const { productId } = await mutate(formData);
 
-      handleResetFormClick();
+      await handleResetFormClick();
 
       setUploadStage('complete');
 
@@ -321,7 +420,11 @@ export function ProductFormComponent() {
     }
   };
 
-  const handleResetFormClick = () => {
+  const handleResetFormClick = async () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    await deleteAllFiles();
+    await deleteAllImageFiles();
+
     setImages([]);
     setPatterns([]);
     setHashtags([]);
@@ -342,7 +445,12 @@ export function ProductFormComponent() {
 
     setShowResetDrawer(false);
 
-    reset();
+    reset({
+      title: '',
+      description: '',
+      price: '',
+      experienceLevel: ExperienceLevels.Intermediate,
+    });
   };
 
   const handleDragEnd = (event: any) => {
@@ -438,7 +546,12 @@ export function ProductFormComponent() {
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
               Price (in $) <span className="text-red-500">*</span>
             </Label>
-            <PriceInput isFree={isFree} handleKeyDown={handleKeyDown} register={register} />
+            <PriceInput
+              isFree={isFree}
+              handleKeyDown={handleKeyDown}
+              name="price"
+              control={control}
+            />
             {errors.price ? (
               <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
             ) : null}
@@ -491,10 +604,7 @@ export function ProductFormComponent() {
             <Label htmlFor="experienceLevel" className="block text-lg font-semibold mb-2">
               Experience Level <span className="text-red-500">*</span>
             </Label>
-            <ExperienceSelect
-              selectedExperienceLevel={selectedExperienceLevel}
-              setSelectedExperienceLevel={setSelectedExperienceLevel}
-            />
+            <ExperienceSelect name="experienceLevel" control={control} />
           </div>
         </div>
 
@@ -506,8 +616,8 @@ export function ProductFormComponent() {
             <MultiSelect
               onChange={(value) => setCategory(value)}
               initialCategories={CATEGORIES}
-              injectCategories={false}
-              initialCraft={'Crocheting'}
+              injectCategories={true}
+              initialCraft={category?.craft ?? 'Crocheting'}
             />
           </div>
           <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />

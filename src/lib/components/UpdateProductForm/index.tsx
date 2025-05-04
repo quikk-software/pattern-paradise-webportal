@@ -94,6 +94,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
     handleSubmit,
     formState: { errors },
     watch,
+    control,
   } = useForm({
     defaultValues: initialData
       ? {
@@ -466,8 +467,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             <PriceInput
               isFree={isFree}
               handleKeyDown={handleKeyDown}
-              register={register}
-              defaultValue={initialData.price}
+              name="price"
+              control={control}
             />
             {errors.price ? (
               <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
@@ -521,10 +522,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             <Label htmlFor="experienceLevel" className="block text-lg font-semibold mb-2">
               Experience Level <span className="text-red-500">*</span>
             </Label>
-            <ExperienceSelect
-              selectedExperienceLevel={selectedExperienceLevel}
-              setSelectedExperienceLevel={setSelectedExperienceLevel}
-            />
+            <ExperienceSelect control={control} name="experienceLevel" />
           </div>
         </div>
 

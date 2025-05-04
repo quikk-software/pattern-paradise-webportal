@@ -6,31 +6,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { EXPERIENCE_LEVELS, ExperienceLevel } from '@/lib/constants';
+import { EXPERIENCE_LEVELS } from '@/lib/constants';
+import { Controller, Control } from 'react-hook-form';
 
 interface ExperienceSelectProps {
-  selectedExperienceLevel: ExperienceLevel;
-  setSelectedExperienceLevel: (selectedExperienceLevel: ExperienceLevel) => void;
-  id?: string;
+  control: Control<any>;
+  name: string;
 }
 
-export default function ExperienceSelect({
-  selectedExperienceLevel,
-  setSelectedExperienceLevel,
-  id = 'experienceLevel',
-}: ExperienceSelectProps) {
+export default function ExperienceSelect({ control, name }: ExperienceSelectProps) {
   return (
-    <Select value={selectedExperienceLevel} onValueChange={setSelectedExperienceLevel}>
-      <SelectTrigger className="w-full" aria-label={'Select an experience label'}>
-        <SelectValue placeholder="Select an experience level" />
-      </SelectTrigger>
-      <SelectContent>
-        {EXPERIENCE_LEVELS.map((experience) => (
-          <SelectItem key={experience} value={experience}>
-            {experience}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Controller
+      name={name}
+      control={control}
+      rules={{ required: 'Experience level is required' }}
+      render={({ field }) => (
+        <Select value={field.value} onValueChange={field.onChange}>
+          <SelectTrigger className="w-full" aria-label="Select an experience level">
+            <SelectValue placeholder="Select an experience level" />
+          </SelectTrigger>
+          <SelectContent>
+            {EXPERIENCE_LEVELS.map((experience) => (
+              <SelectItem key={experience} value={experience}>
+                {experience}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    />
   );
 }
