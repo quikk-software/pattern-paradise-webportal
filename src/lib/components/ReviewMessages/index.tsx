@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import ReviewCard from '@/lib/components/ReviewCard';
 import { useGetTestingByProductId, useListTestingReviewComments } from '@/lib/api/testing';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
@@ -73,13 +72,11 @@ export default function ReviewMessages({ productId }: ReviewMessagesProps) {
             severity="error"
           />
         ) : (
-          <ScrollArea className="h-[600px]">
-            <div className="space-y-4">
-              {comments.map((comment) => (
-                <ReviewCard key={comment.id} comment={comment} testing={testing} />
-              ))}
-            </div>
-          </ScrollArea>
+          <div className="space-y-4">
+            {comments.map((comment) => (
+              <ReviewCard key={comment.id} comment={comment} testing={testing} />
+            ))}
+          </div>
         )}
       </CardContent>
     </Card>

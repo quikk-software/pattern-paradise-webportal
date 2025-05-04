@@ -47,7 +47,6 @@ export default function UserDetailsCard({
   };
 
   const hasSocialLinks = user.instagramRef || user.tiktokRef;
-  const showCardContent = hasSocialLinks || showRoles;
   const isMe = userId === user.id;
   const isLoggedIn = status === 'authenticated';
 
@@ -94,7 +93,7 @@ export default function UserDetailsCard({
         </div>
         <p className="text-sm text-secondary-foreground">{user?.followers ?? 0} Follower</p>
       </CardHeader>
-      {showCardContent ? (
+      {showRoles ? (
         <CardContent className="flex flex-col gap-4">
           <div className="flex gap-2 mb-2 items-center flex-wrap">
             <FollowUserButton initialFollowing={!!user?.isFollowing} userId={user.id} />
