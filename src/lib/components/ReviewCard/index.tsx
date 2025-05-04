@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
 import { GetTestingCommentResponse, GetTestingResponse } from '@/@types/api-types';
@@ -15,10 +14,7 @@ interface ReviewCardProps {
 }
 
 export default function ReviewCard({ comment, testing }: ReviewCardProps) {
-  const [expanded, setExpanded] = useState(false);
   const tester = testing.testers?.find((t) => t.id === comment.creatorId);
-
-  const toggleExpanded = () => setExpanded(!expanded);
 
   const initials =
     tester?.firstName && tester?.lastName
@@ -48,14 +44,7 @@ export default function ReviewCard({ comment, testing }: ReviewCardProps) {
                   {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                 </p>
               </Link>
-              <p className={`mt-2 ${expanded ? '' : 'line-clamp-3'}`}>{comment.message}</p>
-              <div className="w-full flex justify-end">
-                {comment.message.length > 150 ? (
-                  <Button variant="ghost" size="sm" onClick={toggleExpanded}>
-                    {expanded ? 'Show less' : 'Show more'}
-                  </Button>
-                ) : null}
-              </div>
+              <p className="mt-2">{comment.message}</p>
             </div>
             <div>
               {isApproved ? (
