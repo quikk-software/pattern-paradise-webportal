@@ -88,7 +88,7 @@ function escapeXml(unsafe: string) {
 }
 
 function getPinterestImageUrl(originalUrl: string) {
-  return originalUrl.replace('/upload/', '/upload/w_1000,h_1500,c_fill/');
+  return originalUrl.replace('/upload/', '/upload/w_1000,h_1500,c_pad,b_white/');
 }
 
 function generatePinterestMetadata(product: GetProductResponse): {
