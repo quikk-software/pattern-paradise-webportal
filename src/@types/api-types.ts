@@ -183,6 +183,7 @@ export interface PutUserRequest {
   instagramRef?: string;
   refLinks?: string[];
   gallery?: string[];
+  theme?: string;
   tiktokRef?: string;
   imageUrl?: string;
   bannerImageUrl?: string;
@@ -226,6 +227,7 @@ export interface GetUserResponse {
   country?: string;
   instagramRef?: string;
   tiktokRef?: string;
+  theme: string;
   refLinks: string[];
   paypalMerchantIsActive: boolean;
   paypalMerchantId?: string;
@@ -288,6 +290,7 @@ export interface GetUserAccountResponse {
   isSponsored: boolean;
   firstName?: string;
   lastName?: string;
+  theme: string;
   description?: string;
   gallery: string[];
   instagramRef?: string;
@@ -1460,6 +1463,8 @@ export class Api<
         refLinks?: any;
         /** @example "any" */
         imageUrl?: any;
+        /** @example "any" */
+        theme?: any;
         /** @example "any" */
         bannerImageUrl?: any;
         /** @example "any" */

@@ -6,6 +6,7 @@ import { useFollowUser, useUnfollowUser } from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Badge } from '@/components/ui/badge';
 import { useValidSession } from '@/hooks/useValidSession';
+import { cn } from '@/lib/utils';
 
 interface FollowUserButtonProps {
   initialFollowing: boolean;
@@ -18,6 +19,7 @@ export default function FollowUserButton({
   initialFollowing,
   userId,
   onFollowChange,
+  className,
 }: FollowUserButtonProps) {
   const [isFollowing, setIsFollowing] = useState<boolean | undefined>(undefined);
 
@@ -51,7 +53,11 @@ export default function FollowUserButton({
 
   return (
     <a>
-      <Badge variant="secondary" onClick={handleClick} className={`cursor-pointer flex`}>
+      <Badge
+        variant="secondary"
+        onClick={handleClick}
+        className={cn('cursor-pointer flex', className)}
+      >
         {isFollowing ? (
           <>
             {unfollowUserIsLoading ? (
