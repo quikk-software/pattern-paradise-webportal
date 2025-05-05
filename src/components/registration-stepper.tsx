@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, MutableRefObject, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,6 +41,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 import useAuth from '@/lib/auth/useAuth';
 import CountrySelect from '@/lib/components/CountrySelect';
+import WelcomeBanner from '@/lib/components/WelcomeBanner';
 
 interface RegistrationStepperProps {
   preselectedRoles: string[];
@@ -59,6 +60,8 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
   const { redirectUrl } = useRedirect();
   const router = useRouter();
+
+  const registrationRef = useRef<HTMLDivElement | null>(null);
 
   const {
     handleLogin,
@@ -197,6 +200,12 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
     }
   };
 
+  const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
+    ref.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
+  };
+
   const handleNextStep = async () => {
     let canProceed = false;
 
@@ -215,12 +224,14 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
     if (canProceed && currentStep < totalSteps) {
       setCurrentStep((prev) => prev + 1);
+      router.push('#registrationCard');
     }
   };
 
   const handlePrevStep = () => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
+      router.push('#registrationCard');
     }
   };
 
@@ -245,7 +256,10 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
           Go to login
         </Button>
       </Link>
-      <Card>
+      {currentStep === 1 ? (
+        <WelcomeBanner onContinue={() => executeScroll(registrationRef)} />
+      ) : null}
+      <Card ref={registrationRef} id="registrationCard">
         <CardHeader>
           <div className="flex justify-between items-center mb-4">
             <Progress value={progressPercentage} className="w-full" />
