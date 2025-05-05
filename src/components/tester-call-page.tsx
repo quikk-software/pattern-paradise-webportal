@@ -298,14 +298,10 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
                 <div className={`flex flex-col items-center`}>
                   <CldImage
                     key={src}
-                    alt={`${product.title} view ${index + 1}`}
+                    alt={`Tester Call for ${product.title} in ${product.category}${product.subCategories?.length ? ` – styles: ${product.subCategories.join(', ')}` : ''}`}
                     src={src}
-                    width={`200`}
-                    height={`300`}
-                    crop={{
-                      type: 'auto',
-                      source: true,
-                    }}
+                    width={400}
+                    height={400}
                     className={`rounded-lg shadow-md`}
                     format="webp"
                   />
