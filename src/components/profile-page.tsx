@@ -41,6 +41,9 @@ import { CheckCircle2 } from 'lucide-react';
 import CopyClipboard from '@/lib/components/CopyClipboard';
 import Image from 'next/image';
 import CountrySelect from '@/lib/components/CountrySelect';
+import { ProfilePreviewDrawer } from '@/lib/components/ProfilePreviewDrawer';
+import ColorPalette from '@/lib/components/ColorPalette';
+import { themes } from '@/lib/core/themes';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -49,12 +52,14 @@ interface ProfilePageProps {
 export function ProfilePage({ user }: ProfilePageProps) {
   const [profileImage, setProfileImage] = useState(user.imageUrl);
   const [bannerImage, setBannerImage] = useState(user.bannerImageUrl);
+  const [selectedTheme, setSelectedTheme] = useState(user.theme);
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [updateUserIsError, setUpdateUserIsError] = useState(false);
   const [isDisconnectPayPalDrawerOpen, setIsDisconnectPayPalDrawerOpen] = useState(false);
   const [country, setCountry] = useState<string | undefined>(user.country);
   const [highlightCountry, setHighlightCountry] = useState<boolean>(false);
+  const [showPreviewDrawer, setShowPreviewDrawer] = useState<boolean>(false);
 
   const { update } = useValidSession();
 
@@ -205,6 +210,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       tiktokRef: data.tiktokRef?.trim() ? data.tiktokRef.toLowerCase().trim() : undefined,
       username: data.username?.trim() ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
+      theme: selectedTheme !== user.theme ? selectedTheme : undefined,
       country: data.roles?.includes('Seller') ? country : undefined,
     })
       .then(() => {
@@ -258,6 +264,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
     user.firstName && user.lastName ? `${user.firstName.at(0)}${user.lastName.at(0)}` : null;
 
   const roles = watch('roles');
+  const userData = watch();
   const highlightPayPal = action === 'scrollToPayPal';
   const highlightStripe = action === 'scrollToStripe';
   const highlightGallery = action === 'scrollToGallery';
@@ -742,7 +749,36 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
             </div>
 
+            <div className="grid grid-cols-1 gap-2">
+              <Label>
+                Selected Theme <span className="text-red-500">*</span>
+              </Label>
+              <div className="space-y-4">
+                <ColorPalette theme={selectedTheme} selectedTheme={user.theme} />
+                <div className="grid grid-cols-4 gap-2">
+                  {themes.map((theme) => (
+                    <ColorPalette
+                      key={theme}
+                      theme={theme}
+                      selectedTheme={selectedTheme}
+                      handleColorSelect={(theme) => setSelectedTheme(theme)}
+                      handleKeyDown={() => null}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="flex flex-col gap-2">
+              <Button
+                variant="ghost"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowPreviewDrawer(true);
+                }}
+              >
+                Show Preview
+              </Button>
               <Button
                 type="submit"
                 className="w-full"
@@ -769,6 +805,17 @@ export function ProfilePage({ user }: ProfilePageProps) {
         description="Disconnecting your PayPal account will prevent you from offering PayPal services and products on Pattern Paradise. Do you wish to continue?"
         callbackFn={() => handleDisconnectPayPal(userId)}
         isLoading={removePayPalReferralIsLoading}
+      />
+      <ProfilePreviewDrawer
+        isOpen={showPreviewDrawer}
+        onClose={() => setShowPreviewDrawer(false)}
+        user={{
+          ...userData,
+          stripeMerchantIsActive: !!userData.stripeAccountId,
+          theme: selectedTheme,
+          imageUrl: profileImage,
+          bannerImageUrl: bannerImage,
+        }}
       />
     </div>
   );

@@ -18,8 +18,11 @@ import Link from 'next/link';
 import GoBackButton from '@/lib/components/GoBackButton';
 import ShareButton from '@/lib/components/ShareButton';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
-import { meta } from 'eslint-plugin-react/lib/rules/jsx-props-no-spread-multi';
-import category = meta.docs.category;
+import {
+  THEME_LIGHT_FROM_BG_CLASSES,
+  THEME_LIGHT_TEXT_CLASSES,
+  THEME_TEXT_CLASSES,
+} from '@/lib/constants';
 
 function ApplyButton({
   testingId,
@@ -208,63 +211,13 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
 
   const { userId } = useSelector((s: Store) => s.auth);
 
-  const themeTextClasses: any = {
-    slate: 'text-slate-600',
-    gray: 'text-gray-600',
-    zinc: 'text-zinc-600',
-    neutral: 'text-neutral-600',
-    stone: 'text-stone-600',
-    red: 'text-red-600',
-    orange: 'text-orange-600',
-    amber: 'text-amber-600',
-    yellow: 'text-yellow-600',
-    lime: 'text-lime-600',
-    green: 'text-green-600',
-    emerald: 'text-emerald-600',
-    teal: 'text-teal-600',
-    cyan: 'text-cyan-600',
-    sky: 'text-sky-600',
-    blue: 'text-blue-600',
-    indigo: 'text-indigo-600',
-    violet: 'text-violet-600',
-    purple: 'text-purple-600',
-    fuchsia: 'text-fuchsia-600',
-    pink: 'text-pink-600',
-    rose: 'text-rose-600',
-  };
-
-  const themeBgClasses: any = {
-    slate: 'from-slate-100',
-    gray: 'from-gray-100',
-    zinc: 'from-zinc-100',
-    neutral: 'from-neutral-100',
-    stone: 'from-stone-100',
-    red: 'from-red-100',
-    orange: 'from-orange-100',
-    amber: 'from-amber-100',
-    yellow: 'from-yellow-100',
-    lime: 'from-lime-100',
-    green: 'from-green-100',
-    emerald: 'from-emerald-100',
-    teal: 'from-teal-100',
-    cyan: 'from-cyan-100',
-    sky: 'from-sky-100',
-    blue: 'from-blue-100',
-    indigo: 'from-indigo-100',
-    violet: 'from-violet-100',
-    purple: 'from-purple-100',
-    fuchsia: 'from-fuchsia-100',
-    pink: 'from-pink-100',
-    rose: 'from-rose-100',
-  };
-
   const isMe = userId === product.creatorId;
 
   return (
     <div
       className={classNames(
         'bg-gradient-to-b to-white p-4',
-        themeBgClasses[theme] || 'from-neutral-100',
+        THEME_LIGHT_FROM_BG_CLASSES[theme] || 'from-neutral-100',
       )}
     >
       <div className="flex justify-between items-start">
@@ -278,12 +231,11 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
           }
         />
       </div>
-      {/* Hero Section */}
       <section className="text-center mb-8">
         <h1
           className={classNames(
             'text-3xl md:text-5xl font-bold mb-2',
-            themeTextClasses[theme] || 'text-neutral-600',
+            THEME_LIGHT_TEXT_CLASSES[theme] || 'text-neutral-600',
           )}
         >
           Tester Call for
@@ -291,7 +243,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
         <h3
           className={classNames(
             'text-4xl md:text-6xl font-bold mb-2',
-            themeTextClasses[theme] || 'text-neutral-800',
+            THEME_LIGHT_TEXT_CLASSES[theme] || 'text-neutral-600',
           )}
         >
           {product.title}!
@@ -299,7 +251,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
         <h3
           className={classNames(
             'text-md md:text-lg font-bold mb-4 italic underline',
-            themeTextClasses[theme] || 'text-neutral-800',
+            THEME_TEXT_CLASSES[theme] || 'text-neutral-800',
           )}
         >
           <Link href={`/users/${testing.creator.username}`}>by @{testing.creator.username}</Link>
@@ -325,7 +277,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             <h2
               className={classNames(
                 'text-3xl font-semibold mb-4',
-                themeTextClasses[theme] || 'text-neutral-700',
+                THEME_LIGHT_TEXT_CLASSES[theme] || 'text-neutral-700',
               )}
             >
               {product.title}
@@ -362,7 +314,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             ))}
           </CarouselContent>
         </Carousel>
-        <ArrowLeftRight className={classNames(themeTextClasses[theme] || 'text-neutral-800')} />
+        <ArrowLeftRight className={classNames(THEME_TEXT_CLASSES[theme] || 'text-neutral-800')} />
       </section>
 
       {/* Tester Requirements */}
@@ -372,7 +324,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             <h2
               className={classNames(
                 'text-2xl font-semibold mb-4',
-                themeTextClasses[theme] || 'text-neutral-800',
+                THEME_TEXT_CLASSES[theme] || 'text-neutral-800',
               )}
             >
               Tester Requirements
@@ -402,7 +354,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             <h2
               className={classNames(
                 'text-2xl font-semibold mb-4',
-                themeTextClasses[theme] || 'text-neutral-800',
+                THEME_TEXT_CLASSES[theme] || 'text-neutral-800',
               )}
             >
               Benefits of Participating
@@ -417,12 +369,11 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
         </Card>
       </section>
 
-      {/* Call to Action (Bottom) */}
       <section className={`text-center`}>
         <h2
           className={classNames(
             'text-2xl md:text-3xl font-bold  mb-4',
-            themeTextClasses[theme] || 'text-neutral-800',
+            THEME_TEXT_CLASSES[theme] || 'text-neutral-800',
           )}
         >
           Ready to stitch with us?

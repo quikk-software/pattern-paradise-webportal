@@ -19,6 +19,14 @@ import Image from 'next/image';
 import { TipButton } from '@/lib/components/TipButton';
 import FollowUserButton from '@/lib/components/FollowUserButton';
 import { cn } from '@/lib/utils';
+import {
+  THEME_BG_CLASSES,
+  THEME_BORDER_CLASSES,
+  THEME_FROM_BG_CLASSES,
+  THEME_TEXT_CLASSES,
+  THEME_TO_BG_CLASSES,
+  THEME_VIA_BG_CLASSES,
+} from '@/lib/constants';
 
 interface UserDetailsCardProps {
   user: GetUserAccountResponse;
@@ -51,9 +59,15 @@ export default function UserDetailsCard({
 
   return (
     <Card className="group relative overflow-hidden border-none shadow-md transition-all duration-300 hover:shadow-xl">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-background z-0" />
-      <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-      <div className="absolute -left-16 -bottom-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${THEME_FROM_BG_CLASSES[user.theme]} bg-opacity-5 to-background z-0`}
+      />
+      <div
+        className={`absolute -right-16 -top-16 h-40 w-40 rounded-full ${THEME_BG_CLASSES[user.theme]} bg-opacity-10 blur-3xl`}
+      />
+      <div
+        className={`absolute -left-16 -bottom-16 h-40 w-40 rounded-full ${THEME_BG_CLASSES[user.theme]} bg-opacity-10 blur-3xl`}
+      />
 
       {user.bannerImageUrl ? (
         <div className="relative h-48 w-full overflow-hidden">
@@ -64,7 +78,7 @@ export default function UserDetailsCard({
             className="object-cover transition-transform duration-700 group-hover:scale-105"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90" />
+          <div className="absolute inset-0" />
 
           {showFlag && (
             <div className="absolute right-4 top-4 z-10">
@@ -73,7 +87,9 @@ export default function UserDetailsCard({
           )}
         </div>
       ) : (
-        <div className="relative h-24 w-full bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20">
+        <div
+          className={`relative h-24 w-full bg-gradient-to-r ${THEME_FROM_BG_CLASSES[user.theme]} bg-opacity-20 ${THEME_VIA_BG_CLASSES[user.theme]} ${THEME_TO_BG_CLASSES[user.theme]}`}
+        >
           {showFlag && (
             <div className="absolute right-4 top-4 z-10">
               <ReportUser userId={user.id} />
@@ -91,7 +107,9 @@ export default function UserDetailsCard({
                   src={user.imageUrl || '/placeholder.svg'}
                   alt={fullName || user.username}
                 />
-                <AvatarFallback className="bg-primary/20 text-xl font-bold text-primary">
+                <AvatarFallback
+                  className={`${THEME_BG_CLASSES[user.theme]} bg-opacity-20 text-xl font-bold ${THEME_TEXT_CLASSES[user.theme]}`}
+                >
                   {user.firstName?.[0]}
                   {user.lastName?.[0]}
                 </AvatarFallback>
@@ -99,12 +117,14 @@ export default function UserDetailsCard({
 
               <div className="mt-2">
                 {fullName && (
-                  <h2 className="text-xl font-bold tracking-tight text-foreground transition-colors duration-200 group-hover/link:text-primary">
+                  <h2
+                    className={`text-xl font-bold tracking-tight text-foreground transition-colors duration-200 group-hover/link:${THEME_TEXT_CLASSES[user.theme]}`}
+                  >
                     {fullName}
                   </h2>
                 )}
                 <p
-                  className={`${fullName ? 'text-sm' : 'text-lg'} font-medium text-muted-foreground`}
+                  className={`${fullName ? 'text-sm' : 'text-lg'} font-medium ${fullName ? 'text-muted-foreground' : 'text-foreground'}`}
                 >
                   @{user.username}
                 </p>
@@ -173,7 +193,7 @@ export default function UserDetailsCard({
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {isLoggedIn && (
                     <Button
-                      className="group/btn relative overflow-hidden bg-gradient-to-r from-primary to-primary/80 text-primary-foreground transition-all duration-300 hover:shadow-md"
+                      className={`group/btn relative overflow-hidden bg-gradient-to-r ${THEME_FROM_BG_CLASSES[user.theme]} ${THEME_TO_BG_CLASSES[user.theme]} text-primary-foreground transition-all duration-300 hover:shadow-md`}
                       onClick={() => handleChatClick(userId, user.id)}
                     >
                       <div className="absolute inset-0 bg-white/10 opacity-0 transition-opacity duration-300 group-hover/btn:opacity-100" />
@@ -194,7 +214,7 @@ export default function UserDetailsCard({
                 <Link href="#shop" className="mt-2 block w-full">
                   <Button
                     variant="outline"
-                    className="group/shop relative w-full overflow-hidden border-dashed border-primary/30 bg-primary/5 transition-all duration-300 hover:border-primary/50 hover:bg-primary/10"
+                    className={`group/shop relative w-full overflow-hidden border-dashed ${THEME_BORDER_CLASSES[user.theme]} bg-opacity-30 ${THEME_BG_CLASSES[user.theme]} transition-all duration-300 hover:${THEME_BORDER_CLASSES[user.theme]}/50 hover:${THEME_BG_CLASSES[user.theme]} hover:bg-opacity-10`}
                   >
                     <div className="flex w-full items-center justify-center space-x-2">
                       <ArrowDown className="h-4 w-4 animate-bounce" />
