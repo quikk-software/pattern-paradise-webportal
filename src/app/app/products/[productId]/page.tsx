@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : 'Pattern Details | Pattern Paradise';
   const description = `Check out this ${product?.category ? `${product?.category.toLowerCase()} pattern ` : 'pattern '}${product?.title ? ` '${product?.title}'` : ''}.`;
   const imageUrl =
-    product?.imageUrls?.[0] ??
+    product?.imageUrls?.[0]?.replace('/upload/', '/upload/w_1200,h_630,c_pad,b_white/') ??
     `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
 
   return {
