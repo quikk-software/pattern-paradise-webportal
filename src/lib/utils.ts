@@ -33,3 +33,33 @@ export function updateSelectedFlags(
     return { ...item };
   });
 }
+
+export function generateTitle(product: { title: string; category: string }): string {
+  const normalizeWord = (word: string) =>
+    word
+      .toLowerCase()
+      .replace(/[^a-z]/g, '')
+      .replace(/ing$/, '');
+
+  const seen = new Set<string>();
+  const resultWords: string[] = [];
+
+  const allWords = `${product.title} ${product.category}`.split(/\s+/).filter(Boolean);
+
+  for (const word of allWords) {
+    const key = normalizeWord(word);
+    if (key === 'pattern') continue;
+
+    if (!seen.has(key)) {
+      seen.add(key);
+      resultWords.push(word);
+    }
+  }
+
+  return resultWords.length > 0
+    ? resultWords
+        .map((w, i) => (i === 0 ? w[0].toUpperCase() + w.slice(1) : w))
+        .join(' ')
+        .toLowerCase()
+    : product.title.toLowerCase();
+}

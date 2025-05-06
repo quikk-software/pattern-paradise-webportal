@@ -3,6 +3,7 @@ import ProductPageComponent from '@/components/product-page';
 import { getProduct } from '@/lib/api/static/product/getProduct';
 import { Metadata } from 'next';
 import { APP_DOMAIN } from '@/lib/constants';
+import { generateTitle } from '@/lib/utils';
 
 type Props = {
   params: Promise<{ productId: string }>;
@@ -13,7 +14,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProduct(productId);
 
   const title = product?.title
-    ? `Buy ${product.title} ${product.category} Pattern | Pattern Paradise`
+    ? `Buy ${generateTitle({
+        title: product.title,
+        category: product.category,
+      })} Pattern | Pattern Paradise`
     : 'Pattern Details | Pattern Paradise';
   const description = `Check out this ${product?.category ? `${product?.category.toLowerCase()} pattern ` : 'pattern '}${product?.title ? ` '${product?.title}'` : ''}.`;
   const imageUrl =
