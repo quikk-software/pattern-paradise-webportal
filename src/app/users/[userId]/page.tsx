@@ -16,7 +16,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `${userName}'s Profile | Pattern Paradise`;
   const description = `Check out ${userName}'s patterns, tester calls, and more on Pattern Paradise.`;
+  const hasBannerImage = !!user?.bannerImageUrl;
   const imageUrl =
+    user?.bannerImageUrl?.replace('/upload/', '/upload/w_1200,h_630,c_fill/') ??
     user?.imageUrl?.replace('/upload/', '/upload/w_630,h_630,c_fill/') ??
     `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
 
@@ -30,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: imageUrl,
-          width: 630,
+          width: hasBannerImage ? 1200 : 630,
           height: 630,
           alt: `${userName}'s profile image`,
         },
