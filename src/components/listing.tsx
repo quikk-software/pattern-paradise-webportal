@@ -355,7 +355,7 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
         </div>
 
         {products.length === 0 && !isLoading && (
-          <p className="text-center text-muted-foreground mt-6">
+          <p className="text-center text-muted-foreground mt-3 mb-6">
             Nothing found matching your criteria.
           </p>
         )}
