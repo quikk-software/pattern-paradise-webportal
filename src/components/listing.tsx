@@ -343,22 +343,23 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
           </Button>
         </div>
 
-        <div id={'listing-results'}>
-          <WaterfallListing
-            products={products}
-            listingType={listingType}
-            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
-            onImpression={(productId) => handleImpression(productId)}
-            showFade={!infiniteScroll && hasNextPage}
-          />
-          <div ref={lastProductRef} className="h-10" />
+        <div className="space-y-4">
+          <div id={'listing-results'}>
+            <WaterfallListing
+              products={products}
+              listingType={listingType}
+              columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+              onImpression={(productId) => handleImpression(productId)}
+              showFade={!infiniteScroll && hasNextPage}
+            />
+            <div ref={lastProductRef} className="h-10" />
+          </div>
+          {products.length === 0 && !isLoading && (
+            <p className="text-center text-muted-foreground mb-6">
+              Nothing found matching your criteria.
+            </p>
+          )}
         </div>
-
-        {products.length === 0 && !isLoading && (
-          <p className="text-center text-muted-foreground mt-3 mb-6">
-            Nothing found matching your criteria.
-          </p>
-        )}
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ export default async function Home() {
   return (
     <div>
       <HeroV2 products={products.slice(0, FEATURED_PRODUCTS_LENGTH).reverse()} />
-      <div className="mx-auto container px-4 py-8">
+      <div className="mx-auto container px-4 py-8 space-y-8">
         <ListingComponent listingType={'sell'} infiniteScroll={false} />
         <FAQPageComponent />
       </div>
