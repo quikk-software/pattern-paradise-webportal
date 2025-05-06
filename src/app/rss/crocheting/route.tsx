@@ -119,11 +119,14 @@ function generatePinterestMetadata(product: GetProductResponse): {
     title: productTitleClean,
     category: product.category,
   })} ${subcategoryPart} Pattern`;
+  const titleWithoutCategory = generateTitle({
+    title: productTitleClean,
+  });
   const title =
     rawTitle.length > MAX_TITLE ? rawTitle.slice(0, MAX_TITLE - 1).trim() + '…' : rawTitle;
 
   const coreDescriptionSentences = [
-    `Learn how to crochet your own ${productTitleClean.toLowerCase()}.`,
+    `Learn how to crochet your own ${titleWithoutCategory}.`,
     `Perfect for ${product.subCategories.slice(0, 5).join(', ')}.`,
   ];
 
