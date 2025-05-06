@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 import { GetProductResponse } from '@/@types/api-types';
+import { generateTitle } from '@/lib/utils';
 
 let cachedFeed: string | null = null;
 let lastGenerated: number | null = null;
@@ -112,20 +113,20 @@ function generatePinterestMetadata(product: GetProductResponse): {
   const MAX_TITLE = 100;
   const MAX_DESCRIPTION = 500;
 
-  // Compose a clean title:
   const productTitleClean = product.title.replace(/[^a-zA-Z0-9\s]/g, '').trim();
   const subcategoryPart = product.subCategories.slice(0, 2).join(' ');
-  const rawTitle = `DIY ${productTitleClean} ${product.category} ${subcategoryPart} Pattern`;
+  const rawTitle = `DIY ${generateTitle({
+    title: productTitleClean,
+    category: product.category,
+  })} ${subcategoryPart} Pattern`;
   const title =
     rawTitle.length > MAX_TITLE ? rawTitle.slice(0, MAX_TITLE - 1).trim() + '…' : rawTitle;
 
-  // Description from title + description
   const coreDescriptionSentences = [
     `Learn how to crochet your own ${productTitleClean.toLowerCase()}.`,
     `Perfect for ${product.subCategories.slice(0, 5).join(', ')}.`,
   ];
 
-  // Prepare hashtags
   const uniqueHashtags = Array.from(
     new Set(product.hashtags.map((tag) => `#${tag.toLowerCase()}`)),
   ).slice(0, 10);
