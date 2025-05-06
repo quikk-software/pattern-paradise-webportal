@@ -34,7 +34,7 @@ export function updateSelectedFlags(
   });
 }
 
-export function generateTitle(product: { title: string; category: string }): string {
+export function generateTitle(product: { title: string; category?: string }): string {
   const normalizeWord = (word: string) =>
     word
       .toLowerCase()
@@ -44,7 +44,9 @@ export function generateTitle(product: { title: string; category: string }): str
   const seen = new Set<string>();
   const resultWords: string[] = [];
 
-  const allWords = `${product.title} ${product.category}`.split(/\s+/).filter(Boolean);
+  const allWords = `${product.title}${product?.category ? ` ${product.category}` : ''}`
+    .split(/\s+/)
+    .filter(Boolean);
 
   for (const word of allWords) {
     const key = normalizeWord(word);
