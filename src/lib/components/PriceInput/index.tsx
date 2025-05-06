@@ -9,17 +9,33 @@ interface PriceInputProps {
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   control: any;
   name: string;
+  getValues: () => any;
+  overrideRequired?: boolean;
 }
 
-export default function PriceInput({ handleKeyDown, isFree, control, name }: PriceInputProps) {
+export default function PriceInput({
+  handleKeyDown,
+  isFree,
+  control,
+  name,
+  getValues,
+  overrideRequired = true,
+}: PriceInputProps) {
   return (
     <Controller
       name={name}
       control={control}
       rules={{
-        required: !isFree ? 'Price is required' : false,
+        required: !overrideRequired
+          ? false
+          : !isFree && overrideRequired
+            ? 'Price is required'
+            : false,
         validate: (value: any) => {
-          if (isFree) return true;
+          console.log({ name, t: isFree || !overrideRequired });
+          if (isFree || !overrideRequired) {
+            return true;
+          }
           const normalizedValue = parseFloat(value?.replace(',', '.'));
           if (isNaN(normalizedValue)) {
             return 'Please enter a valid number';
@@ -30,6 +46,14 @@ export default function PriceInput({ handleKeyDown, isFree, control, name }: Pri
           if (normalizedValue > MAX_PRICE) {
             return `Price must be at most ${MAX_PRICE.toFixed(2)}$`;
           }
+
+          if (name === 'salePrice') {
+            const priceValue = parseFloat(getValues()?.price);
+            if (!isNaN(priceValue) && normalizedValue >= priceValue) {
+              return 'Sale price must be less than the regular price';
+            }
+          }
+
           return true;
         },
       }}

@@ -198,6 +198,8 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                         creatorId={testing.creatorId}
                         category={testing.product.category}
                         subCategories={testing.product.subCategories}
+                        salePrice={testing.product.salePrice}
+                        salePriceDueDate={testing.product.salePriceDueDate}
                       />
                     </div>
                   </CardContent>

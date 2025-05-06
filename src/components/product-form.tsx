@@ -41,6 +41,8 @@ import UploadFeedback from '@/components/upload-feedback';
 import { useRouter } from 'next/navigation';
 import CardRadioGroup from '@/components/card-radio-group';
 import logger from '@/lib/core/logger';
+import { DatePicker } from '@/components/date-picker';
+import dayjs from '@/lib/core/dayjs';
 
 const LOCAL_STORAGE_KEY = 'productFormData';
 
@@ -66,6 +68,7 @@ export function ProductFormComponent() {
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
+  const [salePriceDueDate, setSalePriceDueDate] = useState<Date | undefined>(undefined);
   const [isMystery, setIsMystery] = useState<string | null>('yes');
   const [showResetDrawer, setShowResetDrawer] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<
@@ -103,11 +106,13 @@ export function ProductFormComponent() {
     watch,
     reset,
     control,
+    getValues,
   } = useForm({
     defaultValues: {
       title: '',
       description: '',
       price: '',
+      salePrice: '',
       experienceLevel: ExperienceLevels.Intermediate,
     },
   });
@@ -115,6 +120,7 @@ export function ProductFormComponent() {
   const router = useRouter();
 
   const watchedValues = watch();
+  // force refresh
   const watchedExperience = watch('experienceLevel');
 
   const hasErrors =
@@ -371,6 +377,11 @@ export function ProductFormComponent() {
       formData.append('experience', data.experienceLevel);
       formData.append('category', category.craft);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
+      formData.append(
+        'salePrice',
+        String(isFree ? '' : parseFloat(data.salePrice.replace(',', '.'))),
+      );
+      formData.append('salePriceDueDate', String(isFree ? '' : salePriceDueDate));
       formData.append('isFree', isFree ? 'true' : 'false');
       formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 
@@ -542,21 +553,6 @@ export function ProductFormComponent() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Price (in $) <span className="text-red-500">*</span>
-            </Label>
-            <PriceInput
-              isFree={isFree}
-              handleKeyDown={handleKeyDown}
-              name="price"
-              control={control}
-            />
-            {errors.price ? (
-              <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
-            ) : null}
-          </div>
-
           <div className="flex gap-1">
             <Checkbox
               id="isfree-checkbox"
@@ -566,6 +562,54 @@ export function ProductFormComponent() {
             <Label htmlFor="isfree-checkbox" className="block text-sm">
               Offer this pattern free of charge
             </Label>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
+              Price (in $) <span className="text-red-500">*</span>
+            </Label>
+            <PriceInput
+              isFree={isFree}
+              handleKeyDown={handleKeyDown}
+              name="price"
+              control={control}
+              getValues={getValues}
+            />
+            {errors.price ? (
+              <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
+            ) : null}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
+              Sale Price (in $)
+            </Label>
+            <PriceInput
+              isFree={isFree}
+              handleKeyDown={handleKeyDown}
+              name="salePrice"
+              control={control}
+              getValues={getValues}
+              overrideRequired={false}
+            />
+            {errors.salePrice ? (
+              <p className="text-sm text-red-500 mb-2">{errors.salePrice.message as string}</p>
+            ) : null}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
+              Sale Due Date
+            </Label>
+            <DatePicker
+              date={salePriceDueDate}
+              setDate={setSalePriceDueDate}
+              min={dayjs().add(1, 'days').toDate()}
+              disabled={isFree}
+            />
+            <p className="text-secondary-foreground text-sm">
+              Leave this blank if the sale price should not expire
+            </p>
           </div>
         </div>
 

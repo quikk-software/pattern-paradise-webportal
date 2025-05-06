@@ -237,6 +237,8 @@ export function SellPageComponent() {
                         isProductView={true}
                         category={product.category}
                         subCategories={product.subCategories}
+                        salePrice={product.salePrice}
+                        salePriceDueDate={product.salePriceDueDate}
                       />
                     </CardContent>
                   </Card>

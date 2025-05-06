@@ -393,6 +393,12 @@ export interface GetProductResponse {
   description: string;
   category: string;
   price: number;
+  salePrice: number;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  salePriceDueDate?: string;
   isFree: boolean;
   isMystery: boolean;
   experience: string;
@@ -2055,6 +2061,10 @@ export class Api<
         category: string;
         /** The price of the product. */
         price: number;
+        /** The sale price of the product. */
+        salePrice?: number;
+        /** The due date of the sale price. */
+        salePriceDueDate?: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
         /** Indicates if the product is enrolled for mystery boxes. */
@@ -2169,6 +2179,10 @@ export class Api<
         category: string;
         /** The price of the product. */
         price: number;
+        /** The sale price of the product. */
+        salePrice?: number;
+        /** The due date of the sale price. */
+        salePriceDueDate?: number;
         /** Indicates if the product is free (true/false). */
         isFree: string;
         /** Indicates if the product is enrolled for mystery boxes. */

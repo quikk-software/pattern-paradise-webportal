@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { Store } from '@/lib/redux/store';
-import { Trash } from 'lucide-react';
+import type { Store } from '@/lib/redux/store';
+import { Clock, Percent, Trash } from 'lucide-react';
 import { useDeleteProduct } from '@/lib/api';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
+import { Badge } from '@/components/ui/badge';
 
 interface ProductCardProps {
   id: string;
@@ -25,6 +26,8 @@ interface ProductCardProps {
   unavailable?: boolean;
   isTesterCall?: boolean;
   isProductView?: boolean;
+  salePrice?: number;
+  salePriceDueDate?: string;
 }
 
 export default function ProductCard({
@@ -40,14 +43,58 @@ export default function ProductCard({
   unavailable = false,
   isTesterCall = false,
   isProductView = false,
+  salePrice,
+  salePriceDueDate,
 }: ProductCardProps) {
   const [isReleaseProductDrawerOpen, setIsReleaseProductDrawerOpen] = useState(false);
   const [isDeleteProductDrawerOpen, setIsDeleteProductDrawerOpen] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<string>('');
 
   const { userId } = useSelector((s: Store) => s.auth);
   const { fetch: deleteProduct, isLoading: deleteProductIsLoading } = useDeleteProduct();
 
   const isCreator = userId === creatorId;
+  const isDueDateActive =
+    salePrice !== undefined &&
+    salePriceDueDate !== undefined &&
+    new Date(salePriceDueDate) > new Date();
+  const isSaleActive =
+    (salePrice !== undefined && salePriceDueDate === undefined) || isDueDateActive;
+
+  const discountPercentage = isSaleActive ? Math.round(((price - salePrice!) / price) * 100) : 0;
+
+  useEffect(() => {
+    if (!salePriceDueDate) return;
+
+    const calculateTimeRemaining = () => {
+      const now = new Date();
+      const dueDate = new Date(salePriceDueDate);
+
+      if (dueDate <= now) {
+        setTimeRemaining('Sale ended');
+        return;
+      }
+
+      const diffMs = dueDate.getTime() - now.getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+      if (diffDays > 0) {
+        setTimeRemaining(`${diffDays}d ${diffHrs}h left`);
+      } else if (diffHrs > 0) {
+        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeRemaining(`${diffHrs}h ${diffMins}m left`);
+      } else {
+        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeRemaining(`${diffMins}m left`);
+      }
+    };
+
+    calculateTimeRemaining();
+    const timer = setInterval(calculateTimeRemaining, 60000); // Update every minute
+
+    return () => clearInterval(timer);
+  }, [salePriceDueDate]);
 
   const handleDeleteProductClick = async (productId: string) => {
     await deleteProduct(productId);
@@ -58,7 +105,17 @@ export default function ProductCard({
   };
 
   return (
-    <Card key={id} className="flex flex-col">
+    <Card key={id} className="flex flex-col relative">
+      {isSaleActive && (
+        <div className="absolute -right-2 -top-2 z-10">
+          <div className="relative">
+            <Badge className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 text-sm font-bold shadow-lg">
+              SALE {discountPercentage}% OFF
+            </Badge>
+          </div>
+        </div>
+      )}
+
       <CardHeader>
         <ProductImageSlider
           imageUrls={imageUrls}
@@ -70,28 +127,48 @@ export default function ProductCard({
       <CardContent className="flex-grow">
         <CardTitle>{name}</CardTitle>
       </CardContent>
-      <CardFooter
-        className="w-full flex items-center justify-between"
-        style={{
-          // TODO: Check why class is not working
-          justifyContent: 'space-between',
-        }}
-      >
-        {isFree ? (
-          <span className="text-lg font-bold">FOR FREE</span>
-        ) : (
-          <span className="text-lg font-bold">${price.toFixed(2)}</span>
-        )}
-        {isTesterCall ? (
-          <Link rel={'nofollow'} href={`/app/tester-calls/${id}`}>
-            <Button>Show tester call</Button>
-          </Link>
-        ) : (
-          <Link href={`/app/products/${id}`}>
-            <Button>Show details</Button>
-          </Link>
+      <CardFooter className="w-full flex flex-col gap-2">
+        <div className="w-full flex items-center justify-between">
+          {isFree ? (
+            <span className="text-lg font-bold">FOR FREE</span>
+          ) : isSaleActive ? (
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-red-500">${salePrice!.toFixed(2)}</span>
+                <span className="text-sm line-through text-gray-500">${price.toFixed(2)}</span>
+              </div>
+              {isDueDateActive ? (
+                <div className="flex items-center text-xs text-gray-500 mt-1">
+                  <Clock className="w-3 h-3 mr-1" />
+                  <span>{timeRemaining}</span>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <span className="text-lg font-bold">${price.toFixed(2)}</span>
+          )}
+
+          {isTesterCall ? (
+            <Link rel={'nofollow'} href={`/app/tester-calls/${id}`}>
+              <Button>Show tester call</Button>
+            </Link>
+          ) : (
+            <Link href={`/app/products/${id}`}>
+              <Button>Show details</Button>
+            </Link>
+          )}
+        </div>
+
+        {isDueDateActive && (
+          <div className="w-full mt-1 bg-red-50 dark:bg-red-950/20 rounded-md p-2 flex items-center justify-center">
+            <Percent className="w-4 h-4 text-red-500 mr-1" />
+            <span className="text-sm text-red-600 dark:text-red-400 font-medium">
+              Saves ${(price - salePrice!).toFixed(2)}
+            </span>
+          </div>
         )}
       </CardFooter>
+
       {isProductView && isCreator && !unavailable ? (
         <>
           <CardFooter className="w-full flex flex-col gap-6">
