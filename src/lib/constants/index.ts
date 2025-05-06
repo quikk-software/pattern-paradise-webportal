@@ -1289,6 +1289,7 @@ export type ProductFilterObject = {
   languages?: string[];
   minPrice?: number;
   maxPrice?: number;
+  sale?: boolean;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;

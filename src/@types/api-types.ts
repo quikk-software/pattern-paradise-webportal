@@ -2117,6 +2117,8 @@ export class Api<
         minPrice?: number;
         /** The maximum price of a product to filter. */
         maxPrice?: number;
+        /** Filter for sales products. */
+        sale?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -2323,6 +2325,8 @@ export class Api<
         minPrice?: number;
         /** The maximum price of a product to filter. */
         maxPrice?: number;
+        /** Filter for sales products. */
+        sale?: boolean;
       },
       params: RequestParams = {},
     ) =>

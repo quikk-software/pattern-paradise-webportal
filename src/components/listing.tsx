@@ -9,6 +9,7 @@ import {
   CalendarArrowDown,
   CalendarArrowUp,
   CircleX,
+  PercentIcon,
   Search,
   SlidersHorizontal,
   Star,
@@ -108,6 +109,7 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
       languages: language ? [language] : [],
       pageNumber: 1,
       pageSize: 20,
+      sale: sortValue === 'sale',
       sortBy: sortValue,
     }).then(() => {
       setTriggerLoad(false);
@@ -304,7 +306,12 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
           <SelectContent>
             <SelectItem value="mostRelevant">
               <span className="flex flex-row gap-2 items-center">
-                <Star size={14} /> Most Relevant{' '}
+                <Star size={14} /> Most Relevant
+              </span>
+            </SelectItem>
+            <SelectItem value="sale">
+              <span className="flex flex-row gap-2 items-center">
+                <PercentIcon size={14} /> Sale Only
               </span>
             </SelectItem>
             <SelectItem value="priceAscending">
