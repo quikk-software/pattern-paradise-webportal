@@ -21,6 +21,7 @@ import { Store } from '@/lib/redux/store';
 import CountrySelect from '@/lib/components/CountrySelect';
 import { isIOSMode } from '@/lib/core/utils';
 import { RedirectBrowserDrawer } from '@/lib/components/RedirectBrowserDrawer';
+import { PriceSaleBadge } from '@/lib/components/PriceSaleBadge';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -116,8 +117,24 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
     );
   }
 
+  const isDueDateActive =
+    product.salePrice !== undefined &&
+    product.salePriceDueDate !== undefined &&
+    new Date(product.salePriceDueDate) > new Date();
+  const isSaleActive =
+    (product.salePrice !== undefined && product.salePriceDueDate === undefined) || isDueDateActive;
+
+  const productPrice = isSaleActive ? product.salePrice : product.price;
+
   return (
     <div className="flex flex-col gap-4">
+      {isDueDateActive ? (
+        <PriceSaleBadge
+          originalPrice={product.price}
+          salePrice={product.salePrice}
+          saleDueDate={product.salePriceDueDate}
+        />
+      ) : null}
       {!customPriceDisabled ? (
         <div className="space-y-1">
           <Label htmlFor="custom-price">
@@ -127,7 +144,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
             id="price"
             type="text"
             required={false}
-            placeholder={`$${product.price.toFixed(2)} or more`}
+            placeholder={`$${productPrice.toFixed(2)} or more`}
             decimalsLimit={2}
             decimalScale={2}
             allowNegativeValue={false}
@@ -135,8 +152,8 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
             onValueChange={(value) => {
               const updatedValue = Number(value?.replace(',', '.'));
               handleCustomPriceChange(
-                !!value && !isNaN(updatedValue) ? updatedValue : product.price,
-                product.price,
+                !!value && !isNaN(updatedValue) ? updatedValue : productPrice,
+                productPrice,
               );
             }}
             className={cn(

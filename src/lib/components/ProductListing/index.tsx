@@ -21,6 +21,8 @@ export default function ProductListing({ products }: { products: GetProductRespo
             creatorId={product.creatorId}
             category={product.category}
             subCategories={product.subCategories}
+            salePrice={product.salePrice}
+            salePriceDueDate={product.salePriceDueDate}
           />
         ))}
       </div>

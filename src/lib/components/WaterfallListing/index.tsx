@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import { GetProductResponse } from '@/@types/api-types';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Clock, Percent } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface WaterfallListingProps {
   products: GetProductResponse[];
@@ -13,6 +14,48 @@ interface WaterfallListingProps {
   onImpression?: (productId: string) => Promise<void>;
   showFade?: boolean;
 }
+
+const SaleCountdown = ({ dueDate }: { dueDate: string }) => {
+  const [timeRemaining, setTimeRemaining] = useState<string>('');
+
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const now = new Date();
+      const saleEndDate = new Date(dueDate);
+
+      if (saleEndDate <= now) {
+        setTimeRemaining('Sale ended');
+        return;
+      }
+
+      const diffMs = saleEndDate.getTime() - now.getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+      if (diffDays > 0) {
+        setTimeRemaining(`${diffDays}d ${diffHrs}h left`);
+      } else if (diffHrs > 0) {
+        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeRemaining(`${diffHrs}h ${diffMins}m left`);
+      } else {
+        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeRemaining(`${diffMins}m left`);
+      }
+    };
+
+    calculateTimeRemaining();
+    const timer = setInterval(calculateTimeRemaining, 60000); // Update every minute
+
+    return () => clearInterval(timer);
+  }, [dueDate]);
+
+  return (
+    <div className="flex items-center justify-end text-xs text-gray-500">
+      <Clock className="w-3 h-3 mr-1" />
+      <span className="text-right">{timeRemaining}</span>
+    </div>
+  );
+};
 
 export default function WaterfallListing({
   products,
@@ -77,53 +120,86 @@ export default function WaterfallListing({
               key={groupIndex}
               style={{ flexBasis: `calc(100% / ${columns})`, flexGrow: 0 }}
             >
-              {group.map((product, index) => (
-                <Link
-                  key={product.id}
-                  rel="nofollow"
-                  href={`${
-                    listingType === 'sell'
-                      ? '/app/products'
-                      : listingType === 'test' && '/app/tester-calls'
-                  }/${product.id}`}
-                  className="w-full"
-                >
-                  <Card
-                    ref={(el) => {
-                      if (el) productRefs.current[index] = el;
-                    }}
-                    data-product-id={product.id}
-                    className="flex flex-col justify-between w-full"
+              {group.map((product, index) => {
+                const isDueDateActive =
+                  product.salePrice !== undefined &&
+                  product.salePriceDueDate !== undefined &&
+                  new Date(product.salePriceDueDate) > new Date();
+                const isSaleActive =
+                  (product.salePrice !== undefined && product.salePriceDueDate === undefined) ||
+                  isDueDateActive;
+
+                return (
+                  <Link
+                    key={product.id}
+                    rel="nofollow"
+                    href={`${
+                      listingType === 'sell'
+                        ? '/app/products'
+                        : listingType === 'test' && '/app/tester-calls'
+                    }/${product.id}`}
+                    className="w-full"
                   >
-                    <CardContent className="pt-4 flex flex-col gap-4">
-                      <ProductImageSlider
-                        imageUrls={product.imageUrls}
-                        title={product.title}
-                        category={product.category}
-                        subCategories={product.subCategories}
-                      />
-                      <div className="flex flex-col gap-1">
-                        <h3 className="font-semibold md:text-lg lg:text-xl">{product.title}</h3>
-                        <p className="text-sm text-muted-foreground md:text-base lg:text-lg">
-                          {product.category}
-                        </p>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-between">
-                      {product.isFree ? (
-                        <span className="font-bold text-sm md:text-base lg:text-lg">FOR FREE</span>
-                      ) : (
-                        <span className="font-bold text-sm md:text-base lg:text-lg">
-                          ${product.price.toFixed(2)}
-                        </span>
-                      )}
-                      <span className="underline text-right text-xs md:text-base lg:text-lg">
-                        Details
-                      </span>
-                    </CardFooter>
-                  </Card>
-                </Link>
-              ))}
+                    <Card
+                      ref={(el) => {
+                        if (el) productRefs.current[index] = el;
+                      }}
+                      data-product-id={product.id}
+                      className="flex flex-col justify-between w-full"
+                    >
+                      <CardContent className="pt-4 flex flex-col gap-4">
+                        <ProductImageSlider
+                          imageUrls={product.imageUrls}
+                          title={product.title}
+                          category={product.category}
+                          subCategories={product.subCategories}
+                        />
+                        <div className="flex flex-col gap-1">
+                          <h3 className="font-semibold md:text-lg lg:text-xl">{product.title}</h3>
+                          <p className="text-sm text-muted-foreground md:text-base lg:text-lg">
+                            {product.category}
+                          </p>
+                        </div>
+                      </CardContent>
+                      <CardFooter className="flex flex-col gap-1">
+                        <div className="flex justify-end items-end w-full">
+                          {product.isFree ? (
+                            <span className="font-bold text-right text-sm md:text-base lg:text-lg">
+                              FOR FREE
+                            </span>
+                          ) : isSaleActive ? (
+                            <div className="flex flex-col items-end">
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-bold text-sm md:text-base lg:text-lg text-red-600 text-right">
+                                  ${product.salePrice!.toFixed(2)}
+                                </span>
+                                <span className="text-xs md:text-sm line-through text-gray-500 text-right">
+                                  ${product.price.toFixed(2)}
+                                </span>
+                              </div>
+                              {product.salePriceDueDate && (
+                                <SaleCountdown dueDate={product.salePriceDueDate} />
+                              )}
+                            </div>
+                          ) : (
+                            <span className="font-bold text-right text-sm md:text-base lg:text-lg">
+                              ${product.price.toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                        {isSaleActive && (
+                          <div className="w-full mb-2 bg-red-50 dark:bg-red-950/20 rounded-md p-1.5 flex items-center justify-center">
+                            <Percent className="w-3 h-3 text-red-500 mr-1" />
+                            <span className="text-xs text-red-600 dark:text-red-400 font-medium">
+                              Save ${(product.price - product.salePrice!).toFixed(2)}
+                            </span>
+                          </div>
+                        )}
+                      </CardFooter>
+                    </Card>
+                  </Link>
+                );
+              })}
             </div>
           ))}
         </div>
