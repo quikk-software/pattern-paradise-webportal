@@ -70,7 +70,7 @@ export default function PatternCard({ pattern }: PatternCardProps) {
           <Link href={`/app/secure/auth/me/orders/${pattern.orderId}`} rel={'nofollow'}>
             <CldImage
               key={imageSrc}
-              alt={pattern.productTitle}
+              alt={`${pattern.productTitle} on Pattern Paradise`}
               src={imageSrc}
               width={100}
               height={100}

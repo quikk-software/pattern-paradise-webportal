@@ -34,7 +34,7 @@ export default function AnimatedHeroHeading() {
           </AnimatePresence>
         </span>{' '}
       </span>
-      <span className="block text-primary">Pattern Paradise</span>
+      <b className="block text-primary">Pattern Paradise</b>
     </h1>
   );
 }

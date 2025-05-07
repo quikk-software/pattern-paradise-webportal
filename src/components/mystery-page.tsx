@@ -27,7 +27,7 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
         <CardContent className="p-6">
           <div className="grid lg:grid-cols-2 gap-4">
             <Image
-              alt={`${category} Mystery Pattern`}
+              alt={`${category} Mystery Pattern on Pattern Paradise`}
               src={`/assets/mystery-pattern_v2.jpeg`}
               width={400}
               height={400}

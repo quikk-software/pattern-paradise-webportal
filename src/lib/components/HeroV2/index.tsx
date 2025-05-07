@@ -124,7 +124,7 @@ export default function HeroV2({ products }: HeroV2Props) {
                   <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm">
                     <div className="aspect-square overflow-hidden rounded-md">
                       <CldImage
-                        alt={`${product.category} Pattern '${product.title}'`}
+                        alt={`${product.category} Pattern '${product.title}' on Pattern Paradise`}
                         src={product.imageUrls?.at(0) ?? ''}
                         width={200}
                         height={200}
