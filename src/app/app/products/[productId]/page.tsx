@@ -81,13 +81,16 @@ export default async function ProductDetailPage({ params }: { params: { productI
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: product?.title,
-    image: product?.imageUrls,
+    image: product?.imageUrls?.at(0),
     description: product?.description,
     sku: params.productId,
     brand: {
       '@type': 'Brand',
       name: 'Pattern Paradise',
     },
+    color: 'Multicolor',
+    gender: 'unisex',
+    ageGroup: 'adult',
     offers: {
       '@type': 'Offer',
       url: `${APP_DOMAIN}/app/products/${params.productId}`,
@@ -95,7 +98,43 @@ export default async function ProductDetailPage({ params }: { params: { productI
       price: product?.price ?? '0.00',
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
+      shippingDetails: [
+        {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '0.00',
+            currency: 'USD',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'US',
+          },
+        },
+        {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '0.00',
+            currency: 'EUR',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'DE',
+          },
+        },
+      ],
     },
+    isAccessibleForFree: String(product?.isFree) === 'true',
+    audience: [
+      { '@type': 'Audience', audienceType: 'crocheters' },
+      { '@type': 'Audience', audienceType: 'knitters' },
+      { '@type': 'Audience', audienceType: 'cross stitchers' },
+      { '@type': 'Audience', audienceType: 'sewists' },
+      { '@type': 'Audience', audienceType: 'embroiderers' },
+      { '@type': 'Audience', audienceType: 'quilters' },
+      { '@type': 'Audience', audienceType: 'weavers' },
+    ],
   };
 
   return (
