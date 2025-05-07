@@ -91,6 +91,8 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Pattern Paradise" />
 
+        <meta name="og:logo" content={`${APP_DOMAIN}/favicons/apple-icon-precomposed.png`} />
+
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
