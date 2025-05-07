@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
+import { APP_DOMAIN } from '@/lib/constants';
 import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
 import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
@@ -22,58 +21,6 @@ const geistMono = localFont({
   weight: '100 900',
 });
 
-export const metadata: Metadata = {
-  title: APP_NAME,
-  description: APP_DESCRIPTION,
-  applicationName: APP_TITLE,
-  appleWebApp: {
-    capable: true,
-    title: APP_NAME,
-    statusBarStyle: 'black-translucent',
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  icons: {
-    icon: '/favicons/favicon.ico?v=3',
-    shortcut: '/favicon.ico?v=3',
-    apple: '/icons/ios/512.png',
-    other: [
-      { rel: 'apple-touch-icon', url: '/favicons/apple-icon-152x152.png', sizes: '152x152' },
-      { rel: 'apple-touch-icon', url: '/favicons/apple-icon-180x180.png', sizes: '180x180' },
-      { rel: 'manifest', url: '/manifest.webmanifest' },
-    ],
-  },
-  openGraph: {
-    type: 'website',
-    title: APP_NAME,
-    description: APP_DESCRIPTION,
-    url: APP_DOMAIN,
-    siteName: APP_NAME,
-    images: [
-      {
-        url: `${APP_DOMAIN}/favicons/apple-icon-precomposed.png`,
-        width: 1200,
-        height: 1200,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary',
-    title: APP_NAME,
-    description: APP_DESCRIPTION,
-    images: [`${APP_DOMAIN}/favicons/android-icon-192x192.png`],
-    creator: '@patternparadis3',
-  },
-  manifest: '/manifest.webmanifest',
-  other: {
-    'mobile-web-app-capable': 'yes',
-    'msapplication-config': '/favicons/browserconfig.xml',
-    'msapplication-TileColor': THEME_COLOR,
-    'msapplication-tap-highlight': 'no',
-  },
-};
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -90,6 +37,8 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Pattern Paradise" />
+
+        <meta name="og:logo" content={`${APP_DOMAIN}/favicons/apple-icon-precomposed.png`} />
 
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />

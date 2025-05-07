@@ -3,7 +3,7 @@ import UserAccountComponent from '@/components/user-account';
 import NotFoundPage from '@/app/not-found';
 import { Metadata } from 'next';
 import { getUserById } from '@/lib/api/static/user/getUserById';
-import { APP_DOMAIN } from '@/lib/constants';
+import { APP_DOMAIN, APP_TITLE, THEME_COLOR } from '@/lib/constants';
 
 type Props = {
   params: Promise<{ userId: string }>;
@@ -25,10 +25,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    applicationName: APP_TITLE,
+    appleWebApp: {
+      title,
+      capable: true,
+      statusBarStyle: 'black-translucent',
+    },
+    formatDetection: {
+      telephone: false,
+    },
+    icons: {
+      icon: '/favicons/favicon.ico?v=3',
+      shortcut: '/favicon.ico?v=3',
+      apple: '/icons/ios/512.png',
+      other: [
+        { rel: 'apple-touch-icon', url: '/favicons/apple-icon-152x152.png', sizes: '152x152' },
+        { rel: 'apple-touch-icon', url: '/favicons/apple-icon-180x180.png', sizes: '180x180' },
+        { rel: 'manifest', url: '/manifest.webmanifest' },
+      ],
+    },
     openGraph: {
       title,
       description,
       type: 'profile',
+      siteName: title,
       images: [
         {
           url: imageUrl,
@@ -51,6 +71,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           alt: `${userName}'s profile image`,
         },
       ],
+    },
+    manifest: '/manifest.webmanifest',
+    other: {
+      'mobile-web-app-capable': 'yes',
+      'msapplication-config': '/favicons/browserconfig.xml',
+      'msapplication-TileColor': THEME_COLOR,
+      'msapplication-tap-highlight': 'no',
     },
     alternates: {
       canonical: `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/users/${userId}`,
