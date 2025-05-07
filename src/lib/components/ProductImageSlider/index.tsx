@@ -48,7 +48,7 @@ export default function ProductImageSlider({
                   {group.map((src) => (
                     <CldImage
                       key={src}
-                      alt={`${title} in ${category}${subCategories?.length ? ` – styles: ${subCategories.join(', ')}` : ''}`}
+                      alt={`${title} in ${category}${subCategories?.length ? ` – styles: ${subCategories.join(', ')}` : ''} on Pattern Paradise`}
                       src={src}
                       width={grids > 1 ? 200 / grids : 400}
                       height={grids > 1 ? 200 : 400}

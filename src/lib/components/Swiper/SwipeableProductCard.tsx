@@ -72,7 +72,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="w-full relative flex-1 overflow-hidden">
         <img
           src={product.imageUrls?.at(0) || ''}
-          alt={product.title}
+          alt={`${product.title} on Pattern Paradise`}
           style={{
             objectFit: 'contain',
           }}

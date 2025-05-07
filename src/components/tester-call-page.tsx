@@ -298,7 +298,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
                 <div className={`flex flex-col items-center`}>
                   <CldImage
                     key={src}
-                    alt={`Tester Call for ${product.title} in ${product.category}${product.subCategories?.length ? ` – styles: ${product.subCategories.join(', ')}` : ''}`}
+                    alt={`Tester Call for ${product.title} in ${product.category}${product.subCategories?.length ? ` – styles: ${product.subCategories.join(', ')}` : ''} on Pattern Paradise`}
                     src={src}
                     width={400}
                     height={400}
