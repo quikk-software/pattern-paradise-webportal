@@ -4,7 +4,7 @@ import { APP_TITLE, THEME_COLOR } from '@/lib/constants';
 
 const APP_NAME = 'My Awesome App';
 const APP_DESCRIPTION = 'Default description for My Awesome App';
-const APP_DOMAIN = 'https://myawesomeapp.com';
+const APP_DOMAIN = 'https://pattern-paradise.shop';
 
 export function generatePageMetadata(pathname: string): Metadata {
   const page = pages.find((page) => page.pathname === pathname);
