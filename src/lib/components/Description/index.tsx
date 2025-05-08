@@ -14,7 +14,6 @@ export default function Description({ description, theme = 'amber' }: Descriptio
   return (
     <div className="mt-4 w-full bg-white rounded-lg border border-muted bg-muted/10 p-3 transition-all duration-300 group-hover/link:border-muted/50">
       <div className="flex items-center gap-2 mb-1.5">
-        <div className={`h-1 w-1 rounded-full ${THEME_BG_CLASSES[theme]}`}></div>
         <h3 className="text-sm font-semibold text-foreground">About Me</h3>
       </div>
       <div className="relative pl-3">
