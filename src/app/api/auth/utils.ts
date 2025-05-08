@@ -40,6 +40,7 @@ export async function refreshAccessToken(token: any) {
       sub: decodedToken?.refId,
       roles: decodedToken?.resource_access?.[process.env.KEYCLOAK_CLIENT_ID || '']?.roles || [],
       subscriptionStatus: user?.paypalSubscriptionStatus,
+      theme: user?.theme,
       accessToken: refreshedTokens.access_token,
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
       expiresAt: decodedToken.exp! * 1000,

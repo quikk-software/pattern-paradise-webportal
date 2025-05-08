@@ -28,10 +28,115 @@ const theme = {
     border: 'hsl(var(--border))',
     input: 'hsl(var(--input))',
     ring: 'hsl(var(--ring))',
+    slate: {
+      200: '#e2e8f0',
+      500: '#64748b',
+      800: '#1e293b',
+    },
+    gray: {
+      200: '#e5e7eb',
+      500: '#6b7280',
+      800: '#1f2937',
+    },
+    zinc: {
+      200: '#e4e4e7',
+      500: '#71717a',
+      800: '#27272a',
+    },
+    neutral: {
+      200: '#e5e5e5',
+      500: '#737373',
+      800: '#262626',
+    },
+    stone: {
+      200: '#e7e5e4',
+      500: '#78716c',
+      800: '#292524',
+    },
+    red: {
+      200: '#fecaca',
+      500: '#ef4444',
+      800: '#991b1b',
+    },
+    orange: {
+      200: '#fed7aa',
+      500: '#f97316',
+      800: '#9a3412',
+    },
     amber: {
       200: '#fde68a',
       500: '#f59e0b',
       800: '#92400e',
+    },
+    yellow: {
+      200: '#fef08a',
+      500: '#eab308',
+      800: '#78350f',
+    },
+    lime: {
+      200: '#d9f99d',
+      500: '#84cc16',
+      800: '#3f6212',
+    },
+    green: {
+      200: '#bbf7d0',
+      500: '#22c55e',
+      800: '#166534',
+    },
+    emerald: {
+      200: '#a7f3d0',
+      500: '#10b981',
+      800: '#065f46',
+    },
+    teal: {
+      200: '#99f6e4',
+      500: '#14b8a6',
+      800: '#115e59',
+    },
+    cyan: {
+      200: '#a5f3fc',
+      500: '#06b6d4',
+      800: '#155e75',
+    },
+    sky: {
+      200: '#bae6fd',
+      500: '#0ea5e9',
+      800: '#075985',
+    },
+    blue: {
+      200: '#bfdbfe',
+      500: '#3b82f6',
+      800: '#1e40af',
+    },
+    indigo: {
+      200: '#c7d2fe',
+      500: '#6366f1',
+      800: '#3730a3',
+    },
+    violet: {
+      200: '#ddd6fe',
+      500: '#8b5cf6',
+      800: '#5b21b6',
+    },
+    purple: {
+      200: '#e9d5ff',
+      500: '#a855f7',
+      800: '#6b21a8',
+    },
+    fuchsia: {
+      200: '#f5d0fe',
+      500: '#d946ef',
+      800: '#701a75',
+    },
+    pink: {
+      200: '#fbcfe8',
+      500: '#ec4899',
+      800: '#831843',
+    },
+    rose: {
+      200: '#fecdd3',
+      500: '#f43f5e',
+      800: '#881337',
     },
   },
 };
@@ -44,6 +149,7 @@ export default function HeroV2({ products }: HeroV2Props) {
   const { status, data: session } = useValidSession();
 
   const isLoggedIn = status === 'authenticated';
+  const themeColor = session?.user.theme ?? 'amber';
 
   return (
     <section
@@ -109,7 +215,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               style={{
                 position: 'absolute',
                 inset: '0',
-                background: `linear-gradient(to bottom right, ${theme.colors.amber[200]}, ${theme.colors.background})`,
+                background: `linear-gradient(to bottom right, ${(theme.colors as any)[themeColor][200]}, ${theme.colors.background})`,
                 opacity: 0.8,
               }}
               className="shadow-lg rounded-lg"
@@ -144,7 +250,7 @@ export default function HeroV2({ products }: HeroV2Props) {
                   height: '6rem',
                   width: '6rem',
                   borderRadius: '9999px',
-                  backgroundColor: theme.colors.amber[500],
+                  backgroundColor: (theme.colors as any)[themeColor][500],
                   opacity: 0.7,
                 }}
               />
@@ -156,7 +262,7 @@ export default function HeroV2({ products }: HeroV2Props) {
                   height: '5rem',
                   width: '5rem',
                   borderRadius: '9999px',
-                  backgroundColor: theme.colors.amber[500],
+                  backgroundColor: (theme.colors as any)[themeColor][500],
                   opacity: 0.5,
                 }}
               />
@@ -229,7 +335,7 @@ export default function HeroV2({ products }: HeroV2Props) {
           height: '16rem',
           width: '16rem',
           borderRadius: '9999px',
-          backgroundColor: theme.colors.amber[200],
+          backgroundColor: (theme.colors as any)[themeColor][200],
           opacity: 0.5,
         }}
       />
@@ -241,7 +347,7 @@ export default function HeroV2({ products }: HeroV2Props) {
           height: '10rem',
           width: '10rem',
           borderRadius: '9999px',
-          backgroundColor: theme.colors.amber[200],
+          backgroundColor: (theme.colors as any)[themeColor][200],
           opacity: 0.3,
         }}
       />
