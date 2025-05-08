@@ -1,7 +1,7 @@
 'use client';
 
 import { PropsWithChildren, useEffect, useState } from 'react';
-import PaymentProviderReminder from '../../lib/components/PaymentProviderReminder';
+import PaymentProviderReminder from '../components/PaymentProviderReminder';
 import { useGetUser } from '@/lib/api';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';

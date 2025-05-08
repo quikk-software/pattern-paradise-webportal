@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import UserDetailsCard from '@/lib/components/UserDetailsCard';
 import { GetUserAccountResponse } from '@/@types/api-types';
+import UserDetailsCardLight from '@/lib/components/UserDetailsCardLight';
+import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
 
 interface ProfilePreviewDrawerProps {
   isOpen: boolean;
@@ -27,7 +29,12 @@ export function ProfilePreviewDrawer({ isOpen, onClose, user }: ProfilePreviewDr
         </DrawerHeader>
 
         <div className="pb-6 w-full">
-          <UserDetailsCard user={user} showFlag={false} showRoles={false} hasProducts={false} />
+          <UserDetailsCardWrapper
+            user={user}
+            showFlag={false}
+            showRoles={false}
+            hasProducts={false}
+          />
         </div>
       </DrawerContent>
     </Drawer>

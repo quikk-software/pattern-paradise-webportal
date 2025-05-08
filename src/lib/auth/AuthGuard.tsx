@@ -14,7 +14,7 @@ import {
   setEmail,
   setUsername,
 } from '@/lib/features/auth/authSlice';
-import PayPalReminderWrapper from '@/app/wrappers/PayPalReminderWrapper';
+import PayPalReminderWrapper from '@/lib/wrappers/PayPalReminderWrapper';
 import { usePushNotification } from '@/app/providers/PushNotificationProvider';
 import { signOut } from 'next-auth/react';
 

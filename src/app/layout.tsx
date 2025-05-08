@@ -3,7 +3,7 @@ import './globals.css';
 import { APP_DOMAIN } from '@/lib/constants';
 import { CookiesProvider } from 'next-client-cookies/server';
 import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
-import DynamicPaddingWrapper from '@/app/wrappers/DynamicPaddingWrapper';
+import DynamicPaddingWrapper from '@/lib/wrappers/DynamicPaddingWrapper';
 import ComingSoon from '@/components/coming-soon';
 import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';

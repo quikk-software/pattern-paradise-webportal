@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { InfoBoxComponent } from '@/components/info-box';
-import Link from 'next/link';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import ReviewCard from '@/lib/components/ReviewCard';
 import { useGetTestingByProductId } from '@/lib/api/testing';
-import UserDetailsCard from '@/lib/components/UserDetailsCard';
+import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
 
 interface TesterShoutoutProps {
   productId: string;
@@ -32,7 +28,12 @@ export default function TesterShoutout({ productId }: TesterShoutoutProps) {
         </p>
         <div className="space-y-2">
           {data?.testers?.map((tester) => (
-            <UserDetailsCard user={tester} showFlag={false} showRoles={false} key={tester.id} />
+            <UserDetailsCardWrapper
+              user={tester}
+              showFlag={false}
+              showRoles={false}
+              key={tester.id}
+            />
           ))}
         </div>
       </CardContent>

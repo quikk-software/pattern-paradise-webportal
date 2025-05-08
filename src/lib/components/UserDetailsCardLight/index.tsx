@@ -21,7 +21,6 @@ import FollowUserButton from '@/lib/components/FollowUserButton';
 import { cn } from '@/lib/utils';
 import {
   THEME_BG_CLASSES,
-  THEME_BORDER_CLASSES,
   THEME_FROM_BG_CLASSES,
   THEME_TEXT_CLASSES,
   THEME_TO_BG_CLASSES,
@@ -29,19 +28,19 @@ import {
 } from '@/lib/constants';
 import Description from '@/lib/components/Description';
 
-interface UserDetailsCardProps {
+interface UserDetailsCardLightProps {
   user: GetUserAccountResponse;
   showFlag?: boolean;
   showRoles?: boolean;
   hasProducts?: boolean;
 }
 
-export default function UserDetailsCard({
+export default function UserDetailsCardLight({
   user,
   showFlag = true,
   showRoles = false,
   hasProducts = false,
-}: UserDetailsCardProps) {
+}: UserDetailsCardLightProps) {
   const { userId } = useSelector((store: Store) => store.auth);
   const { status } = useValidSession();
   const { mutate: createChat } = useCreateChat();
@@ -59,17 +58,8 @@ export default function UserDetailsCard({
   const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
 
   return (
-    <Card className="group relative overflow-hidden border-none shadow-md transition-all duration-300 hover:shadow-xl">
-      <div
-        className={`absolute inset-0 bg-gradient-to-br ${THEME_FROM_BG_CLASSES[user.theme]} bg-opacity-5 to-background z-0`}
-      />
-      <div
-        className={`absolute -right-16 -top-16 h-40 w-40 rounded-full ${THEME_BG_CLASSES[user.theme]} bg-opacity-10 blur-3xl`}
-      />
-      <div
-        className={`absolute -left-16 -bottom-16 h-40 w-40 rounded-full ${THEME_BG_CLASSES[user.theme]} bg-opacity-10 blur-3xl`}
-      />
-
+    <Card className="group relative overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md">
+      <div className={`absolute inset-0 bg-gradient-to-br from-background to-background z-0`} />
       {user.bannerImageUrl ? (
         <div className="relative h-48 w-full overflow-hidden">
           <Image
@@ -89,7 +79,7 @@ export default function UserDetailsCard({
         </div>
       ) : (
         <div
-          className={`relative h-24 w-full bg-gradient-to-r ${THEME_FROM_BG_CLASSES[user.theme]} bg-opacity-20 ${THEME_VIA_BG_CLASSES[user.theme]} ${THEME_TO_BG_CLASSES[user.theme]}`}
+          className={`relative h-24 w-full bg-gradient-to-r opacity-30 ${THEME_FROM_BG_CLASSES[user.theme]} ${THEME_VIA_BG_CLASSES[user.theme]} ${THEME_TO_BG_CLASSES[user.theme]}`}
         >
           {showFlag && (
             <div className="absolute right-4 top-4 z-10">
@@ -118,9 +108,7 @@ export default function UserDetailsCard({
 
               <div className="mt-2">
                 {fullName && (
-                  <h2
-                    className={`text-xl font-bold tracking-tight text-foreground transition-colors duration-200 group-hover/link:${THEME_TEXT_CLASSES[user.theme]}`}
-                  >
+                  <h2 className="text-xl font-bold tracking-tight text-foreground transition-colors duration-200">
                     {fullName}
                   </h2>
                 )}
@@ -160,7 +148,7 @@ export default function UserDetailsCard({
                       >
                         <Badge
                           variant="outline"
-                          className="border-pink-200 bg-pink-50 text-pink-600 dark:border-pink-900 dark:bg-pink-950/30 dark:text-pink-400"
+                          className="border-pink-100 bg-transparent text-foreground dark:border-pink-900/30 dark:bg-transparent"
                         >
                           <InstagramIcon className="mr-1 h-4 w-4" />
                           <span>Instagram</span>
@@ -179,7 +167,7 @@ export default function UserDetailsCard({
                       >
                         <Badge
                           variant="outline"
-                          className="border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-slate-950/30 dark:text-slate-400"
+                          className="border-slate-100 bg-transparent text-foreground dark:border-slate-800/30 dark:bg-transparent"
                         >
                           <TikTokIcon className="mr-1 h-4 w-4" />
                           <span>TikTok</span>
@@ -196,10 +184,9 @@ export default function UserDetailsCard({
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {isLoggedIn && (
                     <Button
-                      className={`group/btn relative overflow-hidden bg-gradient-to-r ${THEME_FROM_BG_CLASSES[user.theme]} ${THEME_TO_BG_CLASSES[user.theme]} text-primary-foreground transition-all duration-300 hover:shadow-md`}
+                      className="group/btn relative overflow-hidden bg-primary text-primary-foreground transition-all duration-300 hover:shadow-sm"
                       onClick={() => handleChatClick(userId, user.id)}
                     >
-                      <div className="absolute inset-0 bg-white/10 opacity-0 transition-opacity duration-300 group-hover/btn:opacity-100" />
                       <MessagesSquare className="mr-2 h-4 w-4" />
                       <span>Start Chat</span>
                     </Button>
@@ -217,7 +204,7 @@ export default function UserDetailsCard({
                 <Link href="#shop" className="mt-2 block w-full">
                   <Button
                     variant="outline"
-                    className={`group/shop relative w-full overflow-hidden border-dashed ${THEME_BORDER_CLASSES[user.theme]} bg-opacity-30 ${THEME_BG_CLASSES[user.theme]} transition-all duration-300 hover:${THEME_BORDER_CLASSES[user.theme]}/50 hover:${THEME_BG_CLASSES[user.theme]} hover:bg-opacity-10`}
+                    className="group/shop relative w-full overflow-hidden border transition-all duration-300"
                   >
                     <div className="flex w-full items-center justify-center space-x-2">
                       <ArrowDown className="h-4 w-4 animate-bounce" />

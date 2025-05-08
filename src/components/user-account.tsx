@@ -1,12 +1,10 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GetUserAccountResponse } from '@/@types/api-types';
 import { useGetUserById, useListProductsByUserId } from '@/lib/api';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
-import UserDetailsCard from '@/lib/components/UserDetailsCard';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { Input } from '@/components/ui/input';
 import GalleryGrid from '@/lib/components/GalleryGrid';
@@ -17,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import ShareButton from '@/lib/components/ShareButton';
 import { useValidSession } from '@/hooks/useValidSession';
+import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -118,16 +117,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         />
       </div>
 
-      <UserDetailsCard user={userToUse} showRoles={true} hasProducts={products.length > 0} />
-
-      {userToUse.description ? (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-2xl">About me</CardTitle>
-          </CardHeader>
-          <CardContent>{userToUse.description}</CardContent>
-        </Card>
-      ) : null}
+      <UserDetailsCardWrapper user={userToUse} showRoles={true} hasProducts={products.length > 0} />
 
       {userToUse.gallery.length > 0 ? (
         <div className="space-y-4">

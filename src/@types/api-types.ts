@@ -184,6 +184,7 @@ export interface PutUserRequest {
   refLinks?: string[];
   gallery?: string[];
   theme?: string;
+  isLightTheme?: boolean;
   tiktokRef?: string;
   imageUrl?: string;
   bannerImageUrl?: string;
@@ -228,6 +229,7 @@ export interface GetUserResponse {
   instagramRef?: string;
   tiktokRef?: string;
   theme: string;
+  isLightTheme: boolean;
   refLinks: string[];
   paypalMerchantIsActive: boolean;
   paypalMerchantId?: string;
@@ -291,6 +293,7 @@ export interface GetUserAccountResponse {
   firstName?: string;
   lastName?: string;
   theme: string;
+  isLightTheme: boolean;
   description?: string;
   gallery: string[];
   instagramRef?: string;
@@ -1471,6 +1474,8 @@ export class Api<
         imageUrl?: any;
         /** @example "any" */
         theme?: any;
+        /** @example "any" */
+        isLightTheme?: any;
         /** @example "any" */
         bannerImageUrl?: any;
         /** @example "any" */
