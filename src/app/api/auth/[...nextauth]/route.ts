@@ -109,6 +109,8 @@ const handler = NextAuth({
             roles: decodedToken?.resource_access?.[process.env.KEYCLOAK_CLIENT_ID]?.roles || [],
             // @ts-ignore
             subscriptionStatus: user.paypalSubscriptionStatus,
+            // @ts-ignore
+            theme: user.theme,
             error: null,
           };
         } catch (error: any) {
@@ -164,6 +166,7 @@ const handler = NextAuth({
         token.image = user.image;
         token.roles = user.roles;
         token.subscriptionStatus = user?.subscriptionStatus;
+        token.theme = user?.theme;
       }
 
       if (
@@ -205,6 +208,7 @@ const handler = NextAuth({
       session.user.image = sessionToken.image as string;
       session.user.roles = sessionToken.roles as string[];
       session.user.subscriptionStatus = sessionToken.subscriptionStatus as string;
+      session.user.theme = sessionToken.theme as string;
       return { ...session, error: sessionToken?.error };
     },
   },
