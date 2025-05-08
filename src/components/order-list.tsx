@@ -16,8 +16,8 @@ import { useRouter } from 'next/navigation';
 import { useListOrders } from '@/lib/api/order';
 import Link from 'next/link';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import UserDetailsCard from '@/lib/components/UserDetailsCard';
 import OrderTable from '@/components/order-table';
+import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
 
 interface OrderListComponentProps {
   filter?: 'customer' | 'seller';
@@ -129,7 +129,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
                       <h5 className="font-semibold">
                         {filter === 'customer' ? 'Sold by' : 'Bought by'}
                       </h5>
-                      <UserDetailsCard
+                      <UserDetailsCardWrapper
                         user={filter === 'customer' ? order.seller : order.customer}
                         showFlag={false}
                         showRoles={false}

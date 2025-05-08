@@ -211,6 +211,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
       username: data.username?.trim() ? data.username.toLowerCase().trim() : undefined,
       roles: data.roles ?? undefined,
       theme: selectedTheme !== user.theme ? selectedTheme : undefined,
+      isLightTheme: data.isLightTheme,
       country: data.roles?.includes('Seller') ? country : undefined,
     })
       .then(() => {
@@ -753,6 +754,22 @@ export function ProfilePage({ user }: ProfilePageProps) {
               <Label>
                 Selected Theme <span className="text-red-500">*</span>
               </Label>
+              <div className="flex gap-2 items-center">
+                <Controller
+                  name="isLightTheme"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="isLightTheme"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
+                />
+                <Label htmlFor="isLightTheme" className="text-sm cursor-pointer">
+                  Use light theming
+                </Label>
+              </div>
               <div className="space-y-4">
                 <ColorPalette theme={selectedTheme} selectedTheme={user.theme} />
                 <div className="grid grid-cols-4 gap-2">

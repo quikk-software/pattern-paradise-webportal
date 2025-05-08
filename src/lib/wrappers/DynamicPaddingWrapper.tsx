@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation';
 import { NavbarComponent } from '@/components/navbar';
 import StoreProvider from '@/app/providers/StoreProvider';
 import { BottomNavigation } from '@/components/bottom-navigation';
-import TokenDataWrapper from '@/app/wrappers/TokenDataWrapper';
+import TokenDataWrapper from '@/lib/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
-import AffiliateWrapper from '@/app/wrappers/AffiliateWrapper';
+import AffiliateWrapper from '@/lib/wrappers/AffiliateWrapper';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 const fullHeightPages = ['/swipe'];
