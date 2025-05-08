@@ -184,7 +184,7 @@ export default function UserDetailsCardLight({
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {isLoggedIn && (
                     <Button
-                      className="group/btn relative overflow-hidden bg-primary text-primary-foreground transition-all duration-300 hover:shadow-sm"
+                      className={`group/btn relative ${THEME_BG_CLASSES[user.theme]} overflow-hidden bg-primary text-primary-foreground transition-all duration-300 hover:shadow-sm`}
                       onClick={() => handleChatClick(userId, user.id)}
                     >
                       <MessagesSquare className="mr-2 h-4 w-4" />
