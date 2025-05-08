@@ -11,6 +11,7 @@ import { Heart, HeartHandshake, Instagram } from 'lucide-react';
 import RegisterButton from '@/lib/components/RegisterButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { THEME_COLOR } from '@/lib/constants';
 
 const theme = {
   colors: {
@@ -49,7 +50,7 @@ export default function HeroV2({ products }: HeroV2Props) {
       style={{
         position: 'relative',
         overflow: 'hidden',
-        background: `linear-gradient(to bottom, ${theme.colors.amber[200]}, ${theme.colors.background})`,
+        background: `bg-white`,
         paddingTop: '2rem',
         paddingBottom: '2rem',
       }}
