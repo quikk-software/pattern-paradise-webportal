@@ -275,7 +275,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             <Link
               href="https://instagram.com/the.patternparadise"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               className="flex items-center gap-2 text-amber-600 hover:text-amber-700 transition-colors mb-3"
             >
               <Instagram className="h-6 w-6" />
