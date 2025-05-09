@@ -11,6 +11,7 @@ interface PriceInputProps {
   name: string;
   getValues: () => any;
   overrideRequired?: boolean;
+  placeholder?: string;
 }
 
 export default function PriceInput({
@@ -20,6 +21,7 @@ export default function PriceInput({
   name,
   getValues,
   overrideRequired = true,
+  placeholder = 'Enter price (e.g. 9,999.99)',
 }: PriceInputProps) {
   return (
     <Controller
@@ -61,7 +63,7 @@ export default function PriceInput({
         <CurrencyInput
           {...field}
           id="price"
-          placeholder="Enter price (e.g. 9,999.99)"
+          placeholder={placeholder}
           decimalsLimit={2}
           decimalScale={2}
           allowNegativeValue={false}

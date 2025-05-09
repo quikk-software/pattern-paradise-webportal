@@ -373,6 +373,9 @@ export function ProductFormComponent() {
         ),
       );
 
+      console.log({
+        salePrice: data.salePrice,
+      });
       formData.append('title', data.title);
       formData.append('description', data.description);
       formData.append('experience', data.experienceLevel);
@@ -380,9 +383,12 @@ export function ProductFormComponent() {
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
       formData.append(
         'salePrice',
-        String(isFree ? '' : parseFloat(data.salePrice.replace(',', '.'))),
+        String(isFree || !data.salePrice ? '' : parseFloat(data.salePrice.replace(',', '.'))),
       );
-      formData.append('salePriceDueDate', String(isFree ? '' : salePriceDueDate));
+      formData.append(
+        'salePriceDueDate',
+        String(isFree || !salePriceDueDate ? '' : salePriceDueDate),
+      );
       formData.append('isFree', isFree ? 'true' : 'false');
       formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 

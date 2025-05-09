@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import type { Store } from '@/lib/redux/store';
-import { Clock, Percent, Trash } from 'lucide-react';
+import { Clock, Percent, Trash, X } from 'lucide-react';
 import { useDeleteProduct } from '@/lib/api';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
 import { Badge } from '@/components/ui/badge';
+import SaleForm from '@/lib/components/SaleForm';
 
 interface ProductCardProps {
   id: string;
@@ -46,7 +47,12 @@ export default function ProductCard({
   salePrice,
   salePriceDueDate,
 }: ProductCardProps) {
+  const [currentSalePrice, setCurrentSalePrice] = useState<number | undefined>(undefined);
+  const [currentSalePriceDueDate, setCurrentSalePriceDueDate] = useState<string | undefined>(
+    undefined,
+  );
   const [isReleaseProductDrawerOpen, setIsReleaseProductDrawerOpen] = useState(false);
+  const [isSaleFormOpen, setIsSaleFormOpen] = useState(false);
   const [isDeleteProductDrawerOpen, setIsDeleteProductDrawerOpen] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
 
@@ -55,20 +61,30 @@ export default function ProductCard({
 
   const isCreator = userId === creatorId;
   const isDueDateActive =
-    salePrice !== undefined &&
-    salePriceDueDate !== undefined &&
-    new Date(salePriceDueDate) > new Date();
+    currentSalePrice !== undefined &&
+    currentSalePriceDueDate !== undefined &&
+    new Date(currentSalePriceDueDate) > new Date();
   const isSaleActive =
-    (salePrice !== undefined && salePriceDueDate === undefined) || isDueDateActive;
+    (currentSalePrice !== undefined && currentSalePriceDueDate === undefined) || isDueDateActive;
 
-  const discountPercentage = isSaleActive ? Math.round(((price - salePrice!) / price) * 100) : 0;
+  const discountPercentage = isSaleActive
+    ? Math.round(((price - currentSalePrice!) / price) * 100)
+    : 0;
 
   useEffect(() => {
-    if (!salePriceDueDate) return;
+    setCurrentSalePrice(salePrice);
+  }, [salePrice]);
+
+  useEffect(() => {
+    setCurrentSalePriceDueDate(salePriceDueDate);
+  }, [salePriceDueDate]);
+
+  useEffect(() => {
+    if (!currentSalePriceDueDate) return;
 
     const calculateTimeRemaining = () => {
       const now = new Date();
-      const dueDate = new Date(salePriceDueDate);
+      const dueDate = new Date(currentSalePriceDueDate);
 
       if (dueDate <= now) {
         setTimeRemaining('Sale ended');
@@ -94,7 +110,7 @@ export default function ProductCard({
     const timer = setInterval(calculateTimeRemaining, 60000); // Update every minute
 
     return () => clearInterval(timer);
-  }, [salePriceDueDate]);
+  }, [currentSalePriceDueDate]);
 
   const handleDeleteProductClick = async (productId: string) => {
     await deleteProduct(productId);
@@ -134,7 +150,9 @@ export default function ProductCard({
           ) : isSaleActive ? (
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-red-500">${salePrice!.toFixed(2)}</span>
+                <span className="text-lg font-bold text-red-500">
+                  ${currentSalePrice!.toFixed(2)}
+                </span>
                 <span className="text-sm line-through text-gray-500">${price.toFixed(2)}</span>
               </div>
               {isDueDateActive ? (
@@ -161,9 +179,9 @@ export default function ProductCard({
 
         {isDueDateActive && (
           <div className="w-full mt-1 bg-red-50 dark:bg-red-950/20 rounded-md p-2 flex items-center justify-center">
-            <Percent className="w-4 h-4 text-red-500 mr-1" />
+            <Clock className="w-3 h-3 mr-1" />
             <span className="text-sm text-red-600 dark:text-red-400 font-medium">
-              Saves ${(price - salePrice!).toFixed(2)}
+              {timeRemaining}
             </span>
           </div>
         )}
@@ -174,9 +192,15 @@ export default function ProductCard({
           <CardFooter className="w-full flex flex-col gap-6">
             <hr className="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10 w-full" />
             <div className="flex justify-end items-center gap-2 w-full">
-              <Link rel={'nofollow'} href={`/app/secure/sell/products/${id}`}>
-                <Button variant="secondary">Update product</Button>
-              </Link>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setIsSaleFormOpen((prev) => !prev);
+                }}
+                disabled={isFree}
+              >
+                {isSaleFormOpen ? <X /> : <Percent />}
+              </Button>
               <Button
                 variant="destructive"
                 onClick={() => {
@@ -186,6 +210,25 @@ export default function ProductCard({
                 <Trash />
               </Button>
             </div>
+
+            {isSaleFormOpen ? (
+              <SaleForm
+                productId={id}
+                isFree={isFree}
+                initialSalePrice={
+                  currentSalePrice ? String(currentSalePrice).replace('.', ',') : undefined
+                }
+                initialSalePriceDueDate={currentSalePriceDueDate}
+                setNewSalePrice={setCurrentSalePrice}
+                setNewSalePriceDueDate={setCurrentSalePriceDueDate}
+              />
+            ) : null}
+
+            <Link rel={'nofollow'} href={`/app/secure/sell/products/${id}`} className="w-full">
+              <Button variant="secondary" className="w-full">
+                Update product
+              </Button>
+            </Link>
             {status === 'Created' || status === 'InProgress' || status === 'Aborted' ? (
               <Button
                 onClick={() => {
