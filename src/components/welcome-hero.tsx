@@ -6,14 +6,21 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
+import { theme } from '@/lib/constants';
 
 interface WelcomeHeroProps {
   userName?: string;
   avatarUrl?: string;
+  themeColor?: string;
   isSeller: boolean;
 }
 
-export default function WelcomeHero({ userName, avatarUrl = '', isSeller }: WelcomeHeroProps) {
+export default function WelcomeHero({
+  userName,
+  avatarUrl = '',
+  themeColor = 'amber',
+  isSeller,
+}: WelcomeHeroProps) {
   const [greeting, setGreeting] = useState('');
 
   useEffect(() => {
@@ -31,9 +38,19 @@ export default function WelcomeHero({ userName, avatarUrl = '', isSeller }: Welc
     <div className="w-full">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 border-2 border-primary/20">
+          <Avatar
+            className="h-16 w-16 border-2"
+            style={{
+              borderColor: (theme.colors as any)[themeColor][200],
+            }}
+          >
             <AvatarImage src={avatarUrl} alt={userName} />
-            <AvatarFallback className="text-xl bg-primary/10 text-primary">
+            <AvatarFallback
+              className="text-xl text-primary"
+              style={{
+                backgroundColor: (theme.colors as any)[themeColor][200],
+              }}
+            >
               {userName?.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
