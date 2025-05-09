@@ -95,6 +95,7 @@ export function ProductFormComponent() {
     isSuccess,
     isError,
     errorDetail,
+    validationErrors,
     uploadProgress: backendProgress,
     setUploadProgress: setBackendProgress,
   } = useCreateProduct();
@@ -773,7 +774,19 @@ export function ProductFormComponent() {
               .
             </span>
           }
-          errorMessage={errorDetail}
+          errorMessage={
+            <span>
+              {errorDetail}
+              {validationErrors.length > 1
+                ? validationErrors.map((error) => (
+                    <>
+                      <br />
+                      {error}
+                    </>
+                  ))
+                : null}
+            </span>
+          }
         />
       </form>
       <GoBackButton />
