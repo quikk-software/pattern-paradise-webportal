@@ -322,6 +322,12 @@ export interface ListUserAccountsResponse {
   users: GetUserAccountResponse[];
 }
 
+export interface PutProductSaleRequest {
+  salePrice?: number;
+  /** @format date-time */
+  salePriceDueDate?: string;
+}
+
 export interface PostProductReportRequest {
   reason: string;
   comment?: string;
@@ -2248,6 +2254,34 @@ export class Api<
         path: `/api/v1/products/${productId}`,
         method: "DELETE",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Updates the sale data of a product by the given request body data and product ID.
+     *
+     * @tags Product
+     * @name PutProductSale
+     * @summary Updates the sale data of a product.
+     * @request PUT:/api/v1/products/{productId}/sale
+     * @secure
+     */
+    putProductSale: (
+      productId: string,
+      data: {
+        /** @example "any" */
+        salePrice?: any;
+        /** @example "any" */
+        salePriceDueDate?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/products/${productId}/sale`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 

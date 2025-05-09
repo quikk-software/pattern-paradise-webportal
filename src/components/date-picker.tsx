@@ -20,14 +20,14 @@ interface DatePickerProps {
 export function DatePicker({ date, setDate, min, max, disabled = false }: DatePickerProps) {
   return (
     <Popover>
-      <div className="flex gap-2 items-center">
-        <PopoverTrigger className="space-x-2">
+      <div className="flex gap-2 items-center w-full">
+        <PopoverTrigger className="space-x-2 w-full">
           <Button
             type="button"
             variant={'outline'}
             disabled={disabled}
             className={cn(
-              'w-[280px] justify-start text-left font-normal',
+              'w-full justify-start text-left font-normal',
               !date && 'text-muted-foreground',
             )}
           >
