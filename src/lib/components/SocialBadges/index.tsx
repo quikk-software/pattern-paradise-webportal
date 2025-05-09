@@ -50,7 +50,7 @@ export default function SocialBadges() {
         >
           <Image
             src={AppleLogo}
-            alt={'Pattern Paradise on Apple App Store'}
+            alt={'Pattern Paradise on the Apple App Store'}
             width={100}
             height={50}
           />
@@ -63,7 +63,7 @@ export default function SocialBadges() {
         >
           <Image
             src={GooglePlayLogo}
-            alt={'Pattern Paradise on Apple App Store'}
+            alt={'Pattern Paradise on the Google Play Store'}
             width={100}
             height={50}
           />
