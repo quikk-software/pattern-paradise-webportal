@@ -189,7 +189,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
               </div>
               <CheckoutButtons
                 disabled={!isLoggedIn}
-                price={customPrice ?? product.salePrice ?? product.price}
+                price={customPrice ? customPrice : isSaleActive ? product.salePrice : product.price}
                 product={product}
                 country={country}
               />
