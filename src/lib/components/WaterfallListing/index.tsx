@@ -126,8 +126,9 @@ export default function WaterfallListing({
                   product.salePriceDueDate !== undefined &&
                   new Date(product.salePriceDueDate) > new Date();
                 const isSaleActive =
-                  (product.salePrice !== undefined && product.salePriceDueDate === undefined) ||
-                  isDueDateActive;
+                  !product.isFree &&
+                  ((product.salePrice !== undefined && product.salePriceDueDate === undefined) ||
+                    isDueDateActive);
 
                 return (
                   <Link
