@@ -177,6 +177,8 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
     await handleLogin(email, password);
 
+    await sessionStorage.removeItem('affiliate');
+
     router.push(
       `/auth/registration/success?email=${data.email.trim()}&roles=${roles.join(',')}&redirect=${redirectUrl}`,
     );

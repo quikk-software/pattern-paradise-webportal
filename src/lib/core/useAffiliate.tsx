@@ -7,7 +7,12 @@ const useAffiliate = () => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const affiliateFromQuery = params.get('affiliate');
-      setAffiliate(affiliateFromQuery ?? undefined);
+      if (affiliateFromQuery) {
+        setAffiliate(affiliateFromQuery ?? undefined);
+        return;
+      }
+      const affiliateFromStorage = sessionStorage.getItem('affiliate');
+      setAffiliate(affiliateFromStorage ?? undefined);
     }
   }, []);
 
