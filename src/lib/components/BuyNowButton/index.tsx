@@ -122,7 +122,9 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
     product.salePriceDueDate !== undefined &&
     new Date(product.salePriceDueDate) > new Date();
   const isSaleActive =
-    (product.salePrice !== undefined && product.salePriceDueDate === undefined) || isDueDateActive;
+    !product.isFree &&
+    ((product.salePrice !== undefined && product.salePriceDueDate === undefined) ||
+      isDueDateActive);
 
   const productPrice = isSaleActive ? product.salePrice : product.price;
 

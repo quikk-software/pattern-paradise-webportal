@@ -65,7 +65,8 @@ export default function ProductCard({
     currentSalePriceDueDate !== undefined &&
     new Date(currentSalePriceDueDate) > new Date();
   const isSaleActive =
-    (currentSalePrice !== undefined && currentSalePriceDueDate === undefined) || isDueDateActive;
+    !isFree &&
+    ((currentSalePrice !== undefined && currentSalePriceDueDate === undefined) || isDueDateActive);
 
   const discountPercentage = isSaleActive
     ? Math.round(((price - currentSalePrice!) / price) * 100)
