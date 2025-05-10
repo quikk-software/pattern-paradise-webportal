@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Sparkles, Users, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import useAffiliate from '@/lib/core/useAffiliate';
+import Link from 'next/link';
 
 interface WelcomeBannerProps {
   userName?: string;
@@ -19,11 +21,17 @@ export default function WelcomeBanner({
 }: WelcomeBannerProps) {
   const [mounted, setMounted] = useState(false);
 
+  const { affiliate } = useAffiliate();
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return null;
+  }
+
+  const isValidAffiliate = ['crochetbygenna'].includes(affiliate ?? '');
 
   return (
     <div className={cn('relative overflow-hidden rounded-xl p-8 mb-8', className)}>
@@ -70,6 +78,21 @@ export default function WelcomeBanner({
           We&apos;re excited to have you join us. Complete your registration to unlock all features
           and start your journey with us.
         </motion.p>
+
+        {isValidAffiliate ? (
+          <motion.p
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-muted-foreground mb-6 max-w-md"
+          >
+            Register Now and Unlock <strong>2 Weeks of Commission-Free Selling</strong> with{' '}
+            <Link href={`/users/${affiliate}`} rel={'nofollow'} className="text-blue-500 underline">
+              @{affiliate}
+            </Link>
+            !
+          </motion.p>
+        ) : null}
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}

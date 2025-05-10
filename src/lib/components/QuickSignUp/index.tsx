@@ -62,6 +62,8 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
 
       await handleLogin(email, password);
 
+      await sessionStorage.removeItem('affiliate');
+
       if (typeof window !== 'undefined') {
         if (redirect) {
           window.location.replace(decodeURIComponent(redirect));
