@@ -59,9 +59,19 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
 
   const isOwner = product.creatorId === userId;
   const isLoggedIn = status === 'authenticated' && session?.user.accessToken;
+  const isDueDateActive =
+    product.salePrice !== undefined &&
+    product.salePriceDueDate !== undefined &&
+    new Date(product.salePriceDueDate) > new Date();
+  const isSaleActive =
+    (product.salePrice !== undefined && product.salePriceDueDate === undefined) || isDueDateActive;
 
   return (
-    <PayPalOrderProvider productId={product.id} userId={userId} price={product.price}>
+    <PayPalOrderProvider
+      productId={product.id}
+      userId={userId}
+      price={isSaleActive ? product.salePrice : product.price}
+    >
       <div className="flex flex-col gap-8">
         <div className="flex items-center gap-2">
           <GoBackButton />
