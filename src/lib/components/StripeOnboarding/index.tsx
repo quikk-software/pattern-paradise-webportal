@@ -38,7 +38,7 @@ export default function StripeOnboarding() {
   };
 
   const handleRedirect = () => {
-    window.location.href = `/app/secure/auth/me?action=scrollToPayPal`;
+    window.location.href = `/app/secure/auth/me?action=scrollToStripe`;
   };
 
   return (
