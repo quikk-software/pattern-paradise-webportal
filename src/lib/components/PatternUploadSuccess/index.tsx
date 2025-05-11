@@ -15,10 +15,13 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import React, { useEffect, useState } from 'react';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
-import { useGetProduct } from '@/lib/api';
+import { useGetProduct, useUndraftProduct } from '@/lib/api';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
+import ShareButton from '@/lib/components/ShareButton';
+import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
+import { useRouter } from 'next/navigation';
 
 interface PatternUploadSuccessProps {
   productId: string;
@@ -26,12 +29,26 @@ interface PatternUploadSuccessProps {
 
 export default function PatternUploadSuccess({ productId }: PatternUploadSuccessProps) {
   const [isReleaseProductDrawerOpen, setIsReleaseProductDrawerOpen] = useState(false);
+  const [isUndraftProductDrawerOpen, setIsUndraftProductDrawerOpen] = useState(false);
 
   const { fetch, data: product, isLoading, isError } = useGetProduct();
+  const {
+    mutate: undraftPattern,
+    isLoading: undraftPatternnIsLoading,
+    errorDetail: undraftPatternErrorDetail,
+  } = useUndraftProduct();
+
+  const router = useRouter();
 
   useEffect(() => {
     fetch(productId).then();
   }, [productId]);
+
+  const handleStartTesterCallClick = () => {
+    undraftPattern(productId).then(() => {
+      router.push(`/app/tester-calls/${productId}`);
+    });
+  };
 
   if (isError) {
     return <NotFoundPage />;
@@ -45,6 +62,8 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
     );
   }
 
+  const isDraft = product.status === 'Draft';
+  const isTesterCall = product.status === 'Created';
   const isReleased = product.status === 'Released';
 
   return (
@@ -54,10 +73,38 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
           <CheckCircle2 className="h-10 w-10 text-green-600" />
         </div>
         <h1 className="text-3xl font-bold tracking-tight">Pattern Uploaded Successfully!</h1>
-        {!isReleased ? (
+        {isDraft ? (
+          <div className="space-y-4">
+            <p>Your pattern has been saved successfully.</p>
+            <div className="flex flex-row gap-2">
+              <div className="space-y-2 w-full">
+                <Button variant="secondary" onClick={() => setIsReleaseProductDrawerOpen(true)}>
+                  Release Pattern
+                </Button>
+              </div>
+              <div className="space-y-2 w-full">
+                <Button onClick={() => setIsUndraftProductDrawerOpen(true)}>
+                  Start Tester Call
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+        {isTesterCall ? (
           <p className="text-muted-foreground mt-2 max-w-md">
             Your pattern has been uploaded and is almost ready to share with the community.
           </p>
+        ) : null}
+        {isReleased ? (
+          <div className="space-y-2">
+            <p className="text-muted-foreground mt-2 max-w-md">
+              Your pattern has been released and is ready to be shared with the community.
+            </p>
+            <ShareButton
+              url={`${process.env.NEXT_PUBLIC_URL}/app/products/${productId}`}
+              shareText={'Check out this pattern on Pattern Paradise!'}
+            />
+          </div>
         ) : null}
       </div>
 
@@ -65,9 +112,19 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Pattern Status</CardTitle>
-            {!isReleased ? (
+            {isDraft ? (
+              <Badge variant={'outline'} className="ml-2">
+                {'Draft'}
+              </Badge>
+            ) : null}
+            {isTesterCall ? (
               <Badge variant={'outline'} className="ml-2">
                 {'In Testing'}
+              </Badge>
+            ) : null}
+            {isReleased ? (
+              <Badge variant={'outline'} className="ml-2">
+                {'Released'}
               </Badge>
             ) : null}
           </div>
@@ -81,7 +138,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
                 message={`Your pattern '${product.title}' has been successfully released!`}
               />
             ) : null}
-            {!isReleased ? (
+            {isTesterCall ? (
               <div className="flex gap-3">
                 <div className="mt-0.5">
                   <FileCheck className="h-5 w-5 text-primary" />
@@ -100,7 +157,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
                 </div>
               </div>
             ) : null}
-            {!isReleased ? (
+            {isTesterCall || isDraft ? (
               <Alert>
                 <Info className="h-4 w-4" />
                 <AlertTitle>Want to release now?</AlertTitle>
@@ -113,7 +170,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
           </div>
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row gap-3">
-          {!isReleased ? (
+          {isTesterCall || isDraft ? (
             <Button onClick={() => setIsReleaseProductDrawerOpen(true)} variant="default">
               Release Pattern
             </Button>
@@ -124,27 +181,27 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
         </CardFooter>
       </Card>
 
-      {!isReleased ? (
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Pattern Preview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                <Eye className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">See how your pattern will appear to customers</span>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Link href={`/app/products/${productId}`}>
-                <Button variant="secondary" className="w-full">
-                  Preview Pattern
-                </Button>
-              </Link>
-            </CardFooter>
-          </Card>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Pattern Preview</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <Eye className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm">See how your pattern will appear to customers</span>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Link href={`/app/products/${productId}`}>
+              <Button variant="secondary" className="w-full">
+                Preview Pattern
+              </Button>
+            </Link>
+          </CardFooter>
+        </Card>
 
+        {isTesterCall ? (
           <Card>
             <CardHeader>
               <CardTitle className="text-base">What&apos;s Next?</CardTitle>
@@ -165,8 +222,8 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
               </Link>
             </CardFooter>
           </Card>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
       <div className="mt-8 text-center">
         <Link
@@ -180,6 +237,14 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
         isOpen={isReleaseProductDrawerOpen}
         setIsOpen={setIsReleaseProductDrawerOpen}
         productId={productId}
+      />
+      <ConfirmDrawer
+        isOpen={isUndraftProductDrawerOpen}
+        setIsOpen={setIsUndraftProductDrawerOpen}
+        isLoading={undraftPatternnIsLoading}
+        errorDetail={undraftPatternErrorDetail}
+        description={'From now on, users will be able to apply to your tester call.'}
+        callbackFn={handleStartTesterCallClick}
       />
     </div>
   );
