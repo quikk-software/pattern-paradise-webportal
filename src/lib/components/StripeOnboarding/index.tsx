@@ -26,7 +26,8 @@ export default function StripeOnboarding() {
 
   const handleOnboardStripeClick = (userId: string, shareDataToPayPalGranted: boolean) => {
     if (isStandalone) {
-      setIsStandalone(true);
+      setIsOpen(false);
+      setShowRedirect(true);
       return;
     }
 
