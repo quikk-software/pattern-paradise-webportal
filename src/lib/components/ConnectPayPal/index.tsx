@@ -58,7 +58,8 @@ export default function ConnectPayPal({ buttonTheme, inputTheme }: ConnectPayPal
     paypalEmail: string,
   ) => {
     if (isStandalone) {
-      setIsStandalone(true);
+      setIsConnectPayPalDrawerOpen(false);
+      setShowRedirect(true);
       return;
     }
     createPayPalReferral(userId, {
