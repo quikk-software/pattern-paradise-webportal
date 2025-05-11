@@ -13,6 +13,8 @@ import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
 import { Badge } from '@/components/ui/badge';
 import SaleForm from '@/lib/components/SaleForm';
+import DraftPatternDrawer from '@/lib/components/DraftPatternDrawer';
+import UndraftPatternDrawer from '@/lib/components/UndraftPatternDrawer';
 
 interface ProductCardProps {
   id: string;
@@ -52,6 +54,8 @@ export default function ProductCard({
     undefined,
   );
   const [isReleaseProductDrawerOpen, setIsReleaseProductDrawerOpen] = useState(false);
+  const [isDraftProductDrawerOpen, setIsDraftProductDrawerOpen] = useState(false);
+  const [isUndraftProductDrawerOpen, setIsUndraftProductDrawerOpen] = useState(false);
   const [isSaleFormOpen, setIsSaleFormOpen] = useState(false);
   const [isDeleteProductDrawerOpen, setIsDeleteProductDrawerOpen] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
@@ -230,20 +234,57 @@ export default function ProductCard({
                 Update product
               </Button>
             </Link>
-            {status === 'Created' || status === 'InProgress' || status === 'Aborted' ? (
-              <Button
-                onClick={() => {
-                  setIsReleaseProductDrawerOpen(true);
-                }}
-                className="w-full"
-              >
-                Release Pattern
-              </Button>
-            ) : null}
+            <div className="space-y-2">
+              {status === 'Draft' ||
+              status === 'Created' ||
+              status === 'InProgress' ||
+              status === 'Aborted' ? (
+                <Button
+                  onClick={() => {
+                    setIsReleaseProductDrawerOpen(true);
+                  }}
+                  className="w-full"
+                >
+                  Release Pattern
+                </Button>
+              ) : null}
+              {status === 'Created' ? (
+                <Button
+                  onClick={() => {
+                    setIsDraftProductDrawerOpen(true);
+                  }}
+                  className="w-full"
+                  variant="ghost"
+                >
+                  Move Pattern to Draft
+                </Button>
+              ) : null}
+              {status === 'Draft' ? (
+                <Button
+                  onClick={() => {
+                    setIsUndraftProductDrawerOpen(true);
+                  }}
+                  className="w-full"
+                  variant="ghost"
+                >
+                  Start Tester Call
+                </Button>
+              ) : null}
+            </div>
           </CardFooter>
           <ReleasePatternDrawer
             isOpen={isReleaseProductDrawerOpen}
             setIsOpen={setIsReleaseProductDrawerOpen}
+            productId={id}
+          />
+          <DraftPatternDrawer
+            isOpen={isDraftProductDrawerOpen}
+            setIsOpen={setIsDraftProductDrawerOpen}
+            productId={id}
+          />
+          <UndraftPatternDrawer
+            isOpen={isUndraftProductDrawerOpen}
+            setIsOpen={setIsUndraftProductDrawerOpen}
             productId={id}
           />
           <ConfirmDrawer

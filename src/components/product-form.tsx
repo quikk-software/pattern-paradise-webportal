@@ -41,8 +41,6 @@ import UploadFeedback from '@/components/upload-feedback';
 import { useRouter } from 'next/navigation';
 import CardRadioGroup from '@/components/card-radio-group';
 import logger from '@/lib/core/logger';
-import { DatePicker } from '@/components/date-picker';
-import dayjs from '@/lib/core/dayjs';
 
 const LOCAL_STORAGE_KEY = 'productFormData';
 
@@ -68,8 +66,8 @@ export function ProductFormComponent() {
   const [patternError, setPatternError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
-  const [salePriceDueDate, setSalePriceDueDate] = useState<Date | undefined>(undefined);
-  const [isMystery, setIsMystery] = useState<string | null>('yes');
+  const [isMystery, setIsMystery] = useState<string>('yes');
+  const [status, setStatus] = useState<string>('Created');
   const [showResetDrawer, setShowResetDrawer] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<
     {
@@ -113,7 +111,6 @@ export function ProductFormComponent() {
       title: '',
       description: '',
       price: '',
-      salePrice: '',
       experienceLevel: ExperienceLevels.Intermediate,
     },
   });
@@ -140,6 +137,7 @@ export function ProductFormComponent() {
             experienceLevel: parsed.experienceLevel || ExperienceLevels.Intermediate,
           });
 
+          if (parsed.status) setStatus(parsed.status);
           if (parsed.category) setCategory(parsed.category);
           if (parsed.hashtags) setHashtags(parsed.hashtags);
           if (parsed.images) setImages(parsed.images);
@@ -187,6 +185,7 @@ export function ProductFormComponent() {
         images,
         isFree,
         isMystery,
+        status,
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
     }, 300);
@@ -373,22 +372,12 @@ export function ProductFormComponent() {
         ),
       );
 
-      console.log({
-        salePrice: data.salePrice,
-      });
       formData.append('title', data.title);
       formData.append('description', data.description);
       formData.append('experience', data.experienceLevel);
       formData.append('category', category.craft);
+      formData.append('status', status);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
-      formData.append(
-        'salePrice',
-        String(isFree || !data.salePrice ? '' : parseFloat(data.salePrice.replace(',', '.'))),
-      );
-      formData.append(
-        'salePriceDueDate',
-        String(isFree || !salePriceDueDate ? '' : salePriceDueDate),
-      );
       formData.append('isFree', isFree ? 'true' : 'false');
       formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 
@@ -443,6 +432,7 @@ export function ProductFormComponent() {
     await deleteAllFiles();
     await deleteAllImageFiles();
 
+    setStatus('Created');
     setImages([]);
     setPatterns([]);
     setHashtags([]);
@@ -586,38 +576,6 @@ export function ProductFormComponent() {
               <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
             ) : null}
           </div>
-
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Sale Price (in $)
-            </Label>
-            <PriceInput
-              isFree={isFree}
-              handleKeyDown={handleKeyDown}
-              name="salePrice"
-              control={control}
-              getValues={getValues}
-              overrideRequired={false}
-            />
-            {errors.salePrice ? (
-              <p className="text-sm text-red-500 mb-2">{errors.salePrice.message as string}</p>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Sale Due Date
-            </Label>
-            <DatePicker
-              date={salePriceDueDate}
-              setDate={setSalePriceDueDate}
-              min={dayjs().add(1, 'days').toDate()}
-              disabled={isFree}
-            />
-            <p className="text-secondary-foreground text-sm">
-              Leave this blank if the sale price should not expire
-            </p>
-          </div>
         </div>
 
         {!isFree ? (
@@ -673,6 +631,34 @@ export function ProductFormComponent() {
           </div>
           <SelectedOptions selectedOptions={{ craft: category.craft, options: category.options }} />
         </div>
+
+        <CardRadioGroup
+          selectedOption={status}
+          setSelectedOption={setStatus}
+          question={'Draft, Tester Call or Release?'}
+          description={
+            <span>
+              Choose if you want to draft this pattern, create a tester call or release directly.
+            </span>
+          }
+          options={[
+            {
+              id: 'Draft',
+              title: 'Draft',
+              description: 'My pattern will be saved but not be available to the public yet',
+            },
+            {
+              id: 'Created',
+              title: 'Tester Call',
+              description: 'My pattern will be listed under open Tester Calls',
+            },
+            {
+              id: 'Released',
+              title: 'Release',
+              description: 'My pattern will be directly released to the public',
+            },
+          ]}
+        />
 
         <div className="flex flex-col">
           <Label htmlFor="images" className="block text-lg font-semibold mb-2">

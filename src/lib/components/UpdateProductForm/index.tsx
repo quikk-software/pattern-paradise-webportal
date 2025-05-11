@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, ChangeEvent, useMemo, useEffect } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -32,8 +32,6 @@ import { Store } from '@/lib/redux/store';
 import UploadFeedback from '@/components/upload-feedback';
 import Link from 'next/link';
 import CardRadioGroup from '@/components/card-radio-group';
-import { DatePicker } from '@/components/date-picker';
-import dayjs from '@/lib/core/dayjs';
 import logger from '@/lib/core/logger';
 
 interface UpdateProductFormProps {
@@ -59,10 +57,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
   const [imageError, setImageError] = useState<string | undefined>(undefined);
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(initialData.isFree);
-  const [isMystery, setIsMystery] = useState<string | null>(initialData.isMystery ? 'yes' : 'no');
-  const [salePriceDueDate, setSalePriceDueDate] = useState<Date | undefined>(
-    !!initialData.salePriceDueDate ? new Date(initialData.salePriceDueDate) : undefined,
-  );
+  const [isMystery, setIsMystery] = useState<string>(initialData.isMystery ? 'yes' : 'no');
   const [uploadProgress, setUploadProgress] = useState<{ fileIndex: number; progress: number }[]>(
     [],
   );
@@ -107,7 +102,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           imageUrls: initialData.imageUrls,
           hashtags: initialData.hashtags,
           price: String(initialData.price),
-          salePrice: initialData.salePrice ? String(initialData.salePrice) : undefined,
           category: initialData.category,
           experienceLevel: initialData.experience,
         }
@@ -117,7 +111,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
           imageUrls: [],
           hashtags: [],
           price: '',
-          salePrice: '',
           category: '',
           experienceLevel: 'Intermediate',
         },
@@ -341,14 +334,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
       formData.append('experience', data.experienceLevel);
       formData.append('category', category.craft);
       formData.append('price', String(isFree ? 0.0 : parseFloat(data.price.replace(',', '.'))));
-      formData.append(
-        'salePrice',
-        String(isFree || !data.salePrice ? '' : parseFloat(data.salePrice.replace(',', '.'))),
-      );
-      formData.append(
-        'salePriceDueDate',
-        String(isFree || !salePriceDueDate ? '' : salePriceDueDate),
-      );
       formData.append('isFree', isFree ? 'true' : 'false');
       formData.append('isMystery', !isFree && isMystery === 'yes' ? 'true' : 'false');
 
@@ -506,38 +491,6 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
             {errors.price ? (
               <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
             ) : null}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Sale Price (in $)
-            </Label>
-            <PriceInput
-              isFree={isFree}
-              handleKeyDown={handleKeyDown}
-              name="salePrice"
-              control={control}
-              getValues={getValues}
-              overrideRequired={false}
-            />
-            {errors.salePrice ? (
-              <p className="text-sm text-red-500 mb-2">{errors.salePrice.message as string}</p>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Sale Due Date
-            </Label>
-            <DatePicker
-              date={salePriceDueDate}
-              setDate={setSalePriceDueDate}
-              min={dayjs().add(1, 'days').toDate()}
-              disabled={isFree}
-            />
-            <p className="text-secondary-foreground text-sm">
-              Leave this blank if the sale price should not expire
-            </p>
           </div>
         </div>
 

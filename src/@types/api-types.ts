@@ -2082,6 +2082,8 @@ export class Api<
         isMystery: string;
         /** The experience level of the product. */
         experience: string;
+        /** The status of the product. */
+        status: string;
       },
       params: RequestParams = {},
     ) =>
@@ -2297,6 +2299,40 @@ export class Api<
     releaseProduct: (productId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/v1/products/${productId}/release`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Drafts the product by the given product ID.
+     *
+     * @tags Product
+     * @name DraftProduct
+     * @summary Drafts the product.
+     * @request PUT:/api/v1/products/{productId}/draft
+     * @secure
+     */
+    draftProduct: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/products/${productId}/draft`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Un-drafts the product by the given product ID.
+     *
+     * @tags Product
+     * @name UndraftProduct
+     * @summary Un-drafts the product.
+     * @request PUT:/api/v1/products/{productId}/undraft
+     * @secure
+     */
+    undraftProduct: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/products/${productId}/undraft`,
         method: "PUT",
         secure: true,
         ...params,

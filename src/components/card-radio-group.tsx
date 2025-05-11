@@ -13,7 +13,7 @@ interface CardRadioOption {
 
 interface CardRadioGroupProps {
   selectedOption: string | null;
-  setSelectedOption: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
   question: string;
   description?: string | React.ReactNode;
   options: CardRadioOption[];
@@ -33,7 +33,9 @@ export default function CardRadioGroup({
         {description && <p className="text-muted-foreground mt-1">{description}</p>}
       </div>
 
-      <div className="grid gap-4 grid-cols-2">
+      <div
+        className={`grid gap-4 md:grid-cols-${options.length}${options.length > 2 ? ` grid-cols-1` : ` grid-cols-${options.length}`}`}
+      >
         {options.map((option) => (
           <div key={option.id} className="relative">
             <input

@@ -5,6 +5,8 @@ export * from './useCreateProduct';
 export * from './useUpdateProductSale';
 export * from './useUpdateProduct';
 export * from './useReleaseProduct';
+export * from './useDraftProduct';
+export * from './useUndraftProduct';
 export * from './useListProductsByUserId';
 export * from './useListProductsForShowcase';
 export * from './useListProductsForSwipe';
