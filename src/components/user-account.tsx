@@ -16,6 +16,8 @@ import Link from 'next/link';
 import ShareButton from '@/lib/components/ShareButton';
 import { useValidSession } from '@/hooks/useValidSession';
 import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
+import WelcomeBanner from '@/lib/components/WelcomeBanner';
+import { useRouter } from 'next/navigation';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -27,6 +29,8 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   const { userId } = useSelector((s: Store) => s.auth);
+
+  const router = useRouter();
 
   const { data } = useValidSession();
 
@@ -116,6 +120,12 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
           }
         />
       </div>
+
+      <WelcomeBanner
+        onContinue={() => router.push(`/auth/registration?redirect=/users/${user.username}`)}
+        buttonText="Get Started in 2 Minutes"
+        minimal
+      />
 
       <UserDetailsCardWrapper user={userToUse} showRoles={true} hasProducts={products.length > 0} />
 
