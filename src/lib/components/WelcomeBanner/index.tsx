@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import useAffiliate from '@/lib/core/useAffiliate';
 import Link from 'next/link';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface WelcomeBannerProps {
   userName?: string;
@@ -28,6 +29,7 @@ export default function WelcomeBanner({
   const [mounted, setMounted] = useState(false);
 
   const { affiliate } = useAffiliate();
+  const { status } = useValidSession();
 
   useEffect(() => {
     setMounted(true);
@@ -39,7 +41,7 @@ export default function WelcomeBanner({
 
   const isValidAffiliate = ['crochetbygenna'].includes(affiliate ?? '');
 
-  if (!isValidAffiliate && hideOnInvalidAffiliate) {
+  if ((!isValidAffiliate && hideOnInvalidAffiliate) || status === 'authenticated') {
     return null;
   }
 
@@ -60,20 +62,20 @@ export default function WelcomeBanner({
       ) : null}
 
       <div className="relative z-10">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center gap-3 mb-2"
+        >
+          <div className="bg-primary/10 p-2 rounded-full">
+            <Users className="h-5 w-5 text-primary" />
+          </div>
+          <span className="text-sm font-medium text-primary">Join our community</span>
+        </motion.div>
+
         {!minimal ? (
           <>
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center gap-3 mb-2"
-            >
-              <div className="bg-primary/10 p-2 rounded-full">
-                <Users className="h-5 w-5 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-primary">Join our community</span>
-            </motion.div>
-
             <motion.h1
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
