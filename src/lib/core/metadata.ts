@@ -1,10 +1,6 @@
 import { Metadata } from 'next';
 import pages from '@/lib/hooks/routes';
-import { APP_TITLE, THEME_COLOR } from '@/lib/constants';
-
-const APP_NAME = 'My Awesome App';
-const APP_DESCRIPTION = 'Default description for My Awesome App';
-const APP_DOMAIN = 'https://pattern-paradise.shop';
+import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
 
 export function generatePageMetadata(pathname: string): Metadata {
   const page = pages.find((page) => page.pathname === pathname);
