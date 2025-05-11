@@ -223,6 +223,8 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
         isOpen={showRedirect}
         onClose={() => setShowRedirect(false)}
         onRedirect={handleRedirect}
+        subtitle={"You'll be redirected to your browser to complete the payment securely."}
+        description={'For your security, the payment process will be completed in your browser.'}
       />
     </div>
   );

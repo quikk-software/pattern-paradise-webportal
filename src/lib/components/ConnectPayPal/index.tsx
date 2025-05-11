@@ -10,6 +10,8 @@ import { Store } from '@/lib/redux/store';
 import { Input } from '@/components/ui/input';
 import { EMAIL_REGEX } from '@/lib/constants';
 import { PlugZap } from 'lucide-react';
+import { RedirectBrowserDrawer } from '@/lib/components/RedirectBrowserDrawer';
+import { isIOSMode } from '@/lib/core/utils';
 
 interface ConnectPayPalProps {
   buttonTheme?: string;
@@ -19,6 +21,8 @@ interface ConnectPayPalProps {
 export default function ConnectPayPal({ buttonTheme, inputTheme }: ConnectPayPalProps) {
   const [isConnectPayPalDrawerOpen, setIsConnectPayPalDrawerOpen] = useState(false);
   const [paypalEmail, setPaypalEmail] = useState<string | undefined>(undefined);
+  const [showRedirect, setShowRedirect] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   const { userId, email } = useSelector((s: Store) => s.auth);
 
@@ -32,6 +36,10 @@ export default function ConnectPayPal({ buttonTheme, inputTheme }: ConnectPayPal
     errorDetail: createPayPalReferralErrorDetail,
     data: paypalReferralData,
   } = useCreatePayPalReferral();
+
+  useEffect(() => {
+    setIsStandalone(isIOSMode());
+  }, []);
 
   useEffect(() => {
     setPaypalEmail(email);
@@ -49,10 +57,18 @@ export default function ConnectPayPal({ buttonTheme, inputTheme }: ConnectPayPal
     shareDataToPayPalGranted: boolean,
     paypalEmail: string,
   ) => {
+    if (isStandalone) {
+      setIsStandalone(true);
+      return;
+    }
     createPayPalReferral(userId, {
       shareDataToPayPalGranted,
       paypalEmail,
     }).then((result) => router.push(result.actionUrl));
+  };
+
+  const handleRedirect = () => {
+    window.location.href = `/app/secure/auth/me?action=scrollToPayPal`;
   };
 
   const invalidEmail = !EMAIL_REGEX.test(paypalEmail || '');
@@ -93,6 +109,15 @@ export default function ConnectPayPal({ buttonTheme, inputTheme }: ConnectPayPal
         isSuccess={createPayPalReferralIsSuccess}
         isError={createPayPalReferralIsError}
         errorDetail={createPayPalReferralErrorDetail}
+      />
+      <RedirectBrowserDrawer
+        isOpen={showRedirect}
+        onClose={() => setShowRedirect(false)}
+        onRedirect={handleRedirect}
+        subtitle={"You'll be redirected to your browser to complete the PayPal onboarding process."}
+        description={
+          'In order to complete the PayPal onboarding, the process will be completed in your browser.'
+        }
       />
     </div>
   );

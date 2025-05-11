@@ -15,6 +15,8 @@ interface RedirectBrowserDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onRedirect: () => void;
+  subtitle: string;
+  description: string;
   countdownTime?: number;
 }
 
@@ -22,6 +24,8 @@ export function RedirectBrowserDrawer({
   isOpen,
   onClose,
   onRedirect,
+  subtitle,
+  description,
   countdownTime = 3,
 }: RedirectBrowserDrawerProps) {
   const [timeLeft, setTimeLeft] = useState(countdownTime);
@@ -59,9 +63,7 @@ export function RedirectBrowserDrawer({
             </Button>
           </div>
           <DrawerTitle className="text-xl font-bold">Redirecting to Browser</DrawerTitle>
-          <DrawerDescription>
-            You&apos;ll be redirected to your browser to complete the payment securely.
-          </DrawerDescription>
+          <DrawerDescription>{subtitle}</DrawerDescription>
         </DrawerHeader>
 
         <div className="p-6 flex flex-col items-center">
@@ -99,9 +101,7 @@ export function RedirectBrowserDrawer({
 
           <div className="flex flex-col items-center space-y-4 w-full">
             <div className="text-center space-y-2">
-              <p className="text-sm text-gray-500">
-                For your security, the payment process will be completed in your browser.
-              </p>
+              <p className="text-sm text-gray-500">{description}</p>
             </div>
 
             <div className="flex gap-4 w-full">
