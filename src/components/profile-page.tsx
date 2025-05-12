@@ -9,7 +9,12 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GetUserResponse } from '@/@types/api-types';
-import { useGetPayPalMerchantStatus, useRemovePayPalReferral, useUpdateUser } from '@/lib/api';
+import {
+  useGetPayPalMerchantStatus,
+  useRemovePayPalReferral,
+  useUpdateUser,
+  useUpdateUserExcludedCountries,
+} from '@/lib/api';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { handleImageUpload } from '@/lib/features/common/utils';
 import { useRouter } from 'next/navigation';
@@ -44,6 +49,7 @@ import CountrySelect from '@/lib/components/CountrySelect';
 import { ProfilePreviewDrawer } from '@/lib/components/ProfilePreviewDrawer';
 import ColorPalette from '@/lib/components/ColorPalette';
 import { themes } from '@/lib/core/themes';
+import CountryGroupSelector from '@/lib/components/CountryGroupSelector';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -60,6 +66,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const [country, setCountry] = useState<string | undefined>(user.country);
   const [highlightCountry, setHighlightCountry] = useState<boolean>(false);
   const [showPreviewDrawer, setShowPreviewDrawer] = useState<boolean>(false);
+  const [excludedCountries, setExcludedCountries] = useState<string[]>([]);
 
   const { update } = useValidSession();
 
@@ -77,6 +84,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
     isLoading: updateUserIsLoading,
     isSuccess: updateUserIsSuccess,
   } = useUpdateUser();
+  const { mutate: mutateUserExcludedCountries, isLoading: mutateUserExcludedCountriesIsLoading } =
+    useUpdateUserExcludedCountries();
   const {
     mutate: removePayPalReferral,
     isLoading: removePayPalReferralIsLoading,
@@ -132,6 +141,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
         break;
     }
   }, [action, rolesRef, paypalRef, stripeRef, galleryRef, countryRef]);
+
+  useEffect(() => {
+    if (!user.excludedCountries) {
+      return;
+    }
+    setExcludedCountries(user.excludedCountries);
+  }, [user.excludedCountries]);
 
   useEffect(() => {
     if (!profileImage || profileImage === user.imageUrl) {
@@ -259,6 +275,12 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   const handleCheckPayPalMerchantStatus = (userId: string) => {
     getPayPalMerchantStatus(userId);
+  };
+
+  const handleSaveExcludedCountries = async (excludedCountries: string[]) => {
+    await mutateUserExcludedCountries(userId, {
+      countryCodes: excludedCountries,
+    });
   };
 
   const initials =
@@ -654,6 +676,18 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     ⚠️ Note: Please provide your country of residence or business registration.
                   </p>
                 </div>
+              </div>
+            ) : null}
+
+            {roles?.includes('Seller') ? (
+              <div className="space-y-2">
+                <Label>Exclude Countries from Purchasing</Label>
+                <CountryGroupSelector
+                  excludedCountries={excludedCountries}
+                  setExcludedCountries={setExcludedCountries}
+                  callback={(countries) => handleSaveExcludedCountries(countries)}
+                  isLoading={mutateUserExcludedCountriesIsLoading}
+                />
               </div>
             ) : null}
 

@@ -128,6 +128,16 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
 
   const productPrice = isSaleActive ? product.salePrice : product.price;
 
+  if (product.hasExcludedCountry) {
+    return (
+      <InfoBoxComponent
+        severity="warning"
+        title={'Pattern Unavailable'}
+        message={'This pattern is currently not available in your country.'}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4">
       {isDueDateActive ? (

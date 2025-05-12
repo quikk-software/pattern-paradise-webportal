@@ -193,6 +193,10 @@ export interface PutUserRequest {
   roles?: string[];
 }
 
+export interface PutUserExcludedCountriesRequest {
+  countryCodes: string[];
+}
+
 export interface PutUserPasswordRequest {
   password?: string;
   oldPassword?: string;
@@ -248,6 +252,7 @@ export interface GetUserResponse {
   imageUrl?: string;
   bannerImageUrl?: string;
   roles?: string[];
+  excludedCountries?: string[];
   keycloakUserId?: string;
   followers?: number;
   isFollowing?: boolean;
@@ -415,6 +420,7 @@ export interface GetProductResponse {
   hasPayPalBusinessAccount: boolean;
   stripeAccountId?: string;
   status: string;
+  hasExcludedCountry?: boolean;
   creatorId: string;
   /**
    * @format date-time
@@ -1523,6 +1529,32 @@ export class Api<
     ) =>
       this.request<void, any>({
         path: `/api/v1/users/${userId}/password`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Updates the users excluded countries by the given request body data and user ID.
+     *
+     * @tags User
+     * @name PutUserExcludedCountries
+     * @summary Updates the users excluded countries.
+     * @request PUT:/api/v1/users/{userId}/excluded-countries
+     * @secure
+     */
+    putUserExcludedCountries: (
+      userId: string,
+      data: {
+        /** @example "any" */
+        countryCodes?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}/excluded-countries`,
         method: "PUT",
         body: data,
         secure: true,
