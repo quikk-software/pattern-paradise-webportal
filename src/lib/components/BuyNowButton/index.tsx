@@ -132,7 +132,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
     return (
       <InfoBoxComponent
         severity="warning"
-        title={'This Pattern is not available'}
+        title={'Pattern Unavailable'}
         message={'This pattern is currently not available in your country.'}
       />
     );
