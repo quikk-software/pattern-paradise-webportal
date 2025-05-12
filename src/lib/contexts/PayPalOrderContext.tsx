@@ -15,6 +15,7 @@ type PayPalOrderContextType = {
   handleCreateOrder: (order?: GetOrderResponse) => Promise<string>;
   handleDeleteOrder: (orderID: string) => Promise<void>;
   createOrderIsError: boolean;
+  createOrderErrorDetail?: string;
   deleteOrderIsError: boolean;
   deleteOrderIsSuccess: boolean;
   listOrdersByProductIdIsLoading: boolean;
@@ -44,7 +45,11 @@ export function PayPalOrderProvider({
   const [orderId, setOrderId] = useState<string | null>(null);
   const [country, setCountry] = useState<string | undefined>(undefined);
 
-  const { mutate: createOrder, isError: createOrderIsError } = useCreateOrderPayPal();
+  const {
+    mutate: createOrder,
+    isError: createOrderIsError,
+    errorDetail: createOrderErrorDetail,
+  } = useCreateOrderPayPal();
   const {
     mutate: deleteOrder,
     isSuccess: deleteOrderIsSuccess,
@@ -141,6 +146,7 @@ export function PayPalOrderProvider({
     handleCreateOrder,
     handleDeleteOrder,
     createOrderIsError,
+    createOrderErrorDetail,
     deleteOrderIsError,
     deleteOrderIsSuccess,
     listOrdersByProductIdIsLoading,

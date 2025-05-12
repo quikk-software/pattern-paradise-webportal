@@ -27,6 +27,7 @@ export function CheckoutButtons({ price, product, disabled, country }: CheckoutB
     handleCreateOrder,
     handleDeleteOrder,
     createOrderIsError,
+    createOrderErrorDetail,
     listOrdersByProductIdIsLoading,
     order,
   } = usePayPalOrder();
@@ -113,9 +114,9 @@ export function CheckoutButtons({ price, product, disabled, country }: CheckoutB
         <Alert variant="destructive" className="mt-4">
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>
-            {createOrderIsError
-              ? 'Failed to create order. Please try again.'
-              : 'Failed to process payment. Please try again or use a different PayPal account.'}
+            {createOrderErrorDetail
+              ? `Failed to create order: ${createOrderErrorDetail}`
+              : 'Failed to create order. Please try again.'}
           </AlertDescription>
         </Alert>
       ) : null}
