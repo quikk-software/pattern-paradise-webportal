@@ -157,7 +157,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
             </div>
           </CardContent>
         </Card>
-        <ReviewMessages productId={product.id} />
+        <ReviewMessages productId={product.id} isFree={product.isFree} />
         <TesterShoutout productId={product.id} />
       </div>
     </PayPalOrderProvider>

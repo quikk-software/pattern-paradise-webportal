@@ -8,9 +8,10 @@ import Link from 'next/link';
 
 interface ReviewMessagesProps {
   productId: string;
+  isFree: boolean;
 }
 
-export default function ReviewMessages({ productId }: ReviewMessagesProps) {
+export default function ReviewMessages({ productId, isFree }: ReviewMessagesProps) {
   const {
     fetch: fetchTesting,
     data: testing,
@@ -53,7 +54,7 @@ export default function ReviewMessages({ productId }: ReviewMessagesProps) {
     <Card>
       <CardContent className="p-6 flex flex-col gap-4">
         <h2 className="text-2xl font-bold">Pattern Reviews</h2>
-        {comments.length === 0 && testing.status !== 'Approved' ? (
+        {comments.length === 0 && testing.status !== 'Approved' && !isFree ? (
           <InfoBoxComponent
             message={
               <>
