@@ -1,3 +1,5 @@
+<img src="https://pattern-paradise.shop/banners/pattern-paradise-banner.jpeg" alt="Pattern Paradise - Where Creativity Pays Off." width="600"/>
+
 # 🧶 Pattern Paradise
 
 [Pattern Paradise](https://pattern-paradise.shop) is a modern, community-powered platform for crochet and knitting enthusiasts. Whether you're a designer sharing your work, or a maker helping test patterns before release — this is your creative home.
