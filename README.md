@@ -1,4 +1,4 @@
-<img src="https://pattern-paradise.shop/banners/pattern-paradise-banner.jpeg" alt="Pattern Paradise - Where Creativity Pays Off." width="600"/>
+![Pattern Paradise - Where Creativity Pays Off.](https://pattern-paradise.shop/banners/pattern-paradise-banner.jpeg)
 
 # 🧶 Pattern Paradise
 
