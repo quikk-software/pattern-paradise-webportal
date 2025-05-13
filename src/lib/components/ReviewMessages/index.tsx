@@ -46,7 +46,7 @@ export default function ReviewMessages({ productId, isFree }: ReviewMessagesProp
     );
   }
 
-  if (comments.length === 0 && testing.status === 'Approved' && !isFree) {
+  if (comments.length === 0 && (testing.status === 'Approved' || !isFree)) {
     return null;
   }
 
