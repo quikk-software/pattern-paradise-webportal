@@ -126,7 +126,7 @@ function generatePinterestMetadata(product: GetProductResponse): {
     rawTitle.length > MAX_TITLE ? rawTitle.slice(0, MAX_TITLE - 1).trim() + '…' : rawTitle;
 
   const coreDescriptionSentences = [
-    `Learn how to knit your own ${titleWithoutCategory}.`,
+    `${product.isFree ? 'Free knitting pattern! ' : ''}Learn how to knit your own ${titleWithoutCategory}.`,
     `Perfect for ${product.subCategories.slice(0, 5).join(', ')}.`,
   ];
 
