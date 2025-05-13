@@ -7,6 +7,7 @@ import ThreadsIcon from '@/lib/icons/ThreadsIcon';
 import RedditIcon from '@/lib/icons/RedditIcon';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import PinterestIcon from '@/lib/icons/PinterestIcon';
+import GithubIcon from '@/lib/icons/GithubIcon';
 
 export default function Footer() {
   return (
@@ -71,6 +72,15 @@ export default function Footer() {
                 rel="noopener noreferrer nofollow"
               >
                 <RedditIcon className="h-6 w-6" />
+              </Link>
+              <Link
+                href="https://github.com/quikk-software"
+                className="text-muted-foreground hover:text-foreground"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                aria-label="Follow Pattern Paradise on Github"
+              >
+                <GithubIcon className="h-6 w-6 text-black" />
               </Link>
             </div>
           </div>
