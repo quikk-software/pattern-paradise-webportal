@@ -56,7 +56,7 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
   return (
     <div className={`flex flex-col h-dvh`}>
       <NavbarComponent background={'none'} scrolled={scrolled} />
-      <ConsentBanner />
+      {/*<ConsentBanner />*/}
       <div
         ref={scrollableDivRef}
         className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto${shouldRemoveContainer ? '' : ' mx-auto container'}`}
