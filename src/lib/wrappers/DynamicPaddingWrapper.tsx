@@ -8,6 +8,7 @@ import { BottomNavigation } from '@/components/bottom-navigation';
 import TokenDataWrapper from '@/lib/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
 import AffiliateWrapper from '@/lib/wrappers/AffiliateWrapper';
+import { ConsentBanner } from '@/lib/components/ConsentBanner';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 const fullHeightPages = ['/swipe'];
@@ -55,6 +56,7 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
   return (
     <div className={`flex flex-col h-dvh`}>
       <NavbarComponent background={'none'} scrolled={scrolled} />
+      <ConsentBanner />
       <div
         ref={scrollableDivRef}
         className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto${shouldRemoveContainer ? '' : ' mx-auto container'}`}

@@ -224,7 +224,17 @@ export interface GetUserResponse {
   isBlocked: boolean;
   isMailConfirmed: boolean;
   hasAcceptedPrivacy: boolean;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  acceptedPrivacyOn: string;
   hasAcceptedTerms: boolean;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  acceptedTermsOn: string;
   openIncidentsCount: number;
   isSponsored: boolean;
   firstName?: string;
@@ -448,6 +458,64 @@ export interface ListProductsResponse {
   /** @example 3 */
   totalPages: number;
   products: GetProductResponse[];
+}
+
+export type PostPhysicalProductRequest = object;
+
+export interface PostPhysicalProductResponse {
+  physicalProductId: string;
+}
+
+export type PutPhysicalProductRequest = object;
+
+export interface GetPhysicalProductResponse {
+  id: string;
+  imageUrls: string[];
+  subCategories: string[];
+  hashtags: string[];
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  salePrice: number;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  salePriceDueDate?: string;
+  isFree: boolean;
+  isSponsored: boolean;
+  hasPayPalBusinessAccount: boolean;
+  stripeAccountId?: string;
+  status: string;
+  hasExcludedCountry?: boolean;
+  creatorId: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  createdAt: string;
+  /**
+   * @format date-time
+   * @example "2024-01-01T00:00:00Z"
+   */
+  updatedAt: string;
+}
+
+export interface ListPhysicalProductsResponse {
+  /** @example "3" */
+  count: number;
+  /** @example false */
+  hasPreviousPage: boolean;
+  /** @example true */
+  hasNextPage: boolean;
+  /** @example 1 */
+  pageNumber: number;
+  /** @example 1 */
+  pageSize: number;
+  /** @example 3 */
+  totalPages: number;
+  products: GetPhysicalProductResponse[];
 }
 
 export interface DeleteUsersFromTestingRequest {
@@ -1910,6 +1978,23 @@ export class Api<
       }),
 
     /**
+     * @description If the user cannot be found, an exception will be thrown.
+     *
+     * @tags User
+     * @name AcceptTermsAndPrivacy
+     * @summary Accepts the terms and privacy.
+     * @request POST:/api/v1/users/accept/terms-and-privacy
+     * @secure
+     */
+    acceptTermsAndPrivacy: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/accept/terms-and-privacy`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description Device tokens can be stored for multiple users simultaneously.
      *
      * @tags User
@@ -2279,7 +2364,7 @@ export class Api<
      *
      * @tags Product
      * @name DeleteProduct
-     * @summary Deletes the products.
+     * @summary Deletes the product.
      * @request DELETE:/api/v1/products/{productId}
      * @secure
      */
@@ -2443,6 +2528,260 @@ export class Api<
         query: query,
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Creates a physical product with metadata provided in the request body.
+     *
+     * @tags Physical product
+     * @name PostPhysicalProduct
+     * @summary Creates a physical product.
+     * @request POST:/api/v1/physical-products
+     * @secure
+     */
+    postPhysicalProduct: (params: RequestParams = {}) =>
+      this.request<PostPhysicalProductResponse, any>({
+        path: `/api/v1/physical-products`,
+        method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of physical products.
+     *
+     * @tags Physical product
+     * @name ListPhysicalProducts
+     * @summary Gets the physical products.
+     * @request GET:/api/v1/physical-products
+     * @secure
+     */
+    listPhysicalProducts: (
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The query for a full text search. */
+        q?: string;
+        /** The status of the physical product. */
+        status?: string;
+        /** How to sort the result. */
+        sortBy?: string;
+        /** List of categories to filter physical products. */
+        categories?: string[];
+        /** List of subcategories to filter physical products. */
+        subCategories?: string[];
+        /** List of hashtags to filter physical products. */
+        hashtags?: string[];
+        /** The minimum price of a physical product to filter. */
+        minPrice?: number;
+        /** The maximum price of a physical product to filter. */
+        maxPrice?: number;
+        /** Filter for sales physical products. */
+        sale?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListPhysicalProductsResponse, any>({
+        path: `/api/v1/physical-products`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Updates the physical product by the given request body data and pyhsical product ID.
+     *
+     * @tags Physical product
+     * @name PutPhysicalProduct
+     * @summary Updates the physical product.
+     * @request PUT:/api/v1/physical-products/{physicalProductId}
+     * @secure
+     */
+    putPhysicalProduct: (
+      physicalProductId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/physical-products/${physicalProductId}`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The physical product will be queried by a given ID. If the physical product cannot be found, an exception will be thrown.
+     *
+     * @tags Physical product
+     * @name GetPhysicalProductById
+     * @summary Gets a physical product by ID.
+     * @request GET:/api/v1/physical-products/{physicalProductId}
+     * @secure
+     */
+    getPhysicalProductById: (
+      physicalProductId: string,
+      query?: {
+        /** If metrics should be tracked. */
+        trackMetrics?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<GetPhysicalProductResponse, NotFoundResponse>({
+        path: `/api/v1/physical-products/${physicalProductId}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Updates the sale data of a physical product by the given request body data and physical product ID.
+     *
+     * @tags Physical product
+     * @name PutPhysicalProductSale
+     * @summary Updates the sale data of a physical product.
+     * @request PUT:/api/v1/physical-products/{physicalProductId}/sale
+     * @secure
+     */
+    putPhysicalProductSale: (
+      physicalProductId: string,
+      data: {
+        /** @example "any" */
+        salePrice?: any;
+        /** @example "any" */
+        salePriceDueDate?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/physical-products/${physicalProductId}/sale`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Releases the physical product by the givenn physical product ID.
+     *
+     * @tags Product
+     * @name ReleasePhysicalProduct
+     * @summary Releases the physical product.
+     * @request PUT:/api/v1/physical-products/{physicalProductId}/release
+     * @secure
+     */
+    releasePhysicalProduct: (
+      physicalProductId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/physical-products/${physicalProductId}/release`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Drafts the physical product by the given physical product ID.
+     *
+     * @tags Physical product
+     * @name DraftPhysicalProduct
+     * @summary Drafts the physical product.
+     * @request PUT:/api/v1/physical-products/{physicalProductId}/draft
+     * @secure
+     */
+    draftPhysicalProduct: (
+      physicalProductId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/physical-products/${physicalProductId}/draft`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Un-drafts the physical product by the given physical product ID.
+     *
+     * @tags Physical product
+     * @name UndraftPhysicalProduct
+     * @summary Un-drafts the physical product.
+     * @request PUT:/api/v1/physical-products/{physicalProductId}/undraft
+     * @secure
+     */
+    undraftPhysicalProduct: (
+      physicalProductId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/physical-products/${physicalProductId}/undraft`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The query returns a list of physical products of a given user ID.
+     *
+     * @tags Physical product
+     * @name ListPhysicalProductsByUserId
+     * @summary Gets the physical products by user ID.
+     * @request GET:/api/v1/physical-products/users/{userId}
+     * @secure
+     */
+    listPhysicalProductsByUserId: (
+      userId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+        /** The query for a full text search. */
+        q?: string;
+        /** The status of the physical product. */
+        status?: string;
+        /** List of categories to filter physical products. */
+        categories?: string[];
+        /** The minimum price of a physical product to filter. */
+        minPrice?: number;
+        /** The maximum price of a physical product to filter. */
+        maxPrice?: number;
+        /** Filter for sales physical products. */
+        sale?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListPhysicalProductsResponse, any>({
+        path: `/api/v1/physical-products/users/${userId}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The query deletes a physical product by a given ID.
+     *
+     * @tags Physical product
+     * @name DeletePhysicalProduct
+     * @summary Deletes the physical product.
+     * @request DELETE:/api/v1/physical-products/{productId}
+     * @secure
+     */
+    deletePhysicalProduct: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/physical-products/${productId}`,
+        method: "DELETE",
+        secure: true,
         ...params,
       }),
 

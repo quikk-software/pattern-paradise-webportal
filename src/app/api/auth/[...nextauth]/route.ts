@@ -110,6 +110,14 @@ const handler = NextAuth({
             // @ts-ignore
             subscriptionStatus: user.paypalSubscriptionStatus,
             // @ts-ignore
+            hasAcceptedTerms: user.hasAcceptedTerms,
+            // @ts-ignore
+            hasAcceptedPrivacy: user.hasAcceptedPrivacy,
+            // @ts-ignore
+            acceptedTermsOn: new Date(user.acceptedTermsOn),
+            // @ts-ignore
+            acceptedPrivacyOn: new Date(user.acceptedPrivacyOn),
+            // @ts-ignore
             theme: user.theme,
             error: null,
           };
@@ -166,6 +174,12 @@ const handler = NextAuth({
         token.image = user.image;
         token.roles = user.roles;
         token.subscriptionStatus = user?.subscriptionStatus;
+        token.hasAcceptedTerms = user?.hasAcceptedTerms;
+        token.hasAcceptedPrivacy = user?.hasAcceptedPrivacy;
+        token.acceptedTermsOn = user?.acceptedTermsOn ? new Date(user.acceptedTermsOn) : undefined;
+        token.acceptedPrivacyOn = user?.acceptedPrivacyOn
+          ? new Date(user.acceptedPrivacyOn)
+          : undefined;
         token.theme = user?.theme;
       }
 
@@ -208,6 +222,10 @@ const handler = NextAuth({
       session.user.image = sessionToken.image as string;
       session.user.roles = sessionToken.roles as string[];
       session.user.subscriptionStatus = sessionToken.subscriptionStatus as string;
+      session.user.hasAcceptedTerms = sessionToken.hasAcceptedTerms as boolean;
+      session.user.hasAcceptedPrivacy = sessionToken.hasAcceptedPrivacy as boolean;
+      session.user.acceptedTermsOn = sessionToken.acceptedTermsOn as Date;
+      session.user.acceptedPrivacyOn = sessionToken.acceptedPrivacyOn as Date;
       session.user.theme = sessionToken.theme as string;
       return { ...session, error: sessionToken?.error };
     },

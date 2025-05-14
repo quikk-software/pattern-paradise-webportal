@@ -7,6 +7,10 @@ declare module 'next-auth' {
     image?: string | null;
     roles?: string[];
     subscriptionStatus?: string;
+    hasAcceptedTerms?: boolean;
+    hasAcceptedPrivacy?: boolean;
+    acceptedTermsOn?: Date;
+    acceptedPrivacyOn?: Date;
     theme?: string;
     accessToken?: string;
     refreshToken?: string;
