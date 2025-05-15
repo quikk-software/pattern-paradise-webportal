@@ -25,6 +25,7 @@ interface PatternCardProps {
 
 export default function PatternCard({ pattern }: PatternCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [currentlyDownloading, setCurrentlyDownloading] = useState<string | undefined>(undefined);
   const [downloadIsDone, setDownloadIsDone] = useState(false);
 
   const {
@@ -58,6 +59,7 @@ export default function PatternCard({ pattern }: PatternCardProps) {
 
   const handleDownload = (fileId: string) => {
     setDownloadIsDone(false);
+    setCurrentlyDownloading(fileId);
     downloadPattern(fileId);
   };
 
@@ -152,7 +154,7 @@ export default function PatternCard({ pattern }: PatternCardProps) {
                     return (
                       <div className="space-y-1" key={file.objectName}>
                         <Button
-                          disabled={isLoading || downloadIsDone}
+                          disabled={currentlyDownloading === file.id && downloadIsDone}
                           onClick={() => handleDownload(file.id)}
                           className="w-full mb-2"
                           variant="secondary"
@@ -161,39 +163,43 @@ export default function PatternCard({ pattern }: PatternCardProps) {
                           <Download className="w-4 h-4 mr-2" />
                           <span className="line-clamp-1">{file.objectName.split('/').pop()}</span>
                         </Button>
-                        {downloadProgress > 0 ? (
-                          <Progress
-                            value={downloadProgress}
-                            className="h-2 transition-all duration-300 ease-in-out"
-                            style={{
-                              background: `linear-gradient(90deg, 
+                        {currentlyDownloading === file.id ? (
+                          <>
+                            {downloadProgress > 0 ? (
+                              <Progress
+                                value={downloadProgress}
+                                className="h-2 transition-all duration-300 ease-in-out"
+                                style={{
+                                  background: `linear-gradient(90deg, 
                                 var(--primary) 0%, 
                                 var(--primary) ${downloadProgress}%, 
                                 var(--muted) ${downloadProgress}%, 
                                 var(--muted) 100%)`,
-                            }}
-                          />
+                                }}
+                              />
+                            ) : null}
+                            {downloadProgress > 20 && !downloadIsDone ? (
+                              <p>Please hang tight. Just a couple of seconds left...</p>
+                            ) : null}
+                            <RequestStatus
+                              isSuccess={downloadIsDone}
+                              isError={isError}
+                              successMessage={
+                                'Your pattern has been successfully downloaded! Check your Downloads folder to access it.'
+                              }
+                              errorMessage={
+                                <span>
+                                  Something went wrong while downloading this pattern. Please try
+                                  again or{' '}
+                                  <Link className="text-blue-500 underline" href="/help">
+                                    contact us
+                                  </Link>{' '}
+                                  for assistance.
+                                </span>
+                              }
+                            />
+                          </>
                         ) : null}
-                        {downloadProgress > 90 && !downloadIsDone ? (
-                          <p>Please hang tight. Just a couple of seconds left...</p>
-                        ) : null}
-                        <RequestStatus
-                          isSuccess={downloadIsDone}
-                          isError={isError}
-                          successMessage={
-                            'Your pattern has been successfully downloaded! Check your Downloads folder to access it.'
-                          }
-                          errorMessage={
-                            <span>
-                              Something went wrong while downloading this pattern. Please try again
-                              or{' '}
-                              <Link className="text-blue-500 underline" href="/help">
-                                contact us
-                              </Link>{' '}
-                              for assistance.
-                            </span>
-                          }
-                        />
                       </div>
                     );
                   })}

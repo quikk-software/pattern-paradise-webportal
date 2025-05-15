@@ -134,7 +134,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           }}
         />
       ) : null}
-      {downloadProgress > 90 && !downloadIsDone ? (
+      {downloadProgress > 20 && !downloadIsDone ? (
         <p>Please hang tight. Just a couple of seconds left...</p>
       ) : null}
       <RequestStatus
