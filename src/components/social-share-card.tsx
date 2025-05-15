@@ -259,7 +259,7 @@ export function SocialShareCard({
 
               {/* Call to Action */}
               <div
-                className="flex items-center justify-between mt-[5%] mb-[5%]"
+                className="flex items-start justify-between mt-[5%] mb-[5%]"
                 style={{ height: isDownloadVersion ? '288px' : '15%' }}
               >
                 <div>
