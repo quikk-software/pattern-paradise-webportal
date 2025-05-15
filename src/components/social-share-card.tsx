@@ -291,7 +291,7 @@ export function SocialShareCard({
                   <QRCodeSVG
                     value={shareUrl}
                     size={isDownloadVersion ? 360 : 60}
-                    fgColor={'#525252'}
+                    fgColor={'#151515'}
                     level="H"
                   />
                 </div>
