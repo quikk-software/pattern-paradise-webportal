@@ -2830,6 +2830,8 @@ export class Api<
         status?: string[];
         /** If the result is for chat. */
         isChat?: boolean;
+        /** Identifier for sorting rule. */
+        sortBy?: string;
         /** The current page number. */
         pageNumber?: number;
         /** The page size. */
@@ -3050,6 +3052,8 @@ export class Api<
         pageSize?: number;
         /** Filter for showing all, only the customers or only the sellers testings. */
         filter?: string;
+        /** Identifier for sorting rule. */
+        sortBy?: string;
       },
       params: RequestParams = {},
     ) =>
@@ -3539,23 +3543,20 @@ export class Api<
       }),
 
     /**
-     * @description The patterns will be queried by a given product ID and optionally by language.
+     * No description
      *
-     * @tags Pattern
-     * @name DownloadPatterns
-     * @summary Downloads patterns by product ID.
+     * @name V1PatternsProductsDownloadList
      * @request GET:/api/v1/patterns/products/{productId}/download
      * @secure
      */
-    downloadPatterns: (
+    v1PatternsProductsDownloadList: (
       productId: string,
-      query: {
-        /** The language of the pattern. */
-        language: string;
+      query?: {
+        language?: string;
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, any>({
+      this.request<any, void>({
         path: `/api/v1/patterns/products/${productId}/download`,
         method: "GET",
         query: query,

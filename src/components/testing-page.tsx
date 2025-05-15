@@ -70,7 +70,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     if (!refetch || !userId) {
       return;
     }
-    fetchTestings(userId);
+    fetchTestings(userId, 'newest');
     setRefetch(false);
   }, [refetch, userId]);
 
@@ -78,7 +78,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     if (!loadMore || !userId) {
       return;
     }
-    fetchTestings(userId);
+    fetchTestings(userId, 'newest');
     setLoadMore((p) => !p);
   }, [loadMore, userId]);
 
