@@ -12,6 +12,7 @@ import { usePathname } from 'next/navigation';
 import CountryFlag from '@/lib/components/CountryFlag';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import Link from 'next/link';
+import { Progress } from '@/components/ui/progress';
 
 interface DownloadPatternButtonProps {
   productId: string;
@@ -28,6 +29,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
 }) => {
   const [language, setLanguage] = useState<string | undefined>(undefined);
   const [isQuickSignupDrawerOpen, setIsQuickSignupDrawerOpen] = useState(false);
+  const [downloadIsDone, setDownloadIsDone] = useState(false);
 
   const { status } = useValidSession();
   const pathname = usePathname();
@@ -38,6 +40,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
     isSuccess: downloadPatternIsSuccess,
     isError: downloadPatternIsError,
     data: file,
+    downloadProgress,
   } = useDownloadPatternsByProductId();
 
   useEffect(() => {
@@ -60,6 +63,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
       setTimeout(() => {
         URL.revokeObjectURL(url);
         document.body.removeChild(link);
+        setDownloadIsDone(true);
       }, 1000);
     }
 
@@ -84,6 +88,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
 
   const handleDownloadClick = (productId: string, fileLanguage: string, isLoggedIn: boolean) => {
     setLanguage(fileLanguage);
+    setDownloadIsDone(false);
     if (isLoggedIn) {
       downloadPattern(productId, fileLanguage);
     } else {
@@ -99,7 +104,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
         <Button
           key={fileLanguage}
           onClick={() => handleDownloadClick(productId, fileLanguage, isLoggedIn)}
-          disabled={downloadPatternIsLoading || downloadPatternIsSuccess}
+          disabled={downloadPatternIsLoading || downloadPatternIsSuccess || downloadIsDone}
         >
           {downloadPatternIsLoading && fileLanguage === language ? (
             <LoadingSpinnerComponent size="sm" className="text-white" />
@@ -116,8 +121,24 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
           )}
         </Button>
       ))}
+      {downloadProgress > 0 ? (
+        <Progress
+          value={downloadProgress}
+          className="h-2 transition-all duration-300 ease-in-out"
+          style={{
+            background: `linear-gradient(90deg, 
+                                var(--primary) 0%, 
+                                var(--primary) ${downloadProgress}%, 
+                                var(--muted) ${downloadProgress}%, 
+                                var(--muted) 100%)`,
+          }}
+        />
+      ) : null}
+      {downloadProgress > 90 && !downloadIsDone ? (
+        <p>Please hang tight. Just a couple of seconds left...</p>
+      ) : null}
       <RequestStatus
-        isSuccess={downloadPatternIsSuccess}
+        isSuccess={downloadIsDone}
         isError={downloadPatternIsError}
         successMessage={
           'Your pattern has been successfully downloaded! Check your Downloads folder to access it.'

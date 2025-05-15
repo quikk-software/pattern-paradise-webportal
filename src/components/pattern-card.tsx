@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { useDownloadPattern } from '@/lib/api/pattern';
 import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import SendFilesButton from '@/lib/components/SendFilesButton';
+import { Progress } from '@/components/ui/progress';
+import RequestStatus from '@/lib/components/RequestStatus';
 
 interface Pattern {
   language: string;
@@ -23,8 +25,15 @@ interface PatternCardProps {
 
 export default function PatternCard({ pattern }: PatternCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [downloadIsDone, setDownloadIsDone] = useState(false);
 
-  const { fetch: downloadPattern, data: fileData, isLoading } = useDownloadPattern();
+  const {
+    fetch: downloadPattern,
+    data: fileData,
+    isLoading,
+    isError,
+    downloadProgress,
+  } = useDownloadPattern();
 
   useEffect(() => {
     if (!fileData) {
@@ -42,11 +51,13 @@ export default function PatternCard({ pattern }: PatternCardProps) {
       setTimeout(() => {
         URL.revokeObjectURL(url);
         document.body.removeChild(link);
+        setDownloadIsDone(true);
       }, 1000);
     }
   }, [fileData]);
 
   const handleDownload = (fileId: string) => {
+    setDownloadIsDone(false);
     downloadPattern(fileId);
   };
 
@@ -139,17 +150,51 @@ export default function PatternCard({ pattern }: PatternCardProps) {
                   .sort((a, b) => fileOrder.indexOf(a.id) - fileOrder.indexOf(b.id))
                   .map((file) => {
                     return (
-                      <Button
-                        disabled={isLoading}
-                        key={file.objectName}
-                        onClick={() => handleDownload(file.id)}
-                        className="w-full mb-2"
-                        variant="secondary"
-                        size="sm"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        <span className="line-clamp-1">{file.objectName.split('/').pop()}</span>
-                      </Button>
+                      <div className="space-y-1" key={file.objectName}>
+                        <Button
+                          disabled={isLoading || downloadIsDone}
+                          onClick={() => handleDownload(file.id)}
+                          className="w-full mb-2"
+                          variant="secondary"
+                          size="sm"
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          <span className="line-clamp-1">{file.objectName.split('/').pop()}</span>
+                        </Button>
+                        {downloadProgress > 0 ? (
+                          <Progress
+                            value={downloadProgress}
+                            className="h-2 transition-all duration-300 ease-in-out"
+                            style={{
+                              background: `linear-gradient(90deg, 
+                                var(--primary) 0%, 
+                                var(--primary) ${downloadProgress}%, 
+                                var(--muted) ${downloadProgress}%, 
+                                var(--muted) 100%)`,
+                            }}
+                          />
+                        ) : null}
+                        {downloadProgress > 90 && !downloadIsDone ? (
+                          <p>Please hang tight. Just a couple of seconds left...</p>
+                        ) : null}
+                        <RequestStatus
+                          isSuccess={downloadIsDone}
+                          isError={isError}
+                          successMessage={
+                            'Your pattern has been successfully downloaded! Check your Downloads folder to access it.'
+                          }
+                          errorMessage={
+                            <span>
+                              Something went wrong while downloading this pattern. Please try again
+                              or{' '}
+                              <Link className="text-blue-500 underline" href="/help">
+                                contact us
+                              </Link>{' '}
+                              for assistance.
+                            </span>
+                          }
+                        />
+                      </div>
                     );
                   })}
               </div>

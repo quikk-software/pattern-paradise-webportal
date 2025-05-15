@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import logger from '@/lib/core/logger';
-import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useValidSession } from '@/hooks/useValidSession';
 
@@ -12,8 +11,8 @@ export const useApiStates = () => {
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [downloadProgress, setDownloadProgress] = useState<number>(0);
 
-  const pathname = usePathname();
   const { update } = useValidSession();
 
   const refreshToken = async () => {
@@ -39,6 +38,7 @@ export const useApiStates = () => {
 
     try {
       setUploadProgress(0);
+      setDownloadProgress(0);
       const result = await fn();
       setIsSuccess(true);
       setIsError(false);
@@ -94,6 +94,8 @@ export const useApiStates = () => {
     setValidationErrors,
     uploadProgress,
     setUploadProgress,
+    downloadProgress,
+    setDownloadProgress,
     isCalled,
     setIsCalled,
     handleFn,
