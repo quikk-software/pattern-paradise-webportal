@@ -15,15 +15,43 @@ export const useApiStates = () => {
 
   const { update } = useValidSession();
 
-  const refreshToken = async () => {
+  const refreshToken = async (): Promise<boolean> => {
     try {
-      const updatedSession = await update(); // Attempts to refresh token
+      const updatedSession = await update();
       logger.info('Token refreshed:', updatedSession);
       return !!updatedSession;
     } catch (err) {
       logger.error('Token refresh failed', err);
       return false;
     }
+  };
+
+  const parseError = async (
+    err: any,
+  ): Promise<{
+    status?: number;
+    detail?: string;
+    errors?: string[];
+  }> => {
+    try {
+      // Axios-style error
+      if (err?.response?.data) {
+        return {
+          status: err.response.data.status,
+          detail: err.response.data.detail,
+          errors: err.response.data.errors ?? [],
+        };
+      }
+
+      // Fetch-style response with .json method
+      if (typeof err?.json === 'function') {
+        return await err.json();
+      }
+    } catch (parseError) {
+      logger.warn('Failed to parse error response', parseError);
+    }
+
+    return {};
   };
 
   const handleFn = async <T>(
@@ -34,43 +62,39 @@ export const useApiStates = () => {
     if (!ignoreIsLoading) {
       setIsLoading(true);
     }
-    setIsCalled((ic) => !ic);
+    setIsCalled((prev) => !prev);
+    setUploadProgress(0);
+    setDownloadProgress(0);
+    setValidationErrors([]);
+    setErrorDetail(undefined);
+    setIsError(false);
+    setIsSuccess(false);
 
     try {
-      setUploadProgress(0);
-      setDownloadProgress(0);
       const result = await fn();
       setIsSuccess(true);
-      setIsError(false);
       return result;
     } catch (err: any) {
-      setIsSuccess(false);
+      const parsedError = await parseError(err);
+
+      logger.error('API call failed', parsedError);
+
+      if (parsedError?.detail) {
+        setErrorDetail(parsedError.detail);
+      }
+      if (parsedError?.errors?.length) {
+        setValidationErrors(parsedError.errors);
+      }
       setIsError(true);
 
-      const errorPayload = await err
-        .json?.()
-        .catch(() => logger.error("Couldn't load error response"));
-
-      logger.error(errorPayload);
-
-      if (errorPayload?.status && errorPayload?.detail !== undefined) {
-        setValidationErrors(errorPayload?.errors ?? []);
-        setErrorDetail(errorPayload?.detail);
-      }
-
-      if (err?.response?.data?.status && err?.response?.data?.detail !== undefined) {
-        setValidationErrors(err?.response?.data?.errors ?? []);
-        setErrorDetail(err?.response?.data?.detail);
-      }
-
-      if (errorPayload?.status === 401 || err?.response?.data?.status === 401) {
-        if (!retrying) {
-          const refreshed = await refreshToken();
-          if (refreshed) {
-            return await handleFn(fn, ignoreIsLoading, true);
-          }
+      // Handle 401 Unauthorized
+      if (parsedError.status === 401 && !retrying) {
+        const refreshed = await refreshToken();
+        if (refreshed) {
+          return await handleFn(fn, ignoreIsLoading, true); // Retry once
         }
-        await signOut({ callbackUrl: `/auth/login` });
+
+        await signOut({ callbackUrl: '/auth/login' });
       }
 
       throw err;
