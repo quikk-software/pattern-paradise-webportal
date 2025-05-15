@@ -192,6 +192,7 @@ export function SellPageComponent() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="All">All</SelectItem>
+            <SelectItem value="Draft">Draft</SelectItem>
             <SelectItem value="InProgress">Test Phase</SelectItem>
             <SelectItem value="Created">Created</SelectItem>
             <SelectItem value="Released">Released</SelectItem>

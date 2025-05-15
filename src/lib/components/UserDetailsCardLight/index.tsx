@@ -27,6 +27,8 @@ import {
   THEME_VIA_BG_CLASSES,
 } from '@/lib/constants';
 import Description from '@/lib/components/Description';
+import { ActionButtons } from '@/lib/components/UserActionButtons';
+import React from 'react';
 
 interface UserDetailsCardLightProps {
   user: GetUserAccountResponse;
@@ -71,21 +73,13 @@ export default function UserDetailsCardLight({
           />
           <div className="absolute inset-0" />
 
-          {showFlag && (
-            <div className="absolute right-4 top-4 z-10">
-              <ReportUser userId={user.id} />
-            </div>
-          )}
+          <ActionButtons showFlag={showFlag} isMe={isMe} userId={user.id} />
         </div>
       ) : (
         <div
           className={`relative h-24 w-full bg-gradient-to-r opacity-30 ${THEME_FROM_BG_CLASSES[user.theme]} ${THEME_VIA_BG_CLASSES[user.theme]} ${THEME_TO_BG_CLASSES[user.theme]}`}
         >
-          {showFlag && (
-            <div className="absolute right-4 top-4 z-10">
-              <ReportUser userId={user.id} />
-            </div>
-          )}
+          <ActionButtons showFlag={showFlag} isMe={isMe} userId={user.id} />
         </div>
       )}
 
