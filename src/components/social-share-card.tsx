@@ -291,11 +291,7 @@ export function SocialShareCard({
                   <QRCodeSVG
                     value={shareUrl}
                     size={isDownloadVersion ? 360 : 60}
-                    fgColor={
-                      theme
-                        ? themeTextClasses[theme].replace('text-', '').replace('-600', '')
-                        : '#525252'
-                    }
+                    fgColor={'#525252'}
                     level="H"
                   />
                 </div>
