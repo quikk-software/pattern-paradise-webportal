@@ -33,9 +33,12 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
     try {
       setIsGenerating(true);
 
+      // ensures image is fetched on mobile devices
+      await new Promise((r) => setTimeout(r, 200));
+
       const dataUrl = await toPng(cardRef.current, {
         quality: 0.95,
-        pixelRatio: 2,
+        pixelRatio: 3,
         cacheBust: true,
       });
 
