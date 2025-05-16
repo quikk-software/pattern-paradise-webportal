@@ -234,7 +234,9 @@ export default function ChatHistory({
 
       setTimeout(() => {
         URL.revokeObjectURL(url);
-        document.body.removeChild(link);
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
       }, 1000);
     }
   }, [file]);

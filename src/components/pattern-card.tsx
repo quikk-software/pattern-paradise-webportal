@@ -51,7 +51,9 @@ export default function PatternCard({ pattern }: PatternCardProps) {
 
       setTimeout(() => {
         URL.revokeObjectURL(url);
-        document.body.removeChild(link);
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
         setDownloadIsDone(true);
       }, 1000);
     }
