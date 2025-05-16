@@ -1,13 +1,21 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 interface ProductDescriptionProps {
   description: string;
   maxRows?: number;
+  className?: string;
+  btnClassName?: string;
 }
 
-export default function ProductDescription({ description, maxRows = 4 }: ProductDescriptionProps) {
+export default function ProductDescription({
+  description,
+  maxRows = 4,
+  className,
+  btnClassName,
+}: ProductDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showMoreButton, setShowMoreButton] = useState(false);
   const [maxHeight, setMaxHeight] = useState<string>('none');
@@ -32,14 +40,17 @@ export default function ProductDescription({ description, maxRows = 4 }: Product
     <div className="flex flex-col gap-2">
       <p
         ref={contentRef}
-        className={`text-sm text-gray-600 overflow-hidden transition-all duration-300 ease-in-out whitespace-pre-line`}
+        className={cn([
+          `text-sm text-gray-600 overflow-hidden transition-all duration-300 ease-in-out whitespace-pre-line`,
+          className,
+        ])}
         style={{ maxHeight: isExpanded ? 'none' : maxHeight }}
       >
         {description}
       </p>
       {showMoreButton ? (
         <span
-          className="text-primary underline text-sm text-right"
+          className={cn(['text-primary underline text-sm text-right', btnClassName])}
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? 'Show Less' : 'Show More'}

@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { isInStandaloneMode } from '@/lib/core/utils';
+import { usePreview } from '@/app/providers/PreviewFlagProvider';
 
 const menuItems = [
   { id: 'shop', label: 'Shop', icon: Store, href: '/' },
@@ -19,6 +20,8 @@ export function BottomNavigation() {
   const [isStandalone, setIsStandalone] = useState(false);
 
   const pathname = usePathname();
+
+  const { isPreview } = usePreview();
 
   useEffect(() => {
     if (pathname === '/') {
@@ -36,6 +39,10 @@ export function BottomNavigation() {
   }, []);
 
   const { push } = useRouter();
+
+  if (isPreview) {
+    return null;
+  }
 
   return (
     <div className={`bg-white ${isStandalone ? 'pb-4' : 'pb-0'}`} id="bottom-navigation">

@@ -9,6 +9,7 @@ import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
 import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
 import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
 import { Toaster } from '@/components/ui/sonner';
+import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -60,7 +61,9 @@ export default async function RootLayout({
                 </PushNotificationProvider>
               </AuthSessionProvider>
             )}
-            <CookieConsentBanner maintenanceMode={maintenanceMode} />
+            <PreviewFlagProvider>
+              <CookieConsentBanner maintenanceMode={maintenanceMode} />
+            </PreviewFlagProvider>
           </CookiesProvider>
         </ServiceWorkerProvider>
       </body>

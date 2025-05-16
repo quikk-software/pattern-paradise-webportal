@@ -250,7 +250,10 @@ export function SocialShareCard({
                 >
                   About this Pattern
                 </h2>
-                <p className="text-gray-700 leading-tight" style={{ fontSize: fontSizeParagraph }}>
+                <p
+                  className="text-gray-700 leading-tight flex-wrap"
+                  style={{ fontSize: fontSizeParagraph }}
+                >
                   {product.description.length > 150
                     ? `${product.description.substring(0, 150)}...`
                     : product.description}

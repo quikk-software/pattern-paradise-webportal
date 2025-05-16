@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useCookies } from 'next-client-cookies';
 import { COOKIE_CONSENT_NAME } from '@/lib/constants';
 import { Analytics } from '@vercel/analytics/react';
+import { usePreview } from '@/app/providers/PreviewFlagProvider';
 
 interface CookieConsentBannerProps {
   maintenanceMode: boolean;
@@ -16,6 +17,8 @@ export default function CookieConsentBanner({ maintenanceMode }: CookieConsentBa
   const [visible, setVisible] = useState(false);
   const [consentGiven, setConsentGiven] = useState(false);
   const cookieStore = useCookies();
+
+  const { isPreview } = usePreview();
 
   useEffect(() => {
     const consent = cookieStore.get(COOKIE_CONSENT_NAME);
@@ -39,6 +42,8 @@ export default function CookieConsentBanner({ maintenanceMode }: CookieConsentBa
     localStorage.removeItem(COOKIE_CONSENT_NAME);
     setVisible(false);
   };
+
+  if (isPreview) return null;
 
   if (typeof window !== 'undefined') {
     return (

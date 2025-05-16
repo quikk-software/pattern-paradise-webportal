@@ -13,7 +13,7 @@ import {
 import type { GetProductResponse, GetTestingResponse } from '@/@types/api-types';
 import { useApplyTesting, useRevokeTesterApplication } from '@/lib/api/testing';
 import { CldImage } from 'next-cloudinary';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Calendar, CheckCircle, Clock, Star, Users } from 'lucide-react';
@@ -31,6 +31,7 @@ import {
 } from '@/lib/constants';
 import { Badge } from '@/components/ui/badge';
 import { ShareModal } from '@/components/share-modal';
+import ShowMoreText from '@/lib/components/ShowMoreText';
 
 const themeClasses: any = {
   slate: 'bg-slate-600 hover:bg-slate-700',
@@ -345,7 +346,12 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
               </Link>
             </div>
 
-            <p className="text-gray-700 text-lg leading-relaxed">{product.description}</p>
+            <ShowMoreText
+              description={product.description}
+              maxRows={4}
+              className="text-gray-700 text-lg leading-relaxed"
+              btnClassName={THEME_TEXT_CLASSES[theme] || 'text-neutral-600'}
+            />
 
             <div className="flex flex-col sm:flex-row gap-4 mt-2">
               <div className="flex items-center">
@@ -360,7 +366,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
               </div>
             </div>
 
-            <ShareModal product={product} testing={testing} theme={theme} />
+            {/*<ShareModal product={product} testing={testing} theme={theme} />*/}
 
             <div className="mt-6">
               <ApplyButton
