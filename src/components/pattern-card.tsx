@@ -31,32 +31,46 @@ export default function PatternCard({ pattern }: PatternCardProps) {
   const {
     fetch: downloadPattern,
     data: fileData,
-    isLoading,
     isError,
     downloadProgress,
   } = useDownloadPattern();
 
   useEffect(() => {
-    if (!fileData) {
+    if (!fileData || typeof window === 'undefined') {
       return;
     }
-    if (typeof window !== 'undefined') {
-      const url = URL.createObjectURL(fileData.file);
-      const link = document.createElement('a');
-      link.href = url;
-      link.target = '_self';
-      link.download = fileData.objectName;
-      document.body.appendChild(link);
-      link.click();
 
-      setTimeout(() => {
-        URL.revokeObjectURL(url);
-        if (link.parentNode) {
-          link.parentNode.removeChild(link);
-        }
+    const url = URL.createObjectURL(fileData.file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_self';
+    link.download = fileData.objectName;
+
+    document.body.appendChild(link);
+    link.click();
+
+    let isCancelled = false;
+
+    const cleanup = () => {
+      URL.revokeObjectURL(url);
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
+      if (!isCancelled) {
         setDownloadIsDone(true);
-      }, 1000);
-    }
+      }
+    };
+
+    const timeoutId = setTimeout(cleanup, 1000);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
+      URL.revokeObjectURL(url);
+    };
   }, [fileData]);
 
   const handleDownload = (fileId: string) => {

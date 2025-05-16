@@ -220,25 +220,39 @@ export default function ChatHistory({
   }, [socketMessage, selectedTestingId, setMessages]);
 
   useEffect(() => {
-    if (!file) {
+    if (!file || typeof window === 'undefined') {
       return;
     }
-    if (typeof window !== 'undefined') {
-      const url = URL.createObjectURL(file);
-      const link = document.createElement('a');
-      link.href = url;
-      link.target = '_self';
-      link.download = file.name ?? 'testing_patterns.zip';
-      document.body.appendChild(link);
-      link.click();
 
-      setTimeout(() => {
-        URL.revokeObjectURL(url);
-        if (link.parentNode) {
-          link.parentNode.removeChild(link);
-        }
-      }, 1000);
-    }
+    const url = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_self';
+    link.download = file.name ?? 'testing_patterns.zip';
+
+    document.body.appendChild(link);
+    link.click();
+
+    let isCancelled = false;
+
+    const cleanup = () => {
+      URL.revokeObjectURL(url);
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      if (!isCancelled) {
+        cleanup();
+      }
+    }, 1000);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+      cleanup();
+    };
   }, [file]);
 
   const loadMore = async () => {
