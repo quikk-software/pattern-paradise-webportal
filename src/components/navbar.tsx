@@ -6,6 +6,7 @@ import { Menu, X } from 'lucide-react';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { cn } from '@/lib/utils';
 import SocialBadges from '@/lib/components/SocialBadges';
+import { usePreview } from '@/app/providers/PreviewFlagProvider';
 
 const NAV_LINKS = [
   {
@@ -43,9 +44,15 @@ interface NavbarComponentProps {
 export function NavbarComponent({ background, scrolled }: NavbarComponentProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { isPreview } = usePreview();
+
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const filteredNavLinks = NAV_LINKS.filter((link) => link.enabled);
+
+  if (isPreview) {
+    return null;
+  }
 
   return (
     <nav

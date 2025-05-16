@@ -14,6 +14,8 @@ import type { GetProductResponse, GetTestingResponse } from '@/@types/api-types'
 import { SocialShareCard } from '@/components/social-share-card';
 import classNames from 'classnames';
 import { toPng } from 'html-to-image';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface ShareModalProps {
   product: GetProductResponse;
@@ -27,27 +29,21 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const downloadImage = async () => {
-    if (!cardRef.current) return;
-
+  const generateServerImage = async () => {
+    setIsGenerating(true);
     try {
-      setIsGenerating(true);
-
-      // ensures image is fetched on mobile devices
-      await new Promise((r) => setTimeout(r, 300));
-
-      const dataUrl = await toPng(cardRef.current, {
-        quality: 0.95,
-        pixelRatio: 3,
-        cacheBust: true,
+      const res = await fetch('/api/image/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: product.id, theme }),
       });
 
+      const blob = await res.blob();
       const link = document.createElement('a');
-      link.download = `${product.title.replace(/\s+/g, '-').toLowerCase()}-tester-call.png`;
-      link.href = dataUrl;
+      link.href = URL.createObjectURL(blob);
+      link.download = 'tester-call.png';
       link.click();
     } catch (error) {
-      console.error('Error generating image:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -69,7 +65,7 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
           <DialogTitle className="text-2xl font-bold">Share on Social Media</DialogTitle>
         </DialogHeader>
         <Button
-          onClick={downloadImage}
+          onClick={generateServerImage}
           disabled={isGenerating}
           size="lg"
           className={classNames(
@@ -78,7 +74,10 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
           )}
         >
           {isGenerating ? (
-            'Generating Image...'
+            <>
+              <LoadingSpinnerComponent className="mr-2 h-5 w-5 text-white" />
+              Generating Image...
+            </>
           ) : (
             <>
               <Download className="mr-2 h-5 w-5" />
@@ -87,7 +86,13 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
           )}
         </Button>
 
-        <p className="text-sm text-gray-500 max-w-md text-center">
+        {isGenerating ? (
+          <p className="text-sm text-gray-700 text-center">
+            Please hang thight, this might take a moment...
+          </p>
+        ) : null}
+
+        <p className="text-sm text-gray-500 text-center">
           This will generate a high-quality image perfect for Instagram stories and other social
           media platforms. The image includes all the important details about your tester call.
         </p>
@@ -96,19 +101,29 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
           product={product}
           testing={testing}
           theme={theme}
-          baseUrl={process.env.NEXT_PUBLIC_URL || 'https://patternparadise.com'}
+          baseUrl={process.env.NEXT_PUBLIC_URL || 'https://pattern-paradise.shop'}
         />
 
-        <div style={{ height: 0, overflow: 'hidden' }}>
-          <div ref={cardRef} className="w-[1080px] h-[1920px]">
-            <SocialShareCard
-              product={product}
-              testing={testing}
-              theme={theme}
-              baseUrl={process.env.NEXT_PUBLIC_URL || 'https://patternparadise.com'}
-              isDownloadVersion
-            />
-          </div>
+        <div
+          ref={cardRef}
+          style={{
+            opacity: 0,
+            pointerEvents: 'none',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            zIndex: -1,
+            width: '1080px',
+            height: '1920px',
+          }}
+        >
+          <SocialShareCard
+            product={product}
+            testing={testing}
+            theme={theme}
+            baseUrl={process.env.NEXT_PUBLIC_URL || 'https://pattern-paradise.shop'}
+            isDownloadVersion
+          />
         </div>
       </DialogContent>
     </Dialog>

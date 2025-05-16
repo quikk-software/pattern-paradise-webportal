@@ -8,7 +8,7 @@ import { BottomNavigation } from '@/components/bottom-navigation';
 import TokenDataWrapper from '@/lib/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
 import AffiliateWrapper from '@/lib/wrappers/AffiliateWrapper';
-import { ConsentBanner } from '@/lib/components/ConsentBanner';
+import { PreviewFlagProvider, usePreview } from '@/app/providers/PreviewFlagProvider';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 const fullHeightPages = ['/swipe'];
@@ -28,6 +28,8 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
   const [scrolled, setScrolled] = useState(false);
 
   const pathname = usePathname();
+  const { isPreview } = usePreview();
+
   const shouldRemovePadding = !!getPublicUrl(pathname, noPaddingPages);
   const shouldRemoveContainer = !!getPublicUrl(pathname, noContainerPages);
   const shouldUseFullHeight = !!getPublicUrl(pathname, fullHeightPages);
@@ -53,10 +55,16 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
     };
   }, []);
 
+  if (isPreview) {
+    return children;
+  }
+
   return (
     <div className={`flex flex-col h-dvh`}>
-      <NavbarComponent background={'none'} scrolled={scrolled} />
-      {/*<ConsentBanner />*/}
+      <PreviewFlagProvider>
+        <NavbarComponent background={'none'} scrolled={scrolled} />
+        {/*<ConsentBanner />*/}
+      </PreviewFlagProvider>
       <div
         ref={scrollableDivRef}
         className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto${shouldRemoveContainer ? '' : ' mx-auto container'}`}
@@ -72,7 +80,9 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
           </StoreProvider>
         </div>
       </div>
-      <BottomNavigation />
+      <PreviewFlagProvider>
+        <BottomNavigation />
+      </PreviewFlagProvider>
     </div>
   );
 }
