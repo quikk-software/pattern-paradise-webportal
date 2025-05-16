@@ -44,34 +44,42 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
   } = useDownloadPatternsByProductId();
 
   useEffect(() => {
-    if (!file || !language) {
+    if (!file || !language || typeof window === 'undefined') {
       return;
     }
 
-    if (typeof window !== 'undefined') {
-      const url = URL.createObjectURL(file);
-      const link = document.createElement('a');
-      link.href = url;
-      link.target = '_self';
-      link.download =
-        file.name ??
-        `${productTitle.toLowerCase().replace(/\s/g, '')}_${
-          language ? `${language}_` : ''
-        }patterns.zip`;
+    const url = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_self';
+    link.download =
+      file.name ??
+      `${productTitle.toLowerCase().replace(/\s/g, '')}_${
+        language ? `${language}_` : ''
+      }patterns.zip`;
 
-      document.body.appendChild(link);
-      link.click();
+    document.body.appendChild(link);
+    link.click();
 
-      setTimeout(() => {
-        URL.revokeObjectURL(url);
-        if (link.parentNode) {
-          link.parentNode.removeChild(link);
-        }
+    let isCancelled = false;
+
+    const cleanup = () => {
+      URL.revokeObjectURL(url);
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
+      if (!isCancelled) {
         setDownloadIsDone(true);
-      }, 1000);
-    }
+      }
+    };
 
-    setLanguage(undefined);
+    const timeoutId = setTimeout(cleanup, 1000);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+      cleanup();
+    };
   }, [file, language, productTitle]);
 
   const filesGroupedByLanguage = files.reduce(
