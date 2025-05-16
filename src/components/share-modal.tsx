@@ -14,6 +14,7 @@ import type { GetProductResponse, GetTestingResponse } from '@/@types/api-types'
 import { SocialShareCard } from '@/components/social-share-card';
 import classNames from 'classnames';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { useGetTesterCallPreviewImage } from '@/lib/api/testing';
 
 interface ShareModalProps {
   product: GetProductResponse;
@@ -25,20 +26,17 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const { fetch } = useGetTesterCallPreviewImage();
+
   const cardRef = useRef<HTMLDivElement>(null);
 
   const generateServerImage = async () => {
     setIsGenerating(true);
     try {
-      const res = await fetch('/api/image/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: product.id, theme }),
-      });
+      const file = await fetch(product.id, theme);
 
-      const blob = await res.blob();
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
+      link.href = URL.createObjectURL(file);
       link.download = 'tester-call.png';
       link.click();
     } catch (error) {
