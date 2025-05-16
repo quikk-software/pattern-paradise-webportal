@@ -3271,6 +3271,31 @@ export class Api<
       }),
 
     /**
+     * @description The query returns an image of a given tester call based on a product ID.
+     *
+     * @tags Testing
+     * @name GetTesterCallImage
+     * @summary Gets an image for a tester call.
+     * @request GET:/api/v1/testings/products/{productId}/tester-call-image
+     * @secure
+     */
+    getTesterCallImage: (
+      productId: string,
+      query: {
+        /** The theme of the tester call. */
+        theme: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/products/${productId}/tester-call-image`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description Creates an order by the given request body data.
      *
      * @tags Order
