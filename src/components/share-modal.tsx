@@ -13,8 +13,6 @@ import { Download, Share2 } from 'lucide-react';
 import type { GetProductResponse, GetTestingResponse } from '@/@types/api-types';
 import { SocialShareCard } from '@/components/social-share-card';
 import classNames from 'classnames';
-import { toPng } from 'html-to-image';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface ShareModalProps {
