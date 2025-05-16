@@ -366,7 +366,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
               </div>
             </div>
 
-            <ShareModal product={product} testing={testing} theme={theme} />
+            {/*<ShareModal product={product} testing={testing} theme={theme} />*/}
 
             <div className="mt-6">
               <ApplyButton
