@@ -47,6 +47,7 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
     if (!file || !language) {
       return;
     }
+
     if (typeof window !== 'undefined') {
       const url = URL.createObjectURL(file);
       const link = document.createElement('a');
@@ -57,12 +58,15 @@ const DownloadPatternZipButton: React.FunctionComponent<DownloadPatternButtonPro
         `${productTitle.toLowerCase().replace(/\s/g, '')}_${
           language ? `${language}_` : ''
         }patterns.zip`;
+
       document.body.appendChild(link);
       link.click();
 
       setTimeout(() => {
         URL.revokeObjectURL(url);
-        document.body.removeChild(link);
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
         setDownloadIsDone(true);
       }, 1000);
     }
