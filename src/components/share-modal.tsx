@@ -34,7 +34,7 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
       setIsGenerating(true);
 
       // ensures image is fetched on mobile devices
-      await new Promise((r) => setTimeout(r, 200));
+      await new Promise((r) => setTimeout(r, 300));
 
       const dataUrl = await toPng(cardRef.current, {
         quality: 0.95,
@@ -99,17 +99,7 @@ export function ShareModal({ product, testing, theme }: ShareModalProps) {
           baseUrl={process.env.NEXT_PUBLIC_URL || 'https://patternparadise.com'}
         />
 
-        <div
-          aria-hidden="true"
-          style={{
-            opacity: 0,
-            pointerEvents: 'none',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            zIndex: -1,
-          }}
-        >
+        <div style={{ height: 0, overflow: 'hidden' }}>
           <div ref={cardRef} className="w-[1080px] h-[1920px]">
             <SocialShareCard
               product={product}
