@@ -67,13 +67,14 @@ export default function TermsAndConditions({ termsAndConditionsRef }: TermsAndCo
             <AccordionContent className="pb-4 space-y-4">
               <div>
                 <p>
-                  You may submit content (&apos;Contributions&apos;). You&apos;re responsible for
-                  ensuring it&apos;s lawful, original, and non-offensive.
+                  You may submit content (&apos;Contributions&apos;) to the platform. It is your
+                  responsibility to ensure that your submissions are lawful, original, and do not
+                  contain any offensive or inappropriate material.
                 </p>
               </div>
               <PracticalExample>
-                When uploading a pattern, make sure it&apos;s yours, not copied from someone else,
-                and doesn&apos;t include harmful or misleading content.
+                For example, when uploading a pattern, ensure that it is your own work, not copied
+                or stolen from others, and that it does not include misleading or harmful content.
               </PracticalExample>
             </AccordionContent>
           </AccordionItem>
@@ -98,9 +99,10 @@ export default function TermsAndConditions({ termsAndConditionsRef }: TermsAndCo
               </div>
               <PracticalExample>
                 Uploading a pattern means we may promote it by creating things like Pinterest Pins
-                or Google Shopping listings using your product image and title — all to drive more
-                traffic to your listing. We don&apos;t claim ownership of your design or share the
-                pattern file itself — we&apos;re just helping people find it.
+                or Google Shopping listings using your product image, title, description,
+                (sub-)category, hashtags and price — all to drive more traffic to your listing. We
+                don&apos;t claim ownership of your design or share the pattern file itself —
+                we&apos;re just helping people find it.
               </PracticalExample>
             </AccordionContent>
           </AccordionItem>
@@ -112,18 +114,35 @@ export default function TermsAndConditions({ termsAndConditionsRef }: TermsAndCo
             <AccordionContent className="pb-4 space-y-4">
               <div>
                 <p>
-                  The license we rely on to operate and promote your content ends once you remove
-                  the content from Pattern Paradise. We will no longer use it in any active or
-                  public-facing way. Please note, however, that we cannot control how third-party
-                  systems like search engines or social media platforms handle cached or previously
-                  indexed content, which may remain visible beyond our reach.
+                  The license that permits us to operate and promote your content is valid only
+                  while your content remains publicly accessible on Pattern Paradise. Once you
+                  remove a listing, it will no longer be used in any active or forward-facing
+                  capacity on the platform.
+                </p>
+                <p>
+                  Please note that we have no control over how third-party platforms — such as
+                  search engines, social media channels, or external newsletters — manage content
+                  that was indexed or published while your listing was live. This includes previews
+                  or promotional posts created by Pattern Paradise during the period in which your
+                  content was publicly available.
+                </p>
+                <p>
+                  We do not retroactively remove previously published promotional material (e.g.,
+                  Instagram posts or Pinterest Pins) that featured your content during its active
+                  period. These remain as part of our historical platform activity.
+                </p>
+                <p>
+                  That said, if someone accesses an external post or search result linking to a
+                  removed listing, they will be directed to a page on Pattern Paradise clearly
+                  indicating that the content is no longer available.
                 </p>
               </div>
               <PracticalExample>
-                Once you delete your listing, we won&apos;t show or promote it on the platform
-                anymore. Your pattern and listing will no longer be accessible to other users.
-                However, some copies may still exist on services like Google Search or Pinterest,
-                where we have no technical ability to remove previously indexed content.
+                When you delete your listing, it will no longer be shown or promoted on Pattern
+                Paradise. However, previously published references — such as search engine entries
+                or social media posts — may remain accessible outside our platform. Visitors who
+                follow those links will see a clear notice that the original content has been
+                removed.
               </PracticalExample>
             </AccordionContent>
           </AccordionItem>
@@ -306,7 +325,7 @@ export default function TermsAndConditions({ termsAndConditionsRef }: TermsAndCo
 
         <div className="mt-8 text-sm text-muted-foreground">
           <p>
-            If you have any questions about these terms, feel free to contact us at
+            If you have any questions about these terms, feel free to contact us at{' '}
             <Link className="text-blue-500 underline" href="mailto:help@pattern-paradise.shop">
               help@pattern-paradise.shop
             </Link>

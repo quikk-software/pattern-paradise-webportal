@@ -23,14 +23,14 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
           {action === 'scrollToPrivacyPolicy' ? '💡 ' : ''}Privacy Policy
         </CardTitle>
         <CardTitle className="text-md font-medium text-left mb-4">
-          Last updated on: 27 Nov 2024
+          Last updated on: 17 Mai 2025
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="overview">
-            <AccordionTrigger>Overview</AccordionTrigger>
-            <AccordionContent>
+        <Accordion type="single" collapsible className="w-full space-y-4">
+          <AccordionItem value="overview" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">Overview</AccordionTrigger>
+            <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">General Information</h3>
               <p>
                 The following notes provide a simple overview of what happens to your personal data
@@ -95,12 +95,28 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
                 Detailed information about these analysis programs can be found in the following
                 privacy policy.
               </p>
+              <h5 className="text-md font-semibold mb-2">Vercel Web Analytics</h5>
+              <p>
+                This website uses <strong>Vercel Web Analytics</strong> to collect anonymized
+                information about visitor interactions, such as page views and duration. This data
+                is used to understand usage patterns and improve website performance.
+              </p>
+              <p>
+                Vercel Analytics does not store any personally identifiable information (PII) and
+                operates in compliance with privacy laws such as the GDPR.
+              </p>
+              <p>
+                The legal basis for this processing is Art. 6(1)(f) GDPR – legitimate interest in
+                optimizing our website.
+              </p>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="hosting">
-            <AccordionTrigger>Hosting and Content Delivery Networks (CDN)</AccordionTrigger>
-            <AccordionContent>
+          <AccordionItem value="hosting" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              Hosting and Content Delivery Networks (CDN)
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">External Hosting</h3>
               <p>
                 This website is hosted by an external service provider (hoster). The personal data
@@ -179,9 +195,11 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="general">
-            <AccordionTrigger>General Information and Mandatory Information</AccordionTrigger>
-            <AccordionContent>
+          <AccordionItem value="general" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              General Information and Mandatory Information
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">Data Protection</h3>
               <p>
                 The operators of these pages take the protection of your personal data very
@@ -342,12 +360,32 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
                 natural or legal person or for reasons of important public interest of the European
                 Union or a Member State.
               </p>
+
+              <h3 className="text-lg font-semibold mb-2">Authentication Services</h3>
+              <p>
+                We use <strong>NextAuth.js</strong> together with <strong>Keycloak</strong> to
+                manage secure user authentication via the OAuth 2.0 protocol. When you log in, your
+                authentication data (e.g., user ID, token) is processed by these services to verify
+                your identity and manage sessions.
+              </p>
+              <p>
+                All authentication infrastructure is <strong>self-hosted</strong> and fully managed
+                by us. We do <strong>not</strong> rely on any third-party authentication providers
+                or external identity services. Your authentication data remains within our
+                controlled environment.
+              </p>
+              <p>
+                This data is stored and processed in accordance with GDPR Art. 6(1)(b) – processing
+                necessary for the performance of a contract or pre-contractual measures.
+              </p>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="data-collection">
-            <AccordionTrigger>Data Collection on This Website</AccordionTrigger>
-            <AccordionContent>
+          <AccordionItem value="data-collection" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              Data Collection on This Website
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">Cookies</h3>
               <p>
                 Our websites use so-called &apos;cookies&apos;. Cookies are small text files and do
@@ -505,6 +543,18 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
                 For more information about Google Web Fonts, please visit
                 https://developers.google.com/fonts/faq and read Google&apos;s privacy policy:
                 https://policies.google.com/privacy?hl=en.
+              </p>
+
+              <h3 className="text-lg font-semibold mb-2">7. Links to External Sites</h3>
+              <p>
+                Our website may contain links to external websites such as Instagram, TikTok,
+                Pinterest or other social media platforms. We have no control over the content and
+                practices of these third-party websites and cannot accept responsibility or
+                liability for their respective privacy policies.
+              </p>
+              <p>
+                We encourage users to review the privacy policies of any external sites before
+                providing any personal information.
               </p>
             </AccordionContent>
           </AccordionItem>
