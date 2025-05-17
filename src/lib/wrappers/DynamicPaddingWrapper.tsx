@@ -9,6 +9,7 @@ import TokenDataWrapper from '@/lib/wrappers/TokenDataWrapper';
 import NotificationPermissionProvider from '@/app/providers/NotificationPermissionProvider';
 import AffiliateWrapper from '@/lib/wrappers/AffiliateWrapper';
 import { PreviewFlagProvider, usePreview } from '@/app/providers/PreviewFlagProvider';
+import { ConsentBanner } from '@/lib/components/ConsentBanner';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 const fullHeightPages = ['/swipe'];
@@ -63,7 +64,7 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
     <div className={`flex flex-col h-dvh`}>
       <PreviewFlagProvider>
         <NavbarComponent background={'none'} scrolled={scrolled} />
-        {/*<ConsentBanner />*/}
+        <ConsentBanner />
       </PreviewFlagProvider>
       <div
         ref={scrollableDivRef}
