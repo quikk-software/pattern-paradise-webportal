@@ -23,13 +23,13 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
           {action === 'scrollToPrivacyPolicy' ? '💡 ' : ''}Privacy Policy
         </CardTitle>
         <CardTitle className="text-md font-medium text-left mb-4">
-          Last updated on: 27 Nov 2024
+          Last updated on: 17 Mai 2025
         </CardTitle>
       </CardHeader>
       <CardContent>
         <Accordion type="single" collapsible className="w-full space-y-4">
-          <AccordionItem value="overview">
-            <AccordionTrigger>Overview</AccordionTrigger>
+          <AccordionItem value="overview" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">Overview</AccordionTrigger>
             <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">General Information</h3>
               <p>
@@ -112,8 +112,10 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="hosting">
-            <AccordionTrigger>Hosting and Content Delivery Networks (CDN)</AccordionTrigger>
+          <AccordionItem value="hosting" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              Hosting and Content Delivery Networks (CDN)
+            </AccordionTrigger>
             <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">External Hosting</h3>
               <p>
@@ -193,8 +195,10 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="general">
-            <AccordionTrigger>General Information and Mandatory Information</AccordionTrigger>
+          <AccordionItem value="general" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              General Information and Mandatory Information
+            </AccordionTrigger>
             <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">Data Protection</h3>
               <p>
@@ -377,8 +381,10 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="data-collection">
-            <AccordionTrigger>Data Collection on This Website</AccordionTrigger>
+          <AccordionItem value="data-collection" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              Data Collection on This Website
+            </AccordionTrigger>
             <AccordionContent className="pb-4 space-y-4">
               <h3 className="text-lg font-semibold mb-2">Cookies</h3>
               <p>
