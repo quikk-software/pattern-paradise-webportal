@@ -19,7 +19,7 @@ export const listProducts = async ({
         categories,
       },
       {
-        next: { revalidate: 1 },
+        next: { revalidate: 60 * 60 }, // 1 hour
       },
     );
 
