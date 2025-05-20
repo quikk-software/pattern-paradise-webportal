@@ -197,21 +197,48 @@ const handler = NextAuth({
 
     async session({ session, user, token }) {
       let sessionToken = token;
-      if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
-        logger.info('Use refresh token to get fresh access token');
-        sessionToken = await refreshAccessToken(token);
+
+      if (!token?.accessToken) {
+        logger.warn('No access token – likely anonymous or bot request');
+        return session;
       }
 
-      logger.info('Current session token', sessionToken);
-      logger.info('Current user', user);
+      if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
+        logger.info('Access token expired – attempt to refresh');
+        try {
+          sessionToken = await refreshAccessToken(token);
+        } catch (e) {
+          logger.error('Failed to refresh access token', e);
+          return { ...session, error: 'RefreshAccessTokenError' };
+        }
+      }
 
-      const decodedSessionToken = jwtDecode(sessionToken.accessToken as string);
+      let decodedSessionToken: any;
+      try {
+        decodedSessionToken = jwtDecode(sessionToken.accessToken as string);
+      } catch (e) {
+        logger.error('Failed to decode session token', e);
+        return session;
+      }
 
-      let userId = decodedSessionToken?.sub ?? user?.id ?? sessionToken?.sub;
-      const existingUser = await getUserById(userId as string);
+      const userId = decodedSessionToken?.sub ?? user?.id ?? sessionToken?.sub;
+
+      if (!userId) {
+        logger.warn('No user ID in decoded token – skipping user lookup');
+        return session;
+      }
+
+      let existingUser;
+      try {
+        existingUser = await getUserById(userId as string);
+      } catch (e) {
+        logger.error('getUserById failed', e);
+        return { ...session, error: 'UserLookupFailed' };
+      }
 
       if (!existingUser) {
-        throw new Error('User not found');
+        logger.warn(`No user found for ID ${userId}`);
+        return session;
       }
 
       session.user.accessToken = sessionToken.accessToken as string;
@@ -227,6 +254,7 @@ const handler = NextAuth({
       session.user.acceptedTermsOn = sessionToken.acceptedTermsOn as Date;
       session.user.acceptedPrivacyOn = sessionToken.acceptedPrivacyOn as Date;
       session.user.theme = sessionToken.theme as string;
+
       return { ...session, error: sessionToken?.error };
     },
   },
