@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
 import { generateTitle } from '@/lib/utils';
 import { listProducts } from '@/lib/api/static/product/listProducts';
+import logger from '@/lib/core/logger';
 
 type Props = {
   params: Promise<{ productId: string }>;
@@ -17,24 +18,42 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productId = (await params).productId;
-  const product = await getProduct(productId);
+
+  let product: Awaited<ReturnType<typeof getProduct>> | null = null;
+
+  try {
+    product = await getProduct(productId);
+  } catch (error) {
+    logger.error(`Failed to fetch product ${productId}`, error);
+  }
+
+  const fallbackTitle = 'Pattern Details | Pattern Paradise';
+  const fallbackDescription = 'Check out this pattern on Pattern Paradise.';
+  const fallbackImage = `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
 
   const title = product?.title
     ? `${product.isFree ? 'Get' : 'Buy'} ${generateTitle({
         title: product.title,
         category: product.category,
       })} ${product.isFree ? 'free ' : ''}pattern | Pattern Paradise`
-    : 'Pattern Details | Pattern Paradise';
-  const description = `Check out this ${product?.isFree ? 'free ' : ''}${product?.category ? `${product?.category.toLowerCase()} pattern ` : 'pattern '}${
-    product?.title
-      ? ` '${generateTitle({
-          title: product.title,
-        })}'`
-      : ''
-  }.`;
+    : fallbackTitle;
+
+  const description = product
+    ? `Check out this ${product.isFree ? 'free ' : ''}${product.category ? `${product.category.toLowerCase()} pattern ` : 'pattern '}${
+        product.title
+          ? ` '${generateTitle({
+              title: product.title,
+            })}'`
+          : ''
+      }.`
+    : fallbackDescription;
+
   const imageUrl =
-    product?.imageUrls?.[0]?.replace('/upload/', '/upload/w_1200,h_630,c_fill/') ??
-    `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
+    product?.imageUrls?.[0]?.replace('/upload/', '/upload/w_1200,h_630,c_fill/') ?? fallbackImage;
+
+  const altText = product?.description || product?.title || 'Pattern Paradise Product';
+
+  const pageUrl = `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/products/${productId}`;
 
   return {
     title,
@@ -68,14 +87,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: product?.description
-            ? product.description
-            : product?.title
-              ? product.title
-              : 'Pattern Paradise Product',
+          alt: altText,
         },
       ],
-      url: `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/products/${productId}`,
+      url: pageUrl,
     },
     twitter: {
       card: 'summary_large_image',
@@ -86,11 +101,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: product?.description
-            ? product.description
-            : product?.title
-              ? product.title
-              : 'Pattern Paradise Product',
+          alt: altText,
         },
       ],
     },
@@ -102,7 +113,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'msapplication-tap-highlight': 'no',
     },
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/app/products/${productId}`,
+      canonical: pageUrl,
     },
   };
 }
