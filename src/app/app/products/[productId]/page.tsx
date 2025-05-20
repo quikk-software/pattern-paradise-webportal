@@ -4,10 +4,16 @@ import { getProduct } from '@/lib/api/static/product/getProduct';
 import { Metadata } from 'next';
 import { APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
 import { generateTitle } from '@/lib/utils';
+import { listProducts } from '@/lib/api/static/product/listProducts';
 
 type Props = {
   params: Promise<{ productId: string }>;
 };
+
+export async function generateStaticParams() {
+  const products = await listProducts({ overridePageNumber: 1, overridePageSize: 9999 });
+  return products.map((product) => ({ productId: product.id }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productId = (await params).productId;
