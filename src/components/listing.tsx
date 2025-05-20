@@ -24,8 +24,6 @@ import useScreenSize from '@/lib/core/useScreenSize';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { CATEGORIES, MAX_PRICE, MIN_PRICE } from '@/lib/constants';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { updateSelectedFlags } from '@/lib/utils';
 import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
 import LanguageSelect from '@/lib/components/LanguageSelect';
