@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,7 +23,7 @@ import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
-import { CATEGORIES, MAX_PRICE, MIN_PRICE } from '@/lib/constants';
+import { CATEGORIES } from '@/lib/constants';
 import { updateSelectedFlags } from '@/lib/utils';
 import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
 import LanguageSelect from '@/lib/components/LanguageSelect';
@@ -35,6 +35,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { CraftSelector } from '@/components/craft-selector';
+import { useDispatch, useSelector } from 'react-redux';
+import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
+import { Store } from '@/lib/redux/store';
 
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
@@ -42,108 +45,93 @@ interface ListingComponentProps {
 }
 
 export function ListingComponent({ listingType, infiniteScroll = true }: ListingComponentProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-  const [selectedCategory, setSelectedCategory] = useState<{
-    craft: string;
-    options: { [key: string]: { name: string; selected: boolean }[] };
-  }>({
-    craft: 'All',
-    options: {},
-  });
-  const [priceRange, setPriceRange] = useState([MIN_PRICE, MAX_PRICE]);
-  const [hashtags, setHashtags] = useState<string[]>([]);
-  const [language, setLanguage] = useState<string | undefined>(undefined);
-  const [showFilter, setShowFilter] = useState(false);
-  const [triggerLoad, setTriggerLoad] = useState(false);
-  const [sortValue, setSortValue] = useState('mostRelevant');
-
+  const dispatch = useDispatch();
   const observer = useRef<IntersectionObserver | null>(null);
+  const screenSize = useScreenSize();
+  const {
+    productFilter: {
+      q: searchTerm,
+      sortBy,
+      selectedCategory,
+      minPrice,
+      maxPrice,
+      hashtags,
+      language,
+      showFilter,
+      triggerLoad,
+    },
+  } = useSelector((s: Store) => s.filter);
 
   const { fetch, data: products, hasNextPage, isLoading } = useListProducts({});
   const { mutate: mutateProductImpression } = useCreateProductImpression();
   const { mutate: mutateTestingImpression } = useCreateTestingImpression();
-  const screenSize = useScreenSize();
 
   const status =
     listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
-
-    return () => clearTimeout(timerId);
-  }, [searchTerm]);
-
-  useEffect(() => {
-    fetch({
+    const filter = {
+      q: searchTerm ?? undefined,
       status,
-    }).then();
-  }, [status]);
-
-  useEffect(() => {
-    fetchProductsByFilter();
-  }, [debouncedSearchTerm, sortValue]);
-
-  useEffect(() => {
-    if (!triggerLoad) {
-      return;
-    }
-    fetchProductsByFilter();
-  }, [triggerLoad]);
-
-  const fetchProductsByFilter = (scrollToResults = false) => {
-    fetch({
-      q: debouncedSearchTerm ?? undefined,
-      status,
-      categories: selectedCategory ? [selectedCategory.craft] : ['All'],
+      categories: [selectedCategory.craft || 'All'],
       subCategories: Object.values(selectedCategory.options)
-        .map((options) => options.map((option) => option.name))
-        .flat(),
-      minPrice: priceRange[0],
-      maxPrice: priceRange[1],
+        .flat()
+        .filter((opt) => opt.selected)
+        .map((opt) => opt.name),
+      minPrice,
+      maxPrice,
       hashtags,
       languages: language ? [language] : [],
       pageNumber: 1,
       pageSize: 20,
-      sale: sortValue === 'sale',
-      sortBy: sortValue,
-    }).then(() => {
-      setTriggerLoad(false);
-      if (typeof window !== 'undefined') {
-        if (scrollToResults) {
-          document.getElementById('listing-results')?.scrollIntoView();
-        }
+      sale: sortBy === 'sale',
+      sortBy,
+    };
+    fetch(filter);
+  }, [status]);
+
+  useEffect(() => {
+    fetchProductsByFilter();
+  }, [searchTerm, sortBy]);
+
+  useEffect(() => {
+    if (!triggerLoad) return;
+    fetchProductsByFilter();
+    dispatch(updateFilterField({ key: 'triggerLoad', value: false }));
+  }, [triggerLoad]);
+
+  const fetchProductsByFilter = (scrollToResults = false) => {
+    const filter = {
+      q: searchTerm ?? undefined,
+      status,
+      categories: [selectedCategory.craft || 'All'],
+      subCategories: Object.values(selectedCategory.options)
+        .flat()
+        .filter((opt) => opt.selected)
+        .map((opt) => opt.name),
+      minPrice,
+      maxPrice,
+      hashtags,
+      languages: language ? [language] : [],
+      pageNumber: 1,
+      pageSize: 20,
+      sale: sortBy === 'sale',
+      sortBy,
+    };
+    fetch(filter).then(() => {
+      if (typeof window !== 'undefined' && scrollToResults) {
+        document.getElementById('listing-results')?.scrollIntoView();
       }
     });
   };
 
   const clearFilter = () => {
-    setSearchTerm('');
-    setDebouncedSearchTerm('');
-    setSelectedCategory({
-      craft: 'All',
-      options: {},
-    });
-    setPriceRange([MIN_PRICE, MAX_PRICE]);
-    setTriggerLoad(true);
-    setHashtags([]);
-    setLanguage(undefined);
-    setSortValue('mostRelevant');
+    dispatch(reset());
   };
 
   const handleImpression = async (productId: string) => {
-    switch (listingType) {
-      case 'sell':
-        await mutateProductImpression(productId);
-        break;
-      case 'test':
-        await mutateTestingImpression(productId);
-        break;
-      default:
-        break;
-    }
+    if (listingType === 'sell') await mutateProductImpression(productId);
+    else if (listingType === 'test') await mutateTestingImpression(productId);
   };
 
   const updatedCategories = updateSelectedFlags(
@@ -154,41 +142,30 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
       .map((option) => ({ name: option.name, selected: option.selected })),
   );
 
-  const handleLanguageChange = (language: string) => {
-    setLanguage(language);
-  };
-
-  const onSortSelectChange = (value: string) => setSortValue(value);
-
   const lastProductRef = (node: HTMLElement | null) => {
-    if (isLoading || !infiniteScroll) {
-      return;
-    }
-    if (observer.current) {
-      observer.current.disconnect();
-    }
+    if (isLoading || !infiniteScroll) return;
+    if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasNextPage) {
         fetch({
-          q: debouncedSearchTerm ?? undefined,
+          q: searchTerm ?? undefined,
           status,
-          categories: selectedCategory ? [selectedCategory.craft] : ['All'],
+          categories: [selectedCategory.craft || 'All'],
           subCategories: Object.values(selectedCategory.options)
-            .map((options) => options.map((option) => option.name))
-            .flat(),
-          minPrice: priceRange[0],
-          maxPrice: priceRange[1],
+            .flat()
+            .filter((opt) => opt.selected)
+            .map((opt) => opt.name),
+          minPrice,
+          maxPrice,
           hashtags,
           languages: language ? [language] : [],
-          sortBy: sortValue,
+          sortBy,
         });
       }
     });
 
-    if (node) {
-      observer.current.observe(node);
-    }
+    if (node) observer.current.observe(node);
   };
 
   return (
@@ -196,43 +173,52 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">
-            {listingType === 'sell'
-              ? 'Find Patterns'
-              : listingType === 'test' && 'Find Tester Calls'}
+            {listingType === 'sell' ? 'Find Patterns' : 'Find Tester Calls'}
           </h2>
-          {!showFilter ? (
-            <Button variant={'outline'} onClick={() => setShowFilter(true)}>
-              <SlidersHorizontal className="mr-2 h-4 w-4" />
-              Filter
-            </Button>
-          ) : (
-            <Button variant={'outline'} onClick={() => setShowFilter(false)}>
-              <CircleX className="mr-2 h-4 w-4" />
-              Filter
-            </Button>
-          )}
+          <Button
+            variant={'outline'}
+            onClick={() => dispatch(updateFilterField({ key: 'showFilter', value: !showFilter }))}
+          >
+            {showFilter ? (
+              <>
+                <CircleX className="mr-2 h-4 w-4" /> Filter
+              </>
+            ) : (
+              <>
+                <SlidersHorizontal className="mr-2 h-4 w-4" /> Filter
+              </>
+            )}
+          </Button>
         </div>
 
-        {showFilter ? (
+        {showFilter && (
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
-              <HashtagInput hashtags={hashtags} setHashtags={setHashtags} />
+              <HashtagInput
+                hashtags={hashtags}
+                setHashtags={(tags) =>
+                  dispatch(updateFilterField({ key: 'hashtags', value: tags }))
+                }
+              />
             </div>
+
             <div>
               <h2 className="text-lg font-semibold mb-2">Language</h2>
               <div className="flex gap-2">
                 <LanguageSelect
                   language={language}
-                  handleLanguageChange={handleLanguageChange}
+                  handleLanguageChange={(lang) =>
+                    dispatch(updateFilterField({ key: 'language', value: lang }))
+                  }
                   fullWidth
                 />
                 <Button
                   variant="destructive"
                   size="icon"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setLanguage(undefined);
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(updateFilterField({ key: 'language', value: undefined }));
                   }}
                   disabled={language === undefined}
                 >
@@ -246,35 +232,35 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
               <CraftSelector
                 hasAll
                 selectedCraft={selectedCategory.craft}
-                onCraftChange={(craft) => {
-                  setSelectedCategory({
-                    craft,
-                    options: {},
-                  });
-                }}
+                onCraftChange={(craft) =>
+                  dispatch(
+                    updateFilterField({
+                      key: 'selectedCategory',
+                      value: { craft, options: {} },
+                    }),
+                  )
+                }
               />
             </div>
 
             <MultiSelect
               initialCategories={updatedCategories}
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-              injectCategories={true}
+              onChange={(value) => dispatch(updateFilterField({ key: 'selectedCategory', value }))}
+              injectCategories
               overrideCraft={selectedCategory.craft}
             />
 
             <PriceFilter
               onFilterChange={(filter) => {
-                setPriceRange([filter.minPrice, filter.maxPrice]);
+                dispatch(updateFilterField({ key: 'minPrice', value: filter.minPrice }));
+                dispatch(updateFilterField({ key: 'maxPrice', value: filter.maxPrice }));
               }}
-              overrideMinPrice={priceRange?.[0]}
-              overrideMaxPrice={priceRange?.[1]}
+              overrideMinPrice={minPrice}
+              overrideMaxPrice={maxPrice}
             />
+
             <Button
-              onClick={() => {
-                fetchProductsByFilter(true);
-              }}
+              onClick={() => fetchProductsByFilter(true)}
               disabled={isLoading}
               className="w-full"
             >
@@ -282,7 +268,7 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
               Apply Filter
             </Button>
           </div>
-        ) : null}
+        )}
       </div>
 
       <div className="flex flex-col gap-6 mt-6">
@@ -292,14 +278,18 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
             <Input
               placeholder="Search pattern or creator..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => dispatch(updateFilterField({ key: 'q', value: e.target.value }))}
               className="pl-8"
             />
           </div>
         </div>
-        <Select onValueChange={onSortSelectChange} value={sortValue} defaultValue={sortValue}>
-          <SelectTrigger aria-label={'Select a reason'}>
-            <SelectValue placeholder="Select a reason" />
+
+        <Select
+          onValueChange={(value) => dispatch(updateFilterField({ key: 'sortBy', value }))}
+          value={sortBy}
+        >
+          <SelectTrigger aria-label={'Sort'}>
+            <SelectValue placeholder="Sort" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="mostRelevant">
@@ -334,10 +324,10 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
             </SelectItem>
           </SelectContent>
         </Select>
+
         <div className="w-full mb-6">
           <Button variant={'outline'} className={'w-full'} onClick={clearFilter}>
-            <Trash />
-            Clear Filter
+            <Trash /> Clear Filter
           </Button>
         </div>
 

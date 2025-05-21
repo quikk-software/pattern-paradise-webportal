@@ -4,6 +4,7 @@ import commonReducer from '@/lib/features/common/commonSlice';
 import authReducer from '@/lib/features/auth/authSlice';
 import testingReducer from '@/lib/features/testing/testingSlice';
 import analyticsReducer from '@/lib/features/analytics/analyticsSlice';
+import filterReducer from '@/lib/features/filter/filterSlice';
 import { enableMapSet } from 'immer';
 
 enableMapSet();
@@ -13,4 +14,5 @@ export const rootReducer: Reducer<Store> = combineReducers({
   auth: authReducer,
   testing: testingReducer,
   analytics: analyticsReducer,
+  filter: filterReducer,
 });
