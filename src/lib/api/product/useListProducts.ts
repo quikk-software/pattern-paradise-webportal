@@ -5,7 +5,7 @@ import { combineArraysById } from '@/lib/core/utils';
 import { ProductFilterObject } from '@/lib/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
-import { setProducts } from '@/lib/features/filter/filterSlice';
+import { setProducts, updateFilterField } from '@/lib/features/filter/filterSlice';
 
 export const useListProducts = ({
   pageNumber = 1,
@@ -36,6 +36,19 @@ export const useListProducts = ({
     } else {
       dispatch(setProducts([...combineArraysById(products, response?.data.products ?? [], 'id')]));
     }
+
+    dispatch(
+      updateFilterField({
+        key: 'pageNumber',
+        value: (response?.data.pageNumber ?? pagination.pageNumber) + 1,
+      }),
+    );
+    dispatch(
+      updateFilterField({
+        key: 'pageSize',
+        value: response?.data.pageSize ?? pagination.pageSize,
+      }),
+    );
 
     pagination.handlePaginationPayload(response?.data);
 
