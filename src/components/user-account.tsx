@@ -154,7 +154,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
           <div className="flex flex-col gap-6">
             <WaterfallListing
               products={products}
-              listingType={'sell'}
+              status={'Released'}
               columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
             />
           </div>

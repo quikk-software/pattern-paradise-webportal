@@ -40,11 +40,11 @@ import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
 
 interface ListingComponentProps {
-  listingType: 'sell' | 'test';
+  status: 'Released' | 'Created';
   infiniteScroll?: boolean;
 }
 
-export function ListingComponent({ listingType, infiniteScroll = true }: ListingComponentProps) {
+export function ListingComponent({ status, infiniteScroll = true }: ListingComponentProps) {
   const dispatch = useDispatch();
   const observer = useRef<IntersectionObserver | null>(null);
   const screenSize = useScreenSize();
@@ -76,8 +76,9 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
   const { mutate: mutateProductImpression } = useCreateProductImpression();
   const { mutate: mutateTestingImpression } = useCreateTestingImpression();
 
-  const status =
-    listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
+  useEffect(() => {
+    fetchProductsByFilter(false, 1, 20);
+  }, [status]);
 
   useEffect(() => {
     if (!triggerLoad) return;
@@ -131,8 +132,8 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
   };
 
   const handleImpression = async (productId: string) => {
-    if (listingType === 'sell') await mutateProductImpression(productId);
-    else if (listingType === 'test') await mutateTestingImpression(productId);
+    if (status === 'Released') await mutateProductImpression(productId);
+    else if (status === 'Created') await mutateTestingImpression(productId);
   };
 
   const updatedCategories = updateSelectedFlags(
@@ -177,7 +178,8 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">
-            {listingType === 'sell' ? 'Find Patterns' : 'Find Tester Calls'}
+            {status === 'Released' ? 'Find Patterns' : null}
+            {status === 'Created' ? 'Find Tester Calls' : null}
           </h2>
           <Button
             variant={'outline'}
@@ -339,7 +341,7 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
           <div id={'listing-results'}>
             <WaterfallListing
               products={products}
-              listingType={listingType}
+              status={status}
               columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
               onImpression={(productId) => handleImpression(productId)}
               showFade={!infiniteScroll && hasNextPage}

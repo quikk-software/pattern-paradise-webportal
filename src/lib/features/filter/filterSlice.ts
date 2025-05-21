@@ -40,7 +40,7 @@ export const initialState: FilterState = {
     hashtags: [],
     language: undefined,
     showFilter: false,
-    triggerLoad: true,
+    triggerLoad: false,
     pageNumber: 1,
     pageSize: 20,
     hasNextPage: false,
