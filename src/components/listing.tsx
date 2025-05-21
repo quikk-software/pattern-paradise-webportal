@@ -74,7 +74,7 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
   }, [searchTerm, sortBy, status]);
 
   useEffect(() => {
-    if (!triggerLoad) return;
+    if (!triggerLoad || products.length > 0) return;
     fetchProductsByFilter();
     dispatch(updateFilterField({ key: 'triggerLoad', value: false }));
   }, [triggerLoad]);
