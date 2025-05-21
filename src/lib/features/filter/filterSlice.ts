@@ -37,7 +37,7 @@ export const initialState: FilterState = {
     hashtags: [],
     language: undefined,
     showFilter: false,
-    triggerLoad: false,
+    triggerLoad: true,
   },
   products: [],
 };

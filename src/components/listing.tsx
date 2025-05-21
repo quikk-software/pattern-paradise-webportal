@@ -38,7 +38,6 @@ import { CraftSelector } from '@/components/craft-selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
-import Link from 'next/link';
 
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
@@ -71,29 +70,8 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
     listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
 
   useEffect(() => {
-    const filter = {
-      q: searchTerm ?? undefined,
-      status,
-      categories: [selectedCategory.craft || 'All'],
-      subCategories: Object.values(selectedCategory.options)
-        .flat()
-        .filter((opt) => opt.selected)
-        .map((opt) => opt.name),
-      minPrice,
-      maxPrice,
-      hashtags,
-      languages: language ? [language] : [],
-      pageNumber: 1,
-      pageSize: 20,
-      sale: sortBy === 'sale',
-      sortBy,
-    };
-    fetch(filter);
-  }, [status]);
-
-  useEffect(() => {
     fetchProductsByFilter();
-  }, [searchTerm, sortBy]);
+  }, [searchTerm, sortBy, status]);
 
   useEffect(() => {
     if (!triggerLoad) return;
