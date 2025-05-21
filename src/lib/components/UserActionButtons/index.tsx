@@ -11,7 +11,6 @@ interface ActionButtonsProps {
 }
 
 export function ActionButtons({ showFlag, isMe, userId }: ActionButtonsProps) {
-  console.log({ showFlag, isMe, userId });
   return showFlag ? (
     <div className="absolute right-4 top-4 z-10">
       {isMe ? (
