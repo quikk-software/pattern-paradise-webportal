@@ -38,6 +38,7 @@ import { CraftSelector } from '@/components/craft-selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
+import Link from 'next/link';
 
 interface ListingComponentProps {
   listingType: 'sell' | 'test';
@@ -343,9 +344,16 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
             <div ref={lastProductRef} className="h-10" />
           </div>
           {products.length === 0 && !isLoading && (
-            <p className="text-center text-muted-foreground mb-6">
-              Nothing found matching your criteria.
-            </p>
+            <div className="flex flex-col gap-4 justify-center items-center mb-10">
+              <p className="text-center text-muted-foreground">
+                Nothing found matching your criteria.
+              </p>
+              <div className="flex justify-center">
+                <Button size="lg" onClick={() => dispatch(reset())}>
+                  Reset Filter
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       </div>
