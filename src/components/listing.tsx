@@ -129,6 +129,7 @@ export function ListingComponent({ status, infiniteScroll = true }: ListingCompo
 
   const clearFilter = () => {
     dispatch(reset());
+    dispatch(updateFilterField({ key: 'triggerLoad', value: true }));
   };
 
   const handleImpression = async (productId: string) => {
