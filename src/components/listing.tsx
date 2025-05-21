@@ -59,10 +59,20 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
       language,
       showFilter,
       triggerLoad,
+      pageNumber,
+      pageSize,
     },
   } = useSelector((s: Store) => s.filter);
 
-  const { fetch, data: products, hasNextPage, isLoading } = useListProducts({});
+  const {
+    fetch,
+    data: products,
+    hasNextPage,
+    isLoading,
+  } = useListProducts({
+    pageNumber,
+    pageSize,
+  });
   const { mutate: mutateProductImpression } = useCreateProductImpression();
   const { mutate: mutateTestingImpression } = useCreateTestingImpression();
 

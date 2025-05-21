@@ -17,6 +17,8 @@ export interface ProductFilterObject {
   language?: string;
   showFilter: boolean;
   triggerLoad: boolean;
+  pageNumber: number;
+  pageSize: number;
 }
 
 export interface FilterState {
@@ -38,6 +40,8 @@ export const initialState: FilterState = {
     language: undefined,
     showFilter: false,
     triggerLoad: true,
+    pageNumber: 1,
+    pageSize: 20,
   },
   products: [],
 };
