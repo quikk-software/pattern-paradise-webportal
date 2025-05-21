@@ -113,6 +113,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
   const stripeRef = useRef<HTMLDivElement | null>(null);
   const galleryRef = useRef<HTMLDivElement | null>(null);
   const countryRef = useRef<HTMLDivElement | null>(null);
+  const settingsRef = useRef<HTMLDivElement | null>(null);
 
   const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({
@@ -137,10 +138,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
       case 'scrollToCountry':
         executeScroll(countryRef);
         break;
+      case 'scrollToSettings':
+        executeScroll(settingsRef);
+        break;
       default:
         break;
     }
-  }, [action, rolesRef, paypalRef, stripeRef, galleryRef, countryRef]);
+  }, [action, rolesRef, paypalRef, stripeRef, galleryRef, countryRef, settingsRef]);
 
   useEffect(() => {
     if (!user.excludedCountries) {
@@ -480,7 +484,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </>
       ) : null}
 
-      <Card>
+      <Card ref={settingsRef}>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>
         </CardHeader>
