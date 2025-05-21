@@ -9,7 +9,7 @@ export default function TestPage() {
   return (
     <div className="flex flex-col gap-4">
       <TestingQuickLinks />
-      <ListingComponent listingType={'test'} />
+      <ListingComponent status={'Created'} />
     </div>
   );
 }

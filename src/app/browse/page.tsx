@@ -5,5 +5,5 @@ import { generatePageMetadata } from '@/lib/core/metadata';
 export const metadata = generatePageMetadata('/browse');
 
 export default function BrowsePage() {
-  return <ListingComponent listingType={'sell'} />;
+  return <ListingComponent status={'Released'} />;
 }

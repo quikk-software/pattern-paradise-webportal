@@ -11,7 +11,7 @@ import { updateFilterField } from '@/lib/features/filter/filterSlice';
 
 interface WaterfallListingProps {
   products: GetProductResponse[];
-  listingType: string;
+  status: 'Released' | 'Created';
   columns: number;
   onImpression?: (productId: string) => Promise<void>;
   showFade?: boolean;
@@ -61,7 +61,7 @@ const SaleCountdown = ({ dueDate }: { dueDate: string }) => {
 
 export default function WaterfallListing({
   products,
-  listingType,
+  status,
   columns,
   onImpression,
   showFade = false,
@@ -115,11 +115,15 @@ export default function WaterfallListing({
     }
 
     dispatch(updateFilterField({ key: 'triggerLoad', value: false }));
-    router.push(
-      `${
-        listingType === 'sell' ? '/app/products' : listingType === 'test' ? '/app/tester-calls' : ''
-      }/${id}`,
-    );
+
+    if (status === 'Released') {
+      router.push(`/app/products/${id}`);
+      return;
+    }
+    if (status === 'Created') {
+      router.push(`/app/tester-calls/${id}`);
+      return;
+    }
   };
 
   const productGroups: GetProductResponse[][] = [];
