@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/navigation';
 import { InfoBoxComponent } from '@/components/info-box';
 import Link from 'next/link';
@@ -43,6 +43,8 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
     usePayPalOrder();
   const { fetch: fetchOrdersByProductId } = useListOrdersByProductId();
 
+  const buyNowRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     setIsStandalone(isIOSMode());
   }, []);
@@ -53,6 +55,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
     }
     if (action === 'toggleBuyNow') {
       setIsOpen(true);
+      executeScroll(buyNowRef);
     }
   }, [action]);
 
@@ -86,6 +89,12 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
     if (e.key === 'Enter') {
       e.preventDefault();
     }
+  };
+
+  const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
+    ref.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
   };
 
   const isLoggedIn = status === 'authenticated';
@@ -176,59 +185,63 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
           {priceError && <p className="text-sm text-red-500">{priceError}</p>}
         </div>
       ) : null}
-      {isOpen ? (
-        <>
-          {isLoggedIn ? (
-            <>
-              <div className="space-y-1">
-                <CountrySelect
+      <div ref={buyNowRef}>
+        {isOpen ? (
+          <>
+            {isLoggedIn ? (
+              <>
+                <div className="space-y-1">
+                  <CountrySelect
+                    country={country}
+                    handleCountryChange={handleCountryChange}
+                    fullWidth
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    ⚠️ Note: Selecting your current country helps the seller calculate the correct
+                    taxes for your purchase.{' '}
+                    <strong>
+                      Please select the country where you are physically located when buying this
+                      pattern.
+                    </strong>
+                  </p>
+                  <p className="text-xs text-muted-foreground italic">
+                    This should be the country you&apos;re in at the moment of purchase - not
+                    necessarily your country of residence.
+                  </p>
+                </div>
+                <CheckoutButtons
+                  disabled={!isLoggedIn}
+                  price={
+                    customPrice ? customPrice : isSaleActive ? product.salePrice : product.price
+                  }
+                  product={product}
                   country={country}
-                  handleCountryChange={handleCountryChange}
-                  fullWidth
                 />
-                <p className="text-xs text-muted-foreground">
-                  ⚠️ Note: Selecting your current country helps the seller calculate the correct
-                  taxes for your purchase.{' '}
-                  <strong>
-                    Please select the country where you are physically located when buying this
-                    pattern.
-                  </strong>
-                </p>
-                <p className="text-xs text-muted-foreground italic">
-                  This should be the country you&apos;re in at the moment of purchase - not
-                  necessarily your country of residence.
-                </p>
+              </>
+            ) : (
+              <div className="flex flex-col gap-4">
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">Almost there!🎉</h3>
+                  <p>
+                    You&apos;re just one step away from getting this stunning pattern!
+                    <br />
+                    <br />
+                    Simply sign up to complete your purchase. Quick, easy, and totally worth it!
+                  </p>
+                </div>
+                <QuickSignUp
+                  redirect={`${encodeURIComponent(`/app/products/${product.id}?action=toggleBuyNow`)}`}
+                />
               </div>
-              <CheckoutButtons
-                disabled={!isLoggedIn}
-                price={customPrice ? customPrice : isSaleActive ? product.salePrice : product.price}
-                product={product}
-                country={country}
-              />
-            </>
-          ) : (
-            <div className="flex flex-col gap-4">
-              <div className="space-y-2">
-                <h3 className="text-xl font-semibold">Almost there!🎉</h3>
-                <p>
-                  You&apos;re just one step away from getting this stunning pattern!
-                  <br />
-                  <br />
-                  Simply sign up to complete your purchase. Quick, easy, and totally worth it!
-                </p>
-              </div>
-              <QuickSignUp
-                redirect={`${encodeURIComponent(`/app/products/${product.id}?action=toggleBuyNow`)}`}
-              />
-            </div>
-          )}
-        </>
-      ) : (
-        <Button className="w-full" onClick={handleBuyNowClick} disabled={!!priceError}>
-          <Lock />
-          Buy Now
-        </Button>
-      )}
+            )}
+          </>
+        ) : (
+          <Button className="w-full" onClick={handleBuyNowClick} disabled={!!priceError}>
+            <Lock />
+            Buy Now
+          </Button>
+        )}
+      </div>
       <RedirectBrowserDrawer
         isOpen={showRedirect}
         onClose={() => setShowRedirect(false)}
