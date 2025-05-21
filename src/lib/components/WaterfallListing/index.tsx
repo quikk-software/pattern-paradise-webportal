@@ -5,7 +5,9 @@ import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import { GetProductResponse } from '@/@types/api-types';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Clock, Percent } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { updateFilterField } from '@/lib/features/filter/filterSlice';
 
 interface WaterfallListingProps {
   products: GetProductResponse[];
@@ -67,6 +69,9 @@ export default function WaterfallListing({
   const productRefs = useRef<(HTMLElement | null)[]>([]);
   const observedProductIds = useRef<Set<string>>(new Set());
 
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -101,6 +106,22 @@ export default function WaterfallListing({
     };
   }, [onImpression]);
 
+  const handleProductClick = (id: string) => {
+    if (typeof window !== 'undefined') {
+      const scrollContainer = document.getElementById('main-scroll-area');
+      const scrollY = scrollContainer?.scrollTop ?? 0;
+
+      sessionStorage.setItem('scrollY', String(scrollY));
+    }
+
+    dispatch(updateFilterField({ key: 'triggerLoad', value: false }));
+    router.push(
+      `${
+        listingType === 'sell' ? '/app/products' : listingType === 'test' ? '/app/tester-calls' : ''
+      }/${id}`,
+    );
+  };
+
   const productGroups: GetProductResponse[][] = [];
   for (let i = 0; i < columns; i++) {
     productGroups[i] = [];
@@ -131,15 +152,10 @@ export default function WaterfallListing({
                     isDueDateActive);
 
                 return (
-                  <Link
+                  <div
                     key={product.id}
-                    rel="nofollow"
-                    href={`${
-                      listingType === 'sell'
-                        ? '/app/products'
-                        : listingType === 'test' && '/app/tester-calls'
-                    }/${product.id}`}
-                    className="w-full"
+                    onClick={() => handleProductClick(product.id)}
+                    className="w-full cursor-pointer"
                   >
                     <Card
                       ref={(el) => {
@@ -198,7 +214,7 @@ export default function WaterfallListing({
                         )}
                       </CardFooter>
                     </Card>
-                  </Link>
+                  </div>
                 );
               })}
             </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -61,13 +61,13 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
       triggerLoad,
       pageNumber,
       pageSize,
+      hasNextPage,
     },
   } = useSelector((s: Store) => s.filter);
 
   const {
     fetch,
     data: products,
-    hasNextPage,
     isLoading,
   } = useListProducts({
     pageNumber,
@@ -80,16 +80,28 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
     listingType === 'sell' ? 'Released' : listingType === 'test' ? 'Created' : undefined;
 
   useEffect(() => {
-    fetchProductsByFilter();
-  }, [searchTerm, sortBy, status]);
-
-  useEffect(() => {
-    if (!triggerLoad || products.length > 0) return;
-    fetchProductsByFilter();
+    if (!triggerLoad) return;
+    fetchProductsByFilter(false, 1, 20);
     dispatch(updateFilterField({ key: 'triggerLoad', value: false }));
   }, [triggerLoad]);
 
-  const fetchProductsByFilter = (scrollToResults = false) => {
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedY = sessionStorage.getItem('scrollY');
+      const scrollContainer = document.getElementById('main-scroll-area');
+
+      if (storedY && scrollContainer) {
+        scrollContainer.scrollTo(0, parseInt(storedY));
+        sessionStorage.removeItem('scrollY');
+      }
+    }
+  }, []);
+
+  const fetchProductsByFilter = (
+    scrollToResults = false,
+    overridePageNumber?: number,
+    overridePageSize?: number,
+  ) => {
     const filter = {
       q: searchTerm ?? undefined,
       status,
@@ -102,8 +114,8 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
       maxPrice,
       hashtags,
       languages: language ? [language] : [],
-      pageNumber: 1,
-      pageSize: 20,
+      pageNumber: overridePageNumber ?? pageNumber,
+      pageSize: overridePageSize ?? pageSize,
       sale: sortBy === 'sale',
       sortBy,
     };
@@ -150,6 +162,9 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
           hashtags,
           languages: language ? [language] : [],
           sortBy,
+          pageNumber,
+          pageSize,
+          sale: sortBy === 'sale',
         });
       }
     });
@@ -337,7 +352,7 @@ export function ListingComponent({ listingType, infiniteScroll = true }: Listing
                 Nothing found matching your criteria.
               </p>
               <div className="flex justify-center">
-                <Button size="lg" onClick={() => dispatch(reset())}>
+                <Button size="lg" onClick={clearFilter}>
                   Reset Filter
                 </Button>
               </div>
