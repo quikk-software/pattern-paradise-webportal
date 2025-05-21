@@ -19,6 +19,7 @@ export interface ProductFilterObject {
   triggerLoad: boolean;
   pageNumber: number;
   pageSize: number;
+  hasNextPage: boolean;
 }
 
 export interface FilterState {
@@ -42,6 +43,7 @@ export const initialState: FilterState = {
     triggerLoad: true,
     pageNumber: 1,
     pageSize: 20,
+    hasNextPage: false,
   },
   products: [],
 };
@@ -58,6 +60,18 @@ export const filterSlice = createSlice({
       action: PayloadAction<{ key: K; value: ProductFilterObject[K] }>,
     ) => {
       state.productFilter[action.payload.key] = action.payload.value;
+      if (action.payload.key !== 'triggerLoad') {
+        state.productFilter.triggerLoad = true;
+      }
+    },
+    setPageNumber: (state: FilterState, action: PayloadAction<number>) => {
+      state.productFilter.pageNumber = action.payload;
+    },
+    setPageSize: (state: FilterState, action: PayloadAction<number>) => {
+      state.productFilter.pageSize = action.payload;
+    },
+    setHasNextPage: (state: FilterState, action: PayloadAction<boolean>) => {
+      state.productFilter.hasNextPage = action.payload;
     },
     setProducts: (state, action: PayloadAction<GetProductResponse[]>) => {
       state.products = action.payload;
@@ -66,5 +80,13 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setProductFilter, updateFilterField, setProducts, reset } = filterSlice.actions;
+export const {
+  setProductFilter,
+  updateFilterField,
+  setProducts,
+  setPageNumber,
+  setPageSize,
+  setHasNextPage,
+  reset,
+} = filterSlice.actions;
 export default filterSlice.reducer;

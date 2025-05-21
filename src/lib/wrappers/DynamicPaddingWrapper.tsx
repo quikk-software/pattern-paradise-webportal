@@ -68,6 +68,7 @@ export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
       </PreviewFlagProvider>
       <div
         ref={scrollableDivRef}
+        id="main-scroll-area"
         className={`${shouldRemovePadding ? 'px-0 py-0' : 'px-4 py-8'} flex-1 overflow-auto${shouldRemoveContainer ? '' : ' mx-auto container'}`}
       >
         <div id="main-area" className={`w-full${shouldUseFullHeight ? ' h-full' : ''}`}>
