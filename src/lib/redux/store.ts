@@ -10,12 +10,14 @@ import {
   AnalyticsState,
   initialState as analyticsInitialState,
 } from '@/lib/features/analytics/analyticsSlice';
+import { FilterState, initialState as filterInitialState } from '@/lib/features/filter/filterSlice';
 
 export type Store = {
   common: CommonState;
   auth: AuthState;
   testing: TestingState;
   analytics: AnalyticsState;
+  filter: FilterState;
 };
 
 const initialStore: Store = {
@@ -23,6 +25,7 @@ const initialStore: Store = {
   auth: authInitialState,
   testing: testingInitialState,
   analytics: analyticsInitialState,
+  filter: filterInitialState,
 };
 
 export const makeStore = () => {

@@ -13,7 +13,7 @@ export default function NoPatterns() {
         You haven&apos;t bought any crochet patterns yet. Start your creative journey by exploring
         our collection of beautiful designs!
       </p>
-      <Link href="/">
+      <Link href="/browse">
         <Button size="lg" className="font-semibold">
           Browse Patterns
         </Button>
