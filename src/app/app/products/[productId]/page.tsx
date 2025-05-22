@@ -2,7 +2,7 @@ import React from 'react';
 import ProductPageComponent from '@/components/product-page';
 import { getProduct } from '@/lib/api/static/product/getProduct';
 import { Metadata } from 'next';
-import { APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
+import { APP_DOMAIN, APP_NAME, APP_TITLE, COUNTRIES, THEME_COLOR } from '@/lib/constants';
 import { generateTitle } from '@/lib/utils';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 import logger from '@/lib/core/logger';
@@ -125,7 +125,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: product?.title,
-    image: product?.imageUrls?.at(0),
+    image: product?.imageUrls,
     description: product?.description,
     sku: params.productId,
     brand: {
@@ -152,19 +152,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
           },
           shippingDestination: {
             '@type': 'DefinedRegion',
-            addressCountry: 'US',
-          },
-        },
-        {
-          '@type': 'OfferShippingDetails',
-          shippingRate: {
-            '@type': 'MonetaryAmount',
-            value: '0.00',
-            currency: 'EUR',
-          },
-          shippingDestination: {
-            '@type': 'DefinedRegion',
-            addressCountry: 'DE',
+            addressCountry: COUNTRIES.map(({ country }) => country),
           },
         },
       ],
