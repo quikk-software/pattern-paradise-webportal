@@ -155,6 +155,7 @@ export interface PostUserRequest {
   affiliate?: string;
   hasAcceptedPrivacy: boolean;
   hasAcceptedTerms: boolean;
+  hasAgreedToNewsletter: boolean;
 }
 
 export interface PostExternalUserRequest {
@@ -460,7 +461,23 @@ export interface ListProductsResponse {
   products: GetProductResponse[];
 }
 
-export type PostPhysicalProductRequest = object;
+export interface PostPhysicalProductRequest {
+  imageUrls: string[];
+  hashtags: string[];
+  subCategories: string[];
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  status?: string;
+  salePrice?: number;
+  /** @format date-time */
+  salePriceDueDate?: string;
+  sku?: string;
+  stock: number;
+  customizationNote?: string;
+  isCustomizable?: boolean;
+}
 
 export interface PostPhysicalProductResponse {
   physicalProductId: string;
@@ -1436,6 +1453,8 @@ export class Api<
         hasAcceptedTerms?: any;
         /** @example "any" */
         hasAcceptedPrivacy?: any;
+        /** @example "any" */
+        hasAgreedToNewsletter?: any;
       },
       params: RequestParams = {},
     ) =>
@@ -2540,11 +2559,45 @@ export class Api<
      * @request POST:/api/v1/physical-products
      * @secure
      */
-    postPhysicalProduct: (params: RequestParams = {}) =>
+    postPhysicalProduct: (
+      data: {
+        /** @example "any" */
+        imageUrls?: any;
+        /** @example "any" */
+        hashtags?: any;
+        /** @example "any" */
+        subCategories?: any;
+        /** @example "any" */
+        price?: any;
+        /** @example "any" */
+        salePrice?: any;
+        /** @example "any" */
+        sku?: any;
+        /** @example "any" */
+        stock?: any;
+        /** @example "any" */
+        status?: any;
+        /** @example "any" */
+        customizationNote?: any;
+        /** @example "any" */
+        isCustomizable?: any;
+        /** @example "any" */
+        category?: any;
+        /** @example "any" */
+        description?: any;
+        /** @example "any" */
+        salePriceDueDate?: any;
+        /** @example "any" */
+        title?: any;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<PostPhysicalProductResponse, any>({
         path: `/api/v1/physical-products`,
         method: "POST",
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

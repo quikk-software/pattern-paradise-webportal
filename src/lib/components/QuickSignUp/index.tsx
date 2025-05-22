@@ -84,6 +84,7 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
         roles: ['Buyer', 'Tester'],
         hasAcceptedPrivacy: data.hasAcceptedTermsAndPrivacy,
         hasAcceptedTerms: data.hasAcceptedTermsAndPrivacy,
+        hasAgreedToNewsletter: false,
         affiliate: affiliate?.trim(),
       });
 

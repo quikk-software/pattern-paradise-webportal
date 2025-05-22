@@ -101,12 +101,15 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       tiktok: '',
       hasAcceptedTerms: false,
       hasAcceptedPrivacy: false,
+      hasAgreedToNewsletter: false,
     },
   });
 
   const username = watch('username');
   const email = watch('email');
   const password = watch('password');
+  const hasAcceptedPrivacy = watch('hasAcceptedPrivacy');
+  const hasAcceptedTerms = watch('hasAcceptedTerms');
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -171,6 +174,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
       tiktokRef: data.tiktok?.trim(),
       hasAcceptedTerms: data.hasAcceptedTerms,
       hasAcceptedPrivacy: data.hasAcceptedPrivacy,
+      hasAgreedToNewsletter: data.hasAgreedToNewsletter,
       affiliate: affiliate?.trim(),
       roles,
     });
@@ -619,6 +623,25 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                     </p>
                   ) : null}
                 </div>
+
+                <div className="space-y-2">
+                  <div className="flex gap-4 items-center">
+                    <Controller
+                      name="hasAgreedToNewsletter"
+                      control={control}
+                      render={({ field }) => (
+                        <Checkbox
+                          id="hasAcceptedPrivacy"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      )}
+                    />
+                    <Label htmlFor="hasAgreedToNewsletter" className="text-sm">
+                      I want to receive <strong>updates & newsletters</strong> by email.
+                    </Label>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -651,16 +674,26 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
             <div />
           )}
           {currentStep === totalSteps ? (
-            <div className="space-y-1">
-              <Button
-                type="submit"
-                variant="default"
-                className="flex items-center gap-1"
-                disabled={isLoading || isSuccess || !isValid}
-              >
-                {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-                Register
-              </Button>
+            <div className="flex flex-col gap-1 justify-end">
+              <div className="w-full flex justify-end">
+                <Button
+                  type="submit"
+                  variant="default"
+                  disabled={isLoading || isSuccess || !isValid}
+                >
+                  <div className="flex items-center gap-1">
+                    {isLoading ? (
+                      <LoadingSpinnerComponent size="sm" className="text-white" />
+                    ) : null}
+                    Register
+                  </div>
+                </Button>
+              </div>
+              {!hasAcceptedTerms || !hasAcceptedPrivacy ? (
+                <p className="text-sm text-red-500">
+                  Please read & accept our Terms of Service and Privacy Policy.
+                </p>
+              ) : null}
               <RequestStatus
                 isSuccess={isSuccess}
                 isError={isError}
