@@ -153,6 +153,8 @@ export function ListingComponent({
         },
       }),
     );
+
+    dispatch(updateFilterField({ key: 'triggerLoad', value: true }));
   }, []);
 
   useEffect(() => {
