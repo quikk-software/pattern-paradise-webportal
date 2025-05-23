@@ -99,7 +99,7 @@ export default function OrderSuccess({ orderId, orderNumber, date, pattern }: Or
           </Link>
         </Button>
         <Button variant="outline" className="gap-2" asChild>
-          <Link href="/">
+          <Link href="/browse">
             Continue Shopping
             <ArrowRight className="h-4 w-4" />
           </Link>
