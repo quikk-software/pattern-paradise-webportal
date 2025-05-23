@@ -5,11 +5,11 @@ import { generatePageMetadata } from '@/lib/core/metadata';
 
 export const metadata = generatePageMetadata('/app/tester-calls');
 
-export default function TestPage() {
+export default function TestPage({ searchParams }: { searchParams: { [key: string]: string } }) {
   return (
     <div className="flex flex-col gap-4">
       <TestingQuickLinks />
-      <ListingComponent status={'Created'} />
+      <ListingComponent initialQuery={searchParams} status={'Created'} />
     </div>
   );
 }

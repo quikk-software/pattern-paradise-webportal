@@ -38,20 +38,24 @@ import { CraftSelector } from '@/components/craft-selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface ListingComponentProps {
   status: 'Released' | 'Created';
   infiniteScroll?: boolean;
+  initialQuery?: { [key: string]: string };
 }
 
-export function ListingComponent({ status, infiniteScroll = true }: ListingComponentProps) {
+export function ListingComponent({
+  initialQuery,
+  status,
+  infiniteScroll = true,
+}: ListingComponentProps) {
   const dispatch = useDispatch();
   const observer = useRef<IntersectionObserver | null>(null);
   const screenSize = useScreenSize();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const { productFilter } = useSelector((s: Store) => s.filter);
 
@@ -104,37 +108,37 @@ export function ListingComponent({ status, infiniteScroll = true }: ListingCompo
   }, [productFilter]);
 
   useEffect(() => {
-    const get = (key: string) => searchParams.get(key);
+    if (!initialQuery) return;
 
-    dispatch(updateFilterField({ key: 'q', value: get('q') || '' }));
-    dispatch(updateFilterField({ key: 'sortBy', value: get('sortBy') || 'mostRelevant' }));
+    dispatch(updateFilterField({ key: 'q', value: initialQuery.q || '' }));
+    dispatch(updateFilterField({ key: 'sortBy', value: initialQuery.sortBy || 'mostRelevant' }));
     dispatch(
       updateFilterField({
         key: 'minPrice',
-        value: parseInt(get('minPrice') || String(MIN_PRICE), 10),
+        value: parseInt(initialQuery.minPrice || String(MIN_PRICE), 10),
       }),
     );
     dispatch(
       updateFilterField({
         key: 'maxPrice',
-        value: parseInt(get('maxPrice') || String(MAX_PRICE), 10),
+        value: parseInt(initialQuery.maxPrice || String(MAX_PRICE), 10),
       }),
     );
     dispatch(
       updateFilterField({
         key: 'language',
-        value: get('language') || undefined,
+        value: initialQuery.language || undefined,
       }),
     );
     dispatch(
       updateFilterField({
         key: 'hashtags',
-        value: get('hashtags')?.split(',') || [],
+        value: initialQuery.hashtags?.split(',') || [],
       }),
     );
 
-    const craft = get('craft') || 'All';
-    const subCategories = get('subCategories')?.split(',') || [];
+    const craft = initialQuery.craft || 'All';
+    const subCategories = initialQuery.subCategories?.split(',') || [];
 
     dispatch(
       updateFilterField({

@@ -9,14 +9,14 @@ import React from 'react';
 
 export const metadata = generatePageMetadata('/');
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: { [key: string]: string } }) {
   const products = await listProductsForShowcase();
 
   return (
     <div>
       <HeroV2 products={products.slice(0, FEATURED_PRODUCTS_LENGTH).reverse()} />
       <div className="mx-auto container px-4 py-8 space-y-8">
-        <ListingComponent status={'Released'} infiniteScroll={false} />
+        <ListingComponent initialQuery={searchParams} status={'Released'} infiniteScroll={false} />
         <FAQPageComponent />
       </div>
       <Footer />
