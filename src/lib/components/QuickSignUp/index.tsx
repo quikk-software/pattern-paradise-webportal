@@ -16,6 +16,7 @@ import { PasswordValidationChecklist } from '@/lib/components/PasswordValidation
 import useAuth from '@/lib/auth/useAuth';
 import GoogleLoginButton from '@/lib/components/GoogleLoginButton';
 import { motion } from 'framer-motion';
+import logger from '@/lib/core/logger';
 
 type FormValues = {
   email: string;
@@ -89,23 +90,25 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
         affiliate: affiliate?.trim(),
       });
 
-      await handleLogin(email, password);
+      await handleLogin(email, password, false);
 
       await sessionStorage.removeItem('affiliate');
-
-      if (!redirect) return;
-
-      try {
-        const decoded = decodeURIComponent(redirect);
-
-        window.location.replace(decoded);
-      } catch (err) {
-        console.error('Redirect decode error:', err);
-      }
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!loginIsSuccess || !redirect) return;
+
+    try {
+      const decoded = decodeURIComponent(redirect);
+      const url = `${process.env.NEXT_PUBLIC_URL ?? ''}${decoded}`;
+      window.location.replace(url);
+    } catch (err) {
+      logger.error('Redirect decode error:', err);
+    }
+  }, [loginIsSuccess, redirect]);
 
   if (isSuccess) {
     return (
@@ -119,6 +122,18 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
             <ShieldCheck className="w-16 h-16 text-green-500" aria-hidden="true" />
           </motion.div>
           <p className="text-sm">You&apos;ll be logged in a second...</p>
+          {redirect ? (
+            <p className="text-sm text-gray-500 text-center mt-2">
+              If you&apos;re not automatically redirected,{' '}
+              <a
+                href={`${process.env.NEXT_PUBLIC_URL ?? ''}${decodeURIComponent(redirect)}`}
+                className="underline text-blue-500"
+              >
+                click here
+              </a>
+              .
+            </p>
+          ) : null}
         </CardContent>
       </Card>
     );

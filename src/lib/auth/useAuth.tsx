@@ -25,7 +25,7 @@ const useAuth = () => {
 
   const { username } = useSelector((store: Store) => store.auth);
 
-  const handleLogin = async (username: string, password: string) => {
+  const handleLogin = async (username: string, password: string, executeRedirect = true) => {
     if (username === '' || password === '') {
       logger.warn('Username or password are empty.', { username, password });
       return;
@@ -47,7 +47,9 @@ const useAuth = () => {
         setLoginIsError(true);
       } else {
         setLoginIsSuccess(true);
-        router.push(redirectUrl);
+        if (executeRedirect) {
+          router.push(redirectUrl);
+        }
       }
     } catch (err) {
       logger.error(err);
