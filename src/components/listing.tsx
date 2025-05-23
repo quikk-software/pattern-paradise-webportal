@@ -158,10 +158,6 @@ export function ListingComponent({
   }, []);
 
   useEffect(() => {
-    fetchProductsByFilter(false, 1, 20);
-  }, [status]);
-
-  useEffect(() => {
     if (!triggerLoad) return;
     fetchProductsByFilter(false, 1, 20);
     dispatch(updateFilterField({ key: 'triggerLoad', value: false }));
