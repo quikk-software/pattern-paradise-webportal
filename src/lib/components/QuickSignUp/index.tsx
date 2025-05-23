@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { PasswordValidationChecklist } from '@/lib/components/PasswordValidationChecklist';
 import useAuth from '@/lib/auth/useAuth';
 import GoogleLoginButton from '@/lib/components/GoogleLoginButton';
+import { motion } from 'framer-motion';
 
 type FormValues = {
   email: string;
@@ -92,12 +93,14 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
 
       await sessionStorage.removeItem('affiliate');
 
-      if (typeof window !== 'undefined') {
-        if (redirect) {
-          window.location.replace(decodeURIComponent(redirect));
-        } else {
-          window.location.reload();
-        }
+      if (!redirect) return;
+
+      try {
+        const decoded = decodeURIComponent(redirect);
+
+        window.location.replace(decoded);
+      } catch (err) {
+        console.error('Redirect decode error:', err);
       }
     } finally {
       setIsLoading(false);
@@ -106,9 +109,18 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
 
   if (isSuccess) {
     return (
-      <div className="flex justify-center mb-4">
-        <ShieldCheck className="w-16 h-16 text-green-500" aria-hidden="true" />
-      </div>
+      <Card className="mb-4">
+        <CardContent className="flex flex-col justify-center items-center gap-2 mt-6">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <ShieldCheck className="w-16 h-16 text-green-500" aria-hidden="true" />
+          </motion.div>
+          <p className="text-sm">You&apos;ll be logged in a second...</p>
+        </CardContent>
+      </Card>
     );
   }
 
