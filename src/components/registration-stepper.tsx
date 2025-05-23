@@ -631,7 +631,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                       control={control}
                       render={({ field }) => (
                         <Checkbox
-                          id="hasAcceptedPrivacy"
+                          id="hasAgreedToNewsletter"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
