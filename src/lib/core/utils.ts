@@ -24,9 +24,7 @@ export const isIOSMode = () => {
 
   const userAgent = navigator.userAgent || navigator.vendor;
 
-  return (
-    /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent) || userAgent.includes('PWAShell')
-  );
+  return userAgent.includes('PWAShell');
 };
 
 export const isInStandaloneMode = () => {
