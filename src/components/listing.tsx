@@ -23,7 +23,7 @@ import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
-import { CATEGORIES } from '@/lib/constants';
+import { CATEGORIES, MAX_PRICE, MIN_PRICE } from '@/lib/constants';
 import { updateSelectedFlags } from '@/lib/utils';
 import { useCreateProductImpression, useCreateTestingImpression } from '@/lib/api/metric';
 import LanguageSelect from '@/lib/components/LanguageSelect';
@@ -38,6 +38,7 @@ import { CraftSelector } from '@/components/craft-selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface ListingComponentProps {
   status: 'Released' | 'Created';
@@ -48,22 +49,26 @@ export function ListingComponent({ status, infiniteScroll = true }: ListingCompo
   const dispatch = useDispatch();
   const observer = useRef<IntersectionObserver | null>(null);
   const screenSize = useScreenSize();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const { productFilter } = useSelector((s: Store) => s.filter);
+
   const {
-    productFilter: {
-      q: searchTerm,
-      sortBy,
-      selectedCategory,
-      minPrice,
-      maxPrice,
-      hashtags,
-      language,
-      showFilter,
-      triggerLoad,
-      pageNumber,
-      pageSize,
-      hasNextPage,
-    },
-  } = useSelector((s: Store) => s.filter);
+    q: searchTerm,
+    sortBy,
+    selectedCategory,
+    minPrice,
+    maxPrice,
+    hashtags,
+    language,
+    showFilter,
+    triggerLoad,
+    pageNumber,
+    pageSize,
+    hasNextPage,
+  } = productFilter;
 
   const {
     fetch,
@@ -75,6 +80,76 @@ export function ListingComponent({ status, infiniteScroll = true }: ListingCompo
   });
   const { mutate: mutateProductImpression } = useCreateProductImpression();
   const { mutate: mutateTestingImpression } = useCreateTestingImpression();
+
+  useEffect(() => {
+    const query = new URLSearchParams();
+
+    if (productFilter.q) query.set('q', productFilter.q);
+    if (productFilter.sortBy) query.set('sortBy', productFilter.sortBy);
+    if (productFilter.minPrice !== MIN_PRICE) query.set('minPrice', String(productFilter.minPrice));
+    if (productFilter.maxPrice !== MAX_PRICE) query.set('maxPrice', String(productFilter.maxPrice));
+    if (productFilter.language) query.set('language', productFilter.language);
+    if (productFilter.hashtags.length) query.set('hashtags', productFilter.hashtags.join(','));
+    if (productFilter.selectedCategory.craft !== 'All')
+      query.set('craft', productFilter.selectedCategory.craft);
+
+    const selectedSubcategories = Object.values(productFilter.selectedCategory.options)
+      .flat()
+      .filter((opt) => opt.selected)
+      .map((opt) => opt.name);
+
+    if (selectedSubcategories.length) query.set('subCategories', selectedSubcategories.join(','));
+
+    router.replace(`${pathname}?${query.toString()}`, { scroll: false });
+  }, [productFilter]);
+
+  useEffect(() => {
+    const get = (key: string) => searchParams.get(key);
+
+    dispatch(updateFilterField({ key: 'q', value: get('q') || '' }));
+    dispatch(updateFilterField({ key: 'sortBy', value: get('sortBy') || 'mostRelevant' }));
+    dispatch(
+      updateFilterField({
+        key: 'minPrice',
+        value: parseInt(get('minPrice') || String(MIN_PRICE), 10),
+      }),
+    );
+    dispatch(
+      updateFilterField({
+        key: 'maxPrice',
+        value: parseInt(get('maxPrice') || String(MAX_PRICE), 10),
+      }),
+    );
+    dispatch(
+      updateFilterField({
+        key: 'language',
+        value: get('language') || undefined,
+      }),
+    );
+    dispatch(
+      updateFilterField({
+        key: 'hashtags',
+        value: get('hashtags')?.split(',') || [],
+      }),
+    );
+
+    const craft = get('craft') || 'All';
+    const subCategories = get('subCategories')?.split(',') || [];
+
+    dispatch(
+      updateFilterField({
+        key: 'selectedCategory',
+        value: {
+          craft,
+          options: subCategories.length
+            ? {
+                [craft]: subCategories.map((name) => ({ name, selected: true })),
+              }
+            : {},
+        },
+      }),
+    );
+  }, []);
 
   useEffect(() => {
     fetchProductsByFilter(false, 1, 20);
