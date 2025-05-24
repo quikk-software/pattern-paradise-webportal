@@ -41,23 +41,23 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
                 <ProductCategories category={category} subCategories={[]} />
                 <p>
                   Feeling adventurous? Let the creativity flow with our Mystery Pattern offer! When
-                  you purchase this listing, you’ll receive a random digital {category}
-                  pattern from one of our talented designers on Pattern Paradise.
+                  you purchase this listing, you’ll receive a random digital{' '}
+                  <strong>{category} Pattern</strong> from one of our talented designers on Pattern
+                  Paradise.
                   <br />
                   <br />
-                  Each pattern is handpicked and guaranteed to spark inspiration—perfect for when
-                  you’re in the mood for something new, fun, and unexpected. Will it be a cozy
-                  accessory, a stylish garment, or a cute home decor piece? There’s only one way to
-                  find out!
+                  Each pattern is here to spark inspiration - perfect for when you’re in the mood
+                  for something new, fun, and unexpected. Will it be a cozy accessory, a stylish
+                  garment, or a cute home decor piece? There’s only one way to find out!
                   <br />
                   <br />
                   🎁 What’s included:
                   <br />
                 </p>
                 <ul className="list-disc ml-5">
-                  <li>1 surprise digital pattern (crochet or knitting)</li>
+                  <li>1 surprise digital pattern ({category})</li>
                   <li>PDF download delivered instantly</li>
-                  <li>Designed by one of our trusted creators</li>
+                  <li>Designed by one of our creators on Pattern Paradise</li>
                 </ul>
                 <p>
                   <br />
@@ -72,9 +72,9 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
                 <p>
                   <br />
                   <br />
-                  Take a chance - you might just discover your next favorite project. 🧶
+                  Take a chance - you might just discover your next favorite project🧶
                 </p>
-                <ProductHashtags hashtags={[category.toLowerCase(), 'mystery', 'pattern']} />
+                <ProductHashtags hashtags={[category.toLowerCase(), 'mysterypattern']} />
                 <BuyMysteryButton category={category} />
               </div>
             </div>
