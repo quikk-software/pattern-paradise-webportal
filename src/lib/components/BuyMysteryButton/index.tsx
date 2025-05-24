@@ -10,6 +10,8 @@ import { useValidSession } from '@/hooks/useValidSession';
 import QuickSignUp from '@/lib/components/QuickSignUp';
 import { isIOSMode } from '@/lib/core/utils';
 import { RedirectBrowserDrawer } from '@/lib/components/RedirectBrowserDrawer';
+import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';
 
 interface BuyMysteryButtonProps {
   category: string;
@@ -83,15 +85,31 @@ export default function BuyMysteryButton({ category }: BuyMysteryButtonProps) {
   return (
     <div className="space-y-2">
       {isStandalone ? (
-        <RedirectBrowserDrawer
-          isOpen={isRedirectOpen}
-          onClose={() => setIsRedirectOpen(false)}
-          onRedirect={handleRedirect}
-          subtitle={"You'll be redirected to your browser."}
-          description={
-            'To order a mystery pattern, the payment process will be completed in your browser.'
-          }
-        />
+        <>
+          <Card>
+            <CardHeader>
+              <CardTitle>Go to Browser</CardTitle>
+              <CardDescription>
+                Please open this page in your browser to buy a {category} Mystery Pattern.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button className="space-y-2 justify-center" onClick={() => handleRedirect()}>
+                <ChevronRight />
+                Open Browser
+              </Button>
+            </CardContent>
+          </Card>
+          <RedirectBrowserDrawer
+            isOpen={isRedirectOpen}
+            onClose={() => setIsRedirectOpen(false)}
+            onRedirect={handleRedirect}
+            subtitle={"You'll be redirected to your browser."}
+            description={
+              'To order a mystery pattern, the payment process will be completed in your browser.'
+            }
+          />
+        </>
       ) : (
         <>
           <div className="space-y-1">
