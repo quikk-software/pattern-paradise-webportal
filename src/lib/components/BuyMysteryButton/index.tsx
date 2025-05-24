@@ -58,7 +58,7 @@ export default function BuyMysteryButton({ category }: BuyMysteryButtonProps) {
   };
 
   const handleRedirect = () => {
-    window.location.href = '/app/products/mystery-patterns/pattern';
+    window.location.href = '/app/products/mystery-patterns/crochet';
   };
 
   const isLoggedIn = status === 'authenticated';
@@ -75,7 +75,7 @@ export default function BuyMysteryButton({ category }: BuyMysteryButtonProps) {
             Simply sign up to complete your purchase. Quick, easy, and totally worth it!
           </p>
         </div>
-        <QuickSignUp redirect={`${encodeURIComponent(`/app/products/mystery-patterns/pattern`)}`} />
+        <QuickSignUp redirect={`${encodeURIComponent(`/app/products/mystery-patterns/crochet`)}`} />
       </div>
     );
   }

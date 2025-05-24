@@ -89,7 +89,7 @@ const pages: Page[] = [
   },
   {
     title: 'Mystery Pattern | Pattern Paradise',
-    pathname: '/app/products/mystery-patterns/pattern',
+    pathname: '/app/products/mystery-patterns/crochet',
     description:
       'Shop exclusive mystery patterns and enjoy surprise designs from Pattern Paradise.',
   },

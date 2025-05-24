@@ -587,7 +587,7 @@ export function ProductFormComponent() {
               <span>
                 Patterns included in{' '}
                 <Link
-                  href="/app/products/mystery-patterns/pattern"
+                  href="/app/products/mystery-patterns/crochet"
                   target="_blank"
                   className="text-blue-500 underline"
                 >
