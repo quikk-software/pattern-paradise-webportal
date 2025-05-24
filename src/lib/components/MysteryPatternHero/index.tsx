@@ -31,7 +31,7 @@ export default function MysteryPatternHero() {
               <div className="text-3xl font-bold text-orange-600">$3.00</div>
             </div>
 
-            <Link href={'/app/products/mystery/pattern'}>
+            <Link href={'/app/products/mystery-patterns/pattern'}>
               <Button className="bg-gradient-to-r from-primary to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold px-6 py-2 shadow-lg">
                 <Sparkles className="w-4 h-4 mr-2" />
                 Try Mystery Pattern

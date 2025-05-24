@@ -20,7 +20,7 @@ export default function MysteryPageComponent({ category, displayName }: MysteryP
       <div className="flex items-center gap-2">
         <GoBackButton />
         <ShareButton
-          url={`${process.env.NEXT_PUBLIC_URL}/app/products/mystery/pattern`}
+          url={`${process.env.NEXT_PUBLIC_URL}/app/products/mystery-patterns/pattern`}
           shareText={'Get your mystery pattern on Pattern Paradise!'}
         />
       </div>
