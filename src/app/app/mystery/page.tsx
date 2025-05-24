@@ -10,5 +10,5 @@ export default async function MysteryPage() {
     return <FeatureComingSoon />;
   }
 
-  return <MysteryPageComponent category={'Crocheting'} />;
+  return <MysteryPageComponent category={'Crochet'} />;
 }
