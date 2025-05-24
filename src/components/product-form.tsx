@@ -586,7 +586,11 @@ export function ProductFormComponent() {
             description={
               <span>
                 Patterns included in{' '}
-                <Link href="/app/mystery" target="_blank" className="text-blue-500 underline">
+                <Link
+                  href="/app/products/mystery/pattern"
+                  target="_blank"
+                  className="text-blue-500 underline"
+                >
                   Mystery Patterns
                 </Link>{' '}
                 may receive additional exposure to customers. Each mystery box is sold for a{' '}

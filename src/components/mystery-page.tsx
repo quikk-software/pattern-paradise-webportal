@@ -11,15 +11,16 @@ import BuyMysteryButton from '@/lib/components/BuyMysteryButton';
 
 interface MysteryPageComponentProps {
   category: string;
+  displayName: string;
 }
 
-export default function MysteryPageComponent({ category }: MysteryPageComponentProps) {
+export default function MysteryPageComponent({ category, displayName }: MysteryPageComponentProps) {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-2">
         <GoBackButton />
         <ShareButton
-          url={`${process.env.NEXT_PUBLIC_URL}/app/mystery`}
+          url={`${process.env.NEXT_PUBLIC_URL}/app/products/mystery/pattern`}
           shareText={'Get your mystery pattern on Pattern Paradise!'}
         />
       </div>
@@ -27,7 +28,7 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
         <CardContent className="p-6">
           <div className="grid lg:grid-cols-2 gap-4">
             <Image
-              alt={`${category} Mystery Pattern on Pattern Paradise`}
+              alt={`${displayName} Mystery Pattern on Pattern Paradise`}
               src={`/assets/mystery-pattern_v2.jpeg`}
               width={400}
               height={400}
@@ -36,14 +37,14 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
             <div className="flex flex-col justify-start gap-8">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <h1 className="text-3xl font-bold break-words">{category} Mystery Pattern</h1>
+                  <h1 className="text-3xl font-bold break-words">{displayName} Mystery Pattern</h1>
                 </div>
                 <ProductCategories category={category} subCategories={[]} />
                 <p>
                   Feeling adventurous? Let the creativity flow with our Mystery Pattern offer! When
                   you purchase this listing, you’ll receive a random digital{' '}
-                  <strong>{category} Pattern</strong> from one of our talented designers on Pattern
-                  Paradise.
+                  <strong>{displayName} Pattern</strong> from one of our talented designers on
+                  Pattern Paradise.
                   <br />
                   <br />
                   Each pattern is here to spark inspiration - perfect for when you’re in the mood
@@ -55,7 +56,7 @@ export default function MysteryPageComponent({ category }: MysteryPageComponentP
                   <br />
                 </p>
                 <ul className="list-disc ml-5">
-                  <li>1 surprise digital pattern ({category})</li>
+                  <li>1 surprise digital pattern ({displayName})</li>
                   <li>PDF download delivered instantly</li>
                   <li>Designed by one of our creators on Pattern Paradise</li>
                 </ul>
