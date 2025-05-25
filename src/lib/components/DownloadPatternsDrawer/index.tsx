@@ -5,6 +5,7 @@ import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import LanguageSelect from '@/lib/components/LanguageSelect';
 import SendFilesButton from '@/lib/components/SendFilesButton';
 import { DownloadIcon } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 interface DownloadPatternsDrawerProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface DownloadPatternsDrawerProps {
   productId?: string;
   callbackFn?: (language: string) => void;
   languages: string[];
+  downloadProgress: number;
 }
 
 export default function DownloadPatternsDrawer({
@@ -22,6 +24,7 @@ export default function DownloadPatternsDrawer({
   productId,
   callbackFn,
   languages,
+  downloadProgress,
 }: DownloadPatternsDrawerProps) {
   const [language, setLanguage] = useState<string | undefined>(undefined);
 
@@ -55,23 +58,41 @@ export default function DownloadPatternsDrawer({
             Cancel
           </Button>
           <SendFilesButton language={language} productId={productId} channel={'MAIL'} />
-          <Button
-            onClick={() => {
-              if (!language) {
-                return;
-              }
-              callbackFn?.(language);
-            }}
-            variant={'default'}
-            disabled={isLoading || !language}
-          >
-            {isLoading ? (
-              <LoadingSpinnerComponent className="mr-4 h-4 w-4" />
-            ) : (
-              <DownloadIcon className="mr-4 h-4 w-4" />
-            )}
-            Download Pattern
-          </Button>
+          <div className="space-y-2">
+            <Button
+              onClick={() => {
+                if (!language) {
+                  return;
+                }
+                callbackFn?.(language);
+              }}
+              variant={'default'}
+              disabled={isLoading || !language}
+            >
+              {isLoading ? (
+                <LoadingSpinnerComponent className="mr-4 h-4 w-4 text-white" />
+              ) : (
+                <DownloadIcon className="mr-4 h-4 w-4" />
+              )}
+              Download Pattern
+            </Button>
+            {downloadProgress > 0 ? (
+              <Progress
+                value={downloadProgress}
+                className="h-2 transition-all duration-300 ease-in-out"
+                style={{
+                  background: `linear-gradient(90deg, 
+                                var(--primary) 0%, 
+                                var(--primary) ${downloadProgress}%, 
+                                var(--muted) ${downloadProgress}%, 
+                                var(--muted) 100%)`,
+                }}
+              />
+            ) : null}
+            {downloadProgress > 20 && isLoading ? (
+              <p>Please hang tight. Just a couple of seconds left...</p>
+            ) : null}
+          </div>
         </div>
       </DrawerContent>
     </Drawer>
