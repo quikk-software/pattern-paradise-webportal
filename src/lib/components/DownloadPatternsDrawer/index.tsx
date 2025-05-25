@@ -58,7 +58,7 @@ export default function DownloadPatternsDrawer({
             Cancel
           </Button>
           <SendFilesButton language={language} productId={productId} channel={'MAIL'} />
-          <div className="space-y-2">
+          <div className="space-y-2 w-full">
             <Button
               onClick={() => {
                 if (!language) {
@@ -68,6 +68,7 @@ export default function DownloadPatternsDrawer({
               }}
               variant={'default'}
               disabled={isLoading || !language}
+              className="w-full"
             >
               {isLoading ? (
                 <LoadingSpinnerComponent className="mr-4 h-4 w-4 text-white" />
