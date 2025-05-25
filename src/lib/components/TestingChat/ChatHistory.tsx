@@ -167,6 +167,7 @@ export default function ChatHistory({
     fetch: downloadPatterns,
     isLoading: downloadPatternsIsLoading,
     data: file,
+    downloadProgress,
   } = useDownloadPatternsByProductId();
   const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications(
     {},
@@ -810,6 +811,7 @@ export default function ChatHistory({
         productId={currentTesting?.productId}
         callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
         languages={productLanguages}
+        downloadProgress={downloadProgress}
       />
       {currentTesting ? (
         <ManageTesterDrawers
