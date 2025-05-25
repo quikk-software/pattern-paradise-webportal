@@ -77,7 +77,7 @@ export default function DownloadPatternsDrawer({
               )}
               Download Pattern
             </Button>
-            {downloadProgress > 0 ? (
+            {downloadProgress > 0 && isLoading ? (
               <Progress
                 value={downloadProgress}
                 className="h-2 transition-all duration-300 ease-in-out"
