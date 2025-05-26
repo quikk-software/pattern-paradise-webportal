@@ -111,11 +111,12 @@ export default function Review({ isOpen, testingId, skipRating = false }: Review
         testerStatus:
           likeState === 'Approved' ? 'Approved' : likeState === 'Declined' ? 'Declined' : undefined,
       });
-    } finally {
-      setIsLoading(false);
+
       if (typeof window !== 'undefined') {
         window.location.reload();
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -244,16 +245,7 @@ export default function Review({ isOpen, testingId, skipRating = false }: Review
               </>
             }
           />
-          <RequestStatus
-            isSuccess={isSuccess}
-            isError={isError}
-            errorMessage={
-              <>
-                Something went wrong while removing testers
-                {errorDetail ? `: ${errorDetail}` : ''}
-              </>
-            }
-          />
+          <RequestStatus isSuccess={isSuccess} isError={isError} errorMessage={errorDetail} />
           <Button
             onClick={() => {
               handleReviewClick(likeState, reviewMessage, images, testingId);
