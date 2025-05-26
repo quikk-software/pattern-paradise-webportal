@@ -34,7 +34,7 @@ export function updateSelectedFlags(
   });
 }
 
-export function generateTitle(product: { title: string; category?: string }): string {
+export function generateTitle(product: { title?: string; category?: string }): string {
   const normalizeWord = (word: string) =>
     word
       .toLowerCase()
@@ -63,5 +63,5 @@ export function generateTitle(product: { title: string; category?: string }): st
         .map((w, i) => (i === 0 ? w[0].toUpperCase() + w.slice(1) : w))
         .join(' ')
         .toLowerCase()
-    : product.title.toLowerCase();
+    : (product?.title?.toLowerCase() ?? '');
 }
