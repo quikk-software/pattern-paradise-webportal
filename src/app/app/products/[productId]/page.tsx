@@ -124,7 +124,10 @@ export default async function ProductDetailPage({ params }: { params: { productI
   const productSchema = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
-    name: product?.title,
+    name: `${generateTitle({
+      title: product?.title,
+      category: product?.category,
+    })} pattern`.trim(),
     image: product?.imageUrls,
     description: product?.description,
     sku: params.productId,
