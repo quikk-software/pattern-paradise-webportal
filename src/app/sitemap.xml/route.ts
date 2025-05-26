@@ -11,6 +11,11 @@ export async function GET() {
     { url: `${APP_DOMAIN}/pro`, lastModified: new Date().toISOString() },
     { url: `${APP_DOMAIN}/faq`, lastModified: new Date().toISOString() },
     { url: `${APP_DOMAIN}/help`, lastModified: new Date().toISOString() },
+    { url: `${APP_DOMAIN}/how-to`, lastModified: new Date().toISOString() },
+    {
+      url: `${APP_DOMAIN}/app/products/mystery-patterns/crochet`,
+      lastModified: new Date().toISOString(),
+    },
     { url: `${APP_DOMAIN}/terms-and-privacy`, lastModified: new Date().toISOString() },
     { url: `${APP_DOMAIN}/auth/login`, lastModified: new Date().toISOString() },
     { url: `${APP_DOMAIN}/auth/registration`, lastModified: new Date().toISOString() },
