@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import Review from '../Review';
 import { useGetTestingByProductId, useGetTestingComment } from '@/lib/api/testing';
@@ -10,6 +10,7 @@ import { CirclePlus } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import ReviewCard from '@/lib/components/ReviewCard';
+import useAction from '@/lib/core/useAction';
 
 interface ReviewCTAProps {
   productId: string;
@@ -20,12 +21,29 @@ export default function ReviewCTA({ productId }: ReviewCTAProps) {
 
   const { userId } = useSelector((s: Store) => s.auth);
 
+  const createReviewRef = useRef<HTMLDivElement | null>(null);
+
+  const { action } = useAction();
+
   const { fetch, isLoading, isError, data: testing } = useGetTestingByProductId();
   const {
     fetch: fetchTestingComment,
     data: testingComment,
     isLoading: fetchTestingCommentIsLoading,
   } = useGetTestingComment();
+
+  useEffect(() => {
+    if (!createReviewRef.current) {
+      return;
+    }
+    switch (action) {
+      case 'scrollToReview':
+        executeScroll(createReviewRef);
+        break;
+      default:
+        break;
+    }
+  }, [action, createReviewRef.current]);
 
   useEffect(() => {
     fetch(productId);
@@ -37,6 +55,11 @@ export default function ReviewCTA({ productId }: ReviewCTAProps) {
     }
     fetchTestingComment(testing.id, userId);
   }, [testing?.id, userId]);
+
+  const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
+    console.log('TEST', ref.current);
+    ref.current?.scrollIntoView();
+  };
 
   if (isError) {
     return null;
@@ -56,7 +79,7 @@ export default function ReviewCTA({ productId }: ReviewCTAProps) {
   }
 
   return (
-    <>
+    <div ref={createReviewRef}>
       {!isOpen ? (
         <Card>
           <CardContent className="p-6 flex flex-col gap-4">
@@ -73,6 +96,6 @@ export default function ReviewCTA({ productId }: ReviewCTAProps) {
         </Card>
       ) : null}
       <Review isOpen={isOpen} testingId={testing.id} skipRating />
-    </>
+    </div>
   );
 }
