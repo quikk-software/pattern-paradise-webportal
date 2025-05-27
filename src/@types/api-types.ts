@@ -535,6 +535,13 @@ export interface ListPhysicalProductsResponse {
   products: GetPhysicalProductResponse[];
 }
 
+export interface PostRateTesterRequest {
+  userId: string;
+  starRating: number;
+  textRating?: string;
+  isHidden: boolean;
+}
+
 export interface DeleteUsersFromTestingRequest {
   testerIds: string[];
 }
@@ -673,6 +680,9 @@ export interface GetTesterApplicationResponse {
   user: GetUserAccountResponse;
   testing: GetTestingResponse;
   status: string;
+  starRating?: number;
+  textRating?: string;
+  isHidden: boolean;
   assignedBy: string;
   /**
    * @format date-time
@@ -2963,6 +2973,38 @@ export class Api<
         path: `/api/v1/testings/${testingId}`,
         method: "DELETE",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The testing will be queried by a given testing ID. If the testing cannot be found, an exception will be thrown. It the given user ID is not related to the given testing, an exception will be thrown. If the authenticated user is not owner of the testing, an exception will be thrown.
+     *
+     * @tags Testing
+     * @name RateTester
+     * @summary Rates a tester of a testing.
+     * @request POST:/api/v1/testings/{testingId}/rate-tester
+     * @secure
+     */
+    rateTester: (
+      testingId: string,
+      data: {
+        /** @example "any" */
+        userId?: any;
+        /** @example "any" */
+        starRating?: any;
+        /** @example "any" */
+        textRating?: any;
+        /** @example "any" */
+        isHidden?: any;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/v1/testings/${testingId}/rate-tester`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 

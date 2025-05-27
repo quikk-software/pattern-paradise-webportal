@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import ManageTesterDrawers from '@/lib/components/ManageTestersDrawer';
+import { useRouter } from 'next/navigation';
 
 const getStatusColor = (status: GetTestingResponse['status']) => {
   switch (status) {
@@ -55,6 +56,8 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
   const [selectedTesting, setSelectedTesting] = useState<GetTestingResponse | null>(null);
 
   const { userId } = useSelector((store: Store) => store.auth);
+
+  const router = useRouter();
 
   const {
     fetch: fetchTestings,
@@ -264,6 +267,17 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                           }}
                         >
                           Abort tester call
+                        </Button>
+                      ) : null}
+                      {isOwner && testing.status === 'Approved' ? (
+                        <Button
+                          variant="default"
+                          className="w-full"
+                          onClick={() => {
+                            router.push(`/app/secure/sell/testings/${testing.id}/rate-testers`);
+                          }}
+                        >
+                          Rate Testers
                         </Button>
                       ) : null}
                     </div>

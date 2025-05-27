@@ -57,7 +57,6 @@ export default function ReviewCTA({ productId }: ReviewCTAProps) {
   }, [testing?.id, userId]);
 
   const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
-    console.log('TEST', ref.current);
     ref.current?.scrollIntoView();
   };
 
