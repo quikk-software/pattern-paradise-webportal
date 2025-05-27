@@ -432,7 +432,7 @@ export default function ChatHistory({
                   >
                     <Users className="h-6 w-6" />
                   </Button>
-                  {status !== 'Created' ? (
+                  {status !== 'Created' && !isSeller ? (
                     <Button
                       variant="outline"
                       size="icon"

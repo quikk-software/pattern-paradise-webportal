@@ -19,3 +19,4 @@ export * from './useGetTestingComment';
 export * from './useGetUnreadTestingCommentsCount';
 export * from './useReadAllTestingComments';
 export * from './useGetTesterCallPreviewImage';
+export * from './useRateTester';

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { GetUserAccountResponse } from '@/@types/api-types';
 import { useGetUserById, useListProductsByUserId } from '@/lib/api';
 import WaterfallListing from '@/lib/components/WaterfallListing';
@@ -18,6 +18,7 @@ import { useValidSession } from '@/hooks/useValidSession';
 import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
 import WelcomeBanner from '@/lib/components/WelcomeBanner';
 import { useRouter } from 'next/navigation';
+import useAction from '@/lib/core/useAction';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -34,9 +35,11 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
   const { data } = useValidSession();
 
-  const observer = useRef<IntersectionObserver | null>(null);
-
   const screenSize = useScreenSize();
+  const { action } = useAction();
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  const testerReviewsRef = useRef<HTMLDivElement | null>(null);
 
   const {
     fetch: fetchProducts,
@@ -46,6 +49,16 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
   } = useListProductsByUserId({});
 
   const { fetch: fetchUser, data: currentUser } = useGetUserById();
+
+  useEffect(() => {
+    switch (action) {
+      case 'scrollToTesterReviews':
+        executeScroll(testerReviewsRef);
+        break;
+      default:
+        break;
+    }
+  }, [action, testerReviewsRef.current]);
 
   useEffect(() => {
     fetchProducts(user.id, {
@@ -82,6 +95,10 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
     return () => clearTimeout(timerId);
   }, [searchTerm]);
+
+  const executeScroll = (ref: MutableRefObject<HTMLDivElement | null>) => {
+    ref.current?.scrollIntoView();
+  };
 
   const lastProductRef = (node: HTMLElement | null) => {
     if (fetchProductsIsLoading) {
@@ -141,6 +158,8 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
           </Button>
         </div>
       ) : null}
+
+      <div ref={testerReviewsRef}></div>
 
       {products.length > 0 ? (
         <div className="space-y-4" id="shop">
