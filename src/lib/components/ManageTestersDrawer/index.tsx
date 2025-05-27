@@ -83,8 +83,8 @@ export default function ManageTesterDrawers({
           <div className="flex flex-col gap-4 overflow-y-auto">
             {testing.testers?.map((tester) => (
               <div className="flex justify-between items-center space-x-4" key={tester.id}>
-                <Link href={`/users/${tester.id}`} className="flex items-center space-x-4">
-                  <Avatar className="w-12 h-12">
+                <Link href={`/users/${tester.id}`} className="flex items-center space-x-2">
+                  <Avatar className="w-10 h-10">
                     <AvatarImage
                       src={tester.imageUrl}
                       alt={`${tester.firstName} ${tester.lastName}`}
@@ -95,10 +95,12 @@ export default function ManageTesterDrawers({
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-md font-semibold line-clamp-1 break-all">
                       {tester.firstName} {tester.lastName}
                     </h2>
-                    <p className="text-sm text-muted-foreground">@{tester.username}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-1 break-all">
+                      @{tester.username}
+                    </p>
                   </div>
                 </Link>
                 <div className="flex flex-row gap-2 items-center justify-end">
