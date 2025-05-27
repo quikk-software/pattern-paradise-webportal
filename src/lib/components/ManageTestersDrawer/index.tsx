@@ -101,16 +101,18 @@ export default function ManageTesterDrawers({
                     <p className="text-sm text-muted-foreground">@{tester.username}</p>
                   </div>
                 </Link>
-                <FollowUserButton userId={tester.id} variant="icon-button" />
-                {isOwner ? (
-                  <Button
-                    variant={selectedTesterIds.includes(tester.id) ? 'destructive' : 'outline'}
-                    size="icon"
-                    onClick={() => handleTesterRemovableListClick(tester.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                ) : null}
+                <div className="flex flex-row gap-2 items-center justify-end">
+                  <FollowUserButton userId={tester.id} variant="icon-button" />
+                  {isOwner ? (
+                    <Button
+                      variant={selectedTesterIds.includes(tester.id) ? 'destructive' : 'outline'}
+                      size="icon"
+                      onClick={() => handleTesterRemovableListClick(tester.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             ))}
           </div>
