@@ -63,7 +63,7 @@ export default function ManageTesterDrawers({
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerContent className="p-4">
+      <DrawerContent className="py-4">
         <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
           {isOwner ? (
             <DrawerHeader>
