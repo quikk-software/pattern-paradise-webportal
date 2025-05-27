@@ -16,6 +16,7 @@ import { useRemoveUsersFromTesting } from '@/lib/api/testing';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
+import FollowUserButton from '@/lib/components/FollowUserButton';
 
 interface ManageTestersDrawerProps {
   isOpen: boolean;
@@ -100,6 +101,7 @@ export default function ManageTesterDrawers({
                     <p className="text-sm text-muted-foreground">@{tester.username}</p>
                   </div>
                 </Link>
+                <FollowUserButton userId={tester.id} variant="icon-button" />
                 {isOwner ? (
                   <Button
                     variant={selectedTesterIds.includes(tester.id) ? 'destructive' : 'outline'}
