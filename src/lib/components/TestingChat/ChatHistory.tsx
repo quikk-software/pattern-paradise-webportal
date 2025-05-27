@@ -37,6 +37,9 @@ import DownloadPatternsDrawer from '@/lib/components/DownloadPatternsDrawer';
 import NewMessages from '@/lib/components/NewMessages';
 import ManageTesterDrawers from '@/lib/components/ManageTestersDrawer';
 import ReplyMessage from '@/lib/components/ReplyMessage';
+import { useReleaseProduct } from '@/lib/api';
+import ReleasePatternSuccessDrawer from '@/lib/components/ReleasePatternSuccessDrawer';
+import RequestStatus from '@/lib/components/RequestStatus';
 
 function getColor(uuid: string) {
   let hash = 0;
@@ -151,6 +154,7 @@ export default function ChatHistory({
   const [isDownloadPatternsDrawerOpen, setIsDownloadPatternsDrawerOpen] = useState(false);
   const [isTestersDrawerOpen, setIsTestersDrawerOpen] = useState(false);
   const [replyingTo, setReplyingTo] = useState<GetTestingCommentResponse | null>(null);
+  const [releaseProductSuccessDrawer, setReleaseProductSuccessDrawer] = useState(false);
 
   const { userId } = useSelector((s: Store) => s.auth);
 
@@ -173,6 +177,13 @@ export default function ChatHistory({
     {},
   );
   const { mutate: readAllTestingComments } = useReadAllTestingComments();
+  const {
+    mutate: releaseProduct,
+    isLoading: releaseProductIsLoading,
+    isSuccess: releaseProductIsSuccess,
+    isError: releaseProductIsError,
+    errorDetail: releaseProductErrorDetail,
+  } = useReleaseProduct();
 
   useEffect(() => {
     if (messages?.at(0)?.creatorId === userId) {
@@ -325,13 +336,22 @@ export default function ChatHistory({
     setIsReviewDrawerOpen(true);
   };
 
-  const handleActionPayload = (payload?: string) => {
-    if (!payload) {
+  const handleActionPayload = (action: GetTestingCommentResponse['actions'][number]) => {
+    if (!action.payload) {
       return;
     }
     // handle link
-    if (payload?.startsWith('https://') || payload.startsWith('/')) {
-      router.push(payload);
+    if (action.payload?.startsWith('https://') || action.payload.startsWith('/')) {
+      router.push(action.payload);
+      return;
+    }
+
+    switch (action.variant) {
+      case 'RELEASE':
+        releaseProduct(action.payload).then(() => setReleaseProductSuccessDrawer(true));
+        break;
+      default:
+        break;
     }
   };
 
@@ -346,11 +366,14 @@ export default function ChatHistory({
     readAllTestingComments(selectedTestingId).then();
   };
 
+  const currentTesting = testings.find((testing) => testing.id === selectedTestingId);
+
   const isInProgress = selectedTestingStatus === 'InProgress';
   const isAborted = selectedTestingStatus === 'Aborted';
   const isDeclined = selectedTestingStatus === 'Declined';
   const isApproved = selectedTestingStatus === 'Approved';
   const isInactive = !isInProgress && !isApproved && !isDeclined;
+  const isSeller = currentTesting?.creatorId === userId;
   const isTesterOrCreator =
     !!testerApplications.find((testerApplication) => testerApplication.user.id === userId) ||
     testings.find((testing) => testing.id === selectedTestingId)?.creatorId === userId;
@@ -358,8 +381,6 @@ export default function ChatHistory({
   const status = testerApplications.find(
     (testerApplication) => testerApplication.user.id === userId,
   )?.status;
-
-  const currentTesting = testings.find((testing) => testing.id === selectedTestingId);
 
   return (
     <div
@@ -490,7 +511,7 @@ export default function ChatHistory({
                             />
                             <AvatarFallback>PP</AvatarFallback>
                           </Avatar>
-                          <div className="flex-1 rounded-lg p-3 bg-primary">
+                          <div className="flex-1 rounded-lg p-3 bg-primary space-y-2">
                             <div className="flex gap-2 justify-between items-center">
                               <span className="font-semibold text-secondary">Pattern Paradise</span>
                               <span className="text-xs text-secondary">
@@ -498,30 +519,42 @@ export default function ChatHistory({
                               </span>
                             </div>
                             <p className={'mt-1 text-left text-secondary'}>{message.message}</p>
-                            {message.actions.length > 0 ? (
+                            {message?.actions?.length > 0 ? (
                               <div className="flex flex-col gap-2">
-                                {message.actions.map((action) => (
-                                  <div key={action.id} className="w-full">
-                                    <Button
-                                      variant={
-                                        (action.variant as
-                                          | 'default'
-                                          | 'destructive'
-                                          | 'outline'
-                                          | 'secondary'
-                                          | 'ghost'
-                                          | 'link'
-                                          | null
-                                          | undefined) ?? 'default'
-                                      }
-                                      onClick={() => {
-                                        handleActionPayload(action.payload);
-                                      }}
-                                    >
-                                      {action.description}
-                                    </Button>
-                                  </div>
-                                ))}
+                                {message.actions.map((action) => {
+                                  if (!isSeller) {
+                                    return null;
+                                  }
+
+                                  if (
+                                    action.variant === 'RELEASE' &&
+                                    currentTesting?.product.status === 'Released'
+                                  ) {
+                                    return null;
+                                  }
+
+                                  return (
+                                    <div key={action.id} className="w-full">
+                                      <Button
+                                        variant={'secondary'}
+                                        onClick={() => {
+                                          handleActionPayload(action);
+                                        }}
+                                        disabled={releaseProductIsLoading}
+                                      >
+                                        {releaseProductIsLoading ? (
+                                          <LoadingSpinnerComponent size="sm" />
+                                        ) : null}
+                                        {action.description}
+                                      </Button>
+                                      <RequestStatus
+                                        isSuccess={releaseProductIsSuccess}
+                                        isError={releaseProductIsError}
+                                        errorMessage={releaseProductErrorDetail}
+                                      />
+                                    </div>
+                                  );
+                                })}
                               </div>
                             ) : null}
                           </div>
@@ -812,6 +845,11 @@ export default function ChatHistory({
         callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
         languages={productLanguages}
         downloadProgress={downloadProgress}
+      />
+      <ReleasePatternSuccessDrawer
+        isOpen={releaseProductSuccessDrawer}
+        setIsOpen={setReleaseProductSuccessDrawer}
+        productId={currentTesting?.productId}
       />
       {currentTesting ? (
         <ManageTesterDrawers
