@@ -101,7 +101,7 @@ export default function ManageTesterDrawers({
                     <p className="text-sm text-muted-foreground">@{tester.username}</p>
                   </div>
                 </Link>
-                <div className="flex flex-row gap-2 items-center">
+                <div className="flex flex-row gap-2 items-center justify-end">
                   <FollowUserButton userId={tester.id} variant="icon-button" />
                   {isOwner ? (
                     <Button
