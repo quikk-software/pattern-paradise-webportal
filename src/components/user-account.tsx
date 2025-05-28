@@ -2,7 +2,7 @@
 
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { GetUserAccountResponse } from '@/@types/api-types';
-import { useGetUserById, useListProductsByUserId } from '@/lib/api';
+import { useGetUserById, useListProductsByUserId, useListUserRatings } from '@/lib/api';
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import GoBackButton from '@/lib/components/GoBackButton';
@@ -19,6 +19,8 @@ import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
 import WelcomeBanner from '@/lib/components/WelcomeBanner';
 import { useRouter } from 'next/navigation';
 import useAction from '@/lib/core/useAction';
+import { Label } from '@/components/ui/label';
+import StarRating from '@/lib/components/StarRating';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -49,6 +51,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
   } = useListProductsByUserId({});
 
   const { fetch: fetchUser, data: currentUser } = useGetUserById();
+  const { fetch: fetchUserRatings, data: userRatings } = useListUserRatings({});
 
   useEffect(() => {
     switch (action) {
@@ -71,6 +74,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
       return;
     }
     fetchUser(user.id);
+    fetchUserRatings(user.id);
   }, [user.id, data]);
 
   useEffect(() => {
@@ -159,7 +163,39 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         </div>
       ) : null}
 
-      <div ref={testerReviewsRef}></div>
+      <div className="space-y-4" id="user-ratings" ref={testerReviewsRef}>
+        {userRatings?.length > 0 ? (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Tester Call Feedback</h2>
+            <div className="space-y-2">
+              {userRatings.map((userRating) => (
+                <div
+                  className="space-y-1 mt-1 p-2 rounded-md shadow-sm"
+                  key={`${userRating.user.id}-${userRating.testing.id}`}
+                >
+                  <Label className="text-sm font-medium text-gray-700">
+                    Feedback from{' '}
+                    <Link
+                      href={`/users/${userRating.testing.creator.id}`}
+                      // rel="nofollow"
+                      className="underline italic"
+                    >
+                      @{userRating.testing.creator.username}
+                    </Link>
+                    :
+                  </Label>
+                  <StarRating rating={userRating.starRating} showCount={false} />
+                  {userRating.textRating ? (
+                    <div className="text-sm text-gray-700 italic">
+                      &quot;{userRating.textRating}&quot;
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : null}
+      </div>
 
       {products.length > 0 ? (
         <div className="space-y-4" id="shop">

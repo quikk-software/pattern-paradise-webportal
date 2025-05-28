@@ -55,7 +55,7 @@ export default function UserTesterShoutoutCard({
       <div className={cn('relative px-2 pb-4 pt-4')}>
         <div className="flex flex-col items-start space-y-2">
           <div className="flex w-full items-start justify-between">
-            <Link href={`/testers/${tester.id}`} className="group/link flex items-start space-x-4">
+            <Link href={`/users/${tester.id}`} className="group/link flex items-start space-x-4">
               <Avatar className="h-14 w-14 border-4 border-background shadow-lg transition-transform duration-300 group-hover/link:scale-105">
                 <AvatarImage src={tester.imageUrl} alt={fullName || tester.username} />
                 <AvatarFallback
