@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useState, useRef, useImperativeHandle, forwardRef } from 'react';
-import ProductCard from './SwipeableProductCard';
+import SwipeableProductCard from './SwipeableProductCard';
 import { GetProductResponse } from '@/@types/api-types';
 
 interface SwipeableCardProps {
@@ -165,7 +165,7 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(function 
       onTouchEnd={handleDragEnd}
     >
       <div className="absolute inset-0 rounded-xl z-10" style={getOverlayStyle()} />
-      <ProductCard product={product} />
+      <SwipeableProductCard product={product} />
     </div>
   );
 });

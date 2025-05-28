@@ -71,12 +71,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       )}
 
-      <div className="w-full relative flex-1 overflow-hidden">
+      <div className="w-full relative flex-1 flex items-center justify-center overflow-hidden">
         <img
-          src={product.imageUrls?.at(0) || ''}
+          src={product.imageUrls?.at(0)?.replace('/upload/', '/upload/') || ''}
           alt={`${product.title} on Pattern Paradise`}
           style={{
-            objectFit: 'contain',
+            objectFit: 'cover',
           }}
           onError={(e) => {
             e.currentTarget.src = '';
