@@ -65,3 +65,7 @@ export function generateTitle(product: { title?: string; category?: string }): s
         .toLowerCase()
     : (product?.title?.toLowerCase() ?? '');
 }
+
+export function capitalizeWords(input: string) {
+  return input.replace(/\b\w/g, (char) => char.toUpperCase());
+}

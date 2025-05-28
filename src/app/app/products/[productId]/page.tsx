@@ -3,7 +3,7 @@ import ProductPageComponent from '@/components/product-page';
 import { getProduct } from '@/lib/api/static/product/getProduct';
 import { Metadata } from 'next';
 import { APP_DOMAIN, APP_NAME, APP_TITLE, COUNTRIES, THEME_COLOR } from '@/lib/constants';
-import { generateTitle } from '@/lib/utils';
+import { capitalizeWords, generateTitle } from '@/lib/utils';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 import logger from '@/lib/core/logger';
 
@@ -124,10 +124,12 @@ export default async function ProductDetailPage({ params }: { params: { productI
   const productSchema = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
-    name: `${generateTitle({
-      title: product?.title,
-      category: product?.category,
-    })} pattern`.trim(),
+    name: `${capitalizeWords(
+      generateTitle({
+        title: product?.title,
+        category: product?.category,
+      }),
+    )} Pattern`.trim(),
     image: product?.imageUrls,
     description: product?.description,
     sku: params.productId,
