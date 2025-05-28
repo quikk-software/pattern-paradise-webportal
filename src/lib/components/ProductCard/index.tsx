@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import type { Store } from '@/lib/redux/store';
-import { Clock, Percent, Trash, X } from 'lucide-react';
+import { Clock, Percent, Trash, X, Edit, Tag, FileBox, ArrowRight } from 'lucide-react';
 import { useDeleteProduct } from '@/lib/api';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import SaleForm from '@/lib/components/SaleForm';
 import DraftPatternDrawer from '@/lib/components/DraftPatternDrawer';
 import UndraftPatternDrawer from '@/lib/components/UndraftPatternDrawer';
+import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
   id: string;
@@ -125,98 +126,178 @@ export default function ProductCard({
     }
   };
 
+  const getStatusBadge = () => {
+    if (!status) return null;
+
+    const statusColors = {
+      Draft: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
+      Created: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+      InProgress: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+      Aborted: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+      Released: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+    };
+
+    const color =
+      statusColors[status as keyof typeof statusColors] ||
+      'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+
+    return (
+      <Badge variant="outline" className={cn('font-medium border-0', color)}>
+        {status}
+      </Badge>
+    );
+  };
+
   return (
-    <Card key={id} className="flex flex-col relative">
+    <Card className="relative flex flex-col overflow-hidden transition-all duration-200 hover:shadow-md group h-full">
+      {/* Sale badge */}
       {isSaleActive && (
-        <div className="absolute -right-2 -top-2 z-10">
+        <div className="absolute -right-1 -top-1 z-10">
           <div className="relative">
-            <Badge className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 text-sm font-bold shadow-lg">
-              SALE {discountPercentage}% OFF
-            </Badge>
+            <div className="absolute -right-8 top-0 bg-red-500 text-white px-10 py-1 rotate-45 shadow-md font-bold text-sm">
+              {discountPercentage}% OFF
+            </div>
           </div>
         </div>
       )}
 
-      <CardHeader>
+      {/* Status badge */}
+      {status && isProductView && (
+        <div className="absolute left-3 top-3 z-10">{getStatusBadge()}</div>
+      )}
+
+      {/* Image slider */}
+      <div className="relative overflow-hidden">
         <ProductImageSlider
           imageUrls={imageUrls}
           title={name}
           category={category}
           subCategories={subCategories}
         />
-      </CardHeader>
-      <CardContent className="flex-grow">
-        <CardTitle>{name}</CardTitle>
-      </CardContent>
-      <CardFooter className="w-full flex flex-col gap-2">
-        <div className="w-full flex items-center justify-between">
+
+        {/* Category pill */}
+        <div className="absolute bottom-3 left-3">
+          <Badge className="bg-black/70 hover:bg-black/80 text-white backdrop-blur-sm">
+            {category}
+          </Badge>
+        </div>
+      </div>
+
+      {/* Content */}
+      <CardContent className="flex-grow p-5">
+        <h3 className="font-semibold text-lg line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+          {name}
+        </h3>
+
+        <div className="flex items-center justify-between mt-2">
           {isFree ? (
-            <span className="text-lg font-bold">FOR FREE</span>
+            <div className="flex items-center">
+              <Badge
+                variant="outline"
+                className="bg-emerald-50 text-emerald-700 border-0 dark:bg-emerald-900/20 dark:text-emerald-400"
+              >
+                FREE
+              </Badge>
+            </div>
           ) : isSaleActive ? (
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-red-500">
-                  ${currentSalePrice!.toFixed(2)}
-                </span>
-                <span className="text-sm line-through text-gray-500">${price.toFixed(2)}</span>
-              </div>
-              {isDueDateActive ? (
-                <div className="flex items-center text-xs text-gray-500 mt-1">
-                  <Clock className="w-3 h-3 mr-1" />
-                  <span>{timeRemaining}</span>
-                </div>
-              ) : null}
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-red-500">
+                ${currentSalePrice!.toFixed(2)}
+              </span>
+              <span className="text-sm line-through text-gray-400">${price.toFixed(2)}</span>
             </div>
           ) : (
             <span className="text-lg font-bold">${price.toFixed(2)}</span>
           )}
 
-          {isTesterCall ? (
-            <Link rel={'nofollow'} href={`/app/tester-calls/${id}`}>
-              <Button>Show tester call</Button>
-            </Link>
-          ) : (
-            <Link href={`/app/products/${id}`}>
-              <Button>Show details</Button>
-            </Link>
+          {subCategories && subCategories.length > 0 && (
+            <div className="flex flex-wrap gap-1 justify-end">
+              {subCategories.slice(0, 2).map((subCat, idx) => (
+                <Badge key={idx} variant="secondary" className="text-xs">
+                  {subCat}
+                </Badge>
+              ))}
+              {subCategories.length > 2 && (
+                <Badge variant="secondary" className="text-xs">
+                  +{subCategories.length - 2}
+                </Badge>
+              )}
+            </div>
           )}
         </div>
 
+        {/* Sale countdown */}
         {isDueDateActive && (
-          <div className="w-full mt-1 bg-red-50 dark:bg-red-950/20 rounded-md p-2 flex items-center justify-center">
-            <Clock className="w-3 h-3 mr-1" />
+          <div className="mt-3 bg-red-50 dark:bg-red-950/20 rounded-md p-2 flex items-center justify-center">
+            <Clock className="w-4 h-4 mr-1.5 text-red-500" />
             <span className="text-sm text-red-600 dark:text-red-400 font-medium">
               {timeRemaining}
             </span>
           </div>
         )}
+      </CardContent>
+
+      {/* Footer */}
+      <CardFooter className="p-5 pt-0">
+        <div className="w-full">
+          {isTesterCall ? (
+            <Link rel={'nofollow'} href={`/app/tester-calls/${id}`} className="w-full">
+              <Button className="w-full gap-2">
+                Show tester call <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          ) : (
+            <Link href={`/app/products/${id}`} className="w-full">
+              <Button className="w-full gap-2">
+                Show details <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          )}
+        </div>
       </CardFooter>
 
-      {isProductView && isCreator && !unavailable ? (
-        <>
-          <CardFooter className="w-full flex flex-col gap-6">
-            <hr className="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10 w-full" />
-            <div className="flex justify-end items-center gap-2 w-full">
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setIsSaleFormOpen((prev) => !prev);
-                }}
-                disabled={isFree}
-              >
-                {isSaleFormOpen ? <X /> : <Percent />}
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  setIsDeleteProductDrawerOpen(true);
-                }}
-              >
-                <Trash />
-              </Button>
-            </div>
+      {/* Creator controls */}
+      {isProductView && isCreator && !unavailable && (
+        <div className="border-t border-border p-5 space-y-4">
+          {/* Creator actions */}
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsSaleFormOpen((prev) => !prev)}
+              disabled={isFree}
+              className="flex-1"
+            >
+              {isSaleFormOpen ? (
+                <>
+                  <X className="w-4 h-4 mr-1.5" /> Cancel
+                </>
+              ) : (
+                <>
+                  <Percent className="w-4 h-4 mr-1.5" /> Set Sale
+                </>
+              )}
+            </Button>
 
-            {isSaleFormOpen ? (
+            <Link rel={'nofollow'} href={`/app/secure/sell/products/${id}`} className="flex-1">
+              <Button variant="outline" size="sm" className="w-full">
+                <Edit className="w-4 h-4 mr-1.5" /> Edit
+              </Button>
+            </Link>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsDeleteProductDrawerOpen(true)}
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
+            >
+              <Trash className="w-4 h-4" />
+            </Button>
+          </div>
+
+          {/* Sale form */}
+          {isSaleFormOpen && (
+            <div className="bg-muted/50 rounded-lg p-3 border border-border">
               <SaleForm
                 productId={id}
                 isFree={isFree}
@@ -227,77 +308,70 @@ export default function ProductCard({
                 setNewSalePrice={setCurrentSalePrice}
                 setNewSalePriceDueDate={setCurrentSalePriceDueDate}
               />
-            ) : null}
-
-            <Link rel={'nofollow'} href={`/app/secure/sell/products/${id}`} className="w-full">
-              <Button variant="secondary" className="w-full">
-                Update product
-              </Button>
-            </Link>
-            <div className="space-y-2">
-              {status === 'Draft' ||
-              status === 'Created' ||
-              status === 'InProgress' ||
-              status === 'Aborted' ? (
-                <Button
-                  onClick={() => {
-                    setIsReleaseProductDrawerOpen(true);
-                  }}
-                  className="w-full"
-                >
-                  Release Pattern
-                </Button>
-              ) : null}
-              {status === 'Created' ? (
-                <Button
-                  onClick={() => {
-                    setIsDraftProductDrawerOpen(true);
-                  }}
-                  className="w-full"
-                  variant="ghost"
-                >
-                  Move Pattern to Draft
-                </Button>
-              ) : null}
-              {status === 'Draft' ? (
-                <Button
-                  onClick={() => {
-                    setIsUndraftProductDrawerOpen(true);
-                  }}
-                  className="w-full"
-                  variant="ghost"
-                >
-                  Start Tester Call
-                </Button>
-              ) : null}
             </div>
-          </CardFooter>
-          <ReleasePatternDrawer
-            isOpen={isReleaseProductDrawerOpen}
-            setIsOpen={setIsReleaseProductDrawerOpen}
-            productId={id}
-          />
-          <DraftPatternDrawer
-            isOpen={isDraftProductDrawerOpen}
-            setIsOpen={setIsDraftProductDrawerOpen}
-            productId={id}
-          />
-          <UndraftPatternDrawer
-            isOpen={isUndraftProductDrawerOpen}
-            setIsOpen={setIsUndraftProductDrawerOpen}
-            productId={id}
-          />
-          <ConfirmDrawer
-            isOpen={isDeleteProductDrawerOpen}
-            setIsOpen={setIsDeleteProductDrawerOpen}
-            callbackFn={() => {
-              handleDeleteProductClick(id).then(() => setIsDeleteProductDrawerOpen(false));
-            }}
-            isLoading={deleteProductIsLoading}
-            description="You cannot restore deleted patterns."
-          />
-        </>
-      ) : null}
+          )}
+
+          {/* Status-based actions */}
+          {(status === 'Draft' ||
+            status === 'Created' ||
+            status === 'InProgress' ||
+            status === 'Aborted') && (
+            <Button
+              onClick={() => setIsReleaseProductDrawerOpen(true)}
+              className="w-full"
+              variant="default"
+            >
+              <Tag className="w-4 h-4 mr-1.5" /> Release Pattern
+            </Button>
+          )}
+
+          {status === 'Created' && (
+            <Button
+              onClick={() => setIsDraftProductDrawerOpen(true)}
+              className="w-full"
+              variant="secondary"
+            >
+              <FileBox className="w-4 h-4 mr-1.5" /> Move to Draft
+            </Button>
+          )}
+
+          {status === 'Draft' && (
+            <Button
+              onClick={() => setIsUndraftProductDrawerOpen(true)}
+              className="w-full"
+              variant="secondary"
+            >
+              <Clock className="w-4 h-4 mr-1.5" /> Start Tester Call
+            </Button>
+          )}
+        </div>
+      )}
+
+      {/* Drawers */}
+      <ReleasePatternDrawer
+        isOpen={isReleaseProductDrawerOpen}
+        setIsOpen={setIsReleaseProductDrawerOpen}
+        productId={id}
+      />
+      <DraftPatternDrawer
+        isOpen={isDraftProductDrawerOpen}
+        setIsOpen={setIsDraftProductDrawerOpen}
+        productId={id}
+      />
+      <UndraftPatternDrawer
+        isOpen={isUndraftProductDrawerOpen}
+        setIsOpen={setIsUndraftProductDrawerOpen}
+        productId={id}
+      />
+      <ConfirmDrawer
+        isOpen={isDeleteProductDrawerOpen}
+        setIsOpen={setIsDeleteProductDrawerOpen}
+        callbackFn={() => {
+          handleDeleteProductClick(id).then(() => setIsDeleteProductDrawerOpen(false));
+        }}
+        isLoading={deleteProductIsLoading}
+        description="You cannot restore deleted patterns."
+      />
     </Card>
   );
 }
