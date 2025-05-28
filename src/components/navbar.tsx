@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, SearchIcon, X } from 'lucide-react';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { cn } from '@/lib/utils';
 import SocialBadges from '@/lib/components/SocialBadges';
 import { usePreview } from '@/app/providers/PreviewFlagProvider';
+import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
   {
@@ -31,7 +32,7 @@ const NAV_LINKS = [
   },
   {
     href: '/terms-and-privacy',
-    name: 'Terms and Privacy',
+    name: 'Terms & Privacy',
     enabled: true,
   },
 ];
@@ -80,16 +81,22 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
             <span>Pattern Paradise</span>
           </Link>
         </div>
-        <div className="hidden sm:ml-6 sm:flex sm:items-center flex flex-row gap-4">
-          <div className="flex space-x-4">
+        <div className="hidden md:ml-6 md:flex md:items-center flex flex-row gap-4">
+          <div className="flex space-x-4 items-center">
             {filteredNavLinks.map(({ href, name }) => (
               <NavLink key={name} href={href} scrolled={scrolled} background={background}>
                 {name}
               </NavLink>
             ))}
+            <Button size="sm" className="space-x-2" variant="ghost" asChild>
+              <Link href="/browse">
+                <SearchIcon />
+                Browse
+              </Link>
+            </Button>
           </div>
         </div>
-        <div className="flex items-center sm:hidden">
+        <div className="flex items-center md:hidden">
           <button
             onClick={toggleMenu}
             className={cn(
@@ -112,8 +119,16 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
         </div>
       </div>
 
-      <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`}>
+      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="pt-2 pb-2 space-y-1">
+          <MobileNavLink
+            href="/browse"
+            scrolled={scrolled}
+            onClick={() => toggleMenu()}
+            background={background}
+          >
+            Browse
+          </MobileNavLink>
           {filteredNavLinks.map(({ href, name }) => (
             <MobileNavLink
               key={name}
