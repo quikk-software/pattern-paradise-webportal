@@ -35,6 +35,7 @@ import TikTokIcon from '@/lib/icons/TikTokIcon';
 import Link from 'next/link';
 import NoDataInfoBox from '@/lib/components/NoDataInfoBox';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
+import StarRating from '@/lib/components/StarRating';
 
 const MIN_TESTER_COUNT = 3;
 
@@ -283,6 +284,10 @@ export function TesterApplicantsPage({
                         @{application.user.username}
                       </p>
                     </Link>
+                    <StarRating
+                      rating={application.averageRating}
+                      totalRatings={application.ratingCount}
+                    />
                   </div>
                 </div>
               </CardHeader>
@@ -358,6 +363,7 @@ export function TesterApplicantsPage({
                     {applicant.firstName} {applicant.lastName}
                   </h2>
                   <p className="text-sm text-muted-foreground">@{applicant.username}</p>
+                  <StarRating rating={applicant.testerRating} showCount={false} />
                 </div>
               </div>
             ))}

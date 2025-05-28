@@ -243,6 +243,8 @@ export interface GetUserResponse {
   country?: string;
   instagramRef?: string;
   tiktokRef?: string;
+  testerRating?: number;
+  testerRatingCount?: number;
   theme: string;
   isLightTheme: boolean;
   refLinks: string[];
@@ -320,6 +322,8 @@ export interface GetUserAccountResponse {
   roles?: string[];
   followers?: number;
   isFollowing?: boolean;
+  testerRating?: number;
+  testerRatingCount?: number;
 }
 
 export interface ListUserAccountsResponse {
@@ -683,6 +687,8 @@ export interface GetTesterApplicationResponse {
   starRating?: number;
   textRating?: string;
   isHidden: boolean;
+  averageRating?: number;
+  ratingCount?: number;
   assignedBy: string;
   /**
    * @format date-time

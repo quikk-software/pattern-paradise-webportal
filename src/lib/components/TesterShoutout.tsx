@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { useGetTestingByProductId } from '@/lib/api/testing';
+import { useGetTestingByProductId, useListTesterApplications } from '@/lib/api/testing';
 import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
 
 interface TesterShoutoutProps {
@@ -9,12 +9,25 @@ interface TesterShoutoutProps {
 
 export default function TesterShoutout({ productId }: TesterShoutoutProps) {
   const { fetch, data } = useGetTestingByProductId();
+  const { fetch: fetchTesters, data: testers } = useListTesterApplications({});
 
   useEffect(() => {
     fetch(productId);
   }, [productId]);
 
-  if (data?.testers?.length === 0) {
+  useEffect(() => {
+    if (!data?.id) {
+      return;
+    }
+    fetchTesters(data.id, {
+      status: ['Approved', 'Declined'],
+      sortKey: 'assignedAt',
+      direction: 'asc',
+      filter: [],
+    });
+  }, [data?.id]);
+
+  if (testers?.length === 0 || data?.status !== 'Approved') {
     return null;
   }
 
@@ -27,14 +40,16 @@ export default function TesterShoutout({ productId }: TesterShoutoutProps) {
           this pattern🧡
         </p>
         <div className="space-y-2">
-          {data?.testers?.map((tester) => (
-            <UserDetailsCardWrapper
-              user={tester}
-              showFlag={false}
-              showRoles={false}
-              key={tester.id}
-            />
-          ))}
+          {testers
+            ?.filter((tester) => !tester.isHidden)
+            .map((tester) => (
+              <UserDetailsCardWrapper
+                user={tester.user}
+                showFlag={false}
+                showRoles={false}
+                key={tester.user.id}
+              />
+            ))}
         </div>
       </CardContent>
     </Card>

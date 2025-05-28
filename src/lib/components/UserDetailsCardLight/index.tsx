@@ -29,6 +29,7 @@ import {
 import Description from '@/lib/components/Description';
 import { ActionButtons } from '@/lib/components/UserActionButtons';
 import React from 'react';
+import StarRating from '@/lib/components/StarRating';
 
 interface UserDetailsCardLightProps {
   user: GetUserAccountResponse;
@@ -122,6 +123,13 @@ export default function UserDetailsCardLight({
               </div>
             </Link>
           </div>
+
+          {user?.testerRating ? (
+            <div className="flex flex-col gap-1 mt-2">
+              <span className="text-xs text-muted-foreground">Tester Rating:</span>
+              <StarRating rating={user?.testerRating} totalRatings={user?.testerRatingCount} />
+            </div>
+          ) : null}
 
           <Description description={user.description} theme={user.theme} />
 
