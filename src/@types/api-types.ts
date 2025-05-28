@@ -3155,6 +3155,8 @@ export class Api<
         filter?: string;
         /** Identifier for sorting rule. */
         sortBy?: string;
+        /** List of status to filter testings. */
+        status?: string[];
       },
       params: RequestParams = {},
     ) =>

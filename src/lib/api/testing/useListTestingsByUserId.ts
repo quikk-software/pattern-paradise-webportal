@@ -22,7 +22,7 @@ export const useListTestingsByUserId = ({
   const { handleFn, ...apiStates } = useApiStates();
   const pagination = usePagination(pageNumber, pageSize);
 
-  const fetch = async (userId: string, sortBy?: string) => {
+  const fetch = async (userId: string, sortBy?: string, status?: string[]) => {
     const response = await handleFn(
       async () =>
         await client.api.listTestingsByUserId(
@@ -31,6 +31,7 @@ export const useListTestingsByUserId = ({
             pageNumber: pagination.pageNumber,
             pageSize: pagination.pageSize,
             sortBy,
+            status,
             filter,
           },
           { ...(await getApi(session)) },

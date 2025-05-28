@@ -17,7 +17,6 @@ export default function TesterRatingOverview({ testingId }: TesterRatingOverview
   useEffect(() => {
     fetch(testingId);
     fetchTesters(testingId, {
-      status: ['Approved', 'Declined'],
       sortKey: 'assignedAt',
       direction: 'asc',
       filter: [],
@@ -38,6 +37,7 @@ export default function TesterRatingOverview({ testingId }: TesterRatingOverview
 
   return (
     <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Rate Your Testers</h1>
       {testers?.map((tester) => (
         <div className="flex flex-col gap-2" key={tester.user.id}>
           <TesterRatingCard

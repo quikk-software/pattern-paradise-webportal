@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import ProductCard from '@/lib/components/ProductCard';
 import { useAbortTesting, useListTestingsByUserId, useUpdateTesting } from '@/lib/api/testing';
@@ -23,19 +23,54 @@ import {
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import ManageTesterDrawers from '@/lib/components/ManageTestersDrawer';
 import { useRouter } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import {
+  CheckCircle,
+  Clock,
+  Eye,
+  MessageSquare,
+  MoreVertical,
+  Play,
+  Settings,
+  Star,
+  Trash2,
+  Users,
+  XCircle,
+} from 'lucide-react';
 
-const getStatusColor = (status: GetTestingResponse['status']) => {
+const getStatusConfig = (status: GetTestingResponse['status']) => {
   switch (status) {
     case 'Created':
-      return 'text-yellow-500';
+      return {
+        color: 'bg-amber-100 text-amber-800 border-amber-200',
+        icon: Clock,
+        label: 'Pending',
+      };
     case 'InProgress':
-      return 'text-blue-500';
+      return {
+        color: 'bg-blue-100 text-blue-800 border-blue-200',
+        icon: Play,
+        label: 'In Progress',
+      };
     case 'Approved':
-      return 'text-green-500';
+      return {
+        color: 'bg-green-100 text-green-800 border-green-200',
+        icon: CheckCircle,
+        label: 'Approved',
+      };
     case 'Declined':
-      return 'text-red-500';
+      return {
+        color: 'bg-red-100 text-red-800 border-red-200',
+        icon: XCircle,
+        label: 'Declined',
+      };
     default:
-      return 'text-gray-500';
+      return {
+        color: 'bg-gray-100 text-gray-800 border-gray-200',
+        icon: Clock,
+        label: 'Unknown',
+      };
   }
 };
 
@@ -73,7 +108,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
     if (!refetch || !userId) {
       return;
     }
-    fetchTestings(userId, 'newest');
+    fetchTestings(userId, 'newest', ['Created', 'InProgress', 'Approved', 'Declined']);
     setRefetch(false);
   }, [refetch, userId]);
 
@@ -176,117 +211,151 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
           </p>
         ) : null}
 
-        {testings.length > 0 ? (
-          <div className="grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {testings.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {testings.map((testing) => {
               const isOwner = userId === testing.creatorId;
+              const statusConfig = getStatusConfig(testing.status);
+              const StatusIcon = statusConfig.icon;
+
               return (
-                <Card key={testing.product.id}>
-                  <CardHeader className="flex flex-row items-center justify-end space-y-0 pb-2">
-                    <CardDescription
-                      className={`text-sm font-semibold ${getStatusColor(testing.status)}`}
-                    >
-                      {testing.status}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col gap-2">
-                      <ProductCard
-                        id={testing.product.id}
-                        name={testing.product.title}
-                        price={testing.product.price}
-                        isFree={testing.product.isFree}
-                        imageUrls={testing.product.imageUrls}
-                        isTesterCall={true}
-                        creatorId={testing.creatorId}
-                        category={testing.product.category}
-                        subCategories={testing.product.subCategories}
-                        salePrice={testing.product.salePrice}
-                        salePriceDueDate={testing.product.salePriceDueDate}
-                      />
+                <Card
+                  key={testing.product.id}
+                  className="group border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white overflow-hidden"
+                >
+                  {/* Status Header */}
+                  <div className="bg-gradient-to-r from-slate-50 to-white p-4 border-b border-slate-100">
+                    <div className="flex items-center justify-between">
+                      <Badge className={cn('gap-1.5 font-medium', statusConfig.color)}>
+                        <StatusIcon className="w-3.5 h-3.5" />
+                        {statusConfig.label}
+                      </Badge>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-6">
+                    <ProductCard
+                      id={testing.product.id}
+                      name={testing.product.title}
+                      price={testing.product.price}
+                      isFree={testing.product.isFree}
+                      imageUrls={testing.product.imageUrls}
+                      isTesterCall={true}
+                      creatorId={testing.creatorId}
+                      category={testing.product.category}
+                      subCategories={testing.product.subCategories}
+                      salePrice={testing.product.salePrice}
+                      salePriceDueDate={testing.product.salePriceDueDate}
+                    />
+
+                    {/* Testing Info */}
+                    <div className="mt-4 p-3 bg-slate-50 rounded-lg">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-600">Duration:</span>
+                        <span className="font-medium text-slate-900">
+                          {testing.durationInWeeks} week{testing.durationInWeeks !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                      {testing.testers && testing.testers.length > 0 && (
+                        <div className="flex items-center justify-between text-sm mt-2">
+                          <span className="text-slate-600">Testers:</span>
+                          <span className="font-medium text-slate-900">
+                            {testing.testers.length}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
-                  <CardFooter>
-                    <div className="flex flex-col gap-2 w-full">
-                      {isOwner && testing.status === 'Created' ? (
-                        <Link
-                          rel={'nofollow'}
-                          href={`/app/secure/sell/testings/${testing.id}`}
-                          style={{
-                            width: '100%',
-                          }}
-                        >
-                          <Button variant="default" className="w-full">
-                            View tester applications
+
+                  <CardFooter className="p-6 pt-0">
+                    <div className="flex flex-col gap-3 w-full">
+                      {/* Primary Actions */}
+                      {isOwner && testing.status === 'Created' && (
+                        <Link href={`/app/secure/sell/testings/${testing.id}`} className="w-full">
+                          <Button className="w-full gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                            <Eye className="w-4 h-4" />
+                            View Applications
                           </Button>
                         </Link>
-                      ) : null}
-                      {testing.status === 'InProgress' ? (
+                      )}
+
+                      {testing.status === 'InProgress' && (
                         <Link
-                          rel={'nofollow'}
                           href={`/app/secure/test/chats?testingId=${testing.id}`}
-                          style={{
-                            width: '100%',
-                          }}
+                          className="w-full"
                         >
-                          <Button variant="default" className="w-full">
-                            View chat with testers
+                          <Button className="w-full gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800">
+                            <MessageSquare className="w-4 h-4" />
+                            Chat with Testers
                           </Button>
                         </Link>
-                      ) : null}
-                      {isOwner && testing.status === 'Created' ? (
+                      )}
+
+                      {isOwner && testing.status === 'Approved' && (
                         <Button
-                          onClick={() => {
-                            handleTesterCallDrawerClick(testing);
-                          }}
-                          variant="outline"
+                          className="w-full gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800"
+                          onClick={() =>
+                            router.push(`/app/secure/sell/testings/${testing.id}/rate-testers`)
+                          }
                         >
-                          Update testing
-                        </Button>
-                      ) : null}
-                      {isOwner &&
-                      testing.status === 'InProgress' &&
-                      testing?.testers &&
-                      testing.testers?.length > 0 ? (
-                        <Button
-                          onClick={() => {
-                            handleManageTestersDrawerClick(testing);
-                          }}
-                          variant="outline"
-                        >
-                          Manage testers
-                        </Button>
-                      ) : null}
-                      {isOwner &&
-                      (testing.status === 'Created' || testing.status === 'InProgress') ? (
-                        <Button
-                          variant="destructive"
-                          className="w-full"
-                          onClick={() => {
-                            handleAbortTestingDrawerClick(testing);
-                          }}
-                        >
-                          Abort tester call
-                        </Button>
-                      ) : null}
-                      {isOwner && testing.status === 'Approved' ? (
-                        <Button
-                          variant="default"
-                          className="w-full"
-                          onClick={() => {
-                            router.push(`/app/secure/sell/testings/${testing.id}/rate-testers`);
-                          }}
-                        >
+                          <Star className="w-4 h-4" />
                           Rate Testers
                         </Button>
-                      ) : null}
+                      )}
+
+                      {/* Secondary Actions */}
+                      <div className="flex gap-2">
+                        {isOwner && testing.status === 'Created' && (
+                          <Button
+                            onClick={() => handleTesterCallDrawerClick(testing)}
+                            variant="outline"
+                            className="flex-1 gap-2"
+                          >
+                            <Settings className="w-4 h-4" />
+                            Update
+                          </Button>
+                        )}
+
+                        {isOwner &&
+                          testing.status === 'InProgress' &&
+                          testing?.testers &&
+                          testing.testers?.length > 0 && (
+                            <Button
+                              onClick={() => handleManageTestersDrawerClick(testing)}
+                              variant="outline"
+                              className="flex-1 gap-2"
+                            >
+                              <Users className="w-4 h-4" />
+                              Manage
+                            </Button>
+                          )}
+
+                        {isOwner &&
+                          (testing.status === 'Created' || testing.status === 'InProgress') && (
+                            <Button
+                              variant="outline"
+                              className="flex-1 gap-2 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                              onClick={() => handleAbortTestingDrawerClick(testing)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Abort
+                            </Button>
+                          )}
+                      </div>
                     </div>
                   </CardFooter>
                 </Card>
               );
             })}
           </div>
-        ) : null}
+        )}
         {hasNextPage ? (
           <Button
             variant="outline"
@@ -295,7 +364,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
               setLoadMore(true);
             }}
           >
-            Load more
+            Load More
           </Button>
         ) : null}
       </div>
