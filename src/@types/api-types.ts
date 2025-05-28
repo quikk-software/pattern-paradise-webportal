@@ -1860,6 +1860,34 @@ export class Api<
       }),
 
     /**
+     * @description The query returns a list of the user
+     *
+     * @tags User
+     * @name ListUserRatings
+     * @summary Gets the user
+     * @request GET:/api/v1/users/{userId}/ratings
+     * @secure
+     */
+    listUserRatings: (
+      userId: string,
+      query?: {
+        /** The current page number. */
+        pageNumber?: number;
+        /** The page size. */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ListTesterApplicationsResponse, any>({
+        path: `/api/v1/users/${userId}/ratings`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Requests a password mail by the given request body data.
      *
      * @tags User
