@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useGetTestingByProductId, useListTesterApplications } from '@/lib/api/testing';
-import UserDetailsCardWrapper from '@/lib/wrappers/UserDetailsCardWrapper';
+import UserTesterShoutoutCard from '@/lib/UserTesterShoutoutCard';
 
 interface TesterShoutoutProps {
   productId: string;
@@ -42,14 +42,7 @@ export default function TesterShoutout({ productId }: TesterShoutoutProps) {
         <div className="space-y-2">
           {testers
             ?.filter((tester) => !tester.isHidden)
-            .map((tester) => (
-              <UserDetailsCardWrapper
-                user={tester.user}
-                showFlag={false}
-                showRoles={false}
-                key={tester.user.id}
-              />
-            ))}
+            .map((tester) => <UserTesterShoutoutCard key={tester.user.id} user={tester.user} />)}
         </div>
       </CardContent>
     </Card>

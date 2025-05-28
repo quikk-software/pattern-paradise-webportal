@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import type { GetUserAccountResponse } from '@/@types/api-types';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
-import { ReportUser } from '@/lib/components/ReportUser';
 import { Button } from '@/components/ui/button';
 import { useCreateChat } from '@/lib/api';
 import { useRouter } from 'next/navigation';
