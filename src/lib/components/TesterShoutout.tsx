@@ -42,7 +42,15 @@ export default function TesterShoutout({ productId }: TesterShoutoutProps) {
         <div className="space-y-2">
           {testers
             ?.filter((tester) => !tester.isHidden)
-            .map((tester) => <UserTesterShoutoutCard key={tester.user.id} user={tester.user} />)}
+            .map((tester) => (
+              <UserTesterShoutoutCard
+                key={tester.user.id}
+                tester={tester.user}
+                starRating={tester.starRating}
+                textRating={tester.textRating}
+                productOwner={data.creator}
+              />
+            ))}
         </div>
       </CardContent>
     </Card>

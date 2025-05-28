@@ -14,21 +14,31 @@ import {
   THEME_VIA_BG_CLASSES,
 } from '@/lib/constants';
 import React from 'react';
+import StarRating from '@/lib/components/StarRating';
+import { Label } from '@/components/ui/label';
 
 interface UserTesterShoutoutCardProps {
-  user: GetUserAccountResponse;
+  tester: GetUserAccountResponse;
+  productOwner: GetUserAccountResponse;
+  starRating?: number;
+  textRating?: string;
 }
 
-export default function UserTesterShoutoutCard({ user }: UserTesterShoutoutCardProps) {
-  const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+export default function UserTesterShoutoutCard({
+  tester,
+  productOwner,
+  starRating,
+  textRating,
+}: UserTesterShoutoutCardProps) {
+  const fullName = `${tester.firstName ?? ''} ${tester.lastName ?? ''}`.trim();
 
   return (
     <Card className="group relative overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md">
       <div className={`absolute inset-0 bg-gradient-to-br from-background to-background z-0`} />
-      {user.bannerImageUrl ? (
+      {tester.bannerImageUrl ? (
         <div className="relative h-16 w-full overflow-hidden">
           <Image
-            src={user.bannerImageUrl}
+            src={tester.bannerImageUrl}
             alt="Profile banner"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -38,21 +48,21 @@ export default function UserTesterShoutoutCard({ user }: UserTesterShoutoutCardP
         </div>
       ) : (
         <div
-          className={`relative h-16 w-full bg-gradient-to-r opacity-30 ${THEME_FROM_BG_CLASSES[user.theme]} ${THEME_VIA_BG_CLASSES[user.theme]} ${THEME_TO_BG_CLASSES[user.theme]}`}
+          className={`relative h-16 w-full bg-gradient-to-r opacity-30 ${THEME_FROM_BG_CLASSES[tester.theme]} ${THEME_VIA_BG_CLASSES[tester.theme]} ${THEME_TO_BG_CLASSES[tester.theme]}`}
         />
       )}
 
       <div className={cn('relative px-2 pb-4 pt-4')}>
         <div className="flex flex-col items-start space-y-2">
           <div className="flex w-full items-start justify-between">
-            <Link href={`/users/${user.id}`} className="group/link flex items-start space-x-4">
+            <Link href={`/testers/${tester.id}`} className="group/link flex items-start space-x-4">
               <Avatar className="h-14 w-14 border-4 border-background shadow-lg transition-transform duration-300 group-hover/link:scale-105">
-                <AvatarImage src={user.imageUrl} alt={fullName || user.username} />
+                <AvatarImage src={tester.imageUrl} alt={fullName || tester.username} />
                 <AvatarFallback
-                  className={`${THEME_BG_CLASSES[user.theme]} bg-opacity-20 text-xl font-bold ${THEME_TEXT_CLASSES[user.theme]}`}
+                  className={`${THEME_BG_CLASSES[tester.theme]} bg-opacity-20 text-xl font-bold ${THEME_TEXT_CLASSES[tester.theme]}`}
                 >
-                  {user.firstName?.[0]}
-                  {user.lastName?.[0]}
+                  {tester.firstName?.[0]}
+                  {tester.lastName?.[0]}
                 </AvatarFallback>
               </Avatar>
 
@@ -65,19 +75,38 @@ export default function UserTesterShoutoutCard({ user }: UserTesterShoutoutCardP
                 <p
                   className={`${fullName ? 'text-xs' : 'text-md'} font-medium ${fullName ? 'text-muted-foreground' : 'text-foreground'}`}
                 >
-                  @{user.username}
+                  @{tester.username}
                 </p>
                 <div className="mt-1 flex items-center space-x-1">
                   <span className="text-sm font-medium text-muted-foreground">
-                    {user?.followers ?? 0}
+                    {tester?.followers ?? 0}
                   </span>
                   <span className="text-sm text-muted-foreground">
-                    {user?.followers === 1 ? 'Follower' : 'Followers'}
+                    {tester?.followers === 1 ? 'Follower' : 'Followers'}
                   </span>
                 </div>
               </div>
             </Link>
           </div>
+          {starRating ? (
+            <div className="space-y-1 mt-1">
+              <Label className="text-sm font-medium text-gray-700">
+                Feedback from{' '}
+                <Link
+                  href={`/users/${productOwner.id}`}
+                  rel="nofollow"
+                  className="underline italic"
+                >
+                  @{productOwner.username}
+                </Link>
+                :
+              </Label>
+              <StarRating rating={starRating} showCount={false} />
+              {textRating ? (
+                <div className="text-sm text-gray-700 italic">&quot;{textRating}&quot;</div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
     </Card>
