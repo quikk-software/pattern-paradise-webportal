@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import ProductCard from '@/lib/components/ProductCard';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
@@ -23,34 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-const getStatusColor = (status?: string) => {
-  switch (status) {
-    case 'Created':
-      return 'text-yellow-500';
-    case 'InProgress':
-      return 'text-blue-500';
-    case 'Released':
-      return 'text-green-500';
-    case 'Declined':
-      return 'text-red-500';
-    case 'Aborted':
-      return 'text-red-500';
-    case 'Deleted':
-      return 'text-red-500';
-    default:
-      return 'text-gray-500';
-  }
-};
-
-const getStatusDisplayText = (status?: string) => {
-  switch (status) {
-    case 'InProgress':
-      return 'Test Phase';
-    default:
-      return status;
-  }
-};
 
 export function SellPageComponent() {
   const [loadMore, setLoadMore] = useState(false);
@@ -205,46 +176,28 @@ export function SellPageComponent() {
         {products.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-              {products.map((product) => {
-                const isCreator = userId === product.creatorId;
-                return (
-                  <Card key={product.id}>
-                    {isCreator ? (
-                      <CardHeader className="flex w-full">
-                        <CardDescription
-                          className={`text-sm font-semibold text-right ${getStatusColor(
-                            product.status,
-                          )}`}
-                        >
-                          {getStatusDisplayText(product.status)}
-                        </CardDescription>
-                      </CardHeader>
-                    ) : null}
-                    <CardContent>
-                      <ProductCard
-                        key={product.id}
-                        id={product.id}
-                        name={product.title}
-                        price={product.price}
-                        isFree={product.isFree}
-                        imageUrls={product.imageUrls}
-                        creatorId={product.creatorId}
-                        status={product.status}
-                        unavailable={
-                          product.status === 'Deleted' ||
-                          product.status === 'Aborted' ||
-                          product.status === 'Declined'
-                        }
-                        isProductView={true}
-                        category={product.category}
-                        subCategories={product.subCategories}
-                        salePrice={product.salePrice}
-                        salePriceDueDate={product.salePriceDueDate}
-                      />
-                    </CardContent>
-                  </Card>
-                );
-              })}
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.title}
+                  price={product.price}
+                  isFree={product.isFree}
+                  imageUrls={product.imageUrls}
+                  creatorId={product.creatorId}
+                  status={product.status}
+                  unavailable={
+                    product.status === 'Deleted' ||
+                    product.status === 'Aborted' ||
+                    product.status === 'Declined'
+                  }
+                  isProductView={true}
+                  category={product.category}
+                  subCategories={product.subCategories}
+                  salePrice={product.salePrice}
+                  salePriceDueDate={product.salePriceDueDate}
+                />
+              ))}
             </div>
             <div className="flex">
               {hasNextPage ? (

@@ -4,7 +4,6 @@ import ReviewCard from '@/lib/components/ReviewCard';
 import { useGetTestingByProductId, useListTestingReviewComments } from '@/lib/api/testing';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
-import Link from 'next/link';
 
 interface ReviewMessagesProps {
   productId: string;
@@ -58,16 +57,9 @@ export default function ReviewMessages({ productId, isFree }: ReviewMessagesProp
           <InfoBoxComponent
             message={
               <>
-                This pattern has not yet received any reviews and has not been subjected to a{' '}
-                <Link
-                  rel={'nofollow'}
-                  href="/faq?action=collaborate"
-                  className="text-blue-500 underline"
-                >
-                  Pattern Paradise Test Process
-                </Link>
-                . The quality of the pattern offered can therefore not be guaranteed and caution is
-                advised.
+                This pattern has not yet received any reviews and has not been subjected to a
+                Pattern Paradise Test Process . The quality of the pattern offered can therefore not
+                be guaranteed and caution is advised.
               </>
             }
             severity="error"

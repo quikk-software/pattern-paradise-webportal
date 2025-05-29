@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { BookHeart, Heart, PlusCircle, ShoppingBag, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { BookHeart, Heart, PlusCircle, ShoppingBag, Star, Settings, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { theme } from '@/lib/constants';
+import { motion } from 'framer-motion';
 
 interface WelcomeHeroProps {
   userName?: string;
@@ -34,90 +35,221 @@ export default function WelcomeHero({
     }
   }, []);
 
+  // Get theme color for styling
+  const getThemeColor = (shade: number) => {
+    return (theme.colors as any)[themeColor][shade];
+  };
+
   return (
     <div className="w-full">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+      {/* Header with user info */}
+      <div className="mb-6">
         <div className="flex items-center gap-4">
-          <Avatar
-            className="h-16 w-16 border-2"
-            style={{
-              borderColor: (theme.colors as any)[themeColor][200],
-            }}
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
           >
-            <AvatarImage src={avatarUrl} alt={userName} />
-            <AvatarFallback
-              className="text-xl text-primary"
+            <Avatar
+              className="h-16 w-16 border-2"
               style={{
-                backgroundColor: (theme.colors as any)[themeColor][200],
+                borderColor: getThemeColor(300),
+                boxShadow: `0 0 0 4px ${getThemeColor(50)}`,
               }}
             >
-              {userName?.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+              <AvatarImage src={avatarUrl || '/placeholder.svg'} alt={userName} />
+              <AvatarFallback
+                className="text-xl font-bold"
+                style={{
+                  backgroundColor: getThemeColor(200),
+                  color: getThemeColor(700),
+                }}
+              >
+                {userName?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </motion.div>
+
           <div>
-            <h1 className="text-2xl font-bold">
-              {greeting}
-              {userName ? `, ${userName}!` : '!'}
-            </h1>
-            <p className="text-muted-foreground">Welcome back!</p>
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              <h1 className="text-2xl font-bold">
+                {greeting}
+                {userName ? `, ${userName}!` : '!'}
+              </h1>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className="flex items-center gap-3 mt-1"
+            >
+              <p className="text-muted-foreground">
+                {new Date().toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
+
+              {isSeller && (
+                <div
+                  className="px-2 py-0.5 text-xs font-medium rounded-full flex items-center gap-1"
+                  style={{
+                    backgroundColor: getThemeColor(100),
+                    color: getThemeColor(700),
+                  }}
+                >
+                  <Star className="h-3 w-3" />
+                  Pattern Seller
+                </div>
+              )}
+            </motion.div>
           </div>
         </div>
       </div>
 
-      <div className="mt-6">
-        <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
-        <div className="flex flex-wrap gap-3">
-          {isSeller ? (
-            <Link href="/app/secure/sell/submit" className="z-10">
-              <Button variant="outline" className="flex items-center gap-2">
-                <PlusCircle className="h-4 w-4" />
-                Create Pattern
-              </Button>
-            </Link>
-          ) : null}
-          {isSeller ? (
-            <Link href="/app/secure/sell/orders" className="z-10">
-              <Button variant="outline" className="flex items-center gap-2">
-                <ShoppingBag className="h-4 w-4" />
-                Show Orders
-              </Button>
-            </Link>
-          ) : null}
-          {isSeller ? (
-            <Link href="/app/secure/sell/testings" className="z-10">
-              <Button variant="outline" className="flex items-center gap-2">
-                <PatternParadiseIcon className="h-4 w-4" />
-                My Tester Calls
-              </Button>
-            </Link>
-          ) : (
-            <Link href="/app/tester-calls" className="z-10">
-              <Button variant="outline" className="flex items-center gap-2">
-                <PatternParadiseIcon className="h-4 w-4" />
-                Show Tester Calls
-              </Button>
-            </Link>
-          )}
-          <Link href="/app/secure/auth/me">
-            <Button variant="outline" className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              Go to Profile
-            </Button>
-          </Link>
-          <Link href="/app/secure/auth/me/favorites">
-            <Button variant="outline" className="flex items-center gap-2">
-              <BookHeart className="h-4 w-4" />
-              Show Favorite Patterns
-            </Button>
-          </Link>
-          <Link href="/swipe">
-            <Button variant="outline" className="flex items-center gap-2 bg-rose-600 text-white">
-              <Heart className="h-4 w-4" />
-              Swipe Patterns
-            </Button>
-          </Link>
+      {/* Quick Actions */}
+      <div>
+        <h2 className="text-base font-semibold mb-4 flex items-center">
+          <div
+            className="w-1 h-5 rounded-full mr-2"
+            style={{ backgroundColor: getThemeColor(400) }}
+          ></div>
+          Quick Actions
+        </h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {/* Primary Action */}
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="col-span-2 sm:col-span-1"
+          >
+            {isSeller ? (
+              <Link href="/app/secure/sell/submit" className="block">
+                <Button
+                  className="w-full h-auto py-3 flex flex-col items-center justify-center gap-2"
+                  style={{
+                    backgroundColor: getThemeColor(600),
+                    borderColor: getThemeColor(600),
+                  }}
+                >
+                  <PlusCircle className="h-5 w-5" />
+                  <span>Create Pattern</span>
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/swipe" className="block">
+                <Button className="w-full h-auto py-3 flex flex-col items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 border-rose-600">
+                  <Heart className="h-5 w-5" />
+                  <span>Swipe Patterns</span>
+                </Button>
+              </Link>
+            )}
+          </motion.div>
+
+          {/* Secondary Actions */}
+          {[
+            ...(isSeller
+              ? [
+                  {
+                    href: '/app/secure/sell/orders',
+                    icon: ShoppingBag,
+                    label: 'Orders',
+                    delay: 0.2,
+                  },
+                  {
+                    href: '/app/secure/sell/testings',
+                    icon: PatternParadiseIcon,
+                    label: 'Tester Calls',
+                    delay: 0.3,
+                  },
+                ]
+              : [
+                  {
+                    href: 'browse',
+                    icon: Search,
+                    label: 'Browse Patterns',
+                    delay: 0.2,
+                  },
+                  {
+                    href: '/app/tester-calls',
+                    icon: PatternParadiseIcon,
+                    label: 'Tester Calls',
+                    delay: 0.2,
+                  },
+                ]),
+            {
+              href: '/app/secure/auth/me',
+              icon: Settings,
+              label: 'Settings',
+              delay: isSeller ? 0.4 : 0.3,
+            },
+            {
+              href: '/app/secure/auth/me/favorites',
+              icon: BookHeart,
+              label: 'Favorites',
+              delay: isSeller ? 0.5 : 0.4,
+            },
+          ].map((action) => (
+            <motion.div
+              key={action.href}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: action.delay }}
+            >
+              <Link href={action.href} className="block">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto py-3 flex flex-col items-center justify-center gap-2 hover:bg-gray-50"
+                  style={{
+                    borderColor: getThemeColor(200),
+                  }}
+                >
+                  <action.icon className="h-5 w-5" style={{ color: getThemeColor(600) }} />
+                  <span>{action.label}</span>
+                </Button>
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </div>
+
+      {/* Welcome Message */}
+      <motion.div
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.6 }}
+        className="mt-6"
+      >
+        <div
+          className="p-4 rounded-lg border text-sm"
+          style={{
+            borderColor: getThemeColor(200),
+            backgroundColor: getThemeColor(50),
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">👋</span>
+            <div>
+              <p className="font-medium" style={{ color: getThemeColor(700) }}>
+                Welcome back to Pattern Paradise!
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                {isSeller
+                  ? 'Check your orders and create new patterns to grow your shop.'
+                  : 'Discover new patterns and join tester calls to help creators.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }

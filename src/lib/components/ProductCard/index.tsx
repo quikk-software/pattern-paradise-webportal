@@ -17,6 +17,15 @@ import DraftPatternDrawer from '@/lib/components/DraftPatternDrawer';
 import UndraftPatternDrawer from '@/lib/components/UndraftPatternDrawer';
 import { cn } from '@/lib/utils';
 
+const getStatusDisplayText = (status?: string) => {
+  switch (status) {
+    case 'InProgress':
+      return 'Test Phase';
+    default:
+      return status;
+  }
+};
+
 interface ProductCardProps {
   id: string;
   name: string;
@@ -143,7 +152,7 @@ export default function ProductCard({
 
     return (
       <Badge variant="outline" className={cn('font-medium border-0', color)}>
-        {status}
+        {getStatusDisplayText(status)}
       </Badge>
     );
   };
