@@ -30,14 +30,17 @@ export const useValidSession = () => {
             .then((result) => {
               if (result?.error === 'RefreshAccessTokenError') {
                 logger.warn('Refreshing access token failed. Signing out...');
-                hasSignedOut.current = true;
-                signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
+                signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then(
+                  () => (hasSignedOut.current = true),
+                );
               }
             })
             .catch(() => {
               logger.warn('Update failed. Signing out...');
               hasSignedOut.current = true;
-              signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then();
+              signOut({ callbackUrl: `/auth/login?redirect=${encodedRedirect}` }).then(
+                () => (hasSignedOut.current = true),
+              );
             });
         }
       }
