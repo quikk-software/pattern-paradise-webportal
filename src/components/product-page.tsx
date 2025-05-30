@@ -26,6 +26,7 @@ import ShareButton from '@/lib/components/ShareButton';
 import LikeProductButton from '@/lib/components/LikeProductButton';
 import { useValidSession } from '@/hooks/useValidSession';
 import Link from 'next/link';
+import DownloadPatternArea from '@/lib/components/DownloadPatternArea';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -117,11 +118,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                 </div>
                 <div className="flex flex-col gap-2">
                   {product.isFree || isOwner ? (
-                    <DownloadPatternZipButton
-                      productId={product.id}
-                      productTitle={product.title}
-                      files={product.files}
-                    />
+                    <DownloadPatternArea product={product} />
                   ) : (
                     <>
                       <BuyNowButton product={product} />
