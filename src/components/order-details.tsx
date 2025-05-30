@@ -21,6 +21,7 @@ import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import { useDeleteOrder } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/lib/core/dayjs';
+import DownloadPatternArea from '@/lib/components/DownloadPatternArea';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -175,13 +176,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <strong>Last update on:</strong> {new Date(order.updatedAt).toDateString()}
             </p>
           </div>
-          {isPayed || isSeller ? (
-            <DownloadPatternZipButton
-              files={order.files}
-              productId={order.productId}
-              productTitle={order.productName}
-            />
-          ) : null}
+          {(isPayed || isSeller) && product ? <DownloadPatternArea product={product} /> : null}
           {isSeller ? (
             <div className="flex flex-col gap-2">
               <ProductMetrics productId={order.productId} />

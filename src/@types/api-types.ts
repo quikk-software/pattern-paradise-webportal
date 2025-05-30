@@ -836,6 +836,14 @@ export interface ListOrdersResponse {
   orders: GetOrderResponse[];
 }
 
+export type GetPatternFilesResponse = {
+  objectName: string;
+  productName: string;
+  productId: string;
+  language: string;
+  fieldName: string;
+}[];
+
 export interface GetFileResponse {
   id: string;
   objectName: string;
@@ -3744,6 +3752,24 @@ export class Api<
         method: "GET",
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description The patterns will be queried by a given product ID.
+     *
+     * @tags Pattern
+     * @name GetPatternsByProductId
+     * @summary Gets patterns by product ID.
+     * @request GET:/api/v1/patterns/products/{productId}
+     * @secure
+     */
+    getPatternsByProductId: (productId: string, params: RequestParams = {}) =>
+      this.request<GetPatternFilesResponse, any>({
+        path: `/api/v1/patterns/products/${productId}`,
+        method: "GET",
+        secure: true,
+        format: "json",
         ...params,
       }),
 
