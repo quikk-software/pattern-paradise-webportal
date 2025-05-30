@@ -50,6 +50,7 @@ export default function DownloadPatternArea({ product }: DownloadPatternAreaProp
       if (!isCancelled) {
         setDownloadIsDone(true);
       }
+      setCurrentlyDownloading(undefined);
     };
 
     const timeoutId = setTimeout(cleanup, 1000);
@@ -61,6 +62,7 @@ export default function DownloadPatternArea({ product }: DownloadPatternAreaProp
         link.parentNode.removeChild(link);
       }
       URL.revokeObjectURL(url);
+      setCurrentlyDownloading(undefined);
     };
   }, [fileData]);
 
@@ -113,7 +115,7 @@ export default function DownloadPatternArea({ product }: DownloadPatternAreaProp
                 return (
                   <div className="space-y-1" key={file.objectName}>
                     <Button
-                      disabled={currentlyDownloading === file.id && downloadIsDone}
+                      disabled={currentlyDownloading === file.id || downloadIsDone}
                       onClick={() => handleDownload(file.id)}
                       className="w-full mb-2"
                       variant="secondary"
