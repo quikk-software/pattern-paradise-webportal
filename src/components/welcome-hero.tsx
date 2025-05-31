@@ -8,6 +8,7 @@ import Link from 'next/link';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { theme } from '@/lib/constants';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 interface WelcomeHeroProps {
   userName?: string;
@@ -159,16 +160,22 @@ export default function WelcomeHero({
             ...(isSeller
               ? [
                   {
+                    href: '/swipe',
+                    icon: Heart,
+                    label: 'Swipe',
+                    delay: 0.2,
+                  },
+                  {
                     href: '/app/secure/sell/orders',
                     icon: ShoppingBag,
                     label: 'Orders',
-                    delay: 0.2,
+                    delay: 0.3,
                   },
                   {
                     href: '/app/secure/sell/testings',
                     icon: PatternParadiseIcon,
                     label: 'Tester Calls',
-                    delay: 0.3,
+                    delay: 0.4,
                   },
                 ]
               : [
@@ -212,7 +219,13 @@ export default function WelcomeHero({
                     borderColor: getThemeColor(200),
                   }}
                 >
-                  <action.icon className="h-5 w-5" style={{ color: getThemeColor(600) }} />
+                  <action.icon
+                    className={cn(
+                      'h-5 w-5',
+                      action.label === 'Swipe' ? 'text-rose-600 fill-rose-600' : undefined,
+                    )}
+                    style={{ color: getThemeColor(600) }}
+                  />
                   <span>{action.label}</span>
                 </Button>
               </Link>
