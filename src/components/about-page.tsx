@@ -26,6 +26,7 @@ const stagger = {
 
 export default function AboutPage() {
   const { t } = useLanguage();
+
   return (
     <div>
       {/* Hero Section */}

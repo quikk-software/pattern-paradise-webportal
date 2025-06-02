@@ -1,6 +1,6 @@
 import React from 'react';
 import UserAccountComponent from '@/components/user-account';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { Metadata } from 'next';
 import { getUserById } from '@/lib/api/static/user/getUserById';
 import { APP_DOMAIN, APP_TITLE, THEME_COLOR } from '@/lib/constants';

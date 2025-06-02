@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/en',
+        permanent: true,
+      },
+    ];
+  },
   poweredByHeader: false,
   images: {
     remotePatterns: [
@@ -11,10 +20,6 @@ const nextConfig = {
         search: '',
       },
     ],
-  },
-  i18n: {
-    locales: ['en', 'de'],
-    defaultLocale: 'en',
   },
 };
 

@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import TesterRatingCard from '@/lib/components/TesterRatingCard';
 import { useGetTesting, useListTesterApplications } from '@/lib/api/testing';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface TesterRatingOverviewProps {

@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import React, { useEffect, useState } from 'react';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
 import { useGetProduct, useUndraftProduct } from '@/lib/api';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
 import ShareButton from '@/lib/components/ShareButton';

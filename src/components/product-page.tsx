@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useGetProduct } from '@/lib/api';
 import React, { useEffect } from 'react';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { Store } from '@/lib/redux/store';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import { Card, CardContent } from '@/components/ui/card';

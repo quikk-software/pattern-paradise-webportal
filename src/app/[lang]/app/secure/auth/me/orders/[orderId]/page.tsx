@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { OrderDetails } from '@/components/order-details';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useGetOrder } from '@/lib/api/order';
 

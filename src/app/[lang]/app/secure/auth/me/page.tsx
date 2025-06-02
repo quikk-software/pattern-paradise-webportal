@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { ProfilePage } from '@/components/profile-page';
 import { useGetUser } from '@/lib/api';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';

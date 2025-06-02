@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useGetTestingByProductId } from '@/lib/api/testing';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useGetProduct } from '@/lib/api';
 import { TesterCallPage } from '@/components/tester-call-page';

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import OrderSuccess from '@/lib/components/OrderSuccess';
 import { useGetOrder } from '@/lib/api/order';
 import useOrderId from '@/lib/core/useOrderId';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import dayjs, { ADVANCED_DATE_FORMAT } from '@/lib/core/dayjs';
 

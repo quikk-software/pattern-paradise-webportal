@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { UpdateProductForm } from '@/lib/components/UpdateProductForm';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useGetProduct } from '@/lib/api';
 

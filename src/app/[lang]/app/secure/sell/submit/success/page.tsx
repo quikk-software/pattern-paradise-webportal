@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import NotFoundPage from '@/app/[lang]/not-found';
+import NotFoundPage from '@/app/not-found';
 import { useSearchParams } from 'next/navigation';
 import PatternUploadSuccess from '@/lib/components/PatternUploadSuccess';
 
