@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import React, { useEffect, useState } from 'react';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
 import { useGetProduct, useUndraftProduct } from '@/lib/api';
-import NotFoundPage from '@/app/not-found';
+import NotFoundPage from '@/app/[lang]/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
 import ShareButton from '@/lib/components/ShareButton';
@@ -147,7 +147,10 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
                   <h3 className="font-medium">Testing Process</h3>
                   <p className="text-sm text-muted-foreground">
                     We&apos;ve started a{' '}
-                    <Link href="/app/secure/sell/testings" className="text-blue-500 underline">
+                    <Link
+                      href="/%5Blang%5D/app/secure/sell/testings"
+                      className="text-blue-500 underline"
+                    >
                       test process
                     </Link>{' '}
                     for your pattern. We encourage you do the whole testing procedure and gather
@@ -175,7 +178,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
               Release Pattern
             </Button>
           ) : null}
-          <Link href={`/app/secure/sell/products/${productId}`}>
+          <Link href={`/%5Blocale%5D/app/secure/sell/products/${productId}`}>
             <Button variant="ghost">Edit Pattern</Button>
           </Link>
         </CardFooter>
@@ -193,7 +196,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
             </div>
           </CardContent>
           <CardFooter>
-            <Link href={`/app/products/${productId}`}>
+            <Link href={`/%5Blocale%5D/app/products/${productId}`}>
               <Button variant="secondary" className="w-full">
                 Preview Pattern
               </Button>
@@ -215,7 +218,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
               </div>
             </CardContent>
             <CardFooter>
-              <Link href={`/app/tester-calls/${productId}`}>
+              <Link href={`/%5Blocale%5D/app/tester-calls/${productId}`}>
                 <Button variant="secondary" className="w-full">
                   Tester Call
                 </Button>
@@ -227,7 +230,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
 
       <div className="mt-8 text-center">
         <Link
-          href="/app/secure/sell"
+          href="/%5Blang%5D/app/secure/sell"
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           Return to Dashboard

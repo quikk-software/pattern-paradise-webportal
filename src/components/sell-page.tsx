@@ -87,7 +87,7 @@ export function SellPageComponent() {
               <>
                 In order to create and sell patterns, you must either{' '}
                 <Link
-                  href="/app/secure/auth/me?action=scrollToPayPal"
+                  href="/%5Blocale%5D/app/secure/auth/me?action=scrollToPayPal"
                   rel={'nofollow'}
                   className="text-blue-500 underline"
                 >
@@ -96,7 +96,7 @@ export function SellPageComponent() {
                 or{' '}
                 <Link
                   rel={'nofollow'}
-                  href="/app/secure/auth/me?action=scrollToStripe"
+                  href="/%5Blocale%5D/app/secure/auth/me?action=scrollToStripe"
                   className="text-blue-500 underline"
                 >
                   connect Stripe
@@ -120,7 +120,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Create Pattern</span>
           </Button>
         </div>
-        <Link rel={'nofollow'} href="/app/secure/sell/dashboard" className="block">
+        <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/sell/dashboard" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -129,7 +129,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Show Analytics</span>
           </Button>
         </Link>
-        <Link rel={'nofollow'} href="/app/secure/sell/orders" className="block">
+        <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/sell/orders" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -138,7 +138,7 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Show My Orders</span>
           </Button>
         </Link>
-        <Link rel={'nofollow'} href="/app/secure/sell/testings" className="block">
+        <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/sell/testings" className="block">
           <Button
             variant="outline"
             className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
@@ -219,7 +219,11 @@ export function SellPageComponent() {
       {products.length === 0 && !isLoading ? (
         <p>
           No patterns available.
-          <Link rel={'nofollow'} href="/app/secure/sell/submit" className="text-blue-500 underline">
+          <Link
+            rel={'nofollow'}
+            href="/%5Blang%5D/app/secure/sell/submit"
+            className="text-blue-500 underline"
+          >
             Create a pattern here!
           </Link>
         </p>

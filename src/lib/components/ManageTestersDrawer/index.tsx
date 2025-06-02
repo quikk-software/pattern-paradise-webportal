@@ -83,7 +83,10 @@ export default function ManageTesterDrawers({
           <div className="flex flex-col gap-4 overflow-y-auto">
             {testing.testers?.map((tester) => (
               <div className="flex justify-between items-center space-x-4" key={tester.id}>
-                <Link href={`/users/${tester.id}`} className="flex items-center space-x-2">
+                <Link
+                  href={`/%5Blocale%5D/users/${tester.id}`}
+                  className="flex items-center space-x-2"
+                >
                   <Avatar className="w-10 h-10">
                     <AvatarImage
                       src={tester.imageUrl}

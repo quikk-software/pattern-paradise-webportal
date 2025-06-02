@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import pages from '@/lib/hooks/routes';
 import { APP_DESCRIPTION, APP_DOMAIN, APP_NAME, APP_TITLE, THEME_COLOR } from '@/lib/constants';
 
-export function generatePageMetadata(pathname: string): Metadata {
-  const page = pages.find((page) => page.pathname === pathname);
+export function generatePageMetadata(pathname: string, language: string): Metadata {
+  const page = pages.find((page) => page.pathname === `/${language}${pathname}`);
 
   const title = page?.title ?? APP_NAME;
   const description = page?.description ?? APP_DESCRIPTION;

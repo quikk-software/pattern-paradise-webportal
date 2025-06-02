@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useGetProduct } from '@/lib/api';
 import React, { useEffect } from 'react';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import NotFoundPage from '@/app/not-found';
+import NotFoundPage from '@/app/[lang]/not-found';
 import { Store } from '@/lib/redux/store';
 import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import { Card, CardContent } from '@/components/ui/card';
@@ -128,7 +128,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                           <span>
                             As soon as payment has been confirmed, your files will be{' '}
                             <Link
-                              href="/app/secure/auth/me/patterns"
+                              href="/%5Blocale%5D/app/secure/auth/me/patterns"
                               className="text-blue-500 underline"
                             >
                               available for download

@@ -86,7 +86,10 @@ export default function UserDetailsCardLight({
       <div className={cn('relative px-6 pb-6 pt-6')}>
         <div className="flex flex-col items-start space-y-4">
           <div className="flex w-full items-start justify-between">
-            <Link href={`/users/${user.id}`} className="group/link flex items-start space-x-4">
+            <Link
+              href={`/%5Blocale%5D/users/${user.id}`}
+              className="group/link flex items-start space-x-4"
+            >
               <Avatar className="h-20 w-20 border-4 border-background shadow-lg transition-transform duration-300 group-hover/link:scale-105">
                 <AvatarImage
                   src={user.imageUrl || '/placeholder.svg'}

@@ -336,7 +336,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
                 {product.title}
               </h1>
               <Link
-                href={`/users/${testing.creator.username}`}
+                href={`/%5Blocale%5D/users/${testing.creator.username}`}
                 className={classNames(
                   'inline-block mt-2 text-lg font-medium hover:underline',
                   THEME_TEXT_CLASSES[theme] || 'text-neutral-800',

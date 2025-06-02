@@ -155,7 +155,10 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
           <h2 className="text-2xl font-bold mb-4">Gallery</h2>
           <GalleryGrid images={userToUse.gallery} />
           <Button variant={'outline'} asChild>
-            <Link href={`/app/secure/auth/me?action=scrollToGallery`} className="w-full">
+            <Link
+              href={`/%5Blocale%5D/app/secure/auth/me?action=scrollToGallery`}
+              className="w-full"
+            >
               <Plus className="w-4 h-4" />
               Add Images to Gallery
             </Link>
@@ -176,7 +179,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
                   <Label className="text-sm font-medium text-gray-700">
                     Feedback from{' '}
                     <Link
-                      href={`/users/${userRating.testing.creator.id}`}
+                      href={`/%5Blocale%5D/users/${userRating.testing.creator.id}`}
                       // rel="nofollow"
                       className="underline italic"
                     >

@@ -34,7 +34,11 @@ export default function PayPalRevoked() {
           <p className="text-gray-600">
             This means that you can no longer receive payments through PayPal on our platform. If
             you want to reactivate your PayPal merchant status,{' '}
-            <Link href="/app/secure/auth/me" className="text-blue-500 underline" rel={'nofollow'}>
+            <Link
+              href="/%5Blocale%5D/app/secure/auth/me"
+              className="text-blue-500 underline"
+              rel={'nofollow'}
+            >
               go to your profile
             </Link>
             .
@@ -51,7 +55,7 @@ export default function PayPalRevoked() {
             <li>Contact PayPal support for more information</li>
             <li>
               Once resolved,{' '}
-              <Link href="/app/secure/auth/me" className="text-blue-500 underline">
+              <Link href="/%5Blocale%5D/app/secure/auth/me" className="text-blue-500 underline">
                 go to your profile
               </Link>{' '}
               to reactivate your merchant status
@@ -60,7 +64,7 @@ export default function PayPalRevoked() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" asChild>
-            <Link href="/app/secure/auth/me">Go to Profile</Link>
+            <Link href="/%5Blocale%5D/app/secure/auth/me">Go to Profile</Link>
           </Button>
           <Button asChild>
             <Link href="/help">Contact Support</Link>

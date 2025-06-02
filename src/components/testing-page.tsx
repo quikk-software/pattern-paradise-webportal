@@ -196,13 +196,17 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
           <p>
             You have no testings yet.{' '}
             {isCustomer ? (
-              <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
+              <Link
+                rel={'nofollow'}
+                href="/%5Blang%5D/app/tester-calls"
+                className="text-blue-500 underline"
+              >
                 Explore open Tester Calls here
               </Link>
             ) : (
               <Link
                 rel={'nofollow'}
-                href="/app/secure/sell/submit"
+                href="/%5Blang%5D/app/secure/sell/submit"
                 className="text-blue-500 underline"
               >
                 Create a pattern and start a Tester Call here!
@@ -278,7 +282,10 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                     <div className="flex flex-col gap-3 w-full">
                       {/* Primary Actions */}
                       {isOwner && testing.status === 'Created' && (
-                        <Link href={`/app/secure/sell/testings/${testing.id}`} className="w-full">
+                        <Link
+                          href={`/%5Blocale%5D/app/secure/sell/testings/${testing.id}`}
+                          className="w-full"
+                        >
                           <Button className="w-full gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
                             <Eye className="w-4 h-4" />
                             View Applications
@@ -288,7 +295,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
 
                       {testing.status === 'InProgress' && (
                         <Link
-                          href={`/app/secure/test/chats?testingId=${testing.id}`}
+                          href={`/%5Blocale%5D/app/secure/test/chats?testingId=${testing.id}`}
                           className="w-full"
                         >
                           <Button className="w-full gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800">

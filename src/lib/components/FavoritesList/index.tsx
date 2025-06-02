@@ -98,7 +98,7 @@ export default function FavoritesList() {
 
 function ProductCard({ item }: { item: GetProductLikeResponse }) {
   return (
-    <Link href={`/app/products/${item.productId}`}>
+    <Link href={`/%5Blocale%5D/app/products/${item.productId}`}>
       <Card className="overflow-hidden h-full flex flex-col">
         <div className="relative pt-4 px-4">
           <Badge

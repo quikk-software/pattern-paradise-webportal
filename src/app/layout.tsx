@@ -10,6 +10,7 @@ import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
 import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
+import { i18n } from '../../i18n-config';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -22,14 +23,20 @@ const geistMono = localFont({
   weight: '100 900',
 });
 
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ lang: locale }));
+}
+
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: any;
 }>) {
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
   return (
-    <html lang="en" className="notranslate" translate="no">
+    <html lang={params.lang} className="notranslate" translate="no">
       <head>
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />

@@ -119,7 +119,7 @@ export default function AboutPage() {
         </motion.p>
         <motion.div variants={fadeIn}>
           <Button asChild size="lg">
-            <Link href="/auth/registration">{t('about:cta.button')}</Link>
+            <Link href="/%5Blang%5D/auth/registration">{t('about:cta.button')}</Link>
           </Button>
         </motion.div>
       </motion.section>

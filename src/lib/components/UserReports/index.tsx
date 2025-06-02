@@ -227,7 +227,7 @@ export function UserReports() {
                   <p>
                     <strong>Reporter:</strong>{' '}
                     <Link
-                      href={`/users/${report.reporter.id}`}
+                      href={`/%5Blocale%5D/users/${report.reporter.id}`}
                       target="_blank"
                       className="text-blue-500 underline"
                     >
@@ -237,7 +237,7 @@ export function UserReports() {
                   <p>
                     <strong>Defendant:</strong>{' '}
                     <Link
-                      href={`/users/${report.defendant.id}`}
+                      href={`/%5Blocale%5D/users/${report.defendant.id}`}
                       target="_blank"
                       className="text-blue-500 underline"
                     >

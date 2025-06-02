@@ -55,7 +55,7 @@ export default function HeroV2({ products }: HeroV2Props) {
 
             {!isLoggedIn ? (
               <div className="flex flex-wrap gap-2">
-                <Link rel={'nofollow'} href="/auth/registration" className="z-10">
+                <Link rel={'nofollow'} href="/%5Blang%5D/auth/registration" className="z-10">
                   <RegisterButton />
                 </Link>
                 <Link href="/swipe" className="z-10">
@@ -96,7 +96,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             <div className="absolute inset-0 grid grid-cols-2 gap-2">
               {products.map((product) => (
                 <Link
-                  href={`/app/products/${product.id}`}
+                  href={`/%5Blocale%5D/app/products/${product.id}`}
                   rel={'nofollow'}
                   key={product.id}
                   className="z-10"

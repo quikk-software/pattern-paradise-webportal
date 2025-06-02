@@ -2,18 +2,18 @@ import type { Page } from './routes.types';
 
 const errorPages: Page[] = [
   {
-    title: 'Fehler',
-    pathname: '/not-found',
+    title: 'Error',
+    pathname: '/en/not-found',
     description: 'Die aufgerufene Seite ist nicht erreichbar.',
   },
   {
-    title: 'Fehler',
-    pathname: '/error',
+    title: 'Error',
+    pathname: '/en/error',
     description: 'Es ist ein Fehler aufgetreten.',
   },
   {
-    title: 'Fehler',
-    pathname: '/_error',
+    title: 'Error',
+    pathname: '/en/_error',
     description: 'Es ist ein Fehler aufgetreten.',
   },
 ];
