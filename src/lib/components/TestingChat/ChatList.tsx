@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { Users } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { GetTestingResponse } from '@/@types/api-types';
+import { GetTestingResponse, ListTestingsResponse } from '@/@types/api-types';
 import { cn } from '@/lib/utils';
 import { PulsatingDot } from '@/lib/components/Chat/PulsatingDot';
-import dayjs from '@/lib/core/dayjs';
+import { Badge } from '@/components/ui/badge';
 
 interface ChatListProps {
   showChatList: boolean;
@@ -16,6 +16,7 @@ interface ChatListProps {
   testings: GetTestingResponse[];
   bottomNavHeight: number;
   navbarHeight: number;
+  refetch: (status?: string[], isChat?: boolean) => Promise<ListTestingsResponse | undefined>;
   handleChatSelect: (testing: GetTestingResponse) => void;
 }
 
@@ -23,10 +24,29 @@ export default function ChatList({
   showChatList,
   fetchTestingsIsLoading,
   testings,
+  refetch,
   bottomNavHeight,
   navbarHeight,
   handleChatSelect,
 }: ChatListProps) {
+  const [showAll, setShowAll] = useState(true);
+
+  const handleShowAll = () => {
+    if (fetchTestingsIsLoading) {
+      return;
+    }
+
+    if (!showAll) {
+      refetch(['InProgress', 'Declined', 'Approved', 'Aborted'], true).then(() => {
+        setShowAll(true);
+      });
+    } else {
+      refetch(['InProgress'], true).then(() => {
+        setShowAll(false);
+      });
+    }
+  };
+
   return (
     <div
       className={cn('bg-white w-full md:w-1/3 overflow-y-auto', {
@@ -45,6 +65,14 @@ export default function ChatList({
       >
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Chats</CardTitle>
+          <div className="flex">
+            <Badge variant={'secondary'} onClick={() => handleShowAll()} className="cursor-pointer">
+              {fetchTestingsIsLoading ? (
+                <LoadingSpinnerComponent className="w-2 h-2 text-black" />
+              ) : null}
+              {!showAll ? 'All Chats' : 'In Progress Only'}
+            </Badge>
+          </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 overflow-y-auto">
           {fetchTestingsIsLoading ? <LoadingSpinnerComponent /> : null}
