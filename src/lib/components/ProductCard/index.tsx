@@ -250,13 +250,13 @@ export default function ProductCard({
       <CardFooter className="p-5 pt-0">
         <div className="w-full">
           {isTesterCall ? (
-            <Link rel={'nofollow'} href={`/app/tester-calls/${id}`} className="w-full">
+            <Link rel={'nofollow'} href={`/%5Blocale%5D/app/tester-calls/${id}`} className="w-full">
               <Button className="w-full gap-2">
                 Show tester call <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
           ) : (
-            <Link href={`/app/products/${id}`} className="w-full">
+            <Link href={`/%5Blocale%5D/app/products/${id}`} className="w-full">
               <Button className="w-full gap-2">
                 Show details <ArrowRight className="w-4 h-4" />
               </Button>
@@ -288,7 +288,11 @@ export default function ProductCard({
               )}
             </Button>
 
-            <Link rel={'nofollow'} href={`/app/secure/sell/products/${id}`} className="flex-1">
+            <Link
+              rel={'nofollow'}
+              href={`/%5Blocale%5D/app/secure/sell/products/${id}`}
+              className="flex-1"
+            >
               <Button variant="outline" size="sm" className="w-full">
                 <Edit className="w-4 h-4 mr-1.5" /> Edit
               </Button>

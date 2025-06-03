@@ -16,7 +16,7 @@ export function RecentSales({ recentSales }: RecentSalesProps): JSX.Element {
     <div className="space-y-8">
       {recentSales.map((recentSale, index) => (
         <Link
-          href={`/users/${recentSale.userId}`}
+          href={`/%5Blocale%5D/users/${recentSale.userId}`}
           key={`${recentSale.userId}-${index}`}
           className="flex items-center"
         >

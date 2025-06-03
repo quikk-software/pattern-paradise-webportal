@@ -25,7 +25,7 @@ export default function InsufficientRoles({ roleType }: InsufficientRolesProps) 
         <CardFooter className="flex flex-col justify-center items-center gap-2 w-full">
           <GoBackButton />
           <Button asChild className="w-full">
-            <Link rel={'nofollow'} href="/app/secure/auth/me?action=scrollToRoles">
+            <Link rel={'nofollow'} href="/%5Blocale%5D/app/secure/auth/me?action=scrollToRoles">
               Add Role {roleType}
             </Link>
           </Button>

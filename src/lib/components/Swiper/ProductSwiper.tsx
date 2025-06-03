@@ -121,7 +121,7 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
             </Button>
             {products.at(currentIndex)?.id ? (
               <Button asChild variant={'secondary'} className="space-x-2">
-                <Link href={`/app/products/${products.at(currentIndex)?.id}`}>
+                <Link href={`/%5Blocale%5D/app/products/${products.at(currentIndex)?.id}`}>
                   <ArrowRight />
                   Show Details
                 </Link>

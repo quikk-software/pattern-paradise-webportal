@@ -14,7 +14,7 @@ export function ActionButtons({ showFlag, isMe, userId }: ActionButtonsProps) {
   return showFlag ? (
     <div className="absolute right-4 top-4 z-10">
       {isMe ? (
-        <Link href="/app/secure/auth/me?action=scrollToSettings">
+        <Link href="/%5Blocale%5D/app/secure/auth/me?action=scrollToSettings">
           <Button size={'icon'} variant={'secondary'}>
             <Settings className="h4 w-4" />
             <span className="sr-only">Edit User</span>

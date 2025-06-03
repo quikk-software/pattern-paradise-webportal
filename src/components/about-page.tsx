@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import creativeWomenIllustration from '@/assets/illustrations/undraw_creative_woman_re_u5tk.svg';
 import connectIllustration from '@/assets/illustrations/undraw_connection_re_lcud.svg';
 import { APP_NAME } from '@/lib/constants';
-import useLanguage from '@/i18n/useLanguage';
+import { useTranslations } from 'use-intl';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -25,7 +25,8 @@ const stagger = {
 };
 
 export default function AboutPage() {
-  const { t } = useLanguage();
+  const t = useTranslations('about');
+
   return (
     <div>
       {/* Hero Section */}
@@ -36,13 +37,13 @@ export default function AboutPage() {
         variants={stagger}
       >
         <motion.h1 className="text-4xl font-bold mb-4" variants={fadeIn}>
-          {t('about:title', {
+          {t('title', {
             appName: APP_NAME,
           })}{' '}
           👋
         </motion.h1>
         <motion.p className="text-xl text-muted-foreground mb-8" variants={fadeIn}>
-          {t('about:subtitle')}
+          {t('subtitle')}
         </motion.p>
         <motion.div variants={fadeIn} className="relative">
           <Image
@@ -58,22 +59,22 @@ export default function AboutPage() {
       {/* Features Section */}
       <motion.section className="mb-16" initial="initial" animate="animate" variants={stagger}>
         <motion.h2 className="text-3xl font-semibold mb-8 text-center" variants={fadeIn}>
-          {t('about:features.title')}
+          {t('features.title')}
         </motion.h2>
         <motion.div className="grid md:grid-cols-3 gap-8" variants={stagger}>
           <FeatureCard
-            title={t('about:features.itemTitle1')}
-            description={t('about:features.itemDescription1')}
+            title={t('features.itemTitle1')}
+            description={t('features.itemDescription1')}
             icon="💰"
           />
           <FeatureCard
-            title={t('about:features.itemTitle2')}
-            description={t('about:features.itemDescription2')}
+            title={t('features.itemTitle2')}
+            description={t('features.itemDescription2')}
             icon="🧶"
           />
           <FeatureCard
-            title={t('about:features.itemTitle3')}
-            description={t('about:features.itemDescription3')}
+            title={t('features.itemTitle3')}
+            description={t('features.itemDescription3')}
             icon="🤝"
           />
         </motion.div>
@@ -88,9 +89,9 @@ export default function AboutPage() {
       >
         <div className="md:flex items-center">
           <motion.div className="md:w-1/2 mb-8 md:mb-0" variants={fadeIn}>
-            <h2 className="text-3xl font-semibold mb-4">{t('about:community.title')}</h2>
-            <p className="text-lg mb-4">{t('about:community.description1')}</p>
-            <p className="text-lg">{t('about:community.description2')}</p>
+            <h2 className="text-3xl font-semibold mb-4">{t('community.title')}</h2>
+            <p className="text-lg mb-4">{t('community.description1')}</p>
+            <p className="text-lg">{t('community.description2')}</p>
           </motion.div>
           <motion.div className="md:w-1/2 md:pl-8" variants={fadeIn}>
             <Image
@@ -112,14 +113,14 @@ export default function AboutPage() {
         variants={stagger}
       >
         <motion.h2 className="text-3xl font-semibold mb-4" variants={fadeIn}>
-          {t('about:cta.title')}
+          {t('cta.title')}
         </motion.h2>
         <motion.p className="text-xl text-muted-foreground mb-8" variants={fadeIn}>
-          {t('about:cta.description')}
+          {t('cta.description')}
         </motion.p>
         <motion.div variants={fadeIn}>
           <Button asChild size="lg">
-            <Link href="/auth/registration">{t('about:cta.button')}</Link>
+            <Link href="/%5Blang%5D/auth/registration">{t('cta.button')}</Link>
           </Button>
         </motion.div>
       </motion.section>

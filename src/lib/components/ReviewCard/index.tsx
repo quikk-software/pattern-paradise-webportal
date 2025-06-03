@@ -31,14 +31,14 @@ export default function ReviewCard({ comment, testing }: ReviewCardProps) {
       <CardContent className="p-4">
         <div className="flex flex-col gap-4 justify-center items-center">
           <div className="flex items-start space-x-2 w-full">
-            <Link href={`/users/${comment.creatorId}`} className="block">
+            <Link href={`/%5Blocale%5D/users/${comment.creatorId}`} className="block">
               <Avatar className="w-10 h-10">
                 <AvatarImage src={tester?.imageUrl} alt={tester?.username} />
                 <AvatarFallback>{initials ? initials : ''}</AvatarFallback>
               </Avatar>
             </Link>
             <div className="flex-1">
-              <Link href={`/users/${comment.creatorId}`}>
+              <Link href={`/%5Blocale%5D/users/${comment.creatorId}`}>
                 <h4 className="font-semibold">{tester?.username}</h4>
                 <p className="text-sm text-muted-foreground">
                   {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}

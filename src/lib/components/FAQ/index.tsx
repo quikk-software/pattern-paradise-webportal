@@ -1,13 +1,8 @@
-'use client';
+import FAQItem from './faq-item';
+import { getTranslations } from 'next-intl/server';
 
-import { useState } from 'react';
-import { FAQCategoryNav } from './faq-category-nav';
-import { FAQItem } from './faq-item';
-import { motion } from 'framer-motion';
-
-export default function FAQPageComponent() {
-  const [selectedAccordionItem, setSelectedAccordionItem] = useState<string | undefined>(undefined);
-  const [activeCategory, setActiveCategory] = useState('all');
+export default async function FAQPageComponent() {
+  const t = await getTranslations();
 
   return (
     <div className="relative">
@@ -15,34 +10,16 @@ export default function FAQPageComponent() {
       <div className="absolute bottom-0 right-0 bg-primary/20 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl opacity-40" />
 
       <div className="relative">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 text-center"
-        >
+        <div className="mb-8 text-center">
           <h2 className="text-2xl font-bold text-primary sm:text-4xl md:text-5xl mb-3">
-            Frequently Asked Questions
+            {t('faq.title')}
           </h2>
-          <p className="text-muted-foreground">
-            Find answers to common questions about Pattern Paradise and how our platform works.
-          </p>
-        </motion.div>
+          <p className="text-muted-foreground">{t('faq.description')}</p>
+        </div>
 
-        <FAQCategoryNav activeCategory={activeCategory} onChange={setActiveCategory} />
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative"
-        >
-          <FAQItem
-            selectedAccordionItem={selectedAccordionItem}
-            setSelectedAccordionItem={setSelectedAccordionItem}
-            activeCategory={activeCategory}
-          />
-        </motion.div>
+        <div className="relative">
+          <FAQItem />
+        </div>
       </div>
     </div>
   );

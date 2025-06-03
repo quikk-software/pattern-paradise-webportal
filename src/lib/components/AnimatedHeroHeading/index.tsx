@@ -2,10 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'use-intl';
 
 export default function AnimatedHeroHeading() {
-  const [currentText, setCurrentText] = useState('Crocheting');
-  const texts = ['Crocheting', 'Knitting'];
+  const [currentText, setCurrentText] = useState('');
+
+  const t = useTranslations();
+
+  const initialCategory = t('landing.hero.categories.crocheting');
+
+  useEffect(() => {
+    if (!initialCategory) {
+      return;
+    }
+    setCurrentText(initialCategory);
+  }, [initialCategory]);
+
+  const texts = [t('landing.hero.categories.crocheting'), t('landing.hero.categories.knitting')];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -15,10 +28,14 @@ export default function AnimatedHeroHeading() {
     return () => clearInterval(interval);
   }, []);
 
+  if (!currentText) {
+    return null;
+  }
+
   return (
     <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
       <span className="block">
-        Your{' '}
+        {t('landing.hero.your')}{' '}
         <span className="relative overflow-hidden">
           <AnimatePresence mode="wait" initial={false}>
             <motion.span

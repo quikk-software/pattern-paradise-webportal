@@ -98,7 +98,7 @@ export function NotFoundComponent() {
         </Button>
 
         <Button asChild variant="default" className="flex items-center space-x-2">
-          <Link href="/auth/login">
+          <Link href="/%5Blang%5D/auth/login">
             <LogIn className="w-4 h-4 mr-2" />
             Login
           </Link>

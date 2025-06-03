@@ -21,8 +21,10 @@ function patternToRegex(pattern: string): RegExp {
   return new RegExp(`^${regexString}$`);
 }
 
-function getPublicUrl(url: string, publicUrls: string[]) {
-  return publicUrls.find((pattern) => patternToRegex(pattern).test(url));
+function getPublicUrl(url: string, publicUrls: string[], supportedLocales = ['en', 'de']) {
+  const normalizedUrl = url.replace(new RegExp(`^/(${supportedLocales.join('|')})(?=/|$)`), '');
+
+  return publicUrls.find((pattern) => patternToRegex(pattern).test(normalizedUrl || '/'));
 }
 
 export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {

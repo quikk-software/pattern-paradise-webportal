@@ -96,7 +96,7 @@ export function OrderListComponent({ filter }: OrderListComponentProps) {
           ) : (
             <Link
               rel={'nofollow'}
-              href="/app/secure/sell/submit"
+              href="/%5Blang%5D/app/secure/sell/submit"
               className="text-blue-500 underline"
             >
               Create a pattern here!
