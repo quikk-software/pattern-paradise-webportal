@@ -39,7 +39,7 @@ export function TestingChat() {
   const router = useRouter();
 
   useEffect(() => {
-    fetchTestings(['InProgress', 'Declined', 'Approved'], true).then(() => setTestingsLoaded(true));
+    fetchTestings(['InProgress'], true).then(() => setTestingsLoaded(true));
   }, [searchParams]);
 
   useEffect(() => {
@@ -70,6 +70,7 @@ export function TestingChat() {
         fetchTestingsIsLoading={fetchTestingsIsLoading}
         testings={testings}
         bottomNavHeight={bottomNavHeight}
+        refetch={fetchTestings}
         navbarHeight={navbarHeight}
         handleChatSelect={handleChatSelect}
       />
