@@ -34,7 +34,7 @@ export const useListTestings = ({
         ),
     );
 
-    setData((p) => [...combineArraysById(p, response?.data.testings ?? [], 'id')]);
+    setData(response.data?.testings ?? []);
 
     pagination.handlePaginationPayload(response?.data);
 
