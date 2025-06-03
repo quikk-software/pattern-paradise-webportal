@@ -39,7 +39,7 @@ export default function WelcomeBanner({
     return null;
   }
 
-  const isValidAffiliate = ['crochetbygenna'].includes(affiliate ?? '');
+  const isValidAffiliate = ['crochetbygenna', 'woolymamacrochet'].includes(affiliate ?? '');
 
   if ((!isValidAffiliate && hideOnInvalidAffiliate) || status === 'authenticated') {
     return null;
