@@ -16,7 +16,7 @@ interface ChatListProps {
   testings: GetTestingResponse[];
   bottomNavHeight: number;
   navbarHeight: number;
-  refetch: (status?: string[]) => Promise<ListTestingsResponse | undefined>;
+  refetch: (status?: string[], isChat?: boolean) => Promise<ListTestingsResponse | undefined>;
   handleChatSelect: (testing: GetTestingResponse) => void;
 }
 
@@ -29,7 +29,7 @@ export default function ChatList({
   navbarHeight,
   handleChatSelect,
 }: ChatListProps) {
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
 
   const handleShowAll = () => {
     if (fetchTestingsIsLoading) {
@@ -37,11 +37,11 @@ export default function ChatList({
     }
 
     if (!showAll) {
-      refetch(['InProgress', 'Declined', 'Approved', 'Aborted']).then(() => {
+      refetch(['InProgress', 'Declined', 'Approved', 'Aborted'], true).then(() => {
         setShowAll(true);
       });
     } else {
-      refetch(['InProgress']).then(() => {
+      refetch(['InProgress'], true).then(() => {
         setShowAll(false);
       });
     }
