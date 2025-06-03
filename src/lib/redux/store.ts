@@ -11,6 +11,7 @@ import {
   initialState as analyticsInitialState,
 } from '@/lib/features/analytics/analyticsSlice';
 import { FilterState, initialState as filterInitialState } from '@/lib/features/filter/filterSlice';
+import { I18nState, initialState as i18nInitialState } from '@/lib/features/i18n/i18nSlice';
 
 export type Store = {
   common: CommonState;
@@ -18,6 +19,7 @@ export type Store = {
   testing: TestingState;
   analytics: AnalyticsState;
   filter: FilterState;
+  i18n: I18nState;
 };
 
 const initialStore: Store = {
@@ -26,6 +28,7 @@ const initialStore: Store = {
   testing: testingInitialState,
   analytics: analyticsInitialState,
   filter: filterInitialState,
+  i18n: i18nInitialState,
 };
 
 export const makeStore = () => {

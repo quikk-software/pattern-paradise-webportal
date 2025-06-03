@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useGetTestingByProductId, useListTesterApplications } from '@/lib/api/testing';
-import UserTesterShoutoutCard from '@/lib/UserTesterShoutoutCard';
+import UserTesterShoutoutCard from '@/lib/components/UserTesterShoutoutCard';
 
 interface TesterShoutoutProps {
   productId: string;
