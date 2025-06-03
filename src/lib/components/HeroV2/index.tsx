@@ -12,7 +12,7 @@ import RegisterButton from '@/lib/components/RegisterButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { theme } from '@/lib/constants';
-import useLanguage from '@/i18n/useLanguage';
+import { useTranslations } from 'use-intl';
 
 interface HeroV2Props {
   products: GetProductResponse[];
@@ -20,7 +20,7 @@ interface HeroV2Props {
 
 export default function HeroV2({ products }: HeroV2Props) {
   const { status, data: session } = useValidSession();
-  const { t } = useLanguage();
+  const t = useTranslations();
 
   const isLoggedIn = status === 'authenticated';
   const themeColor = session?.user.theme ?? 'amber';
@@ -48,7 +48,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             ) : (
               <div className="space-y-2">
                 <AnimatedHeroHeading />
-                <p className="text-lg text-muted-foreground">{t('landing:hero.subtitle')}</p>
+                <p className="text-lg text-muted-foreground">{t('landing.hero.subtitle')}</p>
               </div>
             )}
 
@@ -67,7 +67,7 @@ export default function HeroV2({ products }: HeroV2Props) {
                         'flex items-center gap-2 group',
                       )}
                     >
-                      <span>Swipe Patterns</span>
+                      <span>{t('landing.hero.cta.swipePatterns')}</span>
                       <Heart className="w-5 h-5 fill-white transition-transform duration-300 group-hover:translate-x-1" />
                     </Button>
                   </div>
@@ -154,7 +154,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               }}
             >
               <Instagram className="h-6 w-6" />
-              <span className="font-medium text-lg">Follow our creative journey</span>
+              <span className="font-medium text-lg">{t('landing.hero.follow')}</span>
             </Link>
             <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
               <Link
@@ -163,9 +163,9 @@ export default function HeroV2({ products }: HeroV2Props) {
                 rel="noopener noreferrer nofollow"
                 className="text-blue-500 underline"
               >
-                Join our community
+                {t('landing.hero.followLink')}
               </Link>{' '}
-              and get inspired with our latest patterns and designs.
+              {t('landing.hero.followDescription')}
             </p>
           </div>
 
@@ -181,28 +181,31 @@ export default function HeroV2({ products }: HeroV2Props) {
               }}
             >
               <HeartHandshake className="h-6 w-6" />
-              <span className="font-medium text-lg">Secure payment</span>
+              <span className="font-medium text-lg">{t('landing.hero.payment')}</span>
             </div>
             <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
-              Buy and sell safely with our secure{' '}
-              <Link
-                href="https://paypal.com"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-blue-500 underline"
-              >
-                PayPal
-              </Link>{' '}
-              and{' '}
-              <Link
-                href="https://stripe.com"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-blue-500 underline"
-              >
-                Stripe
-              </Link>{' '}
-              payment options.
+              {t.rich('landing.hero.paymentDescription', {
+                PayPalLink: (chunks) => (
+                  <Link
+                    href="https://paypal.com"
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="text-blue-500 underline"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+                StripeLink: (chunks) => (
+                  <Link
+                    href="https://stripe.com"
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="text-blue-500 underline"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
             </p>
           </div>
         </div>

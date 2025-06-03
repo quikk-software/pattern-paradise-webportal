@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DEFAULT_LANGUAGE, LANGUAGES } from '@/i18n/i18n.constants';
-import { Language } from '@/i18n/i18n.types';
+
+import createIntlMiddleware from 'next-intl/middleware';
+import { routing } from '@/i18n/routing';
+
+const intlMiddleware = createIntlMiddleware(routing);
 
 const PUBLIC_FILE = /\.(.*)$/;
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  let response = intlMiddleware(request);
+
+  if ((await response).status !== 200) {
+    return response;
+  }
+
+  response = await response;
   const { pathname } = request.nextUrl;
-  const response = NextResponse.next();
 
   response.headers.set('x-current-path', pathname);
 
@@ -21,25 +30,9 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  const pathnameParts = pathname.split('/');
-  const firstPart = pathnameParts[1];
-  const pathnameIsMissingLocale = !LANGUAGES.includes(firstPart as Language);
-
-  if (pathnameIsMissingLocale) {
-    const preferredLocale = request.headers.get('accept-language')?.split(',')[0].split('-')[0];
-    const locale = LANGUAGES.includes(preferredLocale as Language)
-      ? preferredLocale
-      : DEFAULT_LANGUAGE;
-
-    const url = request.nextUrl.clone();
-    url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
-
-    return NextResponse.redirect(url);
-  }
-
   return response;
 }
 
 export const config = {
-  matcher: ['/((?!_next|favicon.ico|api).*)'],
+  matcher: '/((?!api|trpc|_next|favicon.ico|_vercel|.*\\..*).*)',
 };

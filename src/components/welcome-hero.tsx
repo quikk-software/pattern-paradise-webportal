@@ -9,7 +9,7 @@ import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { theme } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import useLanguage from '@/i18n/useLanguage';
+import { useTranslations } from 'use-intl';
 
 interface WelcomeHeroProps {
   userName?: string;
@@ -26,16 +26,16 @@ export default function WelcomeHero({
 }: WelcomeHeroProps) {
   const [greeting, setGreeting] = useState('');
 
-  const { t } = useLanguage();
+  const t = useTranslations();
 
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) {
-      setGreeting(t('landing:hero.greeting.morning'));
+      setGreeting(t('landing.hero.greeting.morning'));
     } else if (hour < 18) {
-      setGreeting(t('landing:hero.greeting.afternoon'));
+      setGreeting(t('landing.hero.greeting.afternoon'));
     } else {
-      setGreeting(t('landing:hero.greeting.evening'));
+      setGreeting(t('landing.hero.greeting.evening'));
     }
   }, []);
 
@@ -107,7 +107,7 @@ export default function WelcomeHero({
                   }}
                 >
                   <Star className="h-3 w-3" />
-                  {t('landing:hero.sellerBadge')}
+                  {t('landing.hero.sellerBadge')}
                 </div>
               )}
             </motion.div>
@@ -122,7 +122,7 @@ export default function WelcomeHero({
             className="w-1 h-5 rounded-full mr-2"
             style={{ backgroundColor: getThemeColor(400) }}
           ></div>
-          {t('landing:hero.quickActions')}
+          {t('landing.hero.quickActions')}
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -143,14 +143,14 @@ export default function WelcomeHero({
                   }}
                 >
                   <PlusCircle className="h-5 w-5" />
-                  <span>{t('landing:hero.createPattern')}</span>
+                  <span>{t('landing.hero.createPattern')}</span>
                 </Button>
               </Link>
             ) : (
               <Link href="/swipe" className="block">
                 <Button className="w-full h-auto py-3 flex flex-col items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 border-rose-600">
                   <Heart className="h-5 w-5" />
-                  <span>{t('landing:hero.swipePatterns')}</span>
+                  <span>{t('landing.hero.swipePatterns')}</span>
                 </Button>
               </Link>
             )}
@@ -163,19 +163,19 @@ export default function WelcomeHero({
                   {
                     href: '/swipe',
                     icon: Heart,
-                    label: t('landing:hero.swipe'),
+                    label: t('landing.hero.swipe'),
                     delay: 0.2,
                   },
                   {
                     href: '/app/secure/sell/orders',
                     icon: ShoppingBag,
-                    label: t('landing:hero.orders'),
+                    label: t('landing.hero.orders'),
                     delay: 0.3,
                   },
                   {
                     href: '/app/secure/sell/testings',
                     icon: PatternParadiseIcon,
-                    label: t('landing:hero.testerCalls'),
+                    label: t('landing.hero.testerCalls'),
                     delay: 0.4,
                   },
                 ]
@@ -183,26 +183,26 @@ export default function WelcomeHero({
                   {
                     href: 'browse',
                     icon: Search,
-                    label: t('landing:hero.browsePatterns'),
+                    label: t('landing.hero.browsePatterns'),
                     delay: 0.2,
                   },
                   {
                     href: '/app/tester-calls',
                     icon: PatternParadiseIcon,
-                    label: t('landing:hero.testerCalls'),
+                    label: t('landing.hero.testerCalls'),
                     delay: 0.2,
                   },
                 ]),
             {
               href: '/app/secure/auth/me',
               icon: Settings,
-              label: t('landing:hero.settings'),
+              label: t('landing.hero.settings'),
               delay: isSeller ? 0.4 : 0.3,
             },
             {
               href: '/app/secure/auth/me/favorites',
               icon: BookHeart,
-              label: t('landing:hero.favorites'),
+              label: t('landing.hero.favorites'),
               delay: isSeller ? 0.5 : 0.4,
             },
           ].map((action) => (
@@ -253,10 +253,10 @@ export default function WelcomeHero({
             <span className="text-2xl">👋</span>
             <div>
               <p className="font-medium" style={{ color: getThemeColor(700) }}>
-                {t('landing:hero.greetingBox')}
+                {t('landing.hero.greetingBox')}
               </p>
               <p className="mt-1 text-muted-foreground">
-                {isSeller ? t('landing:hero.greetingSeller') : t('landing:hero.greetingBuyer')}
+                {isSeller ? t('landing.hero.greetingSeller') : t('landing.hero.greetingBuyer')}
               </p>
             </div>
           </div>

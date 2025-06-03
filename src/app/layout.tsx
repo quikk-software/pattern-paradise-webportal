@@ -11,6 +11,7 @@ import { PushNotificationProvider } from '@/app/providers/PushNotificationProvid
 import { Toaster } from '@/components/ui/sonner';
 import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
 import { i18n } from '../../i18n-config';
+import { NextIntlClientProvider } from 'next-intl';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -32,11 +33,14 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: any;
+  params: Promise<{ lang: string }>;
 }>) {
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
+
+  const { lang } = await params;
+
   return (
-    <html lang={params.lang} className="notranslate" translate="no">
+    <html lang={lang} className="notranslate" translate="no">
       <head>
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
@@ -56,23 +60,25 @@ export default async function RootLayout({
         <meta name="p:domain_verify" content="e29836b4ecf762bb55e8700dc302db08" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        <Toaster />
-        <ServiceWorkerProvider>
-          <CookiesProvider>
-            {maintenanceMode ? (
-              <ComingSoon />
-            ) : (
-              <AuthSessionProvider>
-                <PushNotificationProvider>
-                  <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
-                </PushNotificationProvider>
-              </AuthSessionProvider>
-            )}
-            <PreviewFlagProvider>
-              <CookieConsentBanner maintenanceMode={maintenanceMode} />
-            </PreviewFlagProvider>
-          </CookiesProvider>
-        </ServiceWorkerProvider>
+        <NextIntlClientProvider>
+          <Toaster />
+          <ServiceWorkerProvider>
+            <CookiesProvider>
+              {maintenanceMode ? (
+                <ComingSoon />
+              ) : (
+                <AuthSessionProvider>
+                  <PushNotificationProvider>
+                    <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
+                  </PushNotificationProvider>
+                </AuthSessionProvider>
+              )}
+              <PreviewFlagProvider>
+                <CookieConsentBanner maintenanceMode={maintenanceMode} />
+              </PreviewFlagProvider>
+            </CookiesProvider>
+          </ServiceWorkerProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

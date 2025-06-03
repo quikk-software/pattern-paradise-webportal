@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useCreateNewsletterSubscription } from '@/lib/api/newsletter-subscription';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
+import { useTranslations } from 'use-intl';
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('');
@@ -14,6 +15,8 @@ export default function NewsletterSignup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useCreateNewsletterSubscription();
+
+  const t = useTranslations();
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -52,7 +55,7 @@ export default function NewsletterSignup() {
       <div className="flex space-x-2">
         <Input
           type="email"
-          placeholder="Enter your email"
+          placeholder={t('footer.subscribe.placeholder')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -60,13 +63,13 @@ export default function NewsletterSignup() {
         />
         <Button type="submit" disabled={isSubmitting || cooldown > 0}>
           {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-          {cooldown > 0 ? `${cooldown}s` : 'Subscribe'}
+          {cooldown > 0 ? `${cooldown}s` : t('footer.subscribe.button')}
         </Button>
       </div>
       <RequestStatus
         isSuccess={isSuccess}
         isError={isError}
-        successMessage={`Thank you! Your mail has been added to our mailing list.`}
+        successMessage={t('footer.subscribe.success')}
         errorMessage={errorDetail}
       />
     </form>

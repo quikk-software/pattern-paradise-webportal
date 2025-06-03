@@ -1,12 +1,16 @@
+'use server';
+
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Sparkles, Gift } from 'lucide-react';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
-export default function MysteryPatternHero() {
+export default async function MysteryPatternHero() {
   if (process.env.NEXT_PUBLIC_MYSTERY_BOX_ACTIVE !== 'true') {
     return null;
   }
+
+  const t = await getTranslations();
 
   return (
     <section className="w-full py-8 bg-gradient-to-r from-orange-100 to-amber-100 border-y border-orange-200">
@@ -19,10 +23,11 @@ export default function MysteryPatternHero() {
 
             <div className="text-left">
               <div className="flex items-center space-x-2 mb-1">
-                <h3 className="text-xl md:text-2xl font-bold text-orange-700">Mystery Pattern</h3>
-                <Badge className="bg-primary text-white text-xs px-2 py-1">NEW</Badge>
+                <h3 className="text-xl md:text-2xl font-bold text-orange-700">
+                  {t('landing.hero.mystery.title')}
+                </h3>
               </div>
-              <p className="text-orange-600 text-sm">Get a surprise crochet pattern</p>
+              <p className="text-orange-600 text-sm">{t('landing.hero.mystery.description')}</p>
             </div>
           </div>
 
@@ -34,7 +39,7 @@ export default function MysteryPatternHero() {
             <Link href={'/%5Blocale%5D/app/products/mystery-patterns/crochet'}>
               <Button className="bg-gradient-to-r from-primary to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold px-6 py-2 shadow-lg">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Try Mystery Pattern
+                {t('landing.hero.mystery.button')}
               </Button>
             </Link>
           </div>

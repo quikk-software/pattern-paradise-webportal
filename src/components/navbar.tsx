@@ -8,31 +8,33 @@ import { cn } from '@/lib/utils';
 import SocialBadges from '@/lib/components/SocialBadges';
 import { usePreview } from '@/app/providers/PreviewFlagProvider';
 import { Button } from '@/components/ui/button';
+import { useLocale, useTranslations } from 'use-intl';
+import { LanguageSelector } from '@/lib/components/LanguageSelector';
 
-const NAV_LINKS = [
+const NAV_LINKS = (t: any) => [
   {
     href: '/about',
-    name: 'About',
+    name: t('navbar.about'),
     enabled: true,
   },
   {
     href: '/how-to',
-    name: 'How To',
+    name: t('navbar.howTo'),
     enabled: true,
   },
   {
     href: '/help',
-    name: 'Help',
+    name: t('navbar.help'),
     enabled: true,
   },
   {
     href: '/pro',
-    name: 'Pro',
+    name: t('navbar.pro'),
     enabled: process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true',
   },
   {
     href: '/terms-and-privacy',
-    name: 'Terms & Privacy',
+    name: t('navbar.terms'),
     enabled: true,
   },
 ];
@@ -46,10 +48,12 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
   const [isOpen, setIsOpen] = useState(false);
 
   const { isPreview } = usePreview();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const filteredNavLinks = NAV_LINKS.filter((link) => link.enabled);
+  const filteredNavLinks = NAV_LINKS(t).filter((link) => link.enabled);
 
   if (isPreview) {
     return null;
@@ -91,9 +95,10 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
             <Button size="sm" className="space-x-2" variant="ghost" asChild>
               <Link href="/browse">
                 <SearchIcon />
-                Browse
+                {t('navbar.browse')}
               </Link>
             </Button>
+            <LanguageSelector currentLanguage={locale} />
           </div>
         </div>
         <div className="flex items-center md:hidden">
@@ -127,7 +132,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
             onClick={() => toggleMenu()}
             background={background}
           >
-            Browse
+            {t('navbar.browse')}
           </MobileNavLink>
           {filteredNavLinks.map(({ href, name }) => (
             <MobileNavLink
@@ -142,6 +147,9 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
           ))}
         </div>
         <SocialBadges />
+        <div className="flex justify-end my-3">
+          <LanguageSelector currentLanguage={locale} />
+        </div>
       </div>
     </nav>
   );
