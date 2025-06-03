@@ -11,7 +11,8 @@ import { Heart, HeartHandshake, Instagram } from 'lucide-react';
 import RegisterButton from '@/lib/components/RegisterButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { theme, THEME_COLOR } from '@/lib/constants';
+import { theme } from '@/lib/constants';
+import useLanguage from '@/i18n/useLanguage';
 
 interface HeroV2Props {
   products: GetProductResponse[];
@@ -19,6 +20,7 @@ interface HeroV2Props {
 
 export default function HeroV2({ products }: HeroV2Props) {
   const { status, data: session } = useValidSession();
+  const { t } = useLanguage();
 
   const isLoggedIn = status === 'authenticated';
   const themeColor = session?.user.theme ?? 'amber';
@@ -46,10 +48,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             ) : (
               <div className="space-y-2">
                 <AnimatedHeroHeading />
-                <p className="text-lg text-muted-foreground">
-                  Buy, test, and sell your patterns in one place. Join our community of passionate
-                  crocheters & knitters today!
-                </p>
+                <p className="text-lg text-muted-foreground">{t('landing:hero.subtitle')}</p>
               </div>
             )}
 

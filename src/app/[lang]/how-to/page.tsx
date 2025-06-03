@@ -1,25 +1,13 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import {
-  MessageSquare,
-  CheckCircle,
-  LogIn,
-  Clock,
-  MessageSquareText,
-  Paperclip,
-  Reply,
-  Download,
-  Star,
-  UserCircle,
-} from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 import GuideSection from '@/lib/components/GuideSection';
 import StepItem from '@/lib/components/StepItem';
 import Link from 'next/link';
-import InstagramIcon from '@/lib/icons/InstagramIcon';
-import TikTokIcon from '@/lib/icons/TikTokIcon';
 import WelcomeCard from '@/lib/components/WelcomeCard';
 import { generatePageMetadata } from '@/lib/core/metadata';
+import { DEFAULT_LANGUAGE } from '@/i18n/i18n.constants';
 
 export async function generateMetadata({ params }: { params: { lang: string } }) {
   return generatePageMetadata('/how-to', params.lang);
