@@ -587,7 +587,7 @@ export function ProductFormComponent() {
               <span>
                 Patterns included in{' '}
                 <Link
-                  href="/%5Blang%5D/app/products/mystery-patterns/crochet"
+                  href="/app/products/mystery-patterns/crochet"
                   target="_blank"
                   className="text-blue-500 underline"
                 >
@@ -762,7 +762,7 @@ export function ProductFormComponent() {
               You can now{' '}
               <Link
                 rel={'nofollow'}
-                href="/%5Blang%5D/app/secure/sell/testings"
+                href="/app/secure/sell/testings"
                 className="text-blue-500 underline"
               >
                 start a tester call

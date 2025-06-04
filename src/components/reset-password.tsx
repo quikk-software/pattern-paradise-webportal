@@ -103,7 +103,7 @@ export default function ResetPasswordComponent() {
             successMessage={
               <span className="text-left">
                 Your password has been updated successfully. You can now use it to{' '}
-                <Link href="/%5Blang%5D/auth/login" className="text-blue-500 underline">
+                <Link href="/auth/login" className="text-blue-500 underline">
                   login to Pattern Paradise
                 </Link>
                 .
@@ -112,7 +112,7 @@ export default function ResetPasswordComponent() {
             errorMessage={
               <span>
                 You might already used this link. You can request a new password mail on the{' '}
-                <Link href="/%5Blang%5D/auth/login" className="text-blue-500 underline">
+                <Link href="/auth/login" className="text-blue-500 underline">
                   login page
                 </Link>
                 .

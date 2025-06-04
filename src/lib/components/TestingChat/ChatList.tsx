@@ -84,7 +84,7 @@ export default function ChatList({
                 Chats will be displayed here if you have applied for a tester call and have been
                 accepted.
               </p>
-              <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/test">
+              <Link rel={'nofollow'} href="/app/secure/test">
                 <Button>Show Tester Calls</Button>
               </Link>
             </div>

@@ -57,14 +57,14 @@ export default function AnimatedLanding() {
           </motion.div>
           <motion.div className="space-x-4" variants={itemVariants}>
             {isLoggedIn ? (
-              <Link href="/%5Blang%5D/app/secure/sell" rel={'nofollow'}>
+              <Link href="/app/secure/sell" rel={'nofollow'}>
                 <Button className="bg-white text-[#f4930b] hover:bg-white/90 font-semibold">
                   Start selling
                 </Button>
               </Link>
             ) : (
               <Link
-                href="/%5Blang%5D/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
+                href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
                 rel={'nofollow'}
               >
                 <Button className="bg-white text-[#f4930b] hover:bg-white/90 font-semibold">
@@ -73,7 +73,7 @@ export default function AnimatedLanding() {
               </Link>
             )}
             {isLoggedIn ? (
-              <Link href="/%5Blang%5D/app/tester-calls" rel={'nofollow'}>
+              <Link href="/app/tester-calls" rel={'nofollow'}>
                 <Button
                   variant="outline"
                   className="bg-transparent border-white text-white border-2 font-semibold"
@@ -84,7 +84,7 @@ export default function AnimatedLanding() {
             ) : (
               <Link
                 rel={'nofollow'}
-                href="/%5Blang%5D/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls"
+                href="/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls"
               >
                 <Button
                   variant="outline"

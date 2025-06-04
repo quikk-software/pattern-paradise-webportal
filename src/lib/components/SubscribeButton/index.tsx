@@ -67,7 +67,7 @@ export default function SubscribeButton() {
           />
         </PayPalScriptProvider>
       ) : (
-        <Link rel={'nofollow'} href="/%5Blang%5D/auth/registration?redirect=/pro">
+        <Link rel={'nofollow'} href="/auth/registration?redirect=/pro">
           <Button
             size="lg"
             className="font-bold py-4 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105"

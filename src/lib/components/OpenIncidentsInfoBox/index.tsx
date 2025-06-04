@@ -26,7 +26,7 @@ export default function OpenIncidentsInfoBox({ type, count }: OpenIncidentsInfoB
           ) : (
             <Link
               rel={'nofollow'}
-              href="/%5Blang%5D/app/secure/sell/reports"
+              href="/app/secure/sell/reports"
               className="text-blue-500 underline"
             >
               Check your pattern incidents here.

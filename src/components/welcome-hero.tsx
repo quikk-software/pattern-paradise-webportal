@@ -132,7 +132,7 @@ export default function WelcomeHero({
             className="col-span-2 sm:col-span-1"
           >
             {isSeller ? (
-              <Link href="/%5Blang%5D/app/secure/sell/submit" className="block">
+              <Link href="/app/secure/sell/submit" className="block">
                 <Button
                   className="w-full h-auto py-3 flex flex-col items-center justify-center gap-2"
                   style={{

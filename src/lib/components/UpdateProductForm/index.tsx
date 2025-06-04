@@ -503,7 +503,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
               <span>
                 Patterns included in{' '}
                 <Link
-                  href="/%5Blang%5D/app/products/mystery-patterns/crochet"
+                  href="/app/products/mystery-patterns/crochet"
                   target="_blank"
                   className="text-blue-500 underline"
                 >
