@@ -115,18 +115,16 @@ export default function WelcomeHero({
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div>
         <h2 className="text-base font-semibold mb-4 flex items-center">
           <div
             className="w-1 h-5 rounded-full mr-2"
             style={{ backgroundColor: getThemeColor(400) }}
-          ></div>
+          />
           {t('landing.hero.quickActions')}
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {/* Primary Action */}
           <motion.div
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -146,17 +144,9 @@ export default function WelcomeHero({
                   <span>{t('landing.hero.createPattern')}</span>
                 </Button>
               </Link>
-            ) : (
-              <Link href="/swipe" className="block">
-                <Button className="w-full h-auto py-3 flex flex-col items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 border-rose-600">
-                  <Heart className="h-5 w-5" />
-                  <span>{t('landing.hero.swipePatterns')}</span>
-                </Button>
-              </Link>
-            )}
+            ) : null}
           </motion.div>
 
-          {/* Secondary Actions */}
           {[
             ...(isSeller
               ? [
@@ -181,29 +171,35 @@ export default function WelcomeHero({
                 ]
               : [
                   {
+                    href: '/swipe',
+                    icon: Heart,
+                    label: t('landing.hero.swipe'),
+                    delay: 0.2,
+                  },
+                  {
                     href: 'browse',
                     icon: Search,
                     label: t('landing.hero.browsePatterns'),
-                    delay: 0.2,
+                    delay: 0.3,
                   },
                   {
                     href: '/app/tester-calls',
                     icon: PatternParadiseIcon,
                     label: t('landing.hero.testerCalls'),
-                    delay: 0.2,
+                    delay: 0.4,
                   },
                 ]),
             {
               href: '/app/secure/auth/me',
               icon: Settings,
               label: t('landing.hero.settings'),
-              delay: isSeller ? 0.4 : 0.3,
+              delay: 0.5,
             },
             {
               href: '/app/secure/auth/me/favorites',
               icon: BookHeart,
               label: t('landing.hero.favorites'),
-              delay: isSeller ? 0.5 : 0.4,
+              delay: 0.6,
             },
           ].map((action) => (
             <motion.div
@@ -223,7 +219,7 @@ export default function WelcomeHero({
                   <action.icon
                     className={cn(
                       'h-5 w-5',
-                      action.label === 'Swipe' ? 'text-rose-600 fill-rose-600' : undefined,
+                      action.href === '/swipe' ? 'text-rose-600 fill-rose-600' : undefined,
                     )}
                     style={{ color: getThemeColor(600) }}
                   />
@@ -235,7 +231,6 @@ export default function WelcomeHero({
         </div>
       </div>
 
-      {/* Welcome Message */}
       <motion.div
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
