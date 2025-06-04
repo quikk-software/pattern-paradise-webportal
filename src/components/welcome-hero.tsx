@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BookHeart, Heart, PlusCircle, ShoppingBag, Star, Settings, Search } from 'lucide-react';
+import { BookHeart, PlusCircle, ShoppingBag, Star, Settings, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
@@ -151,12 +151,6 @@ export default function WelcomeHero({
             ...(isSeller
               ? [
                   {
-                    href: '/swipe',
-                    icon: Heart,
-                    label: t('landing.hero.swipe'),
-                    delay: 0.2,
-                  },
-                  {
                     href: '/app/secure/sell/orders',
                     icon: ShoppingBag,
                     label: t('landing.hero.orders'),
@@ -170,12 +164,6 @@ export default function WelcomeHero({
                   },
                 ]
               : [
-                  {
-                    href: '/swipe',
-                    icon: Heart,
-                    label: t('landing.hero.swipe'),
-                    delay: 0.2,
-                  },
                   {
                     href: 'browse',
                     icon: Search,
