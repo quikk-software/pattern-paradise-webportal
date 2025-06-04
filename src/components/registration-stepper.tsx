@@ -257,11 +257,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
 
   return (
     <form id="registrationForm" className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-      <Link
-        rel={'nofollow'}
-        href={`/%5Blocale%5D/auth/login?redirect=${redirectUrl}`}
-        className="w-full mb-4"
-      >
+      <Link rel={'nofollow'} href={`/auth/login?redirect=${redirectUrl}`} className="w-full mb-4">
         <Button variant="secondary" className="w-full">
           Go to login
         </Button>
@@ -713,7 +709,7 @@ export function RegistrationStepper({ preselectedRoles }: RegistrationStepperPro
                     Login failed, but your registration was successful. Please try to{' '}
                     <Link
                       rel={'nofollow'}
-                      href={`/%5Blocale%5D/auth/login?redirect=${redirectUrl}`}
+                      href={`/auth/login?redirect=${redirectUrl}`}
                       className="text-blue-500 underline"
                     >
                       Log In

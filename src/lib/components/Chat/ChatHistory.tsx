@@ -280,10 +280,7 @@ export default function ChatHistory({
                             : {}
                         }
                       >
-                        <Link
-                          href={`/%5Blocale%5D/users/${chatMessageCreator?.id}`}
-                          rel={'nofollow'}
-                        >
+                        <Link href={`/users/${chatMessageCreator?.id}`} rel={'nofollow'}>
                           <Avatar
                             className="w-8 h-8"
                             style={

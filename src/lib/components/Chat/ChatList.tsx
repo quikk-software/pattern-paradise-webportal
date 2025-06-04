@@ -62,7 +62,7 @@ export default function ChatList({
                 Start a Chat with a Seller by clicking on the Chat Icon in their Profile or{' '}
                 <Link
                   rel={'nofollow'}
-                  href="/%5Blocale%5D/app/secure/auth/me/orders"
+                  href="/app/secure/auth/me/orders"
                   className="text-blue-500 underline"
                 >
                   through the Actions in your Orders

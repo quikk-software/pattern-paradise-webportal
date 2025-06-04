@@ -87,7 +87,7 @@ export function SellPageComponent() {
               <>
                 In order to create and sell patterns, you must either{' '}
                 <Link
-                  href="/%5Blocale%5D/app/secure/auth/me?action=scrollToPayPal"
+                  href="/app/secure/auth/me?action=scrollToPayPal"
                   rel={'nofollow'}
                   className="text-blue-500 underline"
                 >
@@ -96,7 +96,7 @@ export function SellPageComponent() {
                 or{' '}
                 <Link
                   rel={'nofollow'}
-                  href="/%5Blocale%5D/app/secure/auth/me?action=scrollToStripe"
+                  href="/app/secure/auth/me?action=scrollToStripe"
                   className="text-blue-500 underline"
                 >
                   connect Stripe

@@ -151,7 +151,7 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
               or{' '}
               <Link
                 rel={'nofollow'}
-                href={`/%5Blocale%5D/auth/login?redirect=${redirect}`}
+                href={`/auth/login?redirect=${redirect}`}
                 className="text-blue-500 underline"
               >
                 login
@@ -286,7 +286,7 @@ export default function QuickSignUp({ redirect }: QuickSignUpProps) {
                 Login failed, but your registration was successful. Please try to{' '}
                 <Link
                   rel={'nofollow'}
-                  href={`/%5Blocale%5D/auth/login?redirect=${redirect}`}
+                  href={`/auth/login?redirect=${redirect}`}
                   className="text-blue-500 underline"
                 >
                   Log In

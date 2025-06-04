@@ -105,11 +105,7 @@ export default function WelcomeBanner({
             className="text-muted-foreground mb-6 max-w-md"
           >
             Register Now and Unlock <strong>2 Weeks of Commission-Free Selling</strong> with{' '}
-            <Link
-              href={`/%5Blocale%5D/users/${affiliate}`}
-              rel={'nofollow'}
-              className="text-blue-500 underline"
-            >
+            <Link href={`/users/${affiliate}`} rel={'nofollow'} className="text-blue-500 underline">
               @{affiliate}
             </Link>
             !

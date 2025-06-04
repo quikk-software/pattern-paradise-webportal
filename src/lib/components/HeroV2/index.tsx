@@ -95,7 +95,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             <div className="absolute inset-0 grid grid-cols-2 gap-2">
               {products.map((product) => (
                 <Link
-                  href={`/%5Blocale%5D/app/products/${product.id}`}
+                  href={`/app/products/${product.id}`}
                   rel={'nofollow'}
                   key={product.id}
                   className="z-10"

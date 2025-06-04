@@ -226,7 +226,7 @@ export function ProductReports() {
                   <p>
                     <strong>Product:</strong>{' '}
                     <Link
-                      href={`/%5Blocale%5D/app/products/${report.product.id}`}
+                      href={`/app/products/${report.product.id}`}
                       target="_blank"
                       className="text-blue-500 underline"
                     >
@@ -236,7 +236,7 @@ export function ProductReports() {
                   <p>
                     <strong>Reporter:</strong>{' '}
                     <Link
-                      href={`/%5Blocale%5D/users/${report.reporter.id}`}
+                      href={`/users/${report.reporter.id}`}
                       target="_blank"
                       className="text-blue-500 underline"
                     >
@@ -246,7 +246,7 @@ export function ProductReports() {
                   <p>
                     <strong>Defendant:</strong>{' '}
                     <Link
-                      href={`/%5Blocale%5D/users/${report.defendant.id}`}
+                      href={`/users/${report.defendant.id}`}
                       target="_blank"
                       className="text-blue-500 underline"
                     >

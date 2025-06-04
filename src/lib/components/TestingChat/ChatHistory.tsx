@@ -588,8 +588,8 @@ export default function ChatHistory({
                             <Link
                               href={
                                 isTestingOwner
-                                  ? `/%5Blocale%5D/users/${sellerUser?.id}`
-                                  : `/%5Blocale%5D/users/${testerUser?.id}`
+                                  ? `/users/${sellerUser?.id}`
+                                  : `/users/${testerUser?.id}`
                               }
                             >
                               <Avatar

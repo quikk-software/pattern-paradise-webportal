@@ -57,7 +57,7 @@ export default function OrderSuccess({ orderId, orderNumber, date, pattern }: Or
           </div>
           <div className="flex items-center justify-end gap-2">
             <Button size="sm" variant="outline" className="h-8" asChild>
-              <Link href={`/%5Blocale%5D/app/secure/auth/me/orders/${orderId}`}>View Details</Link>
+              <Link href={`/app/secure/auth/me/orders/${orderId}`}>View Details</Link>
             </Button>
           </div>
         </CardContent>
@@ -93,7 +93,7 @@ export default function OrderSuccess({ orderId, orderNumber, date, pattern }: Or
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button className="gap-2" asChild>
-          <Link href="/%5Blocale%5D/app/secure/auth/me/patterns">
+          <Link href="/app/secure/auth/me/patterns">
             <ShoppingBag className="h-4 w-4" />
             My Patterns
           </Link>

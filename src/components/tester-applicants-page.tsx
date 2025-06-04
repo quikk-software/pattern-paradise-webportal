@@ -258,7 +258,7 @@ export function TesterApplicantsPage({
               )}
               <CardHeader>
                 <div className="flex items-center space-x-4">
-                  <Link href={`/%5Blocale%5D/users/${application.user.id}`} passHref>
+                  <Link href={`/users/${application.user.id}`} passHref>
                     <Avatar className="w-12 h-12">
                       <AvatarImage
                         src={application.user.imageUrl}
@@ -272,12 +272,12 @@ export function TesterApplicantsPage({
                   </Link>
 
                   <div>
-                    <Link href={`/%5Blocale%5D/users/${application.user.id}`}>
+                    <Link href={`/users/${application.user.id}`}>
                       <h2 className="text-lg font-semibold underline text-blue-500">
                         {application.user.firstName} {application.user.lastName}
                       </h2>
                     </Link>
-                    <Link href={`/%5Blocale%5D/users/${application.user.id}`}>
+                    <Link href={`/users/${application.user.id}`}>
                       <p
                         className={`${application.user.firstName || application.user.lastName ? 'text-sm' : 'text-lg font-semibold underline'} text-muted-foreground`}
                       >

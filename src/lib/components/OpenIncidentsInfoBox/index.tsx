@@ -18,7 +18,7 @@ export default function OpenIncidentsInfoBox({ type, count }: OpenIncidentsInfoB
           {type === 'user' ? (
             <Link
               rel={'nofollow'}
-              href="/%5Blocale%5D/app/secure/auth/me/reports"
+              href="/app/secure/auth/me/reports"
               className="text-blue-500 underline"
             >
               Check your profile incidents here.
