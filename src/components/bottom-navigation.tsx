@@ -13,7 +13,7 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 const menuItems = [
   { id: 'shop', label: 'Shop', icon: House, href: '/' },
   { id: 'sell', label: 'Sell', icon: DollarSign, href: '/app/secure/sell' },
-  { id: 'swipe', label: 'Swipe', icon: Heart, href: '/app/swipe', featured: true },
+  { id: 'swipe', label: 'Swipe', icon: Heart, href: '/swipe', featured: true },
   { id: 'test', label: 'Test', icon: PatternParadiseIcon, href: '/app/tester-calls' },
   { id: 'me', label: 'Me', icon: User, href: '/app/secure/auth/me' },
 ];
