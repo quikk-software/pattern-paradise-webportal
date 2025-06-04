@@ -6,6 +6,7 @@ import { APP_DOMAIN, APP_NAME, APP_TITLE, COUNTRIES, THEME_COLOR } from '@/lib/c
 import { capitalizeWords, generateTitle } from '@/lib/utils';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 import logger from '@/lib/core/logger';
+import { getTranslations } from 'next-intl/server';
 
 type Props = {
   params: Promise<{ productId: string; lang: string }>;
@@ -28,6 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productId = p.productId;
   const lang = p.lang;
 
+  const t = await getTranslations();
+
   let product: Awaited<ReturnType<typeof getProduct>> | null = null;
 
   try {
@@ -36,31 +39,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     logger.error(`Failed to fetch product ${productId}`, error);
   }
 
-  const fallbackTitle = 'Pattern Details | Pattern Paradise';
-  const fallbackDescription = 'Check out this pattern on Pattern Paradise.';
+  const fallbackTitle = t('product.fallbackTitle');
+  const fallbackDescription = t('product.fallbackDescription');
   const fallbackImage = `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
 
   const title = product?.title
-    ? `${product.isFree ? 'Get' : 'Buy'} ${generateTitle({
-        title: product.title,
-        category: product.category,
-      })} ${product.isFree ? 'free ' : ''}pattern | Pattern Paradise`
+    ? t('product.title', {
+        item1: product.isFree ? t('product.get') : t('product.buy'),
+        item2: generateTitle({
+          title: product.title,
+          category: product.category,
+        }),
+        item3: product.isFree ? t('product.free') : '',
+      })
     : fallbackTitle;
 
   const description = product
-    ? `Check out this ${product.isFree ? 'free ' : ''}${product.category ? `${product.category.toLowerCase()} pattern ` : 'pattern '}${
-        product.title
-          ? ` '${generateTitle({
-              title: product.title,
-            })}'`
-          : ''
-      }.`
+    ? t('product.description', {
+        item1: product.isFree ? t('product.free') : '',
+        item2: product.category
+          ? `${product.category.toLowerCase()} ${t('product.pattern')}`
+          : t('product.pattern'),
+        item3: `'${generateTitle({
+          title: product.title,
+        })}'`,
+      })
     : fallbackDescription;
 
   const imageUrl =
     product?.imageUrls?.[0]?.replace('/upload/', '/upload/w_1200,h_630,c_fill/') ?? fallbackImage;
 
-  const altText = product?.description || product?.title || 'Pattern Paradise Product';
+  const altText = product?.description || product?.title || t('product.altFallback');
 
   const pageUrl = `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/${lang}/app/products/${productId}`;
 
@@ -130,15 +139,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductDetailPage({ params }: { params: { productId: string } }) {
   const product = await getProduct(params.productId);
 
+  const t = await getTranslations();
+
+  const category =
+    product?.category === 'Crocheting'
+      ? t('product.category.crochet')
+      : product?.category === 'Knitting'
+        ? t('product.category.knitting')
+        : product?.category;
+
   const productSchema = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: `${capitalizeWords(
       generateTitle({
         title: product?.title,
-        category: product?.category,
+        category,
       }),
-    )} Pattern`.trim(),
+    )} ${t('product.pattern')}`.trim(),
     image: product?.imageUrls,
     description: product?.description,
     sku: params.productId,
@@ -173,13 +191,13 @@ export default async function ProductDetailPage({ params }: { params: { productI
     },
     isAccessibleForFree: String(product?.isFree) === 'true',
     audience: [
-      { '@type': 'Audience', audienceType: 'crocheters' },
-      { '@type': 'Audience', audienceType: 'knitters' },
-      { '@type': 'Audience', audienceType: 'cross stitchers' },
-      { '@type': 'Audience', audienceType: 'sewists' },
-      { '@type': 'Audience', audienceType: 'embroiderers' },
-      { '@type': 'Audience', audienceType: 'quilters' },
-      { '@type': 'Audience', audienceType: 'weavers' },
+      { '@type': 'Audience', audienceType: t('product.audience.crocheters') },
+      { '@type': 'Audience', audienceType: t('product.audience.knitters') },
+      { '@type': 'Audience', audienceType: t('product.audience.crossStitchers') },
+      { '@type': 'Audience', audienceType: t('product.audience.sewists') },
+      { '@type': 'Audience', audienceType: t('product.audience.embroiderers') },
+      { '@type': 'Audience', audienceType: t('product.audience.quilters') },
+      { '@type': 'Audience', audienceType: t('product.audience.weavers') },
     ],
   };
 

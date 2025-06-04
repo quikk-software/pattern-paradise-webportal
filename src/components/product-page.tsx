@@ -10,7 +10,6 @@ import { BuyNowButton } from '@/lib/components/BuyNowButton';
 import { Card, CardContent } from '@/components/ui/card';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import CreatedByRef from '@/lib/components/CreatedByRef';
-import DownloadPatternZipButton from '@/lib/components/DownloadPatternZipButton';
 import GoBackButton from '@/lib/components/GoBackButton';
 import { InfoBoxComponent } from '@/components/info-box';
 import ProductHashtags from '@/components/product-hashtags';
@@ -27,6 +26,7 @@ import LikeProductButton from '@/lib/components/LikeProductButton';
 import { useValidSession } from '@/hooks/useValidSession';
 import Link from 'next/link';
 import DownloadPatternArea from '@/lib/components/DownloadPatternArea';
+import { useTranslations } from 'use-intl';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -36,6 +36,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
   const { userId } = useSelector((s: Store) => s.auth);
 
   const { data: session, status } = useValidSession();
+  const t = useTranslations();
 
   const { fetch, data: product, isLoading, isError } = useGetProduct();
 
@@ -80,7 +81,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
           <GoBackButton />
           <ShareButton
             url={`${process.env.NEXT_PUBLIC_URL}/app/products/${productId}`}
-            shareText={'Check out this pattern on Pattern Paradise!'}
+            shareText={t('product.share')}
           />
         </div>
         <Card className="overflow-hidden">
@@ -113,7 +114,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                 <div className="space-y-2">
                   <CreatedByRef creatorId={product.creatorId} />
                   {isOwner ? (
-                    <InfoBoxComponent severity="info" message="You are the owner of this pattern" />
+                    <InfoBoxComponent severity="info" message={t('product.owner')} />
                   ) : null}
                 </div>
                 <div className="flex flex-col gap-2">
@@ -126,18 +127,19 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                         title="Instant download"
                         message={
                           <span>
-                            As soon as payment has been confirmed, your files will be{' '}
-                            <Link
-                              href="/app/secure/auth/me/patterns"
-                              className="text-blue-500 underline"
-                            >
-                              available for download
-                            </Link>
-                            .
+                            {t.rich('product.buyHint', {
+                              DownloadLink: (chunks) => (
+                                <Link
+                                  href="/app/secure/auth/me/patterns"
+                                  className="text-blue-500 underline"
+                                >
+                                  {t('product.downloadLinkText')}
+                                </Link>
+                              ),
+                            })}
                             <br />
                             <br />
-                            Instant download items cannot be returned, exchanged or canceled. Please
-                            contact the seller first if you have any problems with your order.
+                            {t('product.buyHint2')}
                           </span>
                         }
                       />
