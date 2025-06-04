@@ -202,7 +202,7 @@ export default function ContactForm() {
               placeholder={t('help.form.textareaPlaceholder')}
               className="resize-none min-h-[150px] bg-background"
               {...register('message', {
-                required: 'Message is required',
+                required: t('help.form.textareaRequired'),
                 minLength: { value: 10, message: t('help.form.textareaError') },
               })}
             />

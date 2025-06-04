@@ -451,6 +451,7 @@
       "reason8": "Feature Request",
       "reason9": "Other",
       "textareaPlaceholder": "Please provide details about your inquiry...",
+      "textareaRequired": "Message is required",
       "textareaError": "Message must be at least 10 characters",
       "send": "Send Message",
       "sendSuccess1": "Your message has been submitted successfully!",
