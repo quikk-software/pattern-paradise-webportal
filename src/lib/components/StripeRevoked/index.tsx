@@ -34,11 +34,7 @@ export default function StripeRevoked() {
           <p className="text-gray-600">
             This means that you can no longer receive payments through Stripe on our platform. If
             you want to reactivate your Stripe merchant status,{' '}
-            <Link
-              href="/%5Blocale%5D/app/secure/auth/me"
-              className="text-blue-500 underline"
-              rel={'nofollow'}
-            >
+            <Link href="/app/secure/auth/me" className="text-blue-500 underline" rel={'nofollow'}>
               go to your profile
             </Link>
             .
@@ -51,7 +47,7 @@ export default function StripeRevoked() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" asChild>
-            <Link href="/%5Blocale%5D/app/secure/auth/me">Go to Profile</Link>
+            <Link href="/app/secure/auth/me">Go to Profile</Link>
           </Button>
           <Button asChild>
             <Link href="/help">Contact Support</Link>

@@ -46,11 +46,7 @@ export default function SuccessfulOnboarding() {
             <p className="text-lg">
               Congratulations! Your onboarding was successful. You can check your current PayPal
               Merchant status{' '}
-              <Link
-                rel={'nofollow'}
-                href="/%5Blocale%5D/app/secure/auth/me"
-                className="text-blue-500 underline"
-              >
+              <Link rel={'nofollow'} href="/app/secure/auth/me" className="text-blue-500 underline">
                 in your Profile
               </Link>
               .
@@ -113,7 +109,7 @@ export default function SuccessfulOnboarding() {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between items-center">
-            <Link rel={'nofollow'} href="/%5Blocale%5D/app/secure/auth/me">
+            <Link rel={'nofollow'} href="/app/secure/auth/me">
               <Button variant="outline">Go to Profile</Button>
             </Link>
             <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/sell/submit">

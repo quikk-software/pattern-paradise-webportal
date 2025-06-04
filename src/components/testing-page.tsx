@@ -282,10 +282,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                     <div className="flex flex-col gap-3 w-full">
                       {/* Primary Actions */}
                       {isOwner && testing.status === 'Created' && (
-                        <Link
-                          href={`/%5Blocale%5D/app/secure/sell/testings/${testing.id}`}
-                          className="w-full"
-                        >
+                        <Link href={`/app/secure/sell/testings/${testing.id}`} className="w-full">
                           <Button className="w-full gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
                             <Eye className="w-4 h-4" />
                             View Applications
@@ -295,7 +292,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
 
                       {testing.status === 'InProgress' && (
                         <Link
-                          href={`/%5Blocale%5D/app/secure/test/chats?testingId=${testing.id}`}
+                          href={`/app/secure/test/chats?testingId=${testing.id}`}
                           className="w-full"
                         >
                           <Button className="w-full gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800">

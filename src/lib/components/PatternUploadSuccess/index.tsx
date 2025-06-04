@@ -178,7 +178,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
               Release Pattern
             </Button>
           ) : null}
-          <Link href={`/%5Blocale%5D/app/secure/sell/products/${productId}`}>
+          <Link href={`/app/secure/sell/products/${productId}`}>
             <Button variant="ghost">Edit Pattern</Button>
           </Link>
         </CardFooter>
@@ -196,7 +196,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
             </div>
           </CardContent>
           <CardFooter>
-            <Link href={`/%5Blocale%5D/app/products/${productId}`}>
+            <Link href={`/app/products/${productId}`}>
               <Button variant="secondary" className="w-full">
                 Preview Pattern
               </Button>
@@ -218,7 +218,7 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
               </div>
             </CardContent>
             <CardFooter>
-              <Link href={`/%5Blocale%5D/app/tester-calls/${productId}`}>
+              <Link href={`/app/tester-calls/${productId}`}>
                 <Button variant="secondary" className="w-full">
                   Tester Call
                 </Button>

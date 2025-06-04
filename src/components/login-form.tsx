@@ -90,7 +90,7 @@ export function LoginForm() {
         <p className="text-sm text-muted-foreground text-right">
           Don&apos;t have an account?{' '}
           <Link
-            href={`/%5Blocale%5D/auth/registration?redirect=${redirectUrl}`}
+            href={`/auth/registration?redirect=${redirectUrl}`}
             className="text-primary hover:underline"
           >
             Register here

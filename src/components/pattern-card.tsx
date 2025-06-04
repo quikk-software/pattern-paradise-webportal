@@ -98,10 +98,7 @@ export default function PatternCard({ pattern }: PatternCardProps) {
     <div className="rounded-lg shadow-md p-4 flex flex-col">
       <div className="flex flex-row gap-4 bg-white h-full">
         {imageSrc ? (
-          <Link
-            href={`/%5Blocale%5D/app/secure/auth/me/orders/${pattern.orderId}`}
-            rel={'nofollow'}
-          >
+          <Link href={`/app/secure/auth/me/orders/${pattern.orderId}`} rel={'nofollow'}>
             <CldImage
               key={imageSrc}
               alt={`${pattern.productTitle} on Pattern Paradise`}
@@ -115,7 +112,7 @@ export default function PatternCard({ pattern }: PatternCardProps) {
         ) : null}
         <div className="flex-1 flex flex-col justify-between gap-4">
           <Link
-            href={`/%5Blocale%5D/app/secure/auth/me/orders/${pattern.orderId}`}
+            href={`/app/secure/auth/me/orders/${pattern.orderId}`}
             rel={'nofollow'}
             className="flex flex-col gap-2"
           >

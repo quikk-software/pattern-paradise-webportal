@@ -77,7 +77,7 @@ export default function ColumnListing({ products, listingType }: ColumnListingPr
           <Link
             key={product.id}
             rel={'nofollow'}
-            href={`/%5Blocale%5D/app/secure${
+            href={`/app/secure${
               listingType === 'sell' ? '/products' : listingType === 'test' && '/test/products'
             }/${product.id}`}
           >
