@@ -3,8 +3,11 @@
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'use-intl';
 
 export default function RegisterButton() {
+  const t = useTranslations();
+
   return (
     <div className="relative">
       <Button
@@ -15,7 +18,7 @@ export default function RegisterButton() {
           'flex items-center gap-2 group',
         )}
       >
-        <span>Register Now</span>
+        <span>{t('landing.hero.cta.registerNow')}</span>
         <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
       </Button>
     </div>

@@ -26,7 +26,7 @@ export default function WelcomeCard() {
         </div>
         <div className="flex flex-col gap-2">
           <Button size="sm" asChild>
-            <Link href="/auth/registration" className="flex items-center gap-2">
+            <Link href="/%5Blang%5D/auth/registration" className="flex items-center gap-2">
               <ArrowRight />
               Register Now
             </Link>

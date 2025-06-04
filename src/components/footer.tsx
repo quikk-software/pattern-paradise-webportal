@@ -10,8 +10,10 @@ import PinterestIcon from '@/lib/icons/PinterestIcon';
 import GithubIcon from '@/lib/icons/GithubIcon';
 import NewsletterSignup from '@/components/newsletter-signup';
 import { Mail, UserRoundCheck } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-export default function Footer() {
+export default async function Footer() {
+  const t = await getTranslations();
   return (
     <footer className="w-full border-t bg-background">
       <div className="container flex flex-col gap-6 py-12 px-4 md:px-6 lg:flex-row lg:gap-12">
@@ -22,12 +24,12 @@ export default function Footer() {
                 <PatternParadiseIcon className="h-6 w-6" />
                 <span className="inline-block font-bold">Pattern Paradise</span>
               </div>
-              <p className="text-sm text-muted-foreground">Where creativity pays off.</p>
+              <p className="text-sm text-muted-foreground">Where Creativity Pays Off.</p>
             </div>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <UserRoundCheck className="h-6 w-6" />
-                <span className="inline-block font-bold">Follow Us</span>
+                <span className="inline-block font-bold">{t('footer.followUs')}</span>
               </div>
               <div className="flex gap-4 items-center justify-start">
                 <Link
@@ -94,7 +96,7 @@ export default function Footer() {
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <Mail className="h-6 w-6" />
-              <span className="inline-block font-bold">Newsletter & Updates</span>
+              <span className="inline-block font-bold">{t('footer.newsletter')}</span>
             </div>
             <NewsletterSignup />
           </div>
@@ -103,20 +105,20 @@ export default function Footer() {
       <div className="border-t py-6">
         <div className="container flex flex-col items-center justify-between gap-4 px-4 md:px-6 md:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Pattern Paradise. All rights reserved.
+            © {new Date().getFullYear()} Pattern Paradise. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-4">
             <Link
               href="/terms-and-privacy?action=scrollToTermsAndConditions"
               className="text-xs text-muted-foreground hover:text-foreground"
             >
-              Terms of Service
+              {t('footer.terms')}
             </Link>
             <Link
               href="/terms-and-privacy?action=scrollToPrivacyPolicy"
               className="text-xs text-muted-foreground hover:text-foreground"
             >
-              Privacy Policy
+              {t('footer.privacy')}
             </Link>
             <Link
               href="/sitemap.xml"
@@ -124,7 +126,7 @@ export default function Footer() {
               className="text-xs text-muted-foreground hover:text-foreground"
               rel="nofollow"
             >
-              Sitemap
+              {t('footer.sitemap')}
             </Link>
           </div>
         </div>

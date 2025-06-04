@@ -11,7 +11,8 @@ import { Heart, HeartHandshake, Instagram } from 'lucide-react';
 import RegisterButton from '@/lib/components/RegisterButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { theme, THEME_COLOR } from '@/lib/constants';
+import { theme } from '@/lib/constants';
+import { useTranslations } from 'use-intl';
 
 interface HeroV2Props {
   products: GetProductResponse[];
@@ -19,6 +20,7 @@ interface HeroV2Props {
 
 export default function HeroV2({ products }: HeroV2Props) {
   const { status, data: session } = useValidSession();
+  const t = useTranslations();
 
   const isLoggedIn = status === 'authenticated';
   const themeColor = session?.user.theme ?? 'amber';
@@ -46,16 +48,13 @@ export default function HeroV2({ products }: HeroV2Props) {
             ) : (
               <div className="space-y-2">
                 <AnimatedHeroHeading />
-                <p className="text-lg text-muted-foreground">
-                  Buy, test, and sell your patterns in one place. Join our community of passionate
-                  crocheters & knitters today!
-                </p>
+                <p className="text-lg text-muted-foreground">{t('landing.hero.subtitle')}</p>
               </div>
             )}
 
             {!isLoggedIn ? (
               <div className="flex flex-wrap gap-2">
-                <Link rel={'nofollow'} href="/auth/registration" className="z-10">
+                <Link rel={'nofollow'} href="/%5Blang%5D/auth/registration" className="z-10">
                   <RegisterButton />
                 </Link>
                 <Link href="/swipe" className="z-10">
@@ -68,7 +67,7 @@ export default function HeroV2({ products }: HeroV2Props) {
                         'flex items-center gap-2 group',
                       )}
                     >
-                      <span>Swipe Patterns</span>
+                      <span>{t('landing.hero.cta.swipePatterns')}</span>
                       <Heart className="w-5 h-5 fill-white transition-transform duration-300 group-hover:translate-x-1" />
                     </Button>
                   </div>
@@ -96,7 +95,7 @@ export default function HeroV2({ products }: HeroV2Props) {
             <div className="absolute inset-0 grid grid-cols-2 gap-2">
               {products.map((product) => (
                 <Link
-                  href={`/app/products/${product.id}`}
+                  href={`/%5Blocale%5D/app/products/${product.id}`}
                   rel={'nofollow'}
                   key={product.id}
                   className="z-10"
@@ -155,7 +154,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               }}
             >
               <Instagram className="h-6 w-6" />
-              <span className="font-medium text-lg">Follow our creative journey</span>
+              <span className="font-medium text-lg">{t('landing.hero.follow')}</span>
             </Link>
             <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
               <Link
@@ -164,9 +163,9 @@ export default function HeroV2({ products }: HeroV2Props) {
                 rel="noopener noreferrer nofollow"
                 className="text-blue-500 underline"
               >
-                Join our community
+                {t('landing.hero.followLink')}
               </Link>{' '}
-              and get inspired with our latest patterns and designs.
+              {t('landing.hero.followDescription')}
             </p>
           </div>
 
@@ -182,28 +181,31 @@ export default function HeroV2({ products }: HeroV2Props) {
               }}
             >
               <HeartHandshake className="h-6 w-6" />
-              <span className="font-medium text-lg">Secure payment</span>
+              <span className="font-medium text-lg">{t('landing.hero.payment')}</span>
             </div>
             <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
-              Buy and sell safely with our secure{' '}
-              <Link
-                href="https://paypal.com"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-blue-500 underline"
-              >
-                PayPal
-              </Link>{' '}
-              and{' '}
-              <Link
-                href="https://stripe.com"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-blue-500 underline"
-              >
-                Stripe
-              </Link>{' '}
-              payment options.
+              {t.rich('landing.hero.paymentDescription', {
+                PayPalLink: (chunks) => (
+                  <Link
+                    href="https://paypal.com"
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="text-blue-500 underline"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+                StripeLink: (chunks) => (
+                  <Link
+                    href="https://stripe.com"
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="text-blue-500 underline"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
             </p>
           </div>
         </div>

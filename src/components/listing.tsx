@@ -39,6 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'use-intl';
 
 interface ListingComponentProps {
   status: 'Released' | 'Created';
@@ -56,6 +57,7 @@ export function ListingComponent({
   const screenSize = useScreenSize();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations();
 
   const { productFilter } = useSelector((s: Store) => s.filter);
 
@@ -278,7 +280,7 @@ export function ListingComponent({
         {showFilter && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold mb-2">Hashtags</h2>
+              <h2 className="text-lg font-semibold mb-2">{t('browse.filter.hashtags')}</h2>
               <HashtagInput
                 hashtags={hashtags}
                 setHashtags={(tags) =>
@@ -288,7 +290,7 @@ export function ListingComponent({
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold mb-2">Language</h2>
+              <h2 className="text-lg font-semibold mb-2">{t('browse.filter.language')}</h2>
               <div className="flex gap-2">
                 <LanguageSelect
                   language={language}
@@ -312,7 +314,7 @@ export function ListingComponent({
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold mb-2">Category</h2>
+              <h2 className="text-lg font-semibold mb-2">{t('browse.filter.category')}</h2>
               <CraftSelector
                 hasAll
                 selectedCraft={selectedCategory.craft}
@@ -349,7 +351,7 @@ export function ListingComponent({
               className="w-full"
             >
               {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-              Apply Filter
+              {t('browse.filter.applyFilter')}
             </Button>
           </div>
         )}
@@ -358,9 +360,9 @@ export function ListingComponent({
       <div className="flex flex-col gap-6 mt-6">
         <div className="w-full">
           <div className="relative">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2 top-3 h-4 w-4 z-50 text-muted-foreground" />
             <Input
-              placeholder="Search pattern or creator..."
+              placeholder={t('browse.filter.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => dispatch(updateFilterField({ key: 'q', value: e.target.value }))}
               className="pl-8"
@@ -373,37 +375,37 @@ export function ListingComponent({
           value={sortBy}
         >
           <SelectTrigger aria-label={'Sort'}>
-            <SelectValue placeholder="Sort" />
+            <SelectValue placeholder={t('common.sort.placeholder')} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="mostRelevant">
               <span className="flex flex-row gap-2 items-center">
-                <Star size={14} /> Most Relevant
+                <Star size={14} /> {t('browse.filter.mostRelevant')}
               </span>
             </SelectItem>
             <SelectItem value="sale">
               <span className="flex flex-row gap-2 items-center">
-                <PercentIcon size={14} /> Sale Only
+                <PercentIcon size={14} /> {t('browse.filter.saleOnly')}
               </span>
             </SelectItem>
             <SelectItem value="priceAscending">
               <span className="flex flex-row gap-2 items-center">
-                <ArrowDown01 size={14} /> Price Ascending
+                <ArrowDown01 size={14} /> {t('browse.filter.priceAscending')}
               </span>
             </SelectItem>
             <SelectItem value="priceDescending">
               <span className="flex flex-row gap-2 items-center">
-                <ArrowUp10 size={14} /> Price Descending
+                <ArrowUp10 size={14} /> {t('browse.filter.priceAscending')}
               </span>
             </SelectItem>
             <SelectItem value="newest">
               <span className="flex flex-row gap-2 items-center">
-                <CalendarArrowDown size={14} /> Newest
+                <CalendarArrowDown size={14} /> {t('browse.filter.newest')}
               </span>
             </SelectItem>
             <SelectItem value="oldest">
               <span className="flex flex-row gap-2 items-center">
-                <CalendarArrowUp size={14} /> Oldest
+                <CalendarArrowUp size={14} /> {t('browse.filter.oldest')}
               </span>
             </SelectItem>
           </SelectContent>
@@ -411,7 +413,7 @@ export function ListingComponent({
 
         <div className="w-full mb-6">
           <Button variant={'outline'} className={'w-full'} onClick={clearFilter}>
-            <Trash /> Clear Filter
+            <Trash /> {t('browse.filter.clearFilter')}
           </Button>
         </div>
 
@@ -428,12 +430,10 @@ export function ListingComponent({
           </div>
           {products.length === 0 && !isLoading && (
             <div className="flex flex-col gap-4 justify-center items-center mb-10">
-              <p className="text-center text-muted-foreground">
-                Nothing found matching your criteria.
-              </p>
+              <p className="text-center text-muted-foreground">{t('browse.filter.noResults')}</p>
               <div className="flex justify-center">
                 <Button size="lg" onClick={clearFilter}>
-                  Reset Filter
+                  {t('browse.filter.resetFilter')}
                 </Button>
               </div>
             </div>

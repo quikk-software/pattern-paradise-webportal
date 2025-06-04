@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { FAQ_ITEMS } from '@/lib/constants';
 import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
@@ -10,25 +8,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { motion } from 'framer-motion';
+import { getTranslations } from 'next-intl/server';
 
-interface FAQItemProps {
-  selectedAccordionItem?: string;
-  setSelectedAccordionItem: (value: string | undefined) => void;
-  activeCategory: string;
-}
+export default async function FAQItem() {
+  const t = await getTranslations();
 
-export const FAQItem: React.FunctionComponent<FAQItemProps> = ({
-  selectedAccordionItem,
-  setSelectedAccordionItem,
-  activeCategory,
-}) => {
-  const filteredItems =
-    activeCategory === 'all'
-      ? FAQ_ITEMS
-      : FAQ_ITEMS.filter((item) => item.category === activeCategory);
+  const faqItems = FAQ_ITEMS(t);
 
-  const formatAnswer = (item: (typeof FAQ_ITEMS)[0]) => {
+  const formatAnswer = (item: (typeof faqItems)[0]) => {
     if (!item.hasLink) {
       return item.answer;
     }
@@ -98,20 +85,9 @@ export const FAQItem: React.FunctionComponent<FAQItemProps> = ({
   };
 
   return (
-    <Accordion
-      type="single"
-      collapsible
-      className="w-full"
-      value={selectedAccordionItem}
-      onValueChange={(value) => setSelectedAccordionItem(value)}
-    >
-      {filteredItems.map((item) => (
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
+    <Accordion type="single" collapsible className="w-full">
+      {faqItems.map((item) => (
+        <div key={item.id}>
           <AccordionItem
             value={item.id}
             className="mb-4 overflow-hidden border border-border rounded-lg shadow-sm group hover:shadow-md transition-shadow duration-300"
@@ -132,8 +108,8 @@ export const FAQItem: React.FunctionComponent<FAQItemProps> = ({
               </div>
             </AccordionContent>
           </AccordionItem>
-        </motion.div>
+        </div>
       ))}
     </Accordion>
   );
-};
+}

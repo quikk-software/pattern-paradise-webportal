@@ -8,6 +8,7 @@ import { GetProductResponse } from '@/@types/api-types';
 import useMainAreaHeight from '@/hooks/useMainAreaHeight';
 import { useCreateProductLike } from '@/lib/api/product-like';
 import Link from 'next/link';
+import { useTranslations } from 'use-intl';
 
 interface ProductSwiperProps {
   products: GetProductResponse[];
@@ -20,6 +21,7 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
   const { mutate: createProductLike } = useCreateProductLike();
 
   const mainAreaHeight = useMainAreaHeight();
+  const t = useTranslations();
 
   const handleSwiped = (direction: 'left' | 'right', productId: string) => {
     if (direction === 'right') {
@@ -121,9 +123,9 @@ export default function ProductSwiper({ products }: ProductSwiperProps) {
             </Button>
             {products.at(currentIndex)?.id ? (
               <Button asChild variant={'secondary'} className="space-x-2">
-                <Link href={`/app/products/${products.at(currentIndex)?.id}`}>
+                <Link href={`/%5Blocale%5D/app/products/${products.at(currentIndex)?.id}`}>
                   <ArrowRight />
-                  Show Details
+                  {t('swipe.showDetails')}
                 </Link>
               </Button>
             ) : null}

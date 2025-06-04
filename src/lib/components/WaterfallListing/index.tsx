@@ -8,6 +8,7 @@ import { ArrowRight, Clock, Percent } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { updateFilterField } from '@/lib/features/filter/filterSlice';
+import { useTranslations } from 'use-intl';
 
 interface WaterfallListingProps {
   products: GetProductResponse[];
@@ -71,6 +72,7 @@ export default function WaterfallListing({
 
   const dispatch = useDispatch();
   const router = useRouter();
+  const t = useTranslations();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -186,7 +188,7 @@ export default function WaterfallListing({
                         <div className="flex justify-end items-end w-full">
                           {product.isFree ? (
                             <span className="font-bold text-right text-sm md:text-base lg:text-lg">
-                              FOR FREE
+                              {t('browse.forFree')}
                             </span>
                           ) : isSaleActive ? (
                             <div className="flex flex-col items-end">
@@ -212,7 +214,8 @@ export default function WaterfallListing({
                           <div className="w-full mb-2 bg-red-50 dark:bg-red-950/20 rounded-md p-1.5 flex items-center justify-center">
                             <Percent className="w-3 h-3 text-red-500 mr-1" />
                             <span className="text-xs text-red-600 dark:text-red-400 font-medium">
-                              Save ${(product.price - product.salePrice!).toFixed(2)}
+                              {t('browse.saveMoney')} $
+                              {(product.price - product.salePrice!).toFixed(2)}
                             </span>
                           </div>
                         )}
@@ -232,7 +235,7 @@ export default function WaterfallListing({
         <div className="flex justify-center">
           <Button size="lg" asChild>
             <Link href="/browse">
-              Browse Patterns <ArrowRight />
+              {t('browse.browsePatterns')} <ArrowRight />
             </Link>
           </Button>
         </div>

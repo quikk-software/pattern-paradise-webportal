@@ -551,7 +551,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     In the meantime, please take a look at the open incidents here:{' '}
                     <Link
                       rel={'nofollow'}
-                      href="/app/secure/auth/me/reports"
+                      href="/%5Blocale%5D/app/secure/auth/me/reports"
                       className="text-blue-500 underline"
                     >
                       Open Incidents ({user.openIncidentsCount})

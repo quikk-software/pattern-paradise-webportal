@@ -1,12 +1,18 @@
 import React from 'react';
 
-const PatternParadiseIcon = ({ className }: { className?: string }) => (
+const PatternParadiseIcon = ({
+  className,
+  strokeWidth = '8',
+}: {
+  className?: string;
+  strokeWidth?: string;
+}) => (
   <svg
     className={className}
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth={strokeWidth}
     strokeLinecap="round"
     strokeLinejoin="round"
     viewBox="159.76 152.5 852.43 851.95"

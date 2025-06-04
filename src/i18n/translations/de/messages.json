@@ -1,0 +1,466 @@
+{
+  "common": {
+    "hashtagsPlaceholder": "Hashtags eingeben...",
+    "hashtagsError": "Hashtag {inputValue} ist bereits in deiner Liste",
+    "hashtagsLimit": "verwendete Hashtags",
+    "languagesPlaceholder": "Sprache auswählen",
+    "categories": {
+      "all": "Alle",
+      "crocheting": "Häkeln",
+      "knitting": "Stricken",
+      "crossStitch": "Kreuzstich",
+      "sewing": "Nähen",
+      "embroidery": "Stickerei",
+      "quilting": "Quilten",
+      "weaving": "Weben",
+      "search": "Suchoptionen..."
+    },
+    "price": {
+      "title": "Preisfilter",
+      "minPlaceholder": "Mindestpreis",
+      "maxPlaceholder": "Höchstpreis",
+      "maxError": "Der Mindestpreis muss kleiner als der Höchstpreis sein",
+      "maxError2": "Der Höchstpreis muss kleiner als {maxPrice}$ sein",
+      "minError": "Der Mindestpreis muss größer als {minPrice}$ sein"
+    },
+    "sort": {
+      "placeholder": "Sortieren"
+    }
+  },
+  "navbar": {
+    "about": "Über uns",
+    "howTo": "Anleitung",
+    "help": "Hilfe",
+    "pro": "Pro",
+    "terms": "Rechtliches",
+    "browse": "Suchen"
+  },
+  "landing": {
+    "hero": {
+      "your": "Dein",
+      "greeting": {
+        "morning": "Guten Morgen",
+        "evening": "Guten Abend",
+        "afternoon": "Guten Nachmittag"
+      },
+      "sellerBadge": "Anleitungsanbieter",
+      "quickActions": "Schnellaktionen",
+      "createPattern": "Anleitung erstellen",
+      "swipePatterns": "Swipe",
+      "swipe": "Swipe",
+      "orders": "Bestellungen",
+      "testerCalls": "Tester-Aufrufe",
+      "browsePatterns": "Suchen",
+      "settings": "Einstellungen",
+      "favorites": "Favoriten",
+      "greetingBox": "Willkommen zurück bei Pattern Paradise!",
+      "greetingSeller": "Überprüfe deine Bestellungen und erstelle neue Anleitungen, um deinen Shop auszubauen.",
+      "greetingBuyer": "Entdecke neue Anleitungen und nimm an Tester-Aufrufen teil, um Kreative zu unterstützen.",
+      "categories": {
+        "crocheting": "Häkel",
+        "knitting": "Strick"
+      },
+      "subtitle": "Kaufe, teste und verkaufe deine Anleitungen an einem Ort. Werde Teil unserer leidenschaftlichen Häkel- & Strick-Community!",
+      "cta": {
+        "swipePatterns": "Swipe",
+        "registerNow": "Jetzt registrieren"
+      },
+      "follow": "Folge unserer kreativen Reise",
+      "followLink": "Tritt unserer Community bei",
+      "followDescription": "und lass dich von unseren neuesten Anleitungen und Designs inspirieren.",
+      "payment": "Sichere Bezahlung",
+      "paymentDescription": "Kaufe und verkaufe sicher mit unseren sicheren <PayPalLink>PayPal</PayPalLink>- und <StripeLink>Stripe</StripeLink>-Zahlungsoptionen.",
+      "mystery": {
+        "title": "Mystery-Anleitung",
+        "description": "Erhalte eine Überraschungs-Häkelanleitung",
+        "button": "Hier kaufen"
+      }
+    }
+  },
+  "browse": {
+    "filter": {
+      "hashtags": "Hashtags",
+      "language": "Sprache",
+      "category": "Kategorie",
+      "applyFilter": "Filter anwenden",
+      "searchPlaceholder": "Anleitung oder Designer suchen...",
+      "mostRelevant": "Relevanteste",
+      "saleOnly": "Nur Angebote",
+      "priceAscending": "Preis aufsteigend",
+      "priceDescending": "Preis absteigend",
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "clearFilter": "Filter löschen",
+      "resetFilter": "Filter zurücksetzen",
+      "noResults": "Keine Ergebnisse entsprechen deinen Kriterien."
+    },
+    "forFree": "KOSTENLOS",
+    "saveMoney": "Spare",
+    "browsePatterns": "Suchen"
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "description": "Finde Antworten auf häufige Fragen zu Pattern Paradise und wie unsere Plattform funktioniert.",
+    "items": {
+      "question1": "Was ist Pattern Paradise?",
+      "answer1": "Pattern Paradise ist ein Online-Marktplatz, der Häkel- und Strickbegeisterte verbindet. Wir bieten eine Plattform für Designer, um ihre einzigartigen Anleitungen zu verkaufen, und für Käufer, um eine große Auswahl an hochwertigen, handgemachten Designs zu entdecken. Außerdem bieten wir Kollaborationstools für das Testen und Verfeinern von Anleitungen.",
+      "question2": "Wie verdient Pattern Paradise Geld?",
+      "answer2": "Wir erheben eine Gebühr von 5 % auf den Bruttowert jeder verkauften Anleitung. Diese Gebühr hilft uns, die Plattform zu betreiben und weiterzuentwickeln, neue Zusammenarbeitstools zu schaffen und die Qualität der Anleitungen in unserer Community sicherzustellen. Zusätzlich bieten wir eine Pro-Mitgliedschaft für Nutzer mit erweiterten Funktionen an.",
+      "question3": "Was ist eine Anleitung?",
+      "answer3": "Eine Anleitung ist eine detaillierte Schritt-für-Schritt-Beschreibung zur Herstellung handgemachter Artikel mit Häkel- oder Stricktechniken. Sie enthält Maschenanzahl, Maße und manchmal visuelle Hilfsmittel. Anleitungen dienen als Baupläne für Projekte wie Kleidung oder Wohnaccessoires.",
+      "question4": "Wie werden Anleitungen geliefert?",
+      "answer4": "Alle Anleitungen bei Pattern Paradise sind als digitale Downloads erhältlich. Nach dem Kauf kannst du sofort darauf zugreifen und dein Projekt starten.",
+      "question5": "Kann ich meine eigenen Anleitungen auf Pattern Paradise verkaufen?",
+      "answer5": "Ja! Pattern Paradise lädt Designer ein, ihre einzigartigen Anleitungen hochzuladen und zu verkaufen. Du kannst deine Designs einfach einstellen und deine Preise selbst festlegen. Wir kümmern uns um die Transaktionen und bieten Tools zur Verkaufsverwaltung.",
+      "question6": "Was macht Pattern Paradise einzigartig?",
+      "answer6": "Pattern Paradise hebt sich durch enge Verbindungen zur Häkel- und Strickcommunity in sozialen Medien hervor. Diese Netzwerke helfen uns, die Sichtbarkeit von Designern zu erhöhen, Anleitungen zu bewerben und mehr Kreative und Käufer auf unsere Plattform zu bringen. Außerdem bieten wir innovative Kollaborationstools für das Testen und Verfeinern von Anleitungen.",
+      "question7": "Wie kann ich an Anleitungstests teilnehmen?",
+      "answer7": "Pattern Paradise bietet erweiterte Tools für Tutorials und Feedback. Du kannst an Anleitungstests teilnehmen, Verbesserungsvorschläge machen und helfen, Designs vor der Veröffentlichung zu verfeinern. Dieser kollaborative Ansatz sorgt für hochwertige Anleitungen und stärkt die Community.",
+      "question8": "Gibt es eine Mitgliedsgebühr für Pattern Paradise?",
+      "answer8": "Nein, es gibt keine Mitgliedsgebühr für Pattern Paradise. Die Nutzung der Plattform ist für Designer und Käufer kostenlos. Wir erheben nur eine 5%ige Gebühr auf erfolgreiche Verkäufe. Wer erweiterte Funktionen möchte, kann eine Pro-Mitgliedschaft separat abonnieren."
+    }
+  },
+  "footer": {
+    "followUs": "Folge uns",
+    "newsletter": "Newsletter & Updates",
+    "rights": "Alle Rechte vorbehalten.",
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzrichtlinie",
+    "sitemap": "Seitenübersicht",
+    "subscribe": {
+      "placeholder": "E-Mail-Adresse",
+      "button": "Abonnieren",
+      "success": "Danke! Deine E-Mail wurde zu unserer Mailingliste hinzugefügt."
+    }
+  },
+  "about": {
+    "title": "Willkommen bei { appName }",
+    "subtitle": "Kreative weltweit verbinden, um handgemachte Anleitungskreationen zu teilen, zu perfektionieren und zu feiern.",
+    "features": {
+      "title": "Was wir bieten",
+      "itemTitle1": "Anleitungen kaufen & verkaufen",
+      "itemDescription1": "Ein Marktplatz für einzigartige Häkel- und Strickanleitungen, der unabhängige Designer unterstützt.",
+      "itemTitle2": "Anleitungstests",
+      "itemDescription2": "Sorge mit unserer Community aus erfahrenen Testern dafür, dass deine Designs fehlerfrei sind.",
+      "itemTitle3": "Kollaborative Tools",
+      "itemDescription3": "Arbeite gemeinsam an Tutorials und Designs mit unseren erweiterten Kollaborationsfunktionen."
+    },
+    "community": {
+      "title": "Werde Teil unserer kreativen Community",
+      "description1": "Pattern Paradise ist mehr als nur ein Marktplatz – es ist eine lebendige Community aus leidenschaftlichen Handarbeitsfans, Designern und Künstlern.",
+      "description2": "Teile deine Werke, lasse dich inspirieren und vernetze dich mit Gleichgesinnten weltweit."
+    },
+    "cta": {
+      "title": "Bereit für Pattern Paradise?",
+      "description": "Starte noch heute deine Reise in der lebendigsten Anleitungsgemeinschaft der Welt!",
+      "button": "Jetzt beitreten"
+    }
+  },
+  "howTo": {
+    "title": "Anleitungen",
+    "subtitle": "Schritt-für-Schritt-Anleitungen, um dich bei Pattern Paradise zurechtzufinden",
+    "tabs": {
+      "all": "Alle Anleitungen",
+      "patterns": "Anleitungsanleitungen",
+      "testing": "Testanleitungen",
+      "account": "Kontoanleitungen",
+      "payments": "Zahlungsanleitungen"
+    },
+    "help": {
+      "heading": "Brauchen Sie mehr Hilfe?",
+      "description": "Nicht gefunden, was Sie suchen? Kontaktieren Sie unser Support-Team oder sehen Sie sich unsere weiteren Ressourcen an.",
+      "contact": "Support kontaktieren"
+    },
+    "sections": {
+      "uploadPattern": {
+        "title": "Wie man eine Anleitung hochlädt",
+        "description": "Erfahre, wie du deine Häkel- oder Strickanleitungen mit der Community teilen kannst",
+        "intro": "Willkommen bei Pattern Paradise! Folge diesen Schritten, um deine Häkel- oder Strickanleitung auf die Plattform hochzuladen und mit der Welt zu teilen.",
+        "steps": {
+          "step1": {
+            "title": "Fülle die Basisinformationen aus",
+            "requiredFields": "Pflichtfelder:",
+            "optionalFields": "Optional:",
+            "hashtags": "Füge bis zu 10 Hashtags hinzu, damit deine Anleitung leichter gefunden wird.",
+            "fields": {
+              "title": "Titel: Maximal 30 Zeichen.",
+              "description": "Beschreibung: Beschreibe deine Anleitung klar und verständlich.",
+              "price": "Preis:",
+              "priceDetails": [
+                "Gib deinen Preis in USD ein.",
+                "Oder wähle \"Diese Anleitung kostenlos anbieten\", wenn sie gratis ist."
+              ],
+              "experience": "Erfahrungslevel: Wähle zwischen Anfänger, Mittelstufe oder Fortgeschritten."
+            }
+          },
+          "step2": {
+            "title": "Wähle die Kategorie",
+            "description": "Wähle eine Handarbeitsart (z. B. Häkeln oder Stricken) und die passenden Unterkategorien (z. B. Spielzeug/Amigurumi, Kleidung etc.). So wird deine Anleitung richtig eingeordnet."
+          },
+          "step3": {
+            "title": "Bilder hochladen",
+            "tips": [
+              "Lade 1 bis 6 hochwertige Bilder deines fertigen Projekts hoch.",
+              "Ziehe die Bilder per Drag-and-Drop in die gewünschte Reihenfolge.",
+              "Du kannst Bilder mit einem Klick auf ✖️ wieder entfernen."
+            ],
+            "warning": "Du musst mindestens ein Bild hochladen, um fortzufahren."
+          },
+          "step4": {
+            "title": "Anleitungsdatei(en) hochladen",
+            "tips": [
+              "Lade deine Anleitung im PDF-Format hoch.",
+              "Du kannst mehrere Dateien in verschiedenen Sprachen hochladen.",
+              "Ordne die Dateien bei Bedarf per Drag-and-Drop neu.",
+              "Jede PDF sollte die vollständige Anleitung enthalten."
+            ]
+          },
+          "step5": {
+            "title": "Option für Mystery-Anleitung",
+            "description1": "Wenn deine Anleitung nicht kostenlos ist, kannst du sie für das Mystery-Programm anbieten:",
+            "description2": "Wähle \"Ja\", um zusätzliche Aufmerksamkeit durch Mystery-Boxen (Verkaufspreis 3 $) zu erhalten."
+          },
+          "step6": {
+            "title": "Anleitung abschicken",
+            "description": "Klicke unten auf „Upload starten“.",
+            "systemSteps": [
+              "Bilder hochladen.",
+              "Anleitungsdatei(en) hochladen.",
+              "Anleitung speichern."
+            ],
+            "note": "Bitte verlasse die Seite nicht während des Uploads!"
+          },
+          "step7": {
+            "title": "Zurücksetzen falls nötig",
+            "description": "Fehler gemacht oder möchtest du eine neue Anleitung hochladen? Klicke auf „Formular zurücksetzen“, um neu zu starten."
+          },
+          "step8": {
+            "title": "Nach erfolgreichem Upload",
+            "description": "Nach dem Upload:",
+            "items": [
+              "Wirst du auf eine Erfolgsseite weitergeleitet.",
+              "Kannst du optional einen Tester-Aufruf für deine Anleitung starten, um Feedback zu erhalten."
+            ]
+          }
+        },
+        "errors": {
+          "title": "Häufige Upload-Fehler (und Lösungen)",
+          "items": [
+            {
+              "title": "Titel/Beschreibung fehlt",
+              "description": "Alle mit * markierten Felder ausfüllen"
+            },
+            {
+              "title": "Zu viele Bilder",
+              "description": "Nur 1–6 Bilder hochladen"
+            },
+            {
+              "title": "Keine Anleitungsdatei hochgeladen",
+              "description": "Mindestens eine PDF- oder Bilddatei hochladen"
+            },
+            {
+              "title": "Fehler beim Upload",
+              "description": "Bei Fehlern einfach nochmal versuchen"
+            }
+          ]
+        }
+      },
+      "testerCall": {
+        "title": "Wie man sich für einen Tester-Aufruf bewirbt",
+        "description": "Lerne, wie du kommende Anleitungen testen und Designer bei der Verfeinerung ihrer Werke unterstützen kannst",
+        "intro": "Tester-Aufrufe sind eine tolle Möglichkeit, neue Häkel- oder Strickanleitungen vorab zu sehen und aktiv an ihrer Verbesserung mitzuwirken. So funktioniert’s:",
+        "steps": {
+          "step1": {
+            "title": "Einloggen oder registrieren",
+            "description": "Du musst eingeloggt sein, um dich für einen Tester-Aufruf zu bewerben.",
+            "note": "Wenn du auf „Als Tester bewerben“ klickst, ohne eingeloggt zu sein, wirst du auf die Anmelde-/Registrierungsseite weitergeleitet."
+          },
+          "step2": {
+            "title": "Rufe die Tester-Aufruf-Seite auf",
+            "list": [
+              "Über dein Dashboard",
+              "Über Social-Media-Links",
+              "Oder über den Bereich „Tester-Aufrufe“ auf Pattern Paradise"
+            ],
+            "includes": [
+              "Beschreibung der Anleitung",
+              "Informationen zum Designer",
+              "Benötigtes Erfahrungslevel",
+              "Zeitaufwand",
+              "Vorteile für Tester"
+            ]
+          },
+          "step3": {
+            "title": "Überprüfe die Anforderungen",
+            "list": [
+              "Passendes Erfahrungslevel (z. B. Mittelstufe Häkeln)",
+              "Projekt innerhalb der Frist abschließen",
+              "Fortschritt und Feedback teilen",
+              "Fotos des fertigen Projekts einreichen"
+            ]
+          },
+          "step4": {
+            "title": "Vorteile kennen",
+            "list": [
+              "Kostenlose Anleitung erhalten",
+              "Nennung im finalen Design",
+              "Früher Zugang zu einzigartigen Anleitungen",
+              "Teil einer unterstützenden Community sein"
+            ]
+          },
+          "step5": {
+            "title": "Als Tester bewerben",
+            "steps": [
+              "Klicke auf „Als Tester bewerben“.",
+              "Ein Bestätigungsfenster erscheint – klicke auf „Weiter“.",
+              "Fertig! Du siehst eine Bestätigungsmeldung."
+            ],
+            "reviewNote": "Der Designer prüft deine Bewerbung. Bei Annahme erhältst du eine E-Mail mit den nächsten Schritten."
+          },
+          "step6": {
+            "title": "Meinung geändert?",
+            "steps": [
+              "Klicke in der Erfolgsmeldung auf „Hier klicken, um zu verlassen“.",
+              "Bestätige deine Entscheidung im Popup.",
+              "Du wirst aus der Tester-Liste entfernt (und kannst dich später erneut bewerben)."
+            ]
+          }
+        },
+        "limitations": {
+          "title": "Wann du dich nicht bewerben kannst",
+          "list": [
+            "Du bist der Ersteller des Tester-Aufrufs",
+            "Du hast dich bereits beworben",
+            "Der Aufrufstatus ist geschlossen („In Bearbeitung“, „Angenommen“ oder „Abgelehnt“)"
+          ]
+        },
+        "cta": {
+          "title": "Bereit, eine Anleitung mitzugestalten?",
+          "description": "Gehe einfach auf die Seite eines Tester-Aufrufs und klicke auf „Als Tester bewerben“, um loszulegen!"
+        }
+      },
+      "chat": {
+        "title": "Wie man den Tester-Chat nutzt",
+        "description": "Erfahre, wie du mit Designern und anderen Testern in einem speziellen Chatraum zusammenarbeitest",
+        "intro": "Sobald du als Tester für eine Anleitung ausgewählt wurdest, wird ein spezieller Chatraum für diesen Aufruf erstellt. Hier kannst du Fortschritte teilen und Feedback geben.",
+        "features": {
+          "title": "Funktionen im Überblick",
+          "items": [
+            {
+              "title": "Chat",
+              "description": "Sende und empfange Nachrichten in Echtzeit mit dem Designer und anderen Testern"
+            },
+            {
+              "title": "Dateien anhängen",
+              "description": "Teile Fotos oder PDFs (z. B. Fortschrittsbilder, Notizen)"
+            },
+            {
+              "title": "Antworten",
+              "description": "Antworte gezielt auf Nachrichten mit Kontext"
+            },
+            {
+              "title": "Systemnachrichten",
+              "description": "Werde über wichtige Aktionen informiert (z. B. Zuweisungen, Uploads)"
+            },
+            {
+              "title": "Anleitung herunterladen",
+              "description": "Greife auf die aktuellste Version der Anleitung zu"
+            },
+            {
+              "title": "Bewertung abgeben",
+              "description": "Sende deine abschließende Bewertung nach Projektabschluss"
+            },
+            {
+              "title": "Andere Tester ansehen",
+              "description": "Sieh, wer Teil der Testgruppe ist"
+            }
+          ]
+        },
+        "actions": {
+          "step1": "Nachricht senden",
+          "step2": "Fortschrittsbilder teilen",
+          "step3": "Auf Nachricht antworten",
+          "step4": "Anleitung herunterladen",
+          "step5": "Bewertung abgeben",
+          "step6": "Andere Tester ansehen"
+        },
+        "realtime": {
+          "title": "Echtzeitnachrichten",
+          "description": "Nachrichten erscheinen sofort – kein Neuladen nötig!"
+        },
+        "systemBox": {
+          "title": "Systemnachrichten",
+          "description": "Beachte Systemnachrichten von Pattern Paradise zu:",
+          "list": [
+            "Anleitungsupdates",
+            "Fristen",
+            "Anweisungen vom Designer"
+          ],
+          "note": "Diese erscheinen in einem orangefarbenen Kasten."
+        },
+        "limitations": {
+          "title": "Wann du keine Nachrichten senden kannst",
+          "list": [
+            "Der Test ist nicht aktiv",
+            "Deine Bewerbung wurde abgelehnt",
+            "Der Test wurde abgebrochen oder storniert"
+          ],
+          "note": "Du kannst den Chatverlauf und die Anleitungen weiterhin einsehen."
+        },
+        "leaving": {
+          "title": "Möchtest du den Test verlassen?",
+          "steps": [
+            "Bitte kontaktiere den Ersteller des Tester-Aufrufs",
+            "Nur der Ersteller kann dich aus der Gruppe entfernen"
+          ]
+        }
+      }
+    }
+  },
+  "help": {
+    "heading": "Brauchen Sie mehr Hilfe?",
+    "description": "Nicht gefunden, was Sie suchen? Kontaktieren Sie unser Support-Team oder sehen Sie sich unsere weiteren Ressourcen an.",
+    "contact": "Support kontaktieren",
+    "title": "Kontaktieren Sie uns",
+    "subtitle": "Wir sind für Sie da. Wählen Sie aus, wie Sie uns erreichen möchten.",
+    "chat": {
+      "title": "Mit dem Support chatten",
+      "subtitle": "Erhalten Sie Hilfe in Echtzeit",
+      "hint": "Brauchen Sie sofortige Hilfe?",
+      "start": "Chat starten"
+    },
+    "email": {
+      "title": "Senden Sie uns eine E-Mail",
+      "subtitle": "Wir antworten innerhalb von 24 Stunden"
+    },
+    "form": {
+      "namePlaceholder": "Ihr Name",
+      "nameRequired": "Name ist erforderlich",
+      "nameError": "Der Name muss mindestens 2 Zeichen lang sein",
+      "emailPlaceholder": "Ihre E-Mail",
+      "emailRequired": "E-Mail ist erforderlich",
+      "emailError": "Ungültige E-Mail-Adresse",
+      "reasonPlaceholder": "Wählen Sie einen Grund für die Kontaktaufnahme",
+      "reason1": "Allgemeine Anfrage",
+      "reason2": "Rückerstattungsanfrage",
+      "reason3": "Frage zur Nutzung",
+      "reason4": "Problem mit dem Eintrag",
+      "reason5": "Zahlungsproblem",
+      "reason6": "Kontosupport",
+      "reason7": "Einen Fehler melden",
+      "reason8": "Funktionswunsch",
+      "reason9": "Sonstiges",
+      "textareaPlaceholder": "Bitte geben Sie Details zu Ihrer Anfrage an...",
+      "textareaRequired": "Nachricht ist erforderlich",
+      "textareaError": "Die Nachricht muss mindestens 10 Zeichen lang sein",
+      "send": "Nachricht senden",
+      "sendSuccess1": "Ihre Nachricht wurde erfolgreich übermittelt!",
+      "sendSuccess2": "Wir melden uns innerhalb von 24–48 Stunden bei Ihnen.",
+      "sendError1": "Ihre Nachricht wurde nicht übermittelt.",
+      "sendError2": "Bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut."
+    }
+  },
+  "swipe": {
+    "showDetails": "Öffnen"
+  }
+}

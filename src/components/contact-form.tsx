@@ -31,6 +31,7 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { useCreateChat } from '@/lib/api';
 import Link from 'next/link';
+import { useTranslations } from 'use-intl';
 
 type FormData = {
   name: string;
@@ -39,7 +40,6 @@ type FormData = {
 };
 
 export default function ContactForm() {
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -48,6 +48,8 @@ export default function ContactForm() {
   const { userId } = useSelector((s: Store) => s.auth);
 
   const { action } = useAction();
+  const router = useRouter();
+  const t = useTranslations();
 
   const { status, data: session } = useValidSession();
 
@@ -108,10 +110,8 @@ export default function ContactForm() {
   return (
     <Card className="w-full">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Contact Us</CardTitle>
-        <CardDescription>
-          We&apos;re here to help. Choose how you&apos;d like to reach us.
-        </CardDescription>
+        <CardTitle className="text-2xl font-bold">{t('help.title')}</CardTitle>
+        <CardDescription>{t('help.subtitle')}</CardDescription>
       </CardHeader>
 
       <div className="px-6 pb-4">
@@ -124,8 +124,8 @@ export default function ContactForm() {
               <div className="bg-primary/10 p-2 rounded-full">
                 <MessageSquare className="h-5 w-5 text-primary" />
               </div>
-              <span className="font-medium">Chat with Support</span>
-              <span className="text-xs text-muted-foreground">Get help in real-time</span>
+              <span className="font-medium">{t('help.chat.title')}</span>
+              <span className="text-xs text-muted-foreground">{t('help.chat.subtitle')}</span>
             </div>
           ) : null}
 
@@ -136,8 +136,8 @@ export default function ContactForm() {
             <div className="bg-primary/10 p-2 rounded-full">
               <Mail className="h-5 w-5 text-primary" />
             </div>
-            <span className="font-medium">Send us an Email</span>
-            <span className="text-xs text-muted-foreground">We&apos;ll respond within 24h</span>
+            <span className="font-medium">{t('help.email.title')}</span>
+            <span className="text-xs text-muted-foreground">{t('help.email.subtitle')}</span>
           </Link>
         </div>
       </div>
@@ -147,12 +147,12 @@ export default function ContactForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Input
-                placeholder="Your name"
+                placeholder={t('help.form.namePlaceholder')}
                 defaultValue={session?.user.name ?? undefined}
                 className="bg-background"
                 {...register('name', {
-                  required: 'Name is required',
-                  minLength: { value: 2, message: 'Name must be at least 2 characters' },
+                  required: t('help.form.nameRequired'),
+                  minLength: { value: 2, message: t('help.form.nameError') },
                 })}
               />
               {errors.name ? <p className="text-red-500 text-sm">{errors.name.message}</p> : null}
@@ -160,14 +160,14 @@ export default function ContactForm() {
 
             <div className="space-y-2">
               <Input
-                placeholder="Your email"
+                placeholder={t('help.form.emailPlaceholder')}
                 defaultValue={session?.user.email ?? undefined}
                 className="bg-background"
                 {...register('email', {
-                  required: 'Email is required',
+                  required: t('help.form.emailRequired'),
                   pattern: {
                     value: EMAIL_REGEX,
-                    message: 'Invalid email address',
+                    message: t('help.form.emailError'),
                   },
                 })}
               />
@@ -177,30 +177,33 @@ export default function ContactForm() {
 
           <div>
             <Select onValueChange={onSelectChange} value={selectValue}>
-              <SelectTrigger className="bg-background" aria-label={'Select a reason for contact'}>
-                <SelectValue placeholder="Select a reason for contact" />
+              <SelectTrigger
+                className="bg-background"
+                aria-label={t('help.form.reasonPlaceholder')}
+              >
+                <SelectValue placeholder={t('help.form.reasonPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="general">General Inquiry</SelectItem>
-                <SelectItem value="refund">Refund Request</SelectItem>
-                <SelectItem value="usage">Question about Usage</SelectItem>
-                <SelectItem value="listing">Listing Issue</SelectItem>
-                <SelectItem value="payment">Payment Problem</SelectItem>
-                <SelectItem value="account">Account Support</SelectItem>
-                <SelectItem value="bug">Report a Bug</SelectItem>
-                <SelectItem value="feature">Feature Request</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                <SelectItem value="general">{t('help.form.reason1')}</SelectItem>
+                <SelectItem value="refund">{t('help.form.reason2')}</SelectItem>
+                <SelectItem value="usage">{t('help.form.reason3')}</SelectItem>
+                <SelectItem value="listing">{t('help.form.reason4')}</SelectItem>
+                <SelectItem value="payment">{t('help.form.reason5')}</SelectItem>
+                <SelectItem value="account">{t('help.form.reason6')}</SelectItem>
+                <SelectItem value="bug">{t('help.form.reason7')}</SelectItem>
+                <SelectItem value="feature">{t('help.form.reason8')}</SelectItem>
+                <SelectItem value="other">{t('help.form.reason9')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
             <Textarea
-              placeholder="Please provide details about your inquiry..."
+              placeholder={t('help.form.textareaPlaceholder')}
               className="resize-none min-h-[150px] bg-background"
               {...register('message', {
-                required: 'Message is required',
-                minLength: { value: 10, message: 'Message must be at least 10 characters' },
+                required: t('help.form.textareaRequired'),
+                minLength: { value: 10, message: t('help.form.textareaError') },
               })}
             />
             {errors.message && <p className="text-red-500 text-sm">{errors.message.message}</p>}
@@ -212,34 +215,34 @@ export default function ContactForm() {
             ) : (
               <Mail className="mr-2 h-4 w-4" />
             )}
-            Send Message
+            {t('help.form.send')}
           </Button>
         </form>
 
         {isSubmitted ? (
           <div className="mt-4 p-4 bg-green-50 text-green-700 rounded-md border border-green-200">
-            <p className="font-medium">Your message has been submitted successfully!</p>
-            <p className="text-sm mt-1">We&apos;ll get back to you within 24-48 hours.</p>
+            <p className="font-medium">{t('help.form.sendSuccess1')}</p>
+            <p className="text-sm mt-1">{t('help.form.sendSuccess2')}</p>
           </div>
         ) : null}
 
         {isError ? (
           <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-md border border-red-200">
-            <p className="font-medium">Your message was not delivered.</p>
-            <p className="text-sm mt-1">Please check your data input and try again.</p>
+            <p className="font-medium">{t('help.form.sendError1')}</p>
+            <p className="text-sm mt-1">{t('help.form.sendError2')}</p>
           </div>
         ) : null}
       </CardContent>
 
       {canOpenSupportChat ? (
         <CardFooter className="flex justify-between border-t pt-4">
-          <p className="text-sm text-muted-foreground">Need immediate assistance?</p>
+          <p className="text-sm text-muted-foreground">{t('help.chat.hint')}</p>
           <Button
             variant="link"
             onClick={() => handleChatClick(userId, process.env.NEXT_PUBLIC_SUPPORT_USER_ID ?? '')}
             className="text-primary flex items-center gap-1 p-0"
           >
-            Start a chat <ArrowRight className="h-3 w-3" />
+            {t('help.chat.start')} <ArrowRight className="h-3 w-3" />
           </Button>
         </CardFooter>
       ) : null}

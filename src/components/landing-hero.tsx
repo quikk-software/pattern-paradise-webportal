@@ -46,23 +46,23 @@ export default function LandingHero({ products }: LandingHeroProps) {
           </div>
           <div className="flex flex-row gap-2">
             {isLoggedIn ? (
-              <Link rel={'nofollow'} href="/app/secure/sell">
+              <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/sell">
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             ) : (
               <Link
                 rel={'nofollow'}
-                href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
+                href="/%5Blang%5D/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
               >
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             )}
             {isLoggedIn ? (
-              <Link href="/app/tester-calls">
+              <Link href="/%5Blang%5D/app/tester-calls">
                 <Button variant="outline">Show Tester Calls</Button>
               </Link>
             ) : (
-              <Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls">
+              <Link href="/%5Blang%5D/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls">
                 <Button variant="outline">Become a Tester</Button>
               </Link>
             )}
@@ -113,7 +113,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
                       <h3 className="font-semibold text-lg">{product.title}</h3>
                       <div className="mt-2 flex items-center justify-between">
                         <span className="font-bold text-primary">${product.price.toFixed(2)}</span>
-                        <Link href={`/app/products/${product.id}`}>
+                        <Link href={`/%5Blocale%5D/app/products/${product.id}`}>
                           <Button size="sm">Buy Now</Button>
                         </Link>
                       </div>

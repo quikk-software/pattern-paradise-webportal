@@ -205,8 +205,8 @@ export default function OrderTable({ filter }: OrderTableProps) {
                   <Link
                     href={
                       filter === 'customer'
-                        ? `/users/${order.seller.id}`
-                        : `/users/${order.customer.id}`
+                        ? `/%5Blocale%5D/users/${order.seller.id}`
+                        : `/%5Blocale%5D/users/${order.customer.id}`
                     }
                     className="text-blue-500 underline"
                     rel={'nofollow'}
