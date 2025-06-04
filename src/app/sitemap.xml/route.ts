@@ -41,6 +41,8 @@ export async function GET() {
     '/',
     '/swipe',
     '/browse',
+    '/browse?sortBy=mostRelevant&maxPrice=0&craft=Crocheting',
+    '/browse?sortBy=mostRelevant&maxPrice=0&craft=Knitting',
     '/about',
     '/pro',
     '/faq',
