@@ -451,6 +451,7 @@
       "reason8": "Funktionswunsch",
       "reason9": "Sonstiges",
       "textareaPlaceholder": "Bitte geben Sie Details zu Ihrer Anfrage an...",
+      "textareaRequired": "Nachricht ist erforderlich",
       "textareaError": "Die Nachricht muss mindestens 10 Zeichen lang sein",
       "send": "Nachricht senden",
       "sendSuccess1": "Ihre Nachricht wurde erfolgreich übermittelt!",
