@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Select,
   SelectContent,
@@ -5,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useTranslations } from 'use-intl';
 
 interface CraftSelectorProps {
   selectedCraft: string;
@@ -17,20 +20,22 @@ export function CraftSelector({
   onCraftChange,
   hasAll = false,
 }: CraftSelectorProps) {
+  const t = useTranslations();
+
   return (
     <Select value={selectedCraft} onValueChange={onCraftChange}>
       <SelectTrigger id="craft" className="w-full">
         <SelectValue placeholder="Select a craft" />
       </SelectTrigger>
       <SelectContent>
-        {hasAll ? <SelectItem value="All">All</SelectItem> : null}
-        <SelectItem value="Crocheting">Crocheting</SelectItem>
-        <SelectItem value="Knitting">Knitting</SelectItem>
-        <SelectItem value="Cross Stitch">Cross Stitch</SelectItem>
-        <SelectItem value="Sewing">Sewing</SelectItem>
-        <SelectItem value="Embroidery">Embroidery</SelectItem>
-        <SelectItem value="Quilting">Quilting</SelectItem>
-        <SelectItem value="Weaving">Weaving</SelectItem>
+        {hasAll ? <SelectItem value="All">{t('common.categories.all')}</SelectItem> : null}
+        <SelectItem value="Crocheting">{t('common.categories.crocheting')}</SelectItem>
+        <SelectItem value="Knitting">{t('common.categories.knitting')}</SelectItem>
+        <SelectItem value="Cross Stitch">{t('common.categories.crossStitch')}</SelectItem>
+        <SelectItem value="Sewing">{t('common.categories.sewing')}</SelectItem>
+        <SelectItem value="Embroidery">{t('common.categories.embroidery')}</SelectItem>
+        <SelectItem value="Quilting">{t('common.categories.quilting')}</SelectItem>
+        <SelectItem value="Weaving">{t('common.categories.weaving')}</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -360,7 +360,7 @@ export function ListingComponent({
       <div className="flex flex-col gap-6 mt-6">
         <div className="w-full">
           <div className="relative">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted" />
+            <Search className="absolute left-2 top-3 h-4 w-4 z-50 text-muted-foreground" />
             <Input
               placeholder={t('browse.filter.searchPlaceholder')}
               value={searchTerm}
@@ -375,7 +375,7 @@ export function ListingComponent({
           value={sortBy}
         >
           <SelectTrigger aria-label={'Sort'}>
-            <SelectValue placeholder="Sort" />
+            <SelectValue placeholder={t('common.sort.placeholder')} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="mostRelevant">
