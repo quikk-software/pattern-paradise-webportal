@@ -4,77 +4,81 @@ import { listProducts } from '@/lib/api/static/product/listProducts';
 import { listUsers } from '@/lib/api/static/user/listUsers';
 import { getAccessTokenFromKeycloak } from '@/lib/auth/auth.utils';
 
+const SUPPORTED_LOCALES = ['en', 'de'];
+
 export async function GET() {
-  const staticRoutes = [
-    { url: APP_DOMAIN, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/about`, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/pro`, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/faq`, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/help`, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/how-to`, lastModified: new Date().toISOString() },
-    {
-      url: `${APP_DOMAIN}/app/products/mystery-patterns/crochet`,
-      lastModified: new Date().toISOString(),
-    },
-    { url: `${APP_DOMAIN}/terms-and-privacy`, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/auth/login`, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/auth/registration`, lastModified: new Date().toISOString() },
-    { url: `${APP_DOMAIN}/auth/reset-password`, lastModified: new Date().toISOString() },
-  ];
+  const now = new Date().toISOString();
 
   const accessToken = await getAccessTokenFromKeycloak();
 
-  // Fetch products
   const products = await listProducts({
     overridePageNumber: 1,
-    overridePageSize: 50000, // max limit for Google
+    overridePageSize: 50000,
   });
 
-  const dynamicProductRoutes = products.map((product) => ({
-    url: `${APP_DOMAIN}/app/products/${product.id}`,
-    lastModified: product.updatedAt
-      ? new Date(product.updatedAt).toISOString()
-      : new Date().toISOString(),
+  const productRoutes = products.map((product) => ({
+    path: `/app/products/${product.id}`,
+    lastModified: product.updatedAt ? new Date(product.updatedAt).toISOString() : now,
   }));
 
-  let dynamicUsersRoutes: {
-    url: string;
-    lastModified: string;
-  }[] = [];
+  let userRoutes: { path: string; lastModified: string }[] = [];
   if (accessToken) {
-    // Fetch users
     const users = await listUsers(
       {
         overridePageNumber: 1,
-        overridePageSize: 50000, // max limit for Google
+        overridePageSize: 50000,
       },
       accessToken,
     );
 
-    dynamicUsersRoutes = users.map((user) => ({
-      url: `${APP_DOMAIN}/users/${user.username}`,
-      lastModified: user.updatedAt
-        ? new Date(user.updatedAt).toISOString()
-        : new Date().toISOString(),
+    userRoutes = users.map((user) => ({
+      path: `/users/${user.username}`,
+      lastModified: user.updatedAt ? new Date(user.updatedAt).toISOString() : now,
     }));
   }
 
-  const allRoutes = [...staticRoutes, ...dynamicProductRoutes, ...dynamicUsersRoutes];
+  const staticPaths = [
+    '/',
+    '/swipe',
+    '/browse',
+    '/about',
+    '/pro',
+    '/faq',
+    '/help',
+    '/how-to',
+    '/app/products/mystery-patterns/crochet',
+    '/terms-and-privacy',
+    '/auth/login',
+    '/auth/registration',
+    '/auth/reset-password',
+  ];
 
-  // Generate XML format
+  const staticRoutes = staticPaths.map((path) => ({
+    path,
+    lastModified: now,
+  }));
+
+  const allRoutes = [...staticRoutes, ...productRoutes, ...userRoutes];
+
+  const localizedRoutes = allRoutes.flatMap(({ path, lastModified }) =>
+    SUPPORTED_LOCALES.map((locale) => ({
+      url: `${APP_DOMAIN}/${locale}${path}`,
+      lastModified,
+    })),
+  );
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    ${allRoutes
-      .map(
-        (route) => `
-      <url>
-        <loc>${route.url}</loc>
-        <lastmod>${route.lastModified}</lastmod>
-      </url>
-    `,
-      )
-      .join('')}
-  </urlset>`;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${localizedRoutes
+    .map(
+      (route) => `
+    <url>
+      <loc>${route.url}</loc>
+      <lastmod>${route.lastModified}</lastmod>
+    </url>`,
+    )
+    .join('\n')}
+</urlset>`;
 
   return new NextResponse(sitemap, {
     headers: {

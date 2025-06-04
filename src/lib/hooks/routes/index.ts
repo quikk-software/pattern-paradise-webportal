@@ -58,11 +58,6 @@ const pages: Page[] = [
       'Discover how to use Pattern Paradise with easy guides for uploading patterns, joining tester calls, and collaborating with the crafting community.',
   },
   {
-    title: 'Imprint | Pattern Paradise',
-    pathname: '/en/imprint',
-    description: 'View official legal information and company details for Pattern Paradise.',
-  },
-  {
     title: 'Help Center | Pattern Paradise',
     pathname: '/en/help',
     description: 'Get help and find support resources for using Pattern Paradise effectively.',
@@ -105,6 +100,18 @@ const pages: Page[] = [
     description:
       'Use advanced filters to find and select the perfect patterns on Pattern Paradise.',
   },
+  {
+    title: 'Free Crochet Patterns - Amigurumi, Clothing & More | Pattern Paradise',
+    pathname: '/en/browse?sortBy=mostRelevant&maxPrice=0&craft=Crocheting',
+    description:
+      'Discover 100s of free crochet patterns at Pattern Paradise! From adorable amigurumi to stylish clothing, download beginner to advanced projects and start crafting today.',
+  },
+  {
+    title: 'Free Knitting Patterns – Sweaters, Scarves, Baby Clothes & More | Pattern Paradise',
+    pathname: '/en/browse?sortBy=mostRelevant&maxPrice=0&craft=Knitting',
+    description:
+      'Explore 100s of free knitting patterns at Pattern Paradise! From cozy sweaters to cute baby clothes, find beginner to advanced projects and start knitting your next masterpiece.',
+  },
 
   {
     title: APP_NAME,
@@ -130,12 +137,7 @@ const pages: Page[] = [
       'Lerne, wie du Pattern Paradise nutzt – mit einfachen Anleitungen zum Hochladen von Mustern, zur Teilnahme an Testaufrufen und zur Zusammenarbeit in der Handarbeits-Community.',
   },
   {
-    title: 'Impressum | Pattern Paradise',
-    pathname: '/de/imprint',
-    description: 'Offizielle rechtliche Informationen und Unternehmensdetails zu Pattern Paradise.',
-  },
-  {
-    title: 'Hilfezentrum | Pattern Paradise',
+    title: 'Hilfe | Pattern Paradise',
     pathname: '/de/help',
     description:
       'Finde Hilfe und Support-Ressourcen für die effektive Nutzung von Pattern Paradise.',
@@ -158,27 +160,40 @@ const pages: Page[] = [
     description: 'Setze dein Passwort für dein Pattern Paradise-Konto sicher zurück.',
   },
   {
-    title: 'Tester-Calls-Zentrale | Pattern Paradise',
+    title: 'Tester Calls Hub | Pattern Paradise',
     pathname: '/de/app/tester-calls',
-    description: 'Entdecke aktive Tester-Calls und Testmöglichkeiten auf Pattern Paradise.',
+    description: 'Entdecke aktive Tester Calls und Testmöglichkeiten auf Pattern Paradise.',
   },
   {
-    title: 'Mystery-Muster | Pattern Paradise',
+    title: 'Mystery Anleitung | Pattern Paradise',
     pathname: '/de/app/products/mystery-patterns/crochet',
     description:
-      'Kaufe exklusive Mystery-Muster und freue dich auf Überraschungsdesigns von Pattern Paradise.',
+      'Kaufe exklusive Mystery Anleitungen und freue dich auf Überraschungsdesigns von Pattern Paradise.',
   },
   {
-    title: 'Swipe-Muster | Pattern Paradise',
+    title: 'Swipe | Pattern Paradise',
     pathname: '/de/swipe',
     description:
       'Entdecke neue Muster durch Swipen – ein unterhaltsames und einzigartiges Stöbererlebnis bei Pattern Paradise.',
   },
   {
-    title: 'Muster durchsuchen | Pattern Paradise',
+    title: 'Anleitungen durchsuchen | Pattern Paradise',
     pathname: '/de/browse',
     description:
       'Nutze erweiterte Filter, um die perfekten Muster auf Pattern Paradise zu finden und auszuwählen.',
+  },
+  {
+    title: 'Kostenlose Häkelanleitungen – Amigurumi, Kleidung & mehr | Pattern Paradise',
+    pathname: '/de/browse?sortBy=mostRelevant&maxPrice=0&craft=Crocheting',
+    description:
+      'Entdecke Hunderte kostenlose Häkelanleitungen auf Pattern Paradise! Von niedlichen Amigurumi bis zu stylischer Kleidung – lade Anleitungen für Anfänger bis Fortgeschrittene herunter und starte noch heute dein nächstes Projekt.',
+  },
+  {
+    title:
+      'Kostenlose Strickanleitungen – Pullover, Schals, Babykleidung & mehr | Pattern Paradise',
+    pathname: '/en/browse?sortBy=mostRelevant&maxPrice=0&craft=Knitting',
+    description:
+      'Stöbere durch Hunderte kostenlose Strickanleitungen auf Pattern Paradise! Von warmen Pullovern bis zu süßer Babykleidung – finde Projekte für jedes Niveau und beginne jetzt dein neues Strickprojekt.',
   },
 
   ...errorPages,

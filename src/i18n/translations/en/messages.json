@@ -420,6 +420,46 @@
   "help": {
     "heading": "Need more help?",
     "description": "Didn't find what you're looking for? Contact our support team or check out our additional resources.",
-    "contact": "Contact Support"
+    "contact": "Contact Support",
+    "title": "Contact Us",
+    "subtitle": "We're here to help. Choose how you'd like to reach us.",
+    "chat": {
+      "title": "Chat with Support",
+      "subtitle": "Get help in real-time",
+      "hint": "Need immediate assistance?",
+      "start": "Start a chat"
+    },
+    "email": {
+      "title": "Send us an Email",
+      "subtitle": "We'll respond within 24h"
+    },
+    "form": {
+      "namePlaceholder": "Your name",
+      "nameRequired": "Name is required",
+      "nameError": "Name must be at least 2 characters",
+      "emailPlaceholder": "Your email",
+      "emailRequired": "Email is required",
+      "emailError": "Invalid email address",
+      "reasonPlaceholder": "Select a reason for contact",
+      "reason1": "General Inquiry",
+      "reason2": "Refund Request",
+      "reason3": "Question about Usage",
+      "reason4": "Listing Issue",
+      "reason5": "Payment Problem",
+      "reason6": "Account Support",
+      "reason7": "Report a Bug",
+      "reason8": "Feature Request",
+      "reason9": "Other",
+      "textareaPlaceholder": "Please provide details about your inquiry...",
+      "textareaError": "Message must be at least 10 characters",
+      "send": "Send Message",
+      "sendSuccess1": "Your message has been submitted successfully!",
+      "sendSuccess2": "We'll get back to you within 24-48 hours.",
+      "sendError1": "Your message was not delivered.",
+      "sendError2": "Please check your data input and try again."
+    }
+  },
+  "swipe": {
+    "showDetails": "Show Details"
   }
 }
