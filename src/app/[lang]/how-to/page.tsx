@@ -119,6 +119,7 @@ export default async function HowToPage({ params }: Props) {
               <GuideSection
                 title={t('howTo.sections.testerCall.title')}
                 description={t('howTo.sections.testerCall.description')}
+                defaultOpen={tabKey === 'all'}
               >
                 <p className="text-muted-foreground mb-4">{t('howTo.sections.testerCall.intro')}</p>
                 {Object.entries(t('howTo.sections.testerCall.steps')).map(
@@ -185,6 +186,7 @@ export default async function HowToPage({ params }: Props) {
               <GuideSection
                 title={t('howTo.sections.chat.title')}
                 description={t('howTo.sections.chat.description')}
+                defaultOpen={tabKey === 'all'}
               >
                 <p className="text-muted-foreground mb-4">{t('howTo.sections.chat.intro')}</p>
                 <div className="mb-8 rounded-lg bg-muted/50 p-4">
