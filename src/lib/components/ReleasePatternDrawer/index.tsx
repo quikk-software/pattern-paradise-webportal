@@ -58,7 +58,7 @@ export default function ReleasePatternDrawer({
                 If your pattern is approved by testers in a{' '}
                 <Link
                   rel={'nofollow'}
-                  href="/%5Blang%5D/app/secure/sell/testings"
+                  href="/app/secure/sell/testings"
                   className="text-blue-500 underline"
                 >
                   testing

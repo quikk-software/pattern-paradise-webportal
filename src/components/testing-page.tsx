@@ -196,17 +196,13 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
           <p>
             You have no testings yet.{' '}
             {isCustomer ? (
-              <Link
-                rel={'nofollow'}
-                href="/%5Blang%5D/app/tester-calls"
-                className="text-blue-500 underline"
-              >
+              <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
                 Explore open Tester Calls here
               </Link>
             ) : (
               <Link
                 rel={'nofollow'}
-                href="/%5Blang%5D/app/secure/sell/submit"
+                href="/app/secure/sell/submit"
                 className="text-blue-500 underline"
               >
                 Create a pattern and start a Tester Call here!

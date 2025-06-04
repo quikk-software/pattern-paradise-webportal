@@ -68,7 +68,7 @@ export default function SuccessfulOnboarding() {
                   <Link
                     rel={'nofollow'}
                     className="text-blue-500 underline"
-                    href="/%5Blang%5D/app/secure/sell/submit"
+                    href="/app/secure/sell/submit"
                   >
                     Creating a new Pattern
                   </Link>
@@ -78,7 +78,7 @@ export default function SuccessfulOnboarding() {
                   <Link
                     rel={'nofollow'}
                     className="text-blue-500 underline"
-                    href="/%5Blang%5D/app/secure/test/testings"
+                    href="/app/secure/test/testings"
                   >
                     Individualize your Tester Call
                   </Link>
@@ -89,7 +89,7 @@ export default function SuccessfulOnboarding() {
                   <Link
                     rel={'nofollow'}
                     className="text-blue-500 underline"
-                    href="/%5Blang%5D/app/secure/test/chats"
+                    href="/app/secure/test/chats"
                   >
                     Chat with them
                   </Link>
@@ -99,7 +99,7 @@ export default function SuccessfulOnboarding() {
                   <Link
                     rel={'nofollow'}
                     className="text-blue-500 underline"
-                    href="/%5Blang%5D/app/secure/sell"
+                    href="/app/secure/sell"
                   >
                     Release your Pattern
                   </Link>{' '}
@@ -112,7 +112,7 @@ export default function SuccessfulOnboarding() {
             <Link rel={'nofollow'} href="/app/secure/auth/me">
               <Button variant="outline">Go to Profile</Button>
             </Link>
-            <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/sell/submit">
+            <Link rel={'nofollow'} href="/app/secure/sell/submit">
               <Button variant="default">
                 Create a Pattern
                 <ArrowRight className="ml-2 h-4 w-4" />

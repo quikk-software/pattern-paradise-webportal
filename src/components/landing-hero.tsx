@@ -46,23 +46,23 @@ export default function LandingHero({ products }: LandingHeroProps) {
           </div>
           <div className="flex flex-row gap-2">
             {isLoggedIn ? (
-              <Link rel={'nofollow'} href="/%5Blang%5D/app/secure/sell">
+              <Link rel={'nofollow'} href="/app/secure/sell">
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             ) : (
               <Link
                 rel={'nofollow'}
-                href="/%5Blang%5D/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
+                href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
               >
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             )}
             {isLoggedIn ? (
-              <Link href="/%5Blang%5D/app/tester-calls">
+              <Link href="/app/tester-calls">
                 <Button variant="outline">Show Tester Calls</Button>
               </Link>
             ) : (
-              <Link href="/%5Blang%5D/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls">
+              <Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls">
                 <Button variant="outline">Become a Tester</Button>
               </Link>
             )}

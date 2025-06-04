@@ -104,17 +104,13 @@ export function PatternParadiseProComponent() {
             You already have a Pattern Paradise Pro subscription. Start using it by{' '}
             <Link
               rel={'nofollow'}
-              href="/%5Blang%5D/app/secure/sell/submit"
+              href="/app/secure/sell/submit"
               className="text-blue-500 underline"
             >
               creating patterns
             </Link>{' '}
             or{' '}
-            <Link
-              rel={'nofollow'}
-              href="/%5Blang%5D/app/tester-calls"
-              className="text-blue-500 underline"
-            >
+            <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
               apply for tester calls
             </Link>
             !
@@ -178,17 +174,13 @@ export function PatternParadiseProComponent() {
             You already have a Pattern Paradise Pro subscription. Start using it by{' '}
             <Link
               rel={'nofollow'}
-              href="/%5Blang%5D/app/secure/sell/submit"
+              href="/app/secure/sell/submit"
               className="text-blue-500 underline"
             >
               creating patterns
             </Link>{' '}
             or{' '}
-            <Link
-              rel={'nofollow'}
-              href="/%5Blang%5D/app/tester-calls"
-              className="text-blue-500 underline"
-            >
+            <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
               apply for tester calls
             </Link>
             !

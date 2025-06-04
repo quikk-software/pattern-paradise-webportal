@@ -54,7 +54,7 @@ export default function HeroV2({ products }: HeroV2Props) {
 
             {!isLoggedIn ? (
               <div className="flex flex-wrap gap-2">
-                <Link rel={'nofollow'} href="/%5Blang%5D/auth/registration" className="z-10">
+                <Link rel={'nofollow'} href="/auth/registration" className="z-10">
                   <RegisterButton />
                 </Link>
                 <Link href="/swipe" className="z-10">
