@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Select,
@@ -8,6 +10,7 @@ import {
 } from '@/components/ui/select';
 import { LANGUAGES } from '@/lib/constants';
 import ReactCountryFlag from 'react-country-flag';
+import { useTranslations } from 'use-intl';
 
 interface LanguageSelectProps {
   language?: string;
@@ -15,7 +18,6 @@ interface LanguageSelectProps {
   fullWidth?: boolean;
   allowedLanguages?: string[];
   disabled?: boolean;
-  text?: string;
 }
 
 export default function LanguageSelect({
@@ -24,8 +26,9 @@ export default function LanguageSelect({
   fullWidth,
   allowedLanguages,
   disabled = false,
-  text = 'Select language',
 }: LanguageSelectProps) {
+  const t = useTranslations();
+
   return (
     <div className="flex-grow">
       <Select
@@ -37,7 +40,7 @@ export default function LanguageSelect({
           aria-label={'Select a language'}
           className={`${fullWidth ? 'w-full' : 'w-[180px]'}`}
         >
-          <SelectValue placeholder={text} />
+          <SelectValue placeholder={t('common.languagesPlaceholder')} />
         </SelectTrigger>
         <SelectContent>
           {(allowedLanguages && allowedLanguages?.length > 0

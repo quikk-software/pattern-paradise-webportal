@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import CurrencyInput from 'react-currency-input-field';
 import { MAX_PRICE, MIN_PRICE } from '@/lib/constants';
+import { useTranslations } from 'use-intl';
 
 interface PriceFilterProps {
   onFilterChange: (filter: { minPrice: number; maxPrice: number }) => void;
@@ -20,9 +21,11 @@ export default function PriceFilter({
   const [maxPrice, setMaxPrice] = useState(overrideMaxPrice ?? MAX_PRICE);
   const [error, setError] = useState<string | undefined>(undefined);
 
+  const t = useTranslations();
+
   useEffect(() => {
     if (minPrice >= maxPrice) {
-      setError('Minimum price must be smaller than maximum price');
+      setError(t('common.price.maxError'));
       return;
     }
     setError(undefined);
@@ -35,7 +38,11 @@ export default function PriceFilter({
       return;
     }
     if (newMinPrice < MIN_PRICE) {
-      setError(`Minimum price must be greater than ${MIN_PRICE.toFixed(2)}$`);
+      setError(
+        t('common.price.minError', {
+          minPrice: MIN_PRICE.toFixed(2),
+        }),
+      );
       return;
     }
     setError(undefined);
@@ -48,7 +55,11 @@ export default function PriceFilter({
       return;
     }
     if (newMaxPrice > MAX_PRICE) {
-      setError(`Maximum price must be smaller than ${MAX_PRICE.toFixed(2)}$`);
+      setError(
+        t('common.price.maxError2', {
+          maxPrice: MAX_PRICE.toFixed(2),
+        }),
+      );
       return;
     }
     setMaxPrice(newMaxPrice);
@@ -62,14 +73,14 @@ export default function PriceFilter({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Price Filter</h2>
+      <h2 className="text-lg font-semibold">{t('common.price.title')}</h2>
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="flex flex-row gap-2 items-center">
             <CurrencyInput
               id="min-price"
               name="min-price"
-              placeholder="Min price"
+              placeholder={t('common.price.minPlaceholder')}
               defaultValue={minPrice.toFixed(2)}
               decimalsLimit={2}
               onValueChange={(value) => handleMinPriceChange(value)}
@@ -82,7 +93,7 @@ export default function PriceFilter({
             <CurrencyInput
               id="max-price"
               name="max-price"
-              placeholder="Max price"
+              placeholder={t('common.price.maxPlaceholder')}
               defaultValue={maxPrice.toFixed(2)}
               decimalsLimit={2}
               onValueChange={(value) => handleMaxPriceChange(value)}

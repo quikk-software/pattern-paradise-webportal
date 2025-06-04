@@ -1,4 +1,32 @@
 {
+  "common": {
+    "hashtagsPlaceholder": "Hashtags eingeben...",
+    "hashtagsError": "Hashtag {inputValue} ist bereits in deiner Liste",
+    "hashtagsLimit": "verwendete Hashtags",
+    "languagesPlaceholder": "Sprache auswählen",
+    "categories": {
+      "all": "Alle",
+      "crocheting": "Häkeln",
+      "knitting": "Stricken",
+      "crossStitch": "Kreuzstich",
+      "sewing": "Nähen",
+      "embroidery": "Stickerei",
+      "quilting": "Quilten",
+      "weaving": "Weben",
+      "search": "Suchoptionen..."
+    },
+    "price": {
+      "title": "Preisfilter",
+      "minPlaceholder": "Mindestpreis",
+      "maxPlaceholder": "Höchstpreis",
+      "maxError": "Der Mindestpreis muss kleiner als der Höchstpreis sein",
+      "maxError2": "Der Höchstpreis muss kleiner als {maxPrice}$ sein",
+      "minError": "Der Mindestpreis muss größer als {minPrice}$ sein"
+    },
+    "sort": {
+      "placeholder": "Sortieren"
+    }
+  },
   "navbar": {
     "about": "Über uns",
     "howTo": "Anleitung",

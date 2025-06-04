@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Trash2, X } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { useTranslations } from 'use-intl';
 
 interface HashtagInputProps {
   hashtags: string[];
@@ -15,6 +16,8 @@ interface HashtagInputProps {
 export default function HashtagInput({ hashtags, setHashtags, limit }: HashtagInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [hasError, setHasError] = useState(false);
+
+  const t = useTranslations();
 
   const addHashtag = (tag: string) => {
     const trimmedTag = tag.trim().replace(/[^a-zA-Z0-9]/g, '');
@@ -51,7 +54,7 @@ export default function HashtagInput({ hashtags, setHashtags, limit }: HashtagIn
       <div className="flex gap-2">
         <Input
           type="text"
-          placeholder="Enter hashtags..."
+          placeholder={t('common.hashtagsPlaceholder')}
           value={inputValue}
           disabled={!!limit && hashtags.length >= limit}
           onChange={(e) => {
@@ -72,14 +75,16 @@ export default function HashtagInput({ hashtags, setHashtags, limit }: HashtagIn
       </div>
       {!!inputValue && hasError ? (
         <p className="text-sm text-red-500 mb-2">
-          Hashtag &apos;{inputValue}&apos; is already in your list
+          {t('common.hashtagsError', {
+            inputValue,
+          })}
         </p>
       ) : null}
       {hasLimit ? (
         <div>
           <Progress value={progressPercentage} className="w-full" />
           <p className="text-sm text-muted-foreground mt-1">
-            {hashtagCount} / {limit} hashtags used
+            {hashtagCount} / {limit} {t('common.hashtagsLimit')}
           </p>
         </div>
       ) : null}
