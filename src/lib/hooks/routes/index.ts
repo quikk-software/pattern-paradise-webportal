@@ -114,9 +114,10 @@ const pages: Page[] = [
   },
 
   {
-    title: APP_NAME,
+    title: 'Pattern Paradise – Häkel- & Strickanleitungen kaufen, verkaufen & testen',
     pathname: '/de/',
-    description: APP_DESCRIPTION,
+    description:
+      'Entdecke einzigartige Häkel- und Strickanleitungen von internationalen Designern. Jetzt Anleitungen kaufen, verkaufen oder als Tester*in teilnehmen – inklusive kostenloser Muster und exklusiver Testaufrufe!',
   },
   {
     title: 'Pattern Paradise Pro | Pattern Paradise',
