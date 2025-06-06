@@ -491,5 +491,27 @@
     "downloadLinkText": "available for download",
     "buyHint1": "As soon as payment has been confirmed, your files will be <DownloadLink/>.",
     "buyHint2": "Instant download items cannot be returned, exchanged or canceled. Please contact the seller first if you have any problems with your order."
+  },
+  "rss": {
+    "crochet": {
+      "product": {
+        "title": "FREE CROCHET PATTERN! DIY {title} {subcategory} pattern",
+        "description": "Learn how to crochet your own {title}. Perfect for {categories}"
+      },
+      "freeProduct": {
+        "title": "DIY {title} {subcategory} pattern",
+        "description": "Free Crochet Pattern! Learn how to crochet your own {title}. Perfect for {categories}"
+      }
+    },
+    "knitting": {
+      "product": {
+        "title": "FREE KNITTING PATTERN! DIY {title} {subcategory} pattern",
+        "description": "Learn how to knit your own {title}. Perfect for {categories}"
+      },
+      "freeProduct": {
+        "title": "DIY {title} {subcategory} pattern",
+        "description": "Free Knitting Pattern! Learn how to knit your own {title}. Perfect for {categories}"
+      }
+    }
   }
 }
