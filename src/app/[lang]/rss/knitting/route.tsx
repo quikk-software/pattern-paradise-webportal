@@ -2,21 +2,16 @@ import { NextResponse } from 'next/server';
 import { listProducts } from '@/lib/api/static/product/listProducts';
 import { GetProductResponse } from '@/@types/api-types';
 import { generateTitle } from '@/lib/utils';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 let cachedFeed: string | null = null;
 let lastGenerated: number | null = null;
-const CACHE_DURATION = 1000 * 60 * 15; // 15 minutes
 
 export async function GET() {
   const now = Date.now();
 
-  if (cachedFeed && lastGenerated && now - lastGenerated < CACHE_DURATION) {
-    return new NextResponse(cachedFeed, {
-      headers: {
-        'Content-Type': 'application/rss+xml',
-      },
-    });
-  }
+  const locale = await getLocale();
+  const t = await getTranslations();
 
   const products = await listProducts({
     overridePageNumber: 1,
@@ -32,14 +27,14 @@ export async function GET() {
         <description>Discover beautiful knitting patterns</description>
         ${products
           .map((product) => {
-            const { title, description } = generatePinterestMetadata(product);
+            const { title, description } = generatePinterestMetadata(product, t);
             return `
           <item>
             <title>${escapeXml(title)}</title>
-            <link>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}</link>
+            <link>${process.env.NEXT_PUBLIC_URL}/${locale}/app/products/${product.id}</link>
             <description>${escapeXml(description)}</description>
             <pubDate>${new Date(product.createdAt).toUTCString()}</pubDate>
-            <guid>${process.env.NEXT_PUBLIC_URL}/app/products/${product.id}-knitting</guid>
+            <guid>${process.env.NEXT_PUBLIC_URL}/${locale}/app/products/${product.id}-knitting</guid>
             ${
               product.imageUrls.length > 0
                 ? `
@@ -92,7 +87,10 @@ function getPinterestImageUrl(originalUrl: string) {
   return originalUrl.replace('/upload/', '/upload/w_1000,h_1500,c_pad,b_white/');
 }
 
-function generatePinterestMetadata(product: GetProductResponse): {
+function generatePinterestMetadata(
+  product: GetProductResponse,
+  t: any,
+): {
   title: string;
   description: string;
 } {
@@ -115,19 +113,43 @@ function generatePinterestMetadata(product: GetProductResponse): {
 
   const productTitleClean = product.title.replace(/[^a-zA-Z0-9\s]/g, '').trim();
   const subcategoryPart = product.subCategories.slice(0, 2).join(' ');
-  const rawTitle = `DIY ${generateTitle({
-    title: productTitleClean,
-    category: product.category,
-  })} ${subcategoryPart} Pattern`;
+  const rawTitle = product.isFree
+    ? t('rss.knitting.freeProduct.title', {
+        title: generateTitle({
+          title: productTitleClean,
+          category: product.category,
+        }),
+        subcategory: subcategoryPart,
+      })
+    : t('rss.knitting.product.title', {
+        title: generateTitle({
+          title: productTitleClean,
+          category: product.category,
+        }),
+        subcategory: subcategoryPart,
+      });
+
   const titleWithoutCategory = generateTitle({
     title: productTitleClean,
   });
   const title =
     rawTitle.length > MAX_TITLE ? rawTitle.slice(0, MAX_TITLE - 1).trim() + '…' : rawTitle;
 
+  const categories = product.subCategories.slice(0, 5).join(', ');
+  const descTitle = generateTitle({
+    title: titleWithoutCategory,
+  });
+
   const coreDescriptionSentences = [
-    `${product.isFree ? 'Free knitting pattern! ' : ''}Learn how to knit your own ${titleWithoutCategory}.`,
-    `Perfect for ${product.subCategories.slice(0, 5).join(', ')}.`,
+    product.isFree
+      ? t('rss.knitting.freeProduct.description', {
+          title: descTitle,
+          categories,
+        })
+      : t('rss.knitting.product.description', {
+          title: descTitle,
+          categories,
+        }),
   ];
 
   const uniqueHashtags = Array.from(

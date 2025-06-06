@@ -462,5 +462,27 @@
   },
   "swipe": {
     "showDetails": "Öffnen"
+  },
+  "rss": {
+    "crochet": {
+      "product": {
+        "title": "DIY {title} {subcategory} Häkel-Anleitung",
+        "description": "Mit {title} verbesserst du ganz einfach deine Häkel-Fertigkeiten. Perfekt für {categories}"
+      },
+      "freeProduct": {
+        "title": "KOSTENLOSE HÄKEL-ANLEITUNG! DIY {title} {subcategory} Häkel-Anleitung",
+        "description": "Kostenlose Häkel-Anleitung! Mit '{title}' verbesserst du ganz einfach deine Häkel-Fertigkeiten. Perfekt für {categories}"
+      }
+    },
+    "knitting": {
+      "product": {
+        "title": "DIY {title} {subcategory} Strick-Anleitung",
+        "description": "Mit {title} verbesserst du ganz einfach deine Strick-Fertigkeiten. Perfekt für {categories}"
+      },
+      "freeProduct": {
+        "title": "KOSTENLOSE STRICK-ANLEITUNG! DIY {title} {subcategory} Häkel-Anleitung",
+        "description": "Kostenlose Strick-Anleitung! Mit '{title}' verbesserst du ganz einfach deine Strick-Fertigkeiten. Perfekt für {categories}"
+      }
+    }
   }
 }
