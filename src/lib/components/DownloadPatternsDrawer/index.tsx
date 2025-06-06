@@ -58,42 +58,42 @@ export default function DownloadPatternsDrawer({
             Cancel
           </Button>
           <SendFilesButton language={language} productId={productId} channel={'MAIL'} />
-          <div className="space-y-2 w-full">
-            <Button
-              onClick={() => {
-                if (!language) {
-                  return;
-                }
-                callbackFn?.(language);
-              }}
-              variant={'default'}
-              disabled={isLoading || !language}
-              className="w-full"
-            >
-              {isLoading ? (
-                <LoadingSpinnerComponent className="mr-4 h-4 w-4 text-white" />
-              ) : (
-                <DownloadIcon className="mr-4 h-4 w-4" />
-              )}
-              Download Pattern
-            </Button>
-            {downloadProgress > 0 && isLoading ? (
-              <Progress
-                value={downloadProgress}
-                className="h-2 transition-all duration-300 ease-in-out"
-                style={{
-                  background: `linear-gradient(90deg, 
-                                var(--primary) 0%, 
-                                var(--primary) ${downloadProgress}%, 
-                                var(--muted) ${downloadProgress}%, 
-                                var(--muted) 100%)`,
-                }}
-              />
-            ) : null}
-            {downloadProgress > 20 && isLoading ? (
-              <p>Please hang tight. Just a couple of seconds left...</p>
-            ) : null}
-          </div>
+          {/*<div className="space-y-2 w-full">*/}
+          {/*  <Button*/}
+          {/*    onClick={() => {*/}
+          {/*      if (!language) {*/}
+          {/*        return;*/}
+          {/*      }*/}
+          {/*      callbackFn?.(language);*/}
+          {/*    }}*/}
+          {/*    variant={'default'}*/}
+          {/*    disabled={isLoading || !language}*/}
+          {/*    className="w-full"*/}
+          {/*  >*/}
+          {/*    {isLoading ? (*/}
+          {/*      <LoadingSpinnerComponent className="mr-4 h-4 w-4 text-white" />*/}
+          {/*    ) : (*/}
+          {/*      <DownloadIcon className="mr-4 h-4 w-4" />*/}
+          {/*    )}*/}
+          {/*    Download Pattern*/}
+          {/*  </Button>*/}
+          {/*  {downloadProgress > 0 && isLoading ? (*/}
+          {/*    <Progress*/}
+          {/*      value={downloadProgress}*/}
+          {/*      className="h-2 transition-all duration-300 ease-in-out"*/}
+          {/*      style={{*/}
+          {/*        background: `linear-gradient(90deg, */}
+          {/*                      var(--primary) 0%, */}
+          {/*                      var(--primary) ${downloadProgress}%, */}
+          {/*                      var(--muted) ${downloadProgress}%, */}
+          {/*                      var(--muted) 100%)`,*/}
+          {/*      }}*/}
+          {/*    />*/}
+          {/*  ) : null}*/}
+          {/*  {downloadProgress > 20 && isLoading ? (*/}
+          {/*    <p>Please hang tight. Just a couple of seconds left...</p>*/}
+          {/*  ) : null}*/}
+          {/*</div>*/}
         </div>
       </DrawerContent>
     </Drawer>
