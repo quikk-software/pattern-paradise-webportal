@@ -37,9 +37,9 @@ export default function DownloadPatternsDrawer({
       <DrawerContent className="p-4">
         <div className="flex flex-col gap-4">
           <DrawerHeader>
-            <DrawerTitle>Download Pattern</DrawerTitle>
+            <DrawerTitle>Send Pattern via Mail</DrawerTitle>
             <DrawerTitle className="text-sm font-medium">
-              Select the language you want to download.
+              Select the language you want to receive.
             </DrawerTitle>
           </DrawerHeader>
           <LanguageSelect
