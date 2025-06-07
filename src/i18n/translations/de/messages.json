@@ -463,6 +463,35 @@
   "swipe": {
     "showDetails": "Öffnen"
   },
+  "product": {
+    "fallbackTitle": "Anleitungsdetails | Pattern Paradise",
+    "fallbackDescription": "Sieh dir diese Anleitung auf Pattern Paradise an.",
+    "title": "{item1} {item2} {item3} Anleitung | Pattern Paradise",
+    "description": "Sieh dir dieses {item1} {item2} {item3} an",
+    "get": "Hole dir",
+    "buy": "Kaufe dir",
+    "free": "kostenlos",
+    "pattern": "Muster",
+    "altFallback": "Pattern Paradise Muster",
+    "category": {
+      "crochet": "Häkel",
+      "knitting": "Strick"
+    },
+    "audience": {
+      "crocheters": "Häkler",
+      "knitters": "Stricker",
+      "crossStitchers": "Kreuzstich-Fans",
+      "sewists": "Näher",
+      "embroiderers": "Sticker",
+      "quilters": "Quilter",
+      "weavers": "Weber"
+    },
+    "share": "Sieh dir diese Anleitung auf Pattern Paradise an!",
+    "owner": "Du bist der Eigentümer dieser Anleitung",
+    "downloadLinkText": "verfügbar zum Download",
+    "buyHint1": "Sobald die Zahlung bestätigt wurde, sind deine Dateien <DownloadLink></DownloadLink>.",
+    "buyHint2": "Sofort-Downloads können nicht zurückgegeben, umgetauscht oder storniert werden. Bitte kontaktiere zuerst den Verkäufer, wenn du Probleme mit deiner Bestellung hast."
+  },
   "rss": {
     "crochet": {
       "product": {

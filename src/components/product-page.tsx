@@ -127,7 +127,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                         title="Instant download"
                         message={
                           <span>
-                            {t.rich('product.buyHint', {
+                            {t.rich('product.buyHint1', {
                               DownloadLink: (chunks) => (
                                 <Link
                                   href="/app/secure/auth/me/patterns"

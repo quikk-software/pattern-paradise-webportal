@@ -43,12 +43,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDescription = t('product.fallbackDescription');
   const fallbackImage = `${process.env.NEXT_PUBLIC_URL ?? APP_DOMAIN}/favicons/ms-icon-310x310.png`;
 
+  const category =
+    product?.category === 'Crocheting'
+      ? t('product.category.crochet')
+      : product?.category === 'Knitting'
+        ? t('product.category.knitting')
+        : product?.category;
+
   const title = product?.title
     ? t('product.title', {
         item1: product.isFree ? t('product.get') : t('product.buy'),
         item2: generateTitle({
           title: product.title,
-          category: product.category,
+          category,
         }),
         item3: product.isFree ? t('product.free') : '',
       })

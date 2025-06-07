@@ -2320,6 +2320,8 @@ export class Api<
         maxPrice?: number;
         /** Filter for sales products. */
         sale?: boolean;
+        /** Ignore the user IP address (relevant for listing tester calls). */
+        ignoreIpAddress?: boolean;
       },
       params: RequestParams = {},
     ) =>

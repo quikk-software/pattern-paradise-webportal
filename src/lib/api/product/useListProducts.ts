@@ -33,6 +33,7 @@ export const useListProducts = ({
         await client.api.listProducts({
           pageNumber: filter?.pageNumber ?? pagination.pageNumber,
           pageSize: filter?.pageSize ?? pagination.pageSize,
+          ignoreIpAddress: filter?.status === 'Created',
           ...filter,
         }),
     );
