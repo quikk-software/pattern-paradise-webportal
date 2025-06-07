@@ -489,7 +489,7 @@
     "share": "Check out this pattern on Pattern Paradise!",
     "owner": "You are the owner of this pattern",
     "downloadLinkText": "available for download",
-    "buyHint1": "As soon as payment has been confirmed, your files will be <DownloadLink/>.",
+    "buyHint1": "As soon as payment has been confirmed, your files will be <DownloadLink></DownloadLink>.",
     "buyHint2": "Instant download items cannot be returned, exchanged or canceled. Please contact the seller first if you have any problems with your order."
   },
   "rss": {
