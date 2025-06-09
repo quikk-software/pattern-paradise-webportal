@@ -261,12 +261,12 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
           {products.length > 0 && (
             <TabsContent value="patterns" className="space-y-4 mt-4">
-              <Input
-                placeholder="Search..."
-                value={productSearchTerm}
-                onChange={(e) => setProductSearchTerm(e.target.value)}
-                className="pl-8"
-              />
+              {/*<Input*/}
+              {/*  placeholder="Search..."*/}
+              {/*  value={productSearchTerm}*/}
+              {/*  onChange={(e) => setProductSearchTerm(e.target.value)}*/}
+              {/*  className="pl-8"*/}
+              {/*/>*/}
               <div className="flex flex-col gap-6">
                 <WaterfallListing
                   products={products}
@@ -282,12 +282,12 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
           {testerCalls.length > 0 && (
             <TabsContent value="testerCalls" className="space-y-4 mt-4">
-              <Input
-                placeholder="Search..."
-                value={testerCallSearchTerm}
-                onChange={(e) => setTesterCallSearchTerm(e.target.value)}
-                className="pl-8"
-              />
+              {/*<Input*/}
+              {/*  placeholder="Search..."*/}
+              {/*  value={testerCallSearchTerm}*/}
+              {/*  onChange={(e) => setTesterCallSearchTerm(e.target.value)}*/}
+              {/*  className="pl-8"*/}
+              {/*/>*/}
               <div className="flex flex-col gap-6">
                 <WaterfallListing
                   products={testerCalls}
