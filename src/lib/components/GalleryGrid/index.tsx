@@ -15,7 +15,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-1">
         {visibleImages.map((image, index) => (
           <Link
             href={image}
