@@ -263,9 +263,9 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
                           {testing.durationInWeeks} week{testing.durationInWeeks !== 1 ? 's' : ''}
                         </span>
                       </div>
-                      {testing.testers && testing.testers.length > 0 && (
+                      {testing.testers && testing.testers.filter.length > 0 && (
                         <div className="flex items-center justify-between text-sm mt-2">
-                          <span className="text-slate-600">Testers:</span>
+                          <span className="text-slate-600">Tester Applications:</span>
                           <span className="font-medium text-slate-900">
                             {testing.testers.length}
                           </span>
