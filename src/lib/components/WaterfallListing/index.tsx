@@ -137,6 +137,8 @@ export default function WaterfallListing({
     productGroups[index % columns].push(product);
   });
 
+  const isReleased = status === 'Released';
+
   return (
     <div className="space-y-8">
       <div className="relative">
@@ -184,42 +186,44 @@ export default function WaterfallListing({
                           </p>
                         </div>
                       </CardContent>
-                      <CardFooter className="flex flex-col gap-1">
-                        <div className="flex justify-end items-end w-full">
-                          {product.isFree ? (
-                            <span className="font-bold text-right text-sm md:text-base lg:text-lg">
-                              {t('browse.forFree')}
-                            </span>
-                          ) : isSaleActive ? (
-                            <div className="flex flex-col items-end">
-                              <div className="flex items-center gap-1.5">
-                                <span className="font-bold text-sm md:text-base lg:text-lg text-red-600 text-right">
-                                  ${product.salePrice!.toFixed(2)}
-                                </span>
-                                <span className="text-xs md:text-sm line-through text-gray-500 text-right">
-                                  ${product.price.toFixed(2)}
-                                </span>
+                      {isReleased ? (
+                        <CardFooter className="flex flex-col gap-1">
+                          <div className="flex justify-end items-end w-full">
+                            {product.isFree ? (
+                              <span className="font-bold text-right text-sm md:text-base lg:text-lg">
+                                {t('browse.forFree')}
+                              </span>
+                            ) : isSaleActive ? (
+                              <div className="flex flex-col items-end">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-bold text-sm md:text-base lg:text-lg text-red-600 text-right">
+                                    ${product.salePrice!.toFixed(2)}
+                                  </span>
+                                  <span className="text-xs md:text-sm line-through text-gray-500 text-right">
+                                    ${product.price.toFixed(2)}
+                                  </span>
+                                </div>
+                                {product.salePriceDueDate && (
+                                  <SaleCountdown dueDate={product.salePriceDueDate} />
+                                )}
                               </div>
-                              {product.salePriceDueDate && (
-                                <SaleCountdown dueDate={product.salePriceDueDate} />
-                              )}
-                            </div>
-                          ) : (
-                            <span className="font-bold text-right text-sm md:text-base lg:text-lg">
-                              ${product.price.toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                        {isSaleActive && (
-                          <div className="w-full mb-2 bg-red-50 dark:bg-red-950/20 rounded-md p-1.5 flex items-center justify-center">
-                            <Percent className="w-3 h-3 text-red-500 mr-1" />
-                            <span className="text-xs text-red-600 dark:text-red-400 font-medium">
-                              {t('browse.saveMoney')} $
-                              {(product.price - product.salePrice!).toFixed(2)}
-                            </span>
+                            ) : (
+                              <span className="font-bold text-right text-sm md:text-base lg:text-lg">
+                                ${product.price.toFixed(2)}
+                              </span>
+                            )}
                           </div>
-                        )}
-                      </CardFooter>
+                          {isSaleActive && (
+                            <div className="w-full mb-2 bg-red-50 dark:bg-red-950/20 rounded-md p-1.5 flex items-center justify-center">
+                              <Percent className="w-3 h-3 text-red-500 mr-1" />
+                              <span className="text-xs text-red-600 dark:text-red-400 font-medium">
+                                {t('browse.saveMoney')} $
+                                {(product.price - product.salePrice!).toFixed(2)}
+                              </span>
+                            </div>
+                          )}
+                        </CardFooter>
+                      ) : null}
                     </Card>
                   </div>
                 );
