@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ChevronUp, ChevronDown, Check } from 'lucide-react';
+import { ChevronUp, ChevronDown, Check, Circle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   GetTesterApplicationResponse,
@@ -18,6 +18,7 @@ import {
   addSelectedApplicant,
   removeSelectedApplicant,
   resetSelectedApplicants,
+  setApplicationSelectionTestingId,
 } from '@/lib/features/testing/testingSlice';
 import { InfoBoxComponent } from '@/components/info-box';
 import {
@@ -102,14 +103,24 @@ export function TesterApplicantsPage({
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const { selectedApplicants: sa } = useSelector((s: Store) => s.testing);
+  const { selectedApplicants: sa, applicationSelectionTestingId } = useSelector(
+    (s: Store) => s.testing,
+  );
   const selectedApplicants = Object.values(sa);
 
   const { mutate, isLoading, isSuccess, isError } = useUpdateTesting();
 
   useEffect(() => {
+    if (
+      !applicationSelectionTestingId ||
+      !testing?.id ||
+      applicationSelectionTestingId === testing?.id
+    ) {
+      return;
+    }
     dispatch(resetSelectedApplicants());
-  }, [testing?.id]);
+    dispatch(setApplicationSelectionTestingId(testing?.id ?? null));
+  }, [testing?.id, applicationSelectionTestingId]);
 
   const toggleApplicant = (user: GetUserAccountResponse) => {
     if (!!selectedApplicants.find((sa) => sa.id === user.id)) {
@@ -249,11 +260,20 @@ export function TesterApplicantsPage({
                   ? 'ring-2 ring-green-500'
                   : ''
               }`}
-              onClick={() => toggleApplicant(application.user)}
             >
-              {!!selectedApplicants.find((sa) => sa.id === application.user.id) && (
-                <div className="absolute top-2 right-2 bg-green-500 rounded-full p-1">
+              {!!selectedApplicants.find((sa) => sa.id === application.user.id) ? (
+                <div
+                  className="absolute top-3 right-3 bg-green-500 rounded-full cursor-pointer"
+                  onClick={() => toggleApplicant(application.user)}
+                >
                   <Check className="w-4 h-4 text-white" />
+                </div>
+              ) : (
+                <div
+                  className="absolute top-3 right-3 rounded-full cursor-pointer"
+                  onClick={() => toggleApplicant(application.user)}
+                >
+                  <Circle className="w-4 h-4 text-gray-400" />
                 </div>
               )}
               <CardHeader>

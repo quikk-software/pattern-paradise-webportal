@@ -3,10 +3,12 @@ import { GetUserAccountResponse } from '@/@types/api-types';
 
 export interface TestingState {
   selectedApplicants: { [key: string]: GetUserAccountResponse };
+  applicationSelectionTestingId: string | null;
 }
 
 export const initialState: TestingState = {
   selectedApplicants: {},
+  applicationSelectionTestingId: null,
 };
 
 export const testingSlice = createSlice({
@@ -22,9 +24,16 @@ export const testingSlice = createSlice({
     resetSelectedApplicants: (state) => {
       state.selectedApplicants = {};
     },
+    setApplicationSelectionTestingId: (state, action: PayloadAction<string | null>) => {
+      state.applicationSelectionTestingId = action.payload;
+    },
   },
 });
 
-export const { addSelectedApplicant, removeSelectedApplicant, resetSelectedApplicants } =
-  testingSlice.actions;
+export const {
+  addSelectedApplicant,
+  removeSelectedApplicant,
+  resetSelectedApplicants,
+  setApplicationSelectionTestingId,
+} = testingSlice.actions;
 export default testingSlice.reducer;
