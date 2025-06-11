@@ -495,21 +495,21 @@
   "rss": {
     "crochet": {
       "product": {
-        "title": "FREE CROCHET PATTERN! DIY {title} {subcategory} pattern",
+        "title": "DIY {title} {subcategory} pattern",
         "description": "Learn how to crochet your own {title}. Perfect for {categories}"
       },
       "freeProduct": {
-        "title": "DIY {title} {subcategory} pattern",
+        "title": "FREE CROCHET PATTERN! DIY {title} {subcategory} pattern",
         "description": "Free Crochet Pattern! Learn how to crochet your own {title}. Perfect for {categories}"
       }
     },
     "knitting": {
       "product": {
-        "title": "FREE KNITTING PATTERN! DIY {title} {subcategory} pattern",
+        "title": "DIY {title} {subcategory} pattern",
         "description": "Learn how to knit your own {title}. Perfect for {categories}"
       },
       "freeProduct": {
-        "title": "DIY {title} {subcategory} pattern",
+        "title": "FREE KNITTING PATTERN! DIY {title} {subcategory} pattern",
         "description": "Free Knitting Pattern! Learn how to knit your own {title}. Perfect for {categories}"
       }
     }
