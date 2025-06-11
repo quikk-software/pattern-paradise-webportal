@@ -9,4 +9,5 @@ export * from './useDraftProduct';
 export * from './useUndraftProduct';
 export * from './useListProductsByUserId';
 export * from './useListProductsForShowcase';
+export * from './useListProductsForRecommendations';
 export * from './useListProductsForSwipe';

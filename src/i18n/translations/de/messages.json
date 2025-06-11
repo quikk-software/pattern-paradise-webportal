@@ -75,6 +75,11 @@
         "description": "Erhalte eine Überraschungs-Häkelanleitung",
         "button": "Hier kaufen"
       }
+    },
+    "recommendation": {
+      "title": "Vorschläge für Dich",
+      "description": "Ausgewählte Anleitungen basierend auf deinen Interessen",
+      "button": "Mehr entdecken"
     }
   },
   "browse": {

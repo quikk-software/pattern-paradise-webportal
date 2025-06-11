@@ -75,6 +75,11 @@
         "description": "Get a surprise crochet pattern",
         "button": "Try Mystery Pattern"
       }
+    },
+    "recommendation": {
+      "title": "Recommended for You",
+      "description": "Curated picks based on your interests",
+      "button": "Explore more"
     }
   },
   "browse": {

@@ -2529,7 +2529,7 @@ export class Api<
       }),
 
     /**
-     * @description The query returns a 4 random products.
+     * @description The query returns 4 random products.
      *
      * @tags Product
      * @name ListProductsForShowcase
@@ -2540,6 +2540,24 @@ export class Api<
     listProductsForShowcase: (params: RequestParams = {}) =>
       this.request<ListProductsResponse, any>({
         path: `/api/v1/showcase/products`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description The query returns 20 recommended products.
+     *
+     * @tags Product
+     * @name ListProductsForRecommendations
+     * @summary Gets the products for the recommendations.
+     * @request GET:/api/v1/recommendations/products
+     * @secure
+     */
+    listProductsForRecommendations: (params: RequestParams = {}) =>
+      this.request<ListProductsResponse, any>({
+        path: `/api/v1/recommendations/products`,
         method: "GET",
         secure: true,
         format: "json",

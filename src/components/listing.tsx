@@ -16,7 +16,7 @@ import {
   Trash,
   Trash2,
 } from 'lucide-react';
-import { useListProducts } from '@/lib/api';
+import { useListProducts, useListProductsForRecommendations } from '@/lib/api';
 import PriceFilter from '@/components/price-filter';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import WaterfallListing from '@/lib/components/WaterfallListing';
@@ -40,6 +40,7 @@ import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'use-intl';
+import { useValidSession } from '@/hooks/useValidSession';
 
 interface ListingComponentProps {
   status: 'Released' | 'Created';
@@ -58,6 +59,8 @@ export function ListingComponent({
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations();
+
+  const { data: session } = useValidSession();
 
   const { productFilter } = useSelector((s: Store) => s.filter);
 
@@ -84,8 +87,15 @@ export function ListingComponent({
     pageNumber,
     pageSize,
   });
+  const { fetch: fetchRecommendations, data: recommendedProducts } =
+    useListProductsForRecommendations();
   const { mutate: mutateProductImpression } = useCreateProductImpression();
   const { mutate: mutateTestingImpression } = useCreateTestingImpression();
+
+  useEffect(() => {
+    if (!session?.user) return;
+    fetchRecommendations();
+  }, [session?.user]);
 
   useEffect(() => {
     const query = new URLSearchParams();
@@ -252,6 +262,41 @@ export function ListingComponent({
 
     if (node) observer.current.observe(node);
   };
+
+  if (
+    !infiniteScroll &&
+    initialQuery?.sortBy === 'mostRelevant' &&
+    recommendedProducts.length > 0
+  ) {
+    return (
+      <div className="space-y-4">
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-extrabold tracking-tight">
+              {t('landing.recommendation.title')}
+            </h2>
+            <p className="text-sm text-gray-500">{t('landing.recommendation.description')}</p>
+          </div>
+          <a
+            href="/browse"
+            className="text-sm font-medium text-blue-600 hover:underline hover:text-blue-800"
+          >
+            {t('landing.recommendation.button')} →
+          </a>
+        </div>
+        <div id={'listing-results'}>
+          <WaterfallListing
+            products={recommendedProducts}
+            status={status}
+            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+            onImpression={(productId) => handleImpression(productId)}
+            showFade={!infiniteScroll && hasNextPage}
+          />
+          <div ref={lastProductRef} className="h-10" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
