@@ -1,18 +1,13 @@
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const withNextIntl = createNextIntlPlugin();
+const withNextIntl = createNextIntlPlugin({
+  locales: ['en', 'de'],
+  defaultLocale: 'en',
+  localePrefix: 'as-needed',
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/en',
-        permanent: true,
-      },
-    ];
-  },
   poweredByHeader: false,
   images: {
     remotePatterns: [
