@@ -7,9 +7,5 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 }
 
 export default function PrivacyAndTermsPage() {
-  return (
-    <div>
-      <Legal />
-    </div>
-  );
+  return <Legal />;
 }

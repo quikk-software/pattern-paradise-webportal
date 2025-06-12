@@ -12,6 +12,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
 import { i18n } from '../../i18n-config';
 import { NextIntlClientProvider } from 'next-intl';
+import React from 'react';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -58,6 +59,12 @@ export default async function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
 
         <meta name="p:domain_verify" content="e29836b4ecf762bb55e8700dc302db08" />
+
+        <script
+          type="text/javascript"
+          src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
+          async
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
         <NextIntlClientProvider>

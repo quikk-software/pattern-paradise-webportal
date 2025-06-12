@@ -24,7 +24,7 @@ export default function TermsAndConditions({ termsAndConditionsRef }: TermsAndCo
           {action === 'scrollToTermsAndConditions' ? '💡 ' : ''}Terms and Conditions
         </CardTitle>
         <CardTitle className="text-md font-medium text-left mb-4">
-          Last updated on: 17 Mai 2025
+          Last updated on: 12 June 2025
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -318,6 +318,29 @@ export default function TermsAndConditions({ termsAndConditionsRef }: TermsAndCo
                 We regularly back up listings and user profiles as part of running the platform, but
                 we recommend keeping your own backup of any patterns or key information — just to be
                 safe.
+              </PracticalExample>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="trustpilot-invitations" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              18. Trustpilot Review Invitations
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 space-y-4">
+              <div>
+                <p>
+                  After completing a purchase on Pattern Paradise, you may receive an email from
+                  Trustpilot inviting you to leave a review. This helps us maintain transparency and
+                  gather feedback on your shopping experience. Participation is entirely optional
+                  and handled according to Trustpilot&apos;s privacy policy. We do not control the
+                  content of Trustpilot invitations or reviews, but we encourage respectful and
+                  honest feedback.
+                </p>
+              </div>
+              <PracticalExample>
+                After buying a pattern, you might get an email from Trustpilot asking you to share
+                your thoughts about the purchase process. You’re not required to respond, but your
+                input can help others and improve the platform.
               </PracticalExample>
             </AccordionContent>
           </AccordionItem>
