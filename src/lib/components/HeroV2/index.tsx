@@ -36,7 +36,8 @@ export default function HeroV2({ products }: HeroV2Props) {
       }}
     >
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid gap-6 md:grid-cols-2 md:gap-10">
+        {/* 66px is needed for the search bar to have enough space */}
+        <div className="grid gap-6 md:grid-cols-2 md:gap-10 pt-[66px]">
           <div className="flex flex-col justify-center space-y-4 z-10 pb-4">
             {isLoggedIn && session ? (
               <WelcomeHero
