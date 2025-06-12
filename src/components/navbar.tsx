@@ -284,7 +284,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                     <Input
                       type="text"
                       ref={searchInputRef}
-                      placeholder="Search for patterns, designs, or inspiration..."
+                      placeholder={t('browse.filter.searchPlaceholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyDown={handleKeyDown}
@@ -310,7 +310,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                     className="h-12 px-4 hover:bg-orange-700 text-white rounded-r-lg rounded-l-none flex-shrink-0"
                   >
                     <Search className="h-4 w-4" />
-                    <span className="hidden sm:inline ml-2">Search</span>
+                    <span className="hidden sm:inline ml-2">{t('browse.filter.searchButton')}</span>
                   </Button>
                 </div>
               </div>
