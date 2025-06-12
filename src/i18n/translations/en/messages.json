@@ -89,6 +89,7 @@
       "category": "Category",
       "applyFilter": "Apply Filter",
       "searchPlaceholder": "Search pattern or creator...",
+      "searchButton": "Search",
       "mostRelevant": "Most Relevant",
       "saleOnly": "Sale Only",
       "priceAscending": "Price Ascending",
