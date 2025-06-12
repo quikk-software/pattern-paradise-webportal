@@ -1,6 +1,6 @@
 'use client';
 
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useRef } from 'react';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -70,6 +70,8 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
 
   const showSearch = !!getPublicUrl(pathname, ['/']);
 
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     const scrollArea = document.getElementById('main-scroll-area');
     if (!scrollArea) {
@@ -98,6 +100,8 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+
+    searchInputRef.current?.blur();
 
     router.push(`/browse?q=${searchQuery ?? ''}&craft=${selectedCategory}`);
   };
@@ -217,97 +221,101 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
         </div>
       </nav>
 
-      <div
-        className={cn(
-          'bg-white transition-all duration-300 ease-in-out overflow-hidden border-b border-gray-100',
-          searchVisible && showSearch ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0',
-        )}
-      >
-        <div className="mx-auto px-4 py-2">
-          <form onSubmit={handleSearch} className="space-y-4">
-            <div className="relative">
-              <div className="flex items-center bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
-                <div className="flex-shrink-0">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-12 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-l-lg rounded-r-none border-r border-gray-200"
-                      >
-                        <Filter className="h-4 w-4 mr-1" />
-                        <span className="hidden sm:inline text-sm font-medium">
-                          {selectedCategory === 'All'
-                            ? t('common.categories.all')
-                            : t(`common.categories.${camelCase(selectedCategory)}`)}
-                        </span>
-                        <ChevronDown className="h-3 w-3 ml-1" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-56">
-                      <DropdownMenuItem
-                        onClick={() => setSelectedCategory('All')}
-                        className={cn(
-                          'cursor-pointer flex justify-between',
-                          selectedCategory === 'All' && 'bg-orange-50 text-orange-700',
-                        )}
-                      >
-                        <span>{t('common.categories.all')}</span>
-                      </DropdownMenuItem>
-                      {CATEGORIES.map(({ name: category }) => (
+      <div className="relative">
+        <div
+          className={cn(
+            'bg-white transition-all duration-300 ease-in-out overflow-hidden border-b border-gray-100 absolute top-0 left-0 right-0',
+            // 66px is needed for the search bar to have enough space (see HeroV2 component as well)
+            searchVisible && showSearch ? 'max-h-[66px] opacity-100' : 'max-h-0 opacity-0',
+          )}
+        >
+          <div className="mx-auto px-4 py-2">
+            <form onSubmit={handleSearch} className="space-y-4">
+              <div className="relative">
+                <div className="flex items-center bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
+                  <div className="flex-shrink-0">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-12 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-l-lg rounded-r-none border-r border-gray-200"
+                        >
+                          <Filter className="h-4 w-4 mr-1" />
+                          <span className="hidden sm:inline text-sm font-medium">
+                            {selectedCategory === 'All'
+                              ? t('common.categories.all')
+                              : t(`common.categories.${camelCase(selectedCategory)}`)}
+                          </span>
+                          <ChevronDown className="h-3 w-3 ml-1" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="w-56">
                         <DropdownMenuItem
-                          key={category}
-                          onClick={() => setSelectedCategory(category)}
+                          onClick={() => setSelectedCategory('All')}
                           className={cn(
                             'cursor-pointer flex justify-between',
-                            selectedCategory === category && 'bg-orange-50 text-orange-700',
+                            selectedCategory === 'All' && 'bg-orange-50 text-orange-700',
                           )}
                         >
-                          <span>
-                            {category === 'All'
-                              ? t('common.categories.all')
-                              : t(`common.categories.${camelCase(category)}`)}
-                          </span>
+                          <span>{t('common.categories.all')}</span>
                         </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                        {CATEGORIES.map(({ name: category }) => (
+                          <DropdownMenuItem
+                            key={category}
+                            onClick={() => setSelectedCategory(category)}
+                            className={cn(
+                              'cursor-pointer flex justify-between',
+                              selectedCategory === category && 'bg-orange-50 text-orange-700',
+                            )}
+                          >
+                            <span>
+                              {category === 'All'
+                                ? t('common.categories.all')
+                                : t(`common.categories.${camelCase(category)}`)}
+                            </span>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  <div className="flex-1 relative">
+                    <Input
+                      type="text"
+                      ref={searchInputRef}
+                      placeholder="Search for patterns, designs, or inspiration..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      className="border-0 text-ellipsis line-clamp-1 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 text-gray-700 placeholder:text-gray-500"
+                    />
+
+                    {searchQuery && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearSearch}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="h-12 px-4 hover:bg-orange-700 text-white rounded-r-lg rounded-l-none flex-shrink-0"
+                  >
+                    <Search className="h-4 w-4" />
+                    <span className="hidden sm:inline ml-2">Search</span>
+                  </Button>
                 </div>
-
-                <div className="flex-1 relative">
-                  <Input
-                    type="text"
-                    placeholder="Search for patterns, designs, or inspiration..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="border-0 text-ellipsis line-clamp-1 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 text-gray-700 placeholder:text-gray-500"
-                  />
-
-                  {searchQuery && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={clearSearch}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-
-                <Button
-                  type="submit"
-                  size="sm"
-                  className="h-12 px-4 hover:bg-orange-700 text-white rounded-r-lg rounded-l-none flex-shrink-0"
-                >
-                  <Search className="h-4 w-4" />
-                  <span className="hidden sm:inline ml-2">Search</span>
-                </Button>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </header>
