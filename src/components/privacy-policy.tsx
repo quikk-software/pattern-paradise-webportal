@@ -23,7 +23,7 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
           {action === 'scrollToPrivacyPolicy' ? '💡 ' : ''}Privacy Policy
         </CardTitle>
         <CardTitle className="text-md font-medium text-left mb-4">
-          Last updated on: 17 Mai 2025
+          Last updated on: 12 June 2025
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -555,6 +555,41 @@ export default function PrivacyPolicy({ privacyPolicyRef }: PrivacyPolicyProps) 
               <p>
                 We encourage users to review the privacy policies of any external sites before
                 providing any personal information.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="trustpilot" className="border rounded-lg px-4">
+            <AccordionTrigger className="text-lg font-medium py-4">
+              Trustpilot Review Invitations
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 space-y-4">
+              <p>
+                After completing a purchase on Pattern Paradise, you may receive an email from{' '}
+                <strong>Trustpilot A/S</strong> inviting you to leave a review about your shopping
+                experience. This helps us improve our services and offer greater transparency to
+                future customers.
+              </p>
+              <p>
+                For this purpose, we may share limited personal data (e.g., your name, email
+                address, and order reference) with Trustpilot. This data is used solely to generate
+                an invitation to leave a review and is processed in accordance with
+                Trustpilot&apos;s own{' '}
+                <Link
+                  className="text-blue-500 underline"
+                  href="https://legal.trustpilot.com/end-user-privacy-terms"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  privacy policy
+                </Link>
+                .
+              </p>
+              <p>
+                The legal basis for this processing is our legitimate interest in collecting
+                customer feedback to improve our services (Art. 6(1)(f) GDPR). You are not obligated
+                to submit a review, and you can opt out of further invitations at any time via a
+                link in the Trustpilot email.
               </p>
             </AccordionContent>
           </AccordionItem>

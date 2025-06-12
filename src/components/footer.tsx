@@ -11,12 +11,18 @@ import GithubIcon from '@/lib/icons/GithubIcon';
 import NewsletterSignup from '@/components/newsletter-signup';
 import { Mail, UserRoundCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import dynamic from 'next/dynamic';
+
+const Trustpilot = dynamic(() => import('@/lib/components/Trustpilot'), {
+  ssr: false,
+});
 
 export default async function Footer() {
   const t = await getTranslations();
+
   return (
     <footer className="w-full border-t bg-background">
-      <div className="container flex flex-col gap-6 py-12 px-4 md:px-6 lg:flex-row lg:gap-12">
+      <div className="container flex flex-col gap-6 pt-12 pb-6 px-4 md:px-6 lg:flex-row lg:gap-12">
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-8">
             <div className="space-y-2">
@@ -101,6 +107,9 @@ export default async function Footer() {
             <NewsletterSignup />
           </div>
         </div>
+      </div>
+      <div className="pb-12">
+        <Trustpilot />
       </div>
       <div className="border-t py-6">
         <div className="container flex flex-col items-center justify-between gap-4 px-4 md:px-6 md:flex-row">
