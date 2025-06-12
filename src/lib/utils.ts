@@ -74,3 +74,22 @@ export function isValidUsername(username: string) {
   const usernameRegex = /^[a-z0-9._-]+$/;
   return usernameRegex.test(username);
 }
+
+export function patternToRegex(pattern: string): RegExp {
+  const regexString = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*');
+  return new RegExp(`^${regexString}$`);
+}
+
+export function getPublicUrl(url: string, publicUrls: string[], supportedLocales = ['en', 'de']) {
+  const normalizedUrl = url.replace(new RegExp(`^/(${supportedLocales.join('|')})(?=/|$)`), '');
+
+  return publicUrls.find((pattern) => patternToRegex(pattern).test(normalizedUrl || '/'));
+}
+
+export function camelCase(str: string) {
+  return str
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+      index === 0 ? word.toLowerCase() : word.toUpperCase(),
+    )
+    .replace(/\s+/g, '');
+}

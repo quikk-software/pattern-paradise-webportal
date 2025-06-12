@@ -10,22 +10,12 @@ import NotificationPermissionProvider from '@/app/providers/NotificationPermissi
 import AffiliateWrapper from '@/lib/wrappers/AffiliateWrapper';
 import { PreviewFlagProvider, usePreview } from '@/app/providers/PreviewFlagProvider';
 import { ConsentBanner } from '@/lib/components/ConsentBanner';
+import { getPublicUrl } from '@/lib/utils';
 
 const noPaddingPages = ['/', '/app/secure/test/chats', '/app/secure/chats', '/app/tester-calls/*'];
 const fullHeightPages = ['/swipe'];
 
 const noContainerPages = ['/'];
-
-function patternToRegex(pattern: string): RegExp {
-  const regexString = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*');
-  return new RegExp(`^${regexString}$`);
-}
-
-function getPublicUrl(url: string, publicUrls: string[], supportedLocales = ['en', 'de']) {
-  const normalizedUrl = url.replace(new RegExp(`^/(${supportedLocales.join('|')})(?=/|$)`), '');
-
-  return publicUrls.find((pattern) => patternToRegex(pattern).test(normalizedUrl || '/'));
-}
 
 export default function DynamicPaddingWrapper({ children }: PropsWithChildren) {
   const [scrolled, setScrolled] = useState(false);
