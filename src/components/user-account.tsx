@@ -248,7 +248,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
         ) : null}
       </div>
       {shouldShowTabs && fetchProductsIsSuccess && fetchTesterCallsIsSuccess ? (
-        <Tabs defaultValue={defaultTab} className="w-full">
+        <Tabs defaultValue={defaultTab} className="w-full" id="shop">
           <div className="flex justify-center">
             <TabsList>
               {products.length > 0 && <TabsTrigger value="patterns">Patterns</TabsTrigger>}
