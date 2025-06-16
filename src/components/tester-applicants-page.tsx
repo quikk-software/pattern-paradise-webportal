@@ -365,7 +365,7 @@ export function TesterApplicantsPage({
               </DrawerTitle>
             </DrawerHeader>
           </div>
-          <div className="flex flex-col gap-4 overflow-y-auto">
+          <div className="flex flex-col gap-4 overflow-y-auto max-h-[150px]">
             {selectedApplicants.map((applicant) => (
               <div className="flex items-center space-x-4" key={applicant.id}>
                 <Avatar className="w-12 h-12">
