@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGetTesting, useListTesterApplications } from '@/lib/api/testing';
 import { TesterApplicantsPage } from '@/components/tester-applicants-page';
-import { Button } from '@/components/ui/button';
 
 export default function TestingPage({ params }: { params: { testingId: string } }) {
   const testingId = params.testingId;
@@ -19,8 +18,13 @@ export default function TestingPage({ params }: { params: { testingId: string } 
     totalCount,
     isLoading: fetchTesterApplicationsIsLoading,
     hasNextPage: fetchTesterApplicationsHasNextPage,
-  } = useListTesterApplications({});
+  } = useListTesterApplications({
+    pageNumber: 1,
+    pageSize: 3,
+  });
   const { fetch: fetchTesting, data: testing } = useGetTesting();
+
+  const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     fetch(testingId, {
@@ -34,6 +38,24 @@ export default function TestingPage({ params }: { params: { testingId: string } 
   useEffect(() => {
     fetchTesting(testingId);
   }, [testingId]);
+
+  const infinityScrollRef = (node: HTMLElement | null) => {
+    if (fetchTesterApplicationsIsLoading) return;
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && fetchTesterApplicationsHasNextPage) {
+        fetch(testingId, {
+          direction,
+          sortKey,
+          filter,
+          status: ['Created'],
+        });
+      }
+    });
+
+    if (node) observer.current.observe(node);
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,21 +85,7 @@ export default function TestingPage({ params }: { params: { testingId: string } 
         testing={testing}
         fetchTesterApplicationsIsLoading={fetchTesterApplicationsIsLoading}
       />
-      {!fetchTesterApplicationsIsLoading && fetchTesterApplicationsHasNextPage ? (
-        <Button
-          className="w-full"
-          onClick={() =>
-            fetch(testingId, {
-              direction,
-              sortKey,
-              filter,
-              status: ['Created'],
-            })
-          }
-        >
-          Load More
-        </Button>
-      ) : null}
+      <div ref={infinityScrollRef} className="h-10" />
     </div>
   );
 }
