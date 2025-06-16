@@ -173,9 +173,10 @@ export default function ChatHistory({
     data: file,
     downloadProgress,
   } = useDownloadPatternsByProductId();
-  const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications(
-    {},
-  );
+  const { fetch: fetchTesterApplications, data: testerApplications } = useListTesterApplications({
+    pageNumber: 1,
+    pageSize: 999,
+  });
   const { mutate: readAllTestingComments } = useReadAllTestingComments();
   const {
     mutate: releaseProduct,
