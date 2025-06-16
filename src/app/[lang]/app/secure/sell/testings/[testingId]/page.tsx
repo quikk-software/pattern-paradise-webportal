@@ -18,10 +18,7 @@ export default function TestingPage({ params }: { params: { testingId: string } 
     totalCount,
     isLoading: fetchTesterApplicationsIsLoading,
     hasNextPage: fetchTesterApplicationsHasNextPage,
-  } = useListTesterApplications({
-    pageNumber: 1,
-    pageSize: 3,
-  });
+  } = useListTesterApplications({});
   const { fetch: fetchTesting, data: testing } = useGetTesting();
 
   const observer = useRef<IntersectionObserver | null>(null);
