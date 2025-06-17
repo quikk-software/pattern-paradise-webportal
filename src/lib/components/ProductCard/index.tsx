@@ -34,6 +34,7 @@ interface ProductCardProps {
   isFree: boolean;
   creatorId: string;
   category: string;
+  currency?: string;
   subCategories: string[];
   status?: string;
   unavailable?: boolean;
@@ -52,6 +53,7 @@ export default function ProductCard({
   creatorId,
   status,
   category,
+  currency,
   subCategories,
   unavailable = false,
   isTesterCall = false,
@@ -310,6 +312,7 @@ export default function ProductCard({
               <SaleForm
                 productId={id}
                 isFree={isFree}
+                currency={currency}
                 initialSalePrice={
                   currentSalePrice ? String(currentSalePrice).replace('.', ',') : undefined
                 }

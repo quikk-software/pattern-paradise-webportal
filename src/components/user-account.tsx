@@ -6,7 +6,6 @@ import { useGetUserById, useListProductsByUserId, useListUserRatings } from '@/l
 import WaterfallListing from '@/lib/components/WaterfallListing';
 import useScreenSize from '@/lib/core/useScreenSize';
 import GoBackButton from '@/lib/components/GoBackButton';
-import { Input } from '@/components/ui/input';
 import GalleryGrid from '@/lib/components/GalleryGrid';
 import { useSelector } from 'react-redux';
 import type { Store } from '@/lib/redux/store';

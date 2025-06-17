@@ -10,6 +10,7 @@ interface PriceInputProps {
   control: any;
   name: string;
   getValues: () => any;
+  currency?: string;
   overrideRequired?: boolean;
   placeholder?: string;
 }
@@ -20,6 +21,7 @@ export default function PriceInput({
   control,
   name,
   getValues,
+  currency,
   overrideRequired = true,
   placeholder = 'Enter price (e.g. 9,999.99)',
 }: PriceInputProps) {
@@ -43,10 +45,10 @@ export default function PriceInput({
             return 'Please enter a valid number';
           }
           if (normalizedValue < MIN_PRICE) {
-            return `Price must be at least ${MIN_PRICE.toFixed(2)}$`;
+            return `Price must be at least ${currency ?? ''}${MIN_PRICE.toFixed(2)}`;
           }
           if (normalizedValue > MAX_PRICE) {
-            return `Price must be at most ${MAX_PRICE.toFixed(2)}$`;
+            return `Price must be at most ${currency ?? ''}${MAX_PRICE.toFixed(2)}`;
           }
 
           if (name === 'salePrice') {

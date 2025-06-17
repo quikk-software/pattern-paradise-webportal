@@ -93,3 +93,14 @@ export function camelCase(str: string) {
     )
     .replace(/\s+/g, '');
 }
+
+export function getCurrencySymbol(currency?: string) {
+  switch (currency) {
+    case 'USD':
+      return '$';
+    case 'EUR':
+      return '€';
+    default:
+      return '';
+  }
+}

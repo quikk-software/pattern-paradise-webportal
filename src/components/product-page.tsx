@@ -27,6 +27,7 @@ import { useValidSession } from '@/hooks/useValidSession';
 import Link from 'next/link';
 import DownloadPatternArea from '@/lib/components/DownloadPatternArea';
 import { useTranslations } from 'use-intl';
+import { getCurrencySymbol } from '@/lib/utils';
 
 interface ProductPageComponentProps {
   productId: string;
@@ -75,6 +76,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
       productId={product.id}
       userId={userId}
       price={isSaleActive ? product.salePrice : product.price}
+      currency={getCurrencySymbol(product.sellerCurrency)}
     >
       <div className="flex flex-col gap-8">
         <div className="flex items-center gap-2">

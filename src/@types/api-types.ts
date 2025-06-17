@@ -148,6 +148,7 @@ export interface PostUserRequest {
   firstName?: string;
   lastName?: string;
   country?: string;
+  currency?: string;
   roles: string[];
   instagramRef?: string;
   tiktokRef?: string;
@@ -181,6 +182,7 @@ export interface PutUserRequest {
   lastName?: string;
   description?: string;
   country?: string;
+  currency?: string;
   instagramRef?: string;
   refLinks?: string[];
   gallery?: string[];
@@ -241,6 +243,7 @@ export interface GetUserResponse {
   firstName?: string;
   lastName?: string;
   country?: string;
+  currency: string;
   instagramRef?: string;
   tiktokRef?: string;
   testerRating?: number;
@@ -437,6 +440,7 @@ export interface GetProductResponse {
   status: string;
   hasExcludedCountry?: boolean;
   creatorId: string;
+  sellerCurrency?: string;
   /**
    * @format date-time
    * @example "2024-01-01T00:00:00Z"
@@ -1468,6 +1472,8 @@ export class Api<
         /** @example "any" */
         country?: any;
         /** @example "any" */
+        currency?: any;
+        /** @example "any" */
         affiliate?: any;
         /** @example "any" */
         instagramRef?: any;
@@ -1583,6 +1589,8 @@ export class Api<
         lastName?: any;
         /** @example "any" */
         country?: any;
+        /** @example "any" */
+        currency?: any;
         /** @example "any" */
         description?: any;
         /** @example "any" */

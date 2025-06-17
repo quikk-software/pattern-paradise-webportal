@@ -41,6 +41,8 @@ import UploadFeedback from '@/components/upload-feedback';
 import { useRouter } from 'next/navigation';
 import CardRadioGroup from '@/components/card-radio-group';
 import logger from '@/lib/core/logger';
+import { GetUserResponse } from '@/@types/api-types';
+import { getCurrencySymbol } from '@/lib/utils';
 
 const LOCAL_STORAGE_KEY = 'productFormData';
 
@@ -51,7 +53,11 @@ export interface PDFFile {
   originalFilename: string;
 }
 
-export function ProductFormComponent() {
+interface ProductFormComponentProps {
+  user: GetUserResponse;
+}
+
+export function ProductFormComponent({ user }: ProductFormComponentProps) {
   const [patterns, setPatterns] = useState<PDFFile[]>([]);
   const [images, setImages] = useState<{ url: string; name: string }[]>([]);
   const [category, setCategory] = useState<{
@@ -563,12 +569,13 @@ export function ProductFormComponent() {
 
           <div className="flex flex-col gap-1">
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Price (in $) <span className="text-red-500">*</span>
+              Price (in {getCurrencySymbol(user.currency)}) <span className="text-red-500">*</span>
             </Label>
             <PriceInput
               isFree={isFree}
               handleKeyDown={handleKeyDown}
               name="price"
+              currency={getCurrencySymbol(user.currency)}
               control={control}
               getValues={getValues}
             />
@@ -594,7 +601,7 @@ export function ProductFormComponent() {
                   Mystery Patterns
                 </Link>{' '}
                 may receive additional exposure to customers. Each mystery box is sold for a{' '}
-                <strong>flat rate of $3</strong>.
+                <strong>flat rate of $3.00</strong>.
               </span>
             }
             options={[

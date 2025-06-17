@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Percent } from 'lucide-react';
 import type { GetProductResponse } from '@/@types/api-types';
+import { getCurrencySymbol } from '@/lib/utils';
 
 interface ProductCardProps {
   product: GetProductResponse;
@@ -92,10 +93,12 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="flex flex-col items-end">
               <div className="flex items-center gap-2">
                 <span className="text-base font-semibold text-red-600">
-                  ${product.salePrice!.toFixed(2)}
+                  {getCurrencySymbol(product.sellerCurrency)}
+                  {product.salePrice!.toFixed(2)}
                 </span>
                 <span className="text-sm line-through text-gray-500">
-                  ${product.price.toFixed(2)}
+                  {getCurrencySymbol(product.sellerCurrency)}
+                  {product.price.toFixed(2)}
                 </span>
               </div>
               {isDueDateActive ? (
@@ -107,7 +110,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           ) : (
             <span className="text-base font-semibold text-green-600">
-              ${product.price.toFixed(2)}
+              {getCurrencySymbol(product.sellerCurrency)}
+              {product.price.toFixed(2)}
             </span>
           )}
         </div>
@@ -116,7 +120,8 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="w-full mt-1 bg-red-50 dark:bg-red-950/20 rounded-md p-2 flex items-center justify-center">
             <Percent className="w-4 h-4 text-red-500 mr-1" />
             <span className="text-xs text-red-600 dark:text-red-400 font-medium">
-              Limited time offer! Save ${(product.price - product.salePrice!).toFixed(2)}
+              Limited time offer! Save {getCurrencySymbol(product.sellerCurrency)}
+              {(product.price - product.salePrice!).toFixed(2)}
             </span>
           </div>
         )}
