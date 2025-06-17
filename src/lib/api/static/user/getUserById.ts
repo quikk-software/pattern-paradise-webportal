@@ -3,13 +3,7 @@ import logger from '@/lib/core/logger';
 
 export const getUserById = async (userId: string) => {
   try {
-    const response = await client.api.getUserById(
-      userId,
-      {},
-      {
-        next: { revalidate: 60 * 60 }, // 1 hour
-      },
-    );
+    const response = await client.api.getUserById(userId);
 
     return response.data;
   } catch (error) {
