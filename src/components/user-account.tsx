@@ -198,7 +198,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
       <div className="flex items-center gap-2">
         <GoBackButton />
         <ShareButton
-          url={`${process.env.NEXT_PUBLIC_URL}/users/${userToUse.username}`}
+          url={`${process.env.NEXT_PUBLIC_SHORT_URL}/${userToUse.username}`}
           shareText={
             isMe
               ? 'Check out my profile on Pattern Paradise!'
