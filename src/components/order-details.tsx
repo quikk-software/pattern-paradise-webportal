@@ -22,6 +22,7 @@ import { useDeleteOrder } from '@/lib/api/order';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/lib/core/dayjs';
 import DownloadPatternArea from '@/lib/components/DownloadPatternArea';
+import { getCurrencySymbol } from '@/lib/utils';
 
 interface OrderDetailsProps {
   order: GetOrderResponse;
@@ -159,17 +160,20 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           <div className="space-y-2">
             {!!order.productPrice ? (
               <p>
-                <strong>Order price:</strong> {order.productPrice.toFixed(2)}$
+                <strong>Order price:</strong> {getCurrencySymbol(order.currency)}
+                {order.productPrice.toFixed(2)}
               </p>
             ) : null}
             {!!order.paypalFee && isSeller ? (
               <p>
-                <strong>PayPal fee:</strong> {order.paypalFee.toFixed(2)}$
+                <strong>PayPal fee:</strong> {getCurrencySymbol(order.currency)}
+                {order.paypalFee.toFixed(2)}
               </p>
             ) : null}
             {!!order.platformFee && isSeller ? (
               <p>
-                <strong>Platform fee:</strong> {order.platformFee.toFixed(2)}$
+                <strong>Platform fee:</strong> {getCurrencySymbol(order.currency)}
+                {order.platformFee.toFixed(2)}
               </p>
             ) : null}
             <p>

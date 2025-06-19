@@ -13,15 +13,23 @@ import { GetProductResponse } from '@/@types/api-types';
 import { useGetUserById } from '@/lib/api';
 import { InfoBoxComponent } from '@/components/info-box';
 import { useRouter } from 'next/navigation';
+import { getCurrencySymbol } from '@/lib/utils';
 
 interface CheckoutButtonProps {
   price: number;
   product: GetProductResponse;
   disabled?: boolean;
   country?: string;
+  currency?: string;
 }
 
-export function CheckoutButtons({ price, product, disabled, country }: CheckoutButtonProps) {
+export function CheckoutButtons({
+  price,
+  product,
+  disabled,
+  country,
+  currency,
+}: CheckoutButtonProps) {
   const {
     priceError,
     handleCreateOrder,
@@ -48,7 +56,7 @@ export function CheckoutButtons({ price, product, disabled, country }: CheckoutB
     <PayPalScriptProvider
       options={{
         clientId: process.env.NEXT_PUBLIC_PAYPAL_PLATFORM_CLIENT_ID ?? '',
-        currency: 'USD',
+        currency: currency ?? 'USD',
         disableFunding: 'bancontact,blik,eps,giropay,ideal,mybank,p24,sepa,sofort,venmo,paylater',
       }}
     >
@@ -59,8 +67,8 @@ export function CheckoutButtons({ price, product, disabled, country }: CheckoutB
         </CardHeader>
         <CardContent className="space-y-4">
           <h3>
+            {getCurrencySymbol(currency)}
             {price ? price.toFixed(2) : order?.productPrice ? order.productPrice.toFixed(2) : price}
-            $
           </h3>
           <div className="space-y-2">
             {seller?.paypalMerchantIsActive ? (

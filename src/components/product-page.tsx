@@ -126,7 +126,7 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
                     <>
                       <BuyNowButton product={product} />
                       <InfoBoxComponent
-                        title="Instant download"
+                        title={t('product.buyHintTitle')}
                         message={
                           <span>
                             {t.rich('product.buyHint1', {

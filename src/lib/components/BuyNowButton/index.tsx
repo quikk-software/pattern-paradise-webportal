@@ -217,6 +217,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
                   }
                   product={product}
                   country={country}
+                  currency={product.sellerCurrency}
                 />
               </>
             ) : (
