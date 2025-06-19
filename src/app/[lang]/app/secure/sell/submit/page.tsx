@@ -61,5 +61,5 @@ export default function SellSubmitPage() {
     );
   }
 
-  return <ProductFormComponent />;
+  return <ProductFormComponent user={user} />;
 }

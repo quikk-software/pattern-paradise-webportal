@@ -19,7 +19,7 @@ import HashtagInput from '@/components/hashtag-input';
 import { MultiSelect } from '@/components/multi-select';
 import { SelectedOptions } from '@/components/selected-options';
 import ExperienceSelect from '@/lib/components/ExperienceSelect';
-import { updateSelectedFlags } from '@/lib/utils';
+import { getCurrencySymbol, updateSelectedFlags } from '@/lib/utils';
 import DragAndDropContainer from '@/lib/components/DragAndDropContainer';
 import { closestCenter, DndContext } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
@@ -479,7 +479,8 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
 
           <div className="flex flex-col gap-1">
             <Label htmlFor="price" className="block text-lg font-semibold mb-2">
-              Price (in $) <span className="text-red-500">*</span>
+              Price (in {getCurrencySymbol(initialData.sellerCurrency)}){' '}
+              <span className="text-red-500">*</span>
             </Label>
             <PriceInput
               isFree={isFree}
@@ -487,6 +488,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
               name="price"
               control={control}
               getValues={getValues}
+              currency={getCurrencySymbol(initialData.sellerCurrency)}
             />
             {errors.price ? (
               <p className="text-sm text-red-500 mb-2">{errors.price.message as string}</p>
@@ -510,7 +512,7 @@ export function UpdateProductForm({ initialData }: UpdateProductFormProps) {
                   Mystery Patterns
                 </Link>{' '}
                 may receive additional exposure to customers. Each mystery box is sold for a{' '}
-                <strong>flat rate of $3</strong>.
+                <strong>flat rate of $3.00</strong>.
               </span>
             }
             options={[

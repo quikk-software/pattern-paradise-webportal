@@ -4,6 +4,7 @@ import { Check, ArrowRight, ShoppingBag } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { getCurrencySymbol } from '@/lib/utils';
 
 interface OrderSuccessProps {
   orderId: string;
@@ -13,6 +14,7 @@ interface OrderSuccessProps {
     name: string;
     description: string;
     price: string;
+    currency: string;
     image: string;
   };
 }
@@ -43,7 +45,10 @@ export default function OrderSuccess({ orderId, orderNumber, date, pattern }: Or
 
           <div className="flex gap-2 justify-between text-sm text-gray-500 mb-6">
             <span className="flex-1">Order Date: {date}</span>
-            <span className="font-semibold">Total: ${pattern.price}</span>
+            <span className="font-semibold">
+              Total: {getCurrencySymbol(pattern.currency)}
+              {pattern.price}
+            </span>
           </div>
 
           <div className="flex gap-4">

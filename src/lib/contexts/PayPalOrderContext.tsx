@@ -31,6 +31,7 @@ type PayPalOrderProviderProps = {
   productId: string;
   userId: string;
   price: number;
+  currency?: string;
 };
 
 export function PayPalOrderProvider({
@@ -38,6 +39,7 @@ export function PayPalOrderProvider({
   productId,
   userId,
   price,
+  currency,
 }: PayPalOrderProviderProps) {
   const router = useRouter();
   const [customPrice, setCustomPrice] = useState<number | undefined>(undefined);
@@ -125,10 +127,10 @@ export function PayPalOrderProvider({
 
   const handleCustomPriceChange = (price: number, minPrice: number) => {
     if (price < minPrice) {
-      setPriceError(`Price must be at least $${minPrice.toFixed(2)}`);
+      setPriceError(`Price must be at least ${currency ?? ''}${minPrice.toFixed(2)}`);
       setCustomPrice(undefined);
     } else if (price > MAX_PRICE) {
-      setPriceError(`Price cannot be greater than $${MAX_PRICE.toFixed(2)}`);
+      setPriceError(`Price cannot be greater than ${currency ?? ''}${MAX_PRICE.toFixed(2)}`);
       setCustomPrice(undefined);
     } else {
       setPriceError(null);

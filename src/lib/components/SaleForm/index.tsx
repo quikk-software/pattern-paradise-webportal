@@ -12,6 +12,7 @@ import RequestStatus from '@/lib/components/RequestStatus';
 interface SaleFormProps {
   productId: string;
   isFree: boolean;
+  currency?: string;
   initialSalePrice?: string;
   initialSalePriceDueDate?: string;
   setNewSalePrice?: (newSalePrice: number | undefined) => void;
@@ -21,6 +22,7 @@ interface SaleFormProps {
 export default function SaleForm({
   productId,
   isFree,
+  currency,
   initialSalePrice,
   initialSalePriceDueDate,
   setNewSalePrice,
@@ -65,7 +67,7 @@ export default function SaleForm({
         <div className="space-y-2">
           <div className="flex flex-col gap-1">
             <Label htmlFor="price" className="block text-md font-semibold">
-              Sale Price (in $)
+              Sale Price{currency ? ` (in ${currency})` : ''}
             </Label>
             <PriceInput
               isFree={isFree}
@@ -74,6 +76,7 @@ export default function SaleForm({
               control={control}
               getValues={getValues}
               overrideRequired={false}
+              currency={currency}
               placeholder={'Enter Sale Price'}
             />
             {errors.salePrice ? (

@@ -7,6 +7,7 @@ import { Clock, Sparkles } from 'lucide-react';
 interface PriceSaleBadgeProps {
   originalPrice: number;
   salePrice: number;
+  currency: string;
   saleDueDate?: string | Date;
   className?: string;
 }
@@ -15,6 +16,7 @@ export function PriceSaleBadge({
   originalPrice,
   salePrice,
   saleDueDate,
+  currency,
   className,
 }: PriceSaleBadgeProps) {
   const [timeLeft, setTimeLeft] = useState<{
@@ -67,8 +69,14 @@ export function PriceSaleBadge({
         </div>
 
         <div className="flex items-baseline gap-3 mb-3">
-          <span className="text-2xl font-bold text-orange-600">${salePrice.toFixed(2)}</span>
-          <span className="text-gray-500 line-through text-sm">${originalPrice.toFixed(2)}</span>
+          <span className="text-2xl font-bold text-orange-600">
+            {currency}
+            {salePrice.toFixed(2)}
+          </span>
+          <span className="text-gray-500 line-through text-sm">
+            {currency}
+            {originalPrice.toFixed(2)}
+          </span>
         </div>
 
         <div className="flex items-center gap-2 text-gray-700">

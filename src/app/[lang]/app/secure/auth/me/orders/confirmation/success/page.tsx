@@ -41,6 +41,7 @@ export default function OrderSuccessPage() {
         name: order.productName,
         description: order.productDescription,
         price: order.productPrice.toFixed(2),
+        currency: order.currency,
       }}
     />
   );

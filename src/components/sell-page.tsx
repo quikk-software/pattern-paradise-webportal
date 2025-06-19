@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { getCurrencySymbol } from '@/lib/utils';
 
 export function SellPageComponent() {
   const [loadMore, setLoadMore] = useState(false);
@@ -182,6 +183,7 @@ export function SellPageComponent() {
                   id={product.id}
                   name={product.title}
                   price={product.price}
+                  currency={getCurrencySymbol(product.sellerCurrency)}
                   isFree={product.isFree}
                   imageUrls={product.imageUrls}
                   creatorId={product.creatorId}

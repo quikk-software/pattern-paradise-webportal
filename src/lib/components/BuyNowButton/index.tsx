@@ -13,7 +13,7 @@ import { GetProductResponse } from '@/@types/api-types';
 import { useValidSession } from '@/hooks/useValidSession';
 import { Label } from '@/components/ui/label';
 import CurrencyInput from 'react-currency-input-field';
-import { cn } from '@/lib/utils';
+import { cn, getCurrencySymbol } from '@/lib/utils';
 import { usePayPalOrder } from '@/lib/hooks/usePayPalOrder';
 import { useListOrdersByProductId } from '@/lib/api/order';
 import { useSelector } from 'react-redux';
@@ -154,6 +154,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
           originalPrice={product.price}
           salePrice={product.salePrice}
           saleDueDate={product.salePriceDueDate}
+          currency={getCurrencySymbol(product.sellerCurrency)}
         />
       ) : null}
       {!customPriceDisabled ? (
@@ -165,7 +166,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
             id="price"
             type="text"
             required={false}
-            placeholder={`$${productPrice.toFixed(2)} or more`}
+            placeholder={`${getCurrencySymbol(product.sellerCurrency)}${productPrice.toFixed(2)} or more`}
             decimalsLimit={2}
             decimalScale={2}
             allowNegativeValue={false}
@@ -216,6 +217,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
                   }
                   product={product}
                   country={country}
+                  currency={product.sellerCurrency}
                 />
               </>
             ) : (
