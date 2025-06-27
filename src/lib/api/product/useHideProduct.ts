@@ -2,7 +2,7 @@ import { client, getApi } from '@/@types';
 import { useApiStates } from '../useApiStates';
 import { useValidSession } from '@/hooks/useValidSession';
 
-export const useDeleteProduct = () => {
+export const useHideProduct = () => {
   const { data: session } = useValidSession();
 
   const { handleFn, ...apiStates } = useApiStates();
@@ -10,7 +10,7 @@ export const useDeleteProduct = () => {
   const mutate = async (productId: string) => {
     await handleFn(
       async () =>
-        await client.api.deleteProduct(productId, {
+        await client.api.hideProduct(productId, {
           ...(await getApi(session)),
         }),
     );

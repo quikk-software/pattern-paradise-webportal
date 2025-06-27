@@ -7,6 +7,8 @@ export * from './useUpdateProduct';
 export * from './useReleaseProduct';
 export * from './useDraftProduct';
 export * from './useUndraftProduct';
+export * from './useHideProduct';
+export * from './useUnhideProduct';
 export * from './useListProductsByUserId';
 export * from './useListProductsForShowcase';
 export * from './useListProductsForRecommendations';

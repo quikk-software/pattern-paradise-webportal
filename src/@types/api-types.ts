@@ -2537,6 +2537,40 @@ export class Api<
       }),
 
     /**
+     * @description Hides the product by the given product ID.
+     *
+     * @tags Product
+     * @name HideProduct
+     * @summary Hides the product.
+     * @request PUT:/api/v1/products/{productId}/hide
+     * @secure
+     */
+    hideProduct: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/products/${productId}/hide`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Un-hides the product by the given product ID.
+     *
+     * @tags Product
+     * @name UnhideProduct
+     * @summary Un-hides the product.
+     * @request PUT:/api/v1/products/{productId}/unhide
+     * @secure
+     */
+    unhideProduct: (productId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/products/${productId}/unhide`,
+        method: "PUT",
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description The query returns 4 random products.
      *
      * @tags Product
