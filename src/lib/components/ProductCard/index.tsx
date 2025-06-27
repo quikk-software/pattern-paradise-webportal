@@ -6,8 +6,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import type { Store } from '@/lib/redux/store';
-import { Clock, Percent, Trash, X, Edit, Tag, FileBox, ArrowRight } from 'lucide-react';
-import { useDeleteProduct } from '@/lib/api';
+import {
+  Clock,
+  Percent,
+  Trash,
+  X,
+  Edit,
+  Tag,
+  FileBox,
+  ArrowRight,
+  EyeOff,
+  Eye,
+} from 'lucide-react';
+import { useDeleteProduct, useHideProduct, useUnhideProduct } from '@/lib/api';
 import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
 import ProductImageSlider from '@/lib/components/ProductImageSlider';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
@@ -16,6 +27,7 @@ import SaleForm from '@/lib/components/SaleForm';
 import DraftPatternDrawer from '@/lib/components/DraftPatternDrawer';
 import UndraftPatternDrawer from '@/lib/components/UndraftPatternDrawer';
 import { cn } from '@/lib/utils';
+import RequestStatus from '@/lib/components/RequestStatus';
 
 const getStatusDisplayText = (status?: string) => {
   switch (status) {
@@ -68,12 +80,28 @@ export default function ProductCard({
   const [isReleaseProductDrawerOpen, setIsReleaseProductDrawerOpen] = useState(false);
   const [isDraftProductDrawerOpen, setIsDraftProductDrawerOpen] = useState(false);
   const [isUndraftProductDrawerOpen, setIsUndraftProductDrawerOpen] = useState(false);
+  const [isHideProductDrawerOpen, setIsHideProductDrawerOpen] = useState(false);
+  const [isUnhideProductDrawerOpen, setIsUnhideProductDrawerOpen] = useState(false);
   const [isSaleFormOpen, setIsSaleFormOpen] = useState(false);
   const [isDeleteProductDrawerOpen, setIsDeleteProductDrawerOpen] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
 
   const { userId } = useSelector((s: Store) => s.auth);
-  const { fetch: deleteProduct, isLoading: deleteProductIsLoading } = useDeleteProduct();
+  const { mutate: deleteProduct, isLoading: deleteProductIsLoading } = useDeleteProduct();
+  const {
+    mutate: hideProduct,
+    isLoading: hideProductIsLoading,
+    isSuccess: hideProductIsSuccess,
+    isError: hideProductIsError,
+    errorDetail: hideProductErrorDetail,
+  } = useHideProduct();
+  const {
+    mutate: unhideProduct,
+    isLoading: unhideProductIsLoading,
+    isSuccess: unhideProductIsSuccess,
+    isError: unhideProductIsError,
+    errorDetail: unhideProductErrorDetail,
+  } = useUnhideProduct();
 
   const isCreator = userId === creatorId;
   const isDueDateActive =
@@ -132,6 +160,22 @@ export default function ProductCard({
   const handleDeleteProductClick = async (productId: string) => {
     await deleteProduct(productId);
     setIsDeleteProductDrawerOpen(false);
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
+  };
+
+  const handleHideProductClick = async (productId: string) => {
+    await hideProduct(productId);
+    setIsHideProductDrawerOpen(false);
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
+  };
+
+  const handleUnhideProductClick = async (productId: string) => {
+    await unhideProduct(productId);
+    setIsUnhideProductDrawerOpen(false);
     if (typeof window !== 'undefined') {
       window.location.reload();
     }
@@ -356,6 +400,40 @@ export default function ProductCard({
               <Clock className="w-4 h-4 mr-1.5" /> Start Tester Call
             </Button>
           )}
+
+          {status === 'Released' && (
+            <div className="space-y-1">
+              <Button
+                onClick={() => setIsHideProductDrawerOpen(true)}
+                className="w-full"
+                variant="secondary"
+              >
+                <EyeOff className="w-4 h-4 mr-1.5" /> Hide Pattern
+              </Button>
+              <RequestStatus
+                isSuccess={hideProductIsSuccess}
+                isError={hideProductIsError}
+                errorMessage={hideProductErrorDetail}
+              />
+            </div>
+          )}
+
+          {status === 'Hidden' && (
+            <div className="space-y-1">
+              <Button
+                onClick={() => setIsUnhideProductDrawerOpen(true)}
+                className="w-full"
+                variant="secondary"
+              >
+                <Eye className="w-4 h-4 mr-1.5" /> Unveil Pattern
+              </Button>
+              <RequestStatus
+                isSuccess={unhideProductIsSuccess}
+                isError={unhideProductIsError}
+                errorMessage={unhideProductErrorDetail}
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -383,6 +461,24 @@ export default function ProductCard({
         }}
         isLoading={deleteProductIsLoading}
         description="You cannot restore deleted patterns."
+      />
+      <ConfirmDrawer
+        isOpen={isHideProductDrawerOpen}
+        setIsOpen={setIsHideProductDrawerOpen}
+        callbackFn={() => {
+          handleHideProductClick(id).then(() => setIsHideProductDrawerOpen(false));
+        }}
+        isLoading={hideProductIsLoading}
+        description="Your pattern will be hidden from the public."
+      />
+      <ConfirmDrawer
+        isOpen={isUnhideProductDrawerOpen}
+        setIsOpen={setIsUnhideProductDrawerOpen}
+        callbackFn={() => {
+          handleUnhideProductClick(id).then(() => setIsUnhideProductDrawerOpen(false));
+        }}
+        isLoading={unhideProductIsLoading}
+        description="Your pattern will be unveiled again."
       />
     </Card>
   );
