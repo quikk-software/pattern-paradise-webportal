@@ -288,7 +288,7 @@ export function ListingComponent({
           <WaterfallListing
             products={recommendedProducts}
             status={status}
-            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+            columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 5}
             onImpression={(productId) => handleImpression(productId)}
             showFade={!infiniteScroll && hasNextPage}
           />
@@ -467,7 +467,7 @@ export function ListingComponent({
             <WaterfallListing
               products={products}
               status={status}
-              columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4}
+              columns={screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 5}
               onImpression={(productId) => handleImpression(productId)}
               showFade={!infiniteScroll && hasNextPage}
             />

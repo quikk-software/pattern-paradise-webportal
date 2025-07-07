@@ -271,7 +271,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
                   products={products}
                   status={'Released'}
                   columns={
-                    screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4
+                    screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 5
                   }
                 />
               </div>
@@ -292,7 +292,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
                   products={testerCalls}
                   status={'Created'}
                   columns={
-                    screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 4
+                    screenSize === 'xs' || screenSize === 'sm' || screenSize === 'md' ? 2 : 5
                   }
                 />
               </div>
