@@ -115,7 +115,7 @@ export default function DownloadPatternArea({ product }: DownloadPatternAreaProp
                 return (
                   <div className="space-y-1" key={file.objectName}>
                     <Button
-                      disabled={currentlyDownloading === file.id || downloadIsDone}
+                      disabled={currentlyDownloading === file.id}
                       onClick={() => handleDownload(file.id)}
                       className="w-full mb-2"
                       variant="secondary"
