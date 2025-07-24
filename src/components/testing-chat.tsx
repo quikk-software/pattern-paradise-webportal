@@ -14,7 +14,6 @@ export function TestingChat() {
   const [changedChat, setChangedChat] = useState(false);
   const [selectedProductIdByTesting, setSelectedProductIdByTesting] = useState<string | null>(null);
   const [selectedTestingStatus, setSelectedTestingStatus] = useState<string | null>(null);
-  const [selectedProductLanguages, setSelectedProductLanguages] = useState<string[]>([]);
   const [showChatList, setShowChatList] = useState(true);
   const [isReviewDrawerOpen, setIsReviewDrawerOpen] = useState(false);
   const [messages, setMessages] = useState<GetTestingCommentResponse[]>([]);
@@ -52,9 +51,6 @@ export function TestingChat() {
       const selectedTesting = testings.find((testing) => testing.id === testingIdFromQuery);
       setSelectedProductIdByTesting(selectedTesting?.productId ?? null);
       setSelectedTestingStatus(selectedTesting?.status ?? null);
-      setSelectedProductLanguages(
-        selectedTesting?.product?.files?.map((file) => file.language) ?? [],
-      );
       setShowChatList(false);
     } else if (testingsLoaded) {
       setShowChatList(true);
@@ -81,7 +77,6 @@ export function TestingChat() {
         testings={testings}
         selectedTestingId={testingId}
         selectedProductIdByTesting={selectedProductIdByTesting}
-        productLanguages={selectedProductLanguages}
         showChatList={showChatList}
         bottomNavHeight={bottomNavHeight}
         navbarHeight={navbarHeight}

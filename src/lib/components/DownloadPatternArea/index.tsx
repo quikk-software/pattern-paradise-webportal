@@ -13,9 +13,13 @@ import { useDownloadPattern } from '@/lib/api/pattern';
 
 interface DownloadPatternAreaProps {
   product: GetProductResponse;
+  disableZip?: boolean;
 }
 
-export default function DownloadPatternArea({ product }: DownloadPatternAreaProps) {
+export default function DownloadPatternArea({
+  product,
+  disableZip = false,
+}: DownloadPatternAreaProps) {
   const [currentlyDownloading, setCurrentlyDownloading] = useState<string | undefined>(undefined);
   const [downloadIsDone, setDownloadIsDone] = useState(false);
 
@@ -95,15 +99,19 @@ export default function DownloadPatternArea({ product }: DownloadPatternAreaProp
               <CountryFlag languageCode={language} />{' '}
               {LANGUAGES.find((lang) => lang.code === language)?.name ?? language}
             </h3>
-            <h5 className="mb-1 text-muted-foreground">Download as ZIP file</h5>
-            <div className="mb-2">
-              <DownloadPatternZipButton
-                productId={product.id}
-                productTitle={product.title}
-                files={product.files.filter((p) => p.language === language)}
-                buttonLabel={'Download all files'}
-              />
-            </div>
+            {!disableZip ? (
+              <>
+                <h5 className="mb-1 text-muted-foreground">Download as ZIP file</h5>
+                <div className="mb-2">
+                  <DownloadPatternZipButton
+                    productId={product.id}
+                    productTitle={product.title}
+                    files={product.files.filter((p) => p.language === language)}
+                    buttonLabel={'Download all files'}
+                  />
+                </div>
+              </>
+            ) : null}
             <h5 className="mb-1 text-muted-foreground">Send as mail</h5>
             <div className="mb-2">
               <SendFilesButton productId={product.id} channel={'MAIL'} language={language} />

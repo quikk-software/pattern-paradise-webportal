@@ -113,7 +113,6 @@ interface ChatHistoryProps {
   navbarHeight: number;
   changedChat: boolean;
   selectedTestingStatus: string | null;
-  productLanguages: string[];
   messages: GetTestingCommentResponse[];
   fetchTestingComments: (
     testingId: string,
@@ -133,7 +132,6 @@ export default function ChatHistory({
   testings,
   selectedTestingId,
   selectedProductIdByTesting,
-  productLanguages,
   showChatList,
   bottomNavHeight,
   navbarHeight,
@@ -445,18 +443,22 @@ export default function ChatHistory({
                       <StarIcon className="h-6 w-6" />
                     </Button>
                   ) : null}
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    disabled={
-                      !selectedProductIdByTesting || downloadPatternsIsLoading || !isTesterOrCreator
-                    }
-                    onClick={() => {
-                      setIsDownloadPatternsDrawerOpen(true);
-                    }}
-                  >
-                    <DownloadIcon className="h-6 w-6" />
-                  </Button>
+                  {currentTesting?.product ? (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      disabled={
+                        !selectedProductIdByTesting ||
+                        downloadPatternsIsLoading ||
+                        !isTesterOrCreator
+                      }
+                      onClick={() => {
+                        setIsDownloadPatternsDrawerOpen(true);
+                      }}
+                    >
+                      <DownloadIcon className="h-6 w-6" />
+                    </Button>
+                  ) : null}
                 </div>
               </div>
               {isApproved ? (
@@ -838,15 +840,14 @@ export default function ChatHistory({
           ) : null}
         </Card>
       )}
-      <DownloadPatternsDrawer
-        isOpen={isDownloadPatternsDrawerOpen}
-        setIsOpen={setIsDownloadPatternsDrawerOpen}
-        isLoading={downloadPatternsIsLoading}
-        productId={currentTesting?.productId}
-        callbackFn={(language) => handleDownloadPatternClick(selectedProductIdByTesting, language)}
-        languages={productLanguages}
-        downloadProgress={downloadProgress}
-      />
+      {currentTesting?.product ? (
+        <DownloadPatternsDrawer
+          isOpen={isDownloadPatternsDrawerOpen}
+          setIsOpen={setIsDownloadPatternsDrawerOpen}
+          isLoading={downloadPatternsIsLoading}
+          product={currentTesting.product}
+        />
+      ) : null}
       <ReleasePatternSuccessDrawer
         isOpen={releaseProductSuccessDrawer}
         setIsOpen={setReleaseProductSuccessDrawer}
