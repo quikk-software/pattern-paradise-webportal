@@ -51,6 +51,7 @@ import ColorPalette from '@/lib/components/ColorPalette';
 import { themes } from '@/lib/core/themes';
 import CountryGroupSelector from '@/lib/components/CountryGroupSelector';
 import CurrencySelect from '@/lib/components/CurrencySelect';
+import DeleteAccountButton from '@/lib/components/DeleteAccountButton';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -903,6 +904,8 @@ export function ProfilePage({ user }: ProfilePageProps) {
         <ProfileImageGallery gallery={user.gallery} highlight={highlightGallery} />
       </div>
       <EditPassword />
+      <div className="h-10" />
+      <DeleteAccountButton />
       <ConfirmDrawer
         isOpen={isDisconnectPayPalDrawerOpen}
         setIsOpen={setIsDisconnectPayPalDrawerOpen}

@@ -1628,6 +1628,23 @@ export class Api<
       }),
 
     /**
+     * @description Deletes the authenticated user.
+     *
+     * @tags User
+     * @name DeleteUser
+     * @summary Deletes the authenticated user.
+     * @request DELETE:/api/v1/users/{userId}
+     * @secure
+     */
+    deleteUser: (userId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/users/${userId}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description Updates the user password by the given request body data and user ID.
      *
      * @tags User
