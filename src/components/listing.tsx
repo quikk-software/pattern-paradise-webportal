@@ -440,7 +440,7 @@ export function ListingComponent({
             </SelectItem>
             <SelectItem value="priceDescending">
               <span className="flex flex-row gap-2 items-center">
-                <ArrowUp10 size={14} /> {t('browse.filter.priceAscending')}
+                <ArrowUp10 size={14} /> {t('browse.filter.priceDescending')}
               </span>
             </SelectItem>
             <SelectItem value="newest">
