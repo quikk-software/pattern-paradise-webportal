@@ -48,7 +48,11 @@ export default function SaleForm({
 
   const onSubmit = async (data: any) => {
     await mutate(productId, {
-      salePrice: isFree ? undefined : parseFloat(data.salePrice.replace(',', '.')),
+      salePrice: isFree
+        ? undefined
+        : data.salePrice
+          ? parseFloat(data.salePrice.replace(',', '.'))
+          : undefined,
       salePriceDueDate: isFree || !salePriceDueDate ? undefined : salePriceDueDate.toISOString(),
     });
     setNewSalePrice?.(data.salePrice ? parseFloat(data.salePrice.replace(',', '.')) : undefined);
