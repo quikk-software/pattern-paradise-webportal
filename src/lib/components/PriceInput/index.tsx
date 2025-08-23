@@ -36,7 +36,6 @@ export default function PriceInput({
             ? 'Price is required'
             : false,
         validate: (value: any) => {
-          console.log({ name, t: isFree || !overrideRequired });
           if (isFree || !overrideRequired) {
             return true;
           }
@@ -61,9 +60,9 @@ export default function PriceInput({
           return true;
         },
       }}
-      render={({ field }) => (
+      render={({ field: { onChange, value, ...rest } }) => (
         <CurrencyInput
-          {...field}
+          {...rest}
           id="price"
           placeholder={placeholder}
           decimalsLimit={2}
@@ -71,6 +70,9 @@ export default function PriceInput({
           allowNegativeValue={false}
           allowDecimals={true}
           disabled={isFree}
+          onValueChange={(val) => {
+            onChange(val === 'NaN' ? '0' : val);
+          }}
           className={cn(
             'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-md ring-offset-background file:border-0 file:bg-transparent file:text-md file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           )}
