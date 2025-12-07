@@ -11,11 +11,7 @@ import GithubIcon from '@/lib/icons/GithubIcon';
 import NewsletterSignup from '@/components/newsletter-signup';
 import { Mail, UserRoundCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import dynamic from 'next/dynamic';
-
-const Trustpilot = dynamic(() => import('@/lib/components/Trustpilot'), {
-  ssr: false,
-});
+import Trustpilot from '@/lib/components/Trustpilot';
 
 export default async function Footer() {
   const t = await getTranslations();

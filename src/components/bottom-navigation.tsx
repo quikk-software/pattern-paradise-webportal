@@ -36,31 +36,6 @@ export function BottomNavigation() {
 
   return (
     <div className={`bg-white ${isStandalone ? 'pb-4' : 'pb-0'}`} id="bottom-navigation">
-      <style jsx global>{`
-        @keyframes slow-pulse {
-          0%,
-          100% {
-            opacity: 0.75;
-          }
-          50% {
-            opacity: 0.4;
-          }
-        }
-        .slow-pulse {
-          animation: slow-pulse 3s ease-in-out infinite;
-        }
-
-        @keyframes slow-ping {
-          75%,
-          100% {
-            transform: scale(2);
-            opacity: 0;
-          }
-        }
-        .slow-ping {
-          animation: slow-ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-      `}</style>
       <div className="z-50 w-full h-16 bg-background border-t border-border">
         <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
           {menuItems.map((item) => (
