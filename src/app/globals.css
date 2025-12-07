@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+  input,
+  textarea,
   html {
-    -webkit-text-size-adjust: 100%; /* Prevents text scaling on iOS */
-    touch-action: manipulation; /* Prevents pinch-to-zoom and double-tap zoom */
-  },
-input,
-textarea,
-select {
-  @apply text-base; /* Equivalent to font-size: 16px; in Tailwind */
-}
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+
+  select {
+    @apply text-base;
+  }
 }
 
 html {
@@ -149,4 +150,39 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes slow-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+.slow-pulse {
+  animation: slow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes slow-ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+.slow-ping {
+  animation: slow-ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }

@@ -7,7 +7,7 @@ const intlMiddleware = createIntlMiddleware(routing);
 
 const PUBLIC_FILE = /\.(.*)$/;
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = intlMiddleware(request);
 
   if ((await response).status !== 200) {

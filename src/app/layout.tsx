@@ -31,17 +31,13 @@ export async function generateStaticParams() {
 
 export default async function RootLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ lang: string }>;
 }>) {
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
 
-  const { lang } = await params;
-
   return (
-    <html lang={lang} className="notranslate" translate="no">
+    <html className="notranslate" translate="no">
       <head>
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
