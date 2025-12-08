@@ -88,7 +88,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SellUserPage({ params }: { params: { userId: string } }) {
-  const user = await getUserById(params.userId);
+  const p = await params;
+  const user = await getUserById(p.userId);
 
   if (!user) {
     return <NotFoundPage />;

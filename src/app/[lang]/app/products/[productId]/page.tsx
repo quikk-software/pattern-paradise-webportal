@@ -144,7 +144,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductDetailPage({ params }: { params: { productId: string } }) {
-  const product = await getProduct(params.productId);
+  const p = await params;
+  const product = await getProduct(p.productId);
 
   const t = await getTranslations();
 
@@ -166,7 +167,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
     )} ${t('product.pattern')}`.trim(),
     image: product?.imageUrls,
     description: product?.description,
-    sku: params.productId,
+    sku: p.productId,
     brand: {
       '@type': 'Brand',
       name: 'Pattern Paradise',
@@ -176,7 +177,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
     ageGroup: 'adult',
     offers: {
       '@type': 'Offer',
-      url: `${APP_DOMAIN}/app/products/${params.productId}`,
+      url: `${APP_DOMAIN}/app/products/${p.productId}`,
       priceCurrency: 'USD',
       price: product?.price ?? '0.00',
       availability: 'https://schema.org/InStock',
@@ -214,7 +215,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
-      <ProductPageComponent productId={params.productId} />
+      <ProductPageComponent productId={p.productId} />
     </>
   );
 }

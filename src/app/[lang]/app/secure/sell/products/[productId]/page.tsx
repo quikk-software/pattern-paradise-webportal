@@ -5,13 +5,19 @@ import { UpdateProductForm } from '@/lib/components/UpdateProductForm';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useGetProduct } from '@/lib/api';
+import { useParams } from 'next/navigation';
 
-export default function UpdateProductPage({ params }: { params: { productId: string } }) {
+export default function UpdateProductPage() {
+  const { productId } = useParams();
+
   const { fetch, data: product, isLoading, isError } = useGetProduct();
 
   useEffect(() => {
-    fetch(params.productId, false);
-  }, [params.productId]);
+    if (!productId) {
+      return;
+    }
+    fetch(productId as string, false);
+  }, [productId]);
 
   if (isError) {
     return <NotFoundPage />;
