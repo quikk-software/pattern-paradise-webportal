@@ -3,9 +3,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetTesting, useListTesterApplications } from '@/lib/api/testing';
 import { TesterApplicantsPage } from '@/components/tester-applicants-page';
+import { useParams } from 'next/navigation';
 
-export default function TestingPage({ params }: { params: { testingId: string } }) {
-  const testingId = params.testingId;
+export default function TestingPage() {
+  const { testingId } = useParams();
+
   const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
   const [sortKey, setSortKey] = useState<'updatedAt' | 'assignedAt'>('updatedAt');
   const [filter, setFilter] = useState<string[]>([]);
@@ -24,7 +26,10 @@ export default function TestingPage({ params }: { params: { testingId: string } 
   const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    fetch(testingId, {
+    if (!testingId) {
+      return;
+    }
+    fetch(testingId as string, {
       direction,
       sortKey,
       filter,
@@ -33,7 +38,10 @@ export default function TestingPage({ params }: { params: { testingId: string } 
   }, [testingId, direction, filter, sortKey]);
 
   useEffect(() => {
-    fetchTesting(testingId);
+    if (!testingId) {
+      return;
+    }
+    fetchTesting(testingId as string);
   }, [testingId]);
 
   const infinityScrollRef = (node: HTMLElement | null) => {
@@ -41,8 +49,8 @@ export default function TestingPage({ params }: { params: { testingId: string } 
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && fetchTesterApplicationsHasNextPage) {
-        fetch(testingId, {
+      if (entries[0].isIntersecting && fetchTesterApplicationsHasNextPage && !!testingId) {
+        fetch(testingId as string, {
           direction,
           sortKey,
           filter,

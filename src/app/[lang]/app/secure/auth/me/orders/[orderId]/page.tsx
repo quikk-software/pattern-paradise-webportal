@@ -5,13 +5,19 @@ import { OrderDetails } from '@/components/order-details';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useGetOrder } from '@/lib/api/order';
+import { useParams } from 'next/navigation';
 
-export default function MyOrderDetailPage({ params }: { params: { orderId: string } }) {
+export default function MyOrderDetailPage() {
+  const { orderId } = useParams();
+
   const { fetch, data: order, isLoading, isError } = useGetOrder();
 
   useEffect(() => {
-    fetch(params.orderId);
-  }, [params.orderId]);
+    if (!orderId) {
+      return;
+    }
+    fetch(orderId as string);
+  }, [orderId]);
 
   if (isError) {
     return <NotFoundPage />;

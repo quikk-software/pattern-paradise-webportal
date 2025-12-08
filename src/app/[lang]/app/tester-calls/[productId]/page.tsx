@@ -6,8 +6,11 @@ import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useGetProduct } from '@/lib/api';
 import { TesterCallPage } from '@/components/tester-call-page';
+import { useParams } from 'next/navigation';
 
-export default function TestDetailsPage({ params }: { params: { productId: string } }) {
+export default function TestDetailsPage() {
+  const { productId } = useParams();
+
   const {
     fetch: fetchTesting,
     isLoading: fetchTestingIsLoading,
@@ -22,9 +25,12 @@ export default function TestDetailsPage({ params }: { params: { productId: strin
   } = useGetProduct();
 
   useEffect(() => {
-    fetchProduct(params.productId, false);
-    fetchTesting(params.productId);
-  }, [params.productId]);
+    if (!productId) {
+      return;
+    }
+    fetchProduct(productId as string, false);
+    fetchTesting(productId as string);
+  }, [productId]);
 
   if (fetchTestingIsError || fetchProductIsError) {
     return <NotFoundPage />;
