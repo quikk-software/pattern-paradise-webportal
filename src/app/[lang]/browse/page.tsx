@@ -10,18 +10,26 @@ export async function generateMetadata({
   params: { lang: string };
   searchParams: { [key: string]: string };
 }) {
-  const queryString = new URLSearchParams(searchParams).toString();
+  const sp = await searchParams;
+  const p = await params;
+  const queryString = new URLSearchParams(sp).toString();
   const fullPath = queryString ? `/browse?${queryString}` : '/browse';
   const fallback = '/browse';
 
-  return generatePageMetadata(fullPath, params.lang, fallback);
+  return generatePageMetadata(fullPath, p.lang, fallback);
 }
 
-export default function BrowsePage({ searchParams }: { searchParams: { [key: string]: string } }) {
+export default async function BrowsePage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
+  const sp = await searchParams;
+
   return (
     <div className="space-y-4">
       <WelcomeBannerWrapper redirect="/browse" />
-      <ListingComponent status={'Released'} initialQuery={searchParams} />
+      <ListingComponent status={'Released'} initialQuery={sp} />
     </div>
   );
 }
