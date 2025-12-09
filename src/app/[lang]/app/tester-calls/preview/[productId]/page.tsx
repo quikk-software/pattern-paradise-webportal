@@ -8,8 +8,8 @@ interface Props {
 }
 
 export default async function TesterCallPreviewDetailsPage({ params, searchParams }: Props) {
-  const { productId } = params;
-  const theme = searchParams.theme || 'neutral';
+  const { productId } = await params;
+  const theme = (await searchParams.theme) || 'neutral';
   const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://pattern-paradise.shop';
 
   const product = await getProduct(productId);
