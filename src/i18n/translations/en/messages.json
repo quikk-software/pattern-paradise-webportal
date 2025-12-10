@@ -104,6 +104,14 @@
     "saveMoney": "Save",
     "browsePatterns": "Browse Patterns"
   },
+  "browseFree": {
+    "freeHint": "100% Free Forever",
+    "heroTitle": "Free Crochet Patterns for Every Skill Level on Pattern Paradise",
+    "heroDescription": "Discover free crochet patterns for beginners and experts. From amigurumi to blankets, find easy step-by-step instructions for your next project.",
+    "browseButton": "Browse Free Patterns",
+    "searchButton": "Search Patterns",
+    "heroImageAlt": "Free crochet patterns on Pattern Paradise"
+  },
   "faq": {
     "title": "Frequently Asked Questions",
     "description": "Find answers to common questions about Pattern Paradise and how our platform works.",

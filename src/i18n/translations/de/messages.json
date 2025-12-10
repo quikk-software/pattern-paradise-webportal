@@ -104,6 +104,14 @@
     "saveMoney": "Spare",
     "browsePatterns": "Suchen"
   },
+  "browseFree": {
+    "freeHint": "100% kostenlos",
+    "heroTitle": "Entdecke kostenlose Häkelanleitungen auf Pattern Paradise",
+    "heroDescription": "Entdecke kostenlose Häkelanleitungen für Anfänger und Fortgeschrittene. Von Amigurumi bis hin zu Decken – finde leicht verständliche Schritt-für-Schritt-Anleitungen für dein nächstes Projekt.",
+    "browseButton": "Kostenlose Anleitungen",
+    "searchButton": "Anleitungen suchen",
+    "heroImageAlt": "Kostenlose Häkelanleitungen auf Pattern Paradise"
+  },
   "faq": {
     "title": "Häufig gestellte Fragen",
     "description": "Finde Antworten auf häufige Fragen zu Pattern Paradise und wie unsere Plattform funktioniert.",
