@@ -112,6 +112,18 @@ const pages: Page[] = [
     description:
       'Explore 100s of free knitting patterns at Pattern Paradise! From cozy sweaters to cute baby clothes, find beginner to advanced projects and start knitting your next masterpiece.',
   },
+  {
+    title: 'Free Crochet Patterns - Amigurumi, Clothing & More | Pattern Paradise',
+    pathname: '/en/browse/free-crochet-patterns',
+    description:
+      'Discover 100s of free crochet patterns at Pattern Paradise! From adorable amigurumi to stylish clothing, download beginner to advanced projects and start crafting today.',
+  },
+  {
+    title: 'Free Knitting Patterns – Sweaters, Scarves, Baby Clothes & More | Pattern Paradise',
+    pathname: '/en/browse/free-knitting-patterns',
+    description:
+      'Explore 100s of free knitting patterns at Pattern Paradise! From cozy sweaters to cute baby clothes, find beginner to advanced projects and start knitting your next masterpiece.',
+  },
 
   {
     title: 'Pattern Paradise – Häkel- & Strickanleitungen kaufen, verkaufen & testen',
@@ -193,6 +205,19 @@ const pages: Page[] = [
     title:
       'Kostenlose Strickanleitungen – Pullover, Schals, Babykleidung & mehr | Pattern Paradise',
     pathname: '/en/browse?sortBy=mostRelevant&maxPrice=0&craft=Knitting',
+    description:
+      'Stöbere durch Hunderte kostenlose Strickanleitungen auf Pattern Paradise! Von warmen Pullovern bis zu süßer Babykleidung – finde Projekte für jedes Niveau und beginne jetzt dein neues Strickprojekt.',
+  },
+  {
+    title: 'Kostenlose Häkelanleitungen – Amigurumi, Kleidung & mehr | Pattern Paradise',
+    pathname: '/de/browse/free-crochet-patterns',
+    description:
+      'Entdecke Hunderte kostenlose Häkelanleitungen auf Pattern Paradise! Von niedlichen Amigurumi bis zu stylischer Kleidung – lade Anleitungen für Anfänger bis Fortgeschrittene herunter und starte noch heute dein nächstes Projekt.',
+  },
+  {
+    title:
+      'Kostenlose Strickanleitungen – Pullover, Schals, Babykleidung & mehr | Pattern Paradise',
+    pathname: '/en/browse/free-knitting-patterns',
     description:
       'Stöbere durch Hunderte kostenlose Strickanleitungen auf Pattern Paradise! Von warmen Pullovern bis zu süßer Babykleidung – finde Projekte für jedes Niveau und beginne jetzt dein neues Strickprojekt.',
   },
