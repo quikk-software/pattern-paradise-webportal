@@ -79,7 +79,7 @@ export default function CountryGroupSelector({
         ))}
       </div>
 
-      {excludedCountries.length > 0 && (
+      {excludedCountries.length > 0 ? (
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-medium">
@@ -111,6 +111,10 @@ export default function CountryGroupSelector({
                 ))}
             </div>
           </ScrollArea>
+        </div>
+      ) : (
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold">No countries excluded</h3>
         </div>
       )}
 
