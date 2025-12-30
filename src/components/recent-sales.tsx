@@ -7,7 +7,7 @@ interface RecentSalesProps {
   recentSales: GetOrderAnalyticsResponse['lastSales'];
 }
 
-export function RecentSales({ recentSales }: RecentSalesProps): JSX.Element {
+export function RecentSales({ recentSales }: RecentSalesProps): React.ReactNode {
   if (recentSales.length === 0) {
     return <NoDataAvailable />;
   }
