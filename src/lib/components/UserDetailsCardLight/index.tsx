@@ -149,7 +149,7 @@ export default function UserDetailsCardLight({
                       >
                         <Badge
                           variant="outline"
-                          className="border-pink-100 bg-transparent text-foreground dark:border-pink-900/30 dark:bg-transparent"
+                          className="border-pink-100 bg-transparent text-foreground"
                         >
                           <InstagramIcon className="mr-1 h-4 w-4" />
                           <span>Instagram</span>
@@ -168,7 +168,7 @@ export default function UserDetailsCardLight({
                       >
                         <Badge
                           variant="outline"
-                          className="border-slate-100 bg-transparent text-foreground dark:border-slate-800/30 dark:bg-transparent"
+                          className="border-slate-100 bg-transparent text-foreground"
                         >
                           <TikTokIcon className="mr-1 h-4 w-4" />
                           <span>TikTok</span>

@@ -29,7 +29,7 @@ export function EmojiPicker({ onSelect, onClose }: EmojiPickerProps) {
   return (
     <div
       ref={pickerRef}
-      className="absolute bottom-full mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 z-10 border border-gray-200 dark:border-gray-700"
+      className="absolute bottom-full mb-2 bg-white rounded-lg shadow-lg p-2 z-10 border border-gray-200"
     >
       <div className="flex flex-wrap gap-1 max-w-[200px]">
         {emojis.map((emoji, index) => (

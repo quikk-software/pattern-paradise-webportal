@@ -624,7 +624,7 @@ export default function ChatHistory({
                             <div
                               className={`flex flex-col flex-1 gap-1 rounded-lg p-3 ${
                                 message.type === 'Review'
-                                  ? 'bg-yellow-100 border-2 border-yellow-300 dark:bg-yellow-900 dark:border-yellow-700'
+                                  ? 'bg-yellow-100 border-2 border-yellow-300'
                                   : undefined
                               } rounded-lg p-3 max-w-xs`}
                               style={{
@@ -707,18 +707,14 @@ export default function ChatHistory({
                                 <div className="flex gap-2 justify-between items-center">
                                   <span
                                     className={`font-semibold ${
-                                      message.type === 'Review'
-                                        ? 'text-gray-800 dark:text-gray-200'
-                                        : ''
+                                      message.type === 'Review' ? 'text-gray-800' : ''
                                     }`}
                                   >
                                     {isCreator ? 'You' : otherName}
                                   </span>
                                   <span
                                     className={`text-xs ${
-                                      message.type === 'Review'
-                                        ? 'text-gray-800 dark:text-gray-200'
-                                        : 'text-gray-500'
+                                      message.type === 'Review' ? 'text-gray-800' : 'text-gray-500'
                                     }`}
                                   >
                                     {dayjs(message.createdAt).format(TIME_FORMAT)}

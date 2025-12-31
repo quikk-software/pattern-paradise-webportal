@@ -212,14 +212,14 @@ export default async function HowToPage({ params }: Props) {
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                  <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 p-4">
-                    <h4 className="font-semibold text-lg mb-3 text-blue-700 dark:text-blue-400 flex items-center gap-2">
+                  <div className="rounded-lg bg-blue-50 p-4">
+                    <h4 className="font-semibold text-lg mb-3 text-blue-700 flex items-center gap-2">
                       <span className="text-xl">🟢</span> {t('howTo.sections.chat.realtime.title')}
                     </h4>
                     <p>{t('howTo.sections.chat.realtime.description')}</p>
                   </div>
 
-                  <div className="rounded-lg bg-purple-50 dark:bg-orange-950/40 p-4">
+                  <div className="rounded-lg bg-purple-50 p-4">
                     <h4 className="font-semibold text-lg mb-3 text-primary flex items-center gap-2">
                       <span className="text-xl">📦</span> {t('howTo.sections.chat.systemBox.title')}
                     </h4>

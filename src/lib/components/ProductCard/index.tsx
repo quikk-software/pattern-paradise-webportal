@@ -185,16 +185,14 @@ export default function ProductCard({
     if (!status) return null;
 
     const statusColors = {
-      Draft: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
-      Created: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-      InProgress: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
-      Aborted: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-      Released: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      Draft: 'bg-amber-100 text-amber-800',
+      Created: 'bg-blue-100 text-blue-800',
+      InProgress: 'bg-purple-100 text-purple-800',
+      Aborted: 'bg-red-100 text-red-800',
+      Released: 'bg-green-100 text-green-800',
     };
 
-    const color =
-      statusColors[status as keyof typeof statusColors] ||
-      'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+    const color = statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800';
 
     return (
       <Badge variant="outline" className={cn('font-medium border-0', color)}>
@@ -247,10 +245,7 @@ export default function ProductCard({
         <div className="flex items-center justify-between mt-2">
           {isFree ? (
             <div className="flex items-center">
-              <Badge
-                variant="outline"
-                className="bg-emerald-50 text-emerald-700 border-0 dark:bg-emerald-900/20 dark:text-emerald-400"
-              >
+              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-0">
                 FREE
               </Badge>
             </div>
@@ -283,11 +278,9 @@ export default function ProductCard({
 
         {/* Sale countdown */}
         {isDueDateActive && (
-          <div className="mt-3 bg-red-50 dark:bg-red-950/20 rounded-md p-2 flex items-center justify-center">
+          <div className="mt-3 bg-red-50 rounded-md p-2 flex items-center justify-center">
             <Clock className="w-4 h-4 mr-1.5 text-red-500" />
-            <span className="text-sm text-red-600 dark:text-red-400 font-medium">
-              {timeRemaining}
-            </span>
+            <span className="text-sm text-red-600 font-medium">{timeRemaining}</span>
           </div>
         )}
       </CardContent>
@@ -344,7 +337,7 @@ export default function ProductCard({
               variant="outline"
               size="sm"
               onClick={() => setIsDeleteProductDrawerOpen(true)}
-              className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
+              className="text-red-500 hover:text-red-700 hover:bg-red-50"
             >
               <Trash className="w-4 h-4" />
             </Button>
