@@ -39,8 +39,8 @@ export default function RegistrationSuccess() {
     <div className="flex items-center justify-center p-4">
       <Card className="mx-auto w-full">
         <CardHeader className="flex flex-col items-center gap-2 pt-6">
-          <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
-            <CheckCircle className="h-12 w-12 text-green-600 dark:text-green-500" />
+          <div className="rounded-full bg-green-100 p-3">
+            <CheckCircle className="h-12 w-12 text-green-600" />
           </div>
           <h1 className="text-center text-2xl font-bold tracking-tight mt-4">
             Registration Successful!

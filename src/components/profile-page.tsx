@@ -603,9 +603,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 </Badge>
               ) : null}
               {!highlightRoles ? (
-                <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  Roles
-                </Label>
+                <Label className="text-sm font-semibold text-slate-700">Roles</Label>
               ) : null}
               <div className="flex space-x-4">
                 <Controller
@@ -687,9 +685,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                   </Badge>
                 ) : null}
                 {!highlightCountry ? (
-                  <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                    Country
-                  </Label>
+                  <Label className="text-sm font-semibold text-slate-700">Country</Label>
                 ) : null}
                 <div className="space-y-2">
                   <CountrySelect
@@ -706,7 +702,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
             {roles?.includes('Seller') ? (
               <div className="space-y-2">
-                <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <Label className="text-sm font-semibold text-slate-700">
                   Exclude Countries from Purchasing
                 </Label>
                 <CountryGroupSelector
@@ -719,10 +715,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
             ) : null}
 
             <div className="space-y-2">
-              <Label
-                htmlFor="description"
-                className="text-sm font-semibold text-slate-700 dark:text-slate-300"
-              >
+              <Label htmlFor="description" className="text-sm font-semibold text-slate-700">
                 Profile description
               </Label>
               <Textarea
@@ -737,10 +730,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label
-                  htmlFor="firstName"
-                  className="text-sm font-semibold text-slate-700 dark:text-slate-300"
-                >
+                <Label htmlFor="firstName" className="text-sm font-semibold text-slate-700">
                   First Name
                 </Label>
                 <Input id="firstName" {...register('firstName')} onKeyDown={handleKeyDown} />
@@ -749,10 +739,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label
-                  htmlFor="lastName"
-                  className="text-sm font-semibold text-slate-700 dark:text-slate-300"
-                >
+                <Label htmlFor="lastName" className="text-sm font-semibold text-slate-700">
                   Last Name
                 </Label>
                 <Input id="lastName" {...register('lastName')} onKeyDown={handleKeyDown} />
@@ -764,10 +751,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-semibold text-slate-700 dark:text-slate-300"
-                >
+                <Label htmlFor="email" className="text-sm font-semibold text-slate-700">
                   Email <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -786,10 +770,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               </div>
 
               <div className="space-y-2">
-                <Label
-                  htmlFor="username"
-                  className="text-sm font-semibold text-slate-700 dark:text-slate-300"
-                >
+                <Label htmlFor="username" className="text-sm font-semibold text-slate-700">
                   Username <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -809,7 +790,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               <div className="space-y-2">
                 <Label
                   htmlFor="instagramRef"
-                  className="flex gap-1 items-center text-sm font-semibold text-slate-700 dark:text-slate-300"
+                  className="flex gap-1 items-center text-sm font-semibold text-slate-700"
                 >
                   <InstagramIcon className="w-4 h-4" />
                   Instagram username
@@ -824,7 +805,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
               <div className="space-y-2">
                 <Label
                   htmlFor="tiktokRef"
-                  className="flex gap-1 items-center text-sm font-semibold text-slate-700 dark:text-slate-300"
+                  className="flex gap-1 items-center text-sm font-semibold text-slate-700"
                 >
                   <TikTokIcon className="w-4 h-4" />
                   TikTok username
@@ -839,7 +820,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
             </div>
 
             <div className="grid grid-cols-1 gap-2">
-              <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <Label className="text-sm font-semibold text-slate-700">
                 Selected Theme <span className="text-red-500">*</span>
               </Label>
               <div className="flex gap-2 items-center">

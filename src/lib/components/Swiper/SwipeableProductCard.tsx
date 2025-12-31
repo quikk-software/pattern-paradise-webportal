@@ -117,9 +117,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {isSaleActive && (
-          <div className="w-full mt-1 bg-red-50 dark:bg-red-950/20 rounded-md p-2 flex items-center justify-center">
+          <div className="w-full mt-1 bg-red-50 rounded-md p-2 flex items-center justify-center">
             <Percent className="w-4 h-4 text-red-500 mr-1" />
-            <span className="text-xs text-red-600 dark:text-red-400 font-medium">
+            <span className="text-xs text-red-600 font-medium">
               Limited time offer! Save {getCurrencySymbol(product.sellerCurrency)}
               {(product.price - product.salePrice!).toFixed(2)}
             </span>

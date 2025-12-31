@@ -118,9 +118,9 @@ export default function ColumnListing({ products, listingType }: ColumnListingPr
 
               <CardFooter className="flex flex-col w-full">
                 {isSaleActive && (
-                  <div className="w-full mb-2 bg-red-50 dark:bg-red-950/20 rounded-md p-1.5 flex items-center justify-center">
+                  <div className="w-full mb-2 bg-red-50 rounded-md p-1.5 flex items-center justify-center">
                     <Percent className="w-3 h-3 text-red-500 mr-1" />
-                    <span className="text-xs text-red-600 dark:text-red-400 font-medium">
+                    <span className="text-xs text-red-600 font-medium">
                       Save ${(product.price - product.salePrice!).toFixed(2)}
                     </span>
                   </div>

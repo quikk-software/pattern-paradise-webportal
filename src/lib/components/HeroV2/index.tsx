@@ -157,7 +157,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               <Instagram className="h-6 w-6" />
               <span className="font-medium text-lg">{t('landing.hero.follow')}</span>
             </Link>
-            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
+            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed max-w-xs">
               <Link
                 href="https://instagram.com/the.patternparadise"
                 target="_blank"
@@ -170,9 +170,9 @@ export default function HeroV2({ products }: HeroV2Props) {
             </p>
           </div>
 
-          <div className="hidden md:block h-24 w-px bg-zinc-200 dark:bg-zinc-700 mx-4"></div>
+          <div className="hidden md:block h-24 w-px bg-zinc-200 mx-4"></div>
 
-          <div className="md:hidden w-full h-px bg-zinc-200 dark:bg-zinc-700"></div>
+          <div className="md:hidden w-full h-px bg-zinc-200"></div>
 
           <div className="flex flex-col items-center text-center md:text-left md:items-start px-6 py-4 md:w-1/2">
             <div
@@ -184,7 +184,7 @@ export default function HeroV2({ products }: HeroV2Props) {
               <HeartHandshake className="h-6 w-6" />
               <span className="font-medium text-lg">{t('landing.hero.payment')}</span>
             </div>
-            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed dark:text-zinc-400 max-w-xs">
+            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed max-w-xs">
               {t.rich('landing.hero.paymentDescription', {
                 PayPalLink: (chunks) => (
                   <Link

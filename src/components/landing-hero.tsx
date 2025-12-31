@@ -39,7 +39,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
                 {APP_TITLE}
               </h1>
             </div>
-            <p className="max-w-[600px] text-zinc-500 md:text-xl dark:text-zinc-400">
+            <p className="max-w-[600px] text-zinc-500 md:text-xl">
               Buy, test, and sell your patterns in one place. Join our community of passionate
               crocheters today!
             </p>
@@ -129,7 +129,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
         <div className="inline-block rounded-lg bg-orange-50 px-3 py-1 text-sm text-primary">
           Official PayPal Platform Partner
         </div>
-        <p className="text-zinc-500 text-md/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
+        <p className="text-zinc-500 text-md/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
           Secure transactions powered by PayPal. Buy and sell with confidence on our platform.
         </p>
         <Image
