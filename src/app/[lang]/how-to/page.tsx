@@ -8,6 +8,465 @@ import Link from 'next/link';
 import WelcomeCard from '@/lib/components/WelcomeCard';
 import { generatePageMetadata } from '@/lib/core/metadata';
 
+const JSON_LD = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://pattern-paradise.shop/#website',
+    name: 'Pattern Paradise',
+    alternateName: 'Pattern Paradise – Where Creativity Pays Off',
+    url: 'https://pattern-paradise.shop',
+    inLanguage: ['en', 'de'],
+    description:
+      'Pattern Paradise is an online marketplace and community for crochet and knitting patterns. It is a platform where designers sell digital patterns and makers discover, buy, and test handmade designs.',
+    potentialAction: [
+      {
+        '@type': 'SearchAction',
+        target: 'https://pattern-paradise.shop/en/?q={search_term_string}',
+        'query-input': 'required name=search_term_string',
+        inLanguage: 'en',
+      },
+      {
+        '@type': 'SearchAction',
+        target: 'https://pattern-paradise.shop/de/?q={search_term_string}',
+        'query-input': 'required name=search_term_string',
+        inLanguage: 'de',
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': 'https://pattern-paradise.shop/#organization',
+    name: 'Pattern Paradise',
+    url: 'https://pattern-paradise.shop',
+    logo: 'https://pattern-paradise.shop/icons/ios/512.png',
+    slogan: 'Where Creativity Pays Off.',
+    description:
+      'Pattern Paradise is a marketplace and community for crocheters and knitters. It is built to help creators upload and monetize patterns and to help makers buy, download, and test designs with the community.',
+    brand: {
+      '@type': 'Brand',
+      name: 'Pattern Paradise',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': 'https://pattern-paradise.shop/en/how-to#howto-upload-pattern',
+    url: 'https://pattern-paradise.shop/en/how-to#howto-upload-pattern',
+    name: 'How to Upload a Pattern on Pattern Paradise',
+    inLanguage: 'en',
+    description:
+      'This guide explains how to upload a crochet or knitting pattern to Pattern Paradise so it can be listed on the marketplace.',
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Fill in the basic details',
+        text: 'Enter the required pattern information such as title and description.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Choose the category',
+        text: 'Select a craft type such as Crocheting or Knitting and choose related subcategories such as Toys/Amigurumi or Clothes.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Upload images',
+        text: 'Upload 1 to 6 high-quality images of the finished project. Reorder with drag-and-drop and remove images if needed. At least one image is required.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Upload the pattern file(s)',
+        text: 'Upload the pattern in PDF format. Multiple files in different languages can be uploaded and reordered. Each PDF should include the complete pattern.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Optional: join Mystery Pattern',
+        text: 'If the pattern is not free, choose whether to join the Mystery Patterns program for extra exposure via mystery boxes sold at $3.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Submit the pattern',
+        text: 'Click Start Upload, upload images and pattern files, and save the listing.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 7,
+        name: 'Reset if needed',
+        text: 'Click Reset Form to clear the form and start the next upload.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 8,
+        name: 'After successful upload',
+        text: 'After upload, you will be redirected to a success page and you can start a tester call to gather feedback.',
+      },
+    ],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': 'https://pattern-paradise.shop/en/how-to',
+    },
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    translationOfWork: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/de/how-to#howto-upload-pattern',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': 'https://pattern-paradise.shop/en/how-to#howto-apply-tester-call',
+    url: 'https://pattern-paradise.shop/en/how-to#howto-apply-tester-call',
+    name: 'How to Apply for a Tester Call on Pattern Paradise',
+    inLanguage: 'en',
+    description:
+      'This guide explains how to apply for a tester call to preview upcoming patterns and help designers refine their work.',
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Log in or sign up',
+        text: 'You must be logged into an account to apply for a tester call. If you are not logged in, you will be redirected to sign up or log in.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Visit the tester call page',
+        text: 'Open a tester call from your dashboard, via social media links, or by browsing the Tester Calls section. Review the pattern details, designer information, skill level, time commitment, benefits, and requirements.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Review requirements',
+        text: 'Confirm you meet the required skill level, can finish within the time frame, can share progress and feedback, and can submit final project photos.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Understand the perks',
+        text: 'Testers can receive the pattern for free, get credited in the final design, gain early access, and connect with the community.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Apply as a tester',
+        text: 'Click Apply as a Tester, confirm in the popup, and submit the application. The designer reviews applications and accepted testers receive an email with next steps.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Leave the tester list if needed',
+        text: 'Use the leave option in the success message, confirm in the popup, and you will be removed from the tester list. You can reapply later.',
+      },
+    ],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': 'https://pattern-paradise.shop/en/how-to',
+    },
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    translationOfWork: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/de/how-to#howto-apply-tester-call',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': 'https://pattern-paradise.shop/en/how-to#howto-tester-chat',
+    url: 'https://pattern-paradise.shop/en/how-to#howto-tester-chat',
+    name: 'How to Use the Tester Chat on Pattern Paradise',
+    inLanguage: 'en',
+    description:
+      'This guide explains how to use the dedicated tester chat to collaborate with designers and other testers during a tester call.',
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Send messages',
+        text: 'Use the chat to send and receive real-time messages with the designer and other testers.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Share progress images or files',
+        text: 'Attach photos or PDFs such as WIP images or notes.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Reply with context',
+        text: 'Reply to specific messages so feedback is easy to follow.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Download the latest pattern file',
+        text: 'Download and use the latest pattern version shared in the tester call.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Leave a review',
+        text: 'Submit a final review after finishing the project.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'View other testers',
+        text: 'Check who is participating in the testing group.',
+      },
+    ],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': 'https://pattern-paradise.shop/en/how-to',
+    },
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    translationOfWork: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/de/how-to#howto-tester-chat',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://pattern-paradise.shop/en/how-to#page',
+    url: 'https://pattern-paradise.shop/en/how-to',
+    name: 'How To Guides',
+    inLanguage: 'en',
+    description:
+      'How-to guides for Pattern Paradise. It includes step-by-step instructions for uploading patterns, applying to tester calls, and using the tester chat.',
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    about: { '@id': 'https://pattern-paradise.shop/#organization' },
+    hasPart: [
+      { '@id': 'https://pattern-paradise.shop/en/how-to#howto-upload-pattern' },
+      { '@id': 'https://pattern-paradise.shop/en/how-to#howto-apply-tester-call' },
+      { '@id': 'https://pattern-paradise.shop/en/how-to#howto-tester-chat' },
+    ],
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    translationOfWork: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/de/how-to#page',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': 'https://pattern-paradise.shop/de/how-to#howto-upload-pattern',
+    url: 'https://pattern-paradise.shop/de/how-to#howto-upload-pattern',
+    name: 'So lädst du eine Anleitung auf Pattern Paradise hoch',
+    inLanguage: 'de',
+    description:
+      'Diese Anleitung erklärt, wie du eine Häkel- oder Strickanleitung auf Pattern Paradise hochlädst, damit sie im Marktplatz sichtbar wird.',
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Basisdaten ausfüllen',
+        text: 'Gib die Pflichtangaben ein, zum Beispiel Titel und Beschreibung.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Kategorie auswählen',
+        text: 'Wähle die Technik wie Häkeln oder Stricken und passende Unterkategorien wie Amigurumi oder Kleidung.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Bilder hochladen',
+        text: 'Lade 1 bis 6 hochwertige Bilder deines fertigen Projekts hoch. Du kannst Bilder per Drag-and-drop sortieren und entfernen. Mindestens ein Bild ist erforderlich.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Anleitungsdatei(en) hochladen',
+        text: 'Lade die Anleitung als PDF hoch. Du kannst mehrere Dateien in verschiedenen Sprachen hochladen und sortieren. Jede PDF sollte die vollständige Anleitung enthalten.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Optional: Mystery Pattern aktivieren',
+        text: 'Wenn die Anleitung nicht kostenlos ist, kannst du sie optional für das Mystery-Pattern-Programm freigeben, um zusätzliche Reichweite über Mystery-Boxen für 3$ zu erhalten.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Anleitung einreichen',
+        text: 'Klicke auf Start Upload, lade Bilder und Dateien hoch und speichere das Listing.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 7,
+        name: 'Bei Bedarf zurücksetzen',
+        text: 'Mit Reset Form kannst du das Formular leeren und mit der nächsten Anleitung starten.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 8,
+        name: 'Nach erfolgreichem Upload',
+        text: 'Nach dem Upload wirst du auf eine Erfolgsseite weitergeleitet und kannst optional einen Tester Call starten, um Feedback zu sammeln.',
+      },
+    ],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': 'https://pattern-paradise.shop/de/how-to',
+    },
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    workTranslation: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/en/how-to#howto-upload-pattern',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': 'https://pattern-paradise.shop/de/how-to#howto-apply-tester-call',
+    url: 'https://pattern-paradise.shop/de/how-to#howto-apply-tester-call',
+    name: 'So bewirbst du dich für einen Tester Call auf Pattern Paradise',
+    inLanguage: 'de',
+    description:
+      'Diese Anleitung erklärt, wie du dich für einen Tester Call bewirbst, um neue Anleitungen vorab zu testen und Designer:innen beim Verbessern zu helfen.',
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Einloggen oder registrieren',
+        text: 'Du musst eingeloggt sein, um dich zu bewerben. Wenn du nicht eingeloggt bist, wirst du zur Login- oder Registrierungsseite weitergeleitet.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Tester-Call-Seite öffnen',
+        text: 'Öffne einen Tester Call über dein Dashboard, über Social-Media-Links oder über den Bereich Tester Calls. Prüfe Musterbeschreibung, Designer-Infos, Skill-Level, Zeitrahmen, Benefits und Anforderungen.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Anforderungen prüfen',
+        text: 'Stelle sicher, dass du das geforderte Skill-Level erfüllst, im Zeitrahmen fertig wirst, Fortschritt und Feedback teilst und Abschlussfotos hochlädst.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Vorteile kennen',
+        text: 'Tester:innen erhalten die Anleitung oft kostenlos, werden in der finalen Version erwähnt, bekommen frühzeitigen Zugang und knüpfen Kontakte in der Community.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Als Tester:in bewerben',
+        text: 'Klicke auf Apply as a Tester, bestätige im Popup und sende die Bewerbung ab. Der/die Designer:in prüft die Bewerbung. Bei Zusage erhältst du eine E-Mail mit den nächsten Schritten.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Bei Bedarf austreten',
+        text: 'Nutze die Leave-Option in der Bestätigungsmeldung, bestätige im Popup und du wirst von der Tester-Liste entfernt. Du kannst dich später erneut bewerben.',
+      },
+    ],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': 'https://pattern-paradise.shop/de/how-to',
+    },
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    workTranslation: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/en/how-to#howto-apply-tester-call',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': 'https://pattern-paradise.shop/de/how-to#howto-tester-chat',
+    url: 'https://pattern-paradise.shop/de/how-to#howto-tester-chat',
+    name: 'So nutzt du den Tester-Chat auf Pattern Paradise',
+    inLanguage: 'de',
+    description:
+      'Diese Anleitung erklärt, wie du den Tester-Chat nutzt, um während eines Tester Calls mit Designer:innen und anderen Tester:innen zusammenzuarbeiten.',
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Nachrichten senden',
+        text: 'Nutze den Chat, um in Echtzeit mit dem/der Designer:in und anderen Tester:innen zu schreiben.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Fortschritt teilen',
+        text: 'Hänge Fotos oder PDFs an, zum Beispiel WIP-Bilder oder Notizen.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Mit Kontext antworten',
+        text: 'Antworte direkt auf Nachrichten, damit Feedback besser nachvollziehbar ist.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Aktuelle Anleitung herunterladen',
+        text: 'Lade die neueste Version der Anleitungsdatei herunter und nutze sie für dein Projekt.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Review abgeben',
+        text: 'Gib nach Abschluss eine finale Bewertung ab.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Andere Tester:innen ansehen',
+        text: 'Sieh dir an, wer an der Testgruppe teilnimmt.',
+      },
+    ],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': 'https://pattern-paradise.shop/de/how-to',
+    },
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    workTranslation: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/en/how-to#howto-tester-chat',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://pattern-paradise.shop/de/how-to#page',
+    url: 'https://pattern-paradise.shop/de/how-to',
+    name: 'How-To Guides',
+    inLanguage: 'de',
+    description:
+      'How-to Guides für Pattern Paradise. Die Seite enthält Schritt-für-Schritt-Anleitungen für Uploads, Tester Calls und den Tester-Chat.',
+    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
+    about: { '@id': 'https://pattern-paradise.shop/#organization' },
+    hasPart: [
+      { '@id': 'https://pattern-paradise.shop/de/how-to#howto-upload-pattern' },
+      { '@id': 'https://pattern-paradise.shop/de/how-to#howto-apply-tester-call' },
+      { '@id': 'https://pattern-paradise.shop/de/how-to#howto-tester-chat' },
+    ],
+    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
+    workTranslation: {
+      '@type': 'CreativeWork',
+      '@id': 'https://pattern-paradise.shop/en/how-to#page',
+    },
+  },
+];
+
 export async function generateMetadata({ params }: { params: { lang: string } }) {
   return generatePageMetadata('/how-to', params.lang);
 }

@@ -213,7 +213,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema).replace(/</g, '\\u003c') }}
       />
       <ProductPageComponent productId={p.productId} />
     </>
