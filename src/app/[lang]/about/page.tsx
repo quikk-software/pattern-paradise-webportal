@@ -98,61 +98,6 @@ const JSON_LD = [
       '@id': 'https://pattern-paradise.shop/de/about#about',
     },
   },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'AboutPage',
-    '@id': 'https://pattern-paradise.shop/de/about#about',
-    url: 'https://pattern-paradise.shop/de/about',
-    name: 'Über Pattern Paradise',
-    inLanguage: 'de',
-    isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
-    about: { '@id': 'https://pattern-paradise.shop/#organization' },
-    description:
-      'Diese Seite erklärt, was Pattern Paradise ist und was die Plattform anbietet. Pattern Paradise verbindet Kreative weltweit, um handgemachte Anleitungen zu teilen, zu verbessern und zu feiern.',
-    mainEntity: {
-      '@type': 'Organization',
-      '@id': 'https://pattern-paradise.shop/#organization',
-      name: 'Pattern Paradise',
-      slogan: 'Where Creativity Pays Off.',
-      knowsAbout: [
-        'Häkelanleitungen',
-        'Strickanleitungen',
-        'Pattern Testing',
-        'Digitale Downloads',
-        'Community Collaboration',
-        'Tutorial-Kollaboration',
-      ],
-      makesOffer: [
-        {
-          '@type': 'Offer',
-          name: 'Anleitungen kaufen & verkaufen',
-          description:
-            'Es ist ein Marktplatz für einzigartige Häkel- und Strickanleitungen und unterstützt unabhängige Designer:innen.',
-        },
-        {
-          '@type': 'Offer',
-          name: 'Pattern Testing',
-          description:
-            'Es ist eine Möglichkeit für Designer:innen, Anleitungen mit Feedback aus einer Community erfahrener Tester:innen zu verbessern.',
-        },
-        {
-          '@type': 'Offer',
-          name: 'Kollaborative Tools',
-          description:
-            'Es ist ein Set an Funktionen, um gemeinsam an Tutorials und am Anleitungs-Design zu arbeiten.',
-        },
-      ],
-    },
-    primaryImageOfPage: {
-      '@type': 'ImageObject',
-      url: 'https://pattern-paradise.shop/favicons/ms-icon-310x310.png',
-    },
-    publisher: { '@id': 'https://pattern-paradise.shop/#organization' },
-    workTranslation: {
-      '@type': 'CreativeWork',
-      '@id': 'https://pattern-paradise.shop/en/about#about',
-    },
-  },
 ];
 
 export async function generateMetadata({ params }: { params: { lang: string } }) {
