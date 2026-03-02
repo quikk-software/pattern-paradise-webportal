@@ -122,7 +122,7 @@ const handler = NextAuth({
             error: null,
           };
         } catch (error: any) {
-          throw new Error(`Keycloak authentication failed: ${error?.message}`);
+          throw error;
         }
       },
     }),
