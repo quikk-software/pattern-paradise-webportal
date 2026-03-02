@@ -141,7 +141,6 @@ export function LoginForm() {
         <RequestPasswordDrawer
           drawerIsOpen={isRequestPasswordDrawerOpen}
           setDrawerIsOpen={setIsRequestPasswordDrawerOpen}
-          initialEmail={isPasswordResetRequired ? email : undefined}
           message={isPasswordResetRequired ? t('passwordResetRequired.drawerMessage') : undefined}
         />
       ) : null}
