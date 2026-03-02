@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -30,8 +30,16 @@ export function LoginForm() {
 
   const {
     handleLogin,
-    loginStates: { isLoading, isSuccess, isError },
+    loginStates: { isLoading, isSuccess, isError, error: loginError },
   } = useAuth();
+
+  const isPasswordResetRequired = loginError === 'PASSWORD_RESET_REQUIRED';
+
+  useEffect(() => {
+    if (isPasswordResetRequired) {
+      setIsRequestPasswordDrawerOpen(true);
+    }
+  }, [isPasswordResetRequired]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +89,11 @@ export function LoginForm() {
             <RequestStatus
               isSuccess={isSuccess}
               isError={isError}
-              errorMessage="Login failed. Please check your email and password."
+              errorMessage={
+                isPasswordResetRequired
+                  ? 'Your password needs to be reset. Please use the password reset form below.'
+                  : 'Login failed. Please check your email and password.'
+              }
             />
           </div>
         </form>
@@ -110,6 +122,12 @@ export function LoginForm() {
         <RequestPasswordDrawer
           drawerIsOpen={isRequestPasswordDrawerOpen}
           setDrawerIsOpen={setIsRequestPasswordDrawerOpen}
+          initialEmail={isPasswordResetRequired ? email : undefined}
+          message={
+            isPasswordResetRequired
+              ? 'We recently upgraded our systems and your password needs to be reset. Please request a password reset email below to set a new password.'
+              : undefined
+          }
         />
       ) : null}
     </Card>

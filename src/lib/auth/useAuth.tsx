@@ -14,6 +14,7 @@ const useAuth = () => {
   const [loginIsLoading, setLoginIsLoading] = useState(false);
   const [loginIsSuccess, setLoginIsSuccess] = useState(false);
   const [loginIsError, setLoginIsError] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
   const [logoutIsLoading, setLogoutIsLoading] = useState(false);
   const [logoutIsSuccess, setLogoutIsSuccess] = useState(false);
   const [logoutIsError, setLogoutIsError] = useState(false);
@@ -34,6 +35,7 @@ const useAuth = () => {
     setLoginIsLoading(true);
     setLoginIsSuccess(false);
     setLoginIsError(false);
+    setLoginError(null);
 
     try {
       const result = await signIn('credentials', {
@@ -45,6 +47,7 @@ const useAuth = () => {
       if (result?.error) {
         logger.error(`Login failed: ${result.error}`);
         setLoginIsError(true);
+        setLoginError(result.error);
       } else {
         setLoginIsSuccess(true);
         if (executeRedirect) {
@@ -83,6 +86,7 @@ const useAuth = () => {
       isLoading: loginIsLoading,
       isSuccess: loginIsSuccess,
       isError: loginIsError,
+      error: loginError,
     },
     logoutStates: {
       isLoading: logoutIsLoading,
