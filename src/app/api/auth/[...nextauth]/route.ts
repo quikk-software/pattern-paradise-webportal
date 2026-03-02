@@ -198,15 +198,24 @@ const handler = NextAuth({
     async session({ session, user, token }) {
       let sessionToken = token;
 
+      if (token?.error === 'RefreshAccessTokenError') {
+        logger.warn('Token has RefreshAccessTokenError – forcing sign out');
+        return { ...session, error: 'RefreshAccessTokenError' };
+      }
+
       if (!token?.accessToken) {
-        logger.warn('No access token – likely anonymous or bot request');
-        return session;
+        logger.warn('No access token – forcing sign out');
+        return { ...session, error: 'InvalidSessionError' };
       }
 
       if (!token?.expiresAt || Date.now() >= new Date(token.expiresAt as number).getTime()) {
         logger.info('Access token expired – attempt to refresh');
         try {
           sessionToken = await refreshAccessToken(token);
+          if (sessionToken?.error) {
+            logger.error('Refresh returned error:', sessionToken.error);
+            return { ...session, error: 'RefreshAccessTokenError' };
+          }
         } catch (e) {
           logger.error('Failed to refresh access token', e);
           return { ...session, error: 'RefreshAccessTokenError' };
@@ -217,15 +226,15 @@ const handler = NextAuth({
       try {
         decodedSessionToken = jwtDecode(sessionToken.accessToken as string);
       } catch (e) {
-        logger.error('Failed to decode session token', e);
-        return session;
+        logger.error('Failed to decode session token – forcing sign out', e);
+        return { ...session, error: 'InvalidSessionError' };
       }
 
       const userId = decodedSessionToken?.sub ?? user?.id ?? sessionToken?.sub;
 
       if (!userId) {
-        logger.warn('No user ID in decoded token – skipping user lookup');
-        return session;
+        logger.warn('No user ID in decoded token – forcing sign out');
+        return { ...session, error: 'InvalidSessionError' };
       }
 
       let existingUser;
@@ -233,12 +242,12 @@ const handler = NextAuth({
         existingUser = await getUserById(userId as string);
       } catch (e) {
         logger.error('getUserById failed', e);
-        return { ...session, error: 'UserLookupFailed' };
+        return { ...session, error: 'InvalidSessionError' };
       }
 
       if (!existingUser) {
-        logger.warn(`No user found for ID ${userId}`);
-        return session;
+        logger.warn(`No user found for ID ${userId} – forcing sign out`);
+        return { ...session, error: 'InvalidSessionError' };
       }
 
       session.user.accessToken = sessionToken.accessToken as string;
