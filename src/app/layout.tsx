@@ -67,18 +67,18 @@ export default async function RootLayout({
           <Toaster />
           <ServiceWorkerProvider>
             <CookiesProvider>
-              {maintenanceMode ? (
-                <ComingSoon />
-              ) : (
-                <AuthSessionProvider>
+              <AuthSessionProvider>
+                {maintenanceMode ? (
+                  <ComingSoon />
+                ) : (
                   <PushNotificationProvider>
                     <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
                   </PushNotificationProvider>
-                </AuthSessionProvider>
-              )}
-              <PreviewFlagProvider>
-                <CookieConsentBanner maintenanceMode={maintenanceMode} />
-              </PreviewFlagProvider>
+                )}
+                <PreviewFlagProvider>
+                  <CookieConsentBanner maintenanceMode={maintenanceMode} />
+                </PreviewFlagProvider>
+              </AuthSessionProvider>
             </CookiesProvider>
           </ServiceWorkerProvider>
         </NextIntlClientProvider>
