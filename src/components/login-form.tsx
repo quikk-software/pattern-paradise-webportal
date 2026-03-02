@@ -20,6 +20,9 @@ import RequestPasswordDrawer from '@/lib/components/RequestPasswordDrawer';
 import useRedirect from '@/lib/core/useRedirect';
 import GoogleLoginButton from '@/lib/components/GoogleLoginButton';
 import SectionDivider from '@/lib/components/SectionDivider';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Info } from 'lucide-react';
+import { useTranslations } from 'use-intl';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -27,6 +30,7 @@ export function LoginForm() {
   const [isRequestPasswordDrawerOpen, setIsRequestPasswordDrawerOpen] = useState(false);
 
   const { redirectUrl } = useRedirect();
+  const t = useTranslations('login');
 
   const {
     handleLogin,
@@ -52,8 +56,8 @@ export function LoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Login</CardTitle>
-        <CardDescription>Enter your credentials to access your account.</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
         <GoogleLoginButton callbackUrl={redirectUrl} />
@@ -61,22 +65,22 @@ export function LoginForm() {
         <form onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="email">Email or username</Label>
+              <Label htmlFor="email">{t('emailLabel')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email or username"
+                placeholder={t('emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('passwordLabel')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder={t('passwordPlaceholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -84,37 +88,52 @@ export function LoginForm() {
             </div>
             <Button className="w-full" onClick={handleSubmit} disabled={disabled}>
               {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
-              Log in
+              {t('submitButton')}
             </Button>
-            <RequestStatus
-              isSuccess={isSuccess}
-              isError={isError}
-              errorMessage={
-                isPasswordResetRequired
-                  ? 'Your password needs to be reset. Please use the password reset form below.'
-                  : 'Login failed. Please check your email and password.'
-              }
-            />
+            {isPasswordResetRequired ? (
+              <Alert className="border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-700">
+                <Info className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                <AlertTitle className="text-amber-800 dark:text-amber-300">
+                  {t('passwordResetRequired.title')}
+                </AlertTitle>
+                <AlertDescription className="text-amber-700 dark:text-amber-400">
+                  <p className="mt-1">{t('passwordResetRequired.description')}</p>
+                  <Button
+                    variant="link"
+                    className="h-auto p-0 mt-2 text-amber-800 dark:text-amber-300 underline font-semibold"
+                    onClick={() => setIsRequestPasswordDrawerOpen(true)}
+                  >
+                    {t('passwordResetRequired.action')}
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <RequestStatus
+                isSuccess={isSuccess}
+                isError={isError}
+                errorMessage={t('loginFailed')}
+              />
+            )}
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col items-end gap-4">
         <p className="text-sm text-muted-foreground text-right">
-          Don&apos;t have an account?{' '}
+          {t('noAccount')}{' '}
           <Link
             href={`/auth/registration?redirect=${redirectUrl}`}
             className="text-primary hover:underline"
           >
-            Register here
+            {t('registerLink')}
           </Link>
         </p>
         <p className="text-sm text-muted-foreground text-right">
-          Forgot your password?{' '}
+          {t('forgotPassword')}{' '}
           <span
             onClick={() => setIsRequestPasswordDrawerOpen(true)}
-            className="text-primary hover:underline"
+            className="text-primary hover:underline cursor-pointer"
           >
-            Reset here
+            {t('resetLink')}
           </span>
         </p>
       </CardFooter>
@@ -123,11 +142,7 @@ export function LoginForm() {
           drawerIsOpen={isRequestPasswordDrawerOpen}
           setDrawerIsOpen={setIsRequestPasswordDrawerOpen}
           initialEmail={isPasswordResetRequired ? email : undefined}
-          message={
-            isPasswordResetRequired
-              ? 'We recently upgraded our systems and your password needs to be reset. Please request a password reset email below to set a new password.'
-              : undefined
-          }
+          message={isPasswordResetRequired ? t('passwordResetRequired.drawerMessage') : undefined}
         />
       ) : null}
     </Card>

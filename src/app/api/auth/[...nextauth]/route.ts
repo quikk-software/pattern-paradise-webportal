@@ -79,7 +79,8 @@ const handler = NextAuth({
           if (!tokenResponse.ok) {
             if (
               data.error === 'invalid_grant' &&
-              data.error_description === 'Account is not fully set up'
+              (data.error_description === 'Account is not fully set up' ||
+                data.error_description?.toLowerCase().startsWith('invalid user credentials'))
             ) {
               return {
                 id: 'PASSWORD_RESET_REQUIRED',

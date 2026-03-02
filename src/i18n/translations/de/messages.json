@@ -27,6 +27,26 @@
       "placeholder": "Sortieren"
     }
   },
+  "login": {
+    "title": "Anmelden",
+    "description": "Gib deine Zugangsdaten ein, um auf dein Konto zuzugreifen.",
+    "emailLabel": "E-Mail oder Benutzername",
+    "emailPlaceholder": "E-Mail oder Benutzername eingeben",
+    "passwordLabel": "Passwort",
+    "passwordPlaceholder": "Passwort eingeben",
+    "submitButton": "Anmelden",
+    "loginFailed": "Anmeldung fehlgeschlagen. Bitte überprüfe deine E-Mail und dein Passwort.",
+    "noAccount": "Noch kein Konto?",
+    "registerLink": "Hier registrieren",
+    "forgotPassword": "Passwort vergessen?",
+    "resetLink": "Hier zurücksetzen",
+    "passwordResetRequired": {
+      "title": "Passwort-Zurücksetzung erforderlich",
+      "description": "Wir haben kürzlich Änderungen an unserem System vorgenommen. Falls dein Passwort seitdem nicht zurückgesetzt wurde, musst du es jetzt einmal zurücksetzen. Du kannst es auch zurücksetzen, falls du dich nicht mehr an dein Passwort erinnerst.",
+      "action": "Passwort jetzt zurücksetzen",
+      "drawerMessage": "Wir haben kürzlich Änderungen an unserem System vorgenommen und dein Passwort muss zurückgesetzt werden. Bitte fordere unten eine E-Mail zur Passwort-Zurücksetzung an, um ein neues Passwort festzulegen."
+    }
+  },
   "navbar": {
     "about": "Über uns",
     "howTo": "Anleitung",

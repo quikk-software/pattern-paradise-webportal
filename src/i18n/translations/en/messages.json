@@ -27,6 +27,26 @@
       "placeholder": "Sort"
     }
   },
+  "login": {
+    "title": "Login",
+    "description": "Enter your credentials to access your account.",
+    "emailLabel": "Email or username",
+    "emailPlaceholder": "Enter your email or username",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submitButton": "Log in",
+    "loginFailed": "Login failed. Please check your email and password.",
+    "noAccount": "Don't have an account?",
+    "registerLink": "Register here",
+    "forgotPassword": "Forgot your password?",
+    "resetLink": "Reset here",
+    "passwordResetRequired": {
+      "title": "Password reset required",
+      "description": "We have recently made changes to our system. If your password has not been reset since then, you will need to reset it now. You can also reset it if you no longer remember your password.",
+      "action": "Reset password now",
+      "drawerMessage": "We have recently made changes to our system and your password needs to be reset. Please request a password reset email below to set a new password."
+    }
+  },
   "navbar": {
     "about": "About",
     "howTo": "How To",
