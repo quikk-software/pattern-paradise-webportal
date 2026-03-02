@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
@@ -9,13 +9,23 @@ import RequestStatus from '@/lib/components/RequestStatus';
 interface RequestPasswordDrawerProps {
   drawerIsOpen: boolean;
   setDrawerIsOpen: (isOpen: boolean) => void;
+  initialEmail?: string;
+  message?: string;
 }
 
 export default function RequestPasswordDrawer({
   drawerIsOpen,
   setDrawerIsOpen,
+  initialEmail = '',
+  message,
 }: RequestPasswordDrawerProps) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(initialEmail);
+
+  useEffect(() => {
+    if (initialEmail) {
+      setEmail(initialEmail);
+    }
+  }, [initialEmail]);
 
   const { mutate, isLoading, isSuccess, isError, errorDetail } = useRequestPassword();
 
@@ -41,6 +51,11 @@ export default function RequestPasswordDrawer({
               In case you forgot your password, you can request a mail with a one-time code to reset
               your password. <strong>The link expires after 30 minutes!</strong>
             </DrawerTitle>
+            {message ? (
+              <p className="text-sm text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-md p-3 text-left">
+                {message}
+              </p>
+            ) : null}
           </DrawerHeader>
           <form className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">

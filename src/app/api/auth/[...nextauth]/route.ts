@@ -77,6 +77,15 @@ const handler = NextAuth({
           const data = await tokenResponse.json();
 
           if (!tokenResponse.ok) {
+            if (
+              data.error === 'invalid_grant' &&
+              data.error_description === 'Account is not fully set up'
+            ) {
+              return {
+                id: 'PASSWORD_RESET_REQUIRED',
+                error: 'PASSWORD_RESET_REQUIRED',
+              } as any;
+            }
             throw new Error(data.error_description || 'Authentication failed');
           }
 
@@ -128,6 +137,12 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user }) {
+      if ((user as any).error === 'PASSWORD_RESET_REQUIRED') {
+        return '/auth/login?error=PASSWORD_RESET_REQUIRED';
+      }
+      return true;
+    },
     async jwt({ token, user, account, profile, trigger }) {
       const existingUser = profile?.sub ? await getUserById(profile.sub) : undefined;
 
