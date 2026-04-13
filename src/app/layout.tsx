@@ -2,20 +2,7 @@ import { Playfair_Display, DM_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
 import { APP_DOMAIN } from '@/lib/constants';
-import { CookiesProvider } from 'next-client-cookies/server';
-import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
-import DynamicPaddingWrapper from '@/lib/wrappers/DynamicPaddingWrapper';
-import ComingSoon from '@/components/coming-soon';
-import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
-import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
-import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
-import { Toaster } from '@/components/ui/sonner';
-import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
-import { i18n } from '../../i18n-config';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 import React from 'react';
-import { BackgroundSystem } from '@/components/background-system';
 
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
@@ -38,18 +25,11 @@ const geistMono = localFont({
   weight: '100 900',
 });
 
-export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }));
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
-  const messages = await getMessages();
-
   return (
     <html className={`notranslate bg-background ${playfairDisplay.variable} ${dmSans.variable} ${geistMono.variable}`} translate="no">
       <head>
@@ -77,26 +57,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={`font-sans antialiased overflow-hidden`}>
-        <BackgroundSystem />
-        <NextIntlClientProvider messages={messages}>
-          <Toaster />
-          <ServiceWorkerProvider>
-            <CookiesProvider>
-              <AuthSessionProvider>
-                {maintenanceMode ? (
-                  <ComingSoon />
-                ) : (
-                  <PushNotificationProvider>
-                    <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
-                  </PushNotificationProvider>
-                )}
-                <PreviewFlagProvider>
-                  <CookieConsentBanner maintenanceMode={maintenanceMode} />
-                </PreviewFlagProvider>
-              </AuthSessionProvider>
-            </CookiesProvider>
-          </ServiceWorkerProvider>
-        </NextIntlClientProvider>
+        {children}
       </body>
     </html>
   );

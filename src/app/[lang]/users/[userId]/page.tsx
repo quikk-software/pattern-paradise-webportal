@@ -87,7 +87,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function SellUserPage({ params }: { params: { userId: string } }) {
+export default async function SellUserPage({ params }: { params: Promise<{ userId: string }> }) {
   const p = await params;
   const user = await getUserById(p.userId);
 

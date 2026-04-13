@@ -3,7 +3,7 @@ import { ListingComponent } from '@/components/listing';
 import { generatePageMetadata } from '@/lib/core/metadata';
 import WelcomeBannerWrapper from '@/lib/components/WelcomeBannerWrapper';
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
   const p = await params;
   const fullPath = '/browse/free-knitting-patterns';
 

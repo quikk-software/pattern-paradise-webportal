@@ -3,13 +3,14 @@ import { getProduct } from '@/lib/api/static/product/getProduct';
 import { getTestingByProductId } from '@/lib/api/static/testing/getTestingByProductId';
 
 interface Props {
-  params: { productId: string };
-  searchParams: { theme?: string };
+  params: Promise<{ productId: string }>;
+  searchParams: Promise<{ theme?: string }>;
 }
 
 export default async function TesterCallPreviewDetailsPage({ params, searchParams }: Props) {
   const { productId } = await params;
-  const theme = (await searchParams.theme) || 'neutral';
+  const { theme: themeParam } = await searchParams;
+  const theme = themeParam || 'neutral';
   const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://pattern-paradise.shop';
 
   const product = await getProduct(productId);

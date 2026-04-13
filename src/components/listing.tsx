@@ -405,12 +405,12 @@ export function ListingComponent({
       <div className="flex flex-col gap-6 mt-6">
         <div className="w-full">
           <div className="relative">
-            <Search className="absolute left-2 top-3 h-4 w-4 z-50 text-muted-foreground" />
+            <Search className="absolute left-4 top-4.5 h-5 w-5 z-50 text-muted-foreground" />
             <Input
               placeholder={t('browse.filter.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => dispatch(updateFilterField({ key: 'q', value: e.target.value }))}
-              className="pl-8"
+              className="pl-12"
             />
           </div>
         </div>

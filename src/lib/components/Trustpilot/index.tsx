@@ -24,6 +24,7 @@ export default function Trustpilot() {
           data-businessunit-id="68380deedb84260d90932392"
           data-style-height="52px"
           data-style-width="100%"
+          suppressHydrationWarning
         >
           <a
             href="https://www.trustpilot.com/review/pattern-paradise.shop"
