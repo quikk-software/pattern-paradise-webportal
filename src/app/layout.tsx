@@ -1,3 +1,4 @@
+import { Playfair_Display, DM_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
 import { APP_DOMAIN } from '@/lib/constants';
@@ -13,15 +14,26 @@ import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
 import { i18n } from '../../i18n-config';
 import { NextIntlClientProvider } from 'next-intl';
 import React from 'react';
+import { BackgroundSystem } from '@/components/background-system';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
 });
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
 const geistMono = localFont({
   src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
+  variable: '--font-mono',
   weight: '100 900',
 });
 
@@ -37,7 +49,7 @@ export default async function RootLayout({
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
 
   return (
-    <html className="notranslate" translate="no">
+    <html className={`notranslate bg-background ${playfairDisplay.variable} ${dmSans.variable} ${geistMono.variable}`} translate="no">
       <head>
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
@@ -62,7 +74,8 @@ export default async function RootLayout({
           async
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
+      <body className={`font-sans antialiased overflow-hidden`}>
+        <BackgroundSystem />
         <NextIntlClientProvider>
           <Toaster />
           <ServiceWorkerProvider>

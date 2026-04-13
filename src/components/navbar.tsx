@@ -124,11 +124,17 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Main Navbar */}
+      {/* Main Navbar - Pill-shaped floating bar */}
       <nav
         className={cn(
-          `px-4 transition-colors duration-300 relative z-10`,
-          scrolled && (!showSearch || !searchVisible) ? 'bg-white shadow-md' : `bg-${background}`,
+          `mx-4 mt-2 px-4 transition-all duration-500 relative z-10 rounded-full`,
+          scrolled && (!showSearch || !searchVisible) 
+            ? 'bg-card/70 backdrop-blur-xl shadow-clay-card' 
+            : background === 'primary' 
+              ? 'bg-primary/90 backdrop-blur-md' 
+              : background === 'amber-200' 
+                ? 'bg-tertiary/30 backdrop-blur-md' 
+                : 'bg-transparent',
         )}
         id="navbar"
       >
@@ -137,22 +143,35 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
             <Link
               href="/"
               className={cn(
-                'text-lg font-bold flex gap-1 items-center',
-                scrolled ? 'text-black' : background === 'primary' ? 'text-white' : 'text-black',
+                'text-lg font-display font-bold flex gap-2 items-center transition-colors duration-300',
+                scrolled 
+                  ? 'text-foreground' 
+                  : background === 'primary' 
+                    ? 'text-primary-foreground' 
+                    : 'text-foreground',
               )}
             >
               <PatternParadiseIcon
                 className={cn(
-                  'w-8 h-8',
-                  scrolled ? 'fill-black' : background === 'primary' ? 'fill-white' : 'fill-black',
+                  'w-8 h-8 transition-colors duration-300',
+                  scrolled 
+                    ? 'fill-foreground' 
+                    : background === 'primary' 
+                      ? 'fill-primary-foreground' 
+                      : 'fill-foreground',
                 )}
               />
-              <span>Pattern Paradise</span>
+              <span>
+                Pattern <span className={cn(
+                  'italic transition-colors duration-300',
+                  scrolled || background !== 'primary' ? 'text-primary' : 'text-primary-foreground'
+                )}>Paradise</span>
+              </span>
             </Link>
           </div>
 
           <div className="hidden md:ml-6 md:flex md:items-center flex flex-row gap-4">
-            <div className="flex space-x-4 items-center">
+            <div className="flex space-x-2 items-center">
               {filteredNavLinks.map(({ href, name }) => (
                 <NavLink key={name} href={href} scrolled={scrolled} background={background}>
                   {name}
@@ -160,7 +179,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
               ))}
               <Button size="sm" className="space-x-2" variant="ghost" asChild>
                 <Link href="/browse">
-                  <SearchIcon />
+                  <SearchIcon className="h-4 w-4" />
                   {t('navbar.browse')}
                 </Link>
               </Button>
@@ -172,12 +191,12 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
             <button
               onClick={toggleMenu}
               className={cn(
-                `inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset`,
+                `inline-flex items-center justify-center p-2 rounded-full transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/30`,
                 scrolled
-                  ? 'text-black hover:text-black hover:bg-gray-200 focus:ring-black'
+                  ? 'text-foreground hover:bg-muted'
                   : background === 'primary'
-                    ? 'text-white hover:text-white hover:bg-white focus:ring-white'
-                    : 'text-black hover:text-black hover:bg-gray-200 focus:ring-black',
+                    ? 'text-primary-foreground hover:bg-primary-foreground/10'
+                    : 'text-foreground hover:bg-muted',
               )}
               aria-expanded={isOpen}
             >
@@ -191,9 +210,12 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
-          <div className="pt-2 pb-2 space-y-1">
+        {/* Mobile Menu - Full screen overlay */}
+        <div className={cn(
+          `md:hidden fixed inset-0 top-16 z-50 transition-all duration-500`,
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        )}>
+          <div className="bg-background/95 backdrop-blur-xl min-h-screen p-6 space-y-4">
             <MobileNavLink
               href="/browse"
               scrolled={scrolled}
@@ -213,33 +235,35 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                 {name}
               </MobileNavLink>
             ))}
-          </div>
-          <SocialBadges />
-          <div className="flex justify-end my-3">
-            <LanguageSelector currentLanguage={locale} />
+            <div className="pt-4">
+              <SocialBadges />
+            </div>
+            <div className="flex justify-start pt-4">
+              <LanguageSelector currentLanguage={locale} />
+            </div>
           </div>
         </div>
       </nav>
 
+      {/* Search Bar */}
       <div className="relative">
         <div
           className={cn(
-            'bg-white transition-all duration-300 ease-in-out overflow-hidden border-b border-gray-100 absolute top-0 left-0 right-0',
-            // 66px is needed for the search bar to have enough space (see HeroV2 component as well)
-            searchVisible && showSearch ? 'max-h-[66px] opacity-100' : 'max-h-0 opacity-0',
+            'bg-card/70 backdrop-blur-xl transition-all duration-500 ease-out overflow-hidden border-b border-border/50 absolute top-0 left-0 right-0 mx-4 rounded-b-3xl shadow-clay-card',
+            searchVisible && showSearch ? 'max-h-[80px] opacity-100' : 'max-h-0 opacity-0',
           )}
         >
-          <div className="mx-auto px-4 py-2">
+          <div className="mx-auto px-4 py-3">
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="relative">
-                <div className="flex items-center bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
+                <div className="flex items-center bg-muted rounded-full shadow-clay-pressed hover:shadow-clay-card transition-all duration-300 focus-within:ring-4 focus-within:ring-primary/25 focus-within:shadow-clay-card">
                   <div className="flex-shrink-0">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-12 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-l-lg rounded-r-none border-r border-gray-200"
+                          className="h-12 px-4 text-muted-foreground hover:text-foreground rounded-l-full rounded-r-none border-r border-border/50"
                         >
                           <Filter className="h-4 w-4 mr-1" />
                           <span className="hidden sm:inline text-sm font-medium">
@@ -250,12 +274,12 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                           <ChevronDown className="h-3 w-3 ml-1" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="w-56">
+                      <DropdownMenuContent align="start" className="w-56 rounded-2xl shadow-clay-card bg-card/95 backdrop-blur-md border-border/50">
                         <DropdownMenuItem
                           onClick={() => setSelectedCategory('All')}
                           className={cn(
-                            'cursor-pointer flex justify-between',
-                            selectedCategory === 'All' && 'bg-orange-50 text-orange-700',
+                            'cursor-pointer flex justify-between rounded-xl transition-colors duration-300',
+                            selectedCategory === 'All' && 'bg-primary-soft/30 text-primary',
                           )}
                         >
                           <span>{t('common.categories.all')}</span>
@@ -265,8 +289,8 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                             key={category}
                             onClick={() => setSelectedCategory(category)}
                             className={cn(
-                              'cursor-pointer flex justify-between',
-                              selectedCategory === category && 'bg-orange-50 text-orange-700',
+                              'cursor-pointer flex justify-between rounded-xl transition-colors duration-300',
+                              selectedCategory === category && 'bg-primary-soft/30 text-primary',
                             )}
                           >
                             <span>
@@ -281,14 +305,14 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                   </div>
 
                   <div className="flex-1 relative">
-                    <Input
+                    <input
                       type="text"
                       ref={searchInputRef}
                       placeholder={t('browse.filter.searchPlaceholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      className="border-0 text-ellipsis line-clamp-1 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 text-gray-700 placeholder:text-gray-500"
+                      className="w-full border-0 bg-transparent text-ellipsis line-clamp-1 focus:outline-none h-12 text-foreground placeholder:text-muted-foreground px-4"
                     />
 
                     {searchQuery && (
@@ -297,7 +321,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                         variant="ghost"
                         size="sm"
                         onClick={clearSearch}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 rounded-full text-muted-foreground hover:text-foreground"
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -307,7 +331,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                   <Button
                     type="submit"
                     size="sm"
-                    className="h-12 px-4 hover:bg-orange-700 text-white rounded-r-lg rounded-l-none flex-shrink-0"
+                    className="h-12 px-6 rounded-r-full rounded-l-none flex-shrink-0"
                   >
                     <Search className="h-4 w-4" />
                     <span className="hidden sm:inline ml-2">{t('browse.filter.searchButton')}</span>
@@ -337,12 +361,12 @@ function NavLink({
     <Link
       href={href}
       className={cn(
-        'px-3 py-2 rounded-md text-sm font-medium transition-colors',
+        'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:bg-muted/50',
         scrolled
-          ? 'text-black hover:text-gray-900'
+          ? 'text-foreground hover:text-primary'
           : background === 'primary'
-            ? 'text-white hover:text-white'
-            : 'text-black hover:text-gray-900',
+            ? 'text-primary-foreground hover:bg-primary-foreground/10'
+            : 'text-foreground hover:text-primary',
       )}
     >
       {children}
@@ -367,14 +391,7 @@ function MobileNavLink({
     <Link
       href={href}
       onClick={onClick}
-      className={cn(
-        'block py-2 rounded-md text-base font-medium transition-colors',
-        scrolled
-          ? 'text-black hover:text-gray-900'
-          : background === 'primary'
-            ? 'text-white hover:text-gray-900'
-            : 'text-gray-600 hover:text-gray-900',
-      )}
+      className="block py-4 px-6 rounded-2xl text-lg font-medium transition-all duration-300 text-foreground hover:bg-muted hover:text-primary"
     >
       {children}
     </Link>
