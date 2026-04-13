@@ -13,6 +13,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
 import { i18n } from '../../i18n-config';
 import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import React from 'react';
 import { BackgroundSystem } from '@/components/background-system';
 
@@ -47,6 +48,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
+  const messages = await getMessages();
 
   return (
     <html className={`notranslate bg-background ${playfairDisplay.variable} ${dmSans.variable} ${geistMono.variable}`} translate="no">
@@ -76,7 +78,7 @@ export default async function RootLayout({
       </head>
       <body className={`font-sans antialiased overflow-hidden`}>
         <BackgroundSystem />
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           <Toaster />
           <ServiceWorkerProvider>
             <CookiesProvider>
