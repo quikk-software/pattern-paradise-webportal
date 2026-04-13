@@ -1,43 +1,37 @@
+import { Playfair_Display, DM_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
 import { APP_DOMAIN } from '@/lib/constants';
-import { CookiesProvider } from 'next-client-cookies/server';
-import AuthSessionProvider from '@/app/providers/AuthSessionProvider';
-import DynamicPaddingWrapper from '@/lib/wrappers/DynamicPaddingWrapper';
-import ComingSoon from '@/components/coming-soon';
-import CookieConsentBanner from '@/lib/components/CookieConsentBanner';
-import { ServiceWorkerProvider } from '@/app/providers/ServiceWorkerProvider';
-import { PushNotificationProvider } from '@/app/providers/PushNotificationProvider';
-import { Toaster } from '@/components/ui/sonner';
-import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
-import { i18n } from '../../i18n-config';
-import { NextIntlClientProvider } from 'next-intl';
 import React from 'react';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-});
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
 });
 
-export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }));
-}
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const geistMono = localFont({
+  src: './fonts/GeistMonoVF.woff',
+  variable: '--font-mono',
+  weight: '100 900',
+});
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
-
   return (
-    <html className="notranslate" translate="no">
+    <html className={`notranslate bg-background ${playfairDisplay.variable} ${dmSans.variable} ${geistMono.variable}`} translate="no">
       <head>
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
@@ -62,26 +56,8 @@ export default async function RootLayout({
           async
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        <NextIntlClientProvider>
-          <Toaster />
-          <ServiceWorkerProvider>
-            <CookiesProvider>
-              <AuthSessionProvider>
-                {maintenanceMode ? (
-                  <ComingSoon />
-                ) : (
-                  <PushNotificationProvider>
-                    <DynamicPaddingWrapper>{children}</DynamicPaddingWrapper>
-                  </PushNotificationProvider>
-                )}
-                <PreviewFlagProvider>
-                  <CookieConsentBanner maintenanceMode={maintenanceMode} />
-                </PreviewFlagProvider>
-              </AuthSessionProvider>
-            </CookiesProvider>
-          </ServiceWorkerProvider>
-        </NextIntlClientProvider>
+      <body className={`font-sans antialiased overflow-hidden`}>
+        {children}
       </body>
     </html>
   );

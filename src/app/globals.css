@@ -21,7 +21,6 @@ html {
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
   position: fixed;
   width: 100%;
   height: 100vh;
@@ -36,62 +35,102 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    /* Botanical Clay - Warm Canvas */
+    --background: 36 40% 96%; /* #FAF6F1 warm alabaster */
+    --foreground: 148 13% 20%; /* #2D3A31 deep forest green */
+    
+    /* Card surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 148 13% 20%;
+    
+    /* Popover surfaces */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 28 100% 44%;
+    --popover-foreground: 148 13% 20%;
+    
+    /* Primary - PRESERVED brand orange */
+    --primary: 28 100% 44%; /* #E06B00 - unchanged */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --primary-deep: 22 95% 36%; /* #B44A05 gradient companion */
+    --primary-soft: 30 85% 72%; /* #F0B27A soft orange */
+    
+    /* Secondary - Sage green */
+    --secondary: 104 10% 56%; /* #8C9A84 sage */
+    --secondary-foreground: 0 0% 100%;
+    
+    /* Muted - earthy tones */
+    --muted: 32 28% 92%; /* #F2EDE5 recessed bg */
+    --muted-foreground: 152 8% 40%; /* #5D6B60 secondary text */
+    
+    /* Accent - soft sage */
+    --accent: 92 19% 79%; /* #C9D4BE sage accent */
+    --accent-foreground: 148 13% 20%;
+    
+    /* Tertiary - warm ochre */
+    --tertiary: 36 63% 62%; /* #D9A566 warm ochre */
+    --tertiary-foreground: 148 13% 20%;
+    
+    /* Destructive */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 35 91% 50%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    
+    /* Success */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Borders - stone */
+    --border: 36 27% 87%; /* #E6E0D4 delicate stone */
+    --input: 32 28% 92%; /* #F2EDE5 recessed inputs */
+    --ring: 28 100% 44%;
+    
+    /* Charts - warm palette */
+    --chart-1: 28 100% 44%;
+    --chart-2: 104 10% 56%;
+    --chart-3: 36 63% 62%;
+    --chart-4: 92 19% 79%;
+    --chart-5: 22 95% 36%;
+    
+    /* Radius - soft rounded */
+    --radius: 0.75rem;
+    --radius-clay: 28px;
+    --radius-clay-lg: 40px;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 35 91% 50%;
+    --background: 148 15% 10%;
+    --foreground: 36 40% 96%;
+    --card: 148 12% 14%;
+    --card-foreground: 36 40% 96%;
+    --popover: 148 12% 14%;
+    --popover-foreground: 36 40% 96%;
+    --primary: 28 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 14.9%;
+    --primary-deep: 22 95% 40%;
+    --primary-soft: 30 70% 50%;
+    --secondary: 104 15% 40%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    --muted: 148 10% 20%;
+    --muted-foreground: 36 20% 70%;
+    --accent: 92 15% 30%;
+    --accent-foreground: 36 40% 96%;
+    --tertiary: 36 50% 50%;
+    --tertiary-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 35 91% 50%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --success: 142 60% 30%;
+    --success-foreground: 0 0% 100%;
+    --border: 148 10% 25%;
+    --input: 148 10% 20%;
+    --ring: 28 100% 50%;
+    --chart-1: 28 100% 55%;
+    --chart-2: 104 20% 50%;
+    --chart-3: 36 55% 55%;
+    --chart-4: 92 20% 45%;
+    --chart-5: 22 90% 45%;
   }
 }
 
-@theme {
+@theme inline {
+  /* Colors */
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -100,14 +139,20 @@ body {
   --color-popover-foreground: hsl(var(--popover-foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-deep: hsl(var(--primary-deep));
+  --color-primary-soft: hsl(var(--primary-soft));
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-tertiary: hsl(var(--tertiary));
+  --color-tertiary-foreground: hsl(var(--tertiary-foreground));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -118,18 +163,157 @@ body {
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
 
+  /* Radius */
   --radius-xs: calc(var(--radius) - 4px);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-clay: var(--radius-clay);
+  --radius-clay-lg: var(--radius-clay-lg);
+
+  /* Typography - Playfair Display + DM Sans */
+  --font-sans: 'DM Sans', 'DM Sans Fallback', system-ui, sans-serif;
+  --font-display: 'Playfair Display', 'Playfair Display Fallback', Georgia, serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+
+  /* Clay Shadows - warm orange-tinted */
+  --shadow-clay-card: 
+    12px 12px 28px rgba(180, 74, 5, 0.10),
+    -8px -8px 20px rgba(255, 252, 246, 0.9),
+    inset 4px 4px 10px rgba(224, 107, 0, 0.03),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.9);
+  
+  --shadow-clay-card-hover: 
+    20px 20px 40px rgba(180, 74, 5, 0.16),
+    -12px -12px 28px rgba(255, 252, 246, 1),
+    inset 4px 4px 10px rgba(224, 107, 0, 0.04),
+    inset -4px -4px 10px rgba(255, 255, 255, 1);
+  
+  --shadow-clay-button: 
+    10px 10px 22px rgba(180, 74, 5, 0.32),
+    -6px -6px 14px rgba(255, 252, 246, 0.5),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.35),
+    inset -3px -3px 6px rgba(80, 30, 0, 0.14);
+  
+  --shadow-clay-pressed: 
+    inset 8px 8px 18px rgba(180, 74, 5, 0.14),
+    inset -8px -8px 18px rgba(255, 252, 246, 1);
+  
+  --shadow-clay-surface: 
+    24px 24px 50px rgba(180, 74, 5, 0.07),
+    -24px -24px 50px rgba(255, 252, 246, 0.9);
+
+  /* Animations */
+  --animate-clay-float: clay-float 8s ease-in-out infinite;
+  --animate-clay-float-delayed: clay-float-delayed 10s ease-in-out infinite;
+  --animate-clay-float-slow: clay-float-slow 12s ease-in-out infinite;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-confetti: confetti 3s linear forwards;
+
+  @keyframes clay-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(2deg); }
+  }
+
+  @keyframes clay-float-delayed {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-2deg); }
+  }
+
+  @keyframes clay-float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(5deg); }
+  }
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+
+  @keyframes confetti {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Playfair Display for headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+
+  /* Focus ring styling */
+  :focus-visible {
+    @apply outline-none ring-4 ring-primary/30 ring-offset-2;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility classes for clay design system */
+@layer utilities {
+  .shadow-clay-card {
+    box-shadow: var(--shadow-clay-card);
+  }
+  
+  .shadow-clay-card-hover {
+    box-shadow: var(--shadow-clay-card-hover);
+  }
+  
+  .shadow-clay-button {
+    box-shadow: var(--shadow-clay-button);
+  }
+  
+  .shadow-clay-pressed {
+    box-shadow: var(--shadow-clay-pressed);
+  }
+  
+  .shadow-clay-surface {
+    box-shadow: var(--shadow-clay-surface);
+  }
+
+  .rounded-clay {
+    border-radius: var(--radius-clay);
+  }
+
+  .rounded-clay-lg {
+    border-radius: var(--radius-clay-lg);
+  }
+
+  .font-display {
+    font-family: var(--font-display);
   }
 }

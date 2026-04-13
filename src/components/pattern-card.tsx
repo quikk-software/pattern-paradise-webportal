@@ -95,17 +95,17 @@ export default function PatternCard({ pattern }: PatternCardProps) {
   const imageSrc = pattern.productImageUrls.at(0);
 
   return (
-    <div className="rounded-lg shadow-md p-4 flex flex-col">
-      <div className="flex flex-row gap-4 bg-white h-full">
+    <div className="rounded-clay bg-card/80 backdrop-blur-md shadow-clay-card p-5 flex flex-col hover:shadow-clay-card-hover transition-all duration-500">
+      <div className="flex flex-row gap-5 h-full">
         {imageSrc ? (
-          <Link href={`/app/secure/auth/me/orders/${pattern.orderId}`} rel={'nofollow'}>
+          <Link href={`/app/secure/auth/me/orders/${pattern.orderId}`} rel={'nofollow'} className="flex-shrink-0">
             <CldImage
               key={imageSrc}
               alt={`${pattern.productTitle} on Pattern Paradise`}
               src={imageSrc}
               width={100}
               height={100}
-              className={`rounded-lg shadow-md`}
+              className="rounded-2xl shadow-clay-card object-cover"
               format="webp"
             />
           </Link>
@@ -114,13 +114,13 @@ export default function PatternCard({ pattern }: PatternCardProps) {
           <Link
             href={`/app/secure/auth/me/orders/${pattern.orderId}`}
             rel={'nofollow'}
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-2 group"
           >
-            <h2 className="text-xl font-semibold">{pattern.productTitle}</h2>
-            <p className="text-gray-600 line-clamp-2">{pattern.productDescription}</p>
+            <h2 className="font-display text-xl font-semibold text-foreground group-hover:text-primary transition-colors duration-300">{pattern.productTitle}</h2>
+            <p className="text-muted-foreground line-clamp-2 leading-relaxed">{pattern.productDescription}</p>
           </Link>
           <div className="flex-1 flex items-end">
-            <Button onClick={() => setExpanded(!expanded)} className="w-full" variant="outline">
+            <Button onClick={() => setExpanded(!expanded)} className="w-full" variant="secondary">
               {expanded ? (
                 <>
                   <ChevronUp className="w-4 h-4 mr-2" />
@@ -143,84 +143,90 @@ export default function PatternCard({ pattern }: PatternCardProps) {
               .filter((fo) => fo.language === language)
               .map((fo) => fo.fileId);
             return (
-              <div key={language} className="mb-4 border-t-2 border-dashed border-muted">
-                <h3 className="font-semibold mt-4 mb-2">
+              <div key={language} className="mb-6 border-t-2 border-dashed border-border pt-6">
+                <h3 className="font-display font-semibold text-lg text-foreground mb-3 flex items-center gap-2">
                   <CountryFlag languageCode={language} />{' '}
                   {LANGUAGES.find((lang) => lang.code === language)?.name ?? language}
                 </h3>
-                <h5 className="mb-1 text-muted-foreground">Download as ZIP file</h5>
-                <div className="mb-2">
-                  <DownloadPatternZipButton
-                    productId={pattern.productId}
-                    productTitle={pattern.productTitle}
-                    files={pattern.patterns.filter((p) => p.language === language)}
-                    buttonLabel={'Download all files'}
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="mb-2 text-sm text-muted-foreground font-medium">Download as ZIP file</h5>
+                    <DownloadPatternZipButton
+                      productId={pattern.productId}
+                      productTitle={pattern.productTitle}
+                      files={pattern.patterns.filter((p) => p.language === language)}
+                      buttonLabel={'Download all files'}
+                    />
+                  </div>
+                  <div>
+                    <h5 className="mb-2 text-sm text-muted-foreground font-medium">Send as mail</h5>
+                    <SendFilesButton
+                      productId={pattern.productId}
+                      channel={'MAIL'}
+                      language={language}
+                    />
+                  </div>
+                  <div>
+                    <h5 className="mb-2 text-sm text-muted-foreground font-medium">Download single files</h5>
+                    <div className="space-y-2">
+                      {(files as GetFileResponse[])
+                        .sort((a, b) => fileOrder.indexOf(a.id) - fileOrder.indexOf(b.id))
+                        .map((file) => {
+                          return (
+                            <div className="space-y-2" key={file.objectName}>
+                              <Button
+                                disabled={currentlyDownloading === file.id}
+                                onClick={() => handleDownload(file.id)}
+                                className="w-full"
+                                variant="secondary"
+                                size="sm"
+                              >
+                                <Download className="w-4 h-4 mr-2" />
+                                <span className="line-clamp-1">{file.objectName.split('/').pop()}</span>
+                              </Button>
+                              {currentlyDownloading === file.id ? (
+                                <>
+                                  {downloadProgress > 0 ? (
+                                    <Progress
+                                      value={downloadProgress}
+                                      className="h-2 transition-all duration-300 ease-in-out rounded-full"
+                                      style={{
+                                        background: `linear-gradient(90deg, 
+                                        var(--primary) 0%, 
+                                        var(--primary) ${downloadProgress}%, 
+                                        var(--muted) ${downloadProgress}%, 
+                                        var(--muted) 100%)`,
+                                      }}
+                                    />
+                                  ) : null}
+                                  {downloadProgress > 20 && !downloadIsDone ? (
+                                    <p className="text-sm text-muted-foreground">Please hang tight. Just a couple of seconds left...</p>
+                                  ) : null}
+                                  <RequestStatus
+                                    isSuccess={downloadIsDone}
+                                    isError={isError}
+                                    successMessage={
+                                      'Your pattern has been successfully downloaded! Check your Downloads folder to access it.'
+                                    }
+                                    errorMessage={
+                                      <span>
+                                        Something went wrong while downloading this pattern. Please try
+                                        again or{' '}
+                                        <Link className="text-primary underline" href="/help">
+                                          contact us
+                                        </Link>{' '}
+                                        for assistance.
+                                      </span>
+                                    }
+                                  />
+                                </>
+                              ) : null}
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
                 </div>
-                <h5 className="mb-1 text-muted-foreground">Send as mail</h5>
-                <div className="mb-2">
-                  <SendFilesButton
-                    productId={pattern.productId}
-                    channel={'MAIL'}
-                    language={language}
-                  />
-                </div>
-                <h5 className="mb-1 text-muted-foreground">Download single files</h5>
-                {(files as GetFileResponse[])
-                  .sort((a, b) => fileOrder.indexOf(a.id) - fileOrder.indexOf(b.id))
-                  .map((file) => {
-                    return (
-                      <div className="space-y-1" key={file.objectName}>
-                        <Button
-                          disabled={currentlyDownloading === file.id}
-                          onClick={() => handleDownload(file.id)}
-                          className="w-full mb-2"
-                          variant="secondary"
-                          size="sm"
-                        >
-                          <Download className="w-4 h-4 mr-2" />
-                          <span className="line-clamp-1">{file.objectName.split('/').pop()}</span>
-                        </Button>
-                        {currentlyDownloading === file.id ? (
-                          <>
-                            {downloadProgress > 0 ? (
-                              <Progress
-                                value={downloadProgress}
-                                className="h-2 transition-all duration-300 ease-in-out"
-                                style={{
-                                  background: `linear-gradient(90deg, 
-                                var(--primary) 0%, 
-                                var(--primary) ${downloadProgress}%, 
-                                var(--muted) ${downloadProgress}%, 
-                                var(--muted) 100%)`,
-                                }}
-                              />
-                            ) : null}
-                            {downloadProgress > 20 && !downloadIsDone ? (
-                              <p>Please hang tight. Just a couple of seconds left...</p>
-                            ) : null}
-                            <RequestStatus
-                              isSuccess={downloadIsDone}
-                              isError={isError}
-                              successMessage={
-                                'Your pattern has been successfully downloaded! Check your Downloads folder to access it.'
-                              }
-                              errorMessage={
-                                <span>
-                                  Something went wrong while downloading this pattern. Please try
-                                  again or{' '}
-                                  <Link className="text-blue-500 underline" href="/help">
-                                    contact us
-                                  </Link>{' '}
-                                  for assistance.
-                                </span>
-                              }
-                            />
-                          </>
-                        ) : null}
-                      </div>
-                    );
-                  })}
               </div>
             );
           })}

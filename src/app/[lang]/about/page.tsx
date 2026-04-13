@@ -100,8 +100,9 @@ const JSON_LD = [
   },
 ];
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
-  return generatePageMetadata('/about', params.lang);
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return generatePageMetadata('/about', lang);
 }
 
 export default function AboutPage() {

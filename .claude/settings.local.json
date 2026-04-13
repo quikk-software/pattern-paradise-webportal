@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import sys,json; print\\(json.load\\(sys.stdin\\)['version']\\)\")",
+      "Bash(ls /Users/mac/Desktop/Repos/pattern-paradise-webportal/src/middleware*)",
+      "Bash(npx tsc:*)",
+      "Bash(ls /Users/mac/Desktop/Repos/pattern-paradise-webportal/src/app/[lang]/)",
+      "WebSearch",
+      "WebFetch(domain:www.buildwithmatija.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(yarn add:*)"
+    ]
+  }
+}

@@ -14,7 +14,7 @@ export default async function MysteryPatternHero() {
 
   return (
     <section className="w-full py-8 bg-gradient-to-r from-orange-100 to-amber-100 border-y border-orange-200">
-      <div className="container">
+      <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
           <div className="flex items-center space-x-6">
             <div className="w-12 h-12 bg-gradient-to-br from-primary to-amber-500 rounded-full flex items-center justify-center shadow-lg">

@@ -185,11 +185,12 @@ const JSON_LD = [
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
-  return generatePageMetadata('/', params.lang);
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return generatePageMetadata('/', lang);
 }
 
-export default async function Home({ searchParams }: { searchParams: { [key: string]: string } }) {
+export default async function Home({ searchParams }: { searchParams: Promise<{ [key: string]: string }> }) {
   const sp = await searchParams;
   const products = await listProductsForShowcase();
 
