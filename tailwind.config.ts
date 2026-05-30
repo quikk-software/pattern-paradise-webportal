@@ -19,6 +19,11 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Fraunces', 'Georgia', 'serif'],
+        mono: ['GeistMono', 'ui-monospace', 'monospace'],
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -36,6 +41,10 @@ const config = {
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
+        },
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          foreground: 'hsl(var(--success-foreground))',
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -62,9 +71,17 @@ const config = {
         },
       },
       borderRadius: {
+        '2xl': '1rem',         // 16px for cards
+        xl: '0.75rem',         // 12px for inputs
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        full: '9999px',        // Pill buttons
+      },
+      boxShadow: {
+        'card': '0 4px 20px rgba(43, 33, 24, 0.06)',
+        'card-hover': '0 8px 30px rgba(43, 33, 24, 0.1)',
+        'soft': '0 2px 10px rgba(43, 33, 24, 0.04)',
       },
       keyframes: {
         'accordion-down': {

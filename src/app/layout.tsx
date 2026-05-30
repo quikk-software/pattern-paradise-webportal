@@ -37,7 +37,7 @@ export default async function RootLayout({
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
 
   return (
-    <html className="notranslate" translate="no">
+    <html className="notranslate bg-background" translate="no">
       <head>
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
