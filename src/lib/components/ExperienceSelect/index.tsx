@@ -7,14 +7,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { EXPERIENCE_LEVELS } from '@/lib/constants';
-import { Controller, Control } from 'react-hook-form';
+import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 
-interface ExperienceSelectProps {
-  control: Control<any>;
-  name: string;
+interface ExperienceSelectProps<T extends FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
 }
 
-export default function ExperienceSelect({ control, name }: ExperienceSelectProps) {
+export default function ExperienceSelect<T extends FieldValues>({
+  control,
+  name,
+}: ExperienceSelectProps<T>) {
   return (
     <Controller
       name={name}
