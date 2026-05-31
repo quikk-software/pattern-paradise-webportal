@@ -1,0 +1,91 @@
+# Pattern Paradise
+
+> Pattern Paradise is a modern, community-powered marketplace for crochet and knitting patterns. Designers can upload and sell patterns, host tester calls, and connect with makers through real-time chat. Built with Next.js 16, TypeScript, Tailwind CSS, and shadcn/ui.
+
+## Overview
+
+Pattern Paradise (https://pattern-paradise.shop) enables:
+
+- **Pattern Sales**: Designers upload patterns with photos, files, and detailed descriptions for sale or free download
+- **Tester Calls**: Host pattern testing sessions and get feedback from real makers before release
+- **Real-time Chat**: Communicate with testers during projects
+- **Mystery Patterns**: Join or offer mystery pattern bundles to promote hidden gems
+- **User Profiles**: Public creator profiles with pattern portfolios and reviews
+- **Multi-language Support**: Available in English and German
+
+## Tech Stack
+
+- **Framework**: Next.js 16 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4 + shadcn/ui components
+- **State Management**: Redux Toolkit with redux-persist
+- **Forms**: React Hook Form + Zod validation
+- **Auth**: NextAuth.js with Keycloak
+- **Payments**: Stripe + PayPal integration
+- **Internationalization**: next-intl
+- **File Storage**: Vercel Blob + Cloudinary
+- **Real-time**: Firebase for chat
+
+## Docs
+
+- [README](https://github.com/quikk-software/pattern-paradise-webportal/blob/main/README.md): Project overview, setup instructions, and contribution guidelines
+- [How-To Guides](https://pattern-paradise.shop/how-to): User guides for designers and testers
+- [About Page](https://pattern-paradise.shop/about): Platform mission and features
+- [Terms & Privacy](https://pattern-paradise.shop/terms-and-privacy): Legal terms and privacy policy
+
+## Key Features
+
+- [Browse Patterns](https://pattern-paradise.shop/browse): Search and filter patterns by craft type, category, skill level, and price
+- [Free Crochet Patterns](https://pattern-paradise.shop/browse/free-crochet-patterns): Curated free crochet patterns
+- [Free Knitting Patterns](https://pattern-paradise.shop/browse/free-knitting-patterns): Curated free knitting patterns
+- [Tester Calls](https://pattern-paradise.shop/app/tester-calls): Browse and apply for active pattern testing opportunities
+- [Swipe Discovery](https://pattern-paradise.shop/swipe): Tinder-style pattern discovery interface
+- [Pro Subscription](https://pattern-paradise.shop/pro): Premium features for serious designers
+
+## API & Data
+
+- [RSS Feed - Crochet](https://pattern-paradise.shop/rss/crocheting): RSS feed for new crochet patterns
+- [RSS Feed - Knitting](https://pattern-paradise.shop/rss/knitting): RSS feed for new knitting patterns
+- [Sitemap](https://pattern-paradise.shop/sitemap.xml): Full sitemap with all patterns, users, and pages
+
+## Project Structure
+
+```
+src/
+├── app/[lang]/           # Internationalized pages (en, de)
+│   ├── about/            # About page
+│   ├── app/              # Authenticated app routes
+│   │   ├── products/     # Pattern details and mystery patterns
+│   │   ├── secure/       # Protected routes (chat, sell, test, profile)
+│   │   └── tester-calls/ # Tester call listings
+│   ├── auth/             # Login, registration, password reset
+│   ├── browse/           # Pattern browsing and filtering
+│   ├── help/             # Help center
+│   ├── how-to/           # User guides
+│   ├── pro/              # Pro subscription page
+│   ├── swipe/            # Pattern swipe discovery
+│   ├── terms-and-privacy/# Legal pages
+│   └── users/            # Public user profiles
+├── components/           # Shared UI components
+├── lib/
+│   ├── api/              # API client functions
+│   ├── auth/             # Authentication utilities
+│   ├── components/       # Feature-specific components
+│   ├── hooks/            # Custom React hooks
+│   ├── icons/            # SVG icon components
+│   └── redux/            # Redux store, slices, and selectors
+└── @types/               # TypeScript type definitions
+```
+
+## Brand Assets
+
+- [Logo & Brand Kit](https://github.com/quikk-software/pattern-paradise-logo): Official logos in SVG, PNG, WebP formats with usage guidelines
+
+## Optional
+
+- [Next.js Documentation](https://nextjs.org/docs): Framework documentation for Next.js 16
+- [shadcn/ui Components](https://ui.shadcn.com): Component library documentation
+- [Tailwind CSS v4](https://tailwindcss.com/docs): Styling framework documentation
+- [React Hook Form](https://react-hook-form.com): Form handling library
+- [Zod Validation](https://zod.dev): Schema validation library
+- [next-intl](https://next-intl.dev): Internationalization for Next.js
