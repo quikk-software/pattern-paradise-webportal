@@ -8,7 +8,7 @@ import { ArrowRight, Clock, Percent } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { updateFilterField } from '@/lib/features/filter/filterSlice';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 import { getCurrencySymbol } from '@/lib/utils';
 
 interface WaterfallListingProps {

@@ -1,4 +1,11 @@
 @import "tailwindcss";
+@import "@fontsource/fraunces/400.css";
+@import "@fontsource/fraunces/500.css";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
 
 @source inline("bg-{slate,gray,zinc,neutral,stone,red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{200,500,800}");
 
@@ -21,7 +28,7 @@ html {
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   position: fixed;
   width: 100%;
   height: 100vh;
@@ -34,64 +41,91 @@ body {
   }
 }
 
+/* Design Tokens for Pattern Paradise - Warm, Handmade, Modern-Editorial */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 28 100% 44%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 35 91% 50%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    /* Core Colors */
+    --background: 40 33% 97%;        /* #FBF8F3 - warm cream background */
+    --foreground: 24 28% 12%;        /* #2B2118 - deep warm brown text */
+    --card: 0 0% 100%;               /* #FFFFFF - pure white cards */
+    --card-foreground: 24 28% 12%;   /* #2B2118 - deep warm brown */
+    --popover: 0 0% 100%;            /* #FFFFFF */
+    --popover-foreground: 24 28% 12%;/* #2B2118 */
+    --primary: 27 100% 44%;          /* #E06900 - warm orange primary */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF - white on primary */
+    --secondary: 24 28% 12%;         /* #2B2118 - deep brown secondary */
+    --secondary-foreground: 40 33% 97%; /* #FBF8F3 - cream on secondary */
+    --muted: 30 14% 93%;             /* #ECE5DB - soft warm muted */
+    --muted-foreground: 26 8% 44%;   /* #7A7066 - muted text */
+    --accent: 30 14% 93%;            /* #ECE5DB - soft accent */
+    --accent-foreground: 24 28% 12%; /* #2B2118 */
+    --destructive: 0 84% 60%;        /* Red for errors */
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 14% 93%;            /* #ECE5DB - soft warm border */
+    --input: 30 14% 93%;             /* #ECE5DB - input border */
+    --ring: 27 100% 44%;             /* #E06900 - focus ring */
+    
+    /* Success color for badges */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Chart colors - warm palette */
+    --chart-1: 27 100% 44%;          /* Primary orange */
+    --chart-2: 142 76% 36%;          /* Green */
+    --chart-3: 24 28% 12%;           /* Deep brown */
+    --chart-4: 38 92% 50%;           /* Golden */
+    --chart-5: 12 76% 61%;           /* Coral */
+    
+    /* Radius tokens */
+    --radius: 1rem;                  /* 16px base for cards */
+    --radius-input: 0.75rem;         /* 12px for inputs */
+    --radius-button: 9999px;         /* Pill shape for buttons */
+    
+    /* Shadow tokens */
+    --shadow-card: 0 4px 20px rgba(43, 33, 24, 0.06);
+    --shadow-card-hover: 0 8px 30px rgba(43, 33, 24, 0.1);
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 35 91% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --background: 24 28% 8%;         /* Dark warm background */
+    --foreground: 40 33% 97%;        /* #FBF8F3 */
+    --card: 24 28% 12%;              /* #2B2118 */
+    --card-foreground: 40 33% 97%;   /* #FBF8F3 */
+    --popover: 24 28% 12%;           /* #2B2118 */
+    --popover-foreground: 40 33% 97%;/* #FBF8F3 */
+    --primary: 27 100% 44%;          /* #E06900 */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --secondary: 40 33% 97%;         /* #FBF8F3 */
+    --secondary-foreground: 24 28% 12%;/* #2B2118 */
+    --muted: 24 20% 18%;             /* Darker muted */
+    --muted-foreground: 26 8% 64%;   /* Lighter muted text */
+    --accent: 24 20% 18%;            /* Darker accent */
+    --accent-foreground: 40 33% 97%; /* #FBF8F3 */
+    --destructive: 0 62% 30%;        /* Darker red */
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 35 91% 50%;
-    --chart-1: 220 70% 50%;
+    --border: 24 20% 20%;            /* Dark border */
+    --input: 24 20% 20%;             /* Dark input */
+    --ring: 27 100% 44%;             /* #E06900 */
+    
+    --success: 142 70% 30%;
+    --success-foreground: 0 0% 100%;
+    
+    --chart-1: 27 100% 50%;
     --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-3: 40 33% 80%;
+    --chart-4: 38 80% 55%;
+    --chart-5: 12 70% 55%;
+    
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
   }
 }
 
-@theme {
+@theme inline {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-mono: 'GeistMono', ui-monospace, monospace;
+  
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -108,6 +142,8 @@ body {
   --color-accent-foreground: hsl(var(--accent-foreground));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -118,11 +154,16 @@ body {
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
 
-  --radius-xs: calc(var(--radius) - 4px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-xs: calc(var(--radius) - 8px);
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
+  --radius-input: var(--radius-input);
+  --radius-button: var(--radius-button);
+  
+  --shadow-card: var(--shadow-card);
+  --shadow-card-hover: var(--shadow-card-hover);
 }
 
 @layer base {
@@ -130,6 +171,25 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  /* Typography - Headings with Fraunces */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+  
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl leading-snug tracking-tight;
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl leading-snug;
   }
 }

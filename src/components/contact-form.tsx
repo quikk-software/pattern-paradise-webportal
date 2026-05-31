@@ -31,7 +31,7 @@ import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import { useCreateChat } from '@/lib/api';
 import Link from 'next/link';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 type FormData = {
   name: string;

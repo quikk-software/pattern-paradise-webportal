@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/select';
 import { LANGUAGES } from '@/lib/constants';
 import ReactCountryFlag from 'react-country-flag';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface LanguageSelectProps {
   language?: string;

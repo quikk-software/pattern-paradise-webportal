@@ -13,32 +13,32 @@ export default async function MysteryPatternHero() {
   const t = await getTranslations();
 
   return (
-    <section className="w-full py-8 bg-gradient-to-r from-orange-100 to-amber-100 border-y border-orange-200">
-      <div className="container">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
-          <div className="flex items-center space-x-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-amber-500 rounded-full flex items-center justify-center shadow-lg">
-              <Gift className="w-6 h-6 text-white" />
+    <section className="w-full py-8 bg-gradient-to-r from-amber-50 to-orange-50 border-y border-border">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 max-w-4xl mx-auto text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+            <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(224,105,0,0.2)]">
+              <Gift className="w-7 h-7 text-white" />
             </div>
 
-            <div className="text-left">
-              <div className="flex items-center space-x-2 mb-1">
-                <h3 className="text-xl md:text-2xl font-bold text-orange-700">
+            <div>
+              <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                <h3 className="font-serif text-xl md:text-2xl font-semibold text-foreground">
                   {t('landing.hero.mystery.title')}
                 </h3>
               </div>
-              <p className="text-orange-600 text-sm">{t('landing.hero.mystery.description')}</p>
+              <p className="text-muted-foreground text-sm">{t('landing.hero.mystery.description')}</p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-orange-600">$3.00</div>
+              <div className="text-2xl font-bold text-primary">$3.00</div>
             </div>
 
             <Link href={'/app/products/mystery-patterns/crochet'}>
-              <Button className="bg-gradient-to-r from-primary to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold px-6 py-2 shadow-lg">
-                <Sparkles className="w-4 h-4 mr-2" />
+              <Button className="shadow-[0_4px_20px_rgba(224,105,0,0.2)]">
+                <Sparkles className="w-4 h-4" />
                 {t('landing.hero.mystery.button')}
               </Button>
             </Link>

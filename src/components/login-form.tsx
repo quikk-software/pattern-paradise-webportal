@@ -22,7 +22,7 @@ import GoogleLoginButton from '@/lib/components/GoogleLoginButton';
 import SectionDivider from '@/lib/components/SectionDivider';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');

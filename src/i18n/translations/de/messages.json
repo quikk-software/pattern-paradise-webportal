@@ -58,6 +58,10 @@
   "landing": {
     "hero": {
       "your": "Dein",
+      "patternCount": "500+ Anleitungen von Designern weltweit",
+      "headline": "Entdecke dein nächstes Lieblingsprojekt.",
+      "subline": "Kaufe, teste und verkaufe Häkel- & Strickanleitungen an einem gemütlichen Ort. Swipe, um die Anleitung zu finden, bei der deine Hände kribbeln.",
+      "free": "Kostenlos",
       "greeting": {
         "morning": "Guten Morgen",
         "evening": "Guten Abend",
@@ -83,7 +87,12 @@
       "subtitle": "Kaufe, teste und verkaufe deine Anleitungen an einem Ort. Werde Teil unserer leidenschaftlichen Häkel- & Strick-Community!",
       "cta": {
         "swipePatterns": "Swipe",
+        "browseAll": "Alle durchstöbern",
         "registerNow": "Jetzt registrieren"
+      },
+      "trust": {
+        "payment": "Sicher mit PayPal & Stripe",
+        "download": "Sofortiger digitaler Download"
       },
       "follow": "Folge unserer kreativen Reise",
       "followLink": "Tritt unserer Community bei",

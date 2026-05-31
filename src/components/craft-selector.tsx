@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface CraftSelectorProps {
   selectedCraft: string;

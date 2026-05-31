@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Trash2, X } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface HashtagInputProps {
   hashtags: string[];

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useCreateNewsletterSubscription } from '@/lib/api/newsletter-subscription';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('');
