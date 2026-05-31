@@ -624,7 +624,7 @@ export function ProductFormComponent({ user }: ProductFormComponentProps) {
             <Label htmlFor="experienceLevel" className="block text-lg font-semibold mb-2">
               Experience Level <span className="text-red-500">*</span>
             </Label>
-            <ExperienceSelect name="experienceLevel" control={control as any} />
+            <ExperienceSelect name="experienceLevel" control={control} />
           </div>
         </div>
 

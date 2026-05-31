@@ -55,6 +55,11 @@ export async function GET() {
     '/auth/reset-password',
   ];
 
+  // Add llms.txt as a non-localized static entry
+  const nonLocalizedRoutes = [
+    { url: `${APP_DOMAIN}/llms.txt`, lastModified: now },
+  ];
+
   const staticRoutes = staticPaths.map((path) => ({
     path,
     lastModified: now,
@@ -69,9 +74,12 @@ export async function GET() {
     })),
   );
 
+  // Combine localized routes with non-localized routes (like llms.txt)
+  const allSitemapRoutes = [...localizedRoutes, ...nonLocalizedRoutes];
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${localizedRoutes
+  ${allSitemapRoutes
     .map(
       (route) => `
     <url>

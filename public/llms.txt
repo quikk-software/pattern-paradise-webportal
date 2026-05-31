@@ -1,0 +1,37 @@
+# Pattern Paradise
+
+> Pattern Paradise is an online marketplace where independent designers sell digital crochet and knitting patterns, and crafters discover, test, and buy them. Tagline: "Where Creativity Pays Off."
+
+Pattern Paradise connects pattern designers with a worldwide community of crocheters and knitters. Designers upload their original patterns and set their own prices; buyers receive instant digital downloads. On top of a standard marketplace, the platform adds community-driven features: a swipe-based discovery mode for finding patterns, collaborative pattern testing (tester calls) so designs can be refined before release, and a surprise "Mystery Pattern."
+
+Key facts:
+- Patterns are digital downloads for crochet and knitting, delivered instantly after purchase.
+- Free to join for both designers and buyers; Pattern Paradise charges a 5% fee on each sale.
+- Payments are processed securely via PayPal and Stripe.
+- Native apps are available for iOS and Android, alongside the web platform.
+- Active social community on Instagram, TikTok, Pinterest, Threads, X, and Reddit.
+
+## Main pages
+- [Home](https://pattern-paradise.shop/): Overview of the marketplace, featured patterns, and entry points to browse, swipe, and register.
+- [Browse patterns](https://pattern-paradise.shop/browse): Search and filter the full catalog of crochet and knitting patterns.
+- [Swipe patterns](https://pattern-paradise.shop/swipe): Discover patterns one at a time in a swipe-based interface.
+- [Register](https://pattern-paradise.shop/auth/registration): Create a free account to buy or sell patterns.
+
+## How it works
+- [How To](https://pattern-paradise.shop/how-to): Guides for buying, selling, and testing patterns on the platform.
+- [About](https://pattern-paradise.shop/about): What Pattern Paradise is, who it's for, and how it supports designers.
+- [Help](https://pattern-paradise.shop/help): Support and answers to common questions.
+
+## For designers
+- Designers can upload original crochet and knitting patterns, set their own prices, and manage sales.
+- Collaborative pattern testing lets designers gather feedback and refine patterns before launch.
+- Pattern Paradise handles transactions and provides tools to manage and promote pattern sales.
+
+## Apps
+- [iOS app](https://apps.apple.com/de/app/pattern-paradise/id6742999886): Pattern Paradise on the Apple App Store.
+- [Android app](https://play.google.com/store/apps/details?id=shop.pattern_paradise.preview.twa): Pattern Paradise on Google Play.
+
+## Optional
+- [Terms & Privacy](https://pattern-paradise.shop/terms-and-privacy): Terms of service and privacy policy.
+- [Instagram](https://instagram.com/the.patternparadise): Community, new patterns, and behind-the-scenes.
+- [Sitemap](https://pattern-paradise.shop/sitemap.xml): Full list of indexable pages.
