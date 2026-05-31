@@ -4,6 +4,9 @@ import { listProducts } from '@/lib/api/static/product/listProducts';
 import { listUsers } from '@/lib/api/static/user/listUsers';
 import { getAccessTokenFromKeycloak } from '@/lib/auth/auth.utils';
 
+// Force dynamic rendering to avoid build-time API calls to backend
+export const dynamic = 'force-dynamic';
+
 const SUPPORTED_LOCALES = ['en', 'de'];
 
 export async function GET() {
