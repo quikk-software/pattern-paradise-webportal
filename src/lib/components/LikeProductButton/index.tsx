@@ -52,11 +52,11 @@ export default function LikeProductButton({ productId }: LikeProductButtonProps)
       onClick={handleClick}
       style={{
         backgroundColor: hasLike ? '#f43f5e' : 'hsl(var(--secondary))',
-        color: hasLike ? 'hsl(var(--background))' : 'hsl(var(--foreground))',
+        color: hasLike ? 'white' : 'hsl(var(--secondary-foreground))',
       }}
     >
       {isLoading ? (
-        <LoadingSpinnerComponent size="sm" className="text-black" />
+        <LoadingSpinnerComponent size="sm" className="text-secondary-foreground" />
       ) : (
         <Heart className="h-4 w-4" />
       )}

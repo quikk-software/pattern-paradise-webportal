@@ -293,7 +293,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             <div className="flex flex-wrap gap-2 mt-4 justify-center">
               <Badge
                 className={classNames(
-                  'px-3 py-1 text-sm font-medium',
+                  'px-3 py-1 text-sm font-medium text-white',
                   themeClasses[theme] || 'bg-neutral-600',
                 )}
               >
@@ -321,7 +321,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
             <div>
               <Badge
                 className={classNames(
-                  'px-3 py-1 text-sm font-medium mb-4',
+                  'px-3 py-1 text-sm font-medium mb-4 text-white',
                   themeClasses[theme] || 'bg-neutral-600',
                 )}
               >
