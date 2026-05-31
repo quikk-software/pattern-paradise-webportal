@@ -3,8 +3,9 @@ import React from 'react';
 import TestingQuickLinks from '@/lib/components/TestingQuickLinks';
 import { generatePageMetadata } from '@/lib/core/metadata';
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
-  return generatePageMetadata('/app/tester-calls', params.lang);
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return generatePageMetadata('/app/tester-calls', lang);
 }
 
 export default function TestPage({ searchParams }: { searchParams: { [key: string]: string } }) {
