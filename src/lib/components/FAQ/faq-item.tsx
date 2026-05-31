@@ -90,19 +90,19 @@ export default async function FAQItem() {
         <div key={item.id}>
           <AccordionItem
             value={item.id}
-            className="mb-4 overflow-hidden border border-border rounded-lg shadow-sm group hover:shadow-md transition-shadow duration-300"
+            className="mb-4 overflow-hidden border border-border rounded-2xl shadow-[0_4px_20px_rgba(43,33,24,0.06)] group hover:shadow-[0_8px_30px_rgba(43,33,24,0.1)] transition-shadow duration-300"
           >
             <AccordionTrigger
               disabled
-              className="px-6 py-5 text-lg font-medium bg-gradient-to-r from-white to-secondary/20 group-data-[state=open]:from-secondary/10 group-data-[state=open]:to-secondary/30 transition-all duration-300"
+              className="px-6 py-5 text-lg font-medium bg-card hover:bg-muted/50 transition-all duration-300"
             >
               <div className="flex items-center justify-between w-full">
                 <div className="text-left">
-                  <span className="text-primary">{item.question}</span>
+                  <span className="text-foreground">{item.question}</span>
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent forceMount className="px-6 py-4 text-base leading-relaxed bg-white">
+            <AccordionContent forceMount className="px-6 py-4 text-base leading-relaxed bg-card">
               <div className="prose prose-sm max-w-none text-muted-foreground">
                 {formatAnswer(item)}
               </div>
