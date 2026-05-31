@@ -504,7 +504,9 @@
     }
   },
   "swipe": {
-    "showDetails": "Show Details"
+    "showDetails": "Show Details",
+    "allSwiped": "You've seen all patterns!",
+    "startOver": "Start Over"
   },
   "product": {
     "fallbackTitle": "Pattern Details | Pattern Paradise",
