@@ -4,22 +4,15 @@ import React, { KeyboardEvent, useRef } from 'react';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, SearchIcon, X, ChevronDown, Search, Filter } from 'lucide-react';
+import { Menu, SearchIcon, X, Search } from 'lucide-react';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
-import { camelCase, cn, getPublicUrl } from '@/lib/utils';
+import { cn, getPublicUrl } from '@/lib/utils';
 import SocialBadges from '@/lib/components/SocialBadges';
 import { usePreview } from '@/app/providers/PreviewFlagProvider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
 import { LanguageSelector } from '@/lib/components/LanguageSelector';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { CATEGORIES } from '@/lib/constants';
 import { usePathname, useRouter } from 'next/navigation';
 
 const NAV_LINKS = (t: any) => [
@@ -59,7 +52,6 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
   const [isOpen, setIsOpen] = useState(false);
   const [searchVisible, setSearchVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
   const { isPreview } = usePreview();
@@ -103,7 +95,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
 
     searchInputRef.current?.blur();
 
-    router.push(`/browse?q=${searchQuery ?? ''}&craft=${selectedCategory}`);
+    router.push(`/browse?q=${searchQuery ?? ''}`);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -115,7 +107,6 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
 
   const clearSearch = () => {
     setSearchQuery('');
-    setSelectedCategory('All');
   };
 
   if (isPreview) {
@@ -233,54 +224,8 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="relative">
                 <div className="flex items-center bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
-                  <div className="flex-shrink-0">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-12 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-l-lg rounded-r-none border-r border-gray-200"
-                        >
-                          <Filter className="h-4 w-4 mr-1" />
-                          <span className="hidden sm:inline text-sm font-medium">
-                            {selectedCategory === 'All'
-                              ? t('common.categories.all')
-                              : t(`common.categories.${camelCase(selectedCategory)}`)}
-                          </span>
-                          <ChevronDown className="h-3 w-3 ml-1" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="w-56">
-                        <DropdownMenuItem
-                          onClick={() => setSelectedCategory('All')}
-                          className={cn(
-                            'cursor-pointer flex justify-between',
-                            selectedCategory === 'All' && 'bg-orange-50 text-orange-700',
-                          )}
-                        >
-                          <span>{t('common.categories.all')}</span>
-                        </DropdownMenuItem>
-                        {CATEGORIES.map(({ name: category }) => (
-                          <DropdownMenuItem
-                            key={category}
-                            onClick={() => setSelectedCategory(category)}
-                            className={cn(
-                              'cursor-pointer flex justify-between',
-                              selectedCategory === category && 'bg-orange-50 text-orange-700',
-                            )}
-                          >
-                            <span>
-                              {category === 'All'
-                                ? t('common.categories.all')
-                                : t(`common.categories.${camelCase(category)}`)}
-                            </span>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-
                   <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="text"
                       ref={searchInputRef}
@@ -288,7 +233,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      className="border-0 text-ellipsis line-clamp-1 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 text-gray-700 placeholder:text-gray-500"
+                      className="border-0 pl-10 text-ellipsis line-clamp-1 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 text-gray-700 placeholder:text-gray-500"
                     />
 
                     {searchQuery && (
