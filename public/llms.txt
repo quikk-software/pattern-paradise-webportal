@@ -13,19 +13,6 @@ Pattern Paradise (https://pattern-paradise.shop) enables:
 - **User Profiles**: Public creator profiles with pattern portfolios and reviews
 - **Multi-language Support**: Available in English and German
 
-## Tech Stack
-
-- **Framework**: Next.js 16 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS 4 + shadcn/ui components
-- **State Management**: Redux Toolkit with redux-persist
-- **Forms**: React Hook Form + Zod validation
-- **Auth**: NextAuth.js with Keycloak
-- **Payments**: Stripe + PayPal integration
-- **Internationalization**: next-intl
-- **File Storage**: Vercel Blob + Cloudinary
-- **Real-time**: Firebase for chat
-
 ## Docs
 
 - [README](https://github.com/quikk-software/pattern-paradise-webportal/blob/main/README.md): Project overview, setup instructions, and contribution guidelines
