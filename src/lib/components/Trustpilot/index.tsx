@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useLocale } from 'use-intl';
+import { useLocale } from 'next-intl';
 
 export default function Trustpilot() {
   const locale = useLocale();

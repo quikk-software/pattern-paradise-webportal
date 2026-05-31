@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import CurrencyInput from 'react-currency-input-field';
 import { MAX_PRICE, MIN_PRICE } from '@/lib/constants';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface PriceFilterProps {
   onFilterChange: (filter: { minPrice: number; maxPrice: number }) => void;

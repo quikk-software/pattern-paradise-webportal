@@ -8,7 +8,7 @@ import { GetProductResponse } from '@/@types/api-types';
 import useMainAreaHeight from '@/hooks/useMainAreaHeight';
 import { useCreateProductLike } from '@/lib/api/product-like';
 import Link from 'next/link';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface ProductSwiperProps {
   products: GetProductResponse[];

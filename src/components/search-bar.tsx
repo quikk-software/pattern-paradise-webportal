@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface SearchBarProps {
   value: string;

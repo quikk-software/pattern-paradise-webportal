@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 export default function AnimatedHeroHeading() {
   const [currentText, setCurrentText] = useState('');

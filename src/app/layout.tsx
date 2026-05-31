@@ -12,6 +12,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { PreviewFlagProvider } from '@/app/providers/PreviewFlagProvider';
 import { i18n } from '../../i18n-config';
 import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 import React from 'react';
 
 const geistSans = localFont({
@@ -35,6 +36,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
+  const locale = await getLocale();
+  const messages = await getMessages();
 
   return (
     <html className="notranslate bg-background" translate="no">
@@ -63,7 +66,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        <NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <Toaster />
           <ServiceWorkerProvider>
             <CookiesProvider>

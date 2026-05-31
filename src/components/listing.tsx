@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { reset, updateFilterField } from '@/lib/features/filter/filterSlice';
 import { Store } from '@/lib/redux/store';
 import { usePathname, useRouter } from 'next/navigation';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 import { useValidSession } from '@/hooks/useValidSession';
 
 interface ListingComponentProps {

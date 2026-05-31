@@ -9,7 +9,7 @@ import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { theme } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface WelcomeHeroProps {
   userName?: string;

@@ -11,7 +11,7 @@ import SocialBadges from '@/lib/components/SocialBadges';
 import { usePreview } from '@/app/providers/PreviewFlagProvider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useLocale, useTranslations } from 'use-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { LanguageSelector } from '@/lib/components/LanguageSelector';
 import {
   DropdownMenu,

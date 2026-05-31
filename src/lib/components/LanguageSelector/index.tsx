@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { usePathname } from 'next/navigation';
 import ReactCountryFlag from 'react-country-flag';
-import { useLocale } from 'use-intl';
+import { useLocale } from 'next-intl';
 
 interface Language {
   name: string;

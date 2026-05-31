@@ -26,7 +26,7 @@ import LikeProductButton from '@/lib/components/LikeProductButton';
 import { useValidSession } from '@/hooks/useValidSession';
 import Link from 'next/link';
 import DownloadPatternArea from '@/lib/components/DownloadPatternArea';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 import { getCurrencySymbol } from '@/lib/utils';
 
 interface ProductPageComponentProps {

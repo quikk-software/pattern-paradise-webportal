@@ -9,7 +9,7 @@ import WelcomeHero from '@/components/welcome-hero';
 import { Heart, X, ShieldCheck, Download, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 interface HeroV2Props {
   products: GetProductResponse[];

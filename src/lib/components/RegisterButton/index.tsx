@@ -3,7 +3,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 export default function RegisterButton() {
   const t = useTranslations();

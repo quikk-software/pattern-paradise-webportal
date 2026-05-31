@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import creativeWomenIllustration from '@/assets/illustrations/undraw_creative_woman_re_u5tk.svg';
 import connectIllustration from '@/assets/illustrations/undraw_connection_re_lcud.svg';
 import { APP_NAME } from '@/lib/constants';
-import { useTranslations } from 'use-intl';
+import { useTranslations } from 'next-intl';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
