@@ -1,13 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
-import XIcon from '@/lib/icons/XIcon';
 import InstagramIcon from '@/lib/icons/InstagramIcon';
 import ThreadsIcon from '@/lib/icons/ThreadsIcon';
 import RedditIcon from '@/lib/icons/RedditIcon';
 import TikTokIcon from '@/lib/icons/TikTokIcon';
 import PinterestIcon from '@/lib/icons/PinterestIcon';
-import GithubIcon from '@/lib/icons/GithubIcon';
 import NewsletterSignup from '@/components/newsletter-signup';
 import { Mail, UserRoundCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
@@ -68,29 +66,12 @@ export default async function Footer() {
                   <ThreadsIcon className="h-6 w-6" />
                 </Link>
                 <Link
-                  href="https://x.com/patternparadis3"
-                  target="_blank"
-                  className="text-muted-foreground hover:text-foreground"
-                  rel="noopener noreferrer nofollow"
-                >
-                  <XIcon className="h-6 w-6" />
-                </Link>
-                <Link
                   href="https://www.reddit.com/r/patternparadise/"
                   target="_blank"
                   className="text-muted-foreground hover:text-foreground"
                   rel="noopener noreferrer nofollow"
                 >
                   <RedditIcon className="h-6 w-6" />
-                </Link>
-                <Link
-                  href="https://github.com/quikk-software"
-                  className="text-muted-foreground hover:text-foreground"
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  aria-label="Follow Pattern Paradise on Github"
-                >
-                  <GithubIcon className="h-6 w-6 text-black" />
                 </Link>
               </div>
             </div>
