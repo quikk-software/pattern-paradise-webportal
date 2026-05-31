@@ -5,40 +5,40 @@ import { GetProductResponse } from '@/@types/api-types';
 import { CldImage } from 'next-cloudinary';
 import React from 'react';
 import { useValidSession } from '@/hooks/useValidSession';
-import AnimatedHeroHeading from '@/lib/components/AnimatedHeroHeading';
 import WelcomeHero from '@/components/welcome-hero';
-import { Heart, HeartHandshake, Instagram } from 'lucide-react';
-import RegisterButton from '@/lib/components/RegisterButton';
+import { Heart, X, ShieldCheck, Download, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { theme } from '@/lib/constants';
+import { Badge } from '@/components/ui/badge';
 import { useTranslations } from 'use-intl';
 
 interface HeroV2Props {
   products: GetProductResponse[];
 }
 
+// Card rotations for handmade feel
+const CARD_ROTATIONS = ['-rotate-[4deg]', 'rotate-[5deg]', '-rotate-[1deg]'];
+const CARD_OFFSETS = [
+  'translate-x-0 translate-y-0 z-30',
+  'translate-x-8 -translate-y-4 z-20',
+  'translate-x-16 translate-y-2 z-10',
+];
+
 export default function HeroV2({ products }: HeroV2Props) {
   const { status, data: session } = useValidSession();
   const t = useTranslations();
 
   const isLoggedIn = status === 'authenticated';
-  const themeColor = session?.user.theme ?? 'amber';
+
+  // Take only the first 3 products for the card cluster
+  const displayProducts = products.slice(0, 3);
 
   return (
-    <section
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        background: `bg-white`,
-        paddingTop: '2rem',
-        paddingBottom: '2rem',
-      }}
-    >
+    <section className="relative overflow-hidden bg-background pt-8 pb-12 md:pb-16">
       <div className="container mx-auto px-4 md:px-6">
         {/* 66px is needed for the search bar to have enough space */}
-        <div className="grid gap-6 md:grid-cols-2 md:gap-10 pt-[66px]">
-          <div className="flex flex-col justify-center space-y-4 z-10 pb-4">
+        <div className="grid gap-8 md:gap-12 lg:grid-cols-[55%_45%] pt-[66px] items-center">
+          {/* Left Column - Text */}
+          <div className="flex flex-col justify-center space-y-6 z-10">
             {isLoggedIn && session ? (
               <WelcomeHero
                 userName={session.user.name as string}
@@ -47,194 +47,125 @@ export default function HeroV2({ products }: HeroV2Props) {
                 avatarUrl={session.user.image ?? ''}
               />
             ) : (
-              <div className="space-y-2">
-                <AnimatedHeroHeading />
-                <p className="text-lg text-muted-foreground">{t('landing.hero.subtitle')}</p>
+              <div className="space-y-5">
+                {/* Pill Badge */}
+                <Badge
+                  variant="outline"
+                  className="px-4 py-1.5 text-sm font-medium text-muted-foreground border-border bg-card"
+                >
+                  {t('landing.hero.patternCount')}
+                </Badge>
+
+                {/* H1 Headline */}
+                <h1 className="font-serif text-4xl md:text-5xl lg:text-[3.5rem] font-semibold tracking-tight text-foreground leading-[1.1]">
+                  {t('landing.hero.headline')}
+                </h1>
+
+                {/* Subline */}
+                <p className="text-lg text-muted-foreground leading-relaxed max-w-[330px]">
+                  {t('landing.hero.subline')}
+                </p>
               </div>
             )}
 
-            {!isLoggedIn ? (
-              <div className="flex flex-wrap gap-2">
-                <Link rel={'nofollow'} href="/auth/registration" className="z-10">
-                  <RegisterButton />
-                </Link>
+            {/* CTAs */}
+            {!isLoggedIn && (
+              <div className="flex flex-wrap gap-3">
                 <Link href="/swipe" className="z-10">
-                  <div className="relative">
-                    <Button
-                      size="lg"
-                      className={cn(
-                        'relative overflow-hidden font-semibold text-base px-8 py-6 transition-all duration-300 shadow-lg',
-                        'bg-rose-600 text-white hover:bg-rose-600/90 text-primary-foreground',
-                        'flex items-center gap-2 group',
-                      )}
-                    >
-                      <span>{t('landing.hero.cta.swipePatterns')}</span>
-                      <Heart className="w-5 h-5 fill-white transition-transform duration-300 group-hover:translate-x-1" />
-                    </Button>
-                  </div>
+                  <Button size="lg" className="gap-2 text-base font-semibold px-6">
+                    <Layers className="w-5 h-5" />
+                    {t('landing.hero.cta.swipePatterns')}
+                  </Button>
+                </Link>
+                <Link href="/browse" className="z-10">
+                  <Button size="lg" variant="outline" className="text-base font-semibold px-6">
+                    {t('landing.hero.cta.browseAll')}
+                  </Button>
                 </Link>
               </div>
-            ) : null}
+            )}
+
+            {/* Trust Line */}
+            {!isLoggedIn && (
+              <div className="flex flex-wrap items-center gap-6 pt-2">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="text-sm">{t('landing.hero.trust.payment')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Download className="w-4 h-4" />
+                  <span className="text-sm">{t('landing.hero.trust.download')}</span>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div
-            className="relative flex items-center justify-center rounded-lg p-2 mx-auto mt-4 mb-4"
-            style={{
-              width: '300px',
-              height: '300px',
-            }}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                inset: '0',
-                background: `linear-gradient(to bottom right, ${(theme.colors as any)[themeColor][200]}, ${theme.colors.background})`,
-                opacity: 0.8,
-              }}
-              className="shadow-lg rounded-lg"
-            />
-            <div className="absolute inset-0 grid grid-cols-2 gap-2">
-              {products.map((product) => (
+          {/* Right Column - Visual Card Cluster */}
+          <div className="relative flex items-center justify-center min-h-[350px] md:min-h-[420px]">
+            {/* Card Cluster */}
+            <div className="relative w-[280px] h-[350px] md:w-[320px] md:h-[400px]">
+              {displayProducts.map((product, index) => (
                 <Link
                   href={`/app/products/${product.id}`}
-                  rel={'nofollow'}
+                  rel="nofollow"
                   key={product.id}
-                  className="z-10"
+                  className={`absolute top-0 left-0 transition-all duration-300 hover:z-40 hover:scale-105 ${CARD_ROTATIONS[index]} ${CARD_OFFSETS[index]}`}
                 >
-                  <div className="overflow-hidden rounded-md bg-card p-1 shadow-sm">
-                    <div className="aspect-square overflow-hidden rounded-md">
+                  <div className="w-[200px] md:w-[220px] bg-card rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(43,33,24,0.08)] border border-border hover:shadow-[0_8px_30px_rgba(43,33,24,0.12)] transition-shadow duration-300">
+                    {/* Product Image */}
+                    <div className="aspect-square overflow-hidden">
                       <CldImage
                         alt={`${product.category} Pattern '${product.title}' on Pattern Paradise`}
                         src={product.imageUrls?.at(0) ?? ''}
-                        width={200}
-                        height={200}
+                        width={220}
+                        height={220}
                         className="h-full w-full object-cover"
                         format="webp"
                       />
                     </div>
+                    {/* Product Info */}
+                    <div className="p-3 flex items-center justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-serif text-sm font-medium text-foreground truncate">
+                          {product.title}
+                        </p>
+                        <p className="text-sm font-semibold text-primary">
+                          {product.isFree
+                            ? t('landing.hero.free')
+                            : `$${(product.salePrice || product.price).toFixed(2)}`}
+                        </p>
+                      </div>
+                      <Heart className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    </div>
                   </div>
                 </Link>
               ))}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '-1rem',
-                  right: '-1rem',
-                  height: '6rem',
-                  width: '6rem',
-                  borderRadius: '9999px',
-                  backgroundColor: (theme.colors as any)[themeColor][500],
-                  opacity: 0.7,
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '-1.5rem',
-                  left: '-1.5rem',
-                  height: '5rem',
-                  width: '5rem',
-                  borderRadius: '9999px',
-                  backgroundColor: (theme.colors as any)[themeColor][500],
-                  opacity: 0.5,
-                }}
-              />
             </div>
-          </div>
-        </div>
 
-        <div className="mt-8 flex flex-col gap-4 md:flex-row items-center justify-center">
-          <div className="flex flex-col items-center text-center md:text-left md:items-start px-6 py-4 md:w-1/2">
-            <Link
-              href="https://instagram.com/the.patternparadise"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="flex items-center gap-2 transition-colors mb-3"
-              style={{
-                color: (theme.colors as any)[themeColor][800],
-              }}
-            >
-              <Instagram className="h-6 w-6" />
-              <span className="font-medium text-lg">{t('landing.hero.follow')}</span>
-            </Link>
-            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed max-w-xs">
-              <Link
-                href="https://instagram.com/the.patternparadise"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-blue-500 underline"
+            {/* Swipe Action Buttons - Hint */}
+            <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex items-center gap-3 z-40">
+              <button
+                aria-label="Skip pattern"
+                className="w-12 h-12 rounded-full bg-card border border-border shadow-[0_4px_12px_rgba(43,33,24,0.08)] flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
               >
-                {t('landing.hero.followLink')}
-              </Link>{' '}
-              {t('landing.hero.followDescription')}
-            </p>
-          </div>
-
-          <div className="hidden md:block h-24 w-px bg-zinc-200 mx-4"></div>
-
-          <div className="md:hidden w-full h-px bg-zinc-200"></div>
-
-          <div className="flex flex-col items-center text-center md:text-left md:items-start px-6 py-4 md:w-1/2">
-            <div
-              className="flex items-center gap-2 transition-colors mb-3"
-              style={{
-                color: (theme.colors as any)[themeColor][800],
-              }}
-            >
-              <HeartHandshake className="h-6 w-6" />
-              <span className="font-medium text-lg">{t('landing.hero.payment')}</span>
+                <X className="w-5 h-5" />
+              </button>
+              <Link href="/swipe">
+                <button
+                  aria-label="Like pattern"
+                  className="w-12 h-12 rounded-full bg-primary shadow-[0_4px_12px_rgba(224,105,0,0.3)] flex items-center justify-center text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
+                  <Heart className="w-5 h-5" />
+                </button>
+              </Link>
             </div>
-            <p className="text-zinc-500 text-sm/relaxed md:text-base/relaxed max-w-xs">
-              {t.rich('landing.hero.paymentDescription', {
-                PayPalLink: (chunks) => (
-                  <Link
-                    href="https://paypal.com"
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="text-blue-500 underline"
-                  >
-                    {chunks}
-                  </Link>
-                ),
-                StripeLink: (chunks) => (
-                  <Link
-                    href="https://stripe.com"
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="text-blue-500 underline"
-                  >
-                    {chunks}
-                  </Link>
-                ),
-              })}
-            </p>
           </div>
         </div>
       </div>
-      <div
-        style={{
-          position: 'absolute',
-          top: '-6rem',
-          right: '-6rem',
-          height: '16rem',
-          width: '16rem',
-          borderRadius: '9999px',
-          backgroundColor: (theme.colors as any)[themeColor][200],
-          opacity: 0.5,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: '10rem',
-          left: '-5rem',
-          height: '10rem',
-          width: '10rem',
-          borderRadius: '9999px',
-          backgroundColor: (theme.colors as any)[themeColor][200],
-          opacity: 0.3,
-        }}
-      />
+
+      {/* Subtle decorative elements */}
+      <div className="absolute top-20 right-[-100px] w-[200px] h-[200px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[-50px] left-[-50px] w-[150px] h-[150px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
     </section>
   );
 }

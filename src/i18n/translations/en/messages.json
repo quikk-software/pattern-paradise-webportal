@@ -58,6 +58,10 @@
   "landing": {
     "hero": {
       "your": "Your",
+      "patternCount": "12,000+ patterns from makers worldwide",
+      "headline": "Discover your next favourite make.",
+      "subline": "Buy, test and sell crochet & knitting patterns in one cosy place. Swipe to find the one that makes your hands itch to start.",
+      "free": "Free",
       "greeting": {
         "morning": "Good morning",
         "evening": "Good evening",
@@ -83,7 +87,12 @@
       "subtitle": "Buy, test, and sell your patterns in one place. Join our community of passionate crocheters & knitters today!",
       "cta": {
         "swipePatterns": "Swipe Patterns",
+        "browseAll": "Browse all",
         "registerNow": "Register Now"
+      },
+      "trust": {
+        "payment": "Secure PayPal & Stripe",
+        "download": "Instant digital download"
       },
       "follow": "Follow our creative journey",
       "followLink": "Join our community",

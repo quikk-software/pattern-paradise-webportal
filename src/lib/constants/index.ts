@@ -1,4 +1,4 @@
-﻿export const APP_TITLE = 'Pattern Paradise';
+export const APP_TITLE = 'Pattern Paradise';
 export const APP_NAME = 'Pattern Paradise - Where Creativity Pays Off';
 export const APP_DESCRIPTION =
   'Buy, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern paradise business effortlessly.';
@@ -1612,7 +1612,7 @@ export type ReportUserReason = (typeof reportUserReasons)[number]['value'];
 
 export const COOKIE_CONSENT_NAME = 'pp-cookie-consent';
 
-export const FEATURED_PRODUCTS_LENGTH = 4;
+export const FEATURED_PRODUCTS_LENGTH = 3;
 
 export const MIN_PRICE = 0.0;
 export const MAX_PRICE = 100.0;
