@@ -3,8 +3,9 @@ import MysteryPageComponent from '@/components/mystery-page';
 import FeatureComingSoon from '@/lib/components/FeatureComingSoon';
 import { generatePageMetadata } from '@/lib/core/metadata';
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
-  return generatePageMetadata('/app/products/mystery-patterns/crochet', params.lang);
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return generatePageMetadata('/app/products/mystery-patterns/crochet', lang);
 }
 
 export default async function MysteryPage() {
