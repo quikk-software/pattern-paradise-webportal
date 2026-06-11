@@ -96,7 +96,7 @@ export default function PatternCard({ pattern }: PatternCardProps) {
 
   return (
     <div className="rounded-lg shadow-md p-4 flex flex-col">
-      <div className="flex flex-row gap-4 bg-white h-full">
+      <div className="flex flex-row gap-4 bg-card h-full">
         {imageSrc ? (
           <Link href={`/app/secure/auth/me/orders/${pattern.orderId}`} rel={'nofollow'}>
             <CldImage

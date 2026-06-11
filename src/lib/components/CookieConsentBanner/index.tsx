@@ -68,7 +68,7 @@ export default function CookieConsentBanner({ maintenanceMode }: CookieConsentBa
               <div className="items-center justify-between gap-4">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-2">
-                    <h2 className="text-lg font-semibold mb-2 text-primary">
+                    <h2 className="text-lg font-semibold mb-2 text-primary-accessible">
                       We value your privacy 🍪
                     </h2>
                     <p className="text-sm text-muted-foreground">

@@ -238,7 +238,7 @@ export default function ProductCard({
 
       {/* Content */}
       <CardContent className="flex-grow p-5">
-        <h3 className="font-semibold text-lg line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+        <h3 className="font-semibold text-lg line-clamp-2 mb-2 group-hover:text-primary-accessible transition-colors">
           {name}
         </h3>
 

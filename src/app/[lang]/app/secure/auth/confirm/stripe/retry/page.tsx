@@ -30,7 +30,8 @@ export default function StripeOnboardingRetry() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-2">
-          <Button asChild className="w-full bg-orange-600 hover:bg-orange-700">
+          {/* Brand CTA with normal-size white text: use primary-accessible (#B35400, 5.02:1) instead of bg-primary */}
+          <Button asChild className="w-full bg-primary-accessible hover:bg-primary-accessible/90">
             <Link href="/app/secure/auth/me">Go to Profile</Link>
           </Button>
           <Button variant="outline" asChild className="w-full">

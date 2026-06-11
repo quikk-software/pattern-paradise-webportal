@@ -14,7 +14,8 @@ export default function RegisterButton() {
         size="lg"
         className={cn(
           'relative overflow-hidden font-semibold text-base px-8 py-6 transition-all duration-300 shadow-lg',
-          'bg-primary hover:bg-primary/90 text-primary-foreground',
+          // primary-accessible: normal-sized white text needs >= 4.5:1 contrast, brand orange is too light
+          'bg-primary-accessible hover:bg-primary-accessible/90 text-primary-foreground',
           'flex items-center gap-2 group',
         )}
       >

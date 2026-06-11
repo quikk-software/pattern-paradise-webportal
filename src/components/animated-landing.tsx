@@ -37,7 +37,7 @@ export default function AnimatedLanding() {
 
   return (
     <section
-      className={`w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary to-[#ffbc5c] overflow-hidden`}
+      className={`w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary to-primary/60 overflow-hidden`}
     >
       <motion.div
         className="relative"
@@ -58,7 +58,7 @@ export default function AnimatedLanding() {
           <motion.div className="space-x-4" variants={itemVariants}>
             {isLoggedIn ? (
               <Link href="/app/secure/sell" rel={'nofollow'}>
-                <Button className="bg-white text-[#f4930b] hover:bg-white/90 font-semibold">
+                <Button className="bg-white text-primary-accessible hover:bg-white/90 font-semibold">
                   Start selling
                 </Button>
               </Link>
@@ -67,7 +67,7 @@ export default function AnimatedLanding() {
                 href="/auth/registration?preselectedRoles=Seller&redirect=/app/secure/sell"
                 rel={'nofollow'}
               >
-                <Button className="bg-white text-[#f4930b] hover:bg-white/90 font-semibold">
+                <Button className="bg-white text-primary-accessible hover:bg-white/90 font-semibold">
                   Start selling
                 </Button>
               </Link>

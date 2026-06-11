@@ -50,7 +50,7 @@ export default function ProductDescription({
       </p>
       {showMoreButton ? (
         <span
-          className={cn(['text-primary underline text-sm text-right', btnClassName])}
+          className={cn(['text-primary-accessible underline text-sm text-right', btnClassName])}
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? 'Show Less' : 'Show More'}

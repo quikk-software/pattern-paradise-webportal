@@ -290,7 +290,7 @@ function PreferencesCard({
                   className="w-full"
                 >
                   {deleteDeviceTokenIsLoading || disableIsLoading ? (
-                    <LoadingSpinnerComponent size="sm" className="text-white" />
+                    <LoadingSpinnerComponent size="sm" className="text-foreground" />
                   ) : null}
                   Unsubscribe from Notifications
                 </Button>

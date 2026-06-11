@@ -59,7 +59,8 @@ export function ConsentBanner() {
         <Button
           onClick={handleAccept}
           size="sm"
-          className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2 rounded-md transition-colors duration-200 shadow-sm"
+          // primary-accessible: white text at this size needs >= 4.5:1 contrast, brand orange is too light
+          className="bg-primary-accessible hover:bg-primary-accessible/90 text-white px-6 py-2 rounded-md transition-colors duration-200 shadow-sm"
         >
           {isLoading ? <LoadingSpinnerComponent size="sm" className="text-white" /> : null}
           Accept

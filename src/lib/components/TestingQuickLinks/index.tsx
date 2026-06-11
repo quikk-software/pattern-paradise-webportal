@@ -62,7 +62,7 @@ export default function TestingQuickLinks() {
                 href={link.href}
                 className={`
                   flex items-center justify-between p-3 rounded-lg transition-colors
-                  ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}
+                  ${isActive ? 'bg-primary/10 text-primary-accessible' : 'hover:bg-muted'}
                   ${link.highlight ? 'border border-red-500' : ''}
                 `}
               >

@@ -383,7 +383,7 @@ export default function ChatHistory({
 
   return (
     <div
-      className={cn('bg-white w-full md:w-2/3', {
+      className={cn('bg-card w-full md:w-2/3', {
         'hidden md:block': showChatList,
         block: !showChatList,
       })}
@@ -392,7 +392,7 @@ export default function ChatHistory({
         <div className="flex flex-col h-full items-center justify-center text-center p-4">
           <MessageCircle className="h-16 w-16 text-primary mb-4" />
           <h2 className="text-2xl font-semibold mb-2">No Chat Selected</h2>
-          <p className="text-primary max-w-sm">
+          <p className="text-primary-accessible max-w-sm">
             Choose a testing from the list on the left to start chatting.
           </p>
         </div>
@@ -483,7 +483,7 @@ export default function ChatHistory({
                 }}
               >
                 {testingCommentsIsLoading ? (
-                  <LoadingSpinnerComponent size="sm" className="text-black" />
+                  <LoadingSpinnerComponent size="sm" className="text-foreground" />
                 ) : null}
                 Load more
               </Button>
@@ -742,7 +742,7 @@ export default function ChatHistory({
             {!showChatList ? <div ref={bottomRef} /> : null}
           </ScrollArea>
           {replyingTo ? (
-            <div className="sticky bottom-0 left-0 w-full py-1 bg-white flex gap-2 items-center px-4">
+            <div className="sticky bottom-0 left-0 w-full py-1 bg-card flex gap-2 items-center px-4">
               <div className="flex-1">
                 <span className="text-xs font-semibold">
                   Replying to{' '}
@@ -774,7 +774,7 @@ export default function ChatHistory({
               </Button>
             </div>
           ) : null}
-          <div className="sticky bottom-0 left-0 w-full py-1 bg-white px-4">
+          <div className="sticky bottom-0 left-0 w-full py-1 bg-card px-4">
             <NewMessages
               message={socketMessage}
               currentBottomRef={bottomRef}

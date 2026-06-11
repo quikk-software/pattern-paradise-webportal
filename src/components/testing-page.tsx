@@ -221,7 +221,7 @@ export function TestingPageComponent({ filter }: TestingPageComponentProps) {
               return (
                 <Card
                   key={testing.product.id}
-                  className="group border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white overflow-hidden"
+                  className="group border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-card overflow-hidden"
                 >
                   {/* Status Header */}
                   <div className="bg-gradient-to-r from-slate-50 to-white p-4 border-b border-slate-100">

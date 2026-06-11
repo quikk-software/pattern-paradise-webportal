@@ -395,7 +395,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                     className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                   >
                     {removePayPalReferralIsLoading ? (
-                      <LoadingSpinnerComponent size="sm" className="text-black" />
+                      <LoadingSpinnerComponent size="sm" className="text-foreground" />
                     ) : null}
                     Disconnect PayPal Account
                   </Button>
@@ -425,7 +425,7 @@ export function ProfilePage({ user }: ProfilePageProps) {
                 }}
               >
                 {checkPayPalMerchantStatusIsLoading ? (
-                  <LoadingSpinnerComponent size="sm" className="text-black" />
+                  <LoadingSpinnerComponent size="sm" className="text-foreground" />
                 ) : null}
                 Check PayPal merchant status
               </Button>

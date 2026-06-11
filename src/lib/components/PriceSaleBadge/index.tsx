@@ -60,16 +60,16 @@ export function PriceSaleBadge({
 
   return (
     <div className={cn('relative overflow-hidden', className)}>
-      <div className="bg-gradient-to-r from-red-50 to-amber-50 border-2 border-orange-500 rounded-lg p-4 shadow-lg">
+      <div className="bg-gradient-to-r from-red-50 to-amber-50 border-2 border-primary rounded-lg p-4 shadow-lg">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-500 animate-pulse" />
-            <h3 className="font-bold text-orange-600">Limited Time Offer!</h3>
+            <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+            <h3 className="font-bold text-primary-accessible">Limited Time Offer!</h3>
           </div>
         </div>
 
         <div className="flex items-baseline gap-3 mb-3">
-          <span className="text-2xl font-bold text-orange-600">
+          <span className="text-2xl font-bold text-primary">
             {currency}
             {salePrice.toFixed(2)}
           </span>
@@ -93,7 +93,7 @@ export function PriceSaleBadge({
               { value: timeLeft.seconds, label: 'Secs' },
             ].map((item, index) => (
               <div key={index} className="flex flex-col items-center">
-                <div className="bg-white w-full text-center py-1 rounded border border-orange-200 font-mono text-lg font-bold text-orange-600">
+                <div className="bg-card w-full text-center py-1 rounded border border-primary/30 font-mono text-lg font-bold text-primary-accessible">
                   {String(item.value).padStart(2, '0')}
                 </div>
                 <span className="text-xs text-gray-600 mt-1">{item.label}</span>

@@ -59,7 +59,8 @@ function getStatusDisplayText(value: string): {
   > = {
     CREATED: {
       text: 'CREATED',
-      color: 'bg-primary',
+      // primary-accessible: badge renders white text at normal size, brand orange is too light for 4.5:1
+      color: 'bg-primary-accessible',
     },
     IN_PROGRESS: {
       text: 'UNDER REVIEW',

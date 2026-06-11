@@ -9,7 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md active:scale-[0.98]",
+        // Contrast: base buttons render text-sm/normal weight, so white on brand orange (#E06B00, 3.35:1)
+        // fails WCAG AA -> primary-accessible (#B35400, 5.02:1 on white) as background instead.
+        default: "bg-primary-accessible text-primary-foreground hover:bg-primary-accessible/90 hover:shadow-md active:scale-[0.98]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-md active:scale-[0.98]",
         outline:
@@ -17,7 +19,8 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:shadow-md active:scale-[0.98]",
         ghost: "hover:bg-accent hover:text-accent-foreground active:scale-[0.98]",
-        link: "text-primary underline-offset-4 hover:underline",
+        // Contrast: link buttons are normal-sized text -> accessible orange (#B35400), not brand orange.
+        link: "text-primary-accessible underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-6 py-2",

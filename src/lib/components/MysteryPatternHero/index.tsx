@@ -13,7 +13,7 @@ export default async function MysteryPatternHero() {
   const t = await getTranslations();
 
   return (
-    <section className="w-full py-8 bg-gradient-to-r from-amber-50 to-orange-50 border-y border-border">
+    <section className="w-full py-8 bg-gradient-to-r from-primary/5 to-primary/10 border-y border-border">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 max-w-4xl mx-auto text-center md:text-left">
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
@@ -23,7 +23,7 @@ export default async function MysteryPatternHero() {
 
             <div>
               <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                <h3 className="font-serif text-xl md:text-2xl font-semibold text-foreground">
+                <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
                   {t('landing.hero.mystery.title')}
                 </h3>
               </div>

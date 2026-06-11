@@ -89,7 +89,7 @@ export default function HeroV2({ products: initialProducts }: HeroV2Props) {
                 </Badge>
 
                 {/* H1 Headline */}
-                <h1 className="font-serif text-4xl md:text-5xl lg:text-[3.5rem] font-semibold tracking-tight text-foreground leading-[1.1]">
+                <h1 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-semibold tracking-tight text-foreground leading-[1.1]">
                   {t('landing.hero.headline')}
                 </h1>
 

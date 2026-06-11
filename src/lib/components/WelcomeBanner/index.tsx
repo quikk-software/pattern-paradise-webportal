@@ -71,7 +71,7 @@ export default function WelcomeBanner({
           <div className="bg-primary/10 p-2 rounded-full">
             <Users className="h-5 w-5 text-primary" />
           </div>
-          <span className="text-sm font-medium text-primary">Join our community</span>
+          <span className="text-sm font-medium text-primary-accessible">Join our community</span>
         </motion.div>
 
         {!minimal ? (

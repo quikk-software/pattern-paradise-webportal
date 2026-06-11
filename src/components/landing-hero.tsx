@@ -99,7 +99,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
                     }
                   }}
                 >
-                  <div className="bg-white rounded-xl shadow-xl overflow-hidden cursor-pointer">
+                  <div className="bg-card rounded-xl shadow-xl overflow-hidden cursor-pointer">
                     <CldImage
                       key={product.id}
                       alt={`${product.title} Pattern`}
@@ -112,7 +112,9 @@ export default function LandingHero({ products }: LandingHeroProps) {
                     <div className="p-4">
                       <h3 className="font-semibold text-lg">{product.title}</h3>
                       <div className="mt-2 flex items-center justify-between">
-                        <span className="font-bold text-primary">${product.price.toFixed(2)}</span>
+                        <span className="font-bold text-primary-accessible">
+                          ${product.price.toFixed(2)}
+                        </span>
                         <Link href={`/app/products/${product.id}`}>
                           <Button size="sm">Buy Now</Button>
                         </Link>
@@ -126,7 +128,7 @@ export default function LandingHero({ products }: LandingHeroProps) {
         ) : null}
       </div>
       <div className="mt-12 flex flex-col items-center justify-center space-y-4 text-center">
-        <div className="inline-block rounded-lg bg-orange-50 px-3 py-1 text-sm text-primary">
+        <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary-accessible">
           Official PayPal Platform Partner
         </div>
         <p className="text-zinc-500 text-md/relaxed lg:text-base/relaxed xl:text-xl/relaxed">

@@ -139,7 +139,7 @@ export default function TesterRatingCard({
             {textRating && (
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">Feedback</Label>
-                <div className="bg-white border rounded-lg p-3 text-sm text-gray-700 italic">
+                <div className="bg-card border rounded-lg p-3 text-sm text-gray-700 italic">
                   &quot;{textRating}&quot;
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default function TesterRatingCard({
               src={tester.user.imageUrl}
               alt={`${tester.user.firstName} ${tester.user.lastName}`}
             />
-            <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+            <AvatarFallback className="bg-primary/10 text-primary-accessible font-semibold">
               {getInitials(tester.user?.firstName ?? '', tester.user?.lastName ?? '')}
             </AvatarFallback>
           </Avatar>

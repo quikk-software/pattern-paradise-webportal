@@ -3,7 +3,7 @@ export const APP_NAME = 'Pattern Paradise - Where Creativity Pays Off';
 export const APP_DESCRIPTION =
   'Buy, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern paradise business effortlessly.';
 export const APP_DOMAIN = 'https://pattern-paradise.shop';
-export const THEME_COLOR = '#e06900';
+export const THEME_COLOR = '#e06b00';
 
 export const PRO_MEMBERSHIP_PRICE = '$9.99';
 

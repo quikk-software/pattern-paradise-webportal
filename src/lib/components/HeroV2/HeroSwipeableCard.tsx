@@ -191,10 +191,10 @@ const HeroSwipeableCard = forwardRef<HeroSwipeableCardRef, HeroSwipeableCardProp
           {/* Product Info */}
           <div className="p-3 flex items-center justify-between gap-2">
             <div className="min-w-0 flex-1">
-              <p className="font-serif text-sm font-medium text-foreground truncate">
+              <p className="font-display text-sm font-medium text-foreground truncate">
                 {product.title}
               </p>
-              <p className="text-sm font-semibold text-primary">
+              <p className="text-sm font-semibold text-primary-accessible">
                 {product.isFree
                   ? t('landing.hero.free')
                   : `$${(product.salePrice || product.price).toFixed(2)}`}

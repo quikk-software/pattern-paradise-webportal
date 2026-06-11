@@ -11,7 +11,7 @@ import NewsletterSignup from '@/components/newsletter-signup';
 
 export default function ComingSoon() {
   return (
-    <main className="h-screen overflow-y-auto bg-gradient-to-br from-red-700 to-orange-500 flex justify-center px-4 py-8">
+    <main className="h-screen overflow-y-auto bg-gradient-to-br from-red-700 to-primary flex justify-center px-4 py-8">
       <div className="max-w-4xl w-full space-y-12">
         <h1 className="text-5xl md:text-7xl font-bold mb-4 animate-fade-in-down text-white  text-center">
           Coming Soon
@@ -29,10 +29,10 @@ export default function ComingSoon() {
           </h2>
           <NewsletterSignup />
         </div>
-        <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="bg-card rounded-lg shadow-lg p-6">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 What is Pattern Paradise?
               </AccordionTrigger>
               <AccordionContent>
@@ -43,7 +43,7 @@ export default function ComingSoon() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 How does Pattern Paradise make money?
               </AccordionTrigger>
               <AccordionContent>
@@ -55,7 +55,7 @@ export default function ComingSoon() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 What is a pattern?
               </AccordionTrigger>
               <AccordionContent>
@@ -66,7 +66,7 @@ export default function ComingSoon() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 How are patterns delivered?
               </AccordionTrigger>
               <AccordionContent>
@@ -75,7 +75,7 @@ export default function ComingSoon() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-5">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 Can I sell my own patterns on Pattern Paradise?
               </AccordionTrigger>
               <AccordionContent>
@@ -85,7 +85,7 @@ export default function ComingSoon() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-6">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 What makes Pattern Paradise unique?
               </AccordionTrigger>
               <AccordionContent>
@@ -96,7 +96,7 @@ export default function ComingSoon() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="collaborate">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 How can I collaborate on pattern testing?
               </AccordionTrigger>
               <AccordionContent>
@@ -109,7 +109,7 @@ export default function ComingSoon() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-8">
-              <AccordionTrigger className="text-lg font-semibold text-[#8B4513] text-left">
+              <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
                 Is there a membership fee to join Pattern Paradise?
               </AccordionTrigger>
               <AccordionContent>

@@ -1778,20 +1778,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/fraunces@npm:^5.2.9":
-  version: 5.2.9
-  resolution: "@fontsource/fraunces@npm:5.2.9"
-  checksum: 10c0/304da1515a9282551849c6bafcffe88cb51e845898e65072b08014ffadb43a6be9521fb94c03bfcdd487f5e5b41ba8f9573b2f7e41913837bd131f0906b3eac9
-  languageName: node
-  linkType: hard
-
-"@fontsource/inter@npm:^5.2.8":
-  version: 5.2.8
-  resolution: "@fontsource/inter@npm:5.2.8"
-  checksum: 10c0/f737dd50005e4809887ba55ae0c9b7174216d6d14875d17a4fbb9a0ad75dec4265928b805a43fe16a23f14a878f1974a398bbfc84ad65c79fc4d4b9c3ea154e1
-  languageName: node
-  linkType: hard
-
 "@formatjs/ecma402-abstract@npm:2.3.4":
   version: 2.3.4
   resolution: "@formatjs/ecma402-abstract@npm:2.3.4"
@@ -9025,8 +9011,6 @@ __metadata:
   dependencies:
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"
-    "@fontsource/fraunces": "npm:^5.2.9"
-    "@fontsource/inter": "npm:^5.2.8"
     "@hookform/resolvers": "npm:^5.2.2"
     "@paypal/react-paypal-js": "npm:^8.9.2"
     "@radix-ui/react-accordion": "npm:^1.2.12"

@@ -68,26 +68,26 @@ export default function OrderSuccess({ orderId, orderNumber, date, pattern }: Or
         </CardContent>
       </Card>
 
-      <div className="bg-amber-50 rounded-lg p-6 mb-8">
+      <div className="bg-primary/10 rounded-lg p-6 mb-8">
         <h2 className="text-lg font-semibold mb-4">What&apos;s Next?</h2>
         <ul className="space-y-3">
           <li className="flex items-start gap-2">
-            <div className="h-6 w-6 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <span className="text-amber-800 text-sm font-medium">1</span>
+            <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-primary-accessible text-sm font-medium">1</span>
             </div>
             <p className="text-gray-700">Download your pattern and save it to your device.</p>
           </li>
           <li className="flex items-start gap-2">
-            <div className="h-6 w-6 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <span className="text-amber-800 text-sm font-medium">2</span>
+            <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-primary-accessible text-sm font-medium">2</span>
             </div>
             <p className="text-gray-700">
               Check your email for your download link (in case you need it later).
             </p>
           </li>
           <li className="flex items-start gap-2">
-            <div className="h-6 w-6 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <span className="text-amber-800 text-sm font-medium">3</span>
+            <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-primary-accessible text-sm font-medium">3</span>
             </div>
             <p className="text-gray-700">
               Enjoy creating your project and share your finished work with us!
