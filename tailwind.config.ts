@@ -20,9 +20,11 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Fraunces', 'Georgia', 'serif'],
-        mono: ['GeistMono', 'ui-monospace', 'monospace'],
+        display: ['var(--font-fraunces)', 'Georgia', 'serif'],
+        body: ['var(--font-nunito-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-nunito-sans)', 'system-ui', 'sans-serif'], // default override
+        serif: ['var(--font-fraunces)', 'Georgia', 'serif'], // legacy alias for display
+        mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -33,6 +35,8 @@ const config = {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          // #B35400 - WCAG AA compliant orange for normal-sized text and small buttons
+          accessible: 'hsl(var(--primary-accessible))',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',

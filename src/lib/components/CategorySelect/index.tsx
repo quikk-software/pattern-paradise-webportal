@@ -16,7 +16,7 @@ export default function CategorySelect({ category, setCategory }: CategorySelect
           <ChevronDownIcon />
         </Select.Icon>
       </Select.Trigger>
-      <Select.Content className="border rounded shadow-md bg-white">
+      <Select.Content className="border rounded shadow-md bg-card">
         {CATEGORIES.map((category) => (
           <Select.Group key={category.name}>
             <Select.Label className="px-4 py-2 font-bold">{category.name}</Select.Label>

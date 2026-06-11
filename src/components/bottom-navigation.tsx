@@ -35,7 +35,7 @@ export function BottomNavigation() {
   }
 
   return (
-    <div className={`bg-white ${isStandalone ? 'pb-4' : 'pb-0'}`} id="bottom-navigation">
+    <div className={`bg-background ${isStandalone ? 'pb-4' : 'pb-0'}`} id="bottom-navigation">
       <div className="z-50 w-full h-16 bg-background border-t border-border">
         <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
           {menuItems.map((item) => (

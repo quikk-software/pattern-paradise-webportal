@@ -30,7 +30,7 @@ export default function SuccessfulOnboarding() {
   const accountType = accountStatus === 'BUSINESS_ACCOUNT' ? 'Business' : 'Regular';
 
   return (
-    <div className="bg-gradient-to-b from-orange-100 to-white flex flex-col justify-between">
+    <div className="bg-gradient-to-b from-primary/10 to-background flex flex-col justify-between">
       <main className="flex-grow flex justify-center items-center">
         <Card className="w-full">
           <CardHeader>
@@ -52,7 +52,7 @@ export default function SuccessfulOnboarding() {
               .
             </p>
 
-            <div className="bg-orange-50 p-4 rounded-lg">
+            <div className="bg-primary/10 p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Your Account Information:</h3>
               <ul className="list-disc list-inside space-y-1">
                 <li>Merchant ID: {merchantId}</li>

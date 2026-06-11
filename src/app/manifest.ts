@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       'Buy, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern paradise business effortlessly.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#fff',
-    theme_color: '#ed8332',
+    background_color: '#FAF6F0',
+    theme_color: '#E06B00',
     // @ts-ignore
     display_override: 'standalone',
     // @ts-ignore

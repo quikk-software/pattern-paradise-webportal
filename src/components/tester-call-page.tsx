@@ -245,7 +245,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
   return (
     <div
       className={classNames(
-        'min-h-screen bg-gradient-to-b to-white p-4 md:p-8',
+        'min-h-screen bg-gradient-to-b to-background p-4 md:p-8',
         THEME_LIGHT_FROM_BG_CLASSES[theme] || 'from-neutral-100',
       )}
     >
@@ -266,7 +266,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         {/* Image Carousel */}
         <div className="order-2 md:order-1">
-          <div className="relative rounded-2xl overflow-hidden shadow-xl bg-white p-4">
+          <div className="relative rounded-2xl overflow-hidden shadow-xl bg-card p-4">
             <Carousel className="w-full">
               <CarouselContent>
                 {product.imageUrls.map((src, index) => (
@@ -536,7 +536,7 @@ export function TesterCallPage({ product, testing, theme }: TesterCallPageProps)
       </div>
 
       {/* Call to Action Footer */}
-      <div className="mt-16 text-center bg-white rounded-2xl shadow-lg p-8 max-w-3xl mx-auto">
+      <div className="mt-16 text-center bg-card rounded-2xl shadow-lg p-8 max-w-3xl mx-auto">
         <h2
           className={classNames(
             'text-3xl font-bold mb-6',

@@ -50,7 +50,7 @@ export default function CurrencySelect({ userId, initialCurrency }: CurrencySele
         <Select value={selectedCurrency} onValueChange={handleCurrencyChange} disabled={isLoading}>
           <SelectTrigger
             id="currency-select"
-            className="h-14 text-lg border-2 border-slate-200 hover:border-slate-300 transition-colors duration-200 bg-white"
+            className="h-14 text-lg border-2 border-slate-200 hover:border-slate-300 transition-colors duration-200 bg-card"
           >
             <SelectValue placeholder="Choose a currency" />
           </SelectTrigger>

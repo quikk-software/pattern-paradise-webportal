@@ -1,4 +1,4 @@
-import localFont from 'next/font/local';
+import { Fraunces, Nunito_Sans } from 'next/font/google';
 import './globals.css';
 import { APP_DOMAIN } from '@/lib/constants';
 import { CookiesProvider } from 'next-client-cookies/server';
@@ -15,15 +15,21 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import React from 'react';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
+// Display font for headlines, prices and hero text (mapped to font-display via --font-display)
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-fraunces',
+  display: 'swap',
 });
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+// Body/UI font (mapped to font-body and the font-sans default via --font-body)
+const nunitoSans = Nunito_Sans({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-nunito-sans',
+  display: 'swap',
 });
 
 export async function generateStaticParams() {
@@ -40,7 +46,10 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html className="notranslate bg-background" translate="no">
+    <html
+      className={`${fraunces.variable} ${nunitoSans.variable} notranslate bg-background`}
+      translate="no"
+    >
       <head>
         <link rel="apple-touch-icon" href="/favicons/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
@@ -65,7 +74,7 @@ export default async function RootLayout({
           async
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
+      <body className="antialiased overflow-hidden">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Toaster />
           <ServiceWorkerProvider>

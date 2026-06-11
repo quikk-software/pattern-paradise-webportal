@@ -38,8 +38,8 @@ export const FAQCategoryNav: React.FC<FAQCategoryNavProps> = ({ activeCategory, 
             'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-300',
             'border-2 hover:bg-primary/10',
             activeCategory === category.id
-              ? 'bg-primary/10 border-primary/30 text-primary'
-              : 'bg-white border-muted text-muted-foreground',
+              ? 'bg-primary/10 border-primary/30 text-primary-accessible'
+              : 'bg-card border-muted text-muted-foreground',
           )}
         >
           <span className="transition-transform duration-300 group-hover:rotate-12">

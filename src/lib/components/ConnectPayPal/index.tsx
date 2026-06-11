@@ -84,7 +84,7 @@ export default function ConnectPayPal({ buttonTheme, inputTheme }: ConnectPayPal
           onChange={(e) => setPaypalEmail(e.target.value?.toLowerCase().trim())}
           className={inputTheme}
         />
-        {invalidEmail ? <p className="text-orange-500">Please provide a valid email</p> : null}
+        {invalidEmail ? <p className="text-primary-accessible">Please provide a valid email</p> : null}
       </div>
       <Button
         variant="outline"

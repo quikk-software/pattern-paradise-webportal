@@ -46,7 +46,7 @@ export function EventCampaignConfirmationDrawer({
               <DrawerTitle>Congratulations!</DrawerTitle>
               <DrawerTitle className="text-sm font-medium">You found a special prize!</DrawerTitle>
             </DrawerHeader>
-            <div className="bg-white rounded-xl p-6 shadow-inner border border-pink-100 mb-6">
+            <div className="bg-card rounded-xl p-6 shadow-inner border border-pink-100 mb-6">
               <h3 className="text-xl font-bold text-center text-pink-600 mb-2">
                 {description ?? 'We will get in touch in you with more details!'}
               </h3>

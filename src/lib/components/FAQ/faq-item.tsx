@@ -25,7 +25,7 @@ export default async function FAQItem() {
     if (item.id === 'item-2' || item.id === 'item-8') {
       result = result.replace(
         /Pro Membership/g,
-        `<Link href="/pro" className="font-medium text-primary hover:underline transition-colors">Pro Membership</Link>`,
+        `<Link href="/pro" className="font-medium text-primary-accessible hover:underline transition-colors">Pro Membership</Link>`,
       );
 
       if (item.id === 'item-8') {
@@ -39,17 +39,17 @@ export default async function FAQItem() {
     if (item.id === 'collaborate') {
       result = result.replace(
         /Register as a Tester/g,
-        `<Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/test" className="font-medium text-primary hover:underline transition-colors" rel="nofollow">Register as a Tester</Link>`,
+        `<Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/test" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">Register as a Tester</Link>`,
       );
 
       result = result.replace(
         /Profile Settings/g,
-        `<Link href="/app/secure/auth/me" className="font-medium text-primary hover:underline transition-colors" rel="nofollow">Profile Settings</Link>`,
+        `<Link href="/app/secure/auth/me" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">Profile Settings</Link>`,
       );
 
       result = result.replace(
         /browse Tester Calls/g,
-        `<Link href="/app/tester-calls" className="font-medium text-primary hover:underline transition-colors" rel="nofollow">browse Tester Calls</Link>`,
+        `<Link href="/app/tester-calls" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">browse Tester Calls</Link>`,
       );
     }
 
@@ -71,7 +71,7 @@ export default async function FAQItem() {
             <Link
               key={`link-${i}`}
               href={href}
-              className="font-medium text-primary hover:underline transition-colors"
+              className="font-medium text-primary-accessible hover:underline transition-colors"
               {...relProp}
             >
               {text}

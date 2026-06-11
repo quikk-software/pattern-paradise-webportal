@@ -145,7 +145,7 @@ export function PatternParadiseProComponent() {
               animate={controls}
               custom={index + 4}
             >
-              <Check className="text-black mb-4" size={24} />
+              <Check className="text-foreground mb-4" size={24} />
               <p className="text-gray-800">{feature}</p>
             </motion.div>
           ))}
@@ -210,7 +210,7 @@ export function PatternParadiseProComponent() {
               custom={index + 14}
             >
               <AccordionItem value={`item-${index}`}>
-                <AccordionTrigger className="text-black hover:text-gray-600 text-left">
+                <AccordionTrigger className="text-foreground hover:text-muted-foreground text-left">
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>

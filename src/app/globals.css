@@ -1,11 +1,4 @@
 @import "tailwindcss";
-@import "@fontsource/fraunces/400.css";
-@import "@fontsource/fraunces/500.css";
-@import "@fontsource/fraunces/600.css";
-@import "@fontsource/fraunces/700.css";
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
 
 @source inline("bg-{slate,gray,zinc,neutral,stone,red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{200,500,800}");
 
@@ -28,7 +21,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-nunito-sans), system-ui, sans-serif;
   position: fixed;
   width: 100%;
   height: 100vh;
@@ -45,25 +38,26 @@ body {
 @layer base {
   :root {
     /* Core Colors */
-    --background: 40 33% 97%;        /* #FBF8F3 - warm cream background */
-    --foreground: 24 28% 12%;        /* #2B2118 - deep warm brown text */
-    --card: 0 0% 100%;               /* #FFFFFF - pure white cards */
-    --card-foreground: 24 28% 12%;   /* #2B2118 - deep warm brown */
+    --background: 38 47% 96%;        /* #FAF6F0 - warm cream background (no pure white) */
+    --foreground: 24 37% 17%;        /* #3D2C1E - warm dark brown text (not black) */
+    --card: 33 30% 93%;              /* #F1E9DF - warm taupe for cards/surfaces */
+    --card-foreground: 24 37% 17%;   /* #3D2C1E - same as foreground */
     --popover: 0 0% 100%;            /* #FFFFFF */
-    --popover-foreground: 24 28% 12%;/* #2B2118 */
-    --primary: 27 100% 44%;          /* #E06900 - warm orange primary */
-    --primary-foreground: 0 0% 100%; /* #FFFFFF - white on primary */
-    --secondary: 24 28% 12%;         /* #2B2118 - deep brown secondary */
-    --secondary-foreground: 40 33% 97%; /* #FBF8F3 - cream on secondary */
-    --muted: 30 14% 93%;             /* #ECE5DB - soft warm muted */
-    --muted-foreground: 26 8% 44%;   /* #7A7066 - muted text */
-    --accent: 30 14% 93%;            /* #ECE5DB - soft accent */
-    --accent-foreground: 24 28% 12%; /* #2B2118 */
+    --popover-foreground: 24 37% 17%;/* #3D2C1E */
+    --primary: 28 100% 44%;          /* #E06B00 - brand orange (large/bold text only on white) */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF - white on primary, only for large/bold text (>=18.66px bold) */
+    --primary-accessible: 24 100% 35%; /* #B35400 - 5.02:1 on white = WCAG AA for normal text */
+    --secondary: 144 15% 32%;        /* #466B50 - botanical green */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF - white on green */
+    --muted: 33 30% 93%;             /* #F1E9DF - same as card, muted surfaces */
+    --muted-foreground: 24 10% 35%;  /* #5C524A - muted warm brown text */
+    --accent: 33 30% 93%;            /* #F1E9DF - warm taupe accent for hover states */
+    --accent-foreground: 24 37% 17%; /* #3D2C1E - dark brown on accent */
     --destructive: 0 84% 60%;        /* Red for errors */
     --destructive-foreground: 0 0% 100%;
-    --border: 30 14% 93%;            /* #ECE5DB - soft warm border */
-    --input: 30 14% 93%;             /* #ECE5DB - input border */
-    --ring: 27 100% 44%;             /* #E06900 - focus ring */
+    --border: 35 22% 85%;            /* #DED6CB - warm stone border */
+    --input: 35 22% 85%;             /* #DED6CB - input border */
+    --ring: 24 100% 35%;             /* #B35400 - darker orange for focus rings */
     
     /* Success color for badges */
     --success: 142 76% 36%;
@@ -87,25 +81,26 @@ body {
   }
 
   .dark {
-    --background: 24 28% 8%;         /* Dark warm background */
-    --foreground: 40 33% 97%;        /* #FBF8F3 */
-    --card: 24 28% 12%;              /* #2B2118 */
-    --card-foreground: 40 33% 97%;   /* #FBF8F3 */
-    --popover: 24 28% 12%;           /* #2B2118 */
-    --popover-foreground: 40 33% 97%;/* #FBF8F3 */
-    --primary: 27 100% 44%;          /* #E06900 */
+    --background: 24 37% 8%;         /* Dark warm brown background */
+    --foreground: 38 47% 96%;        /* #FAF6F0 - warm cream text */
+    --card: 24 30% 13%;              /* Slightly lighter warm brown surface */
+    --card-foreground: 38 47% 96%;   /* #FAF6F0 */
+    --popover: 24 30% 13%;
+    --popover-foreground: 38 47% 96%;
+    --primary: 28 100% 44%;          /* #E06B00 - brand orange kept */
     --primary-foreground: 0 0% 100%; /* #FFFFFF */
-    --secondary: 40 33% 97%;         /* #FBF8F3 */
-    --secondary-foreground: 24 28% 12%;/* #2B2118 */
-    --muted: 24 20% 18%;             /* Darker muted */
-    --muted-foreground: 26 8% 64%;   /* Lighter muted text */
-    --accent: 24 20% 18%;            /* Darker accent */
-    --accent-foreground: 40 33% 97%; /* #FBF8F3 */
+    --primary-accessible: 28 100% 55%; /* Brighter orange - high contrast on dark surfaces */
+    --secondary: 144 15% 45%;        /* Lighter botanical green for dark surfaces */
+    --secondary-foreground: 24 37% 8%; /* Dark brown on green */
+    --muted: 24 25% 17%;             /* Darker muted */
+    --muted-foreground: 33 15% 70%;  /* Lighter warm muted text */
+    --accent: 24 25% 17%;            /* Darker accent */
+    --accent-foreground: 38 47% 96%; /* #FAF6F0 */
     --destructive: 0 62% 30%;        /* Darker red */
     --destructive-foreground: 0 0% 98%;
-    --border: 24 20% 20%;            /* Dark border */
-    --input: 24 20% 20%;             /* Dark input */
-    --ring: 27 100% 44%;             /* #E06900 */
+    --border: 24 20% 22%;            /* Dark warm border */
+    --input: 24 20% 22%;             /* Dark warm input */
+    --ring: 28 100% 55%;             /* Brighter orange focus ring on dark */
     
     --success: 142 70% 30%;
     --success-foreground: 0 0% 100%;
@@ -122,10 +117,12 @@ body {
 }
 
 @theme inline {
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Fraunces', Georgia, serif;
-  --font-mono: 'GeistMono', ui-monospace, monospace;
-  
+  /* Fonts loaded via next/font/google in src/app/layout.tsx */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-nunito-sans), system-ui, sans-serif;
+  --font-sans: var(--font-nunito-sans), system-ui, sans-serif; /* default override */
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -134,6 +131,7 @@ body {
   --color-popover-foreground: hsl(var(--popover-foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-accessible: hsl(var(--primary-accessible));
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
   --color-muted: hsl(var(--muted));
@@ -171,18 +169,18 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans leading-relaxed;
   }
   
-  /* Typography - Headings with Fraunces */
+  /* Typography - Headings with Fraunces (display font) */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-fraunces), Georgia, serif;
     font-weight: 600;
     color: hsl(var(--foreground));
   }
-  
+
   h1 {
-    @apply text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight;
+    @apply text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight font-bold;
   }
   
   h2 {

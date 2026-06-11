@@ -49,7 +49,7 @@ export default function ChatList({
 
   return (
     <div
-      className={cn('bg-white w-full md:w-1/3 overflow-y-auto', {
+      className={cn('bg-card w-full md:w-1/3 overflow-y-auto', {
         block: showChatList,
         'hidden md:block': !showChatList,
       })}
@@ -68,7 +68,7 @@ export default function ChatList({
           <div className="flex">
             <Badge variant={'secondary'} onClick={() => handleShowAll()} className="cursor-pointer">
               {fetchTestingsIsLoading ? (
-                <LoadingSpinnerComponent className="w-2 h-2 text-black" />
+                <LoadingSpinnerComponent className="w-2 h-2 text-foreground" />
               ) : null}
               {!showAll ? 'All Chats' : 'In Progress Only'}
             </Badge>

@@ -29,7 +29,7 @@ export default function StepItem({
       transition={{ duration: 0.4, delay: number * 0.1 }}
       className={cn('relative pl-12 pb-8', className)}
     >
-      <div className="absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+      <div className="absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary-accessible">
         {isCompleted ? (
           <CheckCircle size={18} className="text-primary" />
         ) : (

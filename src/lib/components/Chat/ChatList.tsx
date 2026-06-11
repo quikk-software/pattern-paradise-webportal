@@ -35,7 +35,7 @@ export default function ChatList({
 
   return (
     <div
-      className={cn('bg-white w-full md:w-1/3 overflow-y-auto', {
+      className={cn('bg-card w-full md:w-1/3 overflow-y-auto', {
         block: showChatList,
         'hidden md:block': !showChatList,
       })}
@@ -98,7 +98,7 @@ export default function ChatList({
                         {correspondence?.username}
                       </h3>
                       <p
-                        className={`text-sm ${hasNewMessages ? 'font-bold text-black' : 'font-medium text-gray-500'} truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]`}
+                        className={`text-sm ${hasNewMessages ? 'font-bold text-foreground' : 'font-medium text-gray-500'} truncate max-w-full sm:max-w-[12rem] md:max-w-[10rem] lg:max-w-[14rem]`}
                       >
                         {chat?.latestChatMessage?.message ?? ''}
                       </p>

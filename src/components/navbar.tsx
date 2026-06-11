@@ -119,7 +119,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
       <nav
         className={cn(
           `px-4 transition-colors duration-300 relative z-10`,
-          scrolled && (!showSearch || !searchVisible) ? 'bg-white shadow-md' : `bg-${background}`,
+          scrolled && (!showSearch || !searchVisible) ? 'bg-card shadow-md' : `bg-${background}`,
         )}
         id="navbar"
       >
@@ -129,13 +129,21 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
               href="/"
               className={cn(
                 'text-lg font-bold flex gap-1 items-center',
-                scrolled ? 'text-black' : background === 'primary' ? 'text-white' : 'text-black',
+                scrolled
+                  ? 'text-foreground'
+                  : background === 'primary'
+                    ? 'text-white'
+                    : 'text-foreground',
               )}
             >
               <PatternParadiseIcon
                 className={cn(
                   'w-8 h-8',
-                  scrolled ? 'fill-black' : background === 'primary' ? 'fill-white' : 'fill-black',
+                  scrolled
+                    ? 'fill-foreground'
+                    : background === 'primary'
+                      ? 'fill-white'
+                      : 'fill-foreground',
                 )}
               />
               <span>Pattern Paradise</span>
@@ -165,10 +173,10 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
               className={cn(
                 `inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset`,
                 scrolled
-                  ? 'text-black hover:text-black hover:bg-gray-200 focus:ring-black'
+                  ? 'text-foreground hover:text-foreground hover:bg-gray-200 focus:ring-foreground'
                   : background === 'primary'
                     ? 'text-white hover:text-white hover:bg-white focus:ring-white'
-                    : 'text-black hover:text-black hover:bg-gray-200 focus:ring-black',
+                    : 'text-foreground hover:text-foreground hover:bg-gray-200 focus:ring-foreground',
               )}
               aria-expanded={isOpen}
             >
@@ -215,7 +223,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
       <div className="relative">
         <div
           className={cn(
-            'bg-white transition-all duration-300 ease-in-out overflow-hidden border-b border-gray-100 absolute top-0 left-0 right-0',
+            'bg-card transition-all duration-300 ease-in-out overflow-hidden border-b border-border absolute top-0 left-0 right-0',
             // 66px is needed for the search bar to have enough space (see HeroV2 component as well)
             searchVisible && showSearch ? 'max-h-[66px] opacity-100' : 'max-h-0 opacity-0',
           )}
@@ -223,7 +231,7 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
           <div className="mx-auto px-4 py-2">
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="relative">
-                <div className="flex items-center bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
+                <div className="flex items-center bg-background border border-input rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent">
                   <div className="flex-1 relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
@@ -249,10 +257,11 @@ export function NavbarComponent({ background, scrolled }: NavbarComponentProps) 
                     )}
                   </div>
 
+                  {/* primary-accessible: normal-size white text needs >=4.5:1 contrast */}
                   <Button
                     type="submit"
                     size="sm"
-                    className="h-12 px-4 hover:bg-orange-700 text-white rounded-r-lg rounded-l-none flex-shrink-0"
+                    className="h-12 px-4 bg-primary-accessible hover:bg-primary-accessible/90 text-white rounded-r-lg rounded-l-none flex-shrink-0"
                   >
                     <Search className="h-4 w-4" />
                     <span className="hidden sm:inline ml-2">{t('browse.filter.searchButton')}</span>
@@ -284,10 +293,10 @@ function NavLink({
       className={cn(
         'px-3 py-2 rounded-md text-sm font-medium transition-colors',
         scrolled
-          ? 'text-black hover:text-gray-900'
+          ? 'text-foreground hover:text-foreground/80'
           : background === 'primary'
             ? 'text-white hover:text-white'
-            : 'text-black hover:text-gray-900',
+            : 'text-foreground hover:text-foreground/80',
       )}
     >
       {children}
@@ -315,10 +324,10 @@ function MobileNavLink({
       className={cn(
         'block py-2 rounded-md text-base font-medium transition-colors',
         scrolled
-          ? 'text-black hover:text-gray-900'
+          ? 'text-foreground hover:text-foreground/80'
           : background === 'primary'
-            ? 'text-white hover:text-gray-900'
-            : 'text-gray-600 hover:text-gray-900',
+            ? 'text-white hover:text-foreground/80'
+            : 'text-muted-foreground hover:text-foreground',
       )}
     >
       {children}

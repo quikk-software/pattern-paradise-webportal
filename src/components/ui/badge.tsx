@@ -8,8 +8,9 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-transparent bg-primary/10 text-primary hover:bg-primary/20',
-        primary: 'border-transparent bg-primary text-white hover:bg-primary/90',
+        // Contrast: badges are text-xs -> accessible orange (#B35400) for text and filled backgrounds.
+        default: 'border-transparent bg-primary/10 text-primary-accessible hover:bg-primary/20',
+        primary: 'border-transparent bg-primary-accessible text-white hover:bg-primary-accessible/90',
         secondary:
           'border-transparent bg-secondary/10 text-secondary hover:bg-secondary/20',
         destructive:

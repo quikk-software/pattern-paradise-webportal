@@ -30,9 +30,15 @@ export function SalesChart({ data }: SalesChartProps) {
             total: month.revenue,
           }))}
         >
-          <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+          <XAxis
+            dataKey="name"
+            stroke="hsl(var(--muted-foreground))"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
           <YAxis
-            stroke="#888888"
+            stroke="hsl(var(--muted-foreground))"
             fontSize={12}
             tickLine={false}
             axisLine={false}

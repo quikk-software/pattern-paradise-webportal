@@ -69,7 +69,8 @@ export default function CountryGroupSelector({
             variant={selectedGroups.includes(group.id) ? 'default' : 'outline'}
             className={`
                 cursor-pointer py-1.5 px-3 text-sm
-                ${selectedGroups.includes(group.id) ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'}
+                ${/* primary-accessible: normal-sized white text needs >= 4.5:1 contrast, brand orange is too light */ ''}
+                ${selectedGroups.includes(group.id) ? 'bg-primary-accessible text-primary-foreground' : 'hover:bg-secondary'}
               `}
             onClick={() => toggleGroup(group.id)}
           >
