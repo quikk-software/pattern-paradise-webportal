@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { CldImage } from 'next-cloudinary';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 
 interface ProductLightboxProps {
   imageUrls: string[];
@@ -25,6 +26,7 @@ export default function ProductLightbox({
 }: ProductLightboxProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [selected, setSelected] = useState(startIndex);
+  const [loaded, setLoaded] = useState<Record<string, boolean>>({});
 
   const hasMultiple = imageUrls.length > 1;
 
@@ -82,14 +84,24 @@ export default function ProductLightbox({
           <CarouselContent>
             {imageUrls.map((src) => (
               <CarouselItem key={src} className="flex items-center justify-center">
-                <CldImage
-                  src={src}
-                  alt={alt}
-                  width={1400}
-                  height={1750}
-                  format="webp"
-                  className="h-auto max-h-[86vh] w-auto max-w-[92vw] rounded-lg object-contain"
-                />
+                <div className="relative flex min-h-[50vh] items-center justify-center">
+                  {!loaded[src] ? (
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <LoadingSpinnerComponent className="text-background" />
+                    </span>
+                  ) : null}
+                  <CldImage
+                    src={src}
+                    alt={alt}
+                    width={1400}
+                    height={1750}
+                    format="webp"
+                    onLoad={() => setLoaded((prev) => ({ ...prev, [src]: true }))}
+                    className={`h-auto max-h-[86vh] w-auto max-w-[92vw] rounded-lg object-contain transition-opacity duration-300 ${
+                      loaded[src] ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                </div>
               </CarouselItem>
             ))}
           </CarouselContent>

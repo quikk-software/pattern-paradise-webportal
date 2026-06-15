@@ -9,11 +9,13 @@ import { usePreview } from '@/app/providers/PreviewFlagProvider';
 import { useValidSession } from '@/hooks/useValidSession';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
+// Order groups related destinations: Home + Search on the left, Sell + Profile on
+// the right, with the featured Swipe action kept in the centre.
 const menuItems = [
-  { id: 'shop', label: 'Shop', icon: House, href: '/' },
-  { id: 'sell', label: 'Sell', icon: DollarSign, href: '/app/secure/sell' },
+  { id: 'shop', label: 'Home', icon: House, href: '/' },
+  { id: 'browse', label: 'Search', icon: Search, href: '/browse' },
   { id: 'swipe', label: 'Swipe', icon: Heart, href: '/swipe', featured: true },
-  { id: 'browse', label: 'Browse', icon: Search, href: '/browse' },
+  { id: 'sell', label: 'Sell', icon: DollarSign, href: '/app/secure/sell' },
   { id: 'me', label: 'Me', icon: User, href: '/app/secure/auth/me' },
 ];
 

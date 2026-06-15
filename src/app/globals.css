@@ -32,6 +32,15 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Hide the horizontal scrollbar (e.g. for the product gallery thumbnail strip). */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Design Tokens for Pattern Paradise - Warm, Handmade, Modern-Editorial */
