@@ -118,7 +118,7 @@ body {
 
 @theme inline {
   /* Fonts loaded via next/font/google in src/app/layout.tsx */
-  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-display: var(--font-source-serif), Georgia, serif;
   --font-body: var(--font-nunito-sans), system-ui, sans-serif;
   --font-sans: var(--font-nunito-sans), system-ui, sans-serif; /* default override */
   --font-mono: ui-monospace, SFMono-Regular, monospace;
@@ -172,9 +172,9 @@ body {
     @apply bg-background text-foreground font-sans leading-relaxed;
   }
   
-  /* Typography - Headings with Fraunces (display font) */
+  /* Typography - Headings with Source Serif 4 (display font) */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-fraunces), Georgia, serif;
+    font-family: var(--font-source-serif), Georgia, serif;
     font-weight: 600;
     color: hsl(var(--foreground));
   }

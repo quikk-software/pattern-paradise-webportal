@@ -20,10 +20,10 @@ const config = {
     },
     extend: {
       fontFamily: {
-        display: ['var(--font-fraunces)', 'Georgia', 'serif'],
+        display: ['var(--font-source-serif)', 'Georgia', 'serif'],
         body: ['var(--font-nunito-sans)', 'system-ui', 'sans-serif'],
         sans: ['var(--font-nunito-sans)', 'system-ui', 'sans-serif'], // default override
-        serif: ['var(--font-fraunces)', 'Georgia', 'serif'], // legacy alias for display
+        serif: ['var(--font-source-serif)', 'Georgia', 'serif'], // legacy alias for display
         mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {

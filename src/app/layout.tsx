@@ -1,4 +1,4 @@
-import { Fraunces, Nunito_Sans } from 'next/font/google';
+import { Source_Serif_4, Nunito_Sans } from 'next/font/google';
 import './globals.css';
 import { APP_DOMAIN } from '@/lib/constants';
 import { CookiesProvider } from 'next-client-cookies/server';
@@ -15,12 +15,12 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import React from 'react';
 
-// Display font for headlines, prices and hero text (mapped to font-display via --font-display)
-const fraunces = Fraunces({
+// Display font for headlines, prices and hero text (mapped to font-display via --font-source-serif)
+const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
   weight: ['600', '700'],
   style: ['normal', 'italic'],
-  variable: '--font-fraunces',
+  variable: '--font-source-serif',
   display: 'swap',
 });
 // Body/UI font (mapped to font-body and the font-sans default via --font-body)
@@ -47,7 +47,7 @@ export default async function RootLayout({
 
   return (
     <html
-      className={`${fraunces.variable} ${nunitoSans.variable} notranslate bg-background`}
+      className={`${sourceSerif.variable} ${nunitoSans.variable} notranslate bg-background`}
       translate="no"
     >
       <head>
