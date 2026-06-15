@@ -79,7 +79,7 @@ export default function ProductLightbox({
         </span>
       ) : null}
 
-      <div className="w-full" onClick={(event) => event.stopPropagation()}>
+      <div className="w-full">
         <Carousel setApi={setApi} opts={{ loop: true, startIndex }} className="w-full">
           <CarouselContent>
             {imageUrls.map((src) => (
@@ -97,6 +97,7 @@ export default function ProductLightbox({
                     height={1750}
                     format="webp"
                     onLoad={() => setLoaded((prev) => ({ ...prev, [src]: true }))}
+                    onClick={(event) => event.stopPropagation()}
                     className={`h-auto max-h-[86vh] w-auto max-w-[92vw] rounded-lg object-contain transition-opacity duration-300 ${
                       loaded[src] ? 'opacity-100' : 'opacity-0'
                     }`}
@@ -111,7 +112,10 @@ export default function ProductLightbox({
           <>
             <button
               type="button"
-              onClick={() => api?.scrollPrev()}
+              onClick={(event) => {
+                event.stopPropagation();
+                api?.scrollPrev();
+              }}
               aria-label="Previous image"
               className="absolute left-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/15 text-background transition-colors hover:bg-background/25 sm:flex"
             >
@@ -119,7 +123,10 @@ export default function ProductLightbox({
             </button>
             <button
               type="button"
-              onClick={() => api?.scrollNext()}
+              onClick={(event) => {
+                event.stopPropagation();
+                api?.scrollNext();
+              }}
               aria-label="Next image"
               className="absolute right-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/15 text-background transition-colors hover:bg-background/25 sm:flex"
             >
