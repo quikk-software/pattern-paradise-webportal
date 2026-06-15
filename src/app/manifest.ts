@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Pattern Paradise - Where Creativity Pays Off',
     short_name: 'Pattern Paradise',
     description:
-      'Buy, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern paradise business effortlessly.',
+      'Buy, sell and test crocheting & knitting patterns from designers worldwide! Grow your pattern paradise business effortlessly.',
     start_url: '/',
     display: 'standalone',
     background_color: '#FAF6F0',
@@ -69,11 +69,6 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: 'portrait',
     prefer_related_applications: false,
     shortcuts: [
-      {
-        name: 'View tester chats',
-        url: '/app/secure/test/chats',
-        description: 'View chats for your testings',
-      },
       {
         name: 'View chats',
         url: '/app/secure/chats',

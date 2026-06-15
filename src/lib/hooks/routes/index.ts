@@ -55,7 +55,7 @@ const pages: Page[] = [
     title: 'How To | Pattern Paradise',
     pathname: '/en/how-to',
     description:
-      'Discover how to use Pattern Paradise with easy guides for uploading patterns, joining tester calls, and collaborating with the crafting community.',
+      'Discover how to use Pattern Paradise with easy guides for uploading patterns and collaborating with the crafting community.',
   },
   {
     title: 'Help Center | Pattern Paradise',
@@ -76,11 +76,6 @@ const pages: Page[] = [
     title: 'Reset Password | Pattern Paradise',
     pathname: '/en/auth/reset-password',
     description: 'Reset your password securely for your Pattern Paradise account.',
-  },
-  {
-    title: 'Tester Calls Hub | Pattern Paradise',
-    pathname: '/en/app/tester-calls',
-    description: 'Explore active tester calls and testing opportunities on Pattern Paradise.',
   },
   {
     title: 'Mystery Pattern | Pattern Paradise',
@@ -129,7 +124,7 @@ const pages: Page[] = [
     title: 'Pattern Paradise – Häkel- & Strickanleitungen kaufen, verkaufen & testen',
     pathname: '/de/',
     description:
-      'Entdecke einzigartige Häkel- und Strickanleitungen von internationalen Designern. Jetzt Anleitungen kaufen, verkaufen oder als Tester*in teilnehmen – inklusive kostenloser Muster und exklusiver Testaufrufe!',
+      'Entdecke einzigartige Häkel- und Strickanleitungen von internationalen Designern. Jetzt Anleitungen kaufen oder verkaufen – inklusive kostenloser Muster!',
   },
   {
     title: 'Pattern Paradise Pro | Pattern Paradise',
@@ -147,7 +142,7 @@ const pages: Page[] = [
     title: 'Anleitung | Pattern Paradise',
     pathname: '/de/how-to',
     description:
-      'Lerne, wie du Pattern Paradise nutzt – mit einfachen Anleitungen zum Hochladen von Mustern, zur Teilnahme an Testaufrufen und zur Zusammenarbeit in der Handarbeits-Community.',
+      'Lerne, wie du Pattern Paradise nutzt – mit einfachen Anleitungen zum Hochladen von Mustern und zur Zusammenarbeit in der Handarbeits-Community.',
   },
   {
     title: 'Hilfe | Pattern Paradise',
@@ -171,11 +166,6 @@ const pages: Page[] = [
     title: 'Passwort zurücksetzen | Pattern Paradise',
     pathname: '/de/auth/reset-password',
     description: 'Setze dein Passwort für dein Pattern Paradise-Konto sicher zurück.',
-  },
-  {
-    title: 'Tester Calls Hub | Pattern Paradise',
-    pathname: '/de/app/tester-calls',
-    description: 'Entdecke aktive Tester Calls und Testmöglichkeiten auf Pattern Paradise.',
   },
   {
     title: 'Mystery Anleitung | Pattern Paradise',

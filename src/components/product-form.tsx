@@ -24,7 +24,13 @@ import {
   getAllImageFiles,
   deleteAllImageFiles,
 } from '@/lib/db/productFormDB';
-import { CATEGORIES, ExperienceLevels, HASHTAG_LIMIT, IMAGE_LIMIT } from '@/lib/constants';
+import {
+  CATEGORIES,
+  ExperienceLevels,
+  HASHTAG_LIMIT,
+  IMAGE_LIMIT,
+  TESTER_CALLS_ENABLED,
+} from '@/lib/constants';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import GoBackButton from '@/lib/components/GoBackButton';
 import PriceInput from '@/lib/components/PriceInput';
@@ -73,7 +79,8 @@ export function ProductFormComponent({ user }: ProductFormComponentProps) {
   const [imageUploadIsLoading, setImageUploadIsLoading] = useState<boolean>(false);
   const [isFree, setIsFree] = useState<boolean>(false);
   const [isMystery, setIsMystery] = useState<string>('yes');
-  const [status, setStatus] = useState<string>('Created');
+  // Default to a tester call only while the feature is enabled; otherwise patterns start as Draft.
+  const [status, setStatus] = useState<string>(TESTER_CALLS_ENABLED ? 'Created' : 'Draft');
   const [showResetDrawer, setShowResetDrawer] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<
     {
@@ -438,7 +445,7 @@ export function ProductFormComponent({ user }: ProductFormComponentProps) {
     await deleteAllFiles();
     await deleteAllImageFiles();
 
-    setStatus('Created');
+    setStatus(TESTER_CALLS_ENABLED ? 'Created' : 'Draft');
     setImages([]);
     setPatterns([]);
     setHashtags([]);
@@ -646,10 +653,12 @@ export function ProductFormComponent({ user }: ProductFormComponentProps) {
         <CardRadioGroup
           selectedOption={status}
           setSelectedOption={setStatus}
-          question={'Draft, Tester Call or Release?'}
+          question={TESTER_CALLS_ENABLED ? 'Draft, Tester Call or Release?' : 'Draft or Release?'}
           description={
             <span>
-              Choose if you want to draft this pattern, create a tester call or release directly.
+              {TESTER_CALLS_ENABLED
+                ? 'Choose if you want to draft this pattern, create a tester call or release directly.'
+                : 'Choose if you want to draft this pattern or release it directly.'}
             </span>
           }
           options={[
@@ -658,11 +667,16 @@ export function ProductFormComponent({ user }: ProductFormComponentProps) {
               title: 'Draft',
               description: 'My pattern will be saved but not be available to the public yet',
             },
-            {
-              id: 'Created',
-              title: 'Tester Call',
-              description: 'My pattern will be listed under open Tester Calls',
-            },
+            // Tester-call status is only offered while the feature is enabled. See TESTER_CALLS_ENABLED.
+            ...(TESTER_CALLS_ENABLED
+              ? [
+                  {
+                    id: 'Created',
+                    title: 'Tester Call',
+                    description: 'My pattern will be listed under open Tester Calls',
+                  },
+                ]
+              : []),
             {
               id: 'Released',
               title: 'Release',
@@ -763,19 +777,23 @@ export function ProductFormComponent({ user }: ProductFormComponentProps) {
           isSuccess={isSuccess}
           isError={isError}
           successMessage={
-            <span>
-              Your listing has been created successfully!
-              <br />
-              You can now{' '}
-              <Link
-                rel={'nofollow'}
-                href="/app/secure/sell/testings"
-                className="text-blue-500 underline"
-              >
-                start a tester call
-              </Link>
-              .
-            </span>
+            TESTER_CALLS_ENABLED ? (
+              <span>
+                Your listing has been created successfully!
+                <br />
+                You can now{' '}
+                <Link
+                  rel={'nofollow'}
+                  href="/app/secure/sell/testings"
+                  className="text-blue-500 underline"
+                >
+                  start a tester call
+                </Link>
+                .
+              </span>
+            ) : (
+              <span>Your listing has been created successfully!</span>
+            )
           }
           errorMessage={
             <span>

@@ -27,6 +27,7 @@ import SaleForm from '@/lib/components/SaleForm';
 import DraftPatternDrawer from '@/lib/components/DraftPatternDrawer';
 import UndraftPatternDrawer from '@/lib/components/UndraftPatternDrawer';
 import { cn } from '@/lib/utils';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 import RequestStatus from '@/lib/components/RequestStatus';
 
 const getStatusDisplayText = (status?: string) => {
@@ -384,7 +385,7 @@ export default function ProductCard({
             </Button>
           )}
 
-          {status === 'Draft' && (
+          {TESTER_CALLS_ENABLED && status === 'Draft' && (
             <Button
               onClick={() => setIsUndraftProductDrawerOpen(true)}
               className="w-full"

@@ -22,6 +22,7 @@ import CountrySelect from '@/lib/components/CountrySelect';
 import { isIOSMode } from '@/lib/core/utils';
 import { RedirectBrowserDrawer } from '@/lib/components/RedirectBrowserDrawer';
 import { PriceSaleBadge } from '@/lib/components/PriceSaleBadge';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 interface BuyNowButtonProps {
   product: GetProductResponse;
@@ -105,7 +106,7 @@ export function BuyNowButton({ product, customPriceDisabled = false }: BuyNowBut
         message={
           <span>
             This pattern is currently not for sale.
-            {product?.status === 'Created' ? (
+            {TESTER_CALLS_ENABLED && product?.status === 'Created' ? (
               <span>
                 {' '}
                 <Link

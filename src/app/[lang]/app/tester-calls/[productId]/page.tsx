@@ -6,9 +6,15 @@ import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { useGetProduct } from '@/lib/api';
 import { TesterCallPage } from '@/components/tester-call-page';
-import { useParams } from 'next/navigation';
+import { useParams, redirect } from 'next/navigation';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 export default function TestDetailsPage() {
+  // Tester Calls feature is disabled — redirect visitors to the homepage. See TESTER_CALLS_ENABLED.
+  if (!TESTER_CALLS_ENABLED) {
+    redirect('/');
+  }
+
   const { productId } = useParams();
 
   const {

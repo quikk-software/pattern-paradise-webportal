@@ -1,6 +1,8 @@
 import { SocialShareCard } from '@/components/social-share-card';
 import { getProduct } from '@/lib/api/static/product/getProduct';
 import { getTestingByProductId } from '@/lib/api/static/testing/getTestingByProductId';
+import { redirect } from 'next/navigation';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 interface Props {
   params: { productId: string };
@@ -8,6 +10,11 @@ interface Props {
 }
 
 export default async function TesterCallPreviewDetailsPage({ params, searchParams }: Props) {
+  // Tester Calls feature is disabled — redirect visitors to the homepage. See TESTER_CALLS_ENABLED.
+  if (!TESTER_CALLS_ENABLED) {
+    redirect('/');
+  }
+
   const { productId } = await params;
   const theme = (await searchParams.theme) || 'neutral';
   const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://pattern-paradise.shop';

@@ -79,7 +79,7 @@
       "favorites": "Favorites",
       "greetingBox": "Welcome back to Pattern Paradise!",
       "greetingSeller": "Check your orders and create new patterns to grow your shop.",
-      "greetingBuyer": "Discover new patterns and join tester calls to help creators.",
+      "greetingBuyer": "Discover new patterns and support your favorite creators.",
       "categories": {
         "crocheting": "Crocheting",
         "knitting": "Knitting"
@@ -157,8 +157,8 @@
       "answer5": "Yes! Pattern Paradise welcomes designers to showcase and sell their unique patterns. You can easily upload your designs and set your own prices. We'll handle the transactions and provide tools to help you manage your pattern sales.",
       "question6": "What makes Pattern Paradise unique?",
       "answer6": "Pattern Paradise stands out due to our strong ties with the crocheting and knitting community on social media. We leverage these connections to increase designers' visibility, promote patterns, and attract more creators and buyers to our platform. We also offer innovative collaboration tools for pattern testing and refinement.",
-      "question7": "How can I collaborate on pattern testing?",
-      "answer7": "Pattern Paradise provides advanced tools for tutorials and feedback. You can participate in pattern testing, offer suggestions for improvements, and help refine designs before they're finalized. This collaborative approach ensures high-quality patterns and fosters community engagement.",
+      "question7": "How can I collaborate with the community?",
+      "answer7": "Pattern Paradise provides advanced tools for tutorials and feedback. You can share suggestions for improvements and connect with designers and other makers. This collaborative approach ensures high-quality patterns and fosters community engagement.",
       "question8": "Is there a membership fee to join Pattern Paradise?",
       "answer8": "No, there's no membership fee to join Pattern Paradise. Our platform is free to use for both designers and buyers. We only charge a 5% fee on successful pattern sales. If you are interested in a Pro membership for advanced features, you can purchase this in a separate subscription."
     }
@@ -183,8 +183,8 @@
       "title": "What We Offer",
       "itemTitle1": "Buy & Sell Patterns",
       "itemDescription1": "A marketplace for unique crochet and knitting patterns, supporting independent designers.",
-      "itemTitle2": "Pattern Testing",
-      "itemDescription2": "Ensure your designs are flawless with our community of skilled testers.",
+      "itemTitle2": "Quality Patterns",
+      "itemDescription2": "Discover carefully crafted, high-quality designs from a passionate community of makers.",
       "itemTitle3": "Collaborative Tools",
       "itemDescription3": "Work together on tutorials and designs with our advanced collaboration features."
     },
@@ -277,7 +277,7 @@
             "description": "Once uploaded:",
             "items": [
               "You'll be redirected to a success page.",
-              "You'll have the option to start a tester call for your pattern to gather feedback."
+              "You can review your pattern and release it to the marketplace."
             ]
           }
         },

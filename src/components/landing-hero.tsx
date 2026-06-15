@@ -57,15 +57,9 @@ export default function LandingHero({ products }: LandingHeroProps) {
                 <Button variant={'default'}>Start Selling</Button>
               </Link>
             )}
-            {isLoggedIn ? (
-              <Link href="/app/tester-calls">
-                <Button variant="outline">Show Tester Calls</Button>
-              </Link>
-            ) : (
-              <Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls">
-                <Button variant="outline">Become a Tester</Button>
-              </Link>
-            )}
+            <Link href="/browse">
+              <Button variant="outline">Browse Patterns</Button>
+            </Link>
           </div>
         </div>
         {!smallScreen && products.length === FEATURED_PRODUCTS_LENGTH ? (

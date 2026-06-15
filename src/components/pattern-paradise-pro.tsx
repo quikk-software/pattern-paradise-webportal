@@ -13,7 +13,7 @@ import SubscribeButton from '@/lib/components/SubscribeButton';
 import { useSelector } from 'react-redux';
 import { Store } from '@/lib/redux/store';
 import Link from 'next/link';
-import { PRO_MEMBERSHIP_PRICE } from '@/lib/constants';
+import { PRO_MEMBERSHIP_PRICE, TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 export function PatternParadiseProComponent() {
   const { subscriptionStatus } = useSelector((s: Store) => s.auth);
@@ -31,16 +31,22 @@ export function PatternParadiseProComponent() {
   const features = [
     'Upload multiple patterns with language options per listing',
     'Featured patterns marked and displayed at the top',
-    'Featured tester calls marked and displayed at the top',
-    "Appear at the top of tester applicant's lists",
-    'Share documents and videos in tester call chats',
+    'Enhanced visibility for your patterns across Pattern Paradise',
+    // Tester-call related perks are only advertised while the feature is enabled. See TESTER_CALLS_ENABLED.
+    ...(TESTER_CALLS_ENABLED
+      ? [
+          'Featured tester calls marked and displayed at the top',
+          "Appear at the top of tester applicant's lists",
+          'Share documents and videos in tester call chats',
+        ]
+      : []),
   ];
 
   const faqs = [
     {
       question: 'What is Pattern Paradise Pro?',
       answer:
-        'Pattern Paradise Pro is our premium subscription plan that offers advanced features for pattern creators and sellers, including multi-language support and enhanced visibility for your patterns and tester calls.',
+        'Pattern Paradise Pro is our premium subscription plan that offers advanced features for pattern creators and sellers, including multi-language support and enhanced visibility for your patterns.',
     },
     {
       question: 'How much does Pattern Paradise Pro cost?',
@@ -108,10 +114,6 @@ export function PatternParadiseProComponent() {
               className="text-blue-500 underline"
             >
               creating patterns
-            </Link>{' '}
-            or{' '}
-            <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
-              apply for tester calls
             </Link>
             !
           </span>
@@ -178,10 +180,6 @@ export function PatternParadiseProComponent() {
               className="text-blue-500 underline"
             >
               creating patterns
-            </Link>{' '}
-            or{' '}
-            <Link rel={'nofollow'} href="/app/tester-calls" className="text-blue-500 underline">
-              apply for tester calls
             </Link>
             !
           </span>

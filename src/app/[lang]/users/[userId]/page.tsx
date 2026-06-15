@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const userName = user?.firstName || user?.username;
 
   const title = `${userName}'s Profile | Pattern Paradise`;
-  const description = `Check out ${userName}'s patterns, tester calls, and more on Pattern Paradise.`;
+  const description = `Check out ${userName}'s patterns and more on Pattern Paradise.`;
   const hasBannerImage = !!user?.bannerImageUrl;
   const imageUrl =
     user?.bannerImageUrl?.replace('/upload/', '/upload/w_1200,h_630,c_fill/') ??

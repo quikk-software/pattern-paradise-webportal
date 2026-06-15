@@ -29,6 +29,7 @@ import { Button } from '@/components/ui/button';
 import { useValidSession } from '@/hooks/useValidSession';
 import RequestStatus from '@/lib/components/RequestStatus';
 import { usePushNotification } from '@/app/providers/PushNotificationProvider';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 type NotificationType = 'DIRECT_MESSAGE' | 'TESTER_MESSAGE' | 'PATTERN_SALE' | 'FOLLOW_ACTION';
 
@@ -67,12 +68,17 @@ function PreferencesCard({
       label: 'Direct Messages',
       description: 'Get notified when someone sends you a direct message',
     },
-    {
-      type: 'TESTER_MESSAGE',
-      enabled: true,
-      label: 'Tester Messages',
-      description: 'Get notified about tester-related communications',
-    },
+    // Tester-message preference is only offered while the feature is enabled. See TESTER_CALLS_ENABLED.
+    ...(TESTER_CALLS_ENABLED
+      ? [
+          {
+            type: 'TESTER_MESSAGE' as NotificationType,
+            enabled: true,
+            label: 'Tester Messages',
+            description: 'Get notified about tester-related communications',
+          },
+        ]
+      : []),
     {
       type: 'PATTERN_SALE',
       enabled: true,
@@ -83,7 +89,7 @@ function PreferencesCard({
       type: 'FOLLOW_ACTION',
       enabled: true,
       label: 'Followed Creator Activity',
-      description: 'Get notified when someone you creates a new pattern or tester call',
+      description: 'Get notified when someone you follow creates a new pattern',
     },
   ]);
   const [enableIsLoading, setEnableIsLoading] = useState(false);
@@ -102,12 +108,17 @@ function PreferencesCard({
         label: 'Direct Messages',
         description: 'Get notified when someone sends you a direct message',
       },
-      {
-        type: 'TESTER_MESSAGE',
-        enabled: deviceToken?.events?.includes('TESTER_MESSAGE') ?? false,
-        label: 'Tester Messages',
-        description: 'Get notified about tester-related communications',
-      },
+      // Tester-message preference is only offered while the feature is enabled. See TESTER_CALLS_ENABLED.
+      ...(TESTER_CALLS_ENABLED
+        ? [
+            {
+              type: 'TESTER_MESSAGE' as NotificationType,
+              enabled: deviceToken?.events?.includes('TESTER_MESSAGE') ?? false,
+              label: 'Tester Messages',
+              description: 'Get notified about tester-related communications',
+            },
+          ]
+        : []),
       {
         type: 'PATTERN_SALE',
         enabled: deviceToken?.events?.includes('PATTERN_SALE') ?? false,
@@ -118,7 +129,7 @@ function PreferencesCard({
         type: 'FOLLOW_ACTION',
         enabled: deviceToken?.events?.includes('FOLLOW_ACTION') ?? false,
         label: 'Followed Creator Activity',
-        description: 'Get notified when someone you creates a new pattern or tester call',
+        description: 'Get notified when someone you follow creates a new pattern',
       },
     ]);
   }, [deviceToken?.events]);

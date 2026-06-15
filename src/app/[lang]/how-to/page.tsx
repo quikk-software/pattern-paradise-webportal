@@ -7,6 +7,7 @@ import StepItem from '@/lib/components/StepItem';
 import Link from 'next/link';
 import WelcomeCard from '@/lib/components/WelcomeCard';
 import { generatePageMetadata } from '@/lib/core/metadata';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 const JSON_LD = [
   {
@@ -106,7 +107,7 @@ const JSON_LD = [
         '@type': 'HowToStep',
         position: 8,
         name: 'After successful upload',
-        text: 'After upload, you will be redirected to a success page and you can start a tester call to gather feedback.',
+        text: 'After upload, you will be redirected to a success page where you can review and release your pattern.',
       },
     ],
     mainEntityOfPage: {
@@ -243,7 +244,7 @@ const JSON_LD = [
     name: 'How To Guides',
     inLanguage: 'en',
     description:
-      'How-to guides for Pattern Paradise. It includes step-by-step instructions for uploading patterns, applying to tester calls, and using the tester chat.',
+      'How-to guides for Pattern Paradise. It includes step-by-step instructions for uploading and releasing patterns.',
     isPartOf: { '@id': 'https://pattern-paradise.shop/#website' },
     about: { '@id': 'https://pattern-paradise.shop/#organization' },
     hasPart: [
@@ -278,11 +279,26 @@ export default async function HowToPage({ params }: Props) {
     return path.reduce((acc, part) => acc?.[part], messages);
   };
 
+  // While Tester Calls are disabled, drop the tester-call/tester-chat structured data
+  // (and their hasPart references). Re-enabling the feature restores them automatically.
+  const jsonLd = JSON_LD.filter(
+    (entry) => TESTER_CALLS_ENABLED || !String((entry as any)['@id'] ?? '').includes('tester'),
+  ).map((entry) =>
+    !TESTER_CALLS_ENABLED && Array.isArray((entry as any).hasPart)
+      ? {
+          ...entry,
+          hasPart: (entry as any).hasPart.filter(
+            (part: any) => !String(part['@id'] ?? '').includes('tester'),
+          ),
+        }
+      : entry,
+  );
+
   return (
     <div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD).replace(/</g, '\\u003c') }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
       <div className="space-y-4 mb-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -300,7 +316,7 @@ export default async function HowToPage({ params }: Props) {
 
         <WelcomeCard />
 
-        {['all', 'patterns', 'testing', 'account', 'payments'].map((tabKey) => (
+        {['all', 'patterns', 'account', 'payments'].map((tabKey) => (
           <TabsContent key={tabKey} value={tabKey} className="space-y-6 mt-0">
             {tabKey === 'all' || tabKey === 'patterns' ? (
               <GuideSection
@@ -371,7 +387,7 @@ export default async function HowToPage({ params }: Props) {
               </GuideSection>
             ) : null}
 
-            {tabKey === 'all' || tabKey === 'testing' ? (
+            {TESTER_CALLS_ENABLED && (tabKey === 'all' || tabKey === 'testing') ? (
               <GuideSection
                 title={t('howTo.sections.testerCall.title')}
                 description={t('howTo.sections.testerCall.description')}
@@ -438,7 +454,7 @@ export default async function HowToPage({ params }: Props) {
               </GuideSection>
             ) : null}
 
-            {tabKey === 'all' || tabKey === 'testing' ? (
+            {TESTER_CALLS_ENABLED && (tabKey === 'all' || tabKey === 'testing') ? (
               <GuideSection
                 title={t('howTo.sections.chat.title')}
                 description={t('howTo.sections.chat.description')}

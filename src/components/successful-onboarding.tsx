@@ -74,28 +74,7 @@ export default function SuccessfulOnboarding() {
                   </Link>
                 </li>
                 <li>
-                  After Creating a Pattern, you can{' '}
-                  <Link
-                    rel={'nofollow'}
-                    className="text-blue-500 underline"
-                    href="/app/secure/test/testings"
-                  >
-                    Individualize your Tester Call
-                  </Link>
-                </li>
-                <li>Post your Tester Call on Social Media and gather Tester Applications</li>
-                <li>
-                  Choose your Testers and{' '}
-                  <Link
-                    rel={'nofollow'}
-                    className="text-blue-500 underline"
-                    href="/app/secure/test/chats"
-                  >
-                    Chat with them
-                  </Link>
-                </li>
-                <li>
-                  After your Testers approved your Pattern, you can{' '}
+                  Once your Pattern is ready, you can{' '}
                   <Link
                     rel={'nofollow'}
                     className="text-blue-500 underline"

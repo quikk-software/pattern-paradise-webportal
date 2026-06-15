@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Heart, House, DollarSign, User } from 'lucide-react';
+import { Heart, House, DollarSign, User, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { isInStandaloneMode } from '@/lib/core/utils';
 import { usePreview } from '@/app/providers/PreviewFlagProvider';
 import { useValidSession } from '@/hooks/useValidSession';
@@ -14,7 +13,7 @@ const menuItems = [
   { id: 'shop', label: 'Shop', icon: House, href: '/' },
   { id: 'sell', label: 'Sell', icon: DollarSign, href: '/app/secure/sell' },
   { id: 'swipe', label: 'Swipe', icon: Heart, href: '/swipe', featured: true },
-  { id: 'test', label: 'Test', icon: PatternParadiseIcon, href: '/app/tester-calls' },
+  { id: 'browse', label: 'Browse', icon: Search, href: '/browse' },
   { id: 'me', label: 'Me', icon: User, href: '/app/secure/auth/me' },
 ];
 
@@ -70,7 +69,6 @@ export function BottomNavigation() {
               ) : (
                 <item.icon
                   className={cn('w-8 h-8 transition-all duration-200 group-hover:scale-110')}
-                  strokeWidth={item.id === 'test' ? '16' : undefined}
                 />
               )}
             </button>

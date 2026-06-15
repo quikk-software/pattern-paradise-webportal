@@ -72,28 +72,14 @@ export default function AnimatedLanding() {
                 </Button>
               </Link>
             )}
-            {isLoggedIn ? (
-              <Link href="/app/tester-calls" rel={'nofollow'}>
-                <Button
-                  variant="outline"
-                  className="bg-transparent border-white text-white border-2 font-semibold"
-                >
-                  Show tester calls
-                </Button>
-              </Link>
-            ) : (
-              <Link
-                rel={'nofollow'}
-                href="/auth/registration?preselectedRoles=Tester&redirect=/app/tester-calls"
+            <Link href="/browse" rel={'nofollow'}>
+              <Button
+                variant="outline"
+                className="bg-transparent border-white text-white border-2 font-semibold"
               >
-                <Button
-                  variant="outline"
-                  className="bg-transparent border-white text-white border-2 font-semibold"
-                >
-                  Become a tester
-                </Button>
-              </Link>
-            )}
+                Browse patterns
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </motion.div>

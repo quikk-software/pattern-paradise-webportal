@@ -38,18 +38,8 @@ export default async function FAQItem() {
 
     if (item.id === 'collaborate') {
       result = result.replace(
-        /Register as a Tester/g,
-        `<Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/test" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">Register as a Tester</Link>`,
-      );
-
-      result = result.replace(
         /Profile Settings/g,
         `<Link href="/app/secure/auth/me" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">Profile Settings</Link>`,
-      );
-
-      result = result.replace(
-        /browse Tester Calls/g,
-        `<Link href="/app/tester-calls" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">browse Tester Calls</Link>`,
       );
     }
 
