@@ -52,6 +52,7 @@ import { themes } from '@/lib/core/themes';
 import CountryGroupSelector from '@/lib/components/CountryGroupSelector';
 import CurrencySelect from '@/lib/components/CurrencySelect';
 import DeleteAccountButton from '@/lib/components/DeleteAccountButton';
+import BannerCropper from '@/lib/components/BannerCropper';
 
 interface ProfilePageProps {
   user: GetUserResponse;
@@ -60,6 +61,8 @@ interface ProfilePageProps {
 export function ProfilePage({ user }: ProfilePageProps) {
   const [profileImage, setProfileImage] = useState(user.imageUrl);
   const [bannerImage, setBannerImage] = useState(user.bannerImageUrl);
+  // Raw, freshly selected banner file (data URL) shown in the cropper before upload.
+  const [bannerCropSource, setBannerCropSource] = useState<string | null>(null);
   const [selectedTheme, setSelectedTheme] = useState(user.theme);
   const [imageIsLoading, setImageIsLoading] = useState(false);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
@@ -257,9 +260,13 @@ export function ProfilePage({ user }: ProfilePageProps) {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => setBannerImage(e.target?.result as string);
+      // Open the cropper first; the actual banner is only set once the user
+      // confirms the 4:1 crop, which then triggers the existing upload effect.
+      reader.onload = (e) => setBannerCropSource(e.target?.result as string);
       reader.readAsDataURL(file);
     }
+    // Allow re-selecting the same file again.
+    event.target.value = '';
   };
 
   const handleCountryChange = (value: string) => {
@@ -505,17 +512,17 @@ export function ProfilePage({ user }: ProfilePageProps) {
           <form onSubmit={handleSubmit(onPersonalDataSubmit)} className="space-y-8">
             <div className="space-y-2 flex flex-col items-center">
               {bannerImage ? (
-                <div className="relative w-full h-32">
+                <div className="relative w-full aspect-[4/1] overflow-hidden rounded-md">
                   <Image
                     src={bannerImage}
                     alt="Profile banner"
                     fill
-                    className="object-cover rounded-md"
+                    className="object-cover"
                     priority
                   />
                 </div>
               ) : (
-                <div className="w-full h-32 bg-gray-300 rounded-md" />
+                <div className="w-full aspect-[4/1] bg-muted rounded-md" />
               )}
               <Label
                 htmlFor="banner"
@@ -523,12 +530,25 @@ export function ProfilePage({ user }: ProfilePageProps) {
               >
                 Change Banner Picture
               </Label>
+              <p className="text-center text-xs text-muted-foreground">
+                Recommended size 1600 x 400 px (4:1). You can position and zoom your image after
+                selecting it.
+              </p>
               <Input
                 id="banner"
                 type="file"
                 accept="image/*"
                 className="hidden"
                 onChange={selectBannerImage}
+              />
+              <BannerCropper
+                image={bannerCropSource}
+                open={!!bannerCropSource}
+                onCancel={() => setBannerCropSource(null)}
+                onCropped={(dataUrl) => {
+                  setBannerImage(dataUrl);
+                  setBannerCropSource(null);
+                }}
               />
             </div>
 

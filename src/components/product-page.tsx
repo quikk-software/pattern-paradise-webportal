@@ -106,8 +106,10 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
           </div>
         </div>
 
-        {/* Main: gallery + description (left) · details + sticky purchase (right) */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        {/* Main: gallery + description (left), details + sticky purchase (right).
+            Columns are capped and centered on desktop so the image stays compact
+            (no oversized 50/50 split) while the details get comfortable room. */}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,560px)] lg:items-start lg:justify-center">
           {/* Left column */}
           <div className="flex min-w-0 flex-col gap-6">
             <ProductGallery
@@ -147,8 +149,9 @@ export default function ProductPageComponent({ productId }: ProductPageComponent
               </div>
             </div>
 
-            {/* Sticky purchase / download card */}
-            <div className="lg:sticky lg:top-4">
+            {/* Sticky purchase / download card. top offset clears the sticky
+                navbar (h-16 = 64px) plus a 16px gap so it isn't hidden on scroll. */}
+            <div className="lg:sticky lg:top-20">
               <Card className="shadow-card">
                 <CardContent className="flex flex-col gap-2 p-5">
                   {product.isFree || isOwner ? (
