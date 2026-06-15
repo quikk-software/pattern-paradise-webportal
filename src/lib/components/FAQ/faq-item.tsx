@@ -22,7 +22,9 @@ export default async function FAQItem() {
 
     let result = item.answer;
 
-    if (item.id === 'item-2' || item.id === 'item-8') {
+    // Only link/advertise Pro while the feature is active (same gating as the /pro route).
+    const proActive = process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true';
+    if (proActive && (item.id === 'item-2' || item.id === 'item-8')) {
       result = result.replace(
         /Pro Membership/g,
         `<Link href="/pro" className="font-medium text-primary-accessible hover:underline transition-colors">Pro Membership</Link>`,
@@ -38,18 +40,8 @@ export default async function FAQItem() {
 
     if (item.id === 'collaborate') {
       result = result.replace(
-        /Register as a Tester/g,
-        `<Link href="/auth/registration?preselectedRoles=Tester&redirect=/app/test" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">Register as a Tester</Link>`,
-      );
-
-      result = result.replace(
         /Profile Settings/g,
         `<Link href="/app/secure/auth/me" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">Profile Settings</Link>`,
-      );
-
-      result = result.replace(
-        /browse Tester Calls/g,
-        `<Link href="/app/tester-calls" className="font-medium text-primary-accessible hover:underline transition-colors" rel="nofollow">browse Tester Calls</Link>`,
       );
     }
 

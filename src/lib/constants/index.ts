@@ -1,9 +1,16 @@
 export const APP_TITLE = 'Pattern Paradise';
 export const APP_NAME = 'Pattern Paradise - Where Creativity Pays Off';
 export const APP_DESCRIPTION =
-  'Buy, sell and test crocheting & knitting patterns from designers worldwide! Join exclusive tester calls and grow your pattern paradise business effortlessly.';
+  'Buy, sell and test crocheting & knitting patterns from designers worldwide! Grow your pattern paradise business effortlessly.';
 export const APP_DOMAIN = 'https://pattern-paradise.shop';
 export const THEME_COLOR = '#e06b00';
+
+/**
+ * Feature flag for the "Tester Calls" feature. While disabled, all tester-call
+ * routes redirect to the homepage and every UI entry point is hidden. The
+ * underlying code/files are kept intact — flip this to `true` to re-enable.
+ */
+export const TESTER_CALLS_ENABLED = false;
 
 export const PRO_MEMBERSHIP_PRICE = '$9.99';
 

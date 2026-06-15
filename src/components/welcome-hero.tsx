@@ -5,7 +5,6 @@ import { BookHeart, PlusCircle, ShoppingBag, Star, Settings, Search } from 'luci
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
-import PatternParadiseIcon from '@/lib/icons/PatternParadiseIcon';
 import { theme } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -156,12 +155,6 @@ export default function WelcomeHero({
                     label: t('landing.hero.orders'),
                     delay: 0.3,
                   },
-                  {
-                    href: '/app/secure/sell/testings',
-                    icon: PatternParadiseIcon,
-                    label: t('landing.hero.testerCalls'),
-                    delay: 0.4,
-                  },
                 ]
               : [
                   {
@@ -169,12 +162,6 @@ export default function WelcomeHero({
                     icon: Search,
                     label: t('landing.hero.browsePatterns'),
                     delay: 0.3,
-                  },
-                  {
-                    href: '/app/tester-calls',
-                    icon: PatternParadiseIcon,
-                    label: t('landing.hero.testerCalls'),
-                    delay: 0.4,
                   },
                 ]),
             {

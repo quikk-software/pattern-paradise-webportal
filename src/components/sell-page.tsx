@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { getCurrencySymbol } from '@/lib/utils';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 export function SellPageComponent() {
   const [loadMore, setLoadMore] = useState(false);
@@ -139,15 +140,17 @@ export function SellPageComponent() {
             <span className="text-lg font-semibold">Show My Orders</span>
           </Button>
         </Link>
-        <Link rel={'nofollow'} href="/app/secure/sell/testings" className="block">
-          <Button
-            variant="outline"
-            className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
-          >
-            <PatternParadiseIcon className="h-8 w-8 fill-black" />
-            <span className="text-lg font-semibold">My Tester Calls</span>
-          </Button>
-        </Link>
+        {TESTER_CALLS_ENABLED ? (
+          <Link rel={'nofollow'} href="/app/secure/sell/testings" className="block">
+            <Button
+              variant="outline"
+              className="w-full h-full min-h-[100px] flex flex-col items-center justify-center gap-2 "
+            >
+              <PatternParadiseIcon className="h-8 w-8 fill-black" />
+              <span className="text-lg font-semibold">My Tester Calls</span>
+            </Button>
+          </Link>
+        ) : null}
       </div>
 
       <h2 className="text-2xl font-bold mb-8">Your Patterns</h2>
@@ -165,8 +168,8 @@ export function SellPageComponent() {
           <SelectContent>
             <SelectItem value="All">All</SelectItem>
             <SelectItem value="Draft">Draft</SelectItem>
-            <SelectItem value="InProgress">Test Phase</SelectItem>
-            <SelectItem value="Created">Created</SelectItem>
+            {TESTER_CALLS_ENABLED ? <SelectItem value="InProgress">Test Phase</SelectItem> : null}
+            {TESTER_CALLS_ENABLED ? <SelectItem value="Created">Created</SelectItem> : null}
             <SelectItem value="Released">Released</SelectItem>
             <SelectItem value="Deleted">Deleted</SelectItem>
             <SelectItem value="Declined">Declined</SelectItem>

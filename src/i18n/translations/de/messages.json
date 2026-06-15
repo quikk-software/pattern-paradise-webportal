@@ -79,7 +79,7 @@
       "favorites": "Favoriten",
       "greetingBox": "Willkommen zurück bei Pattern Paradise!",
       "greetingSeller": "Überprüfe deine Bestellungen und erstelle neue Anleitungen, um deinen Shop auszubauen.",
-      "greetingBuyer": "Entdecke neue Anleitungen und nimm an Tester-Aufrufen teil, um Kreative zu unterstützen.",
+      "greetingBuyer": "Entdecke neue Anleitungen und unterstütze deine Lieblings-Designer.",
       "categories": {
         "crocheting": "Häkel",
         "knitting": "Strick"
@@ -157,8 +157,8 @@
       "answer5": "Ja! Pattern Paradise lädt Designer ein, ihre einzigartigen Anleitungen hochzuladen und zu verkaufen. Du kannst deine Designs einfach einstellen und deine Preise selbst festlegen. Wir kümmern uns um die Transaktionen und bieten Tools zur Verkaufsverwaltung.",
       "question6": "Was macht Pattern Paradise einzigartig?",
       "answer6": "Pattern Paradise hebt sich durch enge Verbindungen zur Häkel- und Strickcommunity in sozialen Medien hervor. Diese Netzwerke helfen uns, die Sichtbarkeit von Designern zu erhöhen, Anleitungen zu bewerben und mehr Kreative und Käufer auf unsere Plattform zu bringen. Außerdem bieten wir innovative Kollaborationstools für das Testen und Verfeinern von Anleitungen.",
-      "question7": "Wie kann ich an Anleitungstests teilnehmen?",
-      "answer7": "Pattern Paradise bietet erweiterte Tools für Tutorials und Feedback. Du kannst an Anleitungstests teilnehmen, Verbesserungsvorschläge machen und helfen, Designs vor der Veröffentlichung zu verfeinern. Dieser kollaborative Ansatz sorgt für hochwertige Anleitungen und stärkt die Community.",
+      "question7": "Wie kann ich mit der Community zusammenarbeiten?",
+      "answer7": "Pattern Paradise bietet erweiterte Tools für Tutorials und Feedback. Du kannst Verbesserungsvorschläge teilen und dich mit Designern und anderen Kreativen vernetzen. Dieser kollaborative Ansatz sorgt für hochwertige Anleitungen und stärkt die Community.",
       "question8": "Gibt es eine Mitgliedsgebühr für Pattern Paradise?",
       "answer8": "Nein, es gibt keine Mitgliedsgebühr für Pattern Paradise. Die Nutzung der Plattform ist für Designer und Käufer kostenlos. Wir erheben nur eine 5%ige Gebühr auf erfolgreiche Verkäufe. Wer erweiterte Funktionen möchte, kann eine Pro-Mitgliedschaft separat abonnieren."
     }
@@ -183,8 +183,8 @@
       "title": "Was wir bieten",
       "itemTitle1": "Anleitungen kaufen & verkaufen",
       "itemDescription1": "Ein Marktplatz für einzigartige Häkel- und Strickanleitungen, der unabhängige Designer unterstützt.",
-      "itemTitle2": "Anleitungstests",
-      "itemDescription2": "Sorge mit unserer Community aus erfahrenen Testern dafür, dass deine Designs fehlerfrei sind.",
+      "itemTitle2": "Hochwertige Anleitungen",
+      "itemDescription2": "Entdecke sorgfältig gestaltete, hochwertige Designs aus einer leidenschaftlichen Community.",
       "itemTitle3": "Kollaborative Tools",
       "itemDescription3": "Arbeite gemeinsam an Tutorials und Designs mit unseren erweiterten Kollaborationsfunktionen."
     },
@@ -282,7 +282,7 @@
             "description": "Nach dem Upload:",
             "items": [
               "Wirst du auf eine Erfolgsseite weitergeleitet.",
-              "Kannst du optional einen Tester-Aufruf für deine Anleitung starten, um Feedback zu erhalten."
+              "Kannst du deine Anleitung prüfen und im Marktplatz veröffentlichen."
             ]
           }
         },

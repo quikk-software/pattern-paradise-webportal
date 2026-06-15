@@ -21,6 +21,7 @@ import useAction from '@/lib/core/useAction';
 import { Label } from '@/components/ui/label';
 import StarRating from '@/lib/components/StarRating';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 interface UserAccountComponentProps {
   user: GetUserAccountResponse;
@@ -131,9 +132,12 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
     return () => clearTimeout(timerId);
   }, [testerCallSearchTerm]);
 
+  // Tester Calls are only surfaced while the feature is enabled. See TESTER_CALLS_ENABLED.
+  const showTesterCalls = TESTER_CALLS_ENABLED && testerCalls.length > 0;
+
   const getDefaultTab = () => {
     if (products.length > 0) return 'patterns';
-    if (testerCalls.length > 0) return 'testerCalls';
+    if (showTesterCalls) return 'testerCalls';
     if (userToUse.gallery.length > 0) return 'gallery';
     return '';
   };
@@ -188,7 +192,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
 
   const isMe = user.id === userId;
 
-  const shouldShowTabs = products.length > 0 || testerCalls.length > 0 || user.gallery.length > 0;
+  const shouldShowTabs = products.length > 0 || showTesterCalls || user.gallery.length > 0;
 
   const defaultTab = getDefaultTab();
 
@@ -215,7 +219,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
       <UserDetailsCardWrapper user={userToUse} showRoles={true} hasProducts={products.length > 0} />
 
       <div className="space-y-4" id="user-ratings" ref={testerReviewsRef}>
-        {userRatings?.length > 0 ? (
+        {TESTER_CALLS_ENABLED && userRatings?.length > 0 ? (
           <>
             <h2 className="text-2xl font-bold mb-4">Tester Call Feedback</h2>
             <div className="space-y-2">
@@ -251,9 +255,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
           <div className="flex justify-center">
             <TabsList>
               {products.length > 0 && <TabsTrigger value="patterns">Patterns</TabsTrigger>}
-              {testerCalls.length > 0 && (
-                <TabsTrigger value="testerCalls">Tester Calls</TabsTrigger>
-              )}
+              {showTesterCalls && <TabsTrigger value="testerCalls">Tester Calls</TabsTrigger>}
               {user.gallery.length > 0 && <TabsTrigger value="gallery">Gallery</TabsTrigger>}
             </TabsList>
           </div>
@@ -279,7 +281,7 @@ export default function UserAccountComponent({ user }: UserAccountComponentProps
             </TabsContent>
           )}
 
-          {testerCalls.length > 0 && (
+          {showTesterCalls && (
             <TabsContent value="testerCalls" className="space-y-4 mt-4">
               {/*<Input*/}
               {/*  placeholder="Search..."*/}

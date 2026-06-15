@@ -15,13 +15,12 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import React, { useEffect, useState } from 'react';
 import ReleasePatternDrawer from '@/lib/components/ReleasePatternDrawer';
-import { useGetProduct, useUndraftProduct } from '@/lib/api';
+import { useGetProduct } from '@/lib/api';
 import NotFoundPage from '@/app/not-found';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
 import { InfoBoxComponent } from '@/components/info-box';
 import ShareButton from '@/lib/components/ShareButton';
-import ConfirmDrawer from '@/lib/components/ConfirmDrawer';
-import { useRouter } from 'next/navigation';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 interface PatternUploadSuccessProps {
   productId: string;
@@ -29,26 +28,12 @@ interface PatternUploadSuccessProps {
 
 export default function PatternUploadSuccess({ productId }: PatternUploadSuccessProps) {
   const [isReleaseProductDrawerOpen, setIsReleaseProductDrawerOpen] = useState(false);
-  const [isUndraftProductDrawerOpen, setIsUndraftProductDrawerOpen] = useState(false);
 
   const { fetch, data: product, isLoading, isError } = useGetProduct();
-  const {
-    mutate: undraftPattern,
-    isLoading: undraftPatternnIsLoading,
-    errorDetail: undraftPatternErrorDetail,
-  } = useUndraftProduct();
-
-  const router = useRouter();
 
   useEffect(() => {
     fetch(productId).then();
   }, [productId]);
-
-  const handleStartTesterCallClick = () => {
-    undraftPattern(productId).then(() => {
-      router.push(`/app/tester-calls/${productId}`);
-    });
-  };
 
   if (isError) {
     return <NotFoundPage />;
@@ -63,7 +48,8 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
   }
 
   const isDraft = product.status === 'Draft';
-  const isTesterCall = product.status === 'Created';
+  // Tester-call status is only surfaced while the feature is enabled. See TESTER_CALLS_ENABLED.
+  const isTesterCall = TESTER_CALLS_ENABLED && product.status === 'Created';
   const isReleased = product.status === 'Released';
 
   return (
@@ -76,17 +62,10 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
         {isDraft ? (
           <div className="space-y-4">
             <p>Your pattern has been saved successfully.</p>
-            <div className="flex flex-row gap-2">
-              <div className="space-y-2 w-full">
-                <Button variant="secondary" onClick={() => setIsReleaseProductDrawerOpen(true)}>
-                  Release Pattern
-                </Button>
-              </div>
-              <div className="space-y-2 w-full">
-                <Button onClick={() => setIsUndraftProductDrawerOpen(true)}>
-                  Start Tester Call
-                </Button>
-              </div>
+            <div className="space-y-2 w-full">
+              <Button variant="secondary" onClick={() => setIsReleaseProductDrawerOpen(true)}>
+                Release Pattern
+              </Button>
             </div>
           </div>
         ) : null}
@@ -237,14 +216,6 @@ export default function PatternUploadSuccess({ productId }: PatternUploadSuccess
         isOpen={isReleaseProductDrawerOpen}
         setIsOpen={setIsReleaseProductDrawerOpen}
         productId={productId}
-      />
-      <ConfirmDrawer
-        isOpen={isUndraftProductDrawerOpen}
-        setIsOpen={setIsUndraftProductDrawerOpen}
-        isLoading={undraftPatternnIsLoading}
-        errorDetail={undraftPatternErrorDetail}
-        description={'From now on, users will be able to apply to your tester call.'}
-        callbackFn={handleStartTesterCallClick}
       />
     </div>
   );

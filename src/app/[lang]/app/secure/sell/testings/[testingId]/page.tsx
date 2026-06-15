@@ -3,9 +3,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetTesting, useListTesterApplications } from '@/lib/api/testing';
 import { TesterApplicantsPage } from '@/components/tester-applicants-page';
-import { useParams } from 'next/navigation';
+import { useParams, redirect } from 'next/navigation';
+import { TESTER_CALLS_ENABLED } from '@/lib/constants';
 
 export default function TestingPage() {
+  // Tester Calls feature is disabled — redirect the seller-side applicants page to the homepage.
+  if (!TESTER_CALLS_ENABLED) {
+    redirect('/');
+  }
+
   const { testingId } = useParams();
 
   const [direction, setDirection] = useState<'asc' | 'desc'>('desc');

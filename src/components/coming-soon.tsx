@@ -97,15 +97,13 @@ export default function ComingSoon() {
             </AccordionItem>
             <AccordionItem value="collaborate">
               <AccordionTrigger className="text-lg font-semibold text-foreground text-left">
-                How can I collaborate on pattern testing?
+                How can I collaborate with the community?
               </AccordionTrigger>
               <AccordionContent>
-                Pattern Paradise provides advanced tools for tutorials and feedback. You can
-                participate in pattern testing, offer suggestions for improvements, and help refine
-                designs before they&apos;re finalized. This collaborative approach ensures
-                high-quality patterns and fosters community engagement. Register as a Tester or
-                update your selected roles in your Profile Settings. Once you have everything set
-                up, you can browse Tester Calls.
+                Pattern Paradise provides advanced tools for tutorials and feedback. You can share
+                suggestions for improvements and connect with designers and other makers. This
+                collaborative approach ensures high-quality patterns and fosters community
+                engagement.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-8">
