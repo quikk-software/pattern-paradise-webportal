@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CldImage } from 'next-cloudinary';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel';
 import { Maximize2 } from 'lucide-react';
@@ -49,11 +49,38 @@ export default function ProductGallery({
     setLightboxOpen(true);
   }, []);
 
+  const hasMultiple = imageUrls.length > 1;
+
+  // Track whether the thumbnail strip can scroll further left/right so we can
+  // show a soft fade indicator on each scrollable side (and hide it at the edges).
+  const thumbsRef = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ left: false, right: false });
+  const updateEdges = useCallback(() => {
+    const el = thumbsRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setEdges({
+      left: scrollLeft > 1,
+      right: scrollLeft + clientWidth < scrollWidth - 1,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!hasMultiple) return;
+    updateEdges();
+    const el = thumbsRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', updateEdges, { passive: true });
+    window.addEventListener('resize', updateEdges);
+    return () => {
+      el.removeEventListener('scroll', updateEdges);
+      window.removeEventListener('resize', updateEdges);
+    };
+  }, [hasMultiple, updateEdges, imageUrls.length]);
+
   const altText = `${title} in ${category}${
     subCategories?.length ? ` – styles: ${subCategories.join(', ')}` : ''
   } on Pattern Paradise`;
-
-  const hasMultiple = imageUrls.length > 1;
 
   return (
     <div className="flex flex-col gap-3">
@@ -103,30 +130,51 @@ export default function ProductGallery({
         </div>
       ) : null}
 
-      {/* Thumbnail strip — horizontally scrollable so many images never overflow */}
+      {/* Thumbnail strip — horizontally scrollable (no visible scrollbar); soft
+          fade hints when there are more images off-screen left/right. The py-1
+          keeps the active thumbnail's 2px ring from being clipped. */}
       {hasMultiple ? (
-        <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:thin]">
-          {imageUrls.map((src, index) => (
-            <button
-              key={src}
-              type="button"
-              onClick={() => openLightbox(index)}
-              aria-label={`Open image ${index + 1} fullscreen`}
-              className={cn(
-                'relative h-16 w-16 shrink-0 snap-start overflow-hidden rounded-lg ring-2 transition-all sm:h-20 sm:w-20',
-                index === selected ? 'ring-primary' : 'ring-transparent hover:ring-border',
-              )}
-            >
-              <CldImage
-                src={src}
-                alt=""
-                fill
-                format="webp"
-                sizes="80px"
-                className="object-cover"
-              />
-            </button>
-          ))}
+        <div className="relative">
+          <div
+            ref={thumbsRef}
+            className="no-scrollbar flex snap-x gap-2 overflow-x-auto px-0.5 py-1"
+          >
+            {imageUrls.map((src, index) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => openLightbox(index)}
+                aria-label={`Open image ${index + 1} fullscreen`}
+                className={cn(
+                  'relative h-16 w-16 shrink-0 snap-start overflow-hidden rounded-lg ring-2 transition-all sm:h-20 sm:w-20',
+                  index === selected ? 'ring-primary' : 'ring-transparent hover:ring-border',
+                )}
+              >
+                <CldImage
+                  src={src}
+                  alt=""
+                  fill
+                  format="webp"
+                  sizes="80px"
+                  className="object-cover"
+                />
+              </button>
+            ))}
+          </div>
+          <div
+            aria-hidden
+            className={cn(
+              'pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-background to-transparent transition-opacity duration-200',
+              edges.left ? 'opacity-100' : 'opacity-0',
+            )}
+          />
+          <div
+            aria-hidden
+            className={cn(
+              'pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent transition-opacity duration-200',
+              edges.right ? 'opacity-100' : 'opacity-0',
+            )}
+          />
         </div>
       ) : null}
 
