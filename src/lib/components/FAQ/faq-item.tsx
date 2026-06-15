@@ -22,7 +22,9 @@ export default async function FAQItem() {
 
     let result = item.answer;
 
-    if (item.id === 'item-2' || item.id === 'item-8') {
+    // Only link/advertise Pro while the feature is active (same gating as the /pro route).
+    const proActive = process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true';
+    if (proActive && (item.id === 'item-2' || item.id === 'item-8')) {
       result = result.replace(
         /Pro Membership/g,
         `<Link href="/pro" className="font-medium text-primary-accessible hover:underline transition-colors">Pro Membership</Link>`,

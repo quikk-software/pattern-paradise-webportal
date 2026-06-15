@@ -3,6 +3,10 @@ import { BreadcrumbConfig } from './routes.types';
 import errorPages from '@/lib/hooks/routes/errorPages';
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants';
 
+// Pro is only listed while the feature is active (mirrors the gating used for the
+// /pro route, navbar item, SubscribeButton and ProInfoBox).
+const PRO_ACTIVE = process.env.NEXT_PUBLIC_PATTERN_PARADISE_PRO_ACTIVE === 'true';
+
 const flattenPages = (pages: Page[]) => {
   const flattenedPages: Page[] = [];
   pages.forEach((p) => {
@@ -215,5 +219,9 @@ const pages: Page[] = [
   ...errorPages,
 ];
 
-export default flattenPages(pages);
-export const breadcrumbConfig = createBreadcrumbConfig(pages);
+const visiblePages = PRO_ACTIVE
+  ? pages
+  : pages.filter((p) => p.pathname !== '/en/pro' && p.pathname !== '/de/pro');
+
+export default flattenPages(visiblePages);
+export const breadcrumbConfig = createBreadcrumbConfig(visiblePages);
