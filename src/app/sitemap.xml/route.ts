@@ -44,7 +44,6 @@ export async function GET() {
     '/browse/free-crochet-patterns',
     '/browse/free-knitting-patterns',
     '/about',
-    '/pro',
     '/faq',
     '/help',
     '/how-to',
