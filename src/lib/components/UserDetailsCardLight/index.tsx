@@ -39,7 +39,9 @@ interface UserDetailsCardLightProps {
 // Banners are stored at a fixed 4:1 ratio (enforced by the upload cropper). For
 // any legacy banner we still fill the 4:1 box without distortion via Cloudinary.
 const toBannerUrl = (url: string) =>
-  url.includes('/upload/') ? url.replace('/upload/', '/upload/c_fill,ar_4:1,g_auto/') : url;
+  url.includes('/upload/')
+    ? url.replace('/upload/', '/upload/c_fill,ar_4:1,g_auto,w_1600,f_auto,q_auto:good/')
+    : url;
 
 export default function UserDetailsCardLight({
   user,
