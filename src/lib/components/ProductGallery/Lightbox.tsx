@@ -93,9 +93,11 @@ export default function ProductLightbox({
                   <CldImage
                     src={src}
                     alt={alt}
-                    width={1400}
-                    height={1750}
-                    format="webp"
+                    width={1280}
+                    height={1600}
+                    crop="limit"
+                    format="auto"
+                    quality="auto:good"
                     onLoad={() => setLoaded((prev) => ({ ...prev, [src]: true }))}
                     onClick={(event) => event.stopPropagation()}
                     className={`h-auto max-h-[86vh] w-auto max-w-[92vw] rounded-lg object-contain transition-opacity duration-300 ${

@@ -30,7 +30,8 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
               fill
               sizes="(max-width: 768px) 33vw, 300px"
               className="object-cover rounded-lg"
-              format="webp"
+              format="auto"
+              quality="auto:eco"
             />
           </Link>
         ))}
