@@ -3,14 +3,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import ReviewCard from '@/lib/components/ReviewCard';
 import { useGetTestingByProductId, useListTestingReviewComments } from '@/lib/api/testing';
 import { LoadingSpinnerComponent } from '@/components/loading-spinner';
-import { InfoBoxComponent } from '@/components/info-box';
 
 interface ReviewMessagesProps {
   productId: string;
   isFree: boolean;
 }
 
-export default function ReviewMessages({ productId, isFree }: ReviewMessagesProps) {
+export default function ReviewMessages({ productId }: ReviewMessagesProps) {
   const {
     fetch: fetchTesting,
     data: testing,
@@ -45,7 +44,9 @@ export default function ReviewMessages({ productId, isFree }: ReviewMessagesProp
     );
   }
 
-  if (comments.length === 0 && (testing.status === 'Approved' || isFree)) {
+  // Only show the reviews section when there are actual reviews. No reviews means
+  // nothing is rendered (no empty card, no warning).
+  if (comments.length === 0) {
     return null;
   }
 
@@ -53,24 +54,11 @@ export default function ReviewMessages({ productId, isFree }: ReviewMessagesProp
     <Card>
       <CardContent className="p-6 flex flex-col gap-4">
         <h2 className="text-2xl font-bold">Pattern Reviews</h2>
-        {comments.length === 0 && testing.status !== 'Approved' && !isFree ? (
-          <InfoBoxComponent
-            message={
-              <>
-                This pattern has not yet received any reviews and has not been subjected to a
-                Pattern Paradise Test Process . The quality of the pattern offered can therefore not
-                be guaranteed and caution is advised.
-              </>
-            }
-            severity="error"
-          />
-        ) : (
-          <div className="space-y-4">
-            {comments.map((comment) => (
-              <ReviewCard key={comment.id} comment={comment} testing={testing} />
-            ))}
-          </div>
-        )}
+        <div className="space-y-4">
+          {comments.map((comment) => (
+            <ReviewCard key={comment.id} comment={comment} testing={testing} />
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
