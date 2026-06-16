@@ -99,8 +99,10 @@ export default function ProductGallery({
                   src={src}
                   alt={altText}
                   fill
-                  format="webp"
-                  sizes="(max-width: 1024px) 100vw, 45vw"
+                  format="auto"
+                  quality="auto:eco"
+                  sizes="(max-width: 1024px) 100vw, 400px"
+                  priority={index === 0}
                   className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                 />
                 <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-foreground/55 text-background opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
@@ -154,7 +156,8 @@ export default function ProductGallery({
                   src={src}
                   alt=""
                   fill
-                  format="webp"
+                  format="auto"
+                  quality="auto:eco"
                   sizes="80px"
                   className="object-cover"
                 />
